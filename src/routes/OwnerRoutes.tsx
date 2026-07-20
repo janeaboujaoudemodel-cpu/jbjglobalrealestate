@@ -6,6 +6,7 @@ import { Route, Navigate, useParams } from "react-router-dom";
 import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import PageLoader from "@/components/PageLoader";
+import { OWNER_HUB_LEGACY_PATHS } from "@/pages/owner/crm/shell/modules";
 
 // All owner pages lazy-loaded — owner area is heavy and must NOT bloat the public/home initial chunk.
 const OwnerDashboardShell = lazy(() => import("@/pages/OwnerDashboardShell"));
@@ -33,6 +34,12 @@ const CrmForecasts = lazy(() => import("@/pages/owner/crm/shell/CrmForecasts"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
+const Properties = lazy(() => import("@/pages/Properties"));
+const AIHub = lazy(() => import("@/pages/AIHub"));
+const MeetingCenter = lazy(() => import("@/pages/MeetingCenter"));
+const AIMeetingSummarizerPage = lazy(() => import("@/pages/AIMeetingSummarizerPage"));
+const ExecutiveAssistant = lazy(() => import("@/pages/ExecutiveAssistant"));
+const SecurityConsole = lazy(() => import("@/pages/SecurityConsole"));
 
 const OwnerTemplates = lazy(() => import("@/pages/OwnerTemplates"));
 const OwnerCommSettings = lazy(() => import("@/pages/OwnerCommSettings"));
@@ -152,6 +159,12 @@ const LegacyOwnerEnvelopeDetail = () => {
   return <Navigate to={`/owner/documents/forms/${id}`} replace />;
 };
 
+const OwnerHubLegacyFallback = () => {
+  const { section = "" } = useParams();
+  const legacyPath = OWNER_HUB_LEGACY_PATHS[section];
+  return <Navigate to={legacyPath || "/owner/crm/jbj/home"} replace />;
+};
+
 export const OwnerRoutes = () => (
   <>
   {/* JBJ CRM — standalone shell, MUST be declared BEFORE the /owner shell route
@@ -183,7 +196,63 @@ export const OwnerRoutes = () => (
     <Route path="documents/:folderId" element={<CrmDocumentsLibrary />} />
     <Route path="forecasts" element={<CrmForecasts />} />
     <Route path="forecasts/:period" element={<CrmForecasts />} />
+    <Route path="owner-admin" element={<Admin />} />
+    <Route path="owner-overview" element={<OwnerDashboardOverview />} />
+    <Route path="owner-jbj-hub" element={<JbjHub />} />
+    <Route path="owner-documents-forms" element={<DocumentsFormsHub />} />
+    <Route path="owner-unified-crm" element={<UnifiedCRM />} />
+    <Route path="owner-crm-workspace" element={<Navigate to="/owner/crm/jbj/home" replace />} />
+    <Route path="owner-data-hub" element={<DataHub />} />
+    <Route path="owner-brokerages" element={<BrokeragePortal />} />
+    <Route path="owner-developers" element={<DeveloperDirectory />} />
+    <Route path="owner-developer-projects" element={<DeveloperLiveEditor />} />
+    <Route path="owner-developer-calendar" element={<DeveloperLaunchEvents />} />
+    <Route path="owner-developer-access" element={<AccessRequestQueue />} />
+    <Route path="owner-developer-profiles" element={<DeveloperEnrichmentQueue />} />
+    <Route path="owner-missing-logos" element={<MissingLogosQueue />} />
+    <Route path="owner-drive-extractions" element={<DriveExtractionsHub />} />
+    <Route path="owner-properties" element={<Properties />} />
+    <Route path="owner-featured-projects" element={<HomeFeaturedProjectsManager />} />
+    <Route path="owner-property-map" element={<PropertyMap />} />
+    <Route path="owner-listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
+    <Route path="owner-inbox" element={<OwnerInbox />} />
+    <Route path="owner-team-chat" element={<TeamChat />} />
+    <Route path="owner-relationships" element={<CRMRelationships />} />
+    <Route path="owner-founder-assistant" element={<FoundersAssistant />} />
+    <Route path="owner-recommendations" element={<GlobalRecommendationsHub />} />
+    <Route path="owner-ai-home-finder" element={<AIHomeFinderSubmissions />} />
+    <Route path="owner-royal-tools" element={<AIHub />} />
+    <Route path="owner-automations" element={<Automations />} />
+    <Route path="owner-meeting-hub" element={<MeetingCenter />} />
+    <Route path="owner-ai-meeting" element={<AIMeetingSummarizerPage />} />
+    <Route path="owner-agent-integrations" element={<AgentIntegrations />} />
+    <Route path="owner-locations" element={<JbjHub />} />
+    <Route path="owner-data-gaps" element={<OwnerDataGaps />} />
+    <Route path="owner-enrichment-review" element={<OwnerEnrichmentReview />} />
+    <Route path="owner-brand-assets" element={<BrandAssetsDashboard />} />
+    <Route path="owner-studio" element={<Studio />} />
+    <Route path="owner-founder-settings" element={<OwnerFounderSettings />} />
+    <Route path="owner-podcast-studio" element={<PodcastStudio />} />
+    <Route path="owner-voice-agent" element={<VoiceAgentControlPanel />} />
+    <Route path="owner-kanban" element={<KanbanBoard />} />
+    <Route path="owner-marketing-hub" element={<MarketingHub />} />
+    <Route path="owner-news" element={<OwnerNewsHub />} />
+    <Route path="owner-books" element={<OwnerBooks />} />
+    <Route path="owner-careers" element={<CareersPortal />} />
+    <Route path="owner-analytics" element={<JBJAnalyticsDashboard />} />
+    <Route path="owner-users" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerUsers")))}</Suspense>} />
+    <Route path="owner-crm-directory" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerCRMDirectory")))}</Suspense>} />
+    <Route path="owner-research-users" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/components/admin/ResearchUsersPanel")))}</Suspense>} />
+    <Route path="owner-broker-preview" element={<BrokeragePortal />} />
+    <Route path="owner-external-access" element={<ExternalAccessManagement />} />
+    <Route path="owner-audit" element={<OwnerAuditPage />} />
+    <Route path="owner-integrations" element={<OwnerIntegrationsPage />} />
+    <Route path="owner-safety" element={<OwnerSafetyPage />} />
+    <Route path="owner-settings" element={<OwnerCommSettings />} />
+    <Route path="owner-security" element={<SecurityConsole />} />
+    <Route path="owner-executive-assistant" element={<ExecutiveAssistant />} />
     <Route path=":section" element={<CrmModulePage />} />
+    <Route path="owner-*:section" element={<OwnerHubLegacyFallback />} />
     <Route path=":section/new" element={<CrmCreatePage />} />
     <Route path=":section/:id" element={<CrmRecordPage />} />
   </Route>
