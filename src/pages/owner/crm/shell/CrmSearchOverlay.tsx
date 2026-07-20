@@ -191,16 +191,15 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
                 <div className="jc-search-overlay__section-title">{label}</div>
                 <ul className="jc-search-overlay__list">
                   {rows.map((r) => (
-                    <li key={r.id}>
+                    <li key={`${r.moduleLabel}-${r.id}`}>
                       <Link
-                        to={`/owner/crm/jbj/${r.module}`}
+                        to={r.to}
                         className="jc-search-overlay__row"
                         onClick={() => {
                           commit(q);
                           onClose();
                         }}
                       >
-                        <span className="jc-search-overlay__row-id">{r.id}</span>
                         <span className="jc-search-overlay__row-body">
                           <span className="jc-search-overlay__row-title">{r.title}</span>
                           <span className="jc-search-overlay__row-sub">{r.subtitle}</span>
@@ -213,7 +212,14 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
               </div>
             ))}
 
-          {query && moduleMatches.length === 0 && grouped.length === 0 && (
+          {query && loading && (
+            <div className="jc-search-overlay__empty">
+              <Loader2 size={16} className="animate-spin" style={{ marginRight: 8, display: "inline-block", verticalAlign: "middle" }} />
+              Searching backend…
+            </div>
+          )}
+
+          {query && !loading && moduleMatches.length === 0 && grouped.length === 0 && (
             <div className="jc-search-overlay__empty jc-search-overlay__empty--big">
               No results for "<strong>{q}</strong>".
             </div>
