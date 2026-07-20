@@ -194,22 +194,34 @@ function AutomationsStrip() {
       inboxQ.refetch();
     } catch (e: any) { toast.error(e?.message || "Inbox sync failed"); } finally { setBusy(null); }
   };
-  const runDld = async (mode: "dld" | "all") => {
-    setBusy(mode);
+  const runDld = async (mode: "market" | "all") => {
+    setBusy(mode === "market" ? "dld" : "all");
     try {
-      // Always pull the DLD market snapshot
+      // "Market snapshot" pulls the DLD daily transaction ingest only —
+      // it does NOT touch brokers/brokerages.
+      // "Sync all" additionally pulls the broker + brokerage register.
       const snap = await supabase.functions.invoke("dld-daily-ingest", { body: {} });
       if (snap.error) throw snap.error;
-      // And pull the broker + brokerage register (individual brokers + agencies)
-      const reg = await supabase.functions.invoke("dld-broker-sync", { body: {} });
-      if (reg.error) throw reg.error;
-      const r = (reg.data as any) || {};
-      toast.success(`DLD sync complete — ${r.agencies_inserted ?? 0} agencies · ${r.brokers_inserted ?? 0} brokers${r.error ? ` (partial: ${r.error})` : ""}`);
+      if (mode === "market") {
+        toast.success("DLD market snapshot pulled");
+      } else {
+        const reg = await supabase.functions.invoke("dld-broker-sync", { body: {} });
+        if (reg.error) throw reg.error;
+        const r = (reg.data as any) || {};
+        const a = r.agencies_inserted ?? 0;
+        const b = r.brokers_inserted ?? 0;
+        if (a === 0 && b === 0) {
+          toast.warning(`DLD register returned 0 rows — upstream (dubaipulse.gov.ae) may be blocked. ${r.error ? `Details: ${r.error}` : ""}`);
+        } else {
+          toast.success(`DLD sync complete — ${a} agencies · ${b} brokers${r.error ? ` (partial: ${r.error})` : ""}`);
+        }
+      }
       dldQ.refetch();
     } catch (e: any) { toast.error(e?.message || "DLD sync failed"); } finally { setBusy(null); }
   };
   const last = dldQ.data as any;
   const lastCount = last ? `${last.agencies_inserted ?? 0} agencies · ${last.brokers_inserted ?? 0} brokers` : "";
+  const lastStatus = last?.status as string | undefined;
   return (
     <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-3">
       <div className="flex items-center justify-between gap-3">
@@ -222,16 +234,23 @@ function AutomationsStrip() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync — brokers + brokerages <span className="ml-2 text-[#064E3B]/70">Auto · daily 03:00 UTC</span></p>
-          <p className="text-xs text-[#1A1A1A]/70 mt-1">Last run: <span className="font-black text-[#1A1A1A]">{fmt(last?.run_started_at)}</span>{lastCount ? ` · ${lastCount}` : ""}</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-1">
+            Last run: <span className="font-black text-[#1A1A1A]">{fmt(last?.run_started_at)}</span>{lastCount ? ` · ${lastCount}` : ""}
+            {lastStatus && lastStatus !== "success" && <span className="ml-2 text-[#8B1F1F] font-black uppercase">· {lastStatus}</span>}
+          </p>
+          <p className="text-[10px] text-[#1A1A1A]/55 mt-0.5">
+            <span className="font-black">Market snapshot</span> pulls DLD market data only. <span className="font-black">Sync all</span> also imports brokers &amp; brokerages from the DLD register.
+          </p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" disabled={busy === "dld"} onClick={() => runDld("dld")}>{busy === "dld" ? "Running…" : "Run now"}</Button>
+          <Button size="sm" variant="outline" disabled={busy === "dld"} onClick={() => runDld("market")}>{busy === "dld" ? "Running…" : "Market snapshot"}</Button>
           <Button size="sm" variant="gold" disabled={busy === "all"} onClick={() => runDld("all")}>{busy === "all" ? "Running…" : "Sync all (brokers + brokerages)"}</Button>
         </div>
       </div>
     </Card>
   );
 }
+
 
 
 
