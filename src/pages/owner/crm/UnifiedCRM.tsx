@@ -62,7 +62,7 @@ const ContractVault       = lazy(() => import("@/pages/owner/contracts/ContractV
 const AutomationRules     = lazy(() => import("@/components/crm/AutomationRules"));
 const CRMEnhancedDashboard= lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
 const InvestorsDirectory  = lazy(() => import("@/components/crm/InvestorsDirectory"));
-const BrokersImported     = lazy(() => import("@/components/crm/BrokersImported"));
+
 const DatabasesHub        = lazy(() => import("@/components/crm/DatabasesHub"));
 const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExportButton"));
 const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
