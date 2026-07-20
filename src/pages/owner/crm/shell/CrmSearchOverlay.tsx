@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, X, Clock, ArrowUpRight, Command } from "lucide-react";
+import { Search, X, Clock, ArrowUpRight, Command, Loader2 } from "lucide-react";
 import {
   CRM_PRIMARY_NAV,
   CRM_TEAMSPACE_TOP,
   CRM_TEAMSPACE_FOLDERS,
   type CrmModule,
 } from "./modules";
+import { useGlobalHubSearch } from "./useGlobalHubSearch";
 
 type SampleRecord = {
   id: string;
