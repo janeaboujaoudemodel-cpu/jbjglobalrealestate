@@ -14,6 +14,10 @@
   letter-spacing: 0;
 }
 
+.jc-app[data-sidebar-collapsed="true"] {
+  grid-template-columns: 72px minmax(0, 1fr);
+}
+
 .jc-app *,
 .jc-app *::before,
 .jc-app *::after {
@@ -129,6 +133,10 @@
   scrollbar-width: thin;
   padding: 0 14px 44px;
 }
+.jc-rail[data-collapsed="true"] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .jc-rail::-webkit-scrollbar { width: 8px; }
 .jc-rail::-webkit-scrollbar-thumb { background: rgba(255,255,255,.22); border-radius: 999px; }
 
@@ -175,6 +183,37 @@
 }
 .jc-collapse-visual svg { width: 22px !important; height: 22px !important; min-width: 22px !important; stroke: #FFFFFF !important; color: #FFFFFF !important; opacity: 1 !important; stroke-width: 2 !important; fill: none !important; }
 .jc-collapse-visual:hover { background: rgba(255,255,255,0.14) !important; border-radius: 6px !important; }
+.jc-rail[data-collapsed="true"] .jc-brand-row {
+  justify-content: center;
+  padding: 0;
+}
+.jc-rail[data-collapsed="true"] .jc-brand-product,
+.jc-rail[data-collapsed="true"] .jc-brand-caret,
+.jc-rail[data-collapsed="true"] .jc-collapse-visual,
+.jc-rail[data-collapsed="true"] .jc-teamspace__title span:not(.jc-teamspace__badge),
+.jc-rail[data-collapsed="true"] .jc-teamspace__title > svg,
+.jc-rail[data-collapsed="true"] .jc-teamspace__title button,
+.jc-rail[data-collapsed="true"] .jc-folder__label span,
+.jc-rail[data-collapsed="true"] .jc-folder__label > svg:last-child,
+.jc-rail[data-collapsed="true"] .jc-side-link span,
+.jc-rail[data-collapsed="true"] .jc-team-item span,
+.jc-rail[data-collapsed="true"] .jc-side-search,
+.jc-rail[data-collapsed="true"] .jc-sidebar-footer__action span {
+  display: none !important;
+}
+.jc-rail[data-collapsed="true"] .jc-side-link,
+.jc-rail[data-collapsed="true"] .jc-team-item,
+.jc-rail[data-collapsed="true"] .jc-folder__label,
+.jc-rail[data-collapsed="true"] .jc-sidebar-footer__action {
+  justify-content: center;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  gap: 0;
+}
+.jc-rail[data-collapsed="true"] .jc-teamspace__title {
+  display: flex;
+  justify-content: center;
+}
 .jc-main-nav {
   padding: 0 0 17px;
   border-bottom: 1px solid var(--jbjcrm-sidebar-line);
@@ -299,6 +338,78 @@
 .jc-folder[data-open="false"] .jc-folder__children { display: none; }
 .jc-folder__children .jc-team-item { padding-left: 13px !important; }
 
+.jc-owner-hub {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.14);
+}
+.jc-owner-hub__title {
+  margin-bottom: 6px;
+}
+.jc-owner-hub__badge {
+  background:
+    radial-gradient(115% 115% at 30% 20%, rgba(255,255,255,0.22), transparent 58%),
+    linear-gradient(160deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.42) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-folder--owner {
+  margin-top: 8px;
+  padding-top: 2px;
+}
+.jc-folder--owner + .jc-folder--owner {
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.jc-folder--owner .jc-folder__label {
+  height: 34px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.82) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
+}
+.jc-folder--owner .jc-team-item {
+  height: 38px !important;
+  min-height: 38px !important;
+  font-size: 14px;
+}
+
+.jc-sidebar-footer {
+  margin-top: 16px;
+  padding: 14px 0 4px;
+  border-top: 1px solid rgba(255,255,255,0.14);
+  display: grid;
+  gap: 6px;
+}
+.jc-sidebar-footer__action {
+  width: 100%;
+  min-height: 38px;
+  border: 0;
+  border-radius: 6px !important;
+  background: transparent;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 11px !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.jc-sidebar-footer__action:hover {
+  background: rgba(255,255,255,0.10) !important;
+}
+.jc-sidebar-footer__action svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 .jc-side-link svg,
 .jc-team-item svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; stroke-width: 2 !important; width: 20px !important; height: 20px !important; min-width: 20px !important; opacity: 1 !important; fill: none !important; }
 .jc-side-link span,
@@ -314,6 +425,58 @@
   grid-row: 2;
   overflow: auto;
   background: #FFFFFF;
+}
+
+/* Owner backend pages embedded in JBJ Hub must inherit the CRM emerald/white system,
+   not the legacy champagne/gold backend palette. */
+.jc-app .jc-content :where(
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-champagne"],
+  [class*="champagne"],
+  .jj-card,
+  .brand-card,
+  .owner-card
+) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  border-color: rgba(6, 78, 59, 0.20) !important;
+  box-shadow: 0 12px 32px rgba(6, 78, 59, 0.08) !important;
+}
+.jc-app .jc-content :where(
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-champagne"],
+  [class*="champagne"],
+  .jj-card,
+  .brand-card,
+  .owner-card
+) :where(h1, h2, h3, h4, h5, h6, p, span, label, small, li, strong, em, div) {
+  color: inherit;
+}
+.jc-app .jc-content :where(
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  .jj-card,
+  .brand-card,
+  .owner-card
+) :where(button, a[role="button"], .btn, [class*="bg-[#064E3B]"], [class*="from-[#064E3B]"]) {
+  border-radius: 6px !important;
+}
+.jc-app .jc-content :where([class*="bg-[#064E3B]"], [class*="from-[#064E3B]"], [class*="to-[#042c1c]"], [class*="to-[#042C1C]"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 .jc-projects-screen {
