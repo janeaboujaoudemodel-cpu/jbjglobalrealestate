@@ -141,6 +141,10 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
 
   const total = images.length;
   const hasMultiple = total > 1;
+  const safePageIndex = total > 0 ? Math.min(pageIndex, total - 1) : 0;
+  const safeFsIndex = total > 0 ? Math.min(fsIndex, total - 1) : 0;
+  const activePageImage = images[safePageIndex];
+  const activeFsImage = images[safeFsIndex];
 
   // Clamp indices if image set shrinks
   useEffect(() => {
@@ -330,20 +334,20 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
         {/* Inline carousel — uses pageIndex, completely independent of fullscreen */}
         <div className="aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-muted via-muted/80 to-muted/60 relative group flex items-center justify-center">
           <SafeImage
-            src={getHighResImageUrl(images[pageIndex].image_url)}
-            alt={images[pageIndex].alt_text || "Project image"}
+            src={getHighResImageUrl(activePageImage.image_url)}
+            alt={activePageImage.alt_text || "Project image"}
             className="w-full h-full object-cover"
             loading="eager"
             decoding="async"
             data-no-fallback
-            onError={() => markImageFailed(images[pageIndex]?.image_url)}
+            onError={() => markImageFailed(activePageImage.image_url)}
           />
 
           {/* Top-right controls */}
           <div className="absolute top-4 right-4 flex gap-2">
             <button
               className="h-11 w-11 rounded-xl border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-transform duration-200 hover:scale-105 flex items-center justify-center"
-              onClick={() => handleDownload(images[pageIndex].image_url, pageIndex)}
+              onClick={() => handleDownload(activePageImage.image_url, safePageIndex)}
               title="Download this image"
               type="button"
             >
@@ -351,7 +355,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
             </button>
             <button
               className="h-11 w-11 rounded-xl border border-border bg-background/70 backdrop-blur-sm shadow-lg transition-transform duration-200 hover:scale-105 flex items-center justify-center"
-              onClick={() => openFullscreen(pageIndex)}
+              onClick={() => openFullscreen(safePageIndex)}
               title="View fullscreen"
               type="button"
             >
@@ -381,7 +385,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
           )}
 
           <div className="absolute bottom-4 right-4 bg-background/70 backdrop-blur-sm px-3 py-1 rounded-full text-foreground text-sm border border-border">
-            {pageIndex + 1} / {total}
+            {safePageIndex + 1} / {total}
           </div>
         </div>
 
@@ -417,7 +421,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                     }}
 
                     className={`aspect-[4/3] rounded overflow-hidden border-2 transition-colors relative ${
-                      index === pageIndex && !isOverflowTile ? "border-primary" : "border-transparent hover:border-border"
+                      index === safePageIndex && !isOverflowTile ? "border-primary" : "border-transparent hover:border-border"
                     }`}
                     type="button"
                     aria-label={isOverflowTile ? `View all ${total} photos` : `View photo ${index + 1}`}
@@ -464,13 +468,13 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
               <div className="min-w-0 text-[#1A1A1A] text-sm md:text-base font-semibold truncate">
                 {projectName}
                 <span className="ml-3 text-[#1A1A1A]/60 font-normal tabular-nums">
-                  {fsIndex + 1} / {total}
+                  {safeFsIndex + 1} / {total}
                 </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   type="button"
-                  onClick={() => handleDownload(images[fsIndex].image_url, fsIndex)}
+                  onClick={() => handleDownload(activeFsImage.image_url, safeFsIndex)}
                   className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555] flex items-center justify-center transition-colors shadow-sm"
                   aria-label="Download image"
                   title="Download"
@@ -492,15 +496,15 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
             {/* Stage — image fills available space. min-h-0 / min-w-0 lets flex child actually shrink. */}
             <div className="relative flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-hidden bg-[#F7F2EA] p-2 md:p-4">
               <SafeImage
-                key={images[fsIndex].id}
-                src={getHighResImageUrl(images[fsIndex].image_url)}
-                alt={images[fsIndex].alt_text || `Photo ${fsIndex + 1}`}
+                key={activeFsImage.id}
+                src={getHighResImageUrl(activeFsImage.image_url)}
+                alt={activeFsImage.alt_text || `Photo ${safeFsIndex + 1}`}
                 className="max-w-full max-h-full w-auto h-auto object-contain"
                 draggable={false}
                 loading="lazy"
                 decoding="async"
                 data-no-fallback
-                onError={() => markImageFailed(images[fsIndex]?.image_url)}
+                onError={() => markImageFailed(activeFsImage.image_url)}
               />
 
               {hasMultiple && (
@@ -535,7 +539,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                       type="button"
                       onClick={() => setFsIndex(i)}
                       className={`relative h-12 sm:h-14 md:h-16 aspect-[4/3] rounded overflow-hidden border-2 flex-shrink-0 transition-all ${
-                        i === fsIndex ? "border-[#B89555] scale-105" : "border-transparent opacity-70 hover:opacity-100"
+                        i === safeFsIndex ? "border-[#B89555] scale-105" : "border-transparent opacity-70 hover:opacity-100"
                       }`}
                       aria-label={`Go to photo ${i + 1}`}
                     >
