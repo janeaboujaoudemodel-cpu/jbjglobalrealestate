@@ -77,17 +77,20 @@ const JunkReturnsQueue    = lazy(() => import("@/components/owner-crm/JunkReturn
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 
 type Entity =
-  | "leads" | "investors" | "developers" | "sales-reps"
-  | "brokers" | "agencies" | "employees" | "databases" | "academy";
+  | "leads" | "investors" | "employees" | "databases" | "academy";
+
+// External entities live in their own portals — CRM redirects to them.
+const PORTAL_REDIRECTS: Record<string, string> = {
+  "developers":  "/owner/developers",
+  "sales-reps":  "/owner/developers?tab=sales-reps",
+  "brokers":     "/owner/brokerage-portal?tab=brokers",
+  "agencies":    "/owner/brokerage-portal?tab=agencies",
+};
 
 const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "leads",       label: "Leads",              icon: Users },
   { id: "databases",   label: "Databases",          icon: Database },
   { id: "investors",   label: "Investors",          icon: Crown },
-  { id: "developers",  label: "Developers",         icon: Building2 },
-  { id: "sales-reps",  label: "Dev Sales Reps",     icon: BadgeCheck },
-  { id: "brokers",     label: "Brokers",            icon: UserCog },
-  { id: "agencies",    label: "Brokerage Agencies", icon: Network },
   { id: "employees",   label: "Employees",          icon: Briefcase },
   { id: "academy",     label: "Academy",            icon: GraduationCap },
 ];
