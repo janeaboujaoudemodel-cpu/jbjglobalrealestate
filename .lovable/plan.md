@@ -1,60 +1,92 @@
-# Owner Backend cleanup inside JBJ Hub
+# Hub contrast + sidebar search + in-place Branded Emails
 
-Scope is **only** pages routed under `/owner/crm/jbj/owner-*` (the ones we imported from the legacy JBJ backend). The Zoho-mirrored CRM pages (`home`, `feeds`, `calls`, `deals`, `salesinbox` Zoho core, etc.) are **not touched**.
+Four fixes, all inside the JBJ Hub shell. No touching Zoho-mirrored pages.
 
-## 1. Kill the gold/champagne skin on owner-backend pages
+## 1. Contrast on header + search overlay
 
-Currently `crmShell.css` overrides champagne backgrounds only on a few utility classes and many owner pages still ship hardcoded `#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555` gradients (e.g. `OwnerCreativeSuite`, featured-projects hero card, sales-inbox folder chips).
+**Header (`CrmHeader.tsx` + `crmShell.css`)**
+- Force the header action icons (Plus, Wand, Bell, Calendar, Store, Settings, Grip, avatar) to solid white on emerald — no faded opacity, stroke 2.25, size 20.
+- Plus button becomes a filled emerald→gold metallic tile with a solid white `+` (currently faded).
+- `⌘K` badge in the search pill: emerald chip with white text.
 
-- In `crmShell.css`, extend the `.jc-app [data-hub-page]` scope so every emerald owner page force-resets:
-  - Champagne page/hero gradients → white canvas `#FFFFFF`
-  - Gold hairlines (`border-[#B89555]/…`, `#EFE6D6`) → emerald hairline `rgba(6,78,59,0.12)`
-  - Gold text (`text-[#8A7356]`, `text-[#B89555]`) → ink `#1A1A1A` or emerald `#064E3B`
-  - Gold icon tiles/badges → emerald `#064E3B` tile with white icon
-- Add a `<div data-hub-page>` wrapper via a lightweight `OwnerHubPage` layout so we only affect owner backend routes, never Zoho-mirrored ones.
-- Keep the JBJ metallic-gold CTA primitive (`.jj-cta-gold-metallic`) **untouched** on public marketing pages — the override is gated behind `.jc-app [data-hub-page]` only.
+**Search overlay (`CrmSearchOverlay.tsx` + css)**
+- Input text color: pure `#0F1F17` on white, placeholder `Search leads, developers, projects, brokers, areas…` in `#4B5D55`.
+- Search glass icon: emerald `#064E3B`, not faded.
+- "Jump to module" chips: white bg, emerald border, emerald icon + emerald text (currently reads as faded/invisible emerald-on-emerald).
+- Loading/empty states: emerald text on white.
+- Result row hover: soft emerald tint, title black, subtitle `#4B5D55`.
 
-## 2. Fix the sidebar Handshake / Owner Backend vertical bug
+## 2. Search bar at the top of the vertical sidebar
 
-In the screenshot, the "Owner Backend" folder header and Handshake icon stack vertically because the folder label wraps under the collapsed rail width and long labels break.
+Add a persistent search field as the first row of `CrmSidebar.tsx`, directly under the "Hub" workspace switcher:
+- Full-width emerald-tinted input with a white search icon, placeholder `Search Hub…`.
+- Click / focus / typing / `⌘K` all open the same `CrmSearchOverlay` (single source of truth — no duplicate search logic).
+- In collapsed sidebar state, it shrinks to a single search-icon button that still opens the overlay.
+- Keep the header `⌘K` search pill (user said "either move it, either keep it but fix contrast") — both entry points feed the same overlay.
 
-- `crmShell.css` `.jc-folder__label`: enforce `flex-direction: row`, `min-width: 0`, `flex-wrap: nowrap`, ellipsis on `span`, and fixed `24px` icon slot.
-- `.jc-owner-hub .jc-teamspace__title`: same row lock + `white-space: nowrap`.
-- Verify Handshake, Sparkles, Palette, ShieldAlert renders inline with their labels at both expanded and collapsed sidebar states.
+## 3. Fix the emerald "Group not created" pill under Open profile
 
-## 3. Rebuild the imported owner pages page-by-page
+On the Developer Portal directory cards, the emerald `GROUP NOT CREATED` chip currently renders with black text on emerald (unreadable). Lock it to white text on emerald in `DeveloperDirectory.tsx` via the emerald-surface white-text contrast guard already used elsewhere.
 
-For every page under `CRM_OWNER_HUB_SECTIONS`, apply the same Zoho-matched chrome:
+## 4. Branded Emails — in-place, restructured, scalable
 
-- **Page header card**: flat white surface, thin emerald hairline `1px solid rgba(6,78,59,0.10)`, `border-radius: 8px` (NOT full-rounded), 24px inner padding, emerald eyebrow label + ink title + ink subtitle. Removes the current "rounded pill" hero seen on Featured Projects.
-- **Section cards** (`.jc-owner-card`): white bg, `8px` radius, emerald hairline, `24px` padding, `12px` gap between sections. No touching the viewport edge — add `24px` container padding.
-- **Device tabs (Mobile / Tablet / Desktop) on Featured Projects**: pill group with a single container radius, tabs stay inside container, active = emerald fill with white text (matches Zoho segmented control).
-- **Insights strip** at the top of every rebuilt owner page: 3-tile row (KPIs relevant to the page — e.g. Featured Projects → "Live slots · Auto refreshes · Manual entries"; SalesInbox → "Unread · Waiting · Snoozed"; Data Hub → "Unassigned · Assigned today · Stale >72h"). Tiles use emerald label + big ink number + tiny delta.
-- **CTA row alignment**: primary action = emerald fill white text; secondary = white with emerald hairline; never gold on backend.
+**Kill the redirect.** Rewrite `BrandedEmailsLauncherCard.tsx` so it no longer links to `/owner/crm/relationship-hub`. Replace it with a full in-place `<BrandedEmailsPanel>` that opens as a large right-side sheet (same shell as CRM record drawers) — everything stays inside `/owner/crm/jbj/owner-developers` (or the brokerage equivalent).
 
-Pages to rebuild in this pass (all `owner-*` slugs from `CRM_OWNER_HUB_SECTIONS`):
-Core (Owner Panel, Overview, JBJ Hub, Document Studio, CRM Database, JBJ CRM, Data Hub), Developers (Broker Portal, Developers Portal, Projects, Calendar, Access Requests, Profiles, Missing Logos, Drive Extractions), Properties (Properties, Featured Projects, Property Map, Listings Admin), Communication (Messages/Inbox, Team Chat, Relationships Hub), AI & Tools (all 11 entries), Creative (Brand Assets, Studio, Founder & Podcast, Podcast Studio, Voice Agent, Kanban, Marketing Hub, News, Books), People & HR (Careers Portal), Admin (Analytics, Users, CRM Directory, Research Users, Preview Broker Portal), System (External Access, Audit, Integrations, Safety, Settings, Security Console, Executive Assistant).
+**Fix the vertical text bug.** The card currently forces "Branded Emails" into a narrow flex column; rebuild the header as a single-row hero (icon · title · eyebrow) with `min-w-0` and no `md:flex-col`, and drop the champagne gradient in favor of the Hub emerald/white surface so it matches the rest of the shell.
 
-Each page keeps its existing business logic — this is a **chrome/layout rebuild only**, wrapping the existing component in `<OwnerHubPage title subtitle insights={[...]}>` and neutralizing hardcoded champagne classes.
+**New panel structure (shared by developer + brokerage variants):**
 
-## 4. Validation gate
+```text
+┌─ Branded Emails ──────────────────────────────┐
+│ Template picker  |  Audience  |  Preview  |  Send │
+├───────────────────────────────────────────────┤
+│ 1. Template                                        │
+│    Registered / Not Registered / Launch / Briefing │
+│    (thumbnails, from existing template library)    │
+├───────────────────────────────────────────────┤
+│ 2. Audience                                        │
+│    ● Select all  ● Registered only  ● Custom       │
+│    [ 🔍 Search developer / brokerage to include ]  │
+│    [ 🔍 Search to exclude ]                        │
+│    ┌ Included (▣ 612) ──── Excluded (▢ 4) ┐       │
+│    │ chips, removable, virtualized list    │       │
+│    └─────────────────────────────────────┘        │
+├───────────────────────────────────────────────┤
+│ 3. Preview  (rendered email w/ real signature)     │
+│ 4. Send test → Send live  (locked flow)            │
+└───────────────────────────────────────────────┘
+```
 
-For every rebuilt page:
-1. Playwright shot at 1280×1800 desktop viewport of `/owner/crm/jbj/{slug}`.
-2. Assert: no `#B89555`, `#FDFBF7`, `#F7F2EA`, `#EFE6D6`, `text-[#8A7356]`, `bg-champagne` in the rendered DOM computed styles.
-3. Assert: page header has emerald hairline + `8px` radius, not the current pill.
-4. Assert: sidebar Handshake row renders on a single line at both expanded and collapsed states.
-5. Attach screenshots inline for the top 6 pages (Featured Projects, Data Hub, Developers Portal, Broker Portal, Properties, Overview).
+- Includes: default all developers/brokerages, "Select all", search-add, chip-remove.
+- Excludes: search-driven exclusion list; excluded rows greyed in the include list.
+- Counts update live: `Sending to N of Total`.
+- Reuses the existing template library + campaign send edge function that Relationships Hub already wires — no duplicate infra, just a new panel UI on top.
+- Developer variant queries `developers`; brokerage variant queries `crm_brokerages`. Same panel, one prop.
 
-## What we will NOT touch
+**Where the panel mounts:**
+- Developer Portal card → in-place sheet inside `/owner/crm/jbj/owner-developers`.
+- Brokerage Portal card → in-place sheet inside `/owner/crm/jbj/owner-brokerage`.
+- Owner backend card variants → same panel, same shell.
 
-- Zoho-mirrored CRM pages: `home`, `feeds`, `workqueue`, `leads`, `contacts`, `accounts`, `deals`, `forecasts`, `campaigns`, `tasks`, `meetings`, `calls`, `documents` (CRM one), plus the mirrored SalesInbox core layout that ships with Zoho parity. If SalesInbox is required as an owner-only rebuild instead of Zoho-mirrored, confirm before touching.
-- Any public marketing page or `.jj-cta-gold-metallic` gold primitive outside `[data-hub-page]`.
-- Any business logic / data queries on the owner pages.
+## 5. E2E validation (Playwright, screenshot proof)
+
+For every change above, capture screenshots at 1280×1800:
+1. Header at rest — all icons solid white, `+` filled tile.
+2. Search overlay open with query "citi" — chips readable, results grouped, loading state visible.
+3. Sidebar search field visible (expanded + collapsed states).
+4. Developer Portal card with `GROUP NOT CREATED` chip — white text on emerald.
+5. Branded Emails panel:
+   - Panel opens in place (URL still `/owner/crm/jbj/owner-developers`).
+   - Select-all → 616 included.
+   - Search-exclude "citi" → Citi Developers moves to Excluded, count becomes 615.
+   - Preview tab renders template.
+   - Send-test button visible + wired.
+6. Repeat the panel flow for the Brokerage variant.
+
+All screenshots saved to `/tmp/browser/hub-fixes/` and reviewed before I claim done.
 
 ## Technical notes
 
-- New file: `src/pages/owner/crm/shell/OwnerHubPage.tsx` — layout wrapper providing `data-hub-page`, header card, insights strip, content slot.
-- Edit: `src/pages/owner/crm/shell/crmShell.css` — new `.jc-app [data-hub-page]` reset block, `.jc-owner-card`, `.jc-owner-header`, `.jc-owner-insights`, plus `.jc-folder__label` / `.jc-owner-hub__title` row locks.
-- Edit each `owner-*` page component to wrap its root in `<OwnerHubPage …>` and drop the local champagne gradient container. Zoho-mirrored components are opened only to confirm they are **not** wrapped.
-- No DB / edge function / RLS changes.
+- Files touched: `src/pages/owner/crm/shell/CrmHeader.tsx`, `CrmSidebar.tsx`, `CrmSearchOverlay.tsx`, `crmShell.css`, `src/components/crm/BrandedEmailsLauncherCard.tsx`, new `src/components/crm/branded-emails/BrandedEmailsPanel.tsx` (+ audience picker + template picker subcomponents), `src/pages/developer-hub-admin/DeveloperDirectory.tsx` for the pill fix.
+- No schema changes. Uses existing `branded_email_templates`, `email_send_log`, `email_send_quota` tables and the existing send edge function.
+- No changes to Zoho-mirrored CRM pages (Leads/Deals/Contacts/Accounts/Tasks/Meetings/etc).
