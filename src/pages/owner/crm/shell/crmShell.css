@@ -4272,3 +4272,83 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* PASS 156 — screenshot follow-up: search overlay lives inside the header,
+   so it must explicitly opt out of header white-ink chrome locks. */
+.jc-app .jc-search-overlay,
+.jc-app .jc-search-overlay__panel,
+.jc-app .jc-search-overlay__panel :where(div, span, p, strong, input, button, a, li, kbd) {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+  text-shadow: none !important;
+}
+.jc-app .jc-search-overlay__panel :where(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+.jc-app .jc-search-overlay__section-title,
+.jc-app .jc-search-overlay__empty,
+.jc-app .jc-search-overlay__row-sub,
+.jc-app .jc-search-overlay__footer,
+.jc-app .jc-search-overlay__footer span {
+  color: #43524C !important;
+  -webkit-text-fill-color: #43524C !important;
+}
+.jc-app .jc-search-overlay__bar input::placeholder {
+  color: #6B7A74 !important;
+  -webkit-text-fill-color: #6B7A74 !important;
+  opacity: 1 !important;
+}
+.jc-app .jc-search-overlay__row:hover,
+.jc-app .jc-search-overlay__chip:hover,
+.jc-app .jc-search-overlay__row:hover :where(div, span, p, strong, svg, path, circle, rect, line, polyline, polygon, ellipse),
+.jc-app .jc-search-overlay__chip:hover :where(div, span, p, strong, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Forecast narrow-table proof: no overlapping owner, quota, or bar text. */
+.jc-app .jc-fc__reptable {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  scrollbar-width: thin;
+}
+.jc-app .jc-fc__reprow > * { min-width: 0; }
+@media (max-width: 820px) {
+  .jc-app .jc-fc__panel { overflow: hidden !important; }
+  .jc-app .jc-fc__reprow {
+    grid-template-columns: minmax(170px, 1.55fr) 112px 112px minmax(160px, 1.15fr) !important;
+    min-width: 590px !important;
+    gap: 12px !important;
+    padding-inline: 12px !important;
+  }
+  .jc-app .jc-fc__reprow--head {
+    min-width: 590px !important;
+  }
+  .jc-app .jc-fc__owner > div {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  .jc-app .jc-fc__num {
+    white-space: nowrap !important;
+  }
+  .jc-app .jc-fc__bar-meta {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1px !important;
+  }
+  .jc-app .jc-fc__bar-meta span:nth-child(2) { display: none !important; }
+}
+
+/* Restore emerald/white for the actual healthy coverage badge after generic
+   neutral tags have been applied. */
+.jc-app .jc-fc__health-tag--em {
+  background: var(--jbjcrm-real-emerald-action) !important;
+  background-image: var(--jbjcrm-real-emerald-action) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(6,78,59,0.72) !important;
+}
