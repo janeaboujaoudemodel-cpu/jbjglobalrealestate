@@ -392,6 +392,8 @@
   -webkit-text-fill-color: #FFFFFF !important;
   display: flex;
   align-items: center;
+  justify-content: flex-start !important;
+  text-align: left !important;
   gap: 12px;
   padding: 0 11px !important;
   font-size: 14px;
@@ -425,6 +427,8 @@
   grid-row: 2;
   overflow: auto;
   background: #FFFFFF;
+  padding: 20px 24px 32px;
+  border-left: 1px solid rgba(6, 78, 59, 0.12);
 }
 
 /* Owner backend pages embedded in JBJ Hub must inherit the CRM emerald/white system,

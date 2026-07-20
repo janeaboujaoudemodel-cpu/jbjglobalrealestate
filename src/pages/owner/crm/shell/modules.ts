@@ -239,8 +239,17 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
       { slug: "owner-jbj-hub", label: "JBJ Hub", icon: Sparkles },
       { slug: "owner-documents-forms", label: "Document Studio", icon: FileText },
       { slug: "owner-unified-crm", label: "CRM Database", icon: Users },
-      { slug: "owner-crm-workspace", label: "JBJ CRM", icon: Building2 },
       { slug: "owner-data-hub", label: "Data Hub", icon: Database },
+    ],
+  },
+  {
+    label: "Portal Hub",
+    icon: Building,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-brokerages", label: "Brokerage Portal", icon: Handshake },
+      { slug: "owner-developers", label: "Developer Portal", icon: Building },
+      { slug: "owner-careers", label: "Careers Portal", icon: BriefcaseBusiness },
     ],
   },
   {
@@ -248,8 +257,6 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
     icon: Building,
     defaultOpen: true,
     children: [
-      { slug: "owner-brokerages", label: "Broker Portal", icon: Building2 },
-      { slug: "owner-developers", label: "Developers Portal", icon: Building },
       { slug: "owner-developer-projects", label: "Projects", icon: ClipboardList },
       { slug: "owner-developer-calendar", label: "Calendar", icon: CalendarDays },
       { slug: "owner-developer-access", label: "Access Requests", icon: Shield },
@@ -314,14 +321,6 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
     ],
   },
   {
-    label: "People & HR",
-    icon: BriefcaseBusiness,
-    defaultOpen: true,
-    children: [
-      { slug: "owner-careers", label: "Careers Portal", icon: BriefcaseBusiness },
-    ],
-  },
-  {
     label: "Admin",
     icon: Shield,
     defaultOpen: true,
@@ -330,7 +329,6 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
       { slug: "owner-users", label: "Users", icon: Users },
       { slug: "owner-crm-directory", label: "CRM Directory", icon: Users },
       { slug: "owner-research-users", label: "Research Users", icon: Users },
-      { slug: "owner-broker-preview", label: "Preview Broker Portal", icon: Store },
     ],
   },
   {
