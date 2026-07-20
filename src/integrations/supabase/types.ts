@@ -41957,6 +41957,19 @@ export type Database = {
         Args: { _name: string; _website?: string }
         Returns: string
       }
+      jbj_project_publish_blockers_for_row: {
+        Args: { project_row: Database["public"]["Tables"]["projects"]["Row"] }
+        Returns: string[]
+      }
+      jbj_text_is_real: { Args: { value: string }; Returns: boolean }
+      jbj_url_is_valid_developer_logo: {
+        Args: { value: string }
+        Returns: boolean
+      }
+      jbj_url_is_valid_project_photo: {
+        Args: { value: string }
+        Returns: boolean
+      }
       link_broker_entity_by_email: { Args: never; Returns: string }
       list_my_broker_oauth_apps: {
         Args: never
