@@ -141,10 +141,7 @@ function migrateLegacy(p: URLSearchParams): { entity: Entity; view: string } | n
   if (section === "automation")       return { entity: "leads", view: "automation" };
   if (section === "employees")        return { entity: "employees", view: "roster" };
   if (section === "relationships") {
-    if (sub === "developers")  return { entity: "developers",  view: "registry" };
-    if (sub === "agencies")    return { entity: "agencies",    view: "directory" };
-    if (sub === "sales-reps")  return { entity: "sales-reps",  view: "directory" };
-    if (sub === "brokers")     return { entity: "brokers",     view: "directory" };
+    // These entities moved to their own portals — the redirect happens later.
     return { entity: "investors", view: "directory" };
   }
   return null;
