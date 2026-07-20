@@ -1857,6 +1857,28 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
 /* .btn-premium-outline - REMOVED: Violates inverted-hover rules */
 
 @layer components {
+  [data-branded-email-panel="true"] :is(
+    button[style*="background: rgb(6, 78, 59)"],
+    button[style*="background: #064E3B"],
+    button[style*="background:#064E3B"],
+    [data-branded-email-live-action="true"]
+  ) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+
+  [data-branded-email-panel="true"] :is(
+    button[style*="background: rgb(6, 78, 59)"],
+    button[style*="background: #064E3B"],
+    button[style*="background:#064E3B"],
+    [data-branded-email-live-action="true"]
+  ) :is(span, svg, path, line, polyline, circle, rect) {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+
   /* ============================================================
    * GLOBAL DESIGN SYSTEM - JBJ GLOBAL REAL ESTATE
    * LOCKED - Applies to Front-End, Back-End, CRM, Employee Hub
