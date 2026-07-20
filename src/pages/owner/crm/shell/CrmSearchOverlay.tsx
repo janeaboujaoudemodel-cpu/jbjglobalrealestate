@@ -64,26 +64,17 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
     [query]
   );
 
-  const recordMatches = useMemo(() => {
-    if (!query) return [];
-    return SAMPLE_RECORDS.filter(
-      (r) =>
-        r.title.toLowerCase().includes(query) ||
-        r.subtitle.toLowerCase().includes(query) ||
-        r.moduleLabel.toLowerCase().includes(query) ||
-        r.id.toLowerCase().includes(query)
-    ).slice(0, 8);
-  }, [query]);
+  const { hits, loading } = useGlobalHubSearch(q);
 
   const grouped = useMemo(() => {
-    const map = new Map<string, SampleRecord[]>();
-    for (const r of recordMatches) {
+    const map = new Map<string, typeof hits>();
+    for (const r of hits) {
       const arr = map.get(r.moduleLabel) || [];
       arr.push(r);
       map.set(r.moduleLabel, arr);
     }
     return Array.from(map.entries());
-  }, [recordMatches]);
+  }, [hits]);
 
   const commit = (term: string) => {
     if (!term.trim()) return;
