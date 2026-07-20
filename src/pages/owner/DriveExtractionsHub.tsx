@@ -11,11 +11,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Building2, FolderKanban, MapPin, Layers, FileText, ExternalLink, RefreshCw } from "lucide-react";
+import { Building2, FolderKanban, MapPin, Layers, FileText, ExternalLink, RefreshCw, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import DriveDropPanel from "./DriveDropPanel";
 
-type Tab = "developers" | "projects" | "communities" | "areas";
+type Tab = "developers" | "projects" | "communities" | "areas" | "emirates";
+
 
 interface Job {
   id: string;
@@ -48,7 +50,9 @@ const TABS: { key: Tab; label: string; icon: typeof Building2 }[] = [
   { key: "projects",    label: "Projects",     icon: FolderKanban },
   { key: "communities", label: "Communities",  icon: Layers },
   { key: "areas",       label: "Areas",        icon: MapPin },
+  { key: "emirates",    label: "Emirates",     icon: Globe2 },
 ];
+
 
 export default function DriveExtractionsHub() {
   const [active, setActive] = useState<Tab>("developers");
@@ -128,7 +132,8 @@ export default function DriveExtractionsHub() {
         </div>
       </header>
 
-      <main className="max-w-[1400px] mx-auto px-6 py-8">
+      <main className="max-w-[1400px] mx-auto px-6 py-8 space-y-6">
+        <DriveDropPanel />
         {loading ? (
           <div className="space-y-3">
             {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-16 w-full" />)}
@@ -139,9 +144,11 @@ export default function DriveExtractionsHub() {
             {active === "projects"    && <ProjectsView projects={projects} />}
             {active === "communities" && <GroupedView mode="community" projects={projects} />}
             {active === "areas"       && <GroupedView mode="area" projects={projects} />}
+            {active === "emirates"    && <EmiratesView />}
           </>
         )}
       </main>
+
     </div>
   );
 }
@@ -283,6 +290,24 @@ function Empty({ text }: { text: string }) {
   return (
     <div className="rounded-xl border border-dashed border-[#B89555]/40 bg-white/60 p-10 text-center text-sm text-[#1A1A1A]/70">
       {text}
+    </div>
+  );
+}
+
+function EmiratesView() {
+  const [rows, setRows] = useState<any[]>([]);
+  useEffect(() => {
+    supabase.from("emirates").select("id,name,slug").order("name").then(({ data }) => setRows(data ?? []));
+  }, []);
+  if (!rows.length) return <Empty text="No emirates seeded yet. Drop a Drive folder above with entity type 'Emirates'." />;
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      {rows.map((e) => (
+        <div key={e.id} className="rounded-lg border border-[#B89555]/30 bg-white p-3">
+          <div className="text-xs uppercase tracking-wider text-[#1A1A1A]/50">Emirate</div>
+          <div className="font-semibold">{e.name}</div>
+        </div>
+      ))}
     </div>
   );
 }

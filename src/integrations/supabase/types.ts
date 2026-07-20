@@ -16013,6 +16013,54 @@ export type Database = {
           },
         ]
       }
+      drive_drop_submissions: {
+        Row: {
+          before_after: Json
+          created_at: string
+          discovered_items: Json
+          entity_type: string
+          error_message: string | null
+          folder_url: string
+          id: string
+          matches: Json
+          notes: string | null
+          status: string
+          submitted_by: string | null
+          summary: Json
+          updated_at: string
+        }
+        Insert: {
+          before_after?: Json
+          created_at?: string
+          discovered_items?: Json
+          entity_type?: string
+          error_message?: string | null
+          folder_url: string
+          id?: string
+          matches?: Json
+          notes?: string | null
+          status?: string
+          submitted_by?: string | null
+          summary?: Json
+          updated_at?: string
+        }
+        Update: {
+          before_after?: Json
+          created_at?: string
+          discovered_items?: Json
+          entity_type?: string
+          error_message?: string | null
+          folder_url?: string
+          id?: string
+          matches?: Json
+          notes?: string | null
+          status?: string
+          submitted_by?: string | null
+          summary?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       economic_indicators: {
         Row: {
           category: string
