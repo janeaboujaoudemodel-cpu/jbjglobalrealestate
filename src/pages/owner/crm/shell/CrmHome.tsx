@@ -65,6 +65,11 @@ export default function CrmHome() {
         </div>
       </header>
 
+      {/* Today's Focus — Zoho-style daily action strip (Phase 5) */}
+      <TodaysFocus leads={leads} todaysLeads={todaysLeads} loading={leadsLoading} />
+
+
+
       {/* KPI tiles */}
       <section className="jc-kpi-row" aria-label="Key metrics">
         <KpiTile
