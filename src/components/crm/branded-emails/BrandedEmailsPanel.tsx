@@ -332,18 +332,25 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <button
                   type="button"
                   onClick={selectAll}
-                  className={`text-xs px-3 py-1.5 rounded-md border transition ${
-                    allSelected
-                      ? "bg-[#064E3B] !text-white border-[#064E3B]"
-                      : "bg-white text-[#064E3B] border-[#064E3B]/40 hover:bg-emerald-50"
-                  }`}
+                  style={{
+                    padding: "6px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700,
+                    background: allSelected ? "#064E3B" : "#FFFFFF",
+                    color: allSelected ? "#FFFFFF" : "#064E3B",
+                    border: `1px solid ${allSelected ? "#064E3B" : "rgba(6,78,59,0.4)"}`,
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   Select all ({total})
                 </button>
                 <button
                   type="button"
                   onClick={clearAll}
-                  className="text-xs px-3 py-1.5 rounded-md border bg-white text-[#064E3B] border-[#064E3B]/40 hover:bg-emerald-50"
+                  style={{
+                    padding: "6px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700,
+                    background: "#FFFFFF", color: "#064E3B",
+                    border: "1px solid rgba(6,78,59,0.4)",
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   Clear
                 </button>
