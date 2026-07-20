@@ -26,6 +26,11 @@ const UNIFIED_PLATE =
   "rounded-lg bg-white border border-[#B89555]/80 " +
   "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5";
 
+const logoPlateSurface = (darkPlate?: boolean) =>
+  darkPlate
+    ? "bg-[#042C1C] border border-[#D8B46A]/85 shadow-[0_4px_14px_rgba(0,0,0,0.24)]"
+    : "bg-white border border-[#B89555]/80 shadow-[0_3px_10px_rgba(0,0,0,0.16)]";
+
 
 
 export function DeveloperLogo({
@@ -86,12 +91,12 @@ export function DeveloperLogo({
         className={cn(
           "block w-full h-full object-contain",
           scale === "compact" ? "rounded-sm" : "rounded-md",
-          !override.invert && "[mix-blend-mode:multiply]",
+          !override.invert && !override.darkPlate && "[mix-blend-mode:multiply]",
         )}
         style={{
-          filter: override.invert
+          filter: override.imageFilter ?? (override.invert
             ? "invert(1) brightness(1)"
-            : "contrast(1.08) saturate(1.1)",
+            : "contrast(1.08) saturate(1.1)"),
         }}
       />
     </div>
@@ -106,12 +111,14 @@ export function DeveloperLogo({
   if (variant === "bare") {
     if (!valid) {
       return renderNameplate(cn(
-        "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5 border border-[#B89555]/70",
+        "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
+        logoPlateSurface(false),
         className,
       ));
     }
     return renderImage(src as string, cn(
-      "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5",
+      "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
+      logoPlateSurface(override.darkPlate),
       className,
     ));
   }
@@ -120,7 +127,8 @@ export function DeveloperLogo({
   // ── Card variant — Reelly-style hero plate (developer directory) ──
   if (variant === "card") {
     const cardContainer = cn(
-      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/70 p-3 overflow-hidden",
+      "w-full h-full rounded-2xl inline-flex items-center justify-center p-3 overflow-hidden",
+      logoPlateSurface(override.darkPlate),
       className,
     );
 
@@ -132,7 +140,8 @@ export function DeveloperLogo({
 
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
   const tileContainer = cn(
-    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white p-1.5 shadow-sm border border-[#B89555]/70 overflow-hidden",
+    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center p-1.5 overflow-hidden",
+    logoPlateSurface(override.darkPlate),
     className,
   );
 

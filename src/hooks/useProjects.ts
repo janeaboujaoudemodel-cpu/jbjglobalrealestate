@@ -542,7 +542,7 @@ export function useProjectsListing() {
         property_type_label, status_label, emirate,
         created_at, updated_at,
         reelly_id, construction_status, sale_status,
-        area_name, cover_image_url, is_published,
+        area_name, cover_image_url, card_image_url, gallery_start_image_url, is_published,
         developer_name, construction_progress,
         total_units, available_units, down_payment_percent,
         roi_estimate, rental_yield_estimate, latitude, longitude,
@@ -569,7 +569,7 @@ export function useProjectsListing() {
         .order("is_featured", { ascending: false })
         .order("is_premium", { ascending: false })
         .order("updated_at", { ascending: false })
-        .limit(240);
+        .limit(90);
 
       if (firstError) throw firstError;
 
