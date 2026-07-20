@@ -457,22 +457,125 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   <li><strong>From:</strong> Jane Bou Jaoude &lt;contact@jbj.ae&gt;</li>
                 </ul>
               </div>
+
+              {/* Inline audience quick-picker so users don't have to jump back */}
+              <div className="border border-emerald-900/15 rounded-lg p-4 bg-white space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-[#4B5D55] uppercase tracking-wider font-semibold">Audience quick controls</p>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => { setAudienceMode("all"); setExcludedIds(new Set()); }}
+                      className={`text-xs px-3 py-1.5 rounded-md border transition ${
+                        audienceMode === "all" && excludedIds.size === 0
+                          ? "bg-[#064E3B] !text-white border-[#064E3B]"
+                          : "bg-white text-[#064E3B] border-[#064E3B]/40 hover:bg-emerald-50"
+                      }`}
+                    >
+                      Select all ({total})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAudienceMode("custom")}
+                      className={`text-xs px-3 py-1.5 rounded-md border transition ${
+                        audienceMode === "custom"
+                          ? "bg-[#064E3B] !text-white border-[#064E3B]"
+                          : "bg-white text-[#064E3B] border-[#064E3B]/40 hover:bg-emerald-50"
+                      }`}
+                    >
+                      Custom ({customIds.size})
+                    </button>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#4B5D55]" />
+                  <Input
+                    value={audienceMode === "all" ? excludeSearch : includeSearch}
+                    onChange={(e) => audienceMode === "all" ? setExcludeSearch(e.target.value) : setIncludeSearch(e.target.value)}
+                    placeholder={audienceMode === "all"
+                      ? `Type a ${kind === "developers" ? "developer" : "brokerage"} to exclude…`
+                      : `Type a ${kind === "developers" ? "developer" : "brokerage"} to include…`}
+                    className="pl-9 border-emerald-900/20"
+                  />
+                </div>
+
+                {audienceMode === "all" && excludeMatches.length > 0 && (
+                  <div className="border border-emerald-900/15 rounded-md max-h-40 overflow-auto">
+                    {excludeMatches.map((r) => (
+                      <button
+                        key={r.id}
+                        type="button"
+                        onClick={() => { addExclude(r.id); setExcludeSearch(""); }}
+                        className="w-full flex items-center justify-between px-3 py-1.5 text-sm hover:bg-red-50 text-[#0F1A16] border-b border-emerald-900/5 last:border-b-0"
+                      >
+                        <span className="truncate">{r.name}</span>
+                        <span className="text-xs text-red-600 font-semibold">Exclude ✕</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {audienceMode === "custom" && includeSearch && includeMatches.length > 0 && (
+                  <div className="border border-emerald-900/15 rounded-md max-h-40 overflow-auto">
+                    {includeMatches.map((r) => {
+                      const already = customIds.has(r.id);
+                      return (
+                        <button
+                          key={r.id}
+                          type="button"
+                          disabled={already}
+                          onClick={() => { addCustom(r.id); setIncludeSearch(""); }}
+                          className="w-full flex items-center justify-between px-3 py-1.5 text-sm hover:bg-emerald-50 text-[#0F1A16] border-b border-emerald-900/5 last:border-b-0 disabled:opacity-40"
+                        >
+                          <span className="truncate">{r.name}</span>
+                          <span className="text-xs text-[#064E3B] font-semibold">{already ? "Added" : "Include +"}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {(audienceMode === "all" ? excludedList : customList).length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {(audienceMode === "all" ? excludedList : customList).map((r) => (
+                      <span
+                        key={r.id}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] border ${
+                          audienceMode === "all"
+                            ? "bg-red-50 border-red-200 text-red-800"
+                            : "bg-emerald-50 border-emerald-200 text-emerald-900"
+                        }`}
+                      >
+                        {r.name}
+                        <button
+                          type="button"
+                          onClick={() => audienceMode === "all" ? removeExclude(r.id) : removeCustom(r.id)}
+                          aria-label={`Remove ${r.name}`}
+                        >
+                          <X className="size-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleSendTest}
                   disabled={sending || !selectedTemplate}
-                  className="border-[#064E3B] text-[#064E3B] hover:bg-[#064E3B]/10"
+                  className="!border-[#064E3B] !text-[#064E3B] !bg-white hover:!bg-[#064E3B]/10 font-semibold"
                 >
-                  {sending ? <Loader2 className="size-4 mr-2 animate-spin" /> : <Send className="size-4 mr-2" />}
+                  {sending ? <Loader2 className="size-4 mr-2 animate-spin" /> : <Send className="size-4 mr-2 !text-[#064E3B]" />}
                   Send test to infoo.jane@gmail.com
                 </Button>
                 <Button
                   type="button"
                   onClick={handleSendLive}
                   disabled={!selectedTemplate || audienceCount === 0}
-                  className="bg-[#064E3B] hover:bg-[#053528] text-white"
+                  className="!bg-[#064E3B] hover:!bg-[#053528] !text-white font-semibold [&_svg]:!text-white"
                 >
                   <Send className="size-4 mr-2" />
                   Send live to {audienceCount} {kind}
