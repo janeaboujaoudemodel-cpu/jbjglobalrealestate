@@ -94,15 +94,16 @@ export default function DriveExtractionsHub() {
   }, [jobs, projects]);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
+    <div className="min-h-screen w-full text-[#1A1A1A] -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 lg:-mt-8">
+
       <header
         data-surface="emerald"
         data-on-dark="true"
         data-hero-dark="true"
         data-no-contrast-guard
-        className="border-b border-white/15 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)]"
+        className="w-full border-b border-white/15 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)]"
       >
-        <div className="max-w-[1400px] mx-auto px-6 py-8">
+        <div className="w-full px-6 lg:px-10 py-8">
           <p data-no-contrast-guard className="allow-white text-xs uppercase tracking-[0.2em] text-white/85">Owner console</p>
           <h1 data-no-contrast-guard className="allow-white text-3xl font-semibold tracking-tight mt-1 text-white">Drive Extractions</h1>
           <p data-no-contrast-guard className="allow-white mt-2 text-sm max-w-2xl text-white/90">
@@ -144,7 +145,7 @@ export default function DriveExtractionsHub() {
         </div>
       </header>
 
-      <main className="max-w-[1400px] mx-auto px-6 py-8 space-y-6">
+      <main className="w-full px-6 lg:px-10 py-8 space-y-6 bg-[#FDFBF7]">
         <DriveDropPanel />
         {loading ? (
           <div className="space-y-3">

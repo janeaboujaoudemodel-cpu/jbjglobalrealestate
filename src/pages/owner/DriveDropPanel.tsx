@@ -41,12 +41,17 @@ export default function DriveDropPanel() {
   useEffect(() => { load(); }, []);
 
   const submit = async () => {
-    if (!url.trim()) { toast.error("Paste a Google Drive folder link"); return; }
+    const clean = url.trim();
+    if (!clean) { toast.error("Paste a Google Drive folder link above first"); return; }
+    if (!/drive\.google\.com|docs\.google\.com/.test(clean)) {
+      toast.error("That doesn't look like a Google Drive link");
+      return;
+    }
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("drive-drop-classify", {
         body: {
-          folder_url: url.trim(),
+          folder_url: clean,
           entity_type: entityType,
           entity_names: entityNames.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean),
           notes: notes.trim() || null,
@@ -54,7 +59,7 @@ export default function DriveDropPanel() {
       });
       if (error) throw error;
       toast.success(`Analyzed — ${data?.summary?.matched ?? 0} matched · ${data?.summary?.new ?? 0} new`);
-      setUrl(""); setEntityNames(""); setNotes("");
+      setEntityNames(""); setNotes("");
       load();
       if (data?.submission_id) setOpenId(data.submission_id);
     } catch (e: any) {
@@ -156,10 +161,13 @@ export default function DriveDropPanel() {
                         {s.before_after.map((row: any, i: number) => (
                           <div key={i} className="rounded border border-[#B89555]/20 p-2">
                             <div className="flex items-center gap-2 text-xs mb-1">
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200">
+                              <span
+                                data-no-contrast-guard
+                                className="allow-white inline-flex items-center px-2 py-0.5 rounded-full bg-[#064E3B] text-white border border-[#064E3B] uppercase tracking-wide text-[10px] font-semibold"
+                              >
                                 {row.type}
                               </span>
-                              <span className="font-medium">{row.name}</span>
+                              <span className="font-medium text-[#1A1A1A]">{row.name}</span>
                               {row.matched ? (
                                 <span className="ml-auto inline-flex items-center gap-1 text-emerald-800 text-[11px]">
                                   <GitCompare className="w-3 h-3" /> Match found
