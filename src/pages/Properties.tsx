@@ -148,6 +148,28 @@ const isReadyProject = (project: object) => {
 const prioritizeOffPlan = <T extends object>(projects: T[]): T[] =>
   [...projects].sort((a, b) => Number(isReadyProject(a)) - Number(isReadyProject(b)));
 
+const hasCardText = (value: unknown) => typeof value === "string" && value.trim().length > 0;
+
+const projectQualityScore = (project: any) => {
+  let score = 0;
+  if (project.cover_image_url || project.card_image_url || project.hero_image_url || project.images?.some?.((img: any) => img?.image_url)) score += 20;
+  if (project.developer?.logo_url) score += 18;
+  if (project.developer?.id || project.developer_id) score += 10;
+  if (typeof project.price_from === "number" && project.price_from > 0) score += 16;
+  if (hasCardText(project.description) || hasCardText(project.short_description)) score += 14;
+  if (hasCardText(project.handover_date) || hasCardText(project.expected_completion)) score += 10;
+  if (hasCardText(project.payment_plan) || project.payment_breakdown) score += 8;
+  if (project.is_featured) score += 6;
+  if (project.is_premium) score += 4;
+  return score;
+};
+
+const compareByQualityThenFreshness = (a: any, b: any) => {
+  const qualityDiff = projectQualityScore(b) - projectQualityScore(a);
+  if (qualityDiff !== 0) return qualityDiff;
+  return new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime();
+};
+
 const searchRelevance = (project: { name?: string | null; developer_name?: string | null; developer?: { name?: string | null } | null }, query: string) => {
   const q = query.toLowerCase().trim();
   if (!q) return 99;
@@ -434,7 +456,7 @@ const Properties = () => {
     let sorted = [...filteredProjects];
     switch (sortBy) {
       case "price-low":
-        sorted.sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
+        sorted.sort((a, b) => (a.price_from ?? Number.POSITIVE_INFINITY) - (b.price_from ?? Number.POSITIVE_INFINITY));
         break;
       case "price-high":
         sorted.sort((a, b) => (b.price_from || 0) - (a.price_from || 0));
@@ -447,10 +469,7 @@ const Properties = () => {
         break;
       case "newest":
       default:
-        sorted.sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
+        sorted.sort(compareByQualityThenFreshness);
     }
     if (appliedFilters.completionStatus !== 'ready') {
       sorted = prioritizeOffPlan(sorted);
