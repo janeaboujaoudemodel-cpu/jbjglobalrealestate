@@ -1,13 +1,17 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 // Re-export the unified type for backwards compatibility
 export type { UnifiedProject as Project } from "@/types/unifiedProject";
 import type { UnifiedProject } from "@/types/unifiedProject";
 
 const hasPublicPhoto = (p: UnifiedProject) =>
-  !!(p.cover_image_url || p.images?.some((img) => !!img.image_url));
+  !!(p.cover_image_url || p.card_image_url || p.gallery_start_image_url || p.images?.some((img) => !!img.image_url));
+
+const hasApprovedDeveloperLogo = (project: UnifiedProject) =>
+  isValidDeveloperLogoUrl(project.developer?.logo_url);
 
 const GENERIC_DUPLICATE_WORDS = new Set([
   "the",
@@ -72,7 +76,7 @@ const hasText = (value: unknown) => typeof value === "string" && value.trim().le
 const projectCardQualityScore = (project: UnifiedProject) => {
   let score = 0;
   if (hasPublicPhoto(project)) score += 20;
-  if (project.developer?.logo_url) score += 18;
+  if (hasApprovedDeveloperLogo(project)) score += 18;
   if (project.developer?.id || project.developer_id) score += 10;
   if (typeof project.price_from === "number" && project.price_from > 0) score += 16;
   if (hasText(project.description) || hasText(project.short_description)) score += 14;

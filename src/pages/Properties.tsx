@@ -77,6 +77,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import PropertiesMapView from "@/components/maps/PropertiesMapView";
 import { CURRENCY_RATES, CURRENCY_SYMBOLS } from "@/hooks/useCurrency";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 
 type ExtendedCurrency = string;
@@ -153,7 +154,7 @@ const hasCardText = (value: unknown) => typeof value === "string" && value.trim(
 const projectQualityScore = (project: any) => {
   let score = 0;
   if (project.cover_image_url || project.card_image_url || project.hero_image_url || project.images?.some?.((img: any) => img?.image_url)) score += 20;
-  if (project.developer?.logo_url) score += 18;
+  if (isValidDeveloperLogoUrl(project.developer?.logo_url)) score += 18;
   if (project.developer?.id || project.developer_id) score += 10;
   if (typeof project.price_from === "number" && project.price_from > 0) score += 16;
   if (hasCardText(project.description) || hasCardText(project.short_description)) score += 14;

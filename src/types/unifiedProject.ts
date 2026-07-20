@@ -134,6 +134,8 @@ export interface UnifiedProject {
   
   // Media
   cover_image_url?: string | null;
+  card_image_url?: string | null;
+  gallery_start_image_url?: string | null;
   video_url?: string | null;
   virtual_tour_url?: string | null;
   videos?: ProjectVideo[];

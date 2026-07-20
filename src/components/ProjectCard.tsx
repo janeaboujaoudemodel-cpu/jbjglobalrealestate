@@ -19,6 +19,18 @@ import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 import { formatBedroomRange } from "@/utils/formatBedroomRange";
 
+const VERIFIED_CARD_MEDIA: Record<string, string> = {
+  "a0d78087-ad89-4532-b237-8795aaa9524f": "https://api.reelly.io/vault/ZZLvFZFt/2vU167fSNHhf_s4DDM9mNt6fU68/04w3Yw../5.jpg",
+  "90fc0ae7-faba-46e3-b3c0-2542c1da421d": "https://alhamra.ae/media/rkipmlry/al-hamra-village-1-min.jpg?width=475&height=398",
+  "b11e3102-dfe7-4380-8c12-a1910d365570": "https://aigentsrealty.b-cdn.net/projects/al-warqa-a/gallery/image-1-b6983f.jpg",
+  "a3c5185e-6fdf-48b7-99a1-725ee04fa17f": "https://palladium.ae/api/media/file/Main%20amazonia.jpg?2026-04-17T15:51:15.933Z",
+  "f765e006-eb3e-4d3e-b23f-fe62663946fb": "https://api.reelly.io/vault/ZZLvFZFt/5pq_NC53VNHtDcO8J9G_Jhe5kPQ/mMA_yw../8.jpg",
+  "dfbb65a3-638a-4a40-94ae-3931da2c26c1": "https://vincitorerealty.com/wp-content/uploads/2025/04/Amenities-Desktop-1920-x-1080px-11.jpg",
+  "7a6aa14a-782d-44bc-830a-632632f9040f": "https://api.reelly.io/vault/ZZLvFZFt/9x-U-nqwmBXJC8YMzrU7rQ2-ILA/ttR1Ew../cover.png",
+  "d2742cef-6cd5-470f-b83b-e943a74b1d23": "https://api.reelly.io/vault/ZZLvFZFt/lwyFq2OzEn-fHW9TEyMH2ghxVw4/QMGPcA../2.jpg",
+  "87ae334f-64c7-42d8-9c76-fbc82b1403de": "https://waedproperties.com/wp-content/uploads/2025/05/01_Gallery_2-1024x512.webp",
+};
+
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null; show_sale_status?: boolean | null };
   showFavorite?: boolean;
@@ -89,6 +101,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
   const rawPrimary =
+    VERIFIED_CARD_MEDIA[project.id] ||
     project.cover_image_url ||
     (project as any).card_image_url ||
     (project as any).hero_image_url ||
