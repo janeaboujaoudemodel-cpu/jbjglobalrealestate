@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AlertTriangle, CheckCircle2, ExternalLink, Loader2, RefreshCw, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 
 interface Status {
   bookingUrl: string | null;
@@ -24,18 +25,26 @@ interface Status {
  *    are stored without ever sending the brokerage to the website.
  */
 export function BreakfastCalendarStatusBanner() {
+  const { isOwner, isLoading: ownerLoading } = useIsAppOwner();
   const [status, setStatus] = useState<Status | null>(null);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
+  const [forbidden, setForbidden] = useState(false);
 
   const load = async () => {
+    if (!isOwner) { setLoading(false); return; }
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("breakfast-calendar-status");
-      if (error) throw error;
+      if (error) {
+        const msg = (error as { message?: string })?.message || "";
+        if (/403|forbidden/i.test(msg)) { setForbidden(true); return; }
+        throw error;
+      }
       setStatus(data as Status);
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Could not load calendar status";
+      if (/403|forbidden/i.test(message)) { setForbidden(true); return; }
       toast.error(message);
     } finally {
       setLoading(false);
@@ -58,9 +67,10 @@ export function BreakfastCalendarStatusBanner() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { if (!ownerLoading) load(); }, [ownerLoading, isOwner]);
 
-  if (loading) {
+  if (!isOwner || forbidden) return null;
+  if (loading || ownerLoading) {
     return (
       <div className="flex items-center gap-2 rounded-md border border-[#1A1A1A]/10 bg-[#F7F2EA] px-4 py-2 text-sm text-[#1A1A1A]/70">
         <Loader2 className="h-4 w-4 animate-spin" /> Checking dedicated breakfast calendar…
