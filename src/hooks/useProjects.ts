@@ -8,7 +8,7 @@ export type { UnifiedProject as Project } from "@/types/unifiedProject";
 import type { UnifiedProject } from "@/types/unifiedProject";
 
 const hasPublicPhoto = (p: UnifiedProject) =>
-  !!(p.cover_image_url || p.images?.some((img) => !!img.image_url));
+  !!(p.cover_image_url || p.card_image_url || p.gallery_start_image_url || p.images?.some((img) => !!img.image_url));
 
 const hasApprovedDeveloperLogo = (project: UnifiedProject) =>
   isValidDeveloperLogoUrl(project.developer?.logo_url);
