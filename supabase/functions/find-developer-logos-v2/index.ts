@@ -117,25 +117,6 @@ Return JSON array:
         }
       } catch {}
 
-      // Fallback: Google Favicon (lower quality but more coverage)
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-      try {
-        const favCheck = await fetch(faviconUrl, { method: "HEAD" });
-        if (favCheck.ok) {
-          const { error } = await supabase
-            .from("developers")
-            .update({ logo_url: faviconUrl, updated_at: new Date().toISOString() })
-            .eq("id", dev.id);
-          
-          if (!error) {
-            updated++;
-            results.push({ name: dev.name, status: "favicon", url: faviconUrl });
-            console.log(`✅ ${dev.name}: ${faviconUrl} (favicon)`);
-            continue;
-          }
-        }
-      } catch {}
-
       results.push({ name: dev.name, status: "no_logo_found", domain });
     }
 
