@@ -236,17 +236,29 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
         <Tabs defaultValue="template" className="flex-1 flex flex-col overflow-hidden">
           <TabsList className="mx-6 mt-4 justify-start bg-transparent p-0 gap-2 h-auto flex-wrap">
-            <TabsTrigger value="template" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white">
-              <FileText className="size-4 mr-1" /> Template
+            <TabsTrigger
+              value="template"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+            >
+              <FileText className="size-4" /> Template
             </TabsTrigger>
-            <TabsTrigger value="audience" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white">
-              <Users className="size-4 mr-1" /> Audience
+            <TabsTrigger
+              value="audience"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+            >
+              <Users className="size-4" /> Audience
             </TabsTrigger>
-            <TabsTrigger value="preview" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white">
-              <Eye className="size-4 mr-1" /> Preview
+            <TabsTrigger
+              value="preview"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+            >
+              <Eye className="size-4" /> Preview
             </TabsTrigger>
-            <TabsTrigger value="send" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white">
-              <Send className="size-4 mr-1" /> Send
+            <TabsTrigger
+              value="send"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+            >
+              <Send className="size-4" /> Send
             </TabsTrigger>
           </TabsList>
 
