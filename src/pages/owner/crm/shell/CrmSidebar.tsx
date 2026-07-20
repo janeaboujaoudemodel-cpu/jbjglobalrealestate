@@ -1,9 +1,11 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, MoreHorizontal, PanelLeft, Search, Crown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { ChevronDown, ExternalLink, LogOut, MoreHorizontal, PanelLeft, Search, Crown } from "lucide-react";
 
 import {
   CRM_DEFAULT_SECTION,
-  CRM_OWNER_BACKEND,
+  CRM_OWNER_HUB_SECTIONS,
+  type CrmOwnerHubModule,
   CRM_PRIMARY_NAV,
   CRM_TEAMSPACE_BOTTOM,
   CRM_TEAMSPACE_FOLDERS,
@@ -11,12 +13,20 @@ import {
   crmSectionPath,
 } from "./modules";
 import { useOwnerVerification } from "@/hooks/useOwnerVerification";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function CrmSidebar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const segment = pathname.replace(/\/+$/, "").split("/").pop();
   const active = !segment || segment === "jbj" ? CRM_DEFAULT_SECTION : segment;
   const { isOwner } = useOwnerVerification();
+  const { signOut } = useAuth();
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    document.querySelector(".jc-app")?.setAttribute("data-sidebar-collapsed", collapsed ? "true" : "false");
+  }, [collapsed]);
 
   const renderModule = (m: typeof CRM_PRIMARY_NAV[number], child = false) => {
     const Icon = m.icon;
@@ -34,9 +44,9 @@ export default function CrmSidebar() {
     );
   };
 
-  const renderExternal = (m: typeof CRM_OWNER_BACKEND[number]) => {
+  const renderHubModule = (m: CrmOwnerHubModule) => {
     const Icon = m.icon;
-    const isActive = pathname === m.href || pathname.startsWith(m.href + "/");
+    const isActive = active === m.slug || pathname === m.href;
     return (
       <NavLink
         key={m.slug}
@@ -50,13 +60,25 @@ export default function CrmSidebar() {
     );
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
   return (
-    <aside className="jc-rail" aria-label="CRM navigation" data-no-contrast-guard>
+    <aside className="jc-rail" aria-label="JBJ Hub navigation" data-no-contrast-guard data-collapsed={collapsed ? "true" : "false"}>
       <div className="jc-brand-row">
         <div className="jc-brand-mark" aria-hidden="true">JBJ</div>
-        <span className="jc-brand-product">CRM</span>
+        <span className="jc-brand-product">{isOwner ? "Hub" : "CRM"}</span>
         <ChevronDown size={18} className="jc-brand-caret" />
-        <button type="button" className="jc-collapse-visual" aria-label="Collapse sidebar"><PanelLeft size={22} /></button>
+        <button
+          type="button"
+          className="jc-collapse-visual"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          onClick={() => setCollapsed((v) => !v)}
+        >
+          <PanelLeft size={22} />
+        </button>
       </div>
 
       <nav className="jc-main-nav" aria-label="Primary CRM modules">
@@ -97,19 +119,48 @@ export default function CrmSidebar() {
       </section>
 
       {isOwner && (
-        <section className="jc-teamspace" aria-label="Owner Backend" style={{ borderTop: "1px solid rgba(255,255,255,0.08)", marginTop: 4 }}>
-          <div className="jc-teamspace__title">
-            <span className="jc-teamspace__badge" style={{ background: "linear-gradient(180deg,#D4AF37,#8a6a1f)", color: "#000" }}>
+        <section className="jc-teamspace jc-owner-hub" aria-label="Owner JBJ Hub">
+          <div className="jc-teamspace__title jc-owner-hub__title">
+            <span className="jc-teamspace__badge jc-owner-hub__badge">
               <Crown size={12} />
             </span>
             <span>Owner Backend</span>
             <ChevronDown size={17} />
           </div>
-          <nav className="jc-team-nav" aria-label="Owner backend modules">
-            {CRM_OWNER_BACKEND.map(renderExternal)}
+          <nav className="jc-team-nav" aria-label="Owner backend modules inside JBJ Hub">
+            {CRM_OWNER_HUB_SECTIONS.map((folder) => {
+              const FolderIcon = folder.icon;
+              return (
+                <div className="jc-folder jc-folder--owner" key={folder.label} data-open={folder.defaultOpen ? "true" : "false"}>
+                  <div className="jc-folder__label">
+                    <FolderIcon size={20} />
+                    <span>{folder.label}</span>
+                    <ChevronDown size={16} />
+                  </div>
+                  <div className="jc-folder__children">
+                    {folder.children.map((m) => renderHubModule(m as CrmOwnerHubModule))}
+                  </div>
+                </div>
+              );
+            })}
           </nav>
         </section>
       )}
+
+      <div className="jc-sidebar-footer" aria-label="Hub account actions">
+        <Link to="/" className="jc-sidebar-footer__action">
+          <ExternalLink size={18} />
+          <span>Return to Site</span>
+        </Link>
+        <button type="button" className="jc-sidebar-footer__action" onClick={handleSignOut}>
+          <LogOut size={18} />
+          <span>Sign Out</span>
+        </button>
+        <button type="button" className="jc-sidebar-footer__action" onClick={() => setCollapsed((v) => !v)}>
+          <PanelLeft size={18} />
+          <span>{collapsed ? "Expand" : "Collapse"}</span>
+        </button>
+      </div>
     </aside>
   );
 }
