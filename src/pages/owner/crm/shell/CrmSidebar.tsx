@@ -93,10 +93,7 @@ export default function CrmSidebar() {
           <ChevronDown size={17} />
           <button type="button" aria-label="Teamspace options"><MoreHorizontal size={20} /></button>
         </div>
-        <label className="jc-side-search" aria-label="Search modules">
-          <Search size={20} />
-          <input placeholder="Search" />
-        </label>
+        {/* Teamspace-local search removed — the header ⌘K search is the single global entry point. */}
 
         <nav className="jc-team-nav" aria-label="Teamspace modules">
           {CRM_TEAMSPACE_TOP.map((m) => renderModule(m, true))}
