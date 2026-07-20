@@ -89,12 +89,12 @@ export default function DataHub() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
-      {/* Full-bleed emerald hero — inline colors bypass all global contrast guards */}
-      <div className="w-full" data-no-contrast-guard style={{ background: "linear-gradient(180deg,#064E3B 0%,#042c1c 60%,#000 100%)" }}>
-        <div className="max-w-[1400px] mx-auto px-6 py-10">
-          <h1 data-no-contrast-guard style={{ color: "#ffffff" }} className="text-3xl md:text-4xl font-semibold tracking-tight">Data Hub</h1>
-          <p data-no-contrast-guard style={{ color: "rgba(255,255,255,0.85)" }} className="mt-2 max-w-2xl">Central databases, unassigned lead pool, and AI-driven distribution to your brokers.</p>
-          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+      {/* Full-bleed emerald hero — data-surface="emerald" opts elements out of the champagne ink coercion */}
+      <div data-surface="emerald" data-on-dark data-no-contrast-guard className="w-full" style={{ background: "linear-gradient(180deg,#064E3B 0%,#042c1c 60%,#000 100%)" }}>
+        <div className="max-w-[1400px] mx-auto px-6 py-10" data-surface="emerald" data-on-dark>
+          <h1 data-surface="emerald" data-on-dark className="text-3xl md:text-4xl font-semibold tracking-tight" style={{ color: "#ffffff" }}>Data Hub</h1>
+          <p data-surface="emerald" data-on-dark className="mt-2 max-w-2xl" style={{ color: "rgba(255,255,255,0.85)" }}>Central databases, unassigned lead pool, and AI-driven distribution to your brokers.</p>
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3" data-surface="emerald" data-on-dark>
             <StatTile label="Unassigned leads" value={poolCount} />
             <StatTile label="Active brokers" value={brokers.length} />
             <StatTile label="Total leads" value={dbCounts.crm_leads ?? 0} />
