@@ -60,6 +60,22 @@ export default function DataHub() {
     const counts: Record<string, number> = {};
     dbs.forEach((t, i) => (counts[t] = results[i].count ?? 0));
     setDbCounts(counts);
+
+    // Recent AI-analyzed calls
+    const { data: callData } = await supabase
+      .from("broker_call_logs")
+      .select("id, lead_id, phone_number, duration_seconds, call_status, ai_summary, ai_score, ai_processed_at, created_at, user_id")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    const leadIds = Array.from(new Set((callData ?? []).map((c: any) => c.lead_id).filter(Boolean)));
+    const brokerIds = Array.from(new Set((callData ?? []).map((c: any) => c.user_id).filter(Boolean)));
+    const [{ data: leadNames }, { data: brokerNames }] = await Promise.all([
+      leadIds.length ? supabase.from("crm_leads").select("id, full_name").in("id", leadIds) : Promise.resolve({ data: [] as any[] }),
+      brokerIds.length ? supabase.from("broker_profiles").select("user_id, display_name").in("user_id", brokerIds) : Promise.resolve({ data: [] as any[] }),
+    ]);
+    const lm = new Map((leadNames ?? []).map((r: any) => [r.id, r.full_name]));
+    const bm = new Map((brokerNames ?? []).map((r: any) => [r.user_id, r.display_name]));
+    setCalls(((callData ?? []) as any[]).map((c) => ({ ...c, lead_name: lm.get(c.lead_id) ?? null, broker_name: bm.get(c.user_id) ?? null })));
     setLoading(false);
   }
 
