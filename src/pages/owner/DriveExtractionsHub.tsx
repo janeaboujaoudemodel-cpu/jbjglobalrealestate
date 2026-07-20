@@ -293,3 +293,23 @@ function Empty({ text }: { text: string }) {
     </div>
   );
 }
+
+function EmiratesView() {
+  const [rows, setRows] = useState<any[]>([]);
+  useEffect(() => {
+    supabase.from("emirates").select("id,name,slug").order("name").then(({ data }) => setRows(data ?? []));
+  }, []);
+  if (!rows.length) return <Empty text="No emirates seeded yet. Drop a Drive folder above with entity type 'Emirates'." />;
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      {rows.map((e) => (
+        <div key={e.id} className="rounded-lg border border-[#B89555]/30 bg-white p-3">
+          <div className="text-xs uppercase tracking-wider text-[#1A1A1A]/50">Emirate</div>
+          <div className="font-semibold">{e.name}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+}
