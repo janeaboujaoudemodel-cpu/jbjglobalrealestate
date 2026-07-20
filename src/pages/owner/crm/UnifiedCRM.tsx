@@ -17,7 +17,7 @@ import { useCRMLiveSync } from "@/hooks/useCRMLiveSync";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
+  Users, Crown, Briefcase,
   ChevronDown, BarChart3, Bell, Database, Plus, UserPlus,
   GraduationCap,
 } from "lucide-react";
