@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
 import { useCrmHomeKpis, formatKpi } from "@/hooks/useCrmHomeKpis";
+import LeadCallButton from "@/components/crm/LeadCallButton";
 
 /**
  * JBJ CRM — Home Dashboard
@@ -289,17 +290,23 @@ function TodaysFocus({
                       {l.source || "Direct"} · {l.company_name || l.email || "—"}
                     </div>
                   </div>
-                  <Link
-                    to="/owner/data-hub"
-                    style={{
-                      color: "#D4AF37", fontSize: 12, fontWeight: 600,
-                      textDecoration: "none", padding: "4px 10px",
-                      borderRadius: 6, border: "1px solid rgba(212,175,55,0.35)",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    Assign
-                  </Link>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <LeadCallButton
+                      lead={{ id: l.id, full_name: l.full_name, phone: l.phone, email: l.email }}
+                      className="h-7 !text-white !border-[rgba(212,175,55,0.4)] !bg-transparent hover:!bg-white/10"
+                    />
+                    <Link
+                      to="/owner/data-hub"
+                      style={{
+                        color: "#D4AF37", fontSize: 12, fontWeight: 600,
+                        textDecoration: "none", padding: "4px 10px",
+                        borderRadius: 6, border: "1px solid rgba(212,175,55,0.35)",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      Assign
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
