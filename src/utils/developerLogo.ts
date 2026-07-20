@@ -22,7 +22,6 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /\/frame\+?\d/i,
   /1080x1080/i,
   /\/images?\.(png|jpe?g|webp)(\?|$)/i,
-  /\/[0-9]{8,}\.(jpg|jpeg|png|webp)(\?|$)/i,
   /logo-white-1/i,
   /logodix\.com/i,
   /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)

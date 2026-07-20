@@ -133,24 +133,23 @@ export function isValidImageUrl(url: unknown): url is string {
     if (pattern.test(effectiveUrl)) return false;
   }
   
-  // If from trusted domain, allow it (skip site asset filtering)
-  if (isTrustedImageSource(effectiveUrl)) {
-    // Still filter out explicit document files even from trusted sources
-    for (const pattern of DOCUMENT_PATTERNS) {
-      if (pattern.test(effectiveUrl)) return false;
-    }
-    return true;
-  }
-  
-  // Check for site asset patterns (only for untrusted domains)
-  for (const pattern of SITE_ASSET_PATTERNS) {
+  // Reject non-property media everywhere, including trusted storage. Trusted
+  // storage can still contain fact sheets, flags, logos, icons, and broker-kit
+  // files; those must never appear as a public project card/photo.
+  for (const pattern of DOCUMENT_PATTERNS) {
     if (pattern.test(effectiveUrl)) return false;
   }
-  
-  // Check for broker-kit / non-photo assets (applies to all domains)
+
   for (const pattern of BROKER_KIT_PATTERNS) {
     if (pattern.test(effectiveUrl)) return false;
   }
+
+  for (const pattern of SITE_ASSET_PATTERNS) {
+    if (pattern.test(effectiveUrl)) return false;
+  }
+
+  // Trusted image hosts pass once known non-photo patterns are excluded.
+  if (isTrustedImageSource(effectiveUrl)) return true;
   
   return true;
 }
