@@ -159,7 +159,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         <div className="p-3 border-b border-[#064E3B]/20 bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-between">
           <h3 className="allow-white font-semibold text-sm text-white">Notifications{unreadCount > 0 ? ` (${unreadCount})` : ''}</h3>
           {unreadCount > 0 && (
-            <button onClick={markAllRead} className="text-xs text-[#1A1A1A] hover:text-[#1A1A1A] font-medium transition-colors">
+            <button onClick={markAllRead} className="text-xs text-white hover:text-white font-medium transition-colors">
               Mark all read
             </button>
           )}
@@ -239,7 +239,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
           style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
         />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none animate-pulse">
+          <span className="absolute -top-2 -right-2 z-10 min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none animate-pulse border-2 border-[#032A1E] shadow-sm">
             {unreadCount}
           </span>
         )}
