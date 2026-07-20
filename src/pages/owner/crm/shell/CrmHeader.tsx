@@ -29,8 +29,13 @@ export default function CrmHeader() {
         setSearchOpen(true);
       }
     };
+    const onExternal = () => setSearchOpen(true);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("jc-open-search", onExternal as EventListener);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("jc-open-search", onExternal as EventListener);
+    };
   }, []);
 
   return (
