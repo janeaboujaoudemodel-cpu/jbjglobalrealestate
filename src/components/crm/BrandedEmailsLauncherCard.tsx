@@ -7,7 +7,6 @@
  */
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
 import BrandedEmailsPanel, { type BrandedAudienceKind } from "./branded-emails/BrandedEmailsPanel";
 
@@ -74,7 +73,7 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
                   padding: "8px 14px", borderRadius: 6, fontSize: 13, fontWeight: 700,
                   background: "#FFFFFF", color: "#0F1A16",
                   border: "1px solid rgba(6,78,59,0.4)",
-                  transform: "none", transition: "background 120ms ease",
+                  transform: "none", transition: "background-color 120ms ease",
                   cursor: "pointer", whiteSpace: "nowrap",
                 }}
               >
@@ -89,7 +88,7 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
                 padding: "8px 14px", borderRadius: 6, fontSize: 13, fontWeight: 700,
                 background: "#064E3B", color: "#FFFFFF",
                 border: "1px solid #064E3B",
-                transform: "none", transition: "background 120ms ease",
+                transform: "none", transition: "background-color 120ms ease",
                 cursor: "pointer", whiteSpace: "nowrap",
               }}
             >

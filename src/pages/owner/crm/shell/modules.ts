@@ -248,6 +248,7 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
     children: [
       { slug: "owner-brokerages", label: "Brokerage Portal", icon: Handshake },
       { slug: "owner-developers", label: "Developer Portal", icon: Building },
+      { slug: "owner-relationships", label: "Relationships Hub", icon: Handshake },
       { slug: "owner-careers", label: "Careers Portal", icon: BriefcaseBusiness },
     ],
   },
@@ -282,7 +283,6 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
     children: [
       { slug: "owner-inbox", label: "Messages / Inbox", icon: MessageSquare },
       { slug: "owner-team-chat", label: "Team Chat", icon: MessagesSquare },
-      { slug: "owner-relationships", label: "Relationships Hub", icon: Handshake },
     ],
   },
   {

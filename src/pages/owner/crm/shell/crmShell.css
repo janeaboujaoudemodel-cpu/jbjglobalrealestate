@@ -4410,3 +4410,104 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
+
+/* PASS 158 — backend-wide stable emerald action contract.
+   Root cause: mixed legacy module CSS, Tailwind hover transforms and generic
+   button variants were overriding the Hub's emerald/white rules. */
+.jc-app .jc-content :is(button, a, [role="button"]),
+.jc-app .jc-content :is(button, a, [role="button"]):hover,
+.jc-app .jc-content :is(button, a, [role="button"]):focus,
+.jc-app .jc-content :is(button, a, [role="button"]):active {
+  transform: none !important;
+  scale: 1 !important;
+  transition-property: background-color, border-color, color, box-shadow !important;
+}
+
+.jc-app .jc-content :is(button, a, [role="button"]) {
+  min-width: max-content;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+}
+
+.jc-app :is(
+  .jc-list__cta,
+  .jc-btn--primary,
+  .jc-an__cta,
+  .jc-rp__create,
+  .jc-flt__apply,
+  .jc-get-started,
+  [data-branded-email-live-action="true"],
+  [data-branded-email-send="true"] button,
+  [data-developer-directory] button[class*="bg-[#064E3B]"],
+  [data-developer-directory] a[class*="bg-[#064E3B]"]
+) {
+  background: #064E3B !important;
+  background-image: none !important;
+  border-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+.jc-app :is(
+  .jc-list__cta,
+  .jc-btn--primary,
+  .jc-an__cta,
+  .jc-rp__create,
+  .jc-flt__apply,
+  .jc-get-started,
+  [data-branded-email-live-action="true"],
+  [data-branded-email-send="true"] button,
+  [data-developer-directory] button[class*="bg-[#064E3B]"],
+  [data-developer-directory] a[class*="bg-[#064E3B]"]
+) :is(span, strong, b, small, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+.jc-app [data-developer-directory] :is(.bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\]) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+}
+
+.jc-app [data-developer-directory] :is(.border-\[\#B89555\]\/25, .border-\[\#B89555\]\/30, .border-\[\#B89555\]\/35, .border-\[\#B89555\]\/40, .border-\[\#B89555\]\/50) {
+  border-color: rgba(6,78,59,0.22) !important;
+}
+
+.jc-app [data-developer-directory] :is(.text-\[\#B89555\]) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+.jc-app [data-branded-email-panel] :is(button[data-state="checked"], [data-state="checked"], .bg-\[\#064E3B\]) {
+  background: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #064E3B !important;
+}
+
+.jc-app [data-branded-email-panel] :is(button[data-state="checked"], [data-state="checked"], .bg-\[\#064E3B\]) :is(svg, path, span) {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.jc-app .jc-icon-btn__badge,
+.jj-header-icon-control > span[class*="bg-red"] {
+  min-width: 20px !important;
+  width: auto !important;
+  height: 20px !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 999px !important;
+  padding-inline: 5px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: visible !important;
+  line-height: 1 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}

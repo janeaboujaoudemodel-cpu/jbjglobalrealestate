@@ -42067,6 +42067,20 @@ export type Database = {
       hash_otp: { Args: { p_code: string }; Returns: string }
       hr_announcement_mark_read: { Args: { _id: string }; Returns: undefined }
       hr_announcement_publish: { Args: { _id: string }; Returns: undefined }
+      hr_candidate_self_update_safe: {
+        Args: {
+          _ai_ranking: number
+          _ai_score: number
+          _final_decision: string
+          _final_decision_by: string
+          _final_decision_date: string
+          _final_decision_notes: string
+          _row_id: string
+          _status: string
+          _user_id: string
+        }
+        Returns: boolean
+      }
       increment_shared_card_views: {
         Args: { card_token: string }
         Returns: undefined
@@ -42264,6 +42278,20 @@ export type Database = {
       redact_sensitive_transcript: {
         Args: { p_transcript: string }
         Returns: string
+      }
+      referral_partner_self_update_safe: {
+        Args: {
+          _approved_at: string
+          _approved_by: string
+          _commission_rate: number
+          _referral_code: string
+          _row_id: string
+          _status: string
+          _total_conversions: number
+          _total_earnings_aed: number
+          _user_id: string
+        }
+        Returns: boolean
       }
       refresh_auto_featured: { Args: { p_surface: string }; Returns: undefined }
       refresh_vault_ranking: { Args: never; Returns: undefined }
