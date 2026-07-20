@@ -3991,3 +3991,284 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 .jc-header .jc-search svg,
 .jc-header .jc-search .jc-search__placeholder,
 .jc-header .jc-search .jc-search__kbd { color: #FFFFFF !important; opacity: 1 !important; }
+
+/* ============================================================
+   PASS 155 — JBJ HUB EMERALD + RESPONSIVE BACKEND AUDIT LOCK
+   Newer backend modules must use the real JBJ Emerald action
+   contract and never shrink toolbar text into vertical letters.
+============================================================ */
+.jc-app {
+  --jbjcrm-real-emerald: #064E3B;
+  --jbjcrm-real-emerald-deep: #032A1E;
+  --jbjcrm-real-emerald-black: #000000;
+  --jbjcrm-real-emerald-action: linear-gradient(160deg, #064E3B 0%, #032A1E 58%, #000000 100%);
+}
+
+.jc-app :where(
+  .jc-fc__chip--primary,
+  .jc-fc__periods button[data-active],
+  .jc-fc__avatar,
+  .jc-fc__health-tag--em,
+  .jc-fc__bar-closed,
+  .jc-fc__wf-fill,
+  .jc-doclib__new,
+  .jc-doclib__folder[data-active],
+  .jc-doclib__chip--primary,
+  .jc-doclib__viewtoggle button[data-active],
+  .jc-doclib__bulk,
+  .jc-doclib__quota-bar > span,
+  .jc-search-overlay__chip:hover,
+  .jc-search-overlay__row:hover .jc-search-overlay__row-id,
+  .jc-notif__icon--lead,
+  .jc-notif__icon--deal,
+  .jc-notif__icon--meeting,
+  .jc-notif__icon--message
+) {
+  background: var(--jbjcrm-real-emerald-action) !important;
+  background-image: var(--jbjcrm-real-emerald-action) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(6, 78, 59, 0.72) !important;
+}
+
+.jc-app :where(
+  .jc-fc__chip--primary,
+  .jc-fc__periods button[data-active],
+  .jc-fc__avatar,
+  .jc-fc__health-tag--em,
+  .jc-doclib__new,
+  .jc-doclib__folder[data-active],
+  .jc-doclib__chip--primary,
+  .jc-doclib__viewtoggle button[data-active],
+  .jc-doclib__bulk,
+  .jc-search-overlay__chip:hover,
+  .jc-search-overlay__row:hover .jc-search-overlay__row-id,
+  .jc-notif__icon--lead,
+  .jc-notif__icon--deal,
+  .jc-notif__icon--meeting,
+  .jc-notif__icon--message
+) :where(span, strong, b, em, small, div, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+.jc-app :where(.jc-fc__chip, .jc-doclib__chip, .jc-doclib__new, .jc-search-overlay__chip, .jc-search-overlay__row) {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  flex-shrink: 0;
+}
+
+.jc-app :where(.jc-fc__chip, .jc-doclib__chip, .jc-doclib__new) svg {
+  flex: 0 0 auto !important;
+}
+
+/* Forecasts — replace fake green/gold accents and lock white ink on emerald. */
+.jc-app .jc-fc__chip--primary {
+  min-height: 36px;
+  box-shadow: 0 8px 18px -12px rgba(6, 78, 59, 0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+.jc-app .jc-fc__head-actions,
+.jc-app .jc-fc__panel-head,
+.jc-app .jc-fc__bar-meta,
+.jc-app .jc-fc__footer-actions {
+  flex-wrap: wrap !important;
+}
+.jc-app .jc-fc__periods {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.jc-app .jc-fc__owner { min-width: 0; }
+.jc-app .jc-fc__owner-name,
+.jc-app .jc-fc__owner-role { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jc-app .jc-fc__avatar {
+  border: 1px solid rgba(255,255,255,0.24) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 5px 14px -10px rgba(6,78,59,0.72) !important;
+  letter-spacing: 0 !important;
+}
+.jc-app .jc-fc__avatar,
+.jc-app .jc-fc__avatar::first-letter {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-fc__dot--em,
+.jc-app .jc-fc__dot--amber,
+.jc-app .jc-fc__dot--gold {
+  background: #064E3B !important;
+  box-shadow: 0 0 0 3px rgba(6,78,59,0.12) !important;
+}
+.jc-app .jc-fc__health-tag--amber,
+.jc-app .jc-fc__health-tag {
+  background: #FFFFFF !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  border: 1px solid rgba(6,78,59,0.20) !important;
+}
+.jc-app .jc-fc__bar-best,
+.jc-app .jc-fc__bar-commit {
+  background: rgba(6,78,59,0.18) !important;
+}
+.jc-app .jc-fc__kpi::before,
+.jc-app .jc-fc__kpi[data-accent="champagne"]::before,
+.jc-app .jc-fc__kpi[data-accent="emerald"]::before {
+  background: var(--jbjcrm-real-emerald-action) !important;
+}
+.jc-app .jc-fc__kpi-icon,
+.jc-app .jc-fc__kpi[data-accent="emerald"] .jc-fc__kpi-icon,
+.jc-app .jc-fc__num--emerald,
+.jc-app .jc-fc__link {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+/* Documents — responsive toolbar, no vertical buttons, real emerald actions. */
+.jc-app .jc-doclib__toolbar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-bottom: 14px !important;
+}
+.jc-app .jc-doclib__search {
+  flex: 1 1 320px !important;
+  min-width: min(100%, 260px) !important;
+  max-width: 100% !important;
+  height: 38px !important;
+}
+.jc-app .jc-doclib__search input {
+  min-width: 0 !important;
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+}
+.jc-app .jc-doclib__chip,
+.jc-app .jc-doclib__viewtoggle,
+.jc-app .jc-doclib__viewtoggle button {
+  height: 38px !important;
+  min-height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+.jc-app .jc-doclib__viewtoggle { overflow: hidden; }
+.jc-app .jc-doclib__viewtoggle button { width: 38px !important; padding: 0 !important; }
+.jc-app .jc-doclib__toolbar-spacer {
+  flex: 1 1 24px !important;
+  min-width: 0 !important;
+}
+.jc-app .jc-doclib__new,
+.jc-app .jc-doclib__chip--primary {
+  min-height: 38px !important;
+  box-shadow: 0 8px 18px -12px rgba(6, 78, 59, 0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+.jc-app .jc-doclib__folder[data-active] .jc-doclib__folder-count {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-doclib__bulk {
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.jc-app .jc-doclib__bulk button {
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-doclib__star,
+.jc-app .jc-doclib__card-foot svg {
+  color: #064E3B !important;
+  fill: #064E3B !important;
+}
+.jc-app .jc-doclib__row[data-selected] {
+  background: rgba(6,78,59,0.08) !important;
+}
+
+@media (max-width: 920px) {
+  .jc-app .jc-doclib__toolbar { align-items: stretch !important; }
+  .jc-app .jc-doclib__search { flex-basis: 100% !important; width: 100% !important; }
+  .jc-app .jc-doclib__toolbar-spacer { display: none !important; }
+  .jc-app .jc-doclib__chip { flex: 0 0 auto !important; }
+  .jc-app .jc-fc__head-actions { width: 100%; }
+}
+
+@media (max-width: 620px) {
+  .jc-app .jc-doclib__main { padding: 14px 12px 20px !important; }
+  .jc-app .jc-doclib__chip { padding-inline: 10px !important; font-size: 11.5px !important; }
+  .jc-app .jc-fc { padding: 16px 12px 24px !important; }
+  .jc-app .jc-fc__periods { max-width: 100%; overflow-x: auto; }
+  .jc-app .jc-fc__chip { min-width: max-content; }
+}
+
+/* Search overlay — stable dark-on-white controls, emerald/white on hover. */
+.jc-app .jc-search-overlay__bar,
+.jc-app .jc-search-overlay__panel,
+.jc-app .jc-search-overlay__body,
+.jc-app .jc-search-overlay__footer {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: initial !important;
+}
+.jc-app .jc-search-overlay__bar input {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+  min-width: 0 !important;
+}
+.jc-app .jc-search-overlay__row,
+.jc-app .jc-search-overlay__chip {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(6,78,59,0.14) !important;
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+  min-height: 40px !important;
+}
+.jc-app .jc-search-overlay__row:hover,
+.jc-app .jc-search-overlay__chip:hover {
+  background: var(--jbjcrm-real-emerald-action) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(6,78,59,0.72) !important;
+}
+.jc-app .jc-search-overlay__row:hover :where(span, svg, path, div),
+.jc-app .jc-search-overlay__chip:hover :where(span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+.jc-app .jc-search-overlay__close,
+.jc-app .jc-search-overlay__kbd,
+.jc-app .jc-search-overlay__footer kbd {
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+}
+
+/* Header notification badge — sit outside the bell, never over it. */
+.jc-app .jc-popover-anchor,
+.jc-app .jc-icon-btn {
+  overflow: visible !important;
+}
+.jc-app .jc-icon-btn { position: relative !important; }
+.jc-app .jc-icon-btn__badge {
+  top: -7px !important;
+  right: -7px !important;
+  min-width: 19px !important;
+  width: auto !important;
+  height: 19px !important;
+  min-height: 19px !important;
+  padding: 0 5px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  z-index: 4 !important;
+  border: 2px solid #032A1E !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
