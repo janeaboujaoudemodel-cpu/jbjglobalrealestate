@@ -483,9 +483,17 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     type="button"
                     onClick={handleSendTest}
                     disabled={sending || !selectedTemplate}
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-[#064E3B] bg-white px-4 py-2 text-sm font-semibold !text-[#064E3B] disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[#064E3B]/10"
+                    style={{
+                      display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
+                      minHeight: 40, padding: "8px 16px", borderRadius: 6, fontSize: 13, fontWeight: 700,
+                      background: "#FFFFFF", color: "#064E3B",
+                      border: "1px solid #064E3B",
+                      whiteSpace: "nowrap",
+                      cursor: sending || !selectedTemplate ? "not-allowed" : "pointer",
+                      opacity: sending || !selectedTemplate ? 0.5 : 1,
+                    }}
                   >
-                    {sending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                    {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#064E3B" }} /> : <Send className="size-4" style={{ color: "#064E3B" }} />}
                     Send test
                   </button>
                 </div>
@@ -496,9 +504,16 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 type="button"
                 onClick={handleSendLive}
                 disabled={!selectedTemplate || audienceCount === 0}
-                className="w-full inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-[#064E3B] bg-[#064E3B] px-4 py-3 text-sm font-bold !text-white disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[#053528]"
+                style={{
+                  width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
+                  background: "#064E3B", color: "#FFFFFF",
+                  border: "1px solid #064E3B",
+                  cursor: !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
+                  opacity: !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
+                }}
               >
-                <Send className="size-4 !text-white" />
+                <Send className="size-4" style={{ color: "#FFFFFF" }} />
                 Send live to {audienceCount} {kind}
               </button>
 
