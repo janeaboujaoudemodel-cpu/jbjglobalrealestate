@@ -49,12 +49,8 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
 const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
 const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
-const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
-const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
-// Developers / Brokerage Agencies / Brokers / Sales Reps all render through
-// CRMRelationships so the UI, fields, filters and drawers are identical to
-// /owner/crm/relationship-hub. The page reads ?tab= to jump to the right tab.
-const DevSalesRepsDirectory     = lazy(() => import("@/components/crm/entity/DevSalesRepsDirectory"));
+// Developers / Brokers / Agencies / Sales Reps redirect to their own portals —
+// no longer embedded inside the CRM hub (see PORTAL_REDIRECTS below).
 const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
 const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
 const CRMTasks            = lazy(() => import("@/pages/CRMTasks"));
