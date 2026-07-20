@@ -569,7 +569,7 @@ export function useProjectsListing() {
         .order("is_featured", { ascending: false })
         .order("is_premium", { ascending: false })
         .order("updated_at", { ascending: false })
-        .limit(240);
+        .limit(90);
 
       if (firstError) throw firstError;
 
