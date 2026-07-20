@@ -50,7 +50,7 @@ import { FileSpreadsheet, FileText as FileTextIcon, UserSquare2, Store } from "l
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
 import DevSalesRepsDirectory from "@/components/crm/entity/DevSalesRepsDirectory";
 import { Link as RouterLink } from "react-router-dom";
-import { BrandedEmailComposer } from "@/components/crm/BrandedEmailComposer";
+import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import { ExportConfigurator } from "@/components/crm/ExportConfigurator";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import { BROKERAGE_EXPORT_COLUMNS, BROKERAGE_EXPORT_PRESETS } from "@/utils/exportBrokerages";
@@ -3233,22 +3233,8 @@ const CRMRelationships = () => {
             <BreakfastCalendarStatusBanner />
           </div>
 
-          {/* ============ BRANDED OUTREACH EMAIL CENTER (sticky) ============ */}
-          <section
-            className="mb-10 sticky top-[88px] z-30 bg-[#FDFBF7]/95 backdrop-blur-md rounded-2xl border border-[#B89555]/25 shadow-[0_4px_18px_rgba(184,149,85,0.10)] p-4"
-            aria-labelledby="branded-outreach-heading"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
-              <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-[#B89555]/40 bg-[#F7F2EA]">
-                <Mail className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                <h2 id="branded-outreach-heading" className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
-                  Branded Outreach Email Center
-                </h2>
-              </div>
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
-            </div>
-            <BrandedEmailComposer />
+          <section className="mb-10" aria-label="Branded emails campaign studio">
+            <BrandedEmailsLauncherCard variant="owner" />
           </section>
 
           <div className="mb-4 flex items-center justify-end">
