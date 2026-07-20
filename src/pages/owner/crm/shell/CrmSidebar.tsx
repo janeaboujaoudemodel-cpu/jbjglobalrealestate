@@ -5,7 +5,7 @@ import { ChevronDown, ExternalLink, LogOut, MoreHorizontal, PanelLeft, Search, C
 import {
   CRM_DEFAULT_SECTION,
   CRM_OWNER_HUB_SECTIONS,
-  type CrmOwnerHubModule,
+  type CrmModule,
   CRM_PRIMARY_NAV,
   CRM_TEAMSPACE_BOTTOM,
   CRM_TEAMSPACE_FOLDERS,
@@ -44,13 +44,14 @@ export default function CrmSidebar() {
     );
   };
 
-  const renderHubModule = (m: CrmOwnerHubModule) => {
+  const renderHubModule = (m: CrmModule) => {
     const Icon = m.icon;
-    const isActive = active === m.slug || pathname === m.href;
+    const href = crmSectionPath(m.slug);
+    const isActive = active === m.slug || pathname === href;
     return (
       <NavLink
         key={m.slug}
-        to={m.href}
+        to={href}
         data-active={isActive}
         className="jc-team-item jc-team-item--child"
       >
@@ -138,7 +139,7 @@ export default function CrmSidebar() {
                     <ChevronDown size={16} />
                   </div>
                   <div className="jc-folder__children">
-                    {folder.children.map((m) => renderHubModule(m as CrmOwnerHubModule))}
+                    {folder.children.map((m) => renderHubModule(m))}
                   </div>
                 </div>
               );
