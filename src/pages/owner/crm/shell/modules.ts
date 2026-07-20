@@ -38,8 +38,21 @@ import {
   Building2,
   Video,
   Wrench,
+  Crown,
+  Database,
+  Building,
+  Shield,
+  Bot,
+  BookOpen,
+  PenTool,
+  Workflow,
+  Palette,
+  ScanLine,
+  Inbox,
+  UserPlus,
   type LucideIcon,
 } from "lucide-react";
+
 
 export type CrmModule = {
   slug: string;
