@@ -117,10 +117,6 @@ const VIEWS: Record<Entity, ViewItem[]> = {
   ],
   databases:  [{ id: "all", label: "All Databases" }],
   investors:  [{ id: "directory", label: "Directory" }, { id: "vip", label: "VIP" }],
-  developers: [{ id: "registry",  label: "Registry"  }],
-  "sales-reps": [{ id: "directory", label: "Directory" }],
-  brokers:    [{ id: "directory", label: "Directory" }, { id: "imported", label: "Imported" }],
-  agencies:   [{ id: "directory", label: "Directory" }],
   employees:  [{ id: "roster",    label: "Roster" }],
   academy:    [{ id: "approvals", label: "Certification Approvals" }],
 };
