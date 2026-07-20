@@ -1163,6 +1163,13 @@ export default function DeveloperProfilePage() {
 
           {/* FILES */}
           <TabsContent value="files" className="space-y-6">
+            {developer?.id && (
+              <DeveloperContractsSection
+                developerId={developer.id}
+                developerName={developer.name}
+                canEdit={canEdit}
+              />
+            )}
             {MEDIA_KINDS.filter((k) => ["brochure", "file"].includes(k.k)).map((k) => (
               <MediaSection
                 key={k.k}
