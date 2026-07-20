@@ -15,7 +15,8 @@ import { toast } from "sonner";
 import { Sparkles, Users, Database, Send, RefreshCw } from "lucide-react";
 
 type Broker = { user_id: string; display_name: string | null; current_tier: string | null };
-type LeadRow = { id: string; full_name: string | null; source: string | null; preferred_location: string | null; created_at: string };
+import LeadCallButton from "@/components/crm/LeadCallButton";
+type LeadRow = { id: string; full_name: string | null; source: string | null; preferred_location: string | null; created_at: string; phone_e164?: string | null; phone_normalized?: string | null; email_normalized?: string | null };
 
 export default function DataHub() {
   const [tab, setTab] = useState<"pool" | "distribution" | "databases">("distribution");
@@ -39,7 +40,7 @@ export default function DataHub() {
     const assignedSet = new Set((assigned ?? []).map((r: any) => r.lead_id));
     const { data: leads } = await supabase
       .from("crm_leads")
-      .select("id, full_name, source, preferred_location, created_at")
+      .select("id, full_name, source, preferred_location, created_at, phone_e164, phone_normalized, email_normalized")
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
       .limit(200);
@@ -188,7 +189,7 @@ export default function DataHub() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead className="bg-neutral-50 text-left">
-                      <tr><th className="p-2">Name</th><th className="p-2">Source</th><th className="p-2">Location</th><th className="p-2">Created</th></tr>
+                      <tr><th className="p-2">Name</th><th className="p-2">Source</th><th className="p-2">Location</th><th className="p-2">Created</th><th className="p-2">Action</th></tr>
                     </thead>
                     <tbody>
                       {pool.slice(0, 100).map((l) => (
@@ -197,6 +198,17 @@ export default function DataHub() {
                           <td className="p-2">{l.source ?? "—"}</td>
                           <td className="p-2">{l.preferred_location ?? "—"}</td>
                           <td className="p-2 text-neutral-500">{new Date(l.created_at).toLocaleDateString()}</td>
+                          <td className="p-2">
+                            <LeadCallButton
+                              lead={{
+                                id: l.id,
+                                full_name: l.full_name,
+                                phone: l.phone_e164 ?? l.phone_normalized ?? null,
+                                email: l.email_normalized ?? null,
+                              }}
+                              onSaved={refresh}
+                            />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
