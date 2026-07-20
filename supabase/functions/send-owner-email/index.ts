@@ -62,12 +62,26 @@ async function authenticate(req: Request) {
   const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
   if (authError || !user) throw new Error("FORBIDDEN");
 
-  const [{ data: isOwner, error: ownerRoleError }, { data: isAdmin, error: adminRoleError }] = await Promise.all([
+  const [
+    { data: isOwner, error: ownerRoleError },
+    { data: isAdmin, error: adminRoleError },
+    { data: crmOwnerProfile, error: crmOwnerProfileError },
+  ] = await Promise.all([
     serviceClient.rpc("has_role", { _user_id: user.id, _role: "owner" }),
     serviceClient.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+    serviceClient
+      .from("crm_users_profile")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .in("crm_role", ["owner_admin", "admin", "founder"])
+      .eq("is_active", true)
+      .maybeSingle(),
   ]);
 
-  if (ownerRoleError || adminRoleError || (!isOwner && !isAdmin)) {
+  const appRoleAllowed = !ownerRoleError && !adminRoleError && (isOwner || isAdmin);
+  const crmRoleAllowed = !crmOwnerProfileError && Boolean(crmOwnerProfile);
+
+  if (!appRoleAllowed && !crmRoleAllowed) {
     throw new Error("FORBIDDEN");
   }
 
