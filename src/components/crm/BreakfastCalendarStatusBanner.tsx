@@ -25,18 +25,26 @@ interface Status {
  *    are stored without ever sending the brokerage to the website.
  */
 export function BreakfastCalendarStatusBanner() {
+  const { isOwner, isLoading: ownerLoading } = useIsAppOwner();
   const [status, setStatus] = useState<Status | null>(null);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
+  const [forbidden, setForbidden] = useState(false);
 
   const load = async () => {
+    if (!isOwner) { setLoading(false); return; }
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("breakfast-calendar-status");
-      if (error) throw error;
+      if (error) {
+        const msg = (error as { message?: string })?.message || "";
+        if (/403|forbidden/i.test(msg)) { setForbidden(true); return; }
+        throw error;
+      }
       setStatus(data as Status);
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Could not load calendar status";
+      if (/403|forbidden/i.test(message)) { setForbidden(true); return; }
       toast.error(message);
     } finally {
       setLoading(false);
