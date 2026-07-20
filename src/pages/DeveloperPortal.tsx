@@ -1010,9 +1010,8 @@ const DeveloperPortal = () => {
               </Card>
             ) : null}
 
-          <div className="mb-6">
-            <BrandedEmailsLauncherCard variant="developer" />
-          </div>
+
+
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="w-full overflow-x-auto pb-1">
