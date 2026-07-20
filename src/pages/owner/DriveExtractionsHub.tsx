@@ -15,6 +15,8 @@ import { Building2, FolderKanban, MapPin, Layers, FileText, ExternalLink, Refres
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import DriveDropPanel from "./DriveDropPanel";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 
 type Tab = "developers" | "projects" | "communities" | "areas" | "emirates";
 
@@ -93,11 +95,11 @@ export default function DriveExtractionsHub() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
-      <header className="border-b border-[#B89555]/30 bg-gradient-to-r from-emerald-950 via-emerald-900 to-black text-white">
+      <header className="border-b border-[#B89555]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)] text-white">
         <div className="max-w-[1400px] mx-auto px-6 py-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-amber-300/90">Owner console</p>
-          <h1 className="text-3xl font-semibold tracking-tight mt-1">Drive Extractions</h1>
-          <p className="mt-2 text-sm text-white/70 max-w-2xl">
+          <p className="text-xs uppercase tracking-[0.2em] text-[#D4AF6A]">Owner console</p>
+          <h1 className="text-3xl font-semibold tracking-tight mt-1 text-white">Drive Extractions</h1>
+          <p className="mt-2 text-sm text-white max-w-2xl">
             Everything AI pulled from developer Google Drive folders — grouped by developer, project, community and area.
           </p>
 
@@ -117,15 +119,16 @@ export default function DriveExtractionsHub() {
                   key={t.key}
                   onClick={() => setActive(t.key)}
                   className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition ${
-                    isActive ? "bg-white text-emerald-900 shadow" : "bg-white/10 text-white/80 hover:bg-white/20"
+                    isActive ? "bg-[#D4AF6A] text-white shadow" : "bg-white/10 text-white hover:bg-white/20"
                   }`}
+                  style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                 >
                   <Icon className="w-4 h-4" />
                   {t.label}
                 </button>
               );
             })}
-            <Button size="sm" variant="secondary" onClick={load} className="ml-auto bg-white/10 hover:bg-white/20 text-white border-0">
+            <Button size="sm" variant="secondary" onClick={load} className="ml-auto bg-white/10 hover:bg-white/20 text-white border border-white/20">
               <RefreshCw className="w-4 h-4 mr-1.5" /> Refresh
             </Button>
           </div>
@@ -193,9 +196,7 @@ function DevelopersView({ jobs }: { jobs: Job[] }) {
             <tr key={j.id} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7]">
               <td className="px-4 py-3">
                 <Link to={`/owner/developers/${j.developers?.slug ?? ""}`} className="inline-flex items-center gap-2 font-medium hover:underline">
-                  {j.developers?.logo_url && (
-                    <img src={j.developers.logo_url} alt="" className="w-6 h-6 rounded object-contain bg-[#0b3b2e]" loading="lazy" />
-                  )}
+                  <DeveloperLogo src={getDeveloperLogoUrl(j.developers)} name={j.developers?.name} alt={j.developers?.name ?? "Developer"} variant="bare" className="!w-8 !h-8 !rounded-md" loading="lazy" />
                   {j.developers?.name ?? j.developer_id}
                 </Link>
               </td>
@@ -231,9 +232,7 @@ function ProjectsView({ projects }: { projects: DriveProject[] }) {
                 {p.areas?.name && <> · {p.areas.name}</>}
               </div>
             </div>
-            {p.developers?.logo_url && (
-              <img src={p.developers.logo_url} alt="" className="w-9 h-9 rounded object-contain bg-[#0b3b2e] shrink-0" loading="lazy" />
-            )}
+            <DeveloperLogo src={getDeveloperLogoUrl(p.developers)} name={p.developers?.name} alt={p.developers?.name ?? "Developer"} variant="bare" className="!w-10 !h-10 !rounded-md shrink-0" loading="lazy" />
           </div>
           <div className="mt-3 flex items-center gap-2 text-[11px] text-[#1A1A1A]/60">
             <FileText className="w-3.5 h-3.5" />
@@ -274,7 +273,7 @@ function GroupedView({ mode, projects }: { mode: "community" | "area"; projects:
           <ul className="divide-y divide-[#B89555]/15">
             {g.items.map(p => (
               <li key={p.id} className="px-4 py-2 flex items-center gap-3 hover:bg-[#FDFBF7]">
-                {p.developers?.logo_url && <img src={p.developers.logo_url} alt="" className="w-6 h-6 rounded object-contain bg-[#0b3b2e]" loading="lazy" />}
+                <DeveloperLogo src={getDeveloperLogoUrl(p.developers)} name={p.developers?.name} alt={p.developers?.name ?? "Developer"} variant="bare" className="!w-7 !h-7 !rounded-md" loading="lazy" />
                 <Link to={`/project/${p.slug}`} className="text-sm hover:underline truncate">{p.name}</Link>
                 <span className="ml-auto text-[11px] text-[#1A1A1A]/60">{p.developers?.name}</span>
               </li>
