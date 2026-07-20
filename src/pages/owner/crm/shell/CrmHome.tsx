@@ -200,10 +200,10 @@ function TodaysFocus({
             <div
               style={{
                 width: 34, height: 34, borderRadius: 8,
-                background: "rgba(212,175,55,0.15)",
-                border: "1px solid rgba(212,175,55,0.4)",
+                background: "rgba(255,255,255,0.14)",
+                border: "1px solid rgba(255,255,255,0.32)",
                 display: "grid", placeItems: "center",
-                color: "#D4AF37",
+                color: "#FFFFFF",
               }}
               aria-hidden="true"
             >
@@ -223,8 +223,9 @@ function TodaysFocus({
             style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               padding: "8px 14px", borderRadius: 8,
-              background: "#D4AF37", color: "#0a0a0a",
-              fontSize: 13, fontWeight: 600, textDecoration: "none",
+              background: "#FFFFFF", color: "#064E3B",
+              fontSize: 13, fontWeight: 700, textDecoration: "none",
+              border: "1px solid rgba(255,255,255,0.6)",
             }}
           >
             Distribute now <ArrowRight size={14} />
