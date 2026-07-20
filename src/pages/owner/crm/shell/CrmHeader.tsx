@@ -97,9 +97,9 @@ export default function CrmHeader() {
           <Settings size={21} />
         </Link>
         <Link
-          to="/owner"
+          to="/owner/crm/jbj/owner-overview"
           className="jc-jbj-avatar"
-          aria-label="Back to Owner"
+          aria-label="JBJ Hub"
         >
           <img src={jbjMonogram} alt="JBJ Global Real Estate" draggable={false} />
         </Link>
