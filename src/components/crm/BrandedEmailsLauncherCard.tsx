@@ -49,8 +49,13 @@ const COPY: Record<Variant, {
 
 export default function BrandedEmailsLauncherCard({ variant = "owner" }: { variant?: Variant }) {
   const c = COPY[variant];
-  const hubHref = `/crm/relationship-hub?tab=${c.hubTab}`;
-  const templatesHref = `/crm/relationship-hub?tab=${c.hubTab}&panel=templates`;
+  // The real Relationships Hub route lives under /owner/crm/relationship-hub
+  // (OwnerRoutes.tsx). The old /crm/... path falls through the CRM shell and
+  // dumped users on the JBJ CRM home, which is why "Edit templates" was
+  // redirecting to CRM.
+  const hubHref = `/owner/crm/relationship-hub?tab=${c.hubTab}`;
+  const templatesHref = `/owner/crm/relationship-hub?tab=${c.hubTab}&panel=templates`;
+
 
   return (
     <Card className="relative overflow-hidden border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
