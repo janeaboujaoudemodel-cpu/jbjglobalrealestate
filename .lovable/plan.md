@@ -1,90 +1,64 @@
+## Goal
+Fix the JBJ Hub backend so every emerald/action surface uses the locked real emerald palette and pure-white text/icons, and prevent toolbar/action buttons from collapsing into vertical letters on narrower content widths.
 
-Scoped strictly to the JBJ Hub (`/owner/crm/jbj/*`). No changes to the legacy owner backend, the Relationships Hub composer, or any front-end site pages.
+## Confirmed root causes
+- The final emerald contrast lock in `crmShell.css` only covers older CRM modules. It does not include the newer **Forecasts** (`.jc-fc*`) and **Documents Library** (`.jc-doclib*`) selectors, so active/action states can keep inherited black/dark text or non-brand green.
+- The Documents toolbar is a single nowrap flex row. At narrower effective content widths, buttons shrink instead of wrapping/grouping, which causes text like **Filter / Sort / New Folder / Upload** to render vertically.
+- The notification badge is positioned inside the icon button and overlaps the bell instead of sitting outside the button corner.
+- Several backend styles still use champagne/gold/alternate green remnants in module-specific blocks instead of the JBJ emerald lock.
 
-## 1. Launcher card (Developer / Broker / Owner portals)
+## Implementation plan
 
-File: `src/components/crm/BrandedEmailsLauncherCard.tsx`
+### 1. Add a backend-wide emerald action contract
+- Extend the final CRM lock in `src/pages/owner/crm/shell/crmShell.css` to cover:
+  - Forecasts: `.jc-fc__chip--primary`, active period buttons, owner avatars, health tags, progress fills.
+  - Documents: `.jc-doclib__new`, active folders, primary chips, view-toggle active states, bulk action bar.
+  - Existing backend action patterns that use `data-active`, `is-active`, or primary action classes.
+- Force all children inside emerald surfaces to pure white:
+  - text, spans, strong, counts, SVGs, paths, icons.
+- Replace remaining non-brand green accents with the official JBJ emerald gradient:
+  - `#064E3B -> #032A1E -> #000000` where chrome/action depth is needed.
+  - Flat `#064E3B` only for small indicators/dots.
 
-- Remove the four mini-status chips ("AI drafts", "From contact@jbj.ae", "Test → Live locked", "Select all · include · exclude") from the launcher card. These belong inside the panel, not on the surface.
-- Keep only: eyebrow, title, one-line blurb, and the CTA button. Rename primary CTA "Open campaigns" → "Send email" (per user).
-- Fix "Registered" mislabel origin: the launcher stops rendering status; the developer card status logic is a separate concern (out of scope of this branded-emails task — user's demand about the developer card "Registered" labels will be flagged as a follow-up in section 6).
+### 2. Fix Forecasts page contrast
+- Make **New forecast** use the official emerald action style with pure white icon/text.
+- Make owner initial circles emerald with pure white initials, not black/dark text.
+- Fix **Coverage health** so emerald pills/dots never render black text on emerald.
+- Normalize the pipeline/coverage bars so emerald fills are brand emerald, not fake green.
 
-## 2. Branded Emails panel — merge redundant controls, restore Relationship-Hub feature parity
+### 3. Fix Documents page toolbar layout
+- Rebuild the toolbar CSS so it behaves as a premium responsive control row:
+  - Search stays readable and takes available width.
+  - Filter / Sort / New Folder / Upload / view toggle remain horizontal buttons.
+  - Buttons wrap into clean rows when needed instead of shrinking into vertical letters.
+  - Add stable min-heights, `white-space: nowrap`, `flex: 0 0 auto`, and mobile breakpoints.
+- Fix **New**, **My Files**, **Upload**, active folder, active view-toggle, and selected/bulk controls to use emerald with pure white icons/text.
 
-File: `src/components/crm/branded-emails/BrandedEmailsPanel.tsx` + `src/index.css` (PASS 175 block).
+### 4. Fix Hub header notification badge
+- Move the red badge visually outside the bell button corner with fixed dimensions and z-index.
+- Ensure it does not cover the bell icon and never stacks vertically.
 
-Layout & tabs
-- 4 tabs stay: Template · Audience · Preview · Send. Fix contrast:
-  - Active tab pill: emerald bg, pure white text AND white icon (`svg *`). Inactive: dark ink on ivory. Locked with `!` utility on the trigger and a `[data-state=active] svg { color:#fff !important }` rule.
-  - "Select all (630)" active pill and "Custom (n)" pill: white text always; hover keeps emerald, not champagne/mint.
+### 5. Deep backend contrast scan
+- Search backend files for risky patterns:
+  - Black/dark text inside emerald/action classes.
+  - Non-brand greens (`green-*`, `#047857`, `#059669`, `#0f7a5a`, etc.).
+  - Champagne/gold action backgrounds inside JBJ Hub modules.
+  - Button text wrapping risks in toolbars.
+- Patch only backend/JBJ Hub surfaces, not public frontend pages.
 
-Template tab
-- Deduplicate templates already handled by `normalizeTemplateKey`; add a second dedupe by `subject` to remove residual duplicates.
-- Category rules:
-  - Developer variant: only show templates in categories `Developer Registration`, `Developer Registration Follow-up`. Hide "Briefing follow-up" for developers.
-  - Brokerage variant: show `Brokerage Breakfast Briefing`, `Brokerage Registration`, `Brokerage Registration Follow-up` (Briefing is priority/default selection).
-- Seed / rename templates in the DB accordingly (migration in section 5).
-
-Audience tab (restore Relationship-Hub UX)
-- Show the full paginated recipient list (developers or brokerages) with:
-  - Logo/avatar (developer `logo_url` via `DeveloperLogo`, brokerage initial fallback)
-  - Name, meta (slug/emirate), email hint
-  - Checkbox per row (tick/untick)
-  - Sticky top bar: Select all / Clear / search input filtering the visible list live
-  - Right rail shows count of selected + chip strip of first N with X to remove.
-- Preserve include/exclude semantics: audience is a Set of included IDs; "Select all" fills the Set with all recipients; typing filters the visible list, not the Set.
-
-Preview tab
-- Preview reflects the **currently selected template** — bug today: it always shows Partnership Introduction because a fallback constant is used. Fix by binding the preview iframe/html to `selectedTemplate.body_html` with variables substituted.
-
-Send tab — remove duplication
-- Delete the standalone "Audience quick controls" block (Select all / Custom + search) that duplicates the Audience tab.
-- Keep one compact recap row: Template · Audience count · From address. Inline mini-preview thumbnail on the right (small `iframe` scaled) so the user sees the template within the Send tab — not a separate section.
-- Inputs:
-  - "Send test to <email>" — text color forced black on white (`!text-[#0F1A16] !bg-white`), placeholder gray. Hover on the field must stay white/emerald outline, never mint/champagne.
-  - Single primary action: "Send live to N recipients" (only one, not two). Include/Exclude dropdown attached to a small "Adjust audience" split control that opens the Audience tab in place.
-- Remove the "Send live to 630 developers" second/duplicate button.
-
-## 3. Hub Home (`/owner/crm/jbj`) polish
-
-Files: `src/pages/owner/crm/HomeOverview.tsx` (or equivalent Home content), `src/pages/owner/crm/shell/crmShell.css`.
-
-- "Distribute now" button: replace gold/yellow with emerald metallic + white ink (matches brand). Same call-to-action, new palette.
-- "+" square button next to "All Open Tasks" (and any sibling plus buttons in Hub Home cards): make it a balanced square (`h-9 w-9`), emerald bg, white plus icon on both idle and hover states. Audit all Hub `Plus`-icon buttons and apply the same primitive.
-
-## 4. Routing — no more legacy backend redirects
-
-- Audit `src/routes/OwnerRoutes.tsx` and any redirect from `/owner` to old champagne surface. When an owner refreshes any Hub page, they must land on `/owner/crm/jbj/...`. Any `Navigate` sending owners to `/owner` root (legacy) is repointed to `/owner/crm/jbj`.
-- Remove the "Preview last saved version" flash routing to the old backend if it still targets legacy paths.
-
-## 5. Database migration (branded email templates)
-
-Single migration:
-- Insert / upsert (idempotent by name+category) the correct developer / brokerage templates:
-  - `Developer · Registration`
-  - `Developer · Registration Follow-up`
-  - `Brokerage · Breakfast Briefing`
-  - `Brokerage · Registration`
-  - `Brokerage · Registration Follow-up`
-- Soft-delete or unpublish stale "Briefing follow-up" / "Partnership Introduction" duplicates under the Developer category.
-
-## 6. Explicitly deferred (called out to user, NOT changed in this plan)
-
-- Developer card `Registered / Group not created` badge accuracy — needs a separate audit of `developers.registration_status` to identify the true handful (Shobha, MR, HRE, etc.) that are actually registered and clear the rest. I'll surface a separate plan for that so this task doesn't sprawl.
-
-## 7. Validation (mandatory before claiming done)
-
-Playwright, headless Chromium at 1280×1800:
-1. Load `/owner/crm/jbj/owner-developers`, screenshot launcher card — chips gone, single CTA.
-2. Click "Send email" → panel opens.
-3. Cycle Template / Audience / Preview / Send — screenshot each. Verify: active-tab icons & text white; no duplicate audience controls in Send; template preview matches selected template; send-test input text is black-on-white.
-4. In Audience tab: verify full list with logos + checkboxes, search filters live.
-5. Load `/owner/crm/jbj` — screenshot Home: Distribute-now is emerald not gold, `+` next to All Open Tasks is square with white icon.
-6. Refresh `/owner/crm/jbj/owner-developers` — verify no redirect to legacy `/owner`.
-
-Attach all screenshots to the closing message; do not claim complete without them.
-
-## Technical notes
-- All contrast locks land in `src/index.css` `PASS 175 — Branded Emails` and a new small `PASS 176 — Hub Home Buttons`.
-- No touching of `_shared/transactional-email-templates/` (those are outbound react-email templates, unrelated).
-- No changes to legacy Relationships Hub composer — it already routes to the same `BrandedEmailsPanel` via the launcher.
+### 6. Visual and technical validation
+- Use Playwright on real preview routes, with nonblank screenshot proof:
+  - `/owner/crm/jbj/forecasts`
+  - `/owner/crm/jbj/documents`
+  - Hub header notifications/search state if reachable
+- Validate at multiple widths:
+  - Current desktop width
+  - Narrow desktop around the problematic 752px content width
+  - Mobile-ish/narrow breakpoint
+- Confirm screenshots show:
+  - No vertical letter buttons.
+  - New forecast/New/Upload/My Files are emerald with white text/icons.
+  - Forecast owner circles are emerald with white initials.
+  - Coverage health has no black-on-emerald text.
+  - Notification badge no longer hides the bell.
+- If a screenshot is blank/white or still broken, continue fixing before reporting completion.
