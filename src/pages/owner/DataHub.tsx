@@ -12,14 +12,19 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { Sparkles, Users, Database, Send, RefreshCw } from "lucide-react";
+import { Sparkles, Users, Database, Send, RefreshCw, Phone, Star } from "lucide-react";
+import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 
 type Broker = { user_id: string; display_name: string | null; current_tier: string | null };
 import LeadCallButton from "@/components/crm/LeadCallButton";
 type LeadRow = { id: string; full_name: string | null; source: string | null; preferred_location: string | null; created_at: string; phone_e164?: string | null; phone_normalized?: string | null; email_normalized?: string | null };
+type CallRow = { id: string; lead_id: string | null; phone_number: string | null; duration_seconds: number | null; call_status: string | null; ai_summary: string | null; ai_score: number | null; ai_processed_at: string | null; created_at: string; user_id: string; lead_name?: string | null; broker_name?: string | null };
 
 export default function DataHub() {
-  const [tab, setTab] = useState<"pool" | "distribution" | "databases">("distribution");
+  const [tab, setTab] = useState<"pool" | "distribution" | "databases" | "calls">("distribution");
+  const [calls, setCalls] = useState<CallRow[]>([]);
+  const [openCallId, setOpenCallId] = useState<string | null>(null);
+  const [openCallLead, setOpenCallLead] = useState<string | null>(null);
   const [brokers, setBrokers] = useState<Broker[]>([]);
   const [pool, setPool] = useState<LeadRow[]>([]);
   const [poolCount, setPoolCount] = useState<number>(0);
@@ -55,6 +60,22 @@ export default function DataHub() {
     const counts: Record<string, number> = {};
     dbs.forEach((t, i) => (counts[t] = results[i].count ?? 0));
     setDbCounts(counts);
+
+    // Recent AI-analyzed calls
+    const { data: callData } = await supabase
+      .from("broker_call_logs")
+      .select("id, lead_id, phone_number, duration_seconds, call_status, ai_summary, ai_score, ai_processed_at, created_at, user_id")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    const leadIds = Array.from(new Set((callData ?? []).map((c: any) => c.lead_id).filter(Boolean)));
+    const brokerIds = Array.from(new Set((callData ?? []).map((c: any) => c.user_id).filter(Boolean)));
+    const [{ data: leadNames }, { data: brokerNames }] = await Promise.all([
+      leadIds.length ? supabase.from("crm_leads").select("id, full_name").in("id", leadIds) : Promise.resolve({ data: [] as any[] }),
+      brokerIds.length ? supabase.from("broker_profiles").select("user_id, display_name").in("user_id", brokerIds) : Promise.resolve({ data: [] as any[] }),
+    ]);
+    const lm = new Map((leadNames ?? []).map((r: any) => [r.id, r.full_name]));
+    const bm = new Map((brokerNames ?? []).map((r: any) => [r.user_id, r.display_name]));
+    setCalls(((callData ?? []) as any[]).map((c) => ({ ...c, lead_name: lm.get(c.lead_id) ?? null, broker_name: bm.get(c.user_id) ?? null })));
     setLoading(false);
   }
 
@@ -110,6 +131,7 @@ export default function DataHub() {
             <TabsTrigger value="distribution"><Sparkles className="h-4 w-4 mr-2" />AI Distribution</TabsTrigger>
             <TabsTrigger value="pool"><Users className="h-4 w-4 mr-2" />Lead Pool</TabsTrigger>
             <TabsTrigger value="databases"><Database className="h-4 w-4 mr-2" />Databases</TabsTrigger>
+            <TabsTrigger value="calls"><Phone className="h-4 w-4 mr-2" />AI Calls</TabsTrigger>
           </TabsList>
 
           <TabsContent value="distribution" className="mt-6">
@@ -228,8 +250,65 @@ export default function DataHub() {
               ))}
             </div>
           </TabsContent>
+
+          <TabsContent value="calls" className="mt-6">
+            <Card className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold">Recent calls ({calls.length})</h3>
+                <Button variant="outline" size="sm" onClick={refresh}><RefreshCw className="h-4 w-4 mr-2" />Refresh</Button>
+              </div>
+              {loading ? (
+                <Skeleton className="h-40 w-full" />
+              ) : calls.length === 0 ? (
+                <p className="text-sm text-neutral-600 py-8 text-center">No calls logged yet. Use the Call button on any lead to record and AI-analyze.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-neutral-50 text-left">
+                      <tr>
+                        <th className="p-2">Lead</th>
+                        <th className="p-2">Broker</th>
+                        <th className="p-2">Duration</th>
+                        <th className="p-2">AI score</th>
+                        <th className="p-2">Summary</th>
+                        <th className="p-2">When</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {calls.map((c) => (
+                        <tr
+                          key={c.id}
+                          className="border-t hover:bg-neutral-50 cursor-pointer"
+                          onClick={() => { setOpenCallId(c.id); setOpenCallLead(c.lead_name ?? null); }}
+                        >
+                          <td className="p-2">{c.lead_name ?? c.phone_number ?? "—"}</td>
+                          <td className="p-2 text-neutral-600">{c.broker_name ?? "—"}</td>
+                          <td className="p-2 text-neutral-600">{c.duration_seconds ? `${Math.floor(c.duration_seconds / 60)}m ${(c.duration_seconds % 60).toString().padStart(2, "0")}s` : "—"}</td>
+                          <td className="p-2">
+                            {typeof c.ai_score === "number" ? (
+                              <span className="inline-flex items-center gap-1 text-[#064E3B] font-medium"><Star className="h-3 w-3" />{c.ai_score}</span>
+                            ) : (
+                              <span className="text-neutral-400">—</span>
+                            )}
+                          </td>
+                          <td className="p-2 text-neutral-700 max-w-md truncate">{c.ai_summary ?? (c.ai_processed_at ? "—" : "Pending AI…")}</td>
+                          <td className="p-2 text-neutral-500 whitespace-nowrap">{new Date(c.created_at).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
+      <CallDetailSheet
+        callId={openCallId}
+        leadName={openCallLead}
+        open={!!openCallId}
+        onOpenChange={(v) => { if (!v) { setOpenCallId(null); setOpenCallLead(null); } }}
+      />
     </div>
   );
 }
