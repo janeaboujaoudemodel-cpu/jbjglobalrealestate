@@ -3767,3 +3767,168 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 .jc-flt__foot{ position:sticky; bottom:0; background:#fff; padding:10px 6px; border-top:1px solid #EFE6D6; display:flex; gap:8px; }
 .jc-flt__apply{ flex:1; padding:8px 12px; background:linear-gradient(145deg,#064E3B,#064E3B); color:#fff; border:0; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; }
 .jc-flt__clear{ padding:8px 12px; background:transparent; border:1px solid #EFE6D6; border-radius:6px; font-size:12px; color:#1A1A1A; cursor:pointer; }
+
+/* ============================================================
+   Owner Backend Hub — Zoho-emerald skin overrides (2026-07-20)
+   Neutralize champagne/gold on owner pages rendered inside the
+   JBJ Hub shell. Does not touch marketing pages (outside .jc-app).
+   ============================================================ */
+
+/* Kill gold borders on any tailwind arbitrary class */
+.jc-app .jc-content [class*="border-[#B89555"],
+.jc-app .jc-content [class*="border-[#EFE6D6"],
+.jc-app .jc-content [class*="border-[#8a6f3f"],
+.jc-app .jc-content [class*="border-[#8A7356"] {
+  border-color: rgba(6, 78, 59, 0.14) !important;
+}
+
+/* Gold text → ink or emerald */
+.jc-app .jc-content [class*="text-[#B89555"],
+.jc-app .jc-content [class*="text-[#8A7356"],
+.jc-app .jc-content [class*="text-[#8a6f3f"] {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+/* Gold gradient backgrounds (icon tiles, badges) → emerald metallic */
+.jc-app .jc-content [class*="from-[#B89555"],
+.jc-app .jc-content [class*="to-[#8a6f3f"],
+.jc-app .jc-content [class*="via-[#8a6f3f"] {
+  background-image: linear-gradient(160deg, #064E3B 0%, #032A1E 100%) !important;
+}
+.jc-app .jc-content [class*="from-[#B89555"] > svg,
+.jc-app .jc-content [class*="to-[#8a6f3f"] > svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Preview strip / soft champagne panels → white with emerald hairline */
+.jc-app .jc-content [class*="bg-[#F7F2EA"],
+.jc-app .jc-content [class*="bg-[#EFE6D6"],
+.jc-app .jc-content [class*="bg-[#FDFBF7"] {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  border-color: rgba(6, 78, 59, 0.12) !important;
+}
+
+/* Rounded pill hero cards (`rounded-[28px]`, `rounded-3xl`) → 10px */
+.jc-app .jc-content [class*="rounded-[28px]"],
+.jc-app .jc-content [class*="rounded-[24px]"],
+.jc-app .jc-content [class*="rounded-3xl"] {
+  border-radius: 10px !important;
+}
+
+/* ============================================================
+   Owner Hub page primitives (opt-in wrapper class .owner-hub-page)
+   ============================================================ */
+.owner-hub-page {
+  padding: 24px 28px 48px;
+  background: #FFFFFF;
+  min-height: 100%;
+}
+.owner-hub-page__header {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbfa 100%);
+  border: 1px solid rgba(6, 78, 59, 0.12);
+  border-radius: 10px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(6, 78, 59, 0.04);
+}
+.owner-hub-page__header-left {
+  display: flex; align-items: flex-start; gap: 14px;
+  min-width: 0; flex: 1;
+}
+.owner-hub-page__icon {
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  background: linear-gradient(160deg, #064E3B 0%, #032A1E 100%);
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+.owner-hub-page__icon svg { color: #FFFFFF; stroke: #FFFFFF; }
+.owner-hub-page__eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  color: #064E3B;
+  margin: 0 0 4px;
+}
+.owner-hub-page__title {
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+.owner-hub-page__subtitle {
+  font-size: 13px;
+  color: #475569;
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.5;
+}
+.owner-hub-page__insights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.owner-hub-page__insight {
+  background: #FFFFFF;
+  border: 1px solid rgba(6, 78, 59, 0.10);
+  border-radius: 8px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+.owner-hub-page__insight-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #064E3B;
+  margin: 0 0 6px;
+}
+.owner-hub-page__insight-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.owner-hub-page__insight-delta {
+  font-size: 11px;
+  color: #64748B;
+  margin-top: 4px;
+}
+.owner-hub-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(6, 78, 59, 0.10);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+}
+
+/* Sidebar row-lock — belt & suspenders against handshake wrapping */
+.jc-team-item, .jc-folder__label, .jc-teamspace__title {
+  flex-wrap: nowrap !important;
+  white-space: nowrap;
+}
+.jc-team-item > span,
+.jc-folder__label > span,
+.jc-teamspace__title > span:not(.jc-teamspace__badge) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.jc-team-item > svg,
+.jc-folder__label > svg,
+.jc-teamspace__title > svg {
+  flex-shrink: 0;
+}

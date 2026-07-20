@@ -231,42 +231,65 @@ export default function HomeFeaturedProjectsManager() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const totalSlots = featured.length;
+  const visibleSlots = featured.filter((r) => r.is_visible).length;
+  const manualSlots = featured.filter((r) => r.manual_project_id).length;
+
   return (
-    <div className="space-y-5 max-w-7xl">
+    <div className="owner-hub-page" data-hub-page="true">
       {/* Header */}
-      <div className="rounded-[28px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex items-start gap-4 min-w-0">
-            <span data-surface="emerald" data-ink-emerald-opt-out className="shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center">
-              <Star className="size-5 text-white" />
-            </span>
-            <div className="min-w-0">
-              <p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Homepage</p>
-              <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Featured Projects</h1>
-              <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">
-                Pick the exact projects shown in <span className="font-bold">Handpicked For You</span> on Mobile, Tablet and Desktop independently. No cap — add as many slots as you want, reorder, hide, or create a manual project that isn't in the catalog yet.
-              </p>
-            </div>
+      <header className="owner-hub-page__header">
+        <div className="owner-hub-page__header-left">
+          <span className="owner-hub-page__icon" aria-hidden="true">
+            <Star size={22} strokeWidth={2} />
+          </span>
+          <div style={{ minWidth: 0 }}>
+            <p className="owner-hub-page__eyebrow">Owner Backend · Homepage</p>
+            <h1 className="owner-hub-page__title">Featured Projects</h1>
+            <p className="owner-hub-page__subtitle">
+              Pick the projects shown in Handpicked For You on Mobile, Tablet and Desktop independently. Reorder, hide, or add manual entries that aren't in the catalog yet.
+            </p>
           </div>
-          <Button onClick={() => window.open("/", "_blank")} variant="outline" size="sm">
-            <Home className="size-4 mr-1" /> View homepage
-          </Button>
+        </div>
+        <Button onClick={() => window.open("/", "_blank")} variant="outline" size="sm">
+          <Home className="size-4 mr-1" /> View homepage
+        </Button>
+      </header>
+
+      {/* Insights strip */}
+      <div className="owner-hub-page__insights">
+        <div className="owner-hub-page__insight">
+          <p className="owner-hub-page__insight-label">Live slots</p>
+          <div className="owner-hub-page__insight-value">{visibleSlots}</div>
+          <p className="owner-hub-page__insight-delta">of {totalSlots} configured</p>
+        </div>
+        <div className="owner-hub-page__insight">
+          <p className="owner-hub-page__insight-label">Manual entries</p>
+          <div className="owner-hub-page__insight-value">{manualSlots}</div>
+          <p className="owner-hub-page__insight-delta">off-catalog additions</p>
+        </div>
+        <div className="owner-hub-page__insight">
+          <p className="owner-hub-page__insight-label">Active surface</p>
+          <div className="owner-hub-page__insight-value" style={{ fontSize: 16 }}>
+            {SURFACES.find((s) => s.id === surface)?.label}
+          </div>
+          <p className="owner-hub-page__insight-delta">{SURFACES.find((s) => s.id === surface)?.hint}</p>
         </div>
       </div>
 
-      {/* Surface selector — choose which public strap you're editing */}
-      <div className="rounded-2xl border border-[#B89555]/35 bg-white p-3 flex flex-wrap items-center gap-2">
-        <span className="text-[11px] uppercase tracking-[0.22em] font-black text-[#1A1A1A]/60 pr-2">Surface</span>
+      {/* Surface selector */}
+      <div className="owner-hub-card" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
+        <span className="text-[11px] uppercase tracking-[0.16em] font-bold text-[#064E3B] pr-2">Surface</span>
         {SURFACES.map((s) => {
           const active = s.id === surface;
           return (
             <button
               key={s.id}
               onClick={() => setSurface(s.id)}
-              className={`rounded-lg px-3 py-2 text-sm font-bold transition ${active ? "bg-[#064E3B] text-white" : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"}`}
+              className={`rounded-md px-3 py-2 text-sm font-semibold transition ${active ? "bg-[#064E3B] text-white" : "bg-white text-[#0F172A] border border-[rgba(6,78,59,0.14)] hover:border-[#064E3B]"}`}
             >
               {s.label}
-              <span className={`ml-2 rounded-full px-1.5 py-0.5 text-[10px] ${active ? "bg-white/20" : "bg-[#B89555]/20 text-[#1A1A1A]"}`}>{s.hint}</span>
+              <span className={`ml-2 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${active ? "bg-white/25 text-white" : "bg-[rgba(6,78,59,0.08)] text-[#064E3B]"}`}>{s.hint}</span>
             </button>
           );
         })}
