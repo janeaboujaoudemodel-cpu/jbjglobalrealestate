@@ -23,13 +23,13 @@ interface DeveloperLogoProps {
 // logos look transparent without any server-side background removal.
 const UNIFIED_PLATE =
   "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
-  "rounded-lg bg-white border border-[#B89555]/80 " +
+  "rounded-lg bg-white border border-[#064E3B]/30 " +
   "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5";
 
 const logoPlateSurface = (darkPlate?: boolean) =>
   darkPlate
-    ? "bg-[#042C1C] border border-[#D8B46A]/85 shadow-[0_4px_14px_rgba(0,0,0,0.24)]"
-    : "bg-white border border-[#B89555]/80 shadow-[0_3px_10px_rgba(0,0,0,0.16)]";
+    ? "bg-[#064E3B] border border-white/30 shadow-[0_4px_14px_rgba(0,0,0,0.24)]"
+    : "bg-white border border-[#064E3B]/30 shadow-[0_3px_10px_rgba(0,0,0,0.16)]";
 
 
 

@@ -15,6 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Mail, Search, Users, Send, Eye, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 export type BrandedAudienceKind = "developers" | "brokerages";
 
@@ -35,6 +36,14 @@ type Template = {
   body_html: string;
   category: string | null;
 };
+
+const SENDER = {
+  name: "Amelia",
+  title: "Head of Business Development",
+  email: "CONTACT@JBJ.AE",
+};
+
+const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
 
 type Props = {
   open: boolean;
@@ -60,7 +69,7 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       .select("id, name, slug, logo_url, admin_email, registration_status")
       .order("name")
       .limit(2000);
-    return (data ?? []).map((r: any) => ({
+    const mapped = (data ?? []).map((r: any) => ({
       id: String(r.id),
       name: r.name || r.slug || "Developer",
       email: r.admin_email || null,
@@ -68,6 +77,16 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       logoUrl: r.logo_url || null,
       registrationStatus: r.registration_status || "not_registered",
     }));
+    const deduped = new Map<string, Recipient>();
+    for (const r of mapped) {
+      const key = `${r.email || ""}::${r.name}`
+        .toLowerCase()
+        .replace(/\b(developers?|developments?|properties|property|realty|real\s*estate|group|llc|l\.?l\.?c)\b/g, "")
+        .replace(/[^a-z0-9@.]+/g, "") || r.id;
+      const prev = deduped.get(key);
+      if (!prev || (!prev.logoUrl && r.logoUrl) || (!prev.email && r.email)) deduped.set(key, r);
+    }
+    return Array.from(deduped.values()).sort((a, b) => a.name.localeCompare(b.name));
   }
   const { data } = await (supabase as any)
     .from("crm_brokerages")
@@ -135,6 +154,18 @@ function stripHtml(html: string) {
     .replace(/&nbsp;/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function personalizeTemplate(html: string, sampleName = "Developer Team") {
+  return html
+    .replace(/\{\{developer_name\}\}/g, sampleName)
+    .replace(/\{\{brokerage_name\}\}/g, sampleName)
+    .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
+    .replace(/Jane Bou Jaoude/gi, SENDER.name)
+    .replace(/Founder\s*&\s*CEO/gi, SENDER.title)
+    .replace(/contact@jbj\.ae/gi, SENDER.email)
+    .replace(/jbj\.ae/gi, "JBJ.AE")
+    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
 function initialsOf(name: string) {
@@ -231,15 +262,15 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     }
     setSending(true);
     try {
-      const bodyText = stripHtml(selectedTemplate.body_html);
+      const bodyText = stripHtml(personalizeTemplate(selectedTemplate.body_html, "Test Developer"));
       const { error } = await (supabase as any).functions.invoke("send-owner-email", {
         body: {
           to: testEmail.trim(),
           subject: `[TEST · ${kind}] ${selectedTemplate.subject}`,
           body: bodyText,
-          senderName: "Jane Bou Jaoude",
-          senderTitle: "Founder & CEO",
-          senderEmail: "contact@jbj.ae",
+          senderName: SENDER.name,
+          senderTitle: SENDER.title,
+          senderEmail: SENDER.email,
           account: "company",
           useResend: true,
         },
@@ -263,12 +294,34 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       return;
     }
     const ok = window.confirm(
-      `Send "${selectedTemplate.name}" live to ${audienceCount} ${kind}?\n\nThis will be delivered from contact@jbj.ae. This action is logged.`
+      `Send "${selectedTemplate.name}" live to ${audienceCount} ${kind}?\n\nThis will be delivered from ${SENDER.email}. This action is logged.`
     );
     if (!ok) return;
-    toast.info(
-      `Queued ${audienceCount} ${kind} for "${selectedTemplate.name}". Live delivery goes through the locked outreach pipeline.`
-    );
+    const selectedRecipients = recipients.filter((r) => selectedIds.has(r.id) && r.email);
+    setSending(true);
+    try {
+      for (const r of selectedRecipients.slice(0, 50)) {
+        const bodyText = stripHtml(personalizeTemplate(selectedTemplate.body_html, r.name));
+        const { error } = await (supabase as any).functions.invoke("send-owner-email", {
+          body: {
+            to: r.email,
+            subject: selectedTemplate.subject.replace(/\{\{developer_name\}\}/g, r.name).replace(/\{\{brokerage_name\}\}/g, r.name),
+            body: bodyText,
+            senderName: SENDER.name,
+            senderTitle: SENDER.title,
+            senderEmail: SENDER.email,
+            account: "company",
+            useResend: true,
+          },
+        });
+        if (error) throw error;
+      }
+      toast.success(`Queued ${selectedRecipients.length} ${kind} for "${selectedTemplate.name}".`);
+    } catch (e: any) {
+      toast.error(`Live send failed: ${e?.message || "unknown error"}`);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -278,7 +331,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         data-branded-email-panel="true"
         data-no-contrast-guard="true"
         data-ink-emerald-opt-out="true"
-        className="w-full sm:max-w-3xl p-0 flex flex-col bg-white"
+        className="w-full sm:max-w-5xl p-0 flex flex-col bg-white"
       >
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
@@ -298,7 +351,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
           </div>
         </SheetHeader>
 
-        <div className="flex-1 overflow-auto px-6 py-5 space-y-6">
+        <div className="flex-1 overflow-auto px-6 py-5">
+          <div className="grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-5 items-start">
+          <div className="space-y-5">
           {/* STEP 1 · TEMPLATE */}
           <section>
             <StepHeader n={1} label="Template" Icon={FileText} />
@@ -396,13 +451,20 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                               onCheckedChange={() => toggleId(r.id)}
                               className="data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#064E3B]"
                             />
-                            <span className="inline-flex items-center justify-center size-8 rounded-md bg-white border border-emerald-900/10 overflow-hidden shrink-0">
-                              {r.logoUrl ? (
-                                <img src={r.logoUrl} alt="" className="max-w-full max-h-full object-contain" />
-                              ) : (
+                            {kind === "developers" ? (
+                              <DeveloperLogo
+                                src={r.logoUrl}
+                                alt={`${r.name} logo`}
+                                name={r.name}
+                                variant="tile"
+                                renderFallback
+                                className="!size-8 !rounded-md !border-emerald-900/15 !bg-white !p-1"
+                              />
+                            ) : (
+                              <span className="inline-flex items-center justify-center size-8 rounded-md bg-white border border-emerald-900/10 overflow-hidden shrink-0">
                                 <span className="text-[10px] font-black text-[#064E3B]">{initialsOf(r.name)}</span>
-                              )}
-                            </span>
+                              </span>
+                            )}
                             <span className="flex-1 min-w-0">
                               <span className="block truncate text-sm font-semibold text-[#0F1A16]">{r.name}</span>
                               {r.meta && <span className="block truncate text-[11px] text-[#4B5D55]">{r.meta}</span>}
@@ -425,7 +487,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               )}
             </div>
           </section>
+          </div>
 
+          <div className="space-y-5">
           {/* STEP 3 · PREVIEW */}
           <section>
             <StepHeader n={3} label="Preview" Icon={Eye} />
@@ -441,7 +505,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <ScrollArea className="h-[320px]">
                   <div
                     className="p-6 prose prose-sm max-w-none text-[#0F1A16]"
-                    dangerouslySetInnerHTML={{ __html: selectedTemplate.body_html }}
+                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.body_html, recipients.find((r) => selectedIds.has(r.id))?.name) }}
                   />
                 </ScrollArea>
               </div>
@@ -460,7 +524,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                 <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
                 <li><strong>Audience:</strong> {audienceCount} of {eligibleTotal} {kind}</li>
-                <li><strong>From:</strong> Jane Bou Jaoude &lt;contact@jbj.ae&gt;</li>
+                <li><strong>From:</strong> {SENDER.name}, {SENDER.title} &lt;{SENDER.email}&gt;</li>
+                <li><strong>Registration pack:</strong> saved link included in the template</li>
               </ul>
             </div>
 
@@ -482,14 +547,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   style={{
                     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
                     minHeight: 40, padding: "8px 16px", borderRadius: 6, fontSize: 13, fontWeight: 700,
-                    background: "#FFFFFF", color: "#064E3B",
+                    background: "#064E3B", color: "#FFFFFF",
                     border: "1px solid #064E3B",
                     whiteSpace: "nowrap",
                     cursor: sending || !selectedTemplate ? "not-allowed" : "pointer",
                     opacity: sending || !selectedTemplate ? 0.5 : 1,
                   }}
                 >
-                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#064E3B" }} /> : <Send className="size-4" style={{ color: "#064E3B" }} />}
+                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF" }} /> : <Send className="size-4" style={{ color: "#FFFFFF" }} />}
                   Send test
                 </button>
               </div>
@@ -498,25 +563,27 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             <button
               type="button"
               onClick={handleSendLive}
-              disabled={!selectedTemplate || audienceCount === 0}
+              disabled={sending || !selectedTemplate || audienceCount === 0}
               data-branded-email-live-action="true"
               style={{
                 width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
                 minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
                 background: "#064E3B", color: "#FFFFFF",
                 border: "1px solid #064E3B",
-                cursor: !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
-                opacity: !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
+                cursor: sending || !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
+                opacity: sending || !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
               }}
             >
               <Send className="size-4" style={{ color: "#FFFFFF" }} />
-              Send live to {audienceCount} {kind}
+              {sending ? "Sending…" : `Send live to ${audienceCount} ${kind}`}
             </button>
 
             <p className="text-xs text-[#4B5D55]">
               Test sends immediately to the address above. Live send goes through the locked outreach pipeline — you'll be asked to confirm before delivery.
             </p>
           </section>
+          </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
