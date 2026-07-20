@@ -131,10 +131,11 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
     <div
       data-card-price-payment-row
       className={cn(
-        "flex items-end justify-between gap-3 min-w-0",
+        "flex items-end justify-between gap-3 min-w-0 min-h-[3.25rem]",
         className,
       )}
     >
+
       {/* LEFT — Price from */}
       <div className="flex flex-col min-w-0">
         <span data-area-price-label className="text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>

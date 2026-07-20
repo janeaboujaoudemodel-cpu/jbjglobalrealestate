@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -293,8 +293,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
 
       <Link to={projectHref} className="flex-1 flex flex-col">
-        {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
-          <div className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611]" data-surface="ink">
+        {/* Image — with subtle gold hover arrows for previewing photos in-place. */}
+          <div className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611] group/photo" data-surface="ink">
           <VerifiedMedia
             src={primaryImageUrl}
             alt={
@@ -316,6 +316,44 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               name: project.name,
             }}
           />
+          {primaryImageCandidates.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Previous photo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setPrimaryImageIndex((i) => (i - 1 + primaryImageCandidates.length) % primaryImageCandidates.length);
+                }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center opacity-0 group-hover/photo:opacity-100 focus:opacity-100 transition-opacity bg-black/45 backdrop-blur-sm border border-[#B89555] hover:bg-black/60"
+              >
+                <ChevronLeft className="w-5 h-5" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.4} />
+              </button>
+              <button
+                type="button"
+                aria-label="Next photo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setPrimaryImageIndex((i) => (i + 1) % primaryImageCandidates.length);
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center opacity-0 group-hover/photo:opacity-100 focus:opacity-100 transition-opacity bg-black/45 backdrop-blur-sm border border-[#B89555] hover:bg-black/60"
+              >
+                <ChevronRight className="w-5 h-5" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.4} />
+              </button>
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-1 opacity-0 group-hover/photo:opacity-100 transition-opacity">
+                {primaryImageCandidates.slice(0, 6).map((_, idx) => (
+                  <span
+                    key={idx}
+                    className="h-1 w-1.5 rounded-full"
+                    style={{ background: idx === primaryImageIndex % primaryImageCandidates.length ? '#D4AF6A' : 'rgba(255,255,255,0.55)' }}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
 
           {/* Reelly-style top-left badge row: EOI + handover quarter.
               Two compact ink/glass pills sitting on the photo, above the
