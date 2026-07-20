@@ -1,32 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, X, Clock, ArrowUpRight, Command } from "lucide-react";
+import { Search, X, Clock, ArrowUpRight, Command, Loader2 } from "lucide-react";
 import {
   CRM_PRIMARY_NAV,
   CRM_TEAMSPACE_TOP,
   CRM_TEAMSPACE_FOLDERS,
   type CrmModule,
 } from "./modules";
-
-type SampleRecord = {
-  id: string;
-  module: string;
-  moduleLabel: string;
-  title: string;
-  subtitle: string;
-};
-
-const SAMPLE_RECORDS: SampleRecord[] = [
-  { id: "L-1041", module: "leads", moduleLabel: "Leads", title: "Amelia Rahman", subtitle: "Emirates NBD · Qualified · Dubai Marina" },
-  { id: "L-1042", module: "leads", moduleLabel: "Leads", title: "Yusuf Al Mansoori", subtitle: "Sobha Realty · New · Palm Jumeirah" },
-  { id: "D-2210", module: "deals", moduleLabel: "Deals", title: "Palm Jebel Ali Villa — 8BR", subtitle: "AED 42.5M · Proposal · Close Q3" },
-  { id: "D-2211", module: "deals", moduleLabel: "Deals", title: "Bugatti Residences PH", subtitle: "AED 18.9M · Negotiation · Close Q4" },
-  { id: "C-3315", module: "contacts", moduleLabel: "Contacts", title: "Fatima Khoury", subtitle: "Investor · +971 50 4102 998" },
-  { id: "A-4402", module: "accounts", moduleLabel: "Accounts", title: "Meraas Holding", subtitle: "Developer · 214 open opportunities" },
-  { id: "T-5501", module: "tasks", moduleLabel: "Tasks", title: "Send LOI to Damac", subtitle: "Due today · High priority" },
-  { id: "M-6602", module: "meetings", moduleLabel: "Meetings", title: "Site Visit — Emaar Beachfront", subtitle: "Tomorrow · 11:00 GST" },
-  { id: "R-7702", module: "reports", moduleLabel: "Reports", title: "Q2 Pipeline by Owner", subtitle: "Public · Updated 2h ago" },
-];
+import { useGlobalHubSearch } from "./useGlobalHubSearch";
 
 const RECENT_KEY = "jbj_crm_recent_search";
 
@@ -83,26 +64,17 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
     [query]
   );
 
-  const recordMatches = useMemo(() => {
-    if (!query) return [];
-    return SAMPLE_RECORDS.filter(
-      (r) =>
-        r.title.toLowerCase().includes(query) ||
-        r.subtitle.toLowerCase().includes(query) ||
-        r.moduleLabel.toLowerCase().includes(query) ||
-        r.id.toLowerCase().includes(query)
-    ).slice(0, 8);
-  }, [query]);
+  const { hits, loading } = useGlobalHubSearch(q);
 
   const grouped = useMemo(() => {
-    const map = new Map<string, SampleRecord[]>();
-    for (const r of recordMatches) {
+    const map = new Map<string, typeof hits>();
+    for (const r of hits) {
       const arr = map.get(r.moduleLabel) || [];
       arr.push(r);
       map.set(r.moduleLabel, arr);
     }
     return Array.from(map.entries());
-  }, [recordMatches]);
+  }, [hits]);
 
   const commit = (term: string) => {
     if (!term.trim()) return;
@@ -219,16 +191,15 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
                 <div className="jc-search-overlay__section-title">{label}</div>
                 <ul className="jc-search-overlay__list">
                   {rows.map((r) => (
-                    <li key={r.id}>
+                    <li key={`${r.moduleLabel}-${r.id}`}>
                       <Link
-                        to={`/owner/crm/jbj/${r.module}`}
+                        to={r.to}
                         className="jc-search-overlay__row"
                         onClick={() => {
                           commit(q);
                           onClose();
                         }}
                       >
-                        <span className="jc-search-overlay__row-id">{r.id}</span>
                         <span className="jc-search-overlay__row-body">
                           <span className="jc-search-overlay__row-title">{r.title}</span>
                           <span className="jc-search-overlay__row-sub">{r.subtitle}</span>
@@ -241,7 +212,14 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
               </div>
             ))}
 
-          {query && moduleMatches.length === 0 && grouped.length === 0 && (
+          {query && loading && (
+            <div className="jc-search-overlay__empty">
+              <Loader2 size={16} className="animate-spin" style={{ marginRight: 8, display: "inline-block", verticalAlign: "middle" }} />
+              Searching backend…
+            </div>
+          )}
+
+          {query && !loading && moduleMatches.length === 0 && grouped.length === 0 && (
             <div className="jc-search-overlay__empty jc-search-overlay__empty--big">
               No results for "<strong>{q}</strong>".
             </div>
