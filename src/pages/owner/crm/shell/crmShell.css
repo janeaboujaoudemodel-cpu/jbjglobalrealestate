@@ -427,6 +427,58 @@
   background: #FFFFFF;
 }
 
+/* Owner backend pages embedded in JBJ Hub must inherit the CRM emerald/white system,
+   not the legacy champagne/gold backend palette. */
+.jc-app .jc-content :where(
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-champagne"],
+  [class*="champagne"],
+  .jj-card,
+  .brand-card,
+  .owner-card
+) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  border-color: rgba(6, 78, 59, 0.20) !important;
+  box-shadow: 0 12px 32px rgba(6, 78, 59, 0.08) !important;
+}
+.jc-app .jc-content :where(
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-champagne"],
+  [class*="champagne"],
+  .jj-card,
+  .brand-card,
+  .owner-card
+) :where(h1, h2, h3, h4, h5, h6, p, span, label, small, li, strong, em, div) {
+  color: inherit;
+}
+.jc-app .jc-content :where(
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  .jj-card,
+  .brand-card,
+  .owner-card
+) :where(button, a[role="button"], .btn, [class*="bg-[#064E3B]"], [class*="from-[#064E3B]"]) {
+  border-radius: 6px !important;
+}
+.jc-app .jc-content :where([class*="bg-[#064E3B]"], [class*="from-[#064E3B]"], [class*="to-[#042c1c]"], [class*="to-[#042C1C]"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
 .jc-projects-screen {
   min-height: 100%;
   padding: 53px 60px 78px;
