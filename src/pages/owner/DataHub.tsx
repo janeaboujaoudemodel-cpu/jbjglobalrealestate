@@ -131,6 +131,7 @@ export default function DataHub() {
             <TabsTrigger value="distribution"><Sparkles className="h-4 w-4 mr-2" />AI Distribution</TabsTrigger>
             <TabsTrigger value="pool"><Users className="h-4 w-4 mr-2" />Lead Pool</TabsTrigger>
             <TabsTrigger value="databases"><Database className="h-4 w-4 mr-2" />Databases</TabsTrigger>
+            <TabsTrigger value="calls"><Phone className="h-4 w-4 mr-2" />AI Calls</TabsTrigger>
           </TabsList>
 
           <TabsContent value="distribution" className="mt-6">
