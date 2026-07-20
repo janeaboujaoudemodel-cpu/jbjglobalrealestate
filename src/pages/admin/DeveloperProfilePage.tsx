@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import DeveloperContractsSection from "@/components/admin/DeveloperContractsSection";
 import {
   ArrowLeft, Building2, Globe, MapPin, Phone, Mail, Upload,
   Image as ImageIcon, FileText, Video, Map as MapIcon, Trash2,
@@ -1162,6 +1163,13 @@ export default function DeveloperProfilePage() {
 
           {/* FILES */}
           <TabsContent value="files" className="space-y-6">
+            {developer?.id && (
+              <DeveloperContractsSection
+                developerId={developer.id}
+                developerName={developer.name}
+                canEdit={canEdit}
+              />
+            )}
             {MEDIA_KINDS.filter((k) => ["brochure", "file"].includes(k.k)).map((k) => (
               <MediaSection
                 key={k.k}

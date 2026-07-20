@@ -273,7 +273,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" data-branded-email-panel="true" className="w-full sm:max-w-3xl p-0 flex flex-col bg-white">
+      <SheetContent
+        side="right"
+        data-branded-email-panel="true"
+        data-no-contrast-guard="true"
+        data-ink-emerald-opt-out="true"
+        className="w-full sm:max-w-3xl p-0 flex flex-col bg-white"
+      >
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <span className="inline-grid place-items-center size-10 rounded-md bg-[#064E3B] !text-white">
