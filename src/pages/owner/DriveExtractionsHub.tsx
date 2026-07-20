@@ -94,7 +94,8 @@ export default function DriveExtractionsHub() {
   }, [jobs, projects]);
 
   return (
-    <div className="min-h-screen w-full text-[#1A1A1A]">
+    <div className="min-h-screen w-full text-[#1A1A1A] -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 lg:-mt-8">
+
       <header
         data-surface="emerald"
         data-on-dark="true"
