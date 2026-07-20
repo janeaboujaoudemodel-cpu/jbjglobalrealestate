@@ -41,7 +41,36 @@ export function DeveloperLogo({
   const [error, setError] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
-  const valid = isValidDeveloperLogoUrl(src) && !error;
+  const valid = isValidDeveloperLogoUrl(src) && !error && !override.forceNameplate;
+
+  const renderNameplate = (containerClass: string) => {
+    const label = (name || alt || "Developer").trim();
+    const initials = label
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "DV";
+
+    return (
+      <div
+        className={cn(containerClass, "bg-[#F7F2EA]")}
+        data-keep-gold={dataKeepGold}
+        data-developer-logo="nameplate"
+        aria-label={`${label} logo pending`}
+        title={label}
+      >
+        <span className="sr-only">{label}</span>
+        <span
+          aria-hidden="true"
+          className="font-serif font-bold leading-none text-center tracking-normal"
+          style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B", fontSize: initials.length > 1 ? "0.82rem" : "1rem" }}
+        >
+          {initials}
+        </span>
+      </div>
+    );
+  };
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
     <div className={containerClass} data-keep-gold={dataKeepGold} data-developer-logo="database">
@@ -70,13 +99,16 @@ export function DeveloperLogo({
 
   // ── Nameplate variant — if no valid logo exists, show the approved icon fallback ──
   if (variant === "nameplate") {
-    if (!valid) return null;
+    if (!valid) return renderNameplate(cn(UNIFIED_PLATE, className));
     return renderImage(src as string, cn(UNIFIED_PLATE, className));
   }
 
   if (variant === "bare") {
     if (!valid) {
-      return null;
+      return renderNameplate(cn(
+        "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5 border border-[#B89555]/70",
+        className,
+      ));
     }
     return renderImage(src as string, cn(
       "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5",
@@ -93,7 +125,7 @@ export function DeveloperLogo({
     );
 
     if (!valid) {
-      return null;
+      return renderNameplate(cardContainer);
     }
     return renderImage(src as string, cardContainer, "card");
   }
@@ -105,7 +137,7 @@ export function DeveloperLogo({
   );
 
   if (!valid) {
-    return null;
+    return renderNameplate(tileContainer);
   }
 
   return renderImage(src as string, tileContainer);

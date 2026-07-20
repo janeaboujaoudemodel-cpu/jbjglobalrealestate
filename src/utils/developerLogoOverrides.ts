@@ -48,6 +48,17 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   kingdom: { forceNameplate: true },
   kingdomdevelopment: { forceNameplate: true },
   kingdomdevelopments: { forceNameplate: true },
+  // Browser favicons and dark-on-transparent/blocked marks caused fake globe
+  // icons or empty white boxes on property cards. Use approved text marks.
+  modon: { forceNameplate: true },
+  modonproperties: { forceNameplate: true },
+  prestigeone: { forceNameplate: true },
+  prestigeonedevelopments: { forceNameplate: true },
+  vincitore: { forceNameplate: true },
+  vincitorerealestatedevelopment: { forceNameplate: true },
+  azizi: { forceNameplate: true },
+  azizidevelopment: { forceNameplate: true },
+  azizidevelopments: { forceNameplate: true },
 };
 
 

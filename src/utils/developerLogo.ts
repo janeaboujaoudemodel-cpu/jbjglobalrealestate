@@ -28,6 +28,8 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)
   /\/projects\/\d+\/images\//i, // project photo paths
   /snapedit/i,
+  /google\.com\/s2\/favicons/i, // generic favicon/globe/phone icons are not developer logos
+  /favicon/i,
   /_feature_[a-f0-9]{6,}\.(jpg|jpeg|png|webp)/i, // mis-tagged project feature images
   /\/x\/16x16\//i, // favicon-size CDN paths only; larger CDN logo plates are valid developer logos
   /habtoor_polo/i,
