@@ -149,7 +149,6 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(false);
-  const [, /* activeTab reserved */] = useState("template");
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [audienceSearch, setAudienceSearch] = useState("");
@@ -160,7 +159,6 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     if (!open) return;
     let cancelled = false;
     setLoading(true);
-    setActiveTab("template");
     setSelectedTemplateId(null);
     setAudienceSearch("");
     Promise.all([loadRecipients(kind), loadTemplates(kind)])
