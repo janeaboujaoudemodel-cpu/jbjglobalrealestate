@@ -11,6 +11,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoUrl, getDeveloperWebsiteUrl, getKnownDeveloperLogoUrl, getKnownDeveloperWebsiteUrl } from "@/utils/developerLogo";
 import { normalizeProvidentImageUrl } from "@/lib/imageUtils";
+import { isValidImageUrl } from "@/lib/imageUtils";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
@@ -100,14 +101,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const navigate = useNavigate();
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
-  const rawPrimary =
-    VERIFIED_CARD_MEDIA[project.id] ||
-    project.cover_image_url ||
-    (project as any).card_image_url ||
-    (project as any).hero_image_url ||
-    images[0]?.image_url ||
-    images.find((i: any) => !!i?.image_url)?.image_url ||
-    null;
+  const rawPrimary = [
+    VERIFIED_CARD_MEDIA[project.id],
+    (project as any).card_image_url,
+    (project as any).gallery_start_image_url,
+    project.cover_image_url,
+    (project as any).hero_image_url,
+    images[0]?.image_url,
+    images.find((i: any) => isValidImageUrl(i?.image_url))?.image_url,
+  ].find(isValidImageUrl) || null;
   const primaryImageUrl = rawPrimary ? normalizeProvidentImageUrl(rawPrimary, priority ? "928x624" : "464x312") : null;
   const rawDeveloperName = project.developer?.name || project.developer_name || null;
   const developerName = isPropertyTypeOnlyLabel(rawDeveloperName) ? null : rawDeveloperName;

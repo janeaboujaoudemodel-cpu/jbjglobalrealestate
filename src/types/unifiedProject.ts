@@ -37,6 +37,7 @@ export interface UnifiedProject {
     name: string;
     slug: string;
     logo_url?: string | null;
+    logo_bg_color?: string | null;
     website_url?: string | null;
     website?: string | null;
     has_active_rep?: boolean | null;

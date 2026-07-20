@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { Switch } from "@/components/ui/switch";
 import { Link, useSearchParams } from "react-router-dom";
@@ -75,7 +75,7 @@ import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
-import PropertiesMapView from "@/components/maps/PropertiesMapView";
+const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
 import { CURRENCY_RATES, CURRENCY_SYMBOLS } from "@/hooks/useCurrency";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 // PropertiesVerticalNav removed — handled globally by MainLayout
@@ -1289,16 +1289,18 @@ const Properties = () => {
 
             {/* Right: Map */}
             <div className="flex-1 min-w-0">
-              <PropertiesMapView
-                projects={finalProjects}
-                hoveredProjectId={hoveredProjectId}
-                onProjectHover={setHoveredProjectId}
-                onProjectClick={(id) => {
-                  const el = document.getElementById(`map-card-${id}`);
-                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  setHoveredProjectId(id);
-                }}
-              />
+              <Suspense fallback={<div className="h-full min-h-[520px] bg-[#03251F]" />}>
+                <PropertiesMapView
+                  projects={finalProjects}
+                  hoveredProjectId={hoveredProjectId}
+                  onProjectHover={setHoveredProjectId}
+                  onProjectClick={(id) => {
+                    const el = document.getElementById(`map-card-${id}`);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setHoveredProjectId(id);
+                  }}
+                />
+              </Suspense>
             </div>
           </div>
         </section>
