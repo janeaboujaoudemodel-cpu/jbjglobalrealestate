@@ -11,7 +11,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Mail, Search, Users, Send, Eye, FileText } from "lucide-react";
@@ -25,6 +24,7 @@ type Recipient = {
   email: string | null;
   meta?: string | null;
   logoUrl?: string | null;
+  registrationStatus?: string | null;
 };
 
 type Template = {
@@ -57,15 +57,16 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
   if (kind === "developers") {
     const { data } = await (supabase as any)
       .from("developers")
-      .select("id, name, slug, logo_url")
+      .select("id, name, slug, logo_url, admin_email, registration_status")
       .order("name")
       .limit(2000);
     return (data ?? []).map((r: any) => ({
       id: String(r.id),
       name: r.name || r.slug || "Developer",
-      email: null,
+      email: r.admin_email || null,
       meta: r.slug || null,
       logoUrl: r.logo_url || null,
+      registrationStatus: r.registration_status || "not_registered",
     }));
   }
   const { data } = await (supabase as any)
@@ -86,6 +87,14 @@ function normalizeTemplateKey(template: Template) {
   return `${template.category || "Template"}::${template.name}`.trim().toLowerCase();
 }
 
+function normalizeSubjectKey(template: Template) {
+  return `${template.category || "Template"}::${template.subject}`.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function isDeveloperRegistrationCampaign(kind: BrandedAudienceKind, template: Template | null | undefined) {
+  return kind === "developers" && template?.name === "Developer · Registration";
+}
+
 async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
   const category = kind === "developers" ? "Developer" : "Brokerage";
   const allowed = kind === "developers" ? DEVELOPER_ALLOWED : BROKERAGE_ALLOWED;
@@ -101,12 +110,15 @@ async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
 
   const source = (data ?? []) as Template[];
 
-  // Dedupe by (category, name) — same template exists per owner_id in DB.
-  const seen = new Set<string>();
+  // Dedupe by (category, name) and then subject — same template exists per owner_id in DB.
+  const seenNames = new Set<string>();
+  const seenSubjects = new Set<string>();
   const dedup = source.filter((template) => {
-    const key = normalizeTemplateKey(template);
-    if (seen.has(key)) return false;
-    seen.add(key);
+    const nameKey = normalizeTemplateKey(template);
+    const subjectKey = normalizeSubjectKey(template);
+    if (seenNames.has(nameKey) || seenSubjects.has(subjectKey)) return false;
+    seenNames.add(nameKey);
+    seenSubjects.add(subjectKey);
     return true;
   });
 
@@ -157,8 +169,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         setRecipients(r);
         setTemplates(t);
         setSelectedTemplateId(t[0]?.id ?? null);
-        // Default audience: all recipients selected.
-        setSelectedIds(new Set(r.map((x) => x.id)));
+        const firstTemplate = t[0] ?? null;
+        const defaultAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
+          ? r.filter((x) => x.registrationStatus !== "registered")
+          : r;
+        setSelectedIds(new Set(defaultAudience.map((x) => x.id)));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -181,7 +196,20 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
   const total = recipients.length;
   const audienceCount = selectedIds.size;
-  const allSelected = audienceCount === total && total > 0;
+  const eligibleRecipients = useMemo(
+    () => isDeveloperRegistrationCampaign(kind, selectedTemplate)
+      ? recipients.filter((r) => r.registrationStatus !== "registered")
+      : recipients,
+    [kind, recipients, selectedTemplate]
+  );
+  const eligibleTotal = eligibleRecipients.length;
+  const allSelected = audienceCount === eligibleTotal && eligibleTotal > 0;
+
+  useEffect(() => {
+    if (!isDeveloperRegistrationCampaign(kind, selectedTemplate)) return;
+    const eligible = new Set(eligibleRecipients.map((r) => r.id));
+    setSelectedIds((current) => new Set([...current].filter((id) => eligible.has(id))));
+  }, [kind, selectedTemplate, eligibleRecipients]);
 
   const toggleId = (id: string) =>
     setSelectedIds((s) => {
@@ -191,7 +219,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       return next;
     });
 
-  const selectAll = () => setSelectedIds(new Set(recipients.map((r) => r.id)));
+  const selectAll = () => setSelectedIds(new Set(eligibleRecipients.map((r) => r.id)));
   const clearAll = () => setSelectedIds(new Set());
 
   const handleSendTest = async () => {
@@ -268,30 +296,41 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
             <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
               <Users className="size-4" />
-              Sending to <strong className="text-[#064E3B]">{audienceCount}</strong> of {total}
+              Sending to <strong className="text-[#064E3B]">{audienceCount}</strong> of {eligibleTotal}
             </div>
           </div>
         </SheetHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
-          <TabsList className="mx-6 mt-4 justify-start bg-transparent p-0 gap-2 h-auto flex-wrap">
-            <TabsTrigger value="template" data-branded-email-tab="true" className={tabClass}>
-              <FileText className="size-4" /> Template
-            </TabsTrigger>
-            <TabsTrigger value="audience" data-branded-email-tab="true" className={tabClass}>
-              <Users className="size-4" /> Audience
-            </TabsTrigger>
-            <TabsTrigger value="preview" data-branded-email-tab="true" className={tabClass}>
-              <Eye className="size-4" /> Preview
-            </TabsTrigger>
-            <TabsTrigger value="send" data-branded-email-tab="true" className={tabClass}>
-              <Send className="size-4" /> Send
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div role="tablist" aria-label="Branded email steps" className="mx-6 mt-4 flex justify-start bg-transparent p-0 gap-2 h-auto flex-wrap">
+            {[
+              { value: "template", label: "Template", Icon: FileText },
+              { value: "audience", label: "Audience", Icon: Users },
+              { value: "preview", label: "Preview", Icon: Eye },
+              { value: "send", label: "Send", Icon: Send },
+            ].map(({ value, label, Icon }) => {
+              const active = activeTab === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  data-state={active ? "active" : "inactive"}
+                  data-branded-email-tab="true"
+                  className={tabClass}
+                  onClick={() => setActiveTab(value)}
+                >
+                  <Icon className="size-4" /> {label}
+                </button>
+              );
+            })}
+          </div>
 
           <div className="flex-1 overflow-auto px-6 py-4">
             {/* TEMPLATE */}
-            <TabsContent value="template" className="mt-0">
+            {activeTab === "template" && (
+            <section className="mt-0">
               {loading ? (
                 <div className="flex items-center gap-2 text-sm text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading templates…</div>
               ) : templates.length === 0 ? (
@@ -324,10 +363,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   })}
                 </div>
               )}
-            </TabsContent>
+            </section>
+            )}
 
             {/* AUDIENCE — full list with checkboxes + logos */}
-            <TabsContent value="audience" className="mt-0 space-y-3">
+            {activeTab === "audience" && (
+            <section className="mt-0 space-y-3">
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
@@ -340,7 +381,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Select all ({total})
+                  Select all ({eligibleTotal})
                 </button>
                 <button
                   type="button"
@@ -395,7 +436,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                               <span className="flex-1 min-w-0">
                                 <span className="block truncate text-sm font-semibold text-[#0F1A16]">{r.name}</span>
                                 {r.meta && <span className="block truncate text-[11px] text-[#4B5D55]">{r.meta}</span>}
+                                {r.email && <span className="block truncate text-[11px] text-[#4B5D55]">{r.email}</span>}
                               </span>
+                              {r.registrationStatus === "registered" && (
+                                <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[#064E3B] bg-emerald-50 border border-emerald-900/15 rounded-full px-2 py-0.5">
+                                  Registered
+                                </span>
+                              )}
                             </label>
                           </li>
                         );
@@ -407,10 +454,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   </ScrollArea>
                 )}
               </div>
-            </TabsContent>
+            </section>
+            )}
 
             {/* PREVIEW — bound to selected template */}
-            <TabsContent value="preview" className="mt-0">
+            {activeTab === "preview" && (
+            <section className="mt-0">
               {selectedTemplate ? (
                 <div className="border border-emerald-900/15 rounded-lg bg-white overflow-hidden">
                   <div className="px-4 py-3 border-b border-emerald-900/10 bg-[#F8FAF9]">
@@ -430,16 +479,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               ) : (
                 <div className="p-8 text-center text-[#4B5D55]">Select a template to preview.</div>
               )}
-            </TabsContent>
+            </section>
+            )}
 
             {/* SEND — summary + inline mini preview, NO duplicate audience block */}
-            <TabsContent value="send" data-branded-email-send="true" className="mt-0 space-y-4">
+            {activeTab === "send" && (
+            <section data-branded-email-send="true" className="mt-0 space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="border border-emerald-900/15 rounded-lg p-4 bg-[#F8FAF9]">
                   <p className="text-xs text-[#4B5D55] uppercase tracking-wider">Campaign summary</p>
                   <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                     <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
-                    <li><strong>Audience:</strong> {audienceCount} of {total} {kind}</li>
+                    <li><strong>Audience:</strong> {audienceCount} of {eligibleTotal} {kind}</li>
                     <li><strong>From:</strong> Jane Bou Jaoude &lt;contact@jbj.ae&gt;</li>
                   </ul>
                   <button
@@ -477,6 +528,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     value={testEmail}
                     onChange={(e) => setTestEmail(e.target.value)}
                     placeholder="Test email address"
+                    data-branded-email-search-input="true"
                     className="flex-1 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
                   />
                   <button
@@ -504,6 +556,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 type="button"
                 onClick={handleSendLive}
                 disabled={!selectedTemplate || audienceCount === 0}
+                data-branded-email-live-action="true"
                 style={{
                   width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
                   minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
@@ -520,9 +573,10 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <p className="text-xs text-[#4B5D55]">
                 Test sends immediately to the address above. Live send goes through the locked outreach pipeline — you'll be asked to confirm before delivery.
               </p>
-            </TabsContent>
+            </section>
+            )}
           </div>
-        </Tabs>
+        </div>
       </SheetContent>
     </Sheet>
   );

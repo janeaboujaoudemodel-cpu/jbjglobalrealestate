@@ -219,7 +219,7 @@ function TodaysFocus({
             </div>
           </div>
           <Link
-            to="/owner/data-hub"
+            to="/owner/crm/jbj/owner-data-hub"
             style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               padding: "8px 14px", borderRadius: 8,
@@ -247,21 +247,21 @@ function TodaysFocus({
             label="Unassigned pool"
             value={loading ? "…" : unassigned.length}
             hint="Awaiting broker assignment"
-            to="/owner/data-hub"
+            to="/owner/crm/jbj/owner-data-hub"
           />
           <FocusTile
             icon={<Sparkles size={14} />}
             label="New today"
             value={loading ? "…" : unassignedToday.length}
             hint="Captured in the last 24h"
-            to="/owner/data-hub"
+            to="/owner/crm/jbj/owner-data-hub"
           />
           <FocusTile
             icon={<Clock size={14} />}
             label="Stale > 24h"
             value={loading ? "…" : stale.length}
             hint="Unassigned longer than a day"
-            to="/owner/data-hub"
+            to="/owner/crm/jbj/owner-data-hub"
           />
         </div>
 
@@ -297,11 +297,12 @@ function TodaysFocus({
                       className="h-7 !text-white !border-[rgba(212,175,55,0.4)] !bg-transparent hover:!bg-white/10"
                     />
                     <Link
-                      to="/owner/data-hub"
+                      to="/owner/crm/jbj/owner-data-hub"
                       style={{
-                        color: "#D4AF37", fontSize: 12, fontWeight: 600,
+                        color: "#FFFFFF", fontSize: 12, fontWeight: 700,
                         textDecoration: "none", padding: "4px 10px",
-                        borderRadius: 6, border: "1px solid rgba(212,175,55,0.35)",
+                        borderRadius: 6, border: "1px solid rgba(255,255,255,0.35)",
+                        background: "rgba(255,255,255,0.08)",
                         whiteSpace: "nowrap",
                       }}
                     >
@@ -346,7 +347,7 @@ function FocusTile({
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.7)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>
-        <span style={{ color: "#D4AF37" }}>{icon}</span>
+        <span style={{ color: "#FFFFFF" }}>{icon}</span>
         {label}
       </div>
       <div style={{ color: "#fff", fontSize: 26, fontWeight: 600, marginTop: 4, letterSpacing: "-0.02em" }}>
