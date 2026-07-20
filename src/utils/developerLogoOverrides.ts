@@ -58,9 +58,6 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   prestigeonedevelopments: { forceNameplate: true },
   vincitore: { forceNameplate: true },
   vincitorerealestatedevelopment: { forceNameplate: true },
-  azizi: { forceNameplate: true },
-  azizidevelopment: { forceNameplate: true },
-  azizidevelopments: { forceNameplate: true },
   // Zoya's official SVG is a very light embedded wordmark; it fades on white.
   zoya: { darkPlate: true, imageFilter: "contrast(1.28) saturate(1.14) brightness(1.08)" },
   zoyadevelopment: { darkPlate: true, imageFilter: "contrast(1.28) saturate(1.14) brightness(1.08)" },

@@ -22,10 +22,8 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /\/frame\+?\d/i,
   /1080x1080/i,
   /\/images?\.(png|jpe?g|webp)(\?|$)/i,
-  /\/[0-9]{8,}\.(jpg|jpeg|png|webp)(\?|$)/i,
   /logo-white-1/i,
   /logodix\.com/i,
-  /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)
   /\/projects\/\d+\/images\//i, // project photo paths
   /snapedit/i,
   /google\.com\/s2\/favicons/i, // generic favicon/globe/phone icons are not developer logos
@@ -60,6 +58,7 @@ const OFFICIAL_LOGO_MIRRORS: Array<{ match: RegExp; logo: string }> = [
 ];
 
 const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bazizi\b/i, logo: "/developer-logos/azizi-developments.png" },
   { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
@@ -107,6 +106,7 @@ const KNOWN_DEVELOPER_WEBSITES: Array<{ match: RegExp; website: string }> = [
 ];
 
 const KNOWN_DEVELOPER_LOGOS: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bazizi\b/i, logo: "/developer-logos/azizi-developments.png" },
   { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },

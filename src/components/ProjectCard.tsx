@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
@@ -101,16 +102,30 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const navigate = useNavigate();
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
-  const rawPrimary = [
-    VERIFIED_CARD_MEDIA[project.id],
-    (project as any).card_image_url,
-    (project as any).gallery_start_image_url,
-    project.cover_image_url,
-    (project as any).hero_image_url,
-    images[0]?.image_url,
-    images.find((i: any) => isValidImageUrl(i?.image_url))?.image_url,
-  ].find(isValidImageUrl) || null;
-  const primaryImageUrl = rawPrimary ? normalizeProvidentImageUrl(rawPrimary, priority ? "928x624" : "464x312") : null;
+  const primaryImageCandidates = useMemo(() => {
+    const seen = new Set<string>();
+    return [
+      VERIFIED_CARD_MEDIA[project.id],
+      (project as any).card_image_url,
+      (project as any).gallery_start_image_url,
+      (project as any).hero_image_url,
+      ...images.map((image: any) => image?.image_url),
+      project.cover_image_url,
+    ]
+      .filter(isValidImageUrl)
+      .map((url) => normalizeProvidentImageUrl(url, priority ? "928x624" : "464x312"))
+      .filter((url) => {
+        const key = url.replace(/[?&](w|width|h|height|q|quality|size|resize|format|fit|auto)=[^&]*/gi, "").toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+  }, [images, priority, project]);
+  const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
+  useEffect(() => {
+    setPrimaryImageIndex(0);
+  }, [project.id, primaryImageCandidates.join("|")]);
+  const primaryImageUrl = primaryImageCandidates[primaryImageIndex] || null;
   const rawDeveloperName = project.developer?.name || project.developer_name || null;
   const developerName = isPropertyTypeOnlyLabel(rawDeveloperName) ? null : rawDeveloperName;
   const displayProjectName = cleanCardProjectName(project.name, developerName);
@@ -291,6 +306,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             className="object-cover object-left w-[calc(100%+10px)] h-[calc(100%+8px)] max-w-none -ml-[6px] -mt-[4px]"
             placeholderLabel=""
             priority={priority}
+            onError={() => {
+              setPrimaryImageIndex((current) => Math.min(current + 1, primaryImageCandidates.length));
+            }}
             loggerComponent="ProjectCard"
             loggerContext={{
               projectId: project.id,
