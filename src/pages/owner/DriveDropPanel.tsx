@@ -41,12 +41,17 @@ export default function DriveDropPanel() {
   useEffect(() => { load(); }, []);
 
   const submit = async () => {
-    if (!url.trim()) { toast.error("Paste a Google Drive folder link"); return; }
+    const clean = url.trim();
+    if (!clean) { toast.error("Paste a Google Drive folder link above first"); return; }
+    if (!/drive\.google\.com|docs\.google\.com/.test(clean)) {
+      toast.error("That doesn't look like a Google Drive link");
+      return;
+    }
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("drive-drop-classify", {
         body: {
-          folder_url: url.trim(),
+          folder_url: clean,
           entity_type: entityType,
           entity_names: entityNames.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean),
           notes: notes.trim() || null,
@@ -54,7 +59,7 @@ export default function DriveDropPanel() {
       });
       if (error) throw error;
       toast.success(`Analyzed — ${data?.summary?.matched ?? 0} matched · ${data?.summary?.new ?? 0} new`);
-      setUrl(""); setEntityNames(""); setNotes("");
+      setEntityNames(""); setNotes("");
       load();
       if (data?.submission_id) setOpenId(data.submission_id);
     } catch (e: any) {
