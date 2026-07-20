@@ -160,9 +160,10 @@ export function isValidImageUrl(url: unknown): url is string {
 export function normalizeProvidentImageUrl(url: string, size?: string): string {
   if (!url) return url;
   
-  // Check for Provident CDN pattern and normalize size
+  // Do NOT invent CloudFront dimensions. Some feeds expose only specific
+  // generated sizes; rewriting them to 464x312/928x624 creates 403/404s.
   if (url.includes("/x/") && url.includes("cloudfront.net")) {
-    return url.replace(CLOUDFRONT_SIZE_SEGMENT, `/x/${size || SAFE_IMAGE_SIZE}/`);
+    return url;
   }
   
   return url;
