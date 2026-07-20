@@ -36752,3 +36752,19 @@ html body #root [data-branded-email-panel="true"] [data-branded-email-live-actio
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* PASS 176 — Branded Emails launcher + panel: lock hover scale/size so buttons never grow on hover. */
+[data-branded-launcher-actions] button:hover,
+[data-branded-launcher-actions] button:focus,
+[data-branded-launcher-actions] button:active,
+[data-branded-email-panel] button:hover,
+[data-branded-email-panel] button:focus,
+[data-branded-email-panel] button:active {
+  transform: none !important;
+  filter: none !important;
+  scale: 1 !important;
+}
+[data-branded-launcher-actions] button,
+[data-branded-email-panel] button {
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease !important;
+}
