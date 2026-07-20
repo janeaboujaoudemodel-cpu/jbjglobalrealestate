@@ -57,7 +57,7 @@ export default function CrmHome() {
             <RefreshCw size={15} />
           </button>
           <button type="button" className="jc-org-picker">
-            <span>JBJ GLOBAL REAL EST…</span>
+            <span>JBJ Global Real Estate</span>
             <ChevronDown size={16} />
           </button>
           <button type="button" className="jc-home__ghost" aria-label="More">
@@ -223,9 +223,11 @@ function TodaysFocus({
             style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               padding: "8px 14px", borderRadius: 8,
-              background: "#FFFFFF", color: "#064E3B",
+              background: "rgba(255,255,255,0.14)", color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
               fontSize: 13, fontWeight: 700, textDecoration: "none",
-              border: "1px solid rgba(255,255,255,0.6)",
+              border: "1px solid rgba(255,255,255,0.42)",
+              whiteSpace: "nowrap",
             }}
           >
             Distribute now <ArrowRight size={14} />
@@ -294,7 +296,7 @@ function TodaysFocus({
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <LeadCallButton
                       lead={{ id: l.id, full_name: l.full_name, phone: l.phone, email: l.email }}
-                      className="h-7 !text-white !border-[rgba(212,175,55,0.4)] !bg-transparent hover:!bg-white/10"
+                      className="h-7 !text-white !border-white/35 !bg-transparent hover:!bg-white/10"
                     />
                     <Link
                       to="/owner/crm/jbj/owner-data-hub"

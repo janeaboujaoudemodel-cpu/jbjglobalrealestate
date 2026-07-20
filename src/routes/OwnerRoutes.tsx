@@ -317,8 +317,8 @@ export const OwnerRoutes = () => (
     <Route path="crm/automation" element={<Navigate to="/owner/crm?entity=leads&view=automation" replace />} />
     <Route path="crm/employees" element={<Navigate to="/owner/crm?entity=employees&view=roster" replace />} />
     <Route path="broker-visits" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerBrokerVisits")))}</Suspense>} />
-    <Route path="crm/relationships" element={<Navigate to="/owner/crm/relationship-hub" replace />} />
-    <Route path="crm/relationship-hub" element={<CRMRelationships />} />
+    <Route path="crm/relationships" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />
+    <Route path="crm/relationship-hub" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />
     <Route path="crm/relationships/secondary-market" element={<SecondaryMarketHub />} />
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
