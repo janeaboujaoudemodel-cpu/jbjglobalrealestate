@@ -106,6 +106,7 @@ const KNOWN_DEVELOPER_WEBSITES: Array<{ match: RegExp; website: string }> = [
 ];
 
 const KNOWN_DEVELOPER_LOGOS: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bazizi\b/i, logo: "/developer-logos/azizi-developments.png" },
   { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
