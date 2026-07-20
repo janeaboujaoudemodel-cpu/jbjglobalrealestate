@@ -300,6 +300,93 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
 }
 
 function PublicContactChips({ developer }: { developer: NonNullable<DeveloperInfoCardProps["developer"]> }) {
-  void developer;
-  return null;
+  const pf = developer.public_fields ?? {};
+  const isOn = (k: PublicFieldKey) => pf[k] === true;
+
+  const chips: Array<{ key: string; href: string; label: string; icon: React.ReactNode }> = [];
+
+  const addressHref =
+    isOn("google_maps_url") && developer.google_maps_url
+      ? developer.google_maps_url
+      : isOn("office_address") && developer.office_address
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(developer.office_address)}`
+      : null;
+  if (addressHref && (isOn("office_address") || isOn("google_maps_url"))) {
+    chips.push({
+      key: "address",
+      href: addressHref,
+      label: developer.office_address || "Map",
+      icon: <Globe className="w-3.5 h-3.5" />,
+    });
+  }
+  if (isOn("office_phone") && developer.office_phone) {
+    chips.push({
+      key: "phone",
+      href: `tel:${developer.office_phone.replace(/\s+/g, "")}`,
+      label: developer.office_phone,
+      icon: <User className="w-3.5 h-3.5" />,
+    });
+  }
+  if (isOn("whatsapp") && developer.whatsapp) {
+    const digits = developer.whatsapp.replace(/[^\d]/g, "");
+    chips.push({
+      key: "whatsapp",
+      href: `https://wa.me/${digits}`,
+      label: "WhatsApp",
+      icon: <Sparkles className="w-3.5 h-3.5" />,
+    });
+  }
+  if (isOn("instagram_url") && developer.instagram_url) {
+    chips.push({
+      key: "instagram",
+      href: developer.instagram_url,
+      label: "Instagram",
+      icon: <ExternalLink className="w-3.5 h-3.5" />,
+    });
+  }
+  if (isOn("linkedin_url") && developer.linkedin_url) {
+    chips.push({
+      key: "linkedin",
+      href: developer.linkedin_url,
+      label: "LinkedIn",
+      icon: <ExternalLink className="w-3.5 h-3.5" />,
+    });
+  }
+  if (isOn("website_url") && developer.website_url) {
+    chips.push({
+      key: "website",
+      href: developer.website_url,
+      label: "Website",
+      icon: <Globe className="w-3.5 h-3.5" />,
+    });
+  }
+  if (isOn("admin_email") && developer.admin_email) {
+    chips.push({
+      key: "email",
+      href: `mailto:${developer.admin_email}`,
+      label: developer.admin_email,
+      icon: <ExternalLink className="w-3.5 h-3.5" />,
+    });
+  }
+
+  if (chips.length === 0) return null;
+
+  return (
+    <>
+      {chips.map((c) => (
+        <a
+          key={c.key}
+          href={c.href}
+          target={c.href.startsWith("http") ? "_blank" : undefined}
+          rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+          onClick={(e) => e.stopPropagation()}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/35 text-xs text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#F7F2EA] transition-colors max-w-[220px] truncate"
+          title={c.label}
+        >
+          {c.icon}
+          <span className="truncate">{c.label}</span>
+        </a>
+      ))}
+    </>
+  );
 }
