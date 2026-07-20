@@ -95,11 +95,17 @@ export default function DriveExtractionsHub() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
-      <header className="border-b border-[#B89555]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)] text-white">
+      <header
+        data-surface="emerald"
+        data-on-dark="true"
+        data-hero-dark="true"
+        data-no-contrast-guard
+        className="border-b border-white/15 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)]"
+      >
         <div className="max-w-[1400px] mx-auto px-6 py-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-[#D4AF6A]">Owner console</p>
-          <h1 className="text-3xl font-semibold tracking-tight mt-1 text-white">Drive Extractions</h1>
-          <p className="mt-2 text-sm text-white max-w-2xl">
+          <p data-no-contrast-guard className="allow-white text-xs uppercase tracking-[0.2em] text-white/85">Owner console</p>
+          <h1 data-no-contrast-guard className="allow-white text-3xl font-semibold tracking-tight mt-1 text-white">Drive Extractions</h1>
+          <p data-no-contrast-guard className="allow-white mt-2 text-sm max-w-2xl text-white/90">
             Everything AI pulled from developer Google Drive folders — grouped by developer, project, community and area.
           </p>
 
@@ -117,19 +123,22 @@ export default function DriveExtractionsHub() {
               return (
                 <button
                   key={t.key}
+                  data-no-contrast-guard
                   onClick={() => setActive(t.key)}
-                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition ${
-                    isActive ? "bg-[#D4AF6A] text-white shadow" : "bg-white/10 text-white hover:bg-white/20"
-                  }`}
-                  style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                  className="allow-white inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition border text-white"
+                  style={{
+                    background: isActive ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.08)",
+                    borderColor: isActive ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.18)",
+                    fontWeight: isActive ? 600 : 500,
+                  }}
                 >
-                  <Icon className="w-4 h-4" />
-                  {t.label}
+                  <Icon className="w-4 h-4 text-white" />
+                  <span className="allow-white text-white">{t.label}</span>
                 </button>
               );
             })}
-            <Button size="sm" variant="secondary" onClick={load} className="ml-auto bg-white/10 hover:bg-white/20 text-white border border-white/20">
-              <RefreshCw className="w-4 h-4 mr-1.5" /> Refresh
+            <Button size="sm" onClick={load} data-no-contrast-guard className="allow-white ml-auto bg-white/10 hover:bg-white/20 border border-white/25 text-white">
+              <RefreshCw className="w-4 h-4 mr-1.5 text-white" /> Refresh
             </Button>
           </div>
         </div>
@@ -158,10 +167,10 @@ export default function DriveExtractionsHub() {
 
 function Stat({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 backdrop-blur px-4 py-3">
-      <div className="text-[11px] uppercase tracking-wider text-white/60">{label}</div>
-      <div className="text-2xl font-semibold text-white mt-1">{value}</div>
-      {sub && <div className="text-[11px] text-amber-300/80 mt-0.5">{sub}</div>}
+    <div data-no-contrast-guard className="allow-white rounded-lg border border-white/20 bg-white/10 backdrop-blur px-4 py-3 text-white">
+      <div data-no-contrast-guard className="allow-white text-[11px] uppercase tracking-wider text-white/85">{label}</div>
+      <div data-no-contrast-guard className="allow-white text-2xl font-semibold mt-1 text-white">{value}</div>
+      {sub && <div data-no-contrast-guard className="allow-white text-[11px] mt-0.5 text-white/80">{sub}</div>}
     </div>
   );
 }
