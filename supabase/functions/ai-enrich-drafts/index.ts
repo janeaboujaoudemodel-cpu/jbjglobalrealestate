@@ -83,7 +83,7 @@ ${projectList}
 Return a JSON array with objects for each project (same order):
 {
   "area_name": "district/community name e.g. Downtown Dubai, Business Bay, Dubai Marina, Arabian Ranches, etc.",
-  "handover_date": "expected completion e.g. Q4 2025, Q1 2026, Ready, etc. or null",
+  "handover_date": "expected completion e.g. Q4 2025, Q1 2026, or null. Do not write Ready unless the source explicitly verifies completion.",
   "bedrooms_min": number or null (0 for studio),
   "bedrooms_max": number or null,
   "construction_status": "Under Construction" | "Completed" | "Presale" | null,

@@ -9,7 +9,7 @@ import { deriveHandover } from "@/utils/handoverDerivation";
 const formatHandoverDisplay = (v: string | null): string | null => {
   if (!v) return null;
   const s = v.trim();
-  if (/^ready$/i.test(s)) return "Ready";
+  if (/^ready$/i.test(s)) return null;
   const qm = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
   if (qm) return `Q${qm[1]} ${qm[2]}`;
   const d = new Date(s);
@@ -24,7 +24,7 @@ const formatHandoverDisplay = (v: string | null): string | null => {
 
 const handoverYear = (v: string | null): number | null => {
   if (!v) return null;
-  if (/^ready$/i.test(v.trim())) return 0;
+  if (/^ready$/i.test(v.trim())) return null;
   const ym = v.match(/(20\d{2})/);
   return ym ? parseInt(ym[1], 10) : null;
 };

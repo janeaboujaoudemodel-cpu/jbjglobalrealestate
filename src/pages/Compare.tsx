@@ -274,7 +274,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
       pricePerSqft: p.size_min && p.price_from ? Math.round(p.price_from / p.size_min) : 0,
       bedrooms: formatBedroomRange(p) || "Not specified",
       sizeRange: p.size_min && p.size_max ? `${p.size_min.toLocaleString()} - ${p.size_max.toLocaleString()} sqft` : "Size on request",
-      handover: p.handover_date || "Ready / TBD",
+      handover: p.handover_date || "Verify with developer",
       paymentPlan: p.payment_plan || "Verify with developer",
       furnishedStatus: p.furnished_status || "Unfurnished",
       views: Array.isArray(p.views) && p.views.length ? p.views : /amra/i.test(p.name) ? ["Full Sea View"] : ["Verify unit view"],
@@ -1159,7 +1159,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     return "N/A";
                   }},
                   { label: "Service Charge", format: (_: any, p: any) => p.service_charge ? `AED ${p.service_charge}/sqft` : "Verify with developer" },
-                  { label: "Handover", format: (_: any, p: any) => p.handover_date || "Ready / TBD" },
+                  { label: "Handover", format: (_: any, p: any) => p.handover_date || "Verify with developer" },
                   { label: "Payment Plan", format: (_: any, p: any) => p.payment_plan || "Contact for details" },
                   { label: "Furnished", format: (_: any, p: any) => p.furnished_status || "Unfurnished" },
                   { label: "Views", format: (_: any, p: any) => {

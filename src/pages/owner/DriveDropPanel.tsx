@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Sparkles, CheckCircle2, AlertCircle, PlusCircle, GitCompare, ExternalLink } from "lucide-react";
+import { Loader2, Sparkles, CheckCircle2, AlertCircle, PlusCircle, GitCompare, ExternalLink, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 
 type EntityType = "auto" | "project" | "developer" | "area" | "emirate" | "community";
@@ -65,14 +65,14 @@ export default function DriveDropPanel() {
   };
 
   return (
-    <section className="rounded-xl border border-[#B89555]/40 bg-white p-5 shadow-sm">
+    <section className="rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="w-5 h-5 text-emerald-800" />
-        <h2 className="text-lg font-semibold">Drop a Google Drive link — AI extraction engine</h2>
+        <Sparkles className="w-5 h-5 text-[#064E3B]" />
+        <h2 className="text-lg font-semibold text-[#1A1A1A]">Drop a Google Drive link — extraction review engine</h2>
       </div>
       <p className="text-sm text-[#1A1A1A]/70 mb-4">
-        Paste a Drive folder link. The engine classifies it (project · developer · area · emirate · community), deep-searches
-        the platform for existing matches, and shows a <strong>Before → After</strong> diff. New entries appear as “no previous history”.
+        Paste a Drive folder link. The engine records candidates, deep-searches the platform for existing matches, and only shows
+        <strong> Before → After</strong> where a real existing record is found. Unmatched candidates stay separate for owner approval.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-3 mb-3">
@@ -80,10 +80,10 @@ export default function DriveDropPanel() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://drive.google.com/drive/folders/…"
-          className="border-[#B89555]/40"
+          className="border-[#B89555]/50 bg-white text-[#1A1A1A]"
         />
         <Select value={entityType} onValueChange={(v) => setEntityType(v as EntityType)}>
-          <SelectTrigger className="border-[#B89555]/40"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="border-[#B89555]/50 bg-white text-[#1A1A1A]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="auto">Auto-detect</SelectItem>
             <SelectItem value="project">Projects</SelectItem>
@@ -99,21 +99,21 @@ export default function DriveDropPanel() {
         onChange={(e) => setEntityNames(e.target.value)}
         placeholder="Optional — hint names (one per line) so the engine knows what to look for"
         rows={2}
-        className="border-[#B89555]/40 mb-2"
+        className="border-[#B89555]/50 bg-white text-[#1A1A1A] mb-2"
       />
       <Textarea
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         placeholder="Notes / context (optional)"
         rows={2}
-        className="border-[#B89555]/40 mb-3"
+        className="border-[#B89555]/50 bg-white text-[#1A1A1A] mb-3"
       />
       <div className="flex items-center gap-2">
-        <Button onClick={submit} disabled={submitting} className="bg-emerald-900 hover:bg-emerald-800 text-white">
+        <Button onClick={submit} disabled={submitting} className="bg-[#064E3B] hover:bg-[#042c1c] text-white rounded-md">
           {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
           Analyze & Match
         </Button>
-        <span className="text-xs text-[#1A1A1A]/60">Results appear below with Before → After diff.</span>
+        <span className="text-xs text-[#1A1A1A]/70">No automatic publishing — owner review is required.</span>
       </div>
 
       <div className="mt-6">
@@ -166,24 +166,24 @@ export default function DriveDropPanel() {
                                 </span>
                               ) : (
                                 <span className="ml-auto inline-flex items-center gap-1 text-amber-800 text-[11px]">
-                                  <PlusCircle className="w-3 h-3" /> No previous history — will create new
+                                  <PlusCircle className="w-3 h-3" /> New Drive candidate — approval required
                                 </span>
                               )}
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
-                              <div className="rounded bg-neutral-50 p-2 border border-neutral-200">
-                                <div className="text-neutral-500 uppercase tracking-wider text-[10px] mb-1">Before</div>
-                                {row.before ? (
-                                  <pre className="whitespace-pre-wrap break-words">{JSON.stringify(row.before, null, 2)}</pre>
-                                ) : (
-                                  <div className="text-neutral-400">— none —</div>
-                                )}
+                            {row.matched ? (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
+                                <DiffPanel title="Before" tone="neutral" data={row.before} />
+                                <DiffPanel title="Proposed from Drive" tone="emerald" data={row.after} />
                               </div>
-                              <div className="rounded bg-emerald-50/40 p-2 border border-emerald-200">
-                                <div className="text-emerald-800 uppercase tracking-wider text-[10px] mb-1">After (from Drive)</div>
-                                <pre className="whitespace-pre-wrap break-words">{JSON.stringify(row.after, null, 2)}</pre>
+                            ) : (
+                              <div className="rounded-md bg-[#F7F2EA] p-3 border border-[#B89555]/35 text-xs text-[#1A1A1A] flex items-start gap-2">
+                                <ShieldAlert className="w-4 h-4 text-[#064E3B] mt-0.5 shrink-0" />
+                                <div>
+                                  <div className="font-semibold">No existing platform record matched.</div>
+                                  <div className="mt-1 text-[#1A1A1A]/75">This stays as a Drive candidate only. It is not shown as a Before → After change and it is not published until reviewed.</div>
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -196,6 +196,29 @@ export default function DriveDropPanel() {
         )}
       </div>
     </section>
+  );
+}
+
+function DiffPanel({ title, data, tone }: { title: string; data: any; tone: "neutral" | "emerald" }) {
+  const entries = Object.entries(data ?? {})
+    .filter(([key, value]) => value !== null && value !== undefined && value !== "" && !["id", "updated_at", "created_at"].includes(key))
+    .slice(0, 8);
+  return (
+    <div className={`rounded p-2 border ${tone === "emerald" ? "bg-[#F7F2EA] border-[#B89555]/40" : "bg-white border-[#B89555]/25"}`}>
+      <div className="text-[#064E3B] uppercase tracking-wider text-[10px] mb-1 font-semibold">{title}</div>
+      {entries.length ? (
+        <dl className="space-y-1">
+          {entries.map(([key, value]) => (
+            <div key={key} className="grid grid-cols-[96px_1fr] gap-2">
+              <dt className="text-[#1A1A1A]/55 capitalize">{key.replace(/_/g, " ")}</dt>
+              <dd className="text-[#1A1A1A] break-words">{typeof value === "object" ? JSON.stringify(value) : String(value)}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <div className="text-[#1A1A1A]/50">No safe fields to display</div>
+      )}
+    </div>
   );
 }
 

@@ -55,7 +55,7 @@ export const SECTION_CONFIGS: Record<string, SectionConfig> = {
       { key: "bedrooms_max", label: "Bedrooms (max)", type: "number" },
       { key: "size_min", label: "Size min (sqft)", type: "number" },
       { key: "size_max", label: "Size max (sqft)", type: "number" },
-      { key: "handover_date", label: "Handover date", type: "date", help: "Past date = automatically labelled 'Ready' everywhere." },
+      { key: "handover_date", label: "Handover date", type: "date", help: "Public cards show the stored date only; completion must be explicitly verified." },
     ],
   },
   gallery: {

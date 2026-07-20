@@ -50,12 +50,10 @@ export function DeveloperLogo({
 
   const renderNameplate = (containerClass: string) => {
     const label = (name || alt || "Developer").trim();
-    const initials = label
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase())
-      .join("") || "DV";
+    const display = label
+      .replace(/\b(properties|property|developers?|developments?|real estate|llc|l\.l\.c\.?|group)\b/gi, "")
+      .replace(/\s+/g, " ")
+      .trim() || label;
 
     return (
       <div
@@ -68,10 +66,10 @@ export function DeveloperLogo({
         <span className="sr-only">{label}</span>
         <span
           aria-hidden="true"
-          className="font-serif font-bold leading-none text-center tracking-normal"
-          style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B", fontSize: initials.length > 1 ? "0.82rem" : "1rem" }}
+          className="font-serif font-bold leading-tight text-center tracking-normal px-0.5"
+          style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B", fontSize: display.length > 14 ? "0.48rem" : display.length > 9 ? "0.56rem" : "0.68rem" }}
         >
-          {initials}
+          {display}
         </span>
       </div>
     );

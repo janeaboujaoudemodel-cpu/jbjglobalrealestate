@@ -155,7 +155,7 @@ async function stage3AI(supabase: any, batchSize: number, dryRun: boolean) {
   const prompt = `You are a Dubai/UAE real estate data verifier. For each project below, return its REAL, VERIFIED expected handover/completion.
 
 Return a JSON array (same order, same length) with objects:
-{ "handover_date": "Q1 YYYY" | "Q2 YYYY" | "Q3 YYYY" | "Q4 YYYY" | "YYYY" | "Ready" | null }
+{ "handover_date": "Q1 YYYY" | "Q2 YYYY" | "Q3 YYYY" | "Q4 YYYY" | "YYYY" | null }
 
 CRITICAL:
 - Return null if you are not confident. Do NOT invent dates.

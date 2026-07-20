@@ -15,6 +15,8 @@ interface Body {
 }
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const STOP_WORDS = new Set(['properties', 'property', 'developers', 'developer', 'development', 'developments', 'real', 'estate', 'group', 'llc', 'l', 'by', 'the', 'at', 'in']);
+const tokensOf = (s: string) => norm(s).split(' ').filter((t) => t.length > 1 && !STOP_WORDS.has(t));
 
 async function classifyWithAI(folderUrl: string, hint?: string): Promise<{ entity_type: string; items: { name: string; type: string }[]; rationale: string }> {
   if (!LOVABLE_API_KEY) return { entity_type: 'auto', items: [], rationale: 'no ai key' };
@@ -31,7 +33,7 @@ async function classifyWithAI(folderUrl: string, hint?: string): Promise<{ entit
           {
             role: 'system',
             content:
-              'You classify Google Drive folder submissions for a Dubai real-estate platform. Return STRICT JSON only: {"entity_type":"project|developer|area|emirate|community|mixed","items":[{"name":"string","type":"project|developer|area|emirate|community"}],"rationale":"short"}. Use the folder URL, folder name hints, and optional owner notes.',
+              'You classify Google Drive folder submissions for a Dubai real-estate platform. Return STRICT JSON only: {"entity_type":"project|developer|area|emirate|community|mixed","items":[{"name":"string","type":"project|developer|area|emirate|community"}],"rationale":"short"}. Do not guess brands from an opaque Drive ID. Only return item names that are explicitly visible in the folder URL text, owner hints, or owner notes.',
           },
           { role: 'user', content: `Folder URL: ${folderUrl}\nOwner hint / notes: ${hint ?? '(none)'}\nRespond with JSON only.` },
         ],
@@ -56,7 +58,8 @@ async function classifyWithAI(folderUrl: string, hint?: string): Promise<{ entit
 async function matchEntity(supa: any, type: string, name: string) {
   const n = norm(name);
   if (!n) return null;
-  const tokens = n.split(' ').filter(Boolean).slice(0, 3).map((t) => `%${t}%`);
+  const tokens = tokensOf(name);
+  if (!tokens.length) return null;
   const tableMap: Record<string, string> = {
     project: 'projects',
     developer: 'developers',
@@ -66,19 +69,32 @@ async function matchEntity(supa: any, type: string, name: string) {
   };
   const table = tableMap[type];
   if (!table) return null;
+  const selectMap: Record<string, string> = {
+    project: 'id,name,slug,cover_image_url,description,updated_at',
+    developer: 'id,name,slug,logo_url,description,updated_at',
+    area: 'id,name,slug,description,updated_at',
+    emirate: 'id,name,slug,updated_at',
+    community: 'id,name,slug,description,updated_at',
+  };
   const { data } = await supa
     .from(table)
-    .select('id,name,slug,logo_url,cover_image_url,description,updated_at')
-    .ilike('name', `%${n.split(' ')[0]}%`)
-    .limit(5);
+    .select(selectMap[type])
+    .or(tokens.slice(0, 4).map((t) => `name.ilike.%${t}%`).join(','))
+    .limit(20);
   if (!data?.length) return null;
-  // pick best by token overlap
+  // Strict match only. This prevents a folder for Mashriq Elite being attached
+  // to Emaar/Ammar just because one generic token happened to overlap.
   const scored = data.map((r: any) => {
     const rn = norm(r.name ?? '');
-    const overlap = tokens.filter((t) => rn.includes(t.replaceAll('%', ''))).length;
-    return { row: r, score: overlap };
+    const rowTokens = tokensOf(r.name ?? '');
+    const overlap = tokens.filter((t) => rowTokens.includes(t)).length;
+    const exact = rn === n;
+    const contained = n.length >= 6 && (rn.includes(n) || n.includes(rn));
+    const ratio = overlap / Math.max(tokens.length, rowTokens.length, 1);
+    const score = exact ? 100 : contained && ratio >= 0.75 ? 80 : ratio >= 0.82 ? 70 : 0;
+    return { row: r, score };
   }).sort((a, b) => b.score - a.score);
-  return scored[0].score > 0 ? scored[0].row : null;
+  return scored[0].score >= 70 ? scored[0].row : null;
 }
 
 Deno.serve(async (req) => {
@@ -115,9 +131,21 @@ Deno.serve(async (req) => {
     // AI classification
     const cls = await classifyWithAI(folderUrl, [body.notes, ...(body.entity_names ?? [])].filter(Boolean).join(' | '));
 
-    // If owner supplied entity_names, merge them in as items
-    const seededItems = (body.entity_names ?? []).map((n) => ({ name: n, type: body.entity_type && body.entity_type !== 'auto' ? body.entity_type : cls.entity_type }));
-    const allItems = [...seededItems, ...cls.items];
+    // If owner supplied entity_names, merge them in as trusted candidate names.
+    const seededItems = (body.entity_names ?? []).map((n) => ({ name: n, type: body.entity_type && body.entity_type !== 'auto' ? body.entity_type : cls.entity_type, source: 'owner_hint' }));
+    const evidence = norm([folderUrl, body.notes ?? '', ...(body.entity_names ?? [])].join(' '));
+    const aiItems = (cls.items ?? [])
+      .filter((it: any) => {
+        const itemTokens = tokensOf(it.name ?? '');
+        return itemTokens.length > 0 && itemTokens.some((t) => evidence.includes(t));
+      })
+      .map((it: any) => ({ ...it, source: 'visible_drive_text' }));
+    const dedupe = new Map<string, { name: string; type: string; source?: string }>();
+    for (const item of [...seededItems, ...aiItems]) {
+      const key = `${item.type}:${norm(item.name)}`;
+      if (norm(item.name)) dedupe.set(key, item);
+    }
+    const allItems = Array.from(dedupe.values()).slice(0, 50);
 
     // Match each item and build before/after
     const beforeAfter: any[] = [];
@@ -132,7 +160,7 @@ Deno.serve(async (req) => {
         after: {
           name: it.name,
           drive_folder_url: folderUrl,
-          source: 'drive_drop',
+          source: it.source ?? 'drive_drop_candidate',
         },
       });
     }

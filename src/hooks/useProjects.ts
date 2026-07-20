@@ -305,7 +305,7 @@ export function useDevelopers(includeHidden = false) {
       // shorter slug (+1), lower rank (better).
       const scoreOf = (d: Developer): number => {
         const slug = (d.slug || "").toLowerCase();
-        const hasLogo = d.logo_url && !d.logo_url.includes("emaar_properties_f2c4d0a72c") ? 3 : 0;
+        const hasLogo = d.logo_url ? 3 : 0;
         const canonicalSlug = !/^\d/.test(slug) && !slug.startsWith("developed-by-") ? 2 : 0;
         const shortSlug = slug.length > 0 && slug.length < 40 ? 1 : 0;
         const rankBonus = typeof d.rank === "number" ? Math.max(0, 1000 - d.rank) / 1000 : 0;

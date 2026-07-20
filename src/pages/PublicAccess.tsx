@@ -579,10 +579,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
   };
 
   const isReadyProject = (p: any) => {
-    const text = [p.sale_status, p.construction_status, p.status, p.handover_date].map((v) => String(v || "").toLowerCase()).join(" ");
-    if (/ready|complete|completed|delivered|handover/.test(text) && !/off[ -]?plan|under construction|new launch/.test(text)) return true;
-    const ts = p.handover_date ? Date.parse(p.handover_date) : NaN;
-    return Number.isFinite(ts) && ts < Date.now();
+    const text = [p.construction_status, p.status].map((v) => String(v || "").toLowerCase()).join(" ");
+    return /\b(ready|complete|completed|delivered)\b/.test(text) && !/off[ -]?plan|under construction|new launch/.test(text);
   };
   const isOffPlanProject = (p: any) => {
     const text = [p.sale_status, p.construction_status, p.status].map((v) => String(v || "").toLowerCase()).join(" ");
@@ -590,9 +588,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     return !isReadyProject(p);
   };
   const completionText = (p: any) => {
-    if (isReadyProject(p)) return "Ready";
     const raw = String(p.handover_date || "").trim();
-    if (!raw || /^ready$/i.test(raw)) return raw ? "Ready" : null;
+    if (!raw || /^ready$/i.test(raw)) return isReadyProject(p) ? "Ready" : null;
     return `Completion ${raw}`;
   };
 

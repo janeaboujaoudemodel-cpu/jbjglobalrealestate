@@ -87,7 +87,9 @@ const getCardPhaseLabel = (project: Project & { is_sold_out?: boolean | null }):
   if (source.includes("eoi") || source.includes("expression of interest")) return "EOI";
   if (source.includes("presale") || source.includes("pre-sale") || source.includes("pre sale")) return "Pre-sale";
   if (source.includes("on sale") || source.includes("selling")) return "On Sale";
-  if (source.includes("ready") || source.includes("complete") || source.includes("delivered")) return "Ready";
+  // Never claim a public project card is "Ready" from loose status text.
+  // Completion is a legal/verification statement and belongs only on audited
+  // detail/admin surfaces, not inferred listing badges.
   if (source.includes("announce")) return "Announced";
   if (source.includes("launch")) return "Launch";
   return null;
@@ -365,7 +367,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             const formatHandover = (v: string | null): string | null => {
               if (!v) return null;
               const s = v.trim();
-              if (/^ready$/i.test(s)) return "Ready";
+              if (/^ready$/i.test(s)) return null;
               // Already "Q# YYYY"
               const qm = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
               if (qm) return `Q${qm[1]} ${qm[2]}`;
@@ -382,7 +384,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             };
             const handover = formatHandover(raw);
             const phaseLabel = getCardPhaseLabel(project);
-            const showHandover = Boolean(handover && handover !== phaseLabel);
+            const showHandover = Boolean(handover && handover !== phaseLabel && !/^ready$/i.test(handover));
             if (!phaseLabel && !showHandover) return null;
             return (
               <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
@@ -403,7 +405,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                     data-emerald-ok="badge"
                     className="jj-emerald-metallic inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide text-white [&_*]:text-white"
                   >
-                    <span className={`text-white ${/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}`}>{handover}</span>
+                    <span className="text-white">{handover}</span>
                   </span>
                 )}
               </div>

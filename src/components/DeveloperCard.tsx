@@ -6,7 +6,6 @@ import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import type { Developer } from "@/hooks/useProjects";
-import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan.jpg";
 
 
@@ -58,8 +57,6 @@ const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
   "sunrise valley": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
   "h h": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
   "ax capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
-  ammar: ammarCreekHarbourMasterplan,
-  amar: ammarCreekHarbourMasterplan,
 };
 
 // Match by matching *any* keyword token in the developer name/slug against
@@ -162,9 +159,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
               }}
             />
           ) : (
-            <div className="flex flex-col items-center justify-center gap-2">
-              <Building2 className="w-10 h-10 text-[#1A1A1A]/40" />
-              <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide text-center line-clamp-2 max-w-[220px]">
+            <div className="flex items-center justify-center px-4">
+              <span className="text-[#1A1A1A] text-xl font-serif font-bold tracking-normal text-center line-clamp-2 max-w-[260px]">
                 {developer.name}
               </span>
             </div>

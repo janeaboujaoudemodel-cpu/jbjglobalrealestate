@@ -51,6 +51,7 @@ function normalizeDeveloper(developer: unknown): Record<string, unknown> | null 
 }
 
 const OFFICIAL_LOGO_MIRRORS: Array<{ match: RegExp; logo: string }> = [
+  { match: /emaar_properties_f2c4d0a72c/i, logo: "/developers/logos/emaar-logo.webp" },
   { match: /makdevelopers\.com\/wp-content\/uploads\/.+mak-developers-logo/i, logo: "/developer-logos/mak-developers.svg" },
   { match: /mashriqelite\.com\/frontend\/images\/logo\.png/i, logo: "/developer-logos/mashriq-elite.png" },
   { match: /oneuae\.com\/.+OneDevLogo/i, logo: "/developer-logos/one-development.svg" },
@@ -58,6 +59,7 @@ const OFFICIAL_LOGO_MIRRORS: Array<{ match: RegExp; logo: string }> = [
 ];
 
 const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bemaar\b/i, logo: "/developers/logos/emaar-logo.webp" },
   { match: /\bazizi\b/i, logo: "/developer-logos/azizi-developments.png" },
   { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
@@ -102,10 +104,12 @@ export function getDeveloperWebsiteUrl(developer: unknown): string | null {
 }
 
 const KNOWN_DEVELOPER_WEBSITES: Array<{ match: RegExp; website: string }> = [
+  { match: /\bemaar\b/i, website: "https://www.emaar.com/en" },
   { match: /\bma+a?k\b|maakdream/i, website: "https://makdevelopers.com/" },
 ];
 
 const KNOWN_DEVELOPER_LOGOS: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bemaar\b/i, logo: "/developers/logos/emaar-logo.webp" },
   { match: /\bazizi\b/i, logo: "/developer-logos/azizi-developments.png" },
   { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
@@ -126,16 +130,11 @@ export function getKnownDeveloperLogoUrl(name: unknown): string | null {
 }
 
 export function getWebsiteLogoFallbackUrl(websiteUrl: unknown): string | null {
-  if (typeof websiteUrl !== "string" || !websiteUrl.trim()) return null;
-  try {
-    const input = websiteUrl.trim();
-    const url = new URL(/^https?:\/\//i.test(input) ? input : `https://${input}`);
-    const host = url.hostname.replace(/^www\./i, "");
-    if (!host || !host.includes(".")) return null;
-    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=256`;
-  } catch {
-    return null;
-  }
+  // Browser favicons/globe icons were being mistaken for developer logos.
+  // Missing logos must stay in the owner approval queue or use a text
+  // nameplate until a real official wordmark is approved.
+  void websiteUrl;
+  return null;
 }
 
 export function getDeveloperLogoBgColor(developer: unknown): string | null {

@@ -136,7 +136,6 @@ const isReadyProject = (project: object) => {
     p.construction_status,
     p.status,
     p.status_label,
-    p.handover_date,
     p.availability_status,
   ]
     .filter(Boolean)

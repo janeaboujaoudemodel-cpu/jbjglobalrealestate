@@ -109,7 +109,8 @@ function priceVerdict(p: any, budget?: string): RowCell {
 function formatHandoverForDisplay(p: any): string {
   const status = String(p?.construction_status || "").trim();
   const raw = String(p?.handover_date || "").trim();
-  if (/ready/i.test(status) || /ready/i.test(raw)) return "Ready";
+  if (/ready/i.test(raw)) return "TBA";
+  if (/\b(ready|complete|completed|delivered)\b/i.test(status)) return "Verified complete";
   if (p?.handover_quarter && p?.handover_year) return `${p.handover_quarter} ${p.handover_year}`;
   if (p?.handover_year) return String(p.handover_year);
   const iso = raw.match(/^(\d{4})-(\d{2})(?:-\d{2})?/);
