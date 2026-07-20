@@ -9,26 +9,6 @@ import {
 } from "./modules";
 import { useGlobalHubSearch } from "./useGlobalHubSearch";
 
-type SampleRecord = {
-  id: string;
-  module: string;
-  moduleLabel: string;
-  title: string;
-  subtitle: string;
-};
-
-const SAMPLE_RECORDS: SampleRecord[] = [
-  { id: "L-1041", module: "leads", moduleLabel: "Leads", title: "Amelia Rahman", subtitle: "Emirates NBD · Qualified · Dubai Marina" },
-  { id: "L-1042", module: "leads", moduleLabel: "Leads", title: "Yusuf Al Mansoori", subtitle: "Sobha Realty · New · Palm Jumeirah" },
-  { id: "D-2210", module: "deals", moduleLabel: "Deals", title: "Palm Jebel Ali Villa — 8BR", subtitle: "AED 42.5M · Proposal · Close Q3" },
-  { id: "D-2211", module: "deals", moduleLabel: "Deals", title: "Bugatti Residences PH", subtitle: "AED 18.9M · Negotiation · Close Q4" },
-  { id: "C-3315", module: "contacts", moduleLabel: "Contacts", title: "Fatima Khoury", subtitle: "Investor · +971 50 4102 998" },
-  { id: "A-4402", module: "accounts", moduleLabel: "Accounts", title: "Meraas Holding", subtitle: "Developer · 214 open opportunities" },
-  { id: "T-5501", module: "tasks", moduleLabel: "Tasks", title: "Send LOI to Damac", subtitle: "Due today · High priority" },
-  { id: "M-6602", module: "meetings", moduleLabel: "Meetings", title: "Site Visit — Emaar Beachfront", subtitle: "Tomorrow · 11:00 GST" },
-  { id: "R-7702", module: "reports", moduleLabel: "Reports", title: "Q2 Pipeline by Owner", subtitle: "Public · Updated 2h ago" },
-];
-
 const RECENT_KEY = "jbj_crm_recent_search";
 
 function loadRecents(): string[] {
