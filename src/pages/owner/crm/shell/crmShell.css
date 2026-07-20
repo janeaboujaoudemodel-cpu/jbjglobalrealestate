@@ -3936,3 +3936,54 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 .jc-teamspace__title > svg {
   flex-shrink: 0;
 }
+
+/* ============================================================
+   Sidebar global search (top of rail)
+============================================================ */
+.jc-side-search {
+  margin: 6px 12px 10px;
+  height: 34px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 10px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.jc-side-search:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.36); }
+.jc-side-search svg { color: #FFFFFF; opacity: 1; }
+.jc-side-search__label { flex: 1; text-align: left; color: #FFFFFF; }
+.jc-side-search__kbd {
+  padding: 1px 6px; border-radius: 4px;
+  background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.24);
+  font-size: 10.5px; color: #FFFFFF;
+}
+.jc-app[data-sidebar-collapsed="true"] .jc-side-search__label,
+.jc-app[data-sidebar-collapsed="true"] .jc-side-search__kbd { display: none; }
+
+/* ============================================================
+   Header contrast lock — icons, plus button, search chip
+============================================================ */
+.jc-header .jc-icon-btn,
+.jc-header .jc-grid-btn { color: #FFFFFF !important; opacity: 1 !important; }
+.jc-header .jc-icon-btn svg,
+.jc-header .jc-grid-btn svg { color: #FFFFFF !important; opacity: 1 !important; }
+.jc-header .jc-icon-btn[data-solid="true"] {
+  background: rgba(255,255,255,0.18) !important;
+  border: 1px solid rgba(255,255,255,0.30) !important;
+}
+.jc-header .jc-icon-btn[data-solid="true"]:hover {
+  background: rgba(255,255,255,0.28) !important;
+}
+.jc-header .jc-search {
+  background: rgba(255,255,255,0.16) !important;
+  border-color: rgba(255,255,255,0.30) !important;
+  color: #FFFFFF !important;
+}
+.jc-header .jc-search svg,
+.jc-header .jc-search .jc-search__placeholder,
+.jc-header .jc-search .jc-search__kbd { color: #FFFFFF !important; opacity: 1 !important; }
