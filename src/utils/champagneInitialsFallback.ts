@@ -7,7 +7,7 @@ const cache = new Map<string, string>();
 
 const STOPWORDS = new Set([
   "the", "a", "an", "of", "and", "or", "by", "for", "to", "in", "on", "at",
-  "image", "photo", "picture", "cover", "gallery", "thumbnail", "logo",
+  "image", "images", "photo", "photos", "picture", "cover", "gallery", "thumbnail", "logo",
 ]);
 
 export function getInitialsFromAlt(alt?: string | null): string {
@@ -18,7 +18,9 @@ export function getInitialsFromAlt(alt?: string | null): string {
     .replace(/[^\p{L}\p{N}\s]/gu, " ")
     .trim();
   if (!cleaned) return "JBJ";
-  const words = cleaned.split(/\s+/).filter((w) => !STOPWORDS.has(w.toLowerCase()));
+  const words = cleaned
+    .split(/\s+/)
+    .filter((w) => !STOPWORDS.has(w.toLowerCase()) && !/^\d+$/.test(w));
   const source = words.length ? words : cleaned.split(/\s+/);
   const initials = source.slice(0, 3).map((w) => w[0]?.toUpperCase() ?? "").join("");
   return (initials || "JBJ").slice(0, 3);

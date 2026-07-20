@@ -175,15 +175,11 @@ export function normalizeProvidentImageUrl(url: string, size?: string): string {
 export function getHighResImageUrl(url: string, size: string = HIGH_RES_IMAGE_SIZE): string {
   if (!url) return url;
   
-  // CloudFront CDN pattern: /x/{w}x{h}/
-  if (url.includes("/x/") && url.includes("cloudfront.net")) {
-    return url.replace(CLOUDFRONT_SIZE_SEGMENT, `/x/${size}/`);
-  }
-  
-  // Off-plan nested path with embedded size: .../340x252/...
-  if (url.includes("cloudfront") && NESTED_SIZE_SEGMENT.test(url)) {
-    return url.replace(NESTED_SIZE_SEGMENT, `/${size}/`);
-  }
+  // Do NOT invent CloudFront dimensions. The off-plan feeds often expose only
+  // specific generated sizes (for example /x/1392x/ or /x/744x/). Rewriting
+  // those to /x/1920x1080/ creates 403/404 images, which then produced blank
+  // galleries and AR2/AR3 placeholder tiles. Keep the trusted original URL.
+  if (url.includes("cloudfront")) return url;
   
   return url;
 }
