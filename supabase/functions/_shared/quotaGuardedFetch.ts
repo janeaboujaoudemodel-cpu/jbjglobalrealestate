@@ -110,7 +110,9 @@ export async function quotaGuardedFetch(
 
   if (!resp.ok) {
     // Roll back the slot so a Resend 4xx/5xx doesn't burn quota.
-    sb.rpc("email_quota_record_failure").catch(() => {});
+    // Supabase's rpc builder is a thenable (not a real Promise) so wrap it
+    // in Promise.resolve() before calling .catch().
+    Promise.resolve(sb.rpc("email_quota_record_failure")).catch(() => {});
   }
 
   return resp;
