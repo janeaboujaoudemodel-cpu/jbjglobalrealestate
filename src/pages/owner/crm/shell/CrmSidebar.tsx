@@ -82,16 +82,6 @@ export default function CrmSidebar() {
         </button>
       </div>
 
-      <button
-        type="button"
-        className="jc-side-search"
-        aria-label="Search Hub"
-        onClick={() => window.dispatchEvent(new CustomEvent("jc-open-search"))}
-      >
-        <Search size={16} strokeWidth={2.25} />
-        <span className="jc-side-search__label">Search Hub</span>
-        <span className="jc-side-search__kbd">⌘K</span>
-      </button>
 
       <nav className="jc-main-nav" aria-label="Primary CRM modules">
         {CRM_PRIMARY_NAV.map((m) => renderModule(m))}
