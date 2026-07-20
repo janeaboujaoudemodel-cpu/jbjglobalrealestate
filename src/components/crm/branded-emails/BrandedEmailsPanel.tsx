@@ -402,6 +402,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   padding: "6px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700,
                   background: allSelected ? "#064E3B" : "#FFFFFF",
                   color: allSelected ? "#FFFFFF" : "#064E3B",
+                  WebkitTextFillColor: allSelected ? "#FFFFFF" : "#064E3B",
                   border: `1px solid ${allSelected ? "#064E3B" : "rgba(6,78,59,0.4)"}`,
                   whiteSpace: "nowrap",
                 }}
@@ -414,6 +415,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 style={{
                   padding: "6px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700,
                   background: "#FFFFFF", color: "#064E3B",
+                  WebkitTextFillColor: "#064E3B",
                   border: "1px solid rgba(6,78,59,0.4)",
                   whiteSpace: "nowrap",
                 }}
@@ -548,13 +550,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
                     minHeight: 40, padding: "8px 16px", borderRadius: 6, fontSize: 13, fontWeight: 700,
                     background: "#064E3B", color: "#FFFFFF",
+                    WebkitTextFillColor: "#FFFFFF",
                     border: "1px solid #064E3B",
                     whiteSpace: "nowrap",
                     cursor: sending || !selectedTemplate ? "not-allowed" : "pointer",
                     opacity: sending || !selectedTemplate ? 0.5 : 1,
                   }}
                 >
-                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF" }} /> : <Send className="size-4" style={{ color: "#FFFFFF" }} />}
+                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} /> : <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />}
                   Send test
                 </button>
               </div>
@@ -569,12 +572,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
                 minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
                 background: "#064E3B", color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
                 border: "1px solid #064E3B",
                 cursor: sending || !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
                 opacity: sending || !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
               }}
             >
-              <Send className="size-4" style={{ color: "#FFFFFF" }} />
+              <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />
               {sending ? "Sending…" : `Send live to ${audienceCount} ${kind}`}
             </button>
 
