@@ -161,10 +161,13 @@ export default function DriveDropPanel() {
                         {s.before_after.map((row: any, i: number) => (
                           <div key={i} className="rounded border border-[#B89555]/20 p-2">
                             <div className="flex items-center gap-2 text-xs mb-1">
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200">
+                              <span
+                                data-no-contrast-guard
+                                className="allow-white inline-flex items-center px-2 py-0.5 rounded-full bg-[#064E3B] text-white border border-[#064E3B] uppercase tracking-wide text-[10px] font-semibold"
+                              >
                                 {row.type}
                               </span>
-                              <span className="font-medium">{row.name}</span>
+                              <span className="font-medium text-[#1A1A1A]">{row.name}</span>
                               {row.matched ? (
                                 <span className="ml-auto inline-flex items-center gap-1 text-emerald-800 text-[11px]">
                                   <GitCompare className="w-3 h-3" /> Match found
