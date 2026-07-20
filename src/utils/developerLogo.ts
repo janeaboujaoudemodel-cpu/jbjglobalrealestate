@@ -59,6 +59,7 @@ const OFFICIAL_LOGO_MIRRORS: Array<{ match: RegExp; logo: string }> = [
 ];
 
 const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bazizi\b/i, logo: "/developer-logos/azizi-developments.png" },
   { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
