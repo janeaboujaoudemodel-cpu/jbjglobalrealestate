@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
