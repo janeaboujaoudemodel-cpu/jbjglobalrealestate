@@ -28,6 +28,7 @@ type Recipient = {
 
 type Template = {
   id: string;
+  owner_id?: string | null;
   name: string;
   subject: string;
   body_html: string;
@@ -69,13 +70,45 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
   }));
 }
 
-async function loadTemplates(): Promise<Template[]> {
-  const { data } = await (supabase as any)
-    .from("branded_email_templates")
-    .select("id, name, subject, body_html, category")
-    .order("updated_at", { ascending: false })
-    .limit(60);
-  return (data ?? []) as Template[];
+function normalizeTemplateKey(template: Template) {
+  return `${template.category || "Template"}::${template.name}`.trim().toLowerCase();
+}
+
+async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
+  const category = kind === "developers" ? "Developer" : "Brokerage";
+  const { data: authData } = await supabase.auth.getUser();
+  const userId = authData.user?.id;
+
+  const selectFields = "id, owner_id, name, subject, body_html, category, updated_at";
+  let scopedTemplates: Template[] = [];
+
+  if (userId) {
+    const { data } = await (supabase as any)
+      .from("branded_email_templates")
+      .select(selectFields)
+      .eq("owner_id", userId)
+      .eq("category", category)
+      .order("updated_at", { ascending: false })
+      .limit(60);
+    scopedTemplates = (data ?? []) as Template[];
+  }
+
+  const source = scopedTemplates.length
+    ? scopedTemplates
+    : ((await (supabase as any)
+        .from("branded_email_templates")
+        .select(selectFields)
+        .eq("category", category)
+        .order("updated_at", { ascending: false })
+        .limit(60)).data ?? []) as Template[];
+
+  const seen = new Set<string>();
+  return source.filter((template) => {
+    const key = normalizeTemplateKey(template);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function stripHtml(html: string) {
@@ -87,10 +120,14 @@ function stripHtml(html: string) {
     .trim();
 }
 
+const tabIconClass = (tab: string, activeTab: string) =>
+  `size-4 ${activeTab === tab ? "!text-white !stroke-white" : "!text-[#0F1A16] !stroke-[#0F1A16]"}`;
+
 export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) {
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("template");
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [audienceMode, setAudienceMode] = useState<"all" | "custom">("all");
   const [includeSearch, setIncludeSearch] = useState("");
@@ -101,15 +138,28 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
   useEffect(() => {
     if (!open) return;
+    let cancelled = false;
     setLoading(true);
-    Promise.all([loadRecipients(kind), loadTemplates()])
+    setActiveTab("template");
+    setSelectedTemplateId(null);
+    setAudienceMode("all");
+    setIncludeSearch("");
+    setExcludeSearch("");
+    setExcludedIds(new Set());
+    setCustomIds(new Set());
+    Promise.all([loadRecipients(kind), loadTemplates(kind)])
       .then(([r, t]) => {
+        if (cancelled) return;
         setRecipients(r);
         setTemplates(t);
-        if (t.length && !selectedTemplateId) setSelectedTemplateId(t[0].id);
+        setSelectedTemplateId(t[0]?.id ?? null);
       })
-      .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [open, kind]);
 
   const selectedTemplate = useMemo(
@@ -215,7 +265,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-3xl p-0 flex flex-col bg-white">
+      <SheetContent side="right" data-branded-email-panel="true" className="w-full sm:max-w-3xl p-0 flex flex-col bg-white">
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white">
           <div className="flex items-center gap-3">
             <span className="inline-grid place-items-center size-10 rounded-md bg-[#064E3B] text-white">
@@ -234,31 +284,35 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
           </div>
         </SheetHeader>
 
-        <Tabs defaultValue="template" className="flex-1 flex flex-col overflow-hidden">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
           <TabsList className="mx-6 mt-4 justify-start bg-transparent p-0 gap-2 h-auto flex-wrap">
             <TabsTrigger
               value="template"
-              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+              data-branded-email-tab="true"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <FileText className="size-4" /> Template
+              <FileText className={tabIconClass("template", activeTab)} /> Template
             </TabsTrigger>
             <TabsTrigger
               value="audience"
-              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+              data-branded-email-tab="true"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <Users className="size-4" /> Audience
+              <Users className={tabIconClass("audience", activeTab)} /> Audience
             </TabsTrigger>
             <TabsTrigger
               value="preview"
-              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+              data-branded-email-tab="true"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <Eye className="size-4" /> Preview
+              <Eye className={tabIconClass("preview", activeTab)} /> Preview
             </TabsTrigger>
             <TabsTrigger
               value="send"
-              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current"
+              data-branded-email-tab="true"
+              className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <Send className="size-4" /> Send
+              <Send className={tabIconClass("send", activeTab)} /> Send
             </TabsTrigger>
           </TabsList>
 
@@ -283,6 +337,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                         key={t.id}
                         type="button"
                         onClick={() => setSelectedTemplateId(t.id)}
+                        data-branded-email-template-card={active ? "active" : "inactive"}
                         className={`text-left p-4 rounded-lg border transition ${
                           active
                             ? "border-[#064E3B] bg-[#064E3B]/5 ring-2 ring-[#064E3B]/30"
@@ -448,7 +503,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               )}
             </TabsContent>
 
-            <TabsContent value="send" className="mt-0 space-y-4">
+            <TabsContent value="send" data-branded-email-send="true" className="mt-0 space-y-4">
               <div className="border border-emerald-900/15 rounded-lg p-4 bg-[#F8FAF9]">
                 <p className="text-xs text-[#4B5D55] uppercase tracking-wider">Campaign summary</p>
                 <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
@@ -491,12 +546,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <div className="relative">
                   <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#4B5D55]" />
                   <Input
+                    type="text"
+                    data-branded-email-search-input="true"
                     value={audienceMode === "all" ? excludeSearch : includeSearch}
                     onChange={(e) => audienceMode === "all" ? setExcludeSearch(e.target.value) : setIncludeSearch(e.target.value)}
                     placeholder={audienceMode === "all"
                       ? `Type a ${kind === "developers" ? "developer" : "brokerage"} to exclude…`
                       : `Type a ${kind === "developers" ? "developer" : "brokerage"} to include…`}
-                    className="pl-9 border-emerald-900/20"
+                    className="pl-9 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
                   />
                 </div>
 
@@ -561,25 +618,26 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2">
-                <Button
+                <button
                   type="button"
-                  variant="outline"
+                  data-branded-email-test-action="true"
                   onClick={handleSendTest}
                   disabled={sending || !selectedTemplate}
-                  className="!border-[#064E3B] !text-[#064E3B] !bg-white hover:!bg-[#064E3B]/10 font-semibold"
+                  className="branded-email-test-button inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-[#064E3B] bg-white px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[#064E3B]/10"
                 >
-                  {sending ? <Loader2 className="size-4 mr-2 animate-spin" /> : <Send className="size-4 mr-2 !text-[#064E3B]" />}
-                  Send test to infoo.jane@gmail.com
-                </Button>
-                <Button
+                  {sending ? <Loader2 className="size-4 mr-2 animate-spin branded-email-test-icon" /> : <Send className="size-4 mr-2 branded-email-test-icon" />}
+                  <span className="branded-email-test-label">Send test to infoo.jane@gmail.com</span>
+                </button>
+                <button
                   type="button"
+                  data-branded-email-live-action="true"
                   onClick={handleSendLive}
                   disabled={!selectedTemplate || audienceCount === 0}
-                  className="!bg-[#064E3B] hover:!bg-[#053528] !text-white font-semibold [&_svg]:!text-white"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-[#064E3B] bg-[#064E3B] px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[#053528]"
                 >
                   <Send className="size-4 mr-2" />
                   Send live to {audienceCount} {kind}
-                </Button>
+                </button>
               </div>
               <p className="text-xs text-[#4B5D55]">
                 Test sends immediately to the owner mailbox for review. Live send goes through the locked outreach pipeline — you'll be asked to confirm before delivery.

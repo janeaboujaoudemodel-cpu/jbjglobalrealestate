@@ -10,7 +10,7 @@
  *   - check_status: Return company + personal key statuses
  *   - (default): Send email
  * 
- * ACCESS: Owner-only (authenticated + email check)
+ * ACCESS: Owner/Admin only (authenticated + role check)
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -21,8 +21,6 @@ const corsHeaders = {
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
-
-const OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
 
 interface SendEmailRequest {
   to: string;
@@ -56,13 +54,22 @@ async function authenticate(req: Request) {
     { global: { headers: { Authorization: authHeader } } }
   );
 
-  const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-  if (authError || !user || user.email !== OWNER_EMAIL) throw new Error("FORBIDDEN");
-
   const serviceClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
+
+  const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+  if (authError || !user) throw new Error("FORBIDDEN");
+
+  const [{ data: isOwner, error: ownerRoleError }, { data: isAdmin, error: adminRoleError }] = await Promise.all([
+    serviceClient.rpc("has_role", { _user_id: user.id, _role: "owner" }),
+    serviceClient.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+  ]);
+
+  if (ownerRoleError || adminRoleError || (!isOwner && !isAdmin)) {
+    throw new Error("FORBIDDEN");
+  }
 
   return { user, serviceClient };
 }
