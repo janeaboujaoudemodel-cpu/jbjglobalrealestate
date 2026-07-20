@@ -224,9 +224,9 @@ export default function DataHub() {
 
 function StatTile({ label, value }: { label: string; value: number }) {
   return (
-    <div data-no-contrast-guard className="rounded-lg border border-white/15 bg-white/5 backdrop-blur px-4 py-3">
-      <div data-no-contrast-guard style={{ color: "rgba(255,255,255,0.7)" }} className="text-xs uppercase tracking-wide">{label}</div>
-      <div data-no-contrast-guard style={{ color: "#ffffff" }} className="text-2xl font-semibold mt-1">{value.toLocaleString()}</div>
+    <div data-surface="emerald" data-on-dark className="rounded-lg border border-white/15 bg-white/5 backdrop-blur px-4 py-3">
+      <div data-surface="emerald" data-on-dark className="text-xs uppercase tracking-wide" style={{ color: "rgba(255,255,255,0.7)" }}>{label}</div>
+      <div data-surface="emerald" data-on-dark className="text-2xl font-semibold mt-1" style={{ color: "#ffffff" }}>{value.toLocaleString()}</div>
     </div>
   );
 }
