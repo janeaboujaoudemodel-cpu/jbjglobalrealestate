@@ -7,6 +7,10 @@ import {
   ArrowUpDown,
   SlidersHorizontal,
   Plus,
+  Sparkles,
+  Flame,
+  Clock,
+  ArrowRight,
 } from "lucide-react";
 import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
 import { useCrmHomeKpis, formatKpi } from "@/hooks/useCrmHomeKpis";
