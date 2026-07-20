@@ -7,6 +7,10 @@ import {
   ArrowUpDown,
   SlidersHorizontal,
   Plus,
+  Sparkles,
+  Flame,
+  Clock,
+  ArrowRight,
 } from "lucide-react";
 import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
 import { useCrmHomeKpis, formatKpi } from "@/hooks/useCrmHomeKpis";
@@ -60,6 +64,11 @@ export default function CrmHome() {
           </button>
         </div>
       </header>
+
+      {/* Today's Focus — Zoho-style daily action strip (Phase 5) */}
+      <TodaysFocus leads={leads} todaysLeads={todaysLeads} loading={leadsLoading} />
+
+
 
       {/* KPI tiles */}
       <section className="jc-kpi-row" aria-label="Key metrics">
@@ -148,6 +157,195 @@ export default function CrmHome() {
         </div>
       </section>
     </div>
+  );
+}
+
+function TodaysFocus({
+  leads,
+  todaysLeads,
+  loading,
+}: {
+  leads: OwnerCrmLead[];
+  todaysLeads: OwnerCrmLead[];
+  loading: boolean;
+}) {
+  const unassigned = leads.filter((l) => !l.owner_user_id);
+  const unassignedToday = todaysLeads.filter((l) => !l.owner_user_id);
+  const dayMs = 24 * 60 * 60 * 1000;
+  const stale = unassigned.filter(
+    (l) => Date.now() - new Date(l.created_at).getTime() > dayMs,
+  );
+  const hotList = unassignedToday.slice(0, 5);
+
+  return (
+    <section
+      aria-label="Today's focus"
+      data-surface="emerald"
+      data-on-dark
+      data-no-contrast-guard
+      className="jc-todays-focus"
+      style={{
+        margin: "0 0 20px",
+        borderRadius: 14,
+        overflow: "hidden",
+        background:
+          "linear-gradient(180deg,#064E3B 0%,#042c1c 60%,#000 100%)",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
+      <div style={{ padding: "18px 20px 14px" }} data-surface="emerald" data-on-dark>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                width: 34, height: 34, borderRadius: 8,
+                background: "rgba(212,175,55,0.15)",
+                border: "1px solid rgba(212,175,55,0.4)",
+                display: "grid", placeItems: "center",
+                color: "#D4AF37",
+              }}
+              aria-hidden="true"
+            >
+              <Sparkles size={17} />
+            </div>
+            <div>
+              <h2 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: 0, letterSpacing: "-0.01em" }}>
+                Today's Focus
+              </h2>
+              <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 12.5, margin: "2px 0 0" }}>
+                Unassigned leads and AI-suggested next actions.
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/owner/data-hub"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              padding: "8px 14px", borderRadius: 8,
+              background: "#D4AF37", color: "#0a0a0a",
+              fontSize: 13, fontWeight: 600, textDecoration: "none",
+            }}
+          >
+            Distribute now <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        <div
+          style={{
+            marginTop: 14,
+            display: "grid",
+            gap: 10,
+            gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
+          }}
+          data-surface="emerald"
+          data-on-dark
+        >
+          <FocusTile
+            icon={<Flame size={14} />}
+            label="Unassigned pool"
+            value={loading ? "…" : unassigned.length}
+            hint="Awaiting broker assignment"
+            to="/owner/data-hub"
+          />
+          <FocusTile
+            icon={<Sparkles size={14} />}
+            label="New today"
+            value={loading ? "…" : unassignedToday.length}
+            hint="Captured in the last 24h"
+            to="/owner/data-hub"
+          />
+          <FocusTile
+            icon={<Clock size={14} />}
+            label="Stale > 24h"
+            value={loading ? "…" : stale.length}
+            hint="Unassigned longer than a day"
+            to="/owner/data-hub"
+          />
+        </div>
+
+        {hotList.length > 0 && (
+          <div style={{ marginTop: 14 }} data-surface="emerald" data-on-dark>
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6 }}>
+              Suggested next actions
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {hotList.map((l) => (
+                <div
+                  key={l.id}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "9px 12px", borderRadius: 8,
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                  }}
+                  data-surface="emerald"
+                  data-on-dark
+                >
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ color: "#fff", fontSize: 13.5, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {l.full_name || "Unnamed lead"}
+                    </div>
+                    <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 11.5 }}>
+                      {l.source || "Direct"} · {l.company_name || l.email || "—"}
+                    </div>
+                  </div>
+                  <Link
+                    to="/owner/data-hub"
+                    style={{
+                      color: "#D4AF37", fontSize: 12, fontWeight: 600,
+                      textDecoration: "none", padding: "4px 10px",
+                      borderRadius: 6, border: "1px solid rgba(212,175,55,0.35)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Assign
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function FocusTile({
+  icon,
+  label,
+  value,
+  hint,
+  to,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number | string;
+  hint: string;
+  to: string;
+}) {
+  return (
+    <Link
+      to={to}
+      data-surface="emerald"
+      data-on-dark
+      style={{
+        display: "block",
+        padding: "12px 14px",
+        borderRadius: 10,
+        background: "rgba(255,255,255,0.05)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        textDecoration: "none",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.7)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+        <span style={{ color: "#D4AF37" }}>{icon}</span>
+        {label}
+      </div>
+      <div style={{ color: "#fff", fontSize: 26, fontWeight: 600, marginTop: 4, letterSpacing: "-0.02em" }}>
+        {value}
+      </div>
+      <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 11.5, marginTop: 2 }}>{hint}</div>
+    </Link>
   );
 }
 
