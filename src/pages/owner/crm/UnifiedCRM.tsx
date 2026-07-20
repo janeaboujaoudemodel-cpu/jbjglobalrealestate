@@ -10,14 +10,14 @@
  * Legacy params (?section, ?sub) are migrated on mount.
  */
 import { Component, lazy, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts";
 import { useCRMLiveSync } from "@/hooks/useCRMLiveSync";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
+  Users, Crown, Briefcase,
   ChevronDown, BarChart3, Bell, Database, Plus, UserPlus,
   GraduationCap,
 } from "lucide-react";
@@ -49,12 +49,8 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
 const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
 const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
-const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
-const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
-// Developers / Brokerage Agencies / Brokers / Sales Reps all render through
-// CRMRelationships so the UI, fields, filters and drawers are identical to
-// /owner/crm/relationship-hub. The page reads ?tab= to jump to the right tab.
-const DevSalesRepsDirectory     = lazy(() => import("@/components/crm/entity/DevSalesRepsDirectory"));
+// Developers / Brokers / Agencies / Sales Reps redirect to their own portals —
+// no longer embedded inside the CRM hub (see PORTAL_REDIRECTS below).
 const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
 const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
 const CRMTasks            = lazy(() => import("@/pages/CRMTasks"));
@@ -66,7 +62,7 @@ const ContractVault       = lazy(() => import("@/pages/owner/contracts/ContractV
 const AutomationRules     = lazy(() => import("@/components/crm/AutomationRules"));
 const CRMEnhancedDashboard= lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
 const InvestorsDirectory  = lazy(() => import("@/components/crm/InvestorsDirectory"));
-const BrokersImported     = lazy(() => import("@/components/crm/BrokersImported"));
+
 const DatabasesHub        = lazy(() => import("@/components/crm/DatabasesHub"));
 const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExportButton"));
 const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
@@ -77,17 +73,20 @@ const JunkReturnsQueue    = lazy(() => import("@/components/owner-crm/JunkReturn
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 
 type Entity =
-  | "leads" | "investors" | "developers" | "sales-reps"
-  | "brokers" | "agencies" | "employees" | "databases" | "academy";
+  | "leads" | "investors" | "employees" | "databases" | "academy";
+
+// External entities live in their own portals — CRM redirects to them.
+const PORTAL_REDIRECTS: Record<string, string> = {
+  "developers":  "/owner/developers",
+  "sales-reps":  "/owner/developers?tab=sales-reps",
+  "brokers":     "/owner/brokerage-portal?tab=brokers",
+  "agencies":    "/owner/brokerage-portal?tab=agencies",
+};
 
 const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "leads",       label: "Leads",              icon: Users },
   { id: "databases",   label: "Databases",          icon: Database },
   { id: "investors",   label: "Investors",          icon: Crown },
-  { id: "developers",  label: "Developers",         icon: Building2 },
-  { id: "sales-reps",  label: "Dev Sales Reps",     icon: BadgeCheck },
-  { id: "brokers",     label: "Brokers",            icon: UserCog },
-  { id: "agencies",    label: "Brokerage Agencies", icon: Network },
   { id: "employees",   label: "Employees",          icon: Briefcase },
   { id: "academy",     label: "Academy",            icon: GraduationCap },
 ];
@@ -114,10 +113,6 @@ const VIEWS: Record<Entity, ViewItem[]> = {
   ],
   databases:  [{ id: "all", label: "All Databases" }],
   investors:  [{ id: "directory", label: "Directory" }, { id: "vip", label: "VIP" }],
-  developers: [{ id: "registry",  label: "Registry"  }],
-  "sales-reps": [{ id: "directory", label: "Directory" }],
-  brokers:    [{ id: "directory", label: "Directory" }, { id: "imported", label: "Imported" }],
-  agencies:   [{ id: "directory", label: "Directory" }],
   employees:  [{ id: "roster",    label: "Roster" }],
   academy:    [{ id: "approvals", label: "Certification Approvals" }],
 };
@@ -142,10 +137,7 @@ function migrateLegacy(p: URLSearchParams): { entity: Entity; view: string } | n
   if (section === "automation")       return { entity: "leads", view: "automation" };
   if (section === "employees")        return { entity: "employees", view: "roster" };
   if (section === "relationships") {
-    if (sub === "developers")  return { entity: "developers",  view: "registry" };
-    if (sub === "agencies")    return { entity: "agencies",    view: "directory" };
-    if (sub === "sales-reps")  return { entity: "sales-reps",  view: "directory" };
-    if (sub === "brokers")     return { entity: "brokers",     view: "directory" };
+    // These entities moved to their own portals — the redirect happens later.
     return { entity: "investors", view: "directory" };
   }
   return null;
@@ -246,7 +238,12 @@ export default function UnifiedCRM() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const entity: Entity = (params.get("entity") as Entity) || "leads";
+  const entityParam = params.get("entity") || "leads";
+  // Redirect legacy/moved entities to their dedicated portals.
+  if (PORTAL_REDIRECTS[entityParam]) {
+    return <Navigate to={PORTAL_REDIRECTS[entityParam]} replace />;
+  }
+  const entity: Entity = (ENTITIES.some(e => e.id === entityParam) ? entityParam : "leads") as Entity;
   const validViews = VIEWS[entity] || [];
   const defaultView = validViews[0]?.id || "overview";
   const viewParam = params.get("view") || defaultView;
@@ -318,36 +315,6 @@ export default function UnifiedCRM() {
     if (entity === "databases") {
       return <DatabasesHub />;
     }
-    if (entity === "brokers") {
-      // Dedicated lightweight Brokers Registry — no full CRMRelationships embed.
-      return <BrokersRegistryPage />;
-    }
-    if (entity === "developers" || entity === "agencies") {
-      // Don't embed the full Relationship Hub inside the CRM tab. Send the user
-      // to the dedicated Relationship Hub page so it loads its own UI properly
-      // and the CRM hub stays fast.
-      const hubTab = entity === "developers" ? "developers" : "brokerages";
-      return (
-        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-8 text-center space-y-4">
-          <h2 className="text-lg font-semibold text-[#1A1A1A]">
-            {entity === "developers" ? "Developers Registry" : "Brokerage Agencies"}
-          </h2>
-          <p className="text-sm text-[#1A1A1A]/70 max-w-xl mx-auto">
-            The full {entity === "developers" ? "Developers" : "Brokerage Agencies"} workspace lives in
-            the Relationship Hub — open it for filters, bulk outreach, exports and the Excel grid.
-          </p>
-          <a
-            href={`/owner/crm/relationship-hub?tab=${hubTab}`}
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-lg bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] font-semibold hover:bg-[#E7DCC7]"
-          >
-            Open Relationship Hub →
-          </a>
-        </div>
-      );
-    }
-    if (entity === "sales-reps") {
-      return <DevSalesRepsDirectory />;
-    }
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;
     }
@@ -369,10 +336,6 @@ export default function UnifiedCRM() {
     switch (id) {
       case "leads": return counts.leads;
       case "investors": return counts.investors;
-      case "developers": return counts.developers;
-      case "sales-reps": return counts.salesReps;
-      case "brokers": return counts.brokers;
-      case "agencies": return counts.agencies;
       case "employees": return counts.employees;
       default: return null;
     }
@@ -392,7 +355,6 @@ export default function UnifiedCRM() {
       if (viewId === "campaigns") return counts.campaigns;
       if (viewId === "automation") return counts.automation;
     }
-    if (entity === "brokers" && viewId === "directory") return counts.brokers;
     if (entity === "investors" && viewId === "vip") return counts.vip;
     if (entity === "investors" && viewId === "directory") return counts.investors;
     return null;
