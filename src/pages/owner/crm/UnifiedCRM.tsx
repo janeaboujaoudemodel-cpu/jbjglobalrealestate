@@ -340,10 +340,6 @@ export default function UnifiedCRM() {
     switch (id) {
       case "leads": return counts.leads;
       case "investors": return counts.investors;
-      case "developers": return counts.developers;
-      case "sales-reps": return counts.salesReps;
-      case "brokers": return counts.brokers;
-      case "agencies": return counts.agencies;
       case "employees": return counts.employees;
       default: return null;
     }
@@ -363,7 +359,6 @@ export default function UnifiedCRM() {
       if (viewId === "campaigns") return counts.campaigns;
       if (viewId === "automation") return counts.automation;
     }
-    if (entity === "brokers" && viewId === "directory") return counts.brokers;
     if (entity === "investors" && viewId === "vip") return counts.vip;
     if (entity === "investors" && viewId === "directory") return counts.investors;
     return null;
