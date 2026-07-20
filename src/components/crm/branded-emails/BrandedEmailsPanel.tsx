@@ -123,6 +123,11 @@ function stripHtml(html: string) {
 const tabIconClass = (tab: string, activeTab: string) =>
   `size-4 ${activeTab === tab ? "!text-white !stroke-white" : "!text-[#0F1A16] !stroke-[#0F1A16]"}`;
 
+const tabIconStyle = (tab: string, activeTab: string): React.CSSProperties => ({
+  color: activeTab === tab ? "#FFFFFF" : "#0F1A16",
+  stroke: activeTab === tab ? "#FFFFFF" : "#0F1A16",
+});
+
 export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) {
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -291,28 +296,28 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               data-branded-email-tab="true"
               className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <FileText className={tabIconClass("template", activeTab)} /> Template
+              <FileText className={tabIconClass("template", activeTab)} style={tabIconStyle("template", activeTab)} /> Template
             </TabsTrigger>
             <TabsTrigger
               value="audience"
               data-branded-email-tab="true"
               className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <Users className={tabIconClass("audience", activeTab)} /> Audience
+              <Users className={tabIconClass("audience", activeTab)} style={tabIconStyle("audience", activeTab)} /> Audience
             </TabsTrigger>
             <TabsTrigger
               value="preview"
               data-branded-email-tab="true"
               className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <Eye className={tabIconClass("preview", activeTab)} /> Preview
+              <Eye className={tabIconClass("preview", activeTab)} style={tabIconStyle("preview", activeTab)} /> Preview
             </TabsTrigger>
             <TabsTrigger
               value="send"
               data-branded-email-tab="true"
               className="gap-1.5 px-3 py-2 rounded-md border border-emerald-900/15 bg-white !text-[#0F1A16] hover:bg-emerald-50 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:border-[#064E3B] [&_svg]:!text-current [&_svg]:!stroke-current data-[state=active]:[&_svg]:!text-white data-[state=active]:[&_svg]:!stroke-white"
             >
-              <Send className={tabIconClass("send", activeTab)} /> Send
+              <Send className={tabIconClass("send", activeTab)} style={tabIconStyle("send", activeTab)} /> Send
             </TabsTrigger>
           </TabsList>
 
