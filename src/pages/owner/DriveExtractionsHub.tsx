@@ -311,5 +311,3 @@ function EmiratesView() {
     </div>
   );
 }
-
-}
