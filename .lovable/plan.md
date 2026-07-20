@@ -1,119 +1,84 @@
+## Plan: Merge owner backend into the CRM-style JBJ Hub
 
-This is a large multi-system rebuild. I'm breaking it into 6 phases so each one is verifiable with screenshots before the next starts. Please review — especially phases 3, 5, 6 — because they touch data models and telephony.
+### Goal
+Make the owner experience a single **JBJ Hub** shell, not a separate champagne/gold owner backend. Broker-facing CRM can remain **JBJ CRM**, but owner-facing navigation/header should read **JBJ Hub** and keep the emerald/white CRM layout.
 
----
+### What I confirmed
+- The current CRM shell is mounted at `/owner/crm/jbj` and uses `CrmShell`, `CrmSidebar`, and emerald/white `crmShell.css`.
+- Owner Backend sidebar items currently link to `/owner`, `/owner/data-hub`, `/owner/developers`, etc., which exits the CRM shell and opens the older champagne owner backend layout.
+- The older owner backend sidebar has many routes that are missing from the CRM Owner Backend list: Owner Panel, Overview, JBJ Hub, Document Studio, Projects, Calendar, Access Requests, Developer Profiles, Missing Logos, Properties, Property Map, Listings Admin, Inbox, Team Chat, Founder Assistant, Recommendations, AI Home Finder Leads, Royal Tools, Workflow Automation, Meeting Hub, AI Meeting Summarizer, Locations, Data Gaps, AI Enrichment Review, Brand Assets, Studio, Founder/Podcast Control, Podcast Studio, Voice Agent, Kanban, Careers, Admin pages, and System pages.
 
-## Phase 1 — Stop the broken redirects (fast fixes, ~today)
+### Implementation
+1. **Rename owner shell identity**
+   - In `CrmSidebar`, change owner-facing brand text from “CRM” to **“Hub”** when the signed-in user is owner.
+   - Update owner-only section labels from “Owner Backend” to **“JBJ Hub”** or equivalent owner hub wording.
+   - Keep broker/non-owner labels as JBJ CRM where applicable.
 
-**Problems**
-- Broker Portal "Edit templates" opens `/crm/relationship-hub?...&panel=templates`, which currently redirects to the JBJ CRM shell.
-- CRM > Developers card shows a "Developers Registry / Open Relationship Hub" placeholder instead of the actual developer workspace.
+2. **Stop owner backend links from leaving the CRM shell**
+   - Replace `CRM_OWNER_BACKEND` absolute `/owner/...` links with CRM-shell routes like:
+     - `/owner/crm/jbj/owner-data-hub`
+     - `/owner/crm/jbj/owner-developers`
+     - `/owner/crm/jbj/owner-settings`
+   - Keep “Return to Site”, “Sign Out”, and “Collapse” as footer actions inside the same scrollable CRM sidebar style.
 
-**Fixes**
-- `src/components/crm/BrandedEmailsLauncherCard.tsx`: point "Edit templates" and "Open Relationships Hub" at the real routes that exist in `OwnerRoutes.tsx` (`/owner/crm/relationship-hub` and a `?tab=templates` query the Hub already reads). No more `/crm/*` path — that path is CRM shell only.
-- Verify the Hub actually mounts a Templates panel when `panel=templates` is present; if not, add the panel switch there.
-- CRM > Developers card: link the tile to `/owner/developers` (existing directory) instead of the "Developers Registry / Open Relationship Hub" placeholder. Remove the placeholder card.
+3. **Add every missing owner backend item into the CRM sidebar**
+   - Mirror the existing owner backend sections from `OwnerSidebarNav` into CRM shell groups:
+     - Core
+     - Developers
+     - Properties
+     - Communication
+     - AI & Tools
+     - Creative
+     - People & HR
+     - Admin
+     - System
+   - Preserve scrollable vertical behavior.
+   - Do not copy the old champagne/gold visual styling.
 
-**Validation**: Playwright — click Edit Templates from Broker Portal, Developer Portal, Brokerage Portal; screenshot landing page. Click Developers tile from CRM; screenshot the directory.
+4. **Render owner pages inside the CRM shell**
+   - Add nested CRM-shell routes for owner hub pages under `/owner/crm/jbj/...`.
+   - Reuse the existing page components, but wrap them in a CRM-compatible owner page adapter so they display inside `jc-content` without mounting `OwnerDashboardShell`.
+   - This avoids the previous backend sidebar/header and keeps the emerald/white CRM frame.
 
----
+5. **Normalize owner page visuals inside JBJ Hub**
+   - Add a scoped CRM-owner style layer so imported owner pages use white/emerald cards, tabs, borders, buttons, and readable black-on-white text.
+   - Remove champagne/gold surface dominance only within the JBJ Hub shell.
+   - Keep emerald active states, white text on emerald, and no blue interactive states.
 
-## Phase 2 — Reorganize CRM entity tiles by ownership
+6. **Footer controls in CRM sidebar**
+   - Add the last sidebar actions exactly as requested:
+     - Return to Site
+     - Sign Out
+     - Collapse
+   - Keep them part of the scrollable vertical sidebar area, not fixed to the viewport bottom like the previous backend.
 
-Move each tile to the portal that actually owns the domain, and stop cross-contaminating counts.
+7. **Route fallbacks to prevent empty/404 views**
+   - For owner hub slugs without an exact component yet, route to the closest existing owner page or a meaningful CRM-shell page instead of leaving an empty module page.
+   - Add safe fallback redirect from unknown owner-hub slugs to `/owner/crm/jbj/owner-overview`.
 
-| Tile | Current home | New home |
-|---|---|---|
-| Leads | CRM | CRM (stays) |
-| Investors 3 | CRM | Users Hub (new count = users with category=investor) |
-| Developers 630 | CRM tile → placeholder | Developer Portal only. CRM keeps a read-only shortcut. |
-| Dev Sales Reps | CRM | Developer Portal only. |
-| Brokers 33k | CRM | Broker Portal only. |
-| Brokerage Agencies 11k | CRM | Broker Portal only. |
-| Employees | CRM | HR Hub / Payroll only. |
-| Databases | CRM | New Data Hub (Phase 3). |
-| Academy | CRM | stays. |
+8. **Visual E2E validation**
+   - Use Playwright screenshots to verify:
+     - `/owner/crm/jbj` shows owner-facing **JBJ Hub** branding.
+     - Clicking Data Hub stays under `/owner/crm/jbj/...` and keeps the emerald/white CRM shell.
+     - Clicking Developers Portal stays under the CRM shell.
+     - Clicking Settings stays under the CRM shell.
+     - Sidebar remains scrollable and includes Return to Site, Sign Out, Collapse.
+     - No champagne/gold backend shell appears during these flows.
 
-Reconcile the count mismatches (33k vs 32k brokers, 11k vs 10k agencies) by having Broker Portal and CRM read the **same** query (single `useBrokerStats` hook). Root cause is two different filters — the CRM tile counts all `broker_profiles` rows, Broker Portal filters by `is_active`. Pick one filter (`is_active OR status='pending'`) and reuse.
+### Technical notes
+- Main files to update:
+  - `src/pages/owner/crm/shell/modules.ts`
+  - `src/pages/owner/crm/shell/CrmSidebar.tsx`
+  - `src/pages/owner/crm/shell/CrmHeader.tsx`
+  - `src/pages/owner/crm/shell/CrmShell.tsx`
+  - `src/routes/OwnerRoutes.tsx`
+  - `src/pages/owner/crm/shell/crmShell.css`
+- Existing old backend shell `OwnerDashboardShell` should remain for legacy direct `/owner/...` routes, but owner navigation from the new JBJ Hub should no longer send users there.
 
-**Validation**: screenshots of CRM (fewer tiles), Broker Portal, Developer Portal, HR Hub. Counts must match across pages.
-
----
-
-## Phase 3 — Data Hub + AI Lead Distribution engine
-
-New route: `/owner/data-hub` with three tabs:
-
-1. **Databases** — every source table (leads, brokers, brokerages, developers, investors) with role/access controls (who can see contact details).
-2. **Lead pipeline** — pool of unassigned leads.
-3. **Distribution** — "Distribute with AI" action.
-
-### Distribution workflow
-- Owner selects a broker, chooses N leads (20 / 40 / custom), clicks **Distribute with AI**.
-- New table `lead_assignments (lead_id, broker_id, assigned_at, status: assigned|contacted|junk|closed, returned_at)`.
-- Distribution edge function `distribute-leads`:
-  - Picks N leads WHERE not in any active assignment.
-  - Uses AI (Lovable AI Gateway, google/gemini-2.5-flash) to score fit between broker specialty/territory and each lead.
-  - Locks those leads to the broker (reserved).
-- Junk flow: broker flags → status=junk → lead returns to pool or owner reassigns.
-- Access toggle per broker: "Show contact details" boolean. If false, broker sees masked phone/email until they log first activity.
-
-### Broker performance view
-On broker profile: assigned count, calls made, avg response time, meetings, briefings, deals closed, join date, activity timeline. Backed by `broker_activity_log` table + existing `activity_events`.
-
-**Validation**: assign 20 test leads → verify they disappear from pool → flag one as junk → verify it comes back. Screenshots at each step.
-
----
-
-## Phase 4 — Unified vertical sidebar (Owner-only merge under Marketplace)
-
-**Concept**: One sidebar, not two.
-
-- Non-owner users see today's `CrmSidebar` up to and including "Marketplace".
-- Owner sees a divider under Marketplace, then the entire Owner backend (Owner Panel, JBJ Hub, Developer Portal, Broker Portal, Data Hub, HR Hub, Document Studio, Drive Extractions, Access Requests, Newsletter, Analytics, etc.) — replacing `GlobalVerticalNav`.
-- The Owner shell (`/owner/*`) reuses the CRM sidebar component; the old `GlobalVerticalNav` is retired for owner routes.
-
-**Validation**: log in as owner → single sidebar visible on both `/owner/*` and `/owner/crm/jbj/*`. Log in as non-owner (test account) → sidebar stops at Marketplace.
-
----
-
-## Phase 5 — Owner + user dashboards (Zoho-style daily home)
-
-Every user's CRM `Home` shows: My Untouched Leads, My Open Deals, Today's Leads, My Meetings, My Notes, My Open Tasks. Owner sees the same, aggregated across the workspace.
-
-- New hook `useCrmDashboardStats(scope: 'me'|'workspace')`.
-- Cards clickable → drill into filtered lead list.
-- "Add Dev Sales Rep" card in Developer Portal is wired to open a searchable developer picker + inline rep-create form (not a dead tile).
-
-**Validation**: screenshots for owner scope and one non-owner test account.
-
----
-
-## Phase 6 — AI call recording & scoring (staged)
-
-This is the biggest new capability. Proposing to stage it because it needs a telephony provider decision.
-
-- **6a**: Add "Call" button on every lead card. Clicking logs a call intent, opens WebRTC recorder (browser mic) or dials via provider.
-- **6b**: On call end, upload audio → edge function `analyze-call` → Lovable AI (Gemini 2.5) transcribes + summarizes + rates tone/clarity/listening + scores lead intent + writes `next_step`.
-- **6c**: Save to `call_recordings` table linked to lead + broker; show inline on lead detail and broker performance page.
-
-**Telephony question below** — need the user's pick before building 6a.
-
----
-
-## Technical notes (for reference)
-
-- New tables: `lead_assignments`, `broker_activity_log`, `call_recordings`, `lead_access_rules`. All with RLS + GRANT blocks per the standard.
-- Edge functions: `distribute-leads`, `analyze-call`, `flag-lead-junk`.
-- No changes to `auth`, `storage`, `realtime` schemas.
-- Every phase ends with Playwright screenshot proof committed under `/tmp/browser/phase-N/`.
-
----
-
-## Questions before I start
-
-1. **Phase 6 telephony**: browser-mic WebRTC only (free, works today), or integrate Twilio/JustCall for real PSTN calls (needs API key + billing)?
-2. **Sidebar merge (Phase 4)**: keep the old owner top-nav header visible above the merged sidebar, or fully retire it?
-3. **Should I ship Phase 1 immediately today** (redirect fix + Developers tile) so the broken Edit Templates stops sending you to CRM, and then continue with 2 → 6 across the next turns?
-
-If you approve, I'll start with Phase 1, ship it with screenshot proof, and only then move to Phase 2.
+### Acceptance criteria
+- Owner sees **JBJ Hub**, not JBJ CRM, in the owner CRM shell.
+- Owner Backend is not a duplicate list of outbound links; it becomes real in-shell JBJ Hub navigation.
+- Every old owner backend sidebar item is represented in the new CRM-style sidebar.
+- Owner hub pages open inside the emerald/white CRM layout.
+- No empty owner pages, no unexpected redirects to the champagne backend, and no 404s in tested owner hub flows.
+- Final response includes screenshot proof from Playwright validation.

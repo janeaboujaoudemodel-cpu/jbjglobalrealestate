@@ -5,6 +5,7 @@
 import {
   BarChart3,
   Blocks,
+  Brain,
   BriefcaseBusiness,
   CalendarDays,
   CheckSquare,
@@ -15,13 +16,23 @@ import {
   FileText,
   Folder,
   Handshake,
+  Headphones,
   Home,
+  ImageOff,
+  Kanban,
   Lightbulb,
+  Link,
   Mail,
+  Map,
+  MapPin,
   Megaphone,
+  MessageSquare,
+  MessagesSquare,
   Package,
   Phone,
+  Plug,
   ReceiptText,
+  RefreshCw,
   ScrollText,
   Rss,
   Search,
@@ -42,14 +53,15 @@ import {
   Database,
   Building,
   Shield,
+  ShieldAlert,
   Bot,
   BookOpen,
   PenTool,
   Workflow,
   Palette,
-  ScanLine,
   Inbox,
-  UserPlus,
+  Zap,
+  AlertTriangle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -150,31 +162,204 @@ export const CRM_TEAMSPACE_BOTTOM: CrmModule[] = [
 ];
 
 /**
- * Owner-only "Backend" section appended after Marketplace.
- * These entries link OUT of the CRM shell to owner-backend routes,
- * so owners get a single unified sidebar (Phase 4).
- * Use absolute hrefs — rendered via NavLink `to={href}` when `href` is present.
+ * Owner-only JBJ Hub section appended after Marketplace.
+ * These routes stay INSIDE the CRM shell so owner tools do not jump back to
+ * the legacy champagne backend shell.
  */
-export type CrmExternalModule = CrmModule & { href: string };
+export type CrmOwnerHubModule = CrmModule & { href: string; legacyPath: string };
 
-export const CRM_OWNER_BACKEND: CrmExternalModule[] = [
-  { slug: "owner-home", label: "Command Center", icon: Crown, href: "/owner" },
-  { slug: "owner-data-hub", label: "Data Hub", icon: Database, href: "/owner/data-hub" },
-  { slug: "owner-developers", label: "Developers Portal", icon: Building, href: "/owner/developers" },
-  { slug: "owner-brokers", label: "Broker Portal", icon: BriefcaseBusiness, href: "/owner/brokers" },
-  { slug: "owner-relationships", label: "Relationships Hub", icon: Handshake, href: "/owner/crm/relationship-hub" },
-  { slug: "owner-hr", label: "HR Hub", icon: Users, href: "/hr-dashboard" },
-  { slug: "owner-marketing", label: "Marketing Hub", icon: Megaphone, href: "/admin/marketing-hub" },
-  { slug: "owner-news", label: "News Admin", icon: Rss, href: "/owner/news" },
-  { slug: "owner-books", label: "Books Library", icon: BookOpen, href: "/owner/books" },
-  { slug: "owner-drive", label: "Drive Extractions", icon: Inbox, href: "/owner/drive-extractions" },
-  { slug: "owner-design", label: "Design Studio", icon: Palette, href: "/jbj-design-studio" },
-  { slug: "owner-security", label: "Security Console", icon: Shield, href: "/security-console" },
-  { slug: "owner-automations", label: "Automations", icon: Workflow, href: "/owner/automations" },
-  { slug: "owner-analytics", label: "JBJ Analytics", icon: BarChart3, href: "/jbj-analytics" },
-  { slug: "owner-onboarding", label: "Onboarding", icon: UserPlus, href: "/admin/onboarding" },
-  { slug: "owner-assistant", label: "Executive Assistant", icon: Bot, href: "/executive-assistant" },
+const hub = (slug: string) => `/owner/crm/jbj/${slug}`;
+
+export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
+  "owner-admin": "/owner/admin",
+  "owner-overview": "/owner",
+  "owner-jbj-hub": "/owner/jbj-hub",
+  "owner-documents-forms": "/owner/documents/forms",
+  "owner-unified-crm": "/owner/crm",
+  "owner-crm-workspace": "/owner/crm/jbj",
+  "owner-data-hub": "/owner/data-hub",
+  "owner-brokerages": "/owner/brokerages",
+  "owner-developers": "/owner/developers",
+  "owner-developer-projects": "/owner/developers/projects",
+  "owner-developer-calendar": "/owner/developers/calendar",
+  "owner-developer-access": "/owner/developers/access-requests",
+  "owner-developer-profiles": "/owner/developers/profile-rebuild",
+  "owner-missing-logos": "/owner/developers/missing-logos",
+  "owner-drive-extractions": "/owner/drive-extractions",
+  "owner-properties": "/owner/properties",
+  "owner-featured-projects": "/owner/properties/featured",
+  "owner-property-map": "/owner/map",
+  "owner-listing-admin": "/owner/listing-admin",
+  "owner-inbox": "/owner/inbox",
+  "owner-team-chat": "/owner/team-chat",
+  "owner-relationships": "/owner/crm/relationship-hub",
+  "owner-founder-assistant": "/owner/founder-assistant",
+  "owner-recommendations": "/owner/recommendations",
+  "owner-ai-home-finder": "/owner/applications/ai-home-finder",
+  "owner-royal-tools": "/ai-hub",
+  "owner-automations": "/owner/automations",
+  "owner-meeting-hub": "/meeting-center",
+  "owner-ai-meeting": "/ai-meeting-summarizer",
+  "owner-agent-integrations": "/owner/agent-integrations",
+  "owner-locations": "/owner/jbj-hub?tab=areas",
+  "owner-data-gaps": "/owner/data-gaps",
+  "owner-enrichment-review": "/owner/enrichment-review",
+  "owner-brand-assets": "/owner/brand-assets",
+  "owner-studio": "/owner/studio",
+  "owner-founder-settings": "/owner/founder-settings",
+  "owner-podcast-studio": "/owner/podcast-studio",
+  "owner-voice-agent": "/owner/voice-agent",
+  "owner-kanban": "/owner/kanban",
+  "owner-marketing-hub": "/owner/marketing-hub",
+  "owner-news": "/owner/news",
+  "owner-books": "/owner/books",
+  "owner-careers": "/owner/careers-portal",
+  "owner-analytics": "/owner/analytics",
+  "owner-users": "/owner/users",
+  "owner-crm-directory": "/owner/crm-directory",
+  "owner-research-users": "/owner/research-users",
+  "owner-broker-preview": "/broker/portal?preview=1",
+  "owner-external-access": "/owner/external-access",
+  "owner-audit": "/owner/audit",
+  "owner-integrations": "/owner/integrations",
+  "owner-safety": "/owner/safety",
+  "owner-settings": "/owner/settings",
+  "owner-security": "/security-console",
+  "owner-executive-assistant": "/executive-assistant",
+};
+
+export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
+  {
+    label: "Core",
+    icon: Crown,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-admin", label: "Owner Panel", icon: Crown },
+      { slug: "owner-overview", label: "Overview", icon: Home },
+      { slug: "owner-jbj-hub", label: "JBJ Hub", icon: Sparkles },
+      { slug: "owner-documents-forms", label: "Document Studio", icon: FileText },
+      { slug: "owner-unified-crm", label: "CRM Database", icon: Users },
+      { slug: "owner-crm-workspace", label: "JBJ CRM", icon: Building2 },
+      { slug: "owner-data-hub", label: "Data Hub", icon: Database },
+    ],
+  },
+  {
+    label: "Developers",
+    icon: Building,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-brokerages", label: "Broker Portal", icon: Building2 },
+      { slug: "owner-developers", label: "Developers Portal", icon: Building },
+      { slug: "owner-developer-projects", label: "Projects", icon: ClipboardList },
+      { slug: "owner-developer-calendar", label: "Calendar", icon: CalendarDays },
+      { slug: "owner-developer-access", label: "Access Requests", icon: Shield },
+      { slug: "owner-developer-profiles", label: "Developer Profiles", icon: RefreshCw },
+      { slug: "owner-missing-logos", label: "Missing Logos", icon: ImageOff },
+      { slug: "owner-drive-extractions", label: "Drive Extractions", icon: Inbox },
+    ],
+  },
+  {
+    label: "Properties",
+    icon: Building2,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-properties", label: "Properties", icon: Building2 },
+      { slug: "owner-featured-projects", label: "Featured Projects", icon: Sparkles },
+      { slug: "owner-property-map", label: "Property Map", icon: Map },
+      { slug: "owner-listing-admin", label: "Listings Admin", icon: ClipboardList },
+    ],
+  },
+  {
+    label: "Communication",
+    icon: MessageSquare,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-inbox", label: "Messages / Inbox", icon: MessageSquare },
+      { slug: "owner-team-chat", label: "Team Chat", icon: MessagesSquare },
+      { slug: "owner-relationships", label: "Relationships Hub", icon: Handshake },
+    ],
+  },
+  {
+    label: "AI & Tools",
+    icon: Bot,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-founder-assistant", label: "Founder Assistant", icon: MessageSquare },
+      { slug: "owner-recommendations", label: "Recommendations", icon: Sparkles },
+      { slug: "owner-ai-home-finder", label: "AI Home Finder Leads", icon: Sparkles },
+      { slug: "owner-royal-tools", label: "JBJ Royal Tools Hub", icon: Crown },
+      { slug: "owner-automations", label: "Workflow Automation", icon: Zap },
+      { slug: "owner-meeting-hub", label: "Meeting Hub", icon: Video },
+      { slug: "owner-ai-meeting", label: "AI Meeting Summarizer", icon: Brain },
+      { slug: "owner-agent-integrations", label: "Agent Integrations", icon: Plug },
+      { slug: "owner-locations", label: "Locations", icon: MapPin },
+      { slug: "owner-data-gaps", label: "Data Gaps", icon: AlertTriangle },
+      { slug: "owner-enrichment-review", label: "AI Enrichment Review", icon: Sparkles },
+    ],
+  },
+  {
+    label: "Creative",
+    icon: Palette,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-brand-assets", label: "Brand Assets", icon: Crown },
+      { slug: "owner-studio", label: "Studio", icon: Video },
+      { slug: "owner-founder-settings", label: "Founder & Podcast Control", icon: Users },
+      { slug: "owner-podcast-studio", label: "Podcast Studio", icon: Headphones },
+      { slug: "owner-voice-agent", label: "Voice Agent", icon: Phone },
+      { slug: "owner-kanban", label: "Kanban Board", icon: Kanban },
+      { slug: "owner-marketing-hub", label: "Marketing Hub", icon: Megaphone },
+      { slug: "owner-news", label: "News Admin", icon: Rss },
+      { slug: "owner-books", label: "Books Library", icon: BookOpen },
+    ],
+  },
+  {
+    label: "People & HR",
+    icon: BriefcaseBusiness,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-careers", label: "Careers Portal", icon: BriefcaseBusiness },
+    ],
+  },
+  {
+    label: "Admin",
+    icon: Shield,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-analytics", label: "Analytics", icon: BarChart3 },
+      { slug: "owner-users", label: "Users", icon: Users },
+      { slug: "owner-crm-directory", label: "CRM Directory", icon: Users },
+      { slug: "owner-research-users", label: "Research Users", icon: Users },
+      { slug: "owner-broker-preview", label: "Preview Broker Portal", icon: Store },
+    ],
+  },
+  {
+    label: "System",
+    icon: ShieldAlert,
+    defaultOpen: true,
+    children: [
+      { slug: "owner-external-access", label: "External Access", icon: Shield },
+      { slug: "owner-audit", label: "Audit", icon: Store },
+      { slug: "owner-integrations", label: "Integrations", icon: Link },
+      { slug: "owner-safety", label: "Safety Panel", icon: ShieldAlert },
+      { slug: "owner-settings", label: "Settings", icon: PenTool },
+      { slug: "owner-security", label: "Security Console", icon: Shield },
+      { slug: "owner-executive-assistant", label: "Executive Assistant", icon: Bot },
+    ],
+  },
 ];
+
+export const CRM_OWNER_HUB_MODULES: CrmOwnerHubModule[] = CRM_OWNER_HUB_SECTIONS.flatMap((section) =>
+  section.children.map((item) => ({
+    ...item,
+    href: hub(item.slug),
+    legacyPath: OWNER_HUB_LEGACY_PATHS[item.slug] ?? "/owner",
+  }))
+);
+
+export const CRM_OWNER_HUB_MAP = Object.fromEntries(
+  CRM_OWNER_HUB_MODULES.map((m) => [m.slug, m])
+) as Record<string, CrmOwnerHubModule>;
 
 export const CRM_MODULES: CrmModule[] = [
   ...CRM_PRIMARY_NAV,
@@ -182,6 +367,7 @@ export const CRM_MODULES: CrmModule[] = [
   ...CRM_TEAMSPACE_TOP,
   ...CRM_TEAMSPACE_FOLDERS.flatMap((folder) => folder.children),
   ...CRM_TEAMSPACE_BOTTOM,
+  ...CRM_OWNER_HUB_MODULES,
 ];
 
 export const CRM_MODULE_MAP = Object.fromEntries(
