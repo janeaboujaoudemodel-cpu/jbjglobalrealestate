@@ -27197,6 +27197,7 @@ export type Database = {
             | null
           id: string
           notification_settings: Json | null
+          settings: Json
           training_corpus_size: number
           updated_at: string
           user_id: string
@@ -27215,6 +27216,7 @@ export type Database = {
             | null
           id?: string
           notification_settings?: Json | null
+          settings?: Json
           training_corpus_size?: number
           updated_at?: string
           user_id: string
@@ -27233,6 +27235,7 @@ export type Database = {
             | null
           id?: string
           notification_settings?: Json | null
+          settings?: Json
           training_corpus_size?: number
           updated_at?: string
           user_id?: string

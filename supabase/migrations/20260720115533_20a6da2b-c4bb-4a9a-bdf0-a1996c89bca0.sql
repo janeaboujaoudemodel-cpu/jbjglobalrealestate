@@ -1,0 +1,1 @@
+ALTER TABLE public.owner_comm_settings ADD COLUMN IF NOT EXISTS settings jsonb NOT NULL DEFAULT '{}'::jsonb;
