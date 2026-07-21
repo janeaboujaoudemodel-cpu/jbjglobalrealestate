@@ -89,6 +89,20 @@ const displayNameFromEmail = (email: string, fallback: string) => {
     .join(" ");
 };
 
+const JBJ_BRAND_HEADER_HTML = `<table role="presentation" data-jbj-brand-header="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;">
+  <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);">
+    <img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/jbj-monogram-dark.png" alt="JBJ Global Real Estate" width="96" height="96" style="display:block;width:96px;height:96px;max-width:96px;margin:0 auto 10px;object-fit:contain;" />
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</div>
+    <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">Developer Relations</div>
+  </td></tr>
+</table>`;
+
+const injectJbjBrandHeader = (html: string) => {
+  if (/data-jbj-brand-header="true"/.test(html)) return html;
+  if (/<body[^>]*>/i.test(html)) return html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>${JBJ_BRAND_HEADER_HTML}`);
+  return JBJ_BRAND_HEADER_HTML + html;
+};
+
 const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
   const contactMailLink = `<a href="mailto:${replyTo}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${replyTo.toUpperCase()}</a>`;
   const jbjLink = `<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>`;
