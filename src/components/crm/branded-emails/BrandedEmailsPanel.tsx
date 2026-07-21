@@ -7,12 +7,13 @@
  * currently selected template.
  */
 import { useEffect, useMemo, useState } from "react";
+import { FunctionsHttpError } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Search, Users, Send, Eye, FileText, Check, Lock } from "lucide-react";
+import { Building2, Loader2, Search, Users, Send, Eye, FileText, Check, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -52,11 +53,33 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
     email: "helpdesk@jbj.ae",
   },
   brokerages: {
-    name: "Jane",
-    title: "CITI Developers · Partnerships",
+    name: "Jane Bujold",
+    title: "CITI Developers · Sales & Training Department",
     email: "infoo.jane@gmail.com",
   },
 };
+
+const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmail: string; replyTo: string; dailyCapLabel: string }> = {
+  developers: {
+    fromName: "Amelia — JBJ GLOBAL REAL ESTATE",
+    fromEmail: "helpdesk@jbj.ae",
+    replyTo: "helpdesk@jbj.ae",
+    dailyCapLabel: "Developer sends use the connected mailbox; test sends use the verified app email path.",
+  },
+  brokerages: {
+    fromName: "CITI Developers · Sales & Training Department",
+    fromEmail: "partnerships@maisonjane.ae",
+    replyTo: "infoo.jane@gmail.com",
+    dailyCapLabel: "Current verified Resend path is capped at 100 emails/day and 2 emails/second.",
+  },
+};
+
+const CITI_PHONE_DISPLAY = "+971 54 716 7107";
+const CITI_PHONE_TEL = "tel:+971547167107";
+const CITI_WHATSAPP_URL = "https://wa.me/971547167107";
+const CITI_WEBSITE_URL = "https://www.citidevelopers.com";
+const CITI_MAP_URL = "https://www.google.com/maps/search/?api=1&query=CITI%20Developers%20Sales%20Gallery%20Dubai";
+const CITI_OFFICE_LABEL = "CITI Developers Sales Gallery";
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
 
@@ -151,12 +174,28 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       registrationStatus: r.registration_status || "not_registered",
     }));
   }
-  const { data } = await (supabase as any)
+  const PAGE_SIZE = 1000;
+  const { count, error: countError } = await (supabase as any)
     .from("crm_brokerages")
-    .select("id, company_name, email, emirate")
-    .order("company_name")
-    .limit(2000);
-  return (data ?? []).map((r: any) => ({
+    .select("id", { count: "exact", head: true });
+  if (countError) throw countError;
+  const total = Number(count ?? 0);
+  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const chunks = await Promise.all(
+    Array.from({ length: pages }, (_, page) => {
+      const from = page * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+      return (supabase as any)
+        .from("crm_brokerages")
+        .select("id, company_name, email, emirate")
+        .order("company_name")
+        .range(from, to);
+    })
+  );
+  const firstError = chunks.find((chunk: any) => chunk.error)?.error;
+  if (firstError) throw firstError;
+  const rows = chunks.flatMap((chunk: any) => chunk.data ?? []);
+  return rows.map((r: any) => ({
     id: String(r.id),
     name: r.company_name || "Brokerage",
     email: r.email || null,
@@ -232,7 +271,7 @@ function stripHtml(html: string) {
     .trim();
 }
 
-function personalizeTemplate(html: string, sampleName = "Recipient Developer Name", audienceKind: BrandedAudienceKind = "developers") {
+function personalizeTemplate(html: string, sampleName = "Recipient Developer Name", audienceKind: BrandedAudienceKind = "developers", bookingUrl = "") {
   const sender = SENDER_BY_KIND[audienceKind];
   const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
@@ -250,6 +289,12 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
         -webkit-text-fill-color:#0a0a0a !important;
         opacity:1 !important;
       }
+      .citi-booking-cta:hover, .citi-booking-cta:hover * {
+        background:#EFE6D6 !important;
+        color:#0a0a0a !important;
+        -webkit-text-fill-color:#0a0a0a !important;
+        border-color:#B89555 !important;
+      }
     </style>`)
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
@@ -260,7 +305,14 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/\{\{project_name\}\}/g, "AMRA")
       .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
       .replace(/\{\{project_url\}\}/g, "https://citideveloper.com/e-catalogue/amra")
-      .replace(/\{\{booking_url\}\}/g, "https://calendar.app.google/")
+      .replace(/\{\{booking_url\}\}/g, bookingUrl || "#calendar-booking-url-not-configured")
+      .replace(/\{\{owner_full_name\}\}/g, "Jane Bujold")
+      .replace(/\{\{developer_phone_display\}\}/g, CITI_PHONE_DISPLAY)
+      .replace(/\{\{developer_phone_tel\}\}/g, CITI_PHONE_TEL)
+      .replace(/\{\{whatsapp_url\}\}/g, CITI_WHATSAPP_URL)
+      .replace(/\{\{developer_website\}\}/g, CITI_WEBSITE_URL)
+      .replace(/\{\{developer_map\}\}/g, CITI_MAP_URL)
+      .replace(/\{\{office_location\}\}/g, CITI_OFFICE_LABEL)
       .replace(/\{\{group_status_line\}\}/g, "We would love to formalise a partnership with your team and align on how CITI Developers can support your brokers on AMRA and upcoming launches.")
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
@@ -268,6 +320,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     .replace(/\{\{reply_to_display\}\}/g, sender.email.toUpperCase())
     .replace(/\{\{reply_to\}\}/g, sender.email)
       .replace(/Jane Bou Jaoude/gi, sender.name)
+      .replace(/Jane Bujold/gi, sender.name)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
     .replace(/\b(?:contact|info|helpdesk)@jbj\.ae\b/gi, senderMailToken)
@@ -285,6 +338,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       const withMarker = attrs.includes("data-jbj-contact-note") ? attrs : ` data-jbj-contact-note="true"${attrs}`;
       return `<div${withMarker.replace(/style=(['"])([^'"]*)\1/i, (_styleMatch, quote, styleValue) => `style=${quote}${styleValue};color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;${quote}`)}>`;
     })
+    .replace(/City Developer/gi, "CITI Developers")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
@@ -345,14 +399,25 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
       data-no-contrast-guard="true"
       className="inline-flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md border-0 shadow-none ring-1 ring-[#064E3B]/20"
       style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-      aria-label={`${recipient.name} logo pending`}
+      aria-label={`${recipient.name} logo unavailable`}
       title={recipient.name}
     >
-      <span data-no-contrast-guard="true" className="text-[10px] font-black leading-none allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
-        {initialsOf(recipient.name)}
-      </span>
+      <Building2 className="size-4" aria-hidden="true" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
     </span>
   );
+}
+
+async function getInvokeErrorMessage(error: any) {
+  if (error instanceof FunctionsHttpError) {
+    try {
+      const text = await error.context.text();
+      const parsed = JSON.parse(text);
+      return parsed?.message || parsed?.error || text || error.message;
+    } catch {
+      return error.message;
+    }
+  }
+  return error?.message || "unknown error";
 }
 
 export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) {
@@ -367,6 +432,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [loadError, setLoadError] = useState<string | null>(null);
   const [unlockedCitiIds, setUnlockedCitiIds] = useState<Set<string>>(new Set());
   const [previouslySentEmails, setPreviouslySentEmails] = useState<Set<string>>(new Set());
+  const [bookingUrl, setBookingUrl] = useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -412,6 +478,23 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       cancelled = true;
     };
   }, [open, kind]);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await (supabase as any)
+        .from("crm_owner_settings")
+        .select("google_calendar_booking_url")
+        .maybeSingle();
+      if (!cancelled) setBookingUrl(String(data?.google_calendar_booking_url || "").trim());
+    })().catch(() => {
+      if (!cancelled) setBookingUrl("");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [open]);
 
   const selectedTemplate = useMemo(
     () => templates.find((t) => t.variant === selectedTemplateId) || null,
@@ -490,7 +573,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const previewRecipientName = previewRecipient?.name || (kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name");
   const previewPersonalizationName = kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name";
   const sender = SENDER_BY_KIND[kind];
+  const delivery = DELIVERY_BY_KIND[kind];
   const activeBrand = BRAND_HEADER_BY_KIND[kind];
+  const sendCap = kind === "brokerages" ? 100 : null;
+  const selectedSendableCount = useMemo(
+    () => recipients.filter((r) => selectedIds.has(r.id) && r.email?.trim()).length,
+    [recipients, selectedIds]
+  );
 
   useEffect(() => {
     const eligible = new Set(eligibleRecipients.map((r) => r.id));
@@ -528,9 +617,10 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testDeveloperName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) }
         : { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testBrokerageName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) };
       const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
-      if (error) throw error;
+      if (error) throw new Error(await getInvokeErrorMessage(error));
       if (data?.error) throw new Error(data.message || data.error);
-      toast.success(`Test sent to ${testEmail} — template "${selectedTemplate.name}"`);
+      const idNote = data?.messageId ? ` · ID ${data.messageId}` : "";
+      toast.success(`Test accepted for ${testEmail} — template "${selectedTemplate.name}"${idNote}`);
     } catch (e: any) {
       toast.error(`Test send failed: ${e?.message || "unknown error"}`);
     } finally {
@@ -547,8 +637,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       toast.error("Empty audience — select recipients first");
       return;
     }
+    if (sendCap && selectedSendableCount > sendCap) {
+      toast.error(`Select ${sendCap} or fewer brokerages for one send. Current verified path allows 100 emails/day.`);
+      return;
+    }
     const ok = window.confirm(
-      `Send "${selectedTemplate.name}" live to ${audienceCount} ${kind}?\n\nThis will be delivered from ${sender.email}. This action is logged.`
+      `Send "${selectedTemplate.name}" live to ${selectedSendableCount} ${kind}?\n\nFrom: ${delivery.fromName} <${delivery.fromEmail}>\nReply-To: ${delivery.replyTo}\nThis action is logged.`
     );
     if (!ok) return;
     const selectedRecipients = recipients.filter((r) => {
@@ -564,7 +658,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
           ? { catalogDeveloperId: r.catalogDeveloperId ?? r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
           : { brokerageId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true };
         const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
-        if (error) throw error;
+        if (error) throw new Error(await getInvokeErrorMessage(error));
         if (data?.error) throw new Error(data.message || data.error);
         sentCount += 1;
       }
@@ -606,7 +700,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
             <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
               <Users className="size-4" />
-              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total} {kind}
+              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total.toLocaleString()} {kind}
               {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
               {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]">· {previouslySentCount} already sent</span>}
             </div>
@@ -705,7 +799,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 />
               </div>
               <span className="text-xs text-[#4B5D55] ml-auto">
-                <strong className="text-[#0F1A16]">{audienceCount}</strong> selected of {total} total
+                <strong className="text-[#0F1A16]">{audienceCount.toLocaleString()}</strong> selected of {total.toLocaleString()} total
                 {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]"> · {lockedCitiCount} locked</span>}
                 {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]"> · {previouslySentCount} already sent</span>}
               </span>
@@ -721,7 +815,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               ) : (
                 <ScrollArea className="h-[300px]">
                   <ul className="divide-y divide-emerald-900/5">
-                    {filteredRecipients.map((r) => {
+                    {filteredRecipients.slice(0, 350).map((r) => {
                       const checked = selectedIds.has(r.id);
                       const isCiti = isCitiRecipient(r);
                       const alreadySent = !!r.email && previouslySentEmails.has(r.email.toLowerCase().trim());
@@ -784,8 +878,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                             {kind === "developers" ? (
                               <AudienceLogo recipient={r} />
                             ) : (
-                              <span className="inline-flex items-center justify-center size-8 rounded-md bg-white border border-emerald-900/10 overflow-hidden shrink-0">
-                                <span className="text-[10px] font-black text-[#064E3B]">{initialsOf(r.name)}</span>
+                              <span className="inline-flex items-center justify-center size-8 rounded-md bg-white border border-emerald-900/10 overflow-hidden shrink-0" aria-label="Brokerage company">
+                                <Building2 className="size-4" aria-hidden="true" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                               </span>
                             )}
                             <span className="flex-1 min-w-0">
@@ -855,6 +949,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                         </li>
                       );
                     })}
+                    {filteredRecipients.length > 350 && (
+                      <li className="px-4 py-3 text-center text-xs font-semibold text-[#4B5D55]">
+                        Showing 350 of {filteredRecipients.length.toLocaleString()} matches — use search to narrow the audience.
+                      </li>
+                    )}
                     {filteredRecipients.length === 0 && (
                       <li className="px-4 py-8 text-center text-sm text-[#4B5D55]">No matches.</li>
                     )}
@@ -877,8 +976,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     {personalizeSubject(selectedTemplate.subject, previewPersonalizationName)}
                   </p>
                   <div className="mt-2 grid gap-1 text-[11px] text-[#4B5D55] sm:grid-cols-2">
-                    <p><span className="uppercase tracking-wider">From:</span> <span className="text-[#0F1A16] font-semibold">{sender.name}</span> &lt;<span className="text-[#064E3B] font-semibold">{sender.email.toUpperCase()}</span>&gt;</p>
-                    <p><span className="uppercase tracking-wider">Reply-to:</span> <span className="text-[#064E3B] font-semibold">{sender.email.toUpperCase()}</span></p>
+                    <p><span className="uppercase tracking-wider">From:</span> <span className="text-[#0F1A16] font-semibold">{delivery.fromName}</span> &lt;<span className="text-[#064E3B] font-semibold">{delivery.fromEmail.toUpperCase()}</span>&gt;</p>
+                    <p><span className="uppercase tracking-wider">Reply-to:</span> <span className="text-[#064E3B] font-semibold">{delivery.replyTo.toUpperCase()}</span></p>
                     <p className="sm:col-span-2"><span className="uppercase tracking-wider">Template:</span> <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span></p>
                   </div>
                 </div>
@@ -888,7 +987,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   sandbox="allow-popups allow-popups-to-escape-sandbox"
                   className="w-full block"
                   style={{ height: "min(68vh, 720px)", border: "0", background: "#FDFBF7" }}
-                  srcDoc={personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind)}
+                  srcDoc={personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind, bookingUrl)}
                 />
               </div>
             ) : (
@@ -905,9 +1004,15 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <p className="text-xs text-[#4B5D55] uppercase tracking-wider">Campaign summary</p>
               <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                 <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
-                <li><strong>Audience:</strong> {audienceCount} selected of {total} total {kind}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}{previouslySentCount > 0 ? ` · ${previouslySentCount} already sent` : ""}</li>
-                <li><strong>From:</strong> {sender.name}, {sender.title} &lt;{sender.email.toUpperCase()}&gt;</li>
-                <li><strong>Registration pack:</strong> saved link included in the template</li>
+                <li><strong>Audience:</strong> {audienceCount.toLocaleString()} selected of {total.toLocaleString()} total {kind}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}{previouslySentCount > 0 ? ` · ${previouslySentCount} already sent` : ""}</li>
+                <li><strong>From:</strong> {delivery.fromName} &lt;{delivery.fromEmail.toUpperCase()}&gt;</li>
+                <li><strong>Reply-To:</strong> {delivery.replyTo.toUpperCase()}</li>
+                {kind === "brokerages" ? (
+                  <li><strong>Calendar:</strong> {bookingUrl ? "Google Calendar appointment link saved" : "Google Calendar appointment link missing"}</li>
+                ) : (
+                  <li><strong>Registration pack:</strong> saved link included in the template</li>
+                )}
+                <li><strong>One-shot limit:</strong> {delivery.dailyCapLabel}</li>
               </ul>
             </div>
 
@@ -962,7 +1067,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               }}
             >
               <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />
-              {sending ? "Sending…" : `Send live to ${audienceCount} ${kind}`}
+              {sending ? "Sending…" : `Send live to ${selectedSendableCount.toLocaleString()} ${kind}`}
             </button>
 
             <p className="text-xs text-[#4B5D55]">
