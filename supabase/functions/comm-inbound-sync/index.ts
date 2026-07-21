@@ -96,6 +96,80 @@ function parseHeaderBlock(block: string): Record<string, string> {
   return h;
 }
 
+async function markRelationshipReply(
+  admin: ReturnType<typeof createClient>,
+  args: {
+    userId: string;
+    fromEmail: string;
+    fromName: string;
+    subject: string;
+    snippet: string;
+    receivedAt: string;
+    externalId: string;
+  },
+) {
+  const email = args.fromEmail.trim().toLowerCase();
+  if (!email || !email.includes("@")) return;
+
+  const logReply = async (entityType: string, entityId: string, label: string) => {
+    await admin.from("crm_relationship_email_log").insert({
+      owner_id: args.userId,
+      entity_type: entityType,
+      entity_id: entityId,
+      direction: "inbound",
+      sent_via: "inbound_sync",
+      external_message_id: `inbound-${args.externalId}`,
+      from_email: email,
+      to_emails: [],
+      cc_emails: [],
+      subject: args.subject,
+      body_snippet: args.snippet || `Reply received from ${label}`,
+      detected_status: "responded",
+      detected_signal: "email_reply",
+      sent_at: args.receivedAt,
+    }).then(() => {}, () => {});
+  };
+
+  const { data: brokerage } = await admin
+    .from("crm_brokerages")
+    .select("id, company_name, response_count, outreach_stage")
+    .eq("owner_id", args.userId)
+    .ilike("email", email)
+    .maybeSingle();
+
+  if (brokerage?.id) {
+    await admin.from("crm_brokerages").update({
+      last_response_at: args.receivedAt,
+      response_count: Number(brokerage.response_count || 0) + 1,
+      last_interaction_at: args.receivedAt,
+      outreach_stage: ["not_contacted", "attempted"].includes(String(brokerage.outreach_stage || ""))
+        ? "engaged"
+        : brokerage.outreach_stage,
+    }).eq("id", brokerage.id);
+    await logReply("brokerage", brokerage.id, brokerage.company_name || email);
+    return;
+  }
+
+  const { data: developer } = await admin
+    .from("crm_developer_registry")
+    .select("id, developer_name, response_count, outreach_stage")
+    .eq("owner_id", args.userId)
+    .ilike("developer_email", `%${email}%`)
+    .maybeSingle();
+
+  if (developer?.id) {
+    await admin.from("crm_developer_registry").update({
+      last_response_at: args.receivedAt,
+      response_count: Number(developer.response_count || 0) + 1,
+      last_interaction_at: args.receivedAt,
+      outreach_stage: ["not_contacted", "attempted"].includes(String(developer.outreach_stage || ""))
+        ? "engaged"
+        : developer.outreach_stage,
+    }).eq("id", developer.id);
+    await logReply("developer_registry", developer.id, developer.developer_name || email);
+  }
+}
+
 async function fetchHostingerMessages(
   creds: HostingerCreds,
   sinceDate: Date,
@@ -360,6 +434,15 @@ Deno.serve(async (req) => {
                   thread_id: threadId,
                 },
               });
+              await markRelationshipReply(admin, {
+                userId: ch.user_id,
+                fromEmail,
+                fromName,
+                subject: m.subject,
+                snippet: m.bodyText || "",
+                receivedAt: lastMessageAt,
+                externalId,
+              });
             }
           }
 
@@ -486,6 +569,15 @@ Deno.serve(async (req) => {
           identifier: ch.identifier,
           event_type: "inbound_received",
           details: { external_message_id: args.externalId, from: args.fromEmail, subject: args.subject, thread_id: thread.id },
+        });
+        await markRelationshipReply(admin, {
+          userId: ch.user_id,
+          fromEmail: args.fromEmail,
+          fromName: args.fromName,
+          subject: args.subject,
+          snippet: args.snippet,
+          receivedAt: args.receivedAt,
+          externalId: args.externalId,
         });
         return true;
       };
