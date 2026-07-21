@@ -87,12 +87,12 @@ function buildEmlFile(opts: {
 
 type SendLogEntry = {
   id: string;
-  recipient_email: string;
-  template_name: string | null;
+  to_email: string;
+  template: string | null;
   status: string;
   subject: string | null;
   created_at: string;
-  error_message: string | null;
+  error: string | null;
 };
 
 export function BrandedEmailComposer() {
@@ -195,7 +195,7 @@ export function BrandedEmailComposer() {
     try {
       const { data, error } = await (supabase as any)
         .from("email_send_log")
-        .select("id, recipient_email, template_name, status, subject, created_at, error_message")
+        .select("id, to_email, template, status, subject, created_at, error")
         .order("created_at", { ascending: false })
         .limit(50);
       if (error) throw error;
@@ -552,7 +552,7 @@ export function BrandedEmailComposer() {
                       <div key={h.id} className="flex items-center gap-2 text-[11px] px-2 py-1.5 rounded bg-[#FDFBF7] border border-[#B89555]/15">
                         <Icon className={`w-3.5 h-3.5 shrink-0 ${tone}`} />
                         <span className="font-medium text-[#1A1A1A] truncate flex-1" title={h.subject || ""}>{h.subject || "(no subject)"}</span>
-                        <span className="text-[#1A1A1A]/60 truncate max-w-[160px]" title={h.recipient_email}>{h.recipient_email}</span>
+                        <span className="text-[#1A1A1A]/60 truncate max-w-[160px]" title={h.to_email}>{h.to_email}</span>
                         <span className={`uppercase tracking-wide ${tone} font-semibold`}>{h.status}</span>
                         <span className="text-[#1A1A1A]/40 hidden md:inline">{new Date(h.created_at).toLocaleString()}</span>
                       </div>

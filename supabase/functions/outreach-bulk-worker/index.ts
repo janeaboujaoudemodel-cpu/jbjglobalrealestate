@@ -133,10 +133,10 @@ serve(async (req) => {
 
         // Optional: write into email_send_log if it exists (best-effort)
         await service.from("email_send_log").insert({
-          template_name: "brokerage_outreach_bulk",
-          recipient_email: r.email,
+          template: "brokerage_outreach_bulk",
+          to_email: r.email,
           status: "sent",
-          message_id: data?.id || null,
+          resend_message_id: data?.id || null,
         }).then(() => {}, () => {});
       } catch (e) {
         const errMsg = String((e as Error).message || e);
