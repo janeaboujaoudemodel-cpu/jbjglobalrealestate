@@ -53,7 +53,7 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
     email: "helpdesk@jbj.ae",
   },
   brokerages: {
-    name: "Jane Bujold",
+    name: "Jane Bou Jaoude",
     title: "CITI Developers · Sales & Training Department",
     email: "infoo.jane@gmail.com",
   },
@@ -77,7 +77,7 @@ const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmai
 const CITI_PHONE_DISPLAY = "+971 54 716 7107";
 const CITI_PHONE_TEL = "tel:+971547167107";
 const CITI_WHATSAPP_URL = "https://wa.me/971547167107";
-const CITI_WEBSITE_URL = "https://www.citidevelopers.com";
+const CITI_WEBSITE_URL = "https://citideveloper.com";
 const CITI_MAP_URL = "https://www.google.com/maps/search/?api=1&query=CITI%20Developers%20Sales%20Gallery%20Dubai";
 const CITI_OFFICE_LABEL = "CITI Developers Sales Gallery";
 
@@ -306,7 +306,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
       .replace(/\{\{project_url\}\}/g, "https://citideveloper.com/e-catalogue/amra")
       .replace(/\{\{booking_url\}\}/g, bookingUrl || "#calendar-booking-url-not-configured")
-      .replace(/\{\{owner_full_name\}\}/g, "Jane Bujold")
+      .replace(/\{\{owner_full_name\}\}/g, "Jane Bou Jaoude")
       .replace(/\{\{developer_phone_display\}\}/g, CITI_PHONE_DISPLAY)
       .replace(/\{\{developer_phone_tel\}\}/g, CITI_PHONE_TEL)
       .replace(/\{\{whatsapp_url\}\}/g, CITI_WHATSAPP_URL)
@@ -319,8 +319,12 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     .replace(/\{\{reply_to_lower\}\}/g, sender.email)
     .replace(/\{\{reply_to_display\}\}/g, sender.email.toUpperCase())
     .replace(/\{\{reply_to\}\}/g, sender.email)
+      .replace(/https?:\/\/(?:www\.)?citidevelopers\.com/gi, CITI_WEBSITE_URL)
+      .replace(/\bwww\.citidevelopers\.com\b/gi, "citideveloper.com")
+      .replace(/\bcitidevelopers\.com\b/gi, "citideveloper.com")
       .replace(/Jane Bou Jaoude/gi, sender.name)
       .replace(/Jane Bujold/gi, sender.name)
+      .replace(/<strong>Jane<\/strong>(\s*&middot;\s*Sales)/gi, `<strong>${sender.name}</strong>$1`)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
     .replace(/\b(?:contact|info|helpdesk)@jbj\.ae\b/gi, senderMailToken)
@@ -339,6 +343,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       return `<div${withMarker.replace(/style=(['"])([^'"]*)\1/i, (_styleMatch, quote, styleValue) => `style=${quote}${styleValue};color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;${quote}`)}>`;
     })
     .replace(/City Developer/gi, "CITI Developers")
+    .replace(/background:#064E3B/gi, "background:#064E3B;background-image:linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
