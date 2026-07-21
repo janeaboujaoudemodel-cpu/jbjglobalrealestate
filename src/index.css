@@ -37089,3 +37089,112 @@ html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:foc
   transform: none !important;
   scale: 1 !important;
 }
+
+/* ============================================================
+   PASS · Relationships Hub — scoped contrast + layout lock
+   Beats global heading/gold/contrast-guard rules by specificity + !important.
+   Applies only under [data-relationships-hub].
+   ============================================================ */
+[data-relationships-hub] .rh-header,
+[data-relationships-hub] .rh-header * {
+  color: #FFFFFF !important;
+}
+[data-relationships-hub] .rh-header h1 {
+  color: #FFFFFF !important;
+  background: none !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-family: 'Cormorant Garamond', serif !important;
+}
+[data-relationships-hub] .rh-header svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+[data-relationships-hub] .rh-pill {
+  background: rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.45) !important;
+  color: #FFFFFF !important;
+}
+[data-relationships-hub] .rh-pill:hover {
+  background: rgba(255,255,255,0.22) !important;
+}
+
+/* Segment tiles */
+[data-relationships-hub] .rh-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+[data-relationships-hub] .rh-tile-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+[data-relationships-hub] .rh-tile-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+[data-relationships-hub] .rh-tile-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: clamp(15px, 1.15vw, 18px);
+  font-weight: 800;
+  line-height: 1.15;
+}
+[data-relationships-hub] .rh-tile-sub {
+  font-size: 11.5px;
+  line-height: 1.4;
+  white-space: normal;
+}
+[data-relationships-hub] .rh-tile-active,
+[data-relationships-hub] .rh-tile-active * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-relationships-hub] .rh-tile-active svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+[data-relationships-hub] .rh-tile-active .rh-tile-sub {
+  color: rgba(255,255,255,0.88) !important;
+}
+[data-relationships-hub] .rh-tile-inactive .rh-tile-label {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+}
+[data-relationships-hub] .rh-tile-inactive .rh-tile-sub {
+  color: #4B5D55 !important;
+}
+[data-relationships-hub] .rh-tile-inactive svg {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+/* KPI cards */
+[data-relationships-hub] .rh-kpi-label {
+  color: #0F1A16 !important;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+[data-relationships-hub] .rh-kpi-value {
+  color: #064E3B !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+  margin-top: 4px;
+}
+[data-relationships-hub] .rh-kpi-value[data-empty="true"] {
+  color: #8A9891 !important;
+}
