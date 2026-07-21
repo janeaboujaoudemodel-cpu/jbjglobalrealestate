@@ -391,19 +391,21 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     if (!ok) return;
     const selectedRecipients = recipients.filter((r) => selectedIds.has(r.id) && r.email);
     setSending(true);
+    let sentCount = 0;
     try {
-      for (const r of selectedRecipients.slice(0, 50)) {
+      for (const r of selectedRecipients) {
         const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
         const body = kind === "developers"
-          ? { developerId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
+          ? { catalogDeveloperId: r.catalogDeveloperId ?? r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
           : { brokerageId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true };
         const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
         if (error) throw error;
         if (data?.error) throw new Error(data.message || data.error);
+        sentCount += 1;
       }
-      toast.success(`Queued ${selectedRecipients.length} ${kind} for "${selectedTemplate.name}".`);
+      toast.success(`Sent ${sentCount} ${kind} for "${selectedTemplate.name}".`);
     } catch (e: any) {
-      toast.error(`Live send failed: ${e?.message || "unknown error"}`);
+      toast.error(`Live send stopped after ${sentCount} sent: ${e?.message || "unknown error"}`);
     } finally {
       setSending(false);
     }
