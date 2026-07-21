@@ -22,6 +22,15 @@ const GROUP_OPTIONS = [
   { value: "group_not_required", label: "Group not required" },
 ];
 
+const BRIEFING_STATUS_OPTIONS = [
+  { value: "__none__", label: "None / Pending" },
+  { value: "scheduled", label: "Scheduled" },
+  { value: "postponed", label: "Postponed" },
+  { value: "briefing_done", label: "Briefing done" },
+  { value: "declined", label: "Declined" },
+  { value: "rejected", label: "Rejected" },
+];
+
 const CONTACT_ROLE_OPTIONS = ["Owner", "Admin", "Sales", "Broker", "Off-plan", "Secondary", "Marketing", "Finance", "Legal", "Other"];
 
 export default function BrokeragePortal() {
