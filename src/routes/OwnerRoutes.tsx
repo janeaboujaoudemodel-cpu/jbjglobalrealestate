@@ -430,7 +430,8 @@ export const OwnerRoutes = () => (
     <Route path="creative-suite" element={<OwnerCreativeSuite />} />
     <Route path="brand-palette" element={<BrandPaletteHub />} />
     <Route path="exclusive-documents" element={<ExclusiveDocuments />} />
-    <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/AgencyActivityLog")))}</Suspense>} />
+    <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/RelationshipsHub")))}</Suspense>} />
+    <Route path="crm/relationships/hub" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
     <Route path="crm/brokers" element={<Navigate to="/owner/crm?entity=brokers&view=directory" replace />} />
     <Route path="crm/integrity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/DataIntegrityCheck")))}</Suspense>} />
