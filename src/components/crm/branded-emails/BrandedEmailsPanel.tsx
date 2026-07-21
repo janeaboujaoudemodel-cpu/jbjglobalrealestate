@@ -1081,8 +1081,17 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
 
             {kind === "brokerages" && (
-              <div className="border border-emerald-900/15 rounded-lg p-4 bg-white">
-                <p className="text-xs text-[#4B5D55] uppercase tracking-wider font-semibold mb-2">Google Calendar booking link</p>
+              <div
+                className={`border rounded-lg p-4 ${bookingUrl ? "border-emerald-900/15 bg-white" : "border-red-300 bg-red-50"}`}
+              >
+                <p className={`text-xs uppercase tracking-wider font-semibold mb-2 ${bookingUrl ? "text-[#4B5D55]" : "text-red-800"}`}>
+                  Google Calendar booking link {bookingUrl ? "" : "— required before live send"}
+                </p>
+                {!bookingUrl && (
+                  <p className="text-xs text-red-800 mb-2">
+                    Live send is blocked until you paste Jane's public Google Calendar appointment link (starts with <code>https://calendar.app.google/</code>) and click Save.
+                  </p>
+                )}
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Input
                     type="url"
@@ -1105,6 +1114,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 </div>
               </div>
             )}
+
 
             <div className="border border-emerald-900/15 rounded-lg p-4 bg-white">
               <p className="text-xs text-[#4B5D55] uppercase tracking-wider font-semibold mb-2">Test send</p>
@@ -1143,7 +1153,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             <button
               type="button"
               onClick={handleSendLive}
-              disabled={sending || !selectedTemplate || audienceCount === 0}
+              disabled={sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl)}
               data-branded-email-live-action="true"
               data-keep-gold="true"
               className="jj-cta-gold-metallic"
@@ -1152,13 +1162,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
                 color: "#3a2a08",
                 WebkitTextFillColor: "#3a2a08",
-                cursor: sending || !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
-                opacity: sending || !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
+                cursor: sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl) ? "not-allowed" : "pointer",
+                opacity: sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl) ? 0.5 : 1,
               }}
             >
               <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />
-              {sending ? "Sending…" : `Send live to ${selectedSendableCount.toLocaleString()} ${kind} with email`}
+              {sending
+                ? "Sending…"
+                : kind === "brokerages" && !bookingUrl
+                  ? "Save Google Calendar link to enable live send"
+                  : `Send live to ${selectedSendableCount.toLocaleString()} ${kind} with email`}
             </button>
+
 
             <p className="text-xs text-[#4B5D55]">
               Test sends immediately to the address above. Live send goes through the locked outreach pipeline — you'll be asked to confirm before delivery.
