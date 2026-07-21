@@ -12,10 +12,11 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Mail, Search, Users, Send, Eye, FileText, Check, Lock, Unlock } from "lucide-react";
+import { Loader2, Search, Users, Send, Eye, FileText, Check, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import jbjMonogramCropped from "@/assets/jbj-monogram-cropped.png";
 
 export type BrandedAudienceKind = "developers" | "brokerages";
 
@@ -59,18 +60,24 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
 
-const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; alt: string; wordmark: string; tagline: string }> = {
+const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; appUrl: string; alt: string; wordmark: string; tagline: string; width: number; height: number }> = {
   developers: {
-    url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/jbj-monogram-dark.png",
+    url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png",
+    appUrl: jbjMonogramCropped,
     alt: "JBJ Global Real Estate",
     wordmark: "JBJ GLOBAL REAL ESTATE",
     tagline: "Developer Relations",
+    width: 78,
+    height: 100,
   },
   brokerages: {
     url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/citi-developers-gold.png",
+    appUrl: "/citi-developers-logo-transparent.png",
     alt: "Citi Developers",
     wordmark: "CITI DEVELOPERS",
     tagline: "Brokerage Partnerships",
+    width: 164,
+    height: 38,
   },
 };
 
@@ -78,7 +85,7 @@ function buildBrandHeaderHtml(kind: BrandedAudienceKind): string {
   const b = BRAND_HEADER_BY_KIND[kind];
   return `<table role="presentation" data-jbj-brand-header="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;">
   <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);">
-    <img src="${b.url}" alt="${b.alt}" width="96" height="96" style="display:block;width:96px;height:96px;max-width:96px;margin:0 auto 10px;object-fit:contain;" />
+    <img src="${b.url}" alt="${b.alt}" width="${b.width}" height="${b.height}" style="display:block;width:${b.width}px;height:${b.height}px;max-width:${b.width}px;margin:0 auto 10px;object-fit:contain;" />
     <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">${b.wordmark}</div>
     <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">${b.tagline}</div>
   </td></tr>
@@ -436,6 +443,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const previewRecipientName = previewRecipient?.name || (kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name");
   const previewPersonalizationName = kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name";
   const sender = SENDER_BY_KIND[kind];
+  const activeBrand = BRAND_HEADER_BY_KIND[kind];
 
   useEffect(() => {
     if (!isDeveloperRegistrationCampaign(kind, selectedTemplate)) return;
@@ -530,8 +538,15 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       >
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <span className="inline-grid place-items-center size-10 rounded-md bg-[#064E3B] !text-white">
-              <Mail className="size-5 !text-white" />
+            <span className="inline-grid place-items-center h-12 w-16 shrink-0 rounded-md border border-emerald-900/15 bg-white p-1.5 shadow-[0_8px_18px_-14px_rgba(6,78,59,0.45)]">
+              <img
+                src={activeBrand.appUrl}
+                alt={activeBrand.alt}
+                className="block max-h-full max-w-full object-contain"
+                data-no-fallback
+                loading="eager"
+                decoding="async"
+              />
             </span>
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">

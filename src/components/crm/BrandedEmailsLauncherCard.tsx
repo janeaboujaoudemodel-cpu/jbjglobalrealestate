@@ -7,8 +7,9 @@
  */
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Mail } from "lucide-react";
+import { Send } from "lucide-react";
 import BrandedEmailsPanel, { preloadBrandedEmailsData, type BrandedAudienceKind } from "./branded-emails/BrandedEmailsPanel";
+import jbjMonogramCropped from "@/assets/jbj-monogram-cropped.png";
 
 type Variant = "owner" | "broker" | "developer";
 
@@ -40,6 +41,9 @@ const COPY: Record<Variant, {
 
 export default function BrandedEmailsLauncherCard({ variant = "owner" }: { variant?: Variant }) {
   const c = COPY[variant];
+  const brand = c.kind === "brokerages"
+    ? { src: "/citi-developers-logo-transparent.png", alt: "Citi Developers", tileClass: "w-20", imgClass: "max-h-8 max-w-full" }
+    : { src: jbjMonogramCropped, alt: "JBJ Global Real Estate", tileClass: "w-14", imgClass: "max-h-11 max-w-full" };
   const [open, setOpen] = useState(false);
   const [kind, setKind] = useState<BrandedAudienceKind>(c.kind);
 
@@ -90,8 +94,16 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
           />
         ))}
         <div className="p-5 md:p-6 flex flex-col md:flex-row md:items-center gap-4">
-          <span className="shrink-0 size-12 rounded-xl bg-[#064E3B] flex items-center justify-center">
-            <Mail className="size-5 !text-white" />
+          <span className={`shrink-0 h-14 ${brand.tileClass} rounded-md border flex items-center justify-center bg-white p-1.5`}
+            style={{ borderColor: "rgba(184,149,85,0.55)" }}>
+            <img
+              src={brand.src}
+              alt={brand.alt}
+              className={`block object-contain ${brand.imgClass}`}
+              data-no-fallback
+              loading="eager"
+              decoding="async"
+            />
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">{c.eyebrow}</p>
@@ -135,7 +147,7 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
                 cursor: "pointer", whiteSpace: "nowrap",
               }}
             >
-              <Mail className="size-4" style={{ color: "#FFFFFF" }} /> Send email
+              <Send className="size-4" style={{ color: "#FFFFFF" }} /> Send email
             </button>
           </div>
         </div>

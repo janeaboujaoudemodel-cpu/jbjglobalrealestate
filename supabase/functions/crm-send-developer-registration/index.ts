@@ -9,6 +9,7 @@
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { sendViaResend } from "../_shared/resendClient.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -91,7 +92,7 @@ const displayNameFromEmail = (email: string, fallback: string) => {
 
 const JBJ_BRAND_HEADER_HTML = `<table role="presentation" data-jbj-brand-header="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;">
   <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);">
-    <img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/jbj-monogram-dark.png" alt="JBJ Global Real Estate" width="96" height="96" style="display:block;width:96px;height:96px;max-width:96px;margin:0 auto 10px;object-fit:contain;" />
+    <img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png" alt="JBJ Global Real Estate" width="78" height="100" style="display:block;width:78px;height:100px;max-width:78px;margin:0 auto 10px;object-fit:contain;" />
     <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</div>
     <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">Developer Relations</div>
   </td></tr>
@@ -202,9 +203,6 @@ serve(async (req: Request) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
-    if (!LOVABLE_API_KEY || !GMAIL_API_KEY) {
-      throw new Error("Gmail connector not configured");
-    }
 
     const fromName = "Amelia — JBJ Global Real Estate";
     const replyTo = "contact@jbj.ae";
@@ -249,6 +247,55 @@ serve(async (req: Request) => {
     });
     const subject = isTest ? `[TEST] ${renderedSubject.replace(/^\[TEST\]\s*/i, "")}` : renderedSubject;
 
+    if (isTest) {
+      const resendResult = await sendViaResend({
+        from: `${fromName} <${replyTo}>`,
+        to: recipient,
+        reply_to: replyTo,
+        subject,
+        html,
+        headers: {
+          "X-JBJ-Outreach": "developer-registration-test",
+          "X-JBJ-Variant": variant,
+        },
+        tags: [
+          { name: "variant", value: variant },
+          { name: "mode", value: "test" },
+        ],
+      });
+
+      if (!resendResult.ok) {
+        console.error("Resend developer test failed:", resendResult.status, resendResult.error, resendResult.data);
+        return new Response(JSON.stringify({
+          error: resendResult.error || "Test send failed",
+          code: "RESEND_TEST_SEND_FAILED",
+          upstream_status: resendResult.status,
+          details: resendResult.data,
+          quota: resendResult.quota,
+        }), {
+          status: resendResult.status >= 400 && resendResult.status < 600 ? resendResult.status : 502,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      return new Response(JSON.stringify({
+        ok: true,
+        test: true,
+        recipient,
+        messageId: resendResult.data?.id || null,
+        threadId: null,
+        sent_via: "resend",
+        quota: resendResult.quota,
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (!LOVABLE_API_KEY || !GMAIL_API_KEY) {
+      throw new Error("Gmail connector not configured");
+    }
+
     const raw = buildRawMime({
       from: `${fromName} <${replyTo}>`,
       to: recipient,
@@ -278,13 +325,6 @@ serve(async (req: Request) => {
 
     const messageId: string | null = gmailJson?.id || null;
     const threadId: string | null = gmailJson?.threadId || null;
-
-    // Test sends do NOT update the registry or log outbound history.
-    if (isTest) {
-      return new Response(JSON.stringify({ ok: true, test: true, recipient, messageId, threadId }), {
-        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
 
     const nowIso = new Date().toISOString();
     const newStatus = sourceTable === "developers"
