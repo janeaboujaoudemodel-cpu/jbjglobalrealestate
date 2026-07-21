@@ -130,11 +130,19 @@ export function getKnownDeveloperLogoUrl(name: unknown): string | null {
 }
 
 export function getWebsiteLogoFallbackUrl(websiteUrl: unknown): string | null {
-  // Browser favicons/globe icons were being mistaken for developer logos.
-  // Missing logos must stay in the owner approval queue or use a text
-  // nameplate until a real official wordmark is approved.
-  void websiteUrl;
-  return null;
+  const publishableKey = import.meta.env.VITE_LOVABLE_CONNECTOR_LOGO_DEV_API_KEY;
+  if (!publishableKey || typeof websiteUrl !== "string") return null;
+  const raw = websiteUrl.trim();
+  if (!raw) return null;
+
+  try {
+    const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+    const domain = new URL(withProtocol).hostname.replace(/^www\./i, "").toLowerCase();
+    if (!domain || !domain.includes(".")) return null;
+    return `https://img.logo.dev/${encodeURIComponent(domain)}?token=${encodeURIComponent(publishableKey)}&size=96&format=png&fallback=404`;
+  } catch {
+    return null;
+  }
 }
 
 export function getDeveloperLogoBgColor(developer: unknown): string | null {

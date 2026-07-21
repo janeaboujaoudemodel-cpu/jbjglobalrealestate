@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 
 interface DeveloperLogoProps {
@@ -40,13 +40,16 @@ export function DeveloperLogo({
   loading = "lazy",
   onError,
   name,
+  websiteUrl,
   variant = "tile",
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
-  const valid = isValidDeveloperLogoUrl(src) && !error && !override.forceNameplate;
+  const fallbackLogo = getWebsiteLogoFallbackUrl(websiteUrl);
+  const resolvedSrc = isValidDeveloperLogoUrl(src) ? src : fallbackLogo;
+  const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error && !override.forceNameplate;
 
   const renderNameplate = (containerClass: string) => {
     const label = (name || alt || "Developer").trim();
@@ -103,7 +106,7 @@ export function DeveloperLogo({
   // ── Nameplate variant — if no valid logo exists, show the approved icon fallback ──
   if (variant === "nameplate") {
     if (!valid) return renderNameplate(cn(UNIFIED_PLATE, className));
-    return renderImage(src as string, cn(UNIFIED_PLATE, className));
+    return renderImage(resolvedSrc as string, cn(UNIFIED_PLATE, className));
   }
 
   if (variant === "bare") {
@@ -114,7 +117,7 @@ export function DeveloperLogo({
         className,
       ));
     }
-    return renderImage(src as string, cn(
+    return renderImage(resolvedSrc as string, cn(
       "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
       logoPlateSurface(override.darkPlate),
       className,
@@ -133,7 +136,7 @@ export function DeveloperLogo({
     if (!valid) {
       return renderNameplate(cardContainer);
     }
-    return renderImage(src as string, cardContainer, "card");
+    return renderImage(resolvedSrc as string, cardContainer, "card");
   }
 
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
@@ -147,5 +150,5 @@ export function DeveloperLogo({
     return renderNameplate(tileContainer);
   }
 
-  return renderImage(src as string, tileContainer);
+  return renderImage(resolvedSrc as string, tileContainer);
 }
