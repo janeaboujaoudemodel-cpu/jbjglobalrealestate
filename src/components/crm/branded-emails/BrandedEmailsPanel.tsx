@@ -534,7 +534,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         data-branded-email-panel="true"
         data-no-contrast-guard="true"
         aria-describedby={undefined}
-        className="w-full sm:max-w-6xl p-0 flex flex-col bg-white"
+        className="w-full sm:max-w-6xl p-0 flex flex-col bg-white border-l-0 rounded-l-2xl shadow-[-24px_0_60px_-30px_rgba(6,78,59,0.35)] overflow-hidden"
       >
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
