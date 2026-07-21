@@ -230,12 +230,13 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
 
   return (
     <span
+      data-branded-email-fallback-logo="true"
       className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md border-0 shadow-none ring-1 ring-[#064E3B]/20"
-      style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" }}
+      style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
       aria-label={`${recipient.name} logo pending`}
       title={recipient.name}
     >
-      <span className="text-[10px] font-black leading-none" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+      <span className="text-[10px] font-black leading-none" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
         {initialsOf(recipient.name)}
       </span>
     </span>
@@ -593,6 +594,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 </div>
                 <ScrollArea className="h-[min(68vh,720px)]">
                   <div
+                    data-branded-email-preview-body="true"
                     className="p-4 md:p-8 prose prose-sm max-w-none text-[#0F1A16] [&_*]:!max-w-full [&_a]:!text-[#0a0a0a] [&_a]:!font-bold [&_a]:underline [&_a]:decoration-[#B89555]"
                     dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, previewRecipientName, kind) }}
                   />
