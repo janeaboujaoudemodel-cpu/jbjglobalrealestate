@@ -12,8 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Mail, Search, Users, Send, Eye, FileText } from "lucide-react";
+import { Loader2, Mail, Search, Users, Send, Eye, FileText, Check } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -556,13 +555,26 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                             className="flex cursor-pointer items-center gap-3 px-3 py-2"
                             style={{ backgroundColor: checked ? "rgba(6,78,59,0.035)" : "#FFFFFF" }}
                           >
-                            <Checkbox
-                              checked={checked}
-                              onCheckedChange={() => toggleId(r.id)}
+                            <button
+                              type="button"
+                              role="checkbox"
+                              aria-checked={checked}
                               data-branded-email-checkbox="true"
-                              className="!border-[#064E3B]/35 data-[state=checked]:!border-[#064E3B] data-[state=checked]:!bg-[#064E3B] data-[state=checked]:!text-white hover:!border-[#064E3B] focus:!border-[#064E3B] focus-visible:!ring-[#064E3B]/25"
-                              style={{ boxShadow: "none", borderColor: checked ? "#064E3B" : "rgba(6,78,59,0.35)" }}
-                            />
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleId(r.id);
+                              }}
+                              className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-[4px]"
+                              style={{
+                                border: "1px solid #064E3B",
+                                background: checked ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FDFBF7",
+                                color: "#FFFFFF",
+                                WebkitTextFillColor: "#FFFFFF",
+                                boxShadow: "none",
+                              }}
+                            >
+                              {checked && <Check className="size-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} strokeWidth={3.2} />}
+                            </button>
                             {kind === "developers" ? (
                               <AudienceLogo recipient={r} />
                             ) : (
