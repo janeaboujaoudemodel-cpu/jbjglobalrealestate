@@ -41416,6 +41416,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      count_truly_updated_brokers: { Args: never; Returns: number }
       crm_auto_purge_old_deleted: { Args: never; Returns: number }
       crm_broker_auto_expire_invites: {
         Args: never

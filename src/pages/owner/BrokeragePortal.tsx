@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import BrokerageExcelImportDialog from "@/components/owner/BrokerageExcelImportDialog";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { Building2, Download, FileSpreadsheet, Plus, Trash2, Upload, UserRound, Users, ChevronDown, Database } from "lucide-react";
+import { Building2, Download, FileSpreadsheet, Plus, Trash2, Upload, UserRound, Users, ChevronDown, Database, Inbox as InboxIcon, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import { statusColor, BROKERAGE_REGISTRATION_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 
 const GROUP_OPTIONS = [
@@ -59,9 +60,13 @@ export default function BrokeragePortal() {
       supabase.from("crm_brokerages" as any).select("id", { count: "exact", head: true }).is("deleted_at", null),
       supabase.from("crm_brokers" as any).select("id", { count: "exact", head: true }),
       supabase.from("crm_brokers" as any).select("id", { count: "exact", head: true }).or("database_source.not.is.null,original_filename.not.is.null,upload_source.not.is.null"),
-      supabase.from("crm_brokers" as any).select("id", { count: "exact", head: true }).not("updated_at", "is", null),
+      // Truthful "updated" count: only rows edited AFTER creation (>5s gap excludes seed/import churn).
+      supabase.rpc("count_truly_updated_brokers" as any).then(
+        (r: any) => ({ count: typeof r?.data === "number" ? r.data : 0, error: r?.error ?? null }),
+        () => ({ count: 0, error: null })
+      ),
     ]);
-    return { agencies: agencies.count ?? 0, brokers: brokers.count ?? 0, uploaded: uploaded.count ?? 0, updated: updated.count ?? 0 };
+    return { agencies: agencies.count ?? 0, brokers: brokers.count ?? 0, uploaded: uploaded.count ?? 0, updated: (updated as any).count ?? 0 };
   }});
 
   const visibleBrokerages = useMemo(() => {
@@ -136,12 +141,22 @@ export default function BrokeragePortal() {
     </div>
     <BrokerageExcelImportDialog open={importOpen} onOpenChange={setImportOpen} onDone={() => { qc.invalidateQueries({ queryKey: ["brokerage-portal-brokerages"] }); qc.invalidateQueries({ queryKey: ["brokerage-portal-lists"] }); qc.invalidateQueries({ queryKey: ["brokerage-portal-members"] }); }} />
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      {[
-        ["Total agencies", statsQ.data?.agencies],
-        ["Total brokers", statsQ.data?.brokers],
-        ["Uploaded brokers", statsQ.data?.uploaded],
-        ["Updated brokers", statsQ.data?.updated],
-      ].map(([label, value]) => <Card key={label as string} className="p-4 bg-[#F7F2EA] border border-[#B89555]/30"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{label}</p><p className="mt-1 text-2xl font-black text-[#064E3B]">{typeof value === "number" ? value.toLocaleString() : "—"}</p></Card>)}
+      {([
+        ["Total agencies", statsQ.data?.agencies, "all"],
+        ["Total brokers", statsQ.data?.brokers, "jbj"],
+        ["Uploaded brokers", statsQ.data?.uploaded, "list"],
+        ["Updated brokers", statsQ.data?.updated, "jbj"],
+      ] as const).map(([label, value, target]) => (
+        <button
+          key={label}
+          type="button"
+          onClick={() => setView(target as any)}
+          className={`p-4 rounded-xl text-left transition bg-[#F7F2EA] border ${view === target ? "border-[#064E3B] ring-1 ring-[#064E3B]/30" : "border-[#B89555]/30 hover:border-[#064E3B]/40"}`}
+        >
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{label}</p>
+          <p className="mt-1 text-2xl font-black text-[#064E3B]">{typeof value === "number" ? value.toLocaleString() : "—"}</p>
+        </button>
+      ))}
     </div>
     <AutomationsStrip />
     <BrandedEmailsLauncherCard variant="owner" />
@@ -188,22 +203,23 @@ function AutomationsStrip() {
   const runGmail = async () => {
     setBusy("gmail");
     try {
-      const { error } = await supabase.functions.invoke("gmail-inbox-sync", { body: {} });
+      const { data, error } = await supabase.functions.invoke("gmail-inbox-sync", { body: {} });
       if (error) throw error;
-      toast.success("Inbox synced from infoo.jane@gmail.com");
+      const synced = Number((data as any)?.synced ?? 0);
+      if (synced > 0) toast.success(`Inbox refreshed — ${synced} new message${synced === 1 ? "" : "s"}`);
+      else toast.message("Inbox up to date — no new messages");
       inboxQ.refetch();
     } catch (e: any) { toast.error(e?.message || "Inbox sync failed"); } finally { setBusy(null); }
   };
   const runDld = async (mode: "market" | "all") => {
     setBusy(mode === "market" ? "dld" : "all");
     try {
-      // "Market snapshot" pulls the DLD daily transaction ingest only —
-      // it does NOT touch brokers/brokerages.
-      // "Sync all" additionally pulls the broker + brokerage register.
       const snap = await supabase.functions.invoke("dld-daily-ingest", { body: {} });
       if (snap.error) throw snap.error;
       if (mode === "market") {
-        toast.success("DLD market snapshot pulled");
+        const total = Number((snap.data as any)?.total ?? 0);
+        if (total > 0) toast.success(`DLD market snapshot pulled — ${total.toLocaleString()} transactions`);
+        else toast.warning("DLD market snapshot returned 0 rows — upstream may be unavailable");
       } else {
         const reg = await supabase.functions.invoke("dld-broker-sync", { body: {} });
         if (reg.error) throw reg.error;
@@ -211,7 +227,7 @@ function AutomationsStrip() {
         const a = r.agencies_inserted ?? 0;
         const b = r.brokers_inserted ?? 0;
         if (a === 0 && b === 0) {
-          toast.warning(`DLD register returned 0 rows — upstream (dubaipulse.gov.ae) may be blocked. ${r.error ? `Details: ${r.error}` : ""}`);
+          toast.warning(`DLD register returned 0 new rows — upstream (dubaipulse.gov.ae) may be blocked. ${r.error ? `Details: ${r.error}` : ""}`);
         } else {
           toast.success(`DLD sync complete — ${a} agencies · ${b} brokers${r.error ? ` (partial: ${r.error})` : ""}`);
         }
@@ -229,7 +245,14 @@ function AutomationsStrip() {
           <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com <span className="ml-2 text-[#064E3B]/70">Auto · every 5 min</span></p>
           <p className="text-xs text-[#1A1A1A]/70 mt-1">Last message ingested: <span className="font-black text-[#1A1A1A]">{fmt(inboxQ.data?.created_at)}</span></p>
         </div>
-        <Button size="sm" variant="gold" disabled={busy === "gmail"} onClick={runGmail}>{busy === "gmail" ? "Syncing…" : "Sync now"}</Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" disabled={busy === "gmail"} onClick={runGmail} title="Refresh now" aria-label="Refresh inbox now">
+            <RefreshCw className={`size-4 ${busy === "gmail" ? "animate-spin" : ""}`} />
+          </Button>
+          <Button size="sm" variant="gold" asChild>
+            <Link to="/owner/inbox"><InboxIcon className="size-4 mr-1" /> Inbox</Link>
+          </Button>
+        </div>
       </div>
       <div className="flex items-center justify-between gap-3">
         <div>
