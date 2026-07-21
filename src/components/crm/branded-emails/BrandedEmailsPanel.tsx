@@ -77,7 +77,7 @@ const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmai
 const CITI_PHONE_DISPLAY = "+971 54 716 7107";
 const CITI_PHONE_TEL = "tel:+971547167107";
 const CITI_WHATSAPP_URL = "https://wa.me/971547167107";
-const CITI_WEBSITE_URL = "https://www.citidevelopers.com";
+const CITI_WEBSITE_URL = "https://citideveloper.com";
 const CITI_MAP_URL = "https://www.google.com/maps/search/?api=1&query=CITI%20Developers%20Sales%20Gallery%20Dubai";
 const CITI_OFFICE_LABEL = "CITI Developers Sales Gallery";
 
