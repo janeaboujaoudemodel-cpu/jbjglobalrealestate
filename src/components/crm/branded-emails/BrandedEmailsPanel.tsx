@@ -42,14 +42,14 @@ type Template = {
 const DEVELOPER_SENDER = {
   name: "Amelia",
   title: "Head of Business Development",
-  email: "contact@jbj.ae",
+  email: "helpdesk@jbj.ae",
 };
 
 const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
   developers: {
     name: "Amelia",
     title: "Head of Business Development",
-    email: "contact@jbj.ae",
+    email: "helpdesk@jbj.ae",
   },
   brokerages: {
     name: "JBJ Team",
