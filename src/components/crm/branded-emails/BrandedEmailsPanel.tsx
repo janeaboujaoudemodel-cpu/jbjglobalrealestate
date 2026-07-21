@@ -22,6 +22,7 @@ export type BrandedAudienceKind = "developers" | "brokerages";
 
 type Recipient = {
   id: string;
+  catalogDeveloperId?: string;
   name: string;
   email: string | null;
   meta?: string | null;
@@ -81,32 +82,33 @@ const BROKERAGE_VARIANTS: Template["variant"][] = [
   "brokerage_breakfast_invite",
 ];
 
+function extractFirstEmail(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const match = value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+  return match?.[0]?.trim().toLowerCase() || null;
+}
+
 async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
   if (kind === "developers") {
-    const { data } = await (supabase as any)
-      .from("crm_developer_registry")
-      .select("id, developer_name, developer_email, logo_url, status, country, website, source")
-      .order("developer_name")
-      .limit(2000);
-    const mapped = (data ?? []).map((r: any) => ({
+    const { data, error } = await (supabase as any)
+      .from("developers")
+      .select("id, name, slug, admin_email, logo_url, website_url, registration_status, group_status, excel_order")
+      .or("is_hidden.is.null,is_hidden.eq.false")
+      .order("excel_order", { ascending: true, nullsFirst: false })
+      .order("name", { ascending: true })
+      .limit(1000);
+    if (error) throw error;
+
+    return (data ?? []).map((r: any) => ({
       id: String(r.id),
-      name: r.developer_name || "Developer",
-      email: r.developer_email || null,
-      meta: r.country || r.website || r.source || null,
+      catalogDeveloperId: String(r.id),
+      name: r.name || "Developer",
+      email: extractFirstEmail(r.admin_email),
+      meta: r.website_url || r.group_status || null,
       logoUrl: r.logo_url || null,
-      websiteUrl: r.website || null,
-      registrationStatus: r.status || "not_started",
+      websiteUrl: r.website_url || null,
+      registrationStatus: r.registration_status || "not_registered",
     }));
-    const deduped = new Map<string, Recipient>();
-    for (const r of mapped) {
-      const key = `${r.email || ""}::${r.name}`
-        .toLowerCase()
-        .replace(/\b(developers?|developments?|properties|property|realty|real\s*estate|group|llc|l\.?l\.?c)\b/g, "")
-        .replace(/[^a-z0-9@.]+/g, "") || r.id;
-      const prev = deduped.get(key);
-      if (!prev || (!prev.logoUrl && r.logoUrl) || (!prev.email && r.email)) deduped.set(key, r);
-    }
-    return Array.from(deduped.values()).sort((a, b) => a.name.localeCompare(b.name));
   }
   const { data } = await (supabase as any)
     .from("crm_brokerages")
