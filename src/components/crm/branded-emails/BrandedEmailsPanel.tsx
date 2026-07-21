@@ -16,6 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Mail, Search, Users, Send, Eye, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 export type BrandedAudienceKind = "developers" | "brokerages";
 
@@ -165,7 +166,10 @@ function stripHtml(html: string) {
     .trim();
 }
 
-function personalizeTemplate(html: string, sampleName = "Developer Team") {
+function personalizeTemplate(html: string, sampleName = "Developer Team", audienceKind: BrandedAudienceKind = "developers") {
+  const sender = SENDER_BY_KIND[audienceKind];
+  const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">jbj.ae</a>';
+  const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email}</a>`;
   return html
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
@@ -174,12 +178,12 @@ function personalizeTemplate(html: string, sampleName = "Developer Team") {
       .replace(/\{\{contact_full_name\}\}/g, sampleName)
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
-      .replace(/Jane Bou Jaoude/gi, SENDER_BY_KIND.developers.name)
-    .replace(/Founder\s*&\s*CEO/gi, SENDER_BY_KIND.developers.title)
-    .replace(/contact@jbj\.ae/gi, SENDER_BY_KIND.developers.email)
-    .replace(/CONTACT@JBJ\.ae/gi, SENDER_BY_KIND.developers.email)
-    .replace(/<b>JBJ<\/b>\.AE/g, "<a href=\"https://jbj.ae\" target=\"_blank\" rel=\"noreferrer\" style=\"color:#0a0a0a;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;\">jbj.ae</a>")
-    .replace(/>JBJ\.AE</g, "><a href=\"https://jbj.ae\" target=\"_blank\" rel=\"noreferrer\" style=\"color:#0a0a0a;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;\">jbj.ae</a><")
+      .replace(/Jane Bou Jaoude/gi, sender.name)
+    .replace(/Founder\s*&\s*CEO/gi, sender.title)
+    .replace(/\b(?:contact|info)@jbj\.ae\b/gi, senderMailLink)
+    .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
+    .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
+    .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
@@ -198,6 +202,38 @@ function initialsOf(name: string) {
     .slice(0, 2)
     .map((w) => w.charAt(0).toUpperCase())
     .join("") || "?";
+}
+
+function AudienceLogo({ recipient }: { recipient: Recipient }) {
+  const fallbackLogoUrl = getWebsiteLogoFallbackUrl(recipient.websiteUrl);
+  const logoUrl = isValidDeveloperLogoUrl(recipient.logoUrl) ? recipient.logoUrl : fallbackLogoUrl;
+  const hasLogo = isValidDeveloperLogoUrl(logoUrl);
+
+  if (hasLogo) {
+    return (
+      <DeveloperLogo
+        src={logoUrl}
+        alt={`${recipient.name} logo`}
+        name={recipient.name}
+        websiteUrl={recipient.websiteUrl}
+        variant="bare"
+        className="!size-9 !rounded-md !border-0 !bg-white !p-1.5 shadow-none ring-1 ring-[#064E3B]/15"
+      />
+    );
+  }
+
+  return (
+    <span
+      className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md border-0 shadow-none ring-1 ring-[#064E3B]/20"
+      style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" }}
+      aria-label={`${recipient.name} logo pending`}
+      title={recipient.name}
+    >
+      <span className="text-[10px] font-black leading-none text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+        {initialsOf(recipient.name)}
+      </span>
+    </span>
+  );
 }
 
 export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) {
