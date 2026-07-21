@@ -528,7 +528,6 @@ export function useProjects() {
  *            the full dataset shortly after.
  */
 export function useProjectsListing() {
-  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["projects-listing"],
     staleTime: 10 * 60 * 1000,
