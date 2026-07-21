@@ -172,6 +172,13 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email}</a>`;
   const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
   return html
+    .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
+      [data-jbj-contact-note], [data-jbj-contact-note] *, [data-jbj-contact-note] a {
+        color:#0a0a0a !important;
+        -webkit-text-fill-color:#0a0a0a !important;
+        opacity:1 !important;
+      }
+    </style>`)
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
       .replace(/\{\{salutation\}\}/g, sampleName)
@@ -190,6 +197,7 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
+    .replace(/<div([^>]*background:#FAF5EA[^>]*)>/gi, '<div data-jbj-contact-note="true"$1 style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">')
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
@@ -215,7 +223,9 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
   const logoUrl = isValidDeveloperLogoUrl(recipient.logoUrl) ? recipient.logoUrl : fallbackLogoUrl;
   const hasLogo = isValidDeveloperLogoUrl(logoUrl);
 
-  if (hasLogo) {
+  const hasVerifiedStoredLogo = isValidDeveloperLogoUrl(recipient.logoUrl);
+
+  if (hasLogo && hasVerifiedStoredLogo) {
     return (
       <DeveloperLogo
         src={logoUrl}
@@ -236,7 +246,7 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
       aria-label={`${recipient.name} logo pending`}
       title={recipient.name}
     >
-      <span className="text-[10px] font-black leading-none" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
+      <span className="text-[10px] font-black leading-none allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
         {initialsOf(recipient.name)}
       </span>
     </span>
