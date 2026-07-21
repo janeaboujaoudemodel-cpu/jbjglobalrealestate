@@ -37,6 +37,12 @@ type Template = {
   category: string | null;
 };
 
+const DEVELOPER_SENDER = {
+  name: "Amelia",
+  title: "Head of Business Development",
+  email: "contact@jbj.ae",
+};
+
 const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
   developers: {
     name: "Amelia",
@@ -48,12 +54,6 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
     title: "Brokerage Relations",
     email: "info@jbj.ae",
   },
-};
-
-const DEVELOPER_SENDER = {
-  name: "Amelia",
-  title: "Head of Business Development",
-  email: "contact@jbj.ae",
 };
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
@@ -178,8 +178,8 @@ function personalizeTemplate(html: string, sampleName = "Developer Team") {
     .replace(/Founder\s*&\s*CEO/gi, SENDER_BY_KIND.developers.title)
     .replace(/contact@jbj\.ae/gi, SENDER_BY_KIND.developers.email)
     .replace(/CONTACT@JBJ\.ae/gi, SENDER_BY_KIND.developers.email)
-    .replace(/\bJBJ\.AE\b/g, "jbj.ae")
-    .replace(/jbj\.ae/gi, "<a href=\"https://jbj.ae\" target=\"_blank\" rel=\"noreferrer\" style=\"color:#0a0a0a;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;\">jbj.ae</a>")
+    .replace(/<b>JBJ<\/b>\.AE/g, "<a href=\"https://jbj.ae\" target=\"_blank\" rel=\"noreferrer\" style=\"color:#0a0a0a;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;\">jbj.ae</a>")
+    .replace(/>JBJ\.AE</g, "><a href=\"https://jbj.ae\" target=\"_blank\" rel=\"noreferrer\" style=\"color:#0a0a0a;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;\">jbj.ae</a><")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
