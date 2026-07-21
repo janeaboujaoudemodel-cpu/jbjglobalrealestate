@@ -170,8 +170,8 @@ function stripHtml(html: string) {
 
 function personalizeTemplate(html: string, sampleName = "Developer Team", audienceKind: BrandedAudienceKind = "developers") {
   const sender = SENDER_BY_KIND[audienceKind];
-  const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">jbj.ae</a>';
-  const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email}</a>`;
+  const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
+  const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
   const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
   return html
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
@@ -199,6 +199,7 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
+    .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${sampleName}`)
     .replace(/<div([^>]*style=(['"])(?=[^'"]*background:#FAF5EA)([^'"]*)\2[^>]*)>/gi, (match, attrs) => {
       const withMarker = attrs.includes("data-jbj-contact-note") ? attrs : ` data-jbj-contact-note="true"${attrs}`;
       return `<div${withMarker.replace(/style=(['"])([^'"]*)\1/i, (_styleMatch, quote, styleValue) => `style=${quote}${styleValue};color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;${quote}`)}>`;
