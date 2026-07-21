@@ -1,76 +1,48 @@
-# Backend Rebuild Plan — Enrichment, Developer Profile, CRM Quick-Add
+# Hub Hardening Plan — no half-done batches
 
-Scope is large. I'll batch it into four phases, all landing in the emerald Hub shell with white-on-emerald contrast, no gold/champagne, no highlight halos, no page redirects.
+Each phase ends with a Playwright screenshot before I move to the next.
 
-## Phase 1 — Enrichment Review page (card-by-card rebuild)
+## Phase 1 — Contrast + layout quick locks (fastest, most visible)
+1. `REGISTERED` pill: force `#FFFFFF` text on emerald (kill the black override that's leaking back in).
+2. Broker table `STATUS` column: pills like "imported" must be **one line** (whitespace-nowrap, min-width, no wrap).
+3. Kill remaining hover-grow on the `+ Add` broker button and the two portal launcher buttons.
+4. Audience dropdown rows without logos: fall back to initials-on-emerald tile (no white empty squares).
 
-Problems observed:
-- Emerald pills (DEVELOPER / PENDING / Approve) render black text on emerald.
-- Raw JSON (custom_fields) leaking as unformatted HTML/text inside cards.
-- Pending/Approve counters mismatched; duplicate suggestion rows for the same source.
-- Layout inconsistent, background highlight halos behind cards.
+## Phase 2 — Data integrity (stop fake numbers)
+1. Remove the "Updated brokers: 3" stat entirely until a real update event exists — no seeded/fake counts anywhere.
+2. Audit stat cards on Brokerage Portal + Developer Portal, remove any counts not backed by a real row-change timestamp.
+3. Re-import broker DB fields that are being dropped on ingest: **company name, broker type, broker number** — fix the DLD ingest mapping so nothing is truncated.
 
-Fix:
-- Rewrite `EnrichmentReviewPage.tsx` + `EnrichmentSuggestionCard.tsx`:
-  - Header row: entity badge (DEVELOPER), model chip, status pill — all `bg-emerald-900 text-white` with `!important` locks.
-  - Deduplicate by `(entity_id, field_name)`, keep newest suggestion only.
-  - Render JSON fields via a `<FieldDiff>` component: labeled key/value rows, no raw braces. Long text truncates to 6 lines with expand.
-  - Reject / Approve buttons: emerald filled + emerald outline, both white text, matched height.
-  - Remove card `bg-muted` halo; use flat `bg-white border border-emerald-900/10`.
-- Fix Pending count = suggestions with status='pending' AND fill_count > 0. "Approve (fill 0)" rows get filtered out or show "Nothing to fill" state.
+## Phase 3 — DLD sync actually working
+1. Debug why "Pull now" returns empty (edge function logs + response shape).
+2. Wire the daily cron so new brokerages + brokers auto-append without me clicking Pull.
+3. Only toast success when `insertedCount > 0` (already partly done — verify).
 
-## Phase 2 — Developer Profile rebuild
+## Phase 4 — Email templates (developer registration + follow-up)
+1. Rewrite **Developer · Registration Follow-up** template:
+   - Shorter subject, no giant "Reply to Confirm" button.
+   - Ask developer to **share the signed contract**.
+   - Remove "please reply with info@jbj.ae on CC" line — keep only `contact@jbj.ae`.
+   - Footer website `JBJ.AE` uppercase + clickable `https://jbj.ae`.
+2. Match Registration + Follow-up visual structure (same header, same signature block, same footer).
+3. Logo rule:
+   - Emails **to developers** → JBJ logo in header.
+   - Emails **to brokerages** (Citi outreach) → Citi Developers logo in header.
+4. Verify with a real test send to `infoo.jane@gmail.com` for both templates.
 
-Problems: Contacts & Reps tab is minimal; no live preview; no filter/search on reps; contract upload missing; highlight halos behind "Developer contact" / "Registered sales representatives".
+## Phase 5 — Right-side detail drawer
+1. Clicking a row in the broker table (name / brokerage / contact) opens a **right-side Sheet** with full details.
+2. Actions in drawer: Call, WhatsApp, Email, "Draft email with AI" (uses existing gateway).
+3. No page navigation, no reload.
 
-Fix:
-- **Live Preview strip** at top of profile: pill row linking to public pages:
-  - Developer page · Projects · Emirates · Areas · Communities · Locations
-  - Each opens in a new tab to the front-end route (read-only preview).
-- **Portfolio tab** — each project card gets a "View public page ↗" link to `/projects/:slug`.
-- **Contacts & Reps rebuild** (`DeveloperRepsSection.tsx`):
-  - Add-rep dialog inline (no redirect): name, position, country dial-code dropdown, phone, WhatsApp, email, nationality, languages (multi), notes, photo upload.
-  - Filter bar: search + facets (position, country, nationality, language).
-  - List view with avatar, contact chips, edit/delete inline.
-- Remove `bg-muted/bg-accent/50` halos from section wrappers globally in `crmShell.css`.
+## Phase 6 — Broker intake form (replace "coming next time")
+1. Real form on `+ Add broker` with fields:
+   - Name, phone (country code), email, brokerage
+   - Specialty: Off-plan / Secondary / Both
+   - RERA certified: yes/no + RERA card upload (Supabase storage)
+   - RERA expiry date → auto-flag broker as `license_expired` when past
+2. Nightly cron marks brokers with expired RERA as inactive.
 
-## Phase 3 — Enrichment content extraction
+---
 
-- Extend `extract-developer-content` edge function to crawl developer site's e-catalogue pages (Amra, Allura, Arya, Aveline, Agua) per developer.
-- For each project found: create/update `projects` row with location, emirate, community, area, handover, units, brochure links.
-- Auto-link projects → developer, emirate, area, community entities so profile cards show correct list (fixes "wrong projects for Citi").
-- Download any PDF brochures/materials to `developer-brochures` bucket; run text extract into `project_documents` for AI enrichment.
-- Dedupe projects by `(developer_id, normalized_name)` — resolves duplicate project cards.
-
-## Phase 4 — CRM inline quick-add
-
-Problem: "Register Meeting / Deal / Event" opens new page and redirects to CRM.
-
-Fix:
-- Replace the header CTA with a `QuickAddPopover` (radix Popover), same pattern as the "+" button:
-  - Options: Log Call · Meeting · Task · Deal · Event · Note.
-  - Each opens an inline `<Sheet>` on the same page with the form, saves via existing mutations, no navigation.
-- Same component reused across CRM, JBJ Hub, Developer profile, Broker profile.
-
-## Contrast / structural guarantees (applied in all phases)
-
-- `crmShell.css`: 
-  - `.emerald-pill, [data-status], [data-badge]` → `bg-emerald-900 !text-white`.
-  - Remove `background-color` from `.card-halo, [data-card-bg]` wrappers.
-  - Enforce `#064E3B` (not tailwind `green-*`) across every button variant used in Hub.
-- No route inside Owner Backend may `navigate()` to a champagne path; add router guard.
-
-## Verification
-
-Playwright E2E on:
-1. `/owner/enrichment-review` — screenshot each card state (pending, approve>0, approve=0, rejected).
-2. `/owner/developer-profiles/citi-developers` — screenshot Overview, Portfolio (live links), Contacts & Reps (add + filter).
-3. `/owner/crm` — click Register Meeting → confirm popover opens same page, submit meeting, confirm no navigation.
-4. Assert computed color of every status pill = `rgb(255,255,255)` on emerald bg.
-
-All screenshots saved to `/tmp/browser/rebuild/` and reviewed before I report back.
-
-## Out of scope for this pass
-
-- Zoho-mirrored pages (untouched per prior rule).
-- Front-end public pages (only linked to, not restyled).
+**Question for you before I start:** should I run Phases 1 → 6 in order and screenshot each before moving on, or do you want me to jump straight to Phase 3 (DLD sync) and Phase 4 (email templates) first since those are the ones blocking real work today?
