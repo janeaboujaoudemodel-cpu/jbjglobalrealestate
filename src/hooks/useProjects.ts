@@ -549,7 +549,8 @@ export function useProjectsListing() {
           deleted_at,
         developer_id,
         developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url, logo_bg_color),
-        community:communities(id, name, slug)
+        community:communities(id, name, slug),
+        images:project_images(id, image_url, alt_text, display_order)
       `;
 
       const baseQuery = () =>
@@ -560,24 +561,12 @@ export function useProjectsListing() {
           .or("listing_kind.is.null,listing_kind.neq.leasing")
           .is("deleted_at", null);
 
-      // Fast first paint: render complete publishable cards first, then hydrate
-      // the full catalogue in the background. This prevents the grid from
-      // opening blank while 1,600+ rows are fetched serially.
-      const { data: firstRows, error: firstError } = await baseQuery()
-        .not("price_from", "is", null)
-        .not("description", "is", null)
-        .order("is_featured", { ascending: false })
-        .order("is_premium", { ascending: false })
-        .order("updated_at", { ascending: false })
-        .limit(90);
-
-      if (firstError) throw firstError;
-
-      const firstResult = sortPublicProjectsForListing(
-        dedupePublicProjects(((firstRows ?? []) as unknown as UnifiedProject[]).map((row) => ({ ...row, images: [] }))),
-      );
-
-      void (async () => {
+      // Fetch the full catalogue in bounded pages so filtering/search operates
+      // on the complete dataset from the first render. Previously a 90-row
+      // first-paint query returned early while a background fetch tried to
+      // hydrate the cache, but any filter/search applied in that window only
+      // matched within those 90 rows, and errors in the background pass left
+      // users stuck on the shrunken set.
       const PAGE_SIZE = 1000;
       const MAX_PAGES = 10; // hard ceiling = 10,000 rows safety net
       const all: unknown[] = [];
@@ -589,22 +578,15 @@ export function useProjectsListing() {
           .order("created_at", { ascending: false })
           .range(from, to);
 
-        if (error) return;
+        if (error) throw error;
         const rows = data ?? [];
         all.push(...rows);
         if (rows.length < PAGE_SIZE) break;
       }
 
-        const fullResult = sortPublicProjectsForListing(
-          dedupePublicProjects((all as unknown as UnifiedProject[]).map((row) => ({ ...row, images: [] }))),
-        );
-        if (fullResult.length >= firstResult.length) {
-          queryClient.setQueryData(["projects-listing"], fullResult);
-        }
-      })();
-
-      return firstResult;
-
+      return sortPublicProjectsForListing(
+        dedupePublicProjects(all as unknown as UnifiedProject[]),
+      );
     },
   });
 }
