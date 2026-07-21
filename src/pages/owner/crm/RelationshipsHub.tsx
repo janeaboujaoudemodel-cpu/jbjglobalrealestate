@@ -271,8 +271,8 @@ export default function RelationshipsHub() {
         {/* DLD scraper health — red banner if the nightly scrape fails or goes stale. */}
         <DldSyncStatusAlert />
 
-        {/* Segment tabs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        {/* Segment tabs — emerald ombré, white ink locked */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {SEGMENTS.map((s) => {
             const Icon = s.icon;
             const active = seg === s.key;
@@ -281,39 +281,67 @@ export default function RelationshipsHub() {
                 key={s.key}
                 type="button"
                 onClick={() => { setSeg(s.key); setStatusFilter("all"); setNewTodayOnly(false); }}
-                className="rounded-lg border p-3 text-left transition-colors"
+                data-emerald-icon-lock={active ? "true" : undefined}
+                className="group relative rounded-xl p-4 text-left transition-all overflow-hidden min-h-[112px]"
                 style={{
-                  borderColor: active ? "#064E3B" : "rgba(184,149,85,0.35)",
-                  background: active ? "#064E3B" : "#FFFFFF",
-                  color: active ? "#FFFFFF" : "#0F1A16",
+                  border: active ? "1px solid rgba(255,255,255,0.35)" : "1px solid rgba(6,78,59,0.18)",
+                  background: active
+                    ? "linear-gradient(180deg,#064E3B 0%,#042c1c 60%,#010806 100%)"
+                    : "#FFFFFF",
+                  boxShadow: active
+                    ? "0 8px 24px -12px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12)"
+                    : "0 1px 2px rgba(15,23,42,0.05)",
                 }}
               >
-                <div className="flex items-center gap-2">
-                  <Icon className="h-4 w-4" />
-                  <span className="text-sm font-black tracking-tight">{s.label}</span>
+                <div className="flex items-center gap-2" style={{ color: active ? "#FFFFFF" : "#064E3B" }}>
+                  <Icon className="h-4 w-4 shrink-0" style={{ color: active ? "#FFFFFF" : "#064E3B" }} />
+                  <span
+                    className="text-[13px] font-black tracking-tight whitespace-nowrap"
+                    style={{ color: active ? "#FFFFFF" : "#0F1A16", fontFamily: "'Cormorant Garamond', serif", fontSize: "18px", lineHeight: 1.1 }}
+                  >
+                    {s.label}
+                  </span>
                 </div>
-                <p className="text-[11px] mt-1 leading-snug opacity-80">{s.sub}</p>
+                <p
+                  className="text-[11.5px] mt-2 leading-snug"
+                  style={{ color: active ? "rgba(255,255,255,0.86)" : "#4B5D55" }}
+                >
+                  {s.sub}
+                </p>
               </button>
             );
           })}
         </div>
 
         {/* KPI strip */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           {[
-            { k: "total",           label: "Total",            v: kpis.data?.total ?? 0,           tone: "#0F1A16" },
-            { k: "untouched",       label: "Untouched",        v: kpis.data?.untouched ?? 0,       tone: "#7A5C1E" },
-            { k: "needs_follow_up", label: "Needs follow-up",  v: kpis.data?.needs_follow_up ?? 0, tone: "#B45309" },
-            { k: "briefing_booked", label: "Briefing booked",  v: kpis.data?.briefing_booked ?? 0, tone: "#1D4ED8" },
-            { k: "registered",      label: "Registered",       v: kpis.data?.registered ?? 0,      tone: "#064E3B" },
-            { k: "new_today",       label: "New from DLD (24h)", v: kpis.data?.new_today ?? 0,     tone: "#B89555" },
+            { k: "total",           label: "Total",              v: kpis.data?.total ?? 0 },
+            { k: "untouched",       label: "Untouched",          v: kpis.data?.untouched ?? 0 },
+            { k: "needs_follow_up", label: "Needs follow-up",    v: kpis.data?.needs_follow_up ?? 0 },
+            { k: "briefing_booked", label: "Briefing booked",    v: kpis.data?.briefing_booked ?? 0 },
+            { k: "registered",      label: "Registered",         v: kpis.data?.registered ?? 0 },
+            { k: "new_today",       label: "New from DLD (24h)", v: kpis.data?.new_today ?? 0 },
           ].map((s) => (
-            <Card key={s.k} className="bg-white border-[#B89555]/30 p-3">
-              <p className="text-[10px] uppercase tracking-widest text-[#4B5D55] font-black">{s.label}</p>
-              <p className="mt-1 font-[Cormorant_Garamond] text-2xl font-black leading-none" style={{ color: s.tone }}>
+            <div
+              key={s.k}
+              className="rounded-xl p-3"
+              style={{
+                background: "#FFFFFF",
+                border: "1px solid rgba(6,78,59,0.15)",
+                boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
+              }}
+            >
+              <p className="text-[10px] uppercase tracking-widest font-black" style={{ color: "#4B5D55" }}>
+                {s.label}
+              </p>
+              <p
+                className="mt-1 text-2xl font-black leading-none"
+                style={{ color: "#064E3B", fontFamily: "'Cormorant Garamond', serif" }}
+              >
                 {kpis.isLoading ? "…" : s.v.toLocaleString()}
               </p>
-            </Card>
+            </div>
           ))}
         </div>
 
