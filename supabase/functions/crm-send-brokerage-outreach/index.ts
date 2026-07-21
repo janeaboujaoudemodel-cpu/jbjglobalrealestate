@@ -352,7 +352,7 @@ serve(async (req: Request) => {
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
       : [...brkActiveCc];
     // Drop any self-CC (From == CC would just duplicate the message).
-    const SECONDARY_CC = FORCED_FROM_EMAIL;
+    const SECONDARY_CC = FORCED_ENVELOPE_FROM;
     const filteredCc = ccList.filter((c) => c.toLowerCase() !== SECONDARY_CC.toLowerCase());
     ccList.length = 0;
     ccList.push(...filteredCc);
