@@ -87,12 +87,12 @@ function buildEmlFile(opts: {
 
 type SendLogEntry = {
   id: string;
-  recipient_email: string;
-  template_name: string | null;
+  to_email: string;
+  template: string | null;
   status: string;
   subject: string | null;
   created_at: string;
-  error_message: string | null;
+  error: string | null;
 };
 
 export function BrandedEmailComposer() {
