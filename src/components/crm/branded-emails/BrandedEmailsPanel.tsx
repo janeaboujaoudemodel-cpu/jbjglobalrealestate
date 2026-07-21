@@ -343,6 +343,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       return `<div${withMarker.replace(/style=(['"])([^'"]*)\1/i, (_styleMatch, quote, styleValue) => `style=${quote}${styleValue};color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;${quote}`)}>`;
     })
     .replace(/City Developer/gi, "CITI Developers")
+    .replace(/background:#064E3B/gi, "background:#064E3B;background-image:linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
