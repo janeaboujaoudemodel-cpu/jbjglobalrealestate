@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Send } from "lucide-react";
 import BrandedEmailsPanel, { preloadBrandedEmailsData, type BrandedAudienceKind } from "./branded-emails/BrandedEmailsPanel";
 import jbjMonogramCropped from "@/assets/jbj-monogram-cropped.png";
+import citiDevelopersLogo from "@/assets/citi-developers-logo.png";
 
 type Variant = "owner" | "broker" | "developer";
 
