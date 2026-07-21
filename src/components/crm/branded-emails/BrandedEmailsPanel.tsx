@@ -230,7 +230,13 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
   const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
   const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
-  return html
+  const brandHeader = buildBrandHeaderHtml(audienceKind);
+  const htmlWithBrand = /data-jbj-brand-header="true"/.test(html)
+    ? html
+    : (html.match(/<body[^>]*>/i)
+        ? html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>${brandHeader}`)
+        : brandHeader + html);
+  return htmlWithBrand
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
       [data-jbj-contact-note], [data-jbj-contact-note] *, [data-jbj-contact-note] a {
         color:#0a0a0a !important;
