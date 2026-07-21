@@ -1930,6 +1930,28 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
     text-shadow: none !important;
   }
 
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"],
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:hover,
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:focus,
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"] :is(span, svg, path, line, polyline, circle, rect) {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"],
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:hover,
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:focus,
+  [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"] :is(span, svg, path, line, polyline, circle, rect) {
+    color: #064E3B !important;
+    stroke: #064E3B !important;
+    -webkit-text-fill-color: #064E3B !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
   /* ============================================================
    * GLOBAL DESIGN SYSTEM - JBJ GLOBAL REAL ESTATE
    * LOCKED - Applies to Front-End, Back-End, CRM, Employee Hub
@@ -36977,4 +36999,64 @@ html body [data-branded-email-panel="true"] [data-branded-email-live-action="tru
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   opacity: 1 !important;
+}
+
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"],
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:hover,
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:focus,
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:active,
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:hover :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:focus :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"],
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:hover,
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:focus,
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:active,
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:hover :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:focus :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+  opacity: 1 !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"],
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:hover,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:focus,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:active,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:hover :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:focus :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"],
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:hover,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:focus,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:active,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:hover :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:focus :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+  opacity: 1 !important;
+  transform: none !important;
+  scale: 1 !important;
 }
