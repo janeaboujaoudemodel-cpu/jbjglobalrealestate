@@ -804,13 +804,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     Template: <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span>
                   </p>
                 </div>
-                <ScrollArea className="h-[min(68vh,720px)]">
-                  <div
-                    data-branded-email-preview-body="true"
-                    className="p-3 md:p-5 prose prose-sm max-w-none text-[#0F1A16] [&_*]:!max-w-full [&_table]:!w-full [&_table]:!max-w-full [&_td]:!max-w-full [&_td]:!box-border [&_a]:!text-[#0a0a0a] [&_a]:!font-bold [&_a]:underline [&_a]:decoration-[#B89555]"
-                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind) }}
-                  />
-                </ScrollArea>
+                <iframe
+                  title="Branded email preview"
+                  data-branded-email-preview-iframe="true"
+                  sandbox=""
+                  className="w-full block"
+                  style={{ height: "min(68vh, 720px)", border: "0", background: "#FDFBF7" }}
+                  srcDoc={personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind)}
+                />
               </div>
             ) : (
               <div className="p-6 text-center text-[#4B5D55] border border-dashed border-emerald-900/20 rounded-lg">
