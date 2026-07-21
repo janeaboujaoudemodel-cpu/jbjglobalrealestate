@@ -3,6 +3,9 @@
 // since last_sync_at, threads them, deduplicates, and writes into
 // owner_comm_threads + owner_comm_messages.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { generateText, Output } from "npm:ai";
+import { createOpenAICompatible } from "npm:@ai-sdk/openai-compatible";
+import { z } from "npm:zod";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
 import { decryptCredential } from "../_shared/credentialCrypto.ts";
 
@@ -13,6 +16,67 @@ const corsHeaders = {
 };
 
 const GATEWAY_BASE = "https://connector-gateway.lovable.dev";
+
+const ReplyAnalysisSchema = z.object({
+  summary: z.string().optional(),
+  registrationStatus: z.string().optional(),
+  registrationLink: z.string().optional(),
+  requestedDocuments: z.array(z.string()).optional(),
+  nextAction: z.string().optional(),
+  draftResponse: z.string().optional(),
+});
+
+function firstUrl(text: string) {
+  return text.match(/https?:\/\/[^\s<>")]+/i)?.[0] ?? "";
+}
+
+function cleanAiJson(text: string) {
+  const cleaned = (text || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+  const s = cleaned.indexOf("{");
+  const e = cleaned.lastIndexOf("}");
+  if (s === -1 || e === -1) return null;
+  try { return JSON.parse(cleaned.slice(s, e + 1)); } catch { return null; }
+}
+
+async function analyzeDeveloperReply(args: { subject: string; snippet: string }) {
+  const key = Deno.env.get("LOVABLE_API_KEY");
+  const fallbackLink = firstUrl(`${args.subject}\n${args.snippet}`);
+  if (!key) return fallbackLink ? { registrationLink: fallbackLink } : null;
+
+  const gateway = createOpenAICompatible({
+    name: "lovable",
+    baseURL: "https://ai.gateway.lovable.dev/v1",
+    headers: { "Lovable-API-Key": key, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+  });
+
+  const prompt = `Analyze this inbound reply from a real-estate developer about broker/agency registration.\n\nSubject: ${args.subject}\n\nMessage:\n${args.snippet.slice(0, 6000)}\n\nReturn: summary, registrationStatus, registrationLink, requestedDocuments, nextAction, draftResponse. registrationStatus should be one of: registered, pending_application, documents_required, under_review, rejected, not_started. If they say JBJ is already registered, use registered. If they provide a registration form/link, include the link and use pending_application unless already registered. Keep draftResponse ready for Jane to send.`;
+
+  try {
+    const { output } = await generateText({
+      model: gateway("google/gemini-3-flash-preview"),
+      output: Output.object({ schema: ReplyAnalysisSchema }),
+      prompt,
+    });
+    return output;
+  } catch (error) {
+    const raw = error && typeof error === "object" && "text" in error ? String((error as { text?: unknown }).text || "") : "";
+    const parsed = cleanAiJson(raw);
+    const validated = ReplyAnalysisSchema.safeParse(parsed);
+    if (validated.success) return validated.data;
+    return fallbackLink ? { registrationLink: fallbackLink } : null;
+  }
+}
+
+function normalizeRegistrationStatus(value: unknown) {
+  const v = String(value || "").toLowerCase().trim();
+  if (["registered", "pending_application", "documents_required", "under_review", "rejected", "not_started"].includes(v)) return v;
+  if (/already\s+registered|approved|active/.test(v)) return "registered";
+  if (/document/.test(v)) return "documents_required";
+  if (/review/.test(v)) return "under_review";
+  if (/reject|declin/.test(v)) return "rejected";
+  if (/link|form|apply|application/.test(v)) return "pending_application";
+  return null;
+}
 
 /* ─── Gmail helpers ─── */
 async function gmailListMessages(lovableKey: string, connectorKey: string, sinceEpoch: number) {
@@ -111,7 +175,7 @@ async function markRelationshipReply(
   const email = args.fromEmail.trim().toLowerCase();
   if (!email || !email.includes("@")) return;
 
-  const logReply = async (entityType: string, entityId: string, label: string) => {
+  const logReply = async (entityType: string, entityId: string, label: string, analysis?: z.infer<typeof ReplyAnalysisSchema> | null) => {
     await admin.from("crm_relationship_email_log").insert({
       owner_id: args.userId,
       entity_type: entityType,
@@ -123,9 +187,9 @@ async function markRelationshipReply(
       to_emails: [],
       cc_emails: [],
       subject: args.subject,
-      body_snippet: args.snippet || `Reply received from ${label}`,
+      body_snippet: analysis?.summary || args.snippet || `Reply received from ${label}`,
       detected_status: "responded",
-      detected_signal: "email_reply",
+      detected_signal: analysis?.registrationLink ? "registration_link_extracted" : "email_reply",
       sent_at: args.receivedAt,
     }).then(() => {}, () => {});
   };
@@ -158,15 +222,25 @@ async function markRelationshipReply(
     .maybeSingle();
 
   if (developer?.id) {
+    const analysis = await analyzeDeveloperReply({ subject: args.subject, snippet: args.snippet });
+    const nextStatus = normalizeRegistrationStatus(analysis?.registrationStatus) || (analysis?.registrationLink ? "pending_application" : null);
+    const requestedDocs = Array.isArray(analysis?.requestedDocuments) && analysis.requestedDocuments.length
+      ? ` Requested documents: ${analysis.requestedDocuments.join(", ")}.`
+      : "";
+    const nextAction = [analysis?.nextAction, analysis?.draftResponse ? `Draft reply: ${analysis.draftResponse}` : ""].filter(Boolean).join("\n\n") || null;
     await admin.from("crm_developer_registry").update({
       last_response_at: args.receivedAt,
       response_count: Number(developer.response_count || 0) + 1,
       last_interaction_at: args.receivedAt,
+      ...(nextStatus ? { status: nextStatus } : {}),
+      ...(analysis?.registrationLink ? { registration_url: analysis.registrationLink } : {}),
+      ...(analysis?.summary ? { ai_summary: `${analysis.summary}${requestedDocs}`.trim(), ai_generated_at: new Date().toISOString() } : {}),
+      ...(nextAction ? { ai_next_action: nextAction } : {}),
       outreach_stage: ["not_contacted", "attempted"].includes(String(developer.outreach_stage || ""))
         ? "engaged"
         : developer.outreach_stage,
     }).eq("id", developer.id);
-    await logReply("developer_registry", developer.id, developer.developer_name || email);
+    await logReply("developer_registry", developer.id, developer.developer_name || email, analysis);
   }
 }
 

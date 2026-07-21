@@ -495,16 +495,16 @@ serve(async (req: Request) => {
         : CITI_BRAND_HEADER + html;
     }
 
-    // Resend's domain-level click tracking rewrites every <a href> through a
-    // tracking redirect, which breaks tel:, mailto: and https://wa.me/* on
-    // mobile (the OS dialer / WhatsApp handler never fires). Inject the
-    // per-link opt-out attribute `data-no-link-tracking` on every anchor
-    // whose href is one of these schemes so Resend ships the original href.
+    // Resend click tracking can rewrite deep links through a browser redirect,
+    // which breaks mobile handlers for phone, WhatsApp, Maps and Calendar.
+    // Add both supported opt-out attributes so the original href ships intact.
     html = html.replace(
-      /<a\b([^>]*\bhref\s*=\s*["'](?:tel:|mailto:|https:\/\/wa\.me\/|https:\/\/api\.whatsapp\.com\/|whatsapp:)[^"']*["'][^>]*)>/gi,
+      /<a\b([^>]*\bhref\s*=\s*["'](?:tel:|mailto:|https:\/\/(?:wa\.me|api\.whatsapp\.com|www\.google\.com\/maps|maps\.app\.goo\.gl|calendar\.app\.google|calendar\.google\.com)\/|whatsapp:)[^"']*["'][^>]*)>/gi,
       (full, attrs) => {
-        if (/\bdata-no-link-tracking\b/i.test(attrs)) return full;
-        return `<a${attrs} data-no-link-tracking="true">`;
+        let nextAttrs = attrs;
+        if (!/\bdata-no-link-tracking\b/i.test(nextAttrs)) nextAttrs += ' data-no-link-tracking="true"';
+        if (!/\bdata-disable-tracking\b/i.test(nextAttrs)) nextAttrs += ' data-disable-tracking="true"';
+        return `<a${nextAttrs}>`;
       },
     );
     const subjectRendered = renderTemplate(template.subject, varsMap);

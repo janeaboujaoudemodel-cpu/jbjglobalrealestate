@@ -80,6 +80,7 @@ const CITI_WHATSAPP_URL = "https://wa.me/971547167107";
 const CITI_WEBSITE_URL = "https://citideveloper.com";
 const CITI_MAP_URL = "https://www.google.com/maps/search/?api=1&query=CITI%20Developers%20Sales%20Gallery%20Dubai";
 const CITI_OFFICE_LABEL = "CITI Developers Sales Gallery";
+const CALENDAR_PLACEHOLDER_URL = "https://calendar.google.com/calendar/appointments/schedules/REPLACE_WITH_JANE_PUBLIC_BOOKING_LINK";
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
 
@@ -271,8 +272,21 @@ function stripHtml(html: string) {
     .trim();
 }
 
+function normalizeTrackedLinks(html: string) {
+  return html.replace(
+    /<a\b([^>]*\bhref\s*=\s*["'](?:tel:|mailto:|https:\/\/(?:wa\.me|api\.whatsapp\.com|www\.google\.com\/maps|maps\.app\.goo\.gl|calendar\.app\.google|calendar\.google\.com)\/|whatsapp:)[^"']*["'][^>]*)>/gi,
+    (full, attrs) => {
+      let nextAttrs = attrs;
+      if (!/\bdata-no-link-tracking\b/i.test(nextAttrs)) nextAttrs += ' data-no-link-tracking="true"';
+      if (!/\bdata-disable-tracking\b/i.test(nextAttrs)) nextAttrs += ' data-disable-tracking="true"';
+      return `<a${nextAttrs}>`;
+    },
+  );
+}
+
 function personalizeTemplate(html: string, sampleName = "Recipient Developer Name", audienceKind: BrandedAudienceKind = "developers", bookingUrl = "") {
   const sender = SENDER_BY_KIND[audienceKind];
+  const safeBookingUrl = bookingUrl.trim() || CALENDAR_PLACEHOLDER_URL;
   const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
   const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
@@ -282,7 +296,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     : (html.match(/<body[^>]*>/i)
         ? html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>${brandHeader}`)
         : brandHeader + html);
-  return htmlWithBrand
+  const personalized = htmlWithBrand
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
       [data-jbj-contact-note], [data-jbj-contact-note] *, [data-jbj-contact-note] a {
         color:#0a0a0a !important;
@@ -305,7 +319,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/\{\{project_name\}\}/g, "AMRA")
       .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
       .replace(/\{\{project_url\}\}/g, "https://citideveloper.com/e-catalogue/amra")
-      .replace(/\{\{booking_url\}\}/g, bookingUrl || "#")
+      .replace(/\{\{booking_url\}\}/g, safeBookingUrl)
       .replace(/\{\{owner_full_name\}\}/g, "Jane Bou Jaoude")
       .replace(/\{\{developer_phone_display\}\}/g, CITI_PHONE_DISPLAY)
       .replace(/\{\{developer_phone_tel\}\}/g, CITI_PHONE_TEL)
@@ -345,6 +359,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     .replace(/City Developer/gi, "CITI Developers")
     .replace(/background:#064E3B/gi, "background:#064E3B;background-image:linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+  return normalizeTrackedLinks(personalized);
 }
 
 function personalizeSubject(subject: string, sampleName = "Recipient Developer Name") {
@@ -438,6 +453,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [unlockedCitiIds, setUnlockedCitiIds] = useState<Set<string>>(new Set());
   const [previouslySentEmails, setPreviouslySentEmails] = useState<Set<string>>(new Set());
   const [bookingUrl, setBookingUrl] = useState("");
+  const [savingBookingUrl, setSavingBookingUrl] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -600,6 +616,34 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
   const selectAll = () => setSelectedIds(new Set(eligibleRecipients.map((r) => r.id)));
   const clearAll = () => setSelectedIds(new Set());
+
+  const handleSaveBookingUrl = async () => {
+    const normalized = bookingUrl.trim();
+    if (!/^https:\/\/(calendar\.app\.google|calendar\.google\.com)\//i.test(normalized)) {
+      toast.error("Paste Jane’s public Google Calendar booking link first.");
+      return;
+    }
+    if (/jbj\.ae|lovable\.dev|lovable\.app|auth-bridge/i.test(normalized)) {
+      toast.error("This is not a public Google Calendar booking link.");
+      return;
+    }
+    setSavingBookingUrl(true);
+    try {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      const userId = userData?.user?.id;
+      if (userError || !userId) throw new Error("Sign in required");
+      const { error } = await (supabase as any)
+        .from("crm_owner_settings")
+        .upsert({ owner_id: userId, google_calendar_booking_url: normalized }, { onConflict: "owner_id" });
+      if (error) throw error;
+      setBookingUrl(normalized);
+      toast.success("Google Calendar booking link saved.");
+    } catch (e: any) {
+      toast.error(`Calendar link save failed: ${e?.message || "unknown error"}`);
+    } finally {
+      setSavingBookingUrl(false);
+    }
+  };
 
   const handleSendTest = async () => {
     if (!selectedTemplate) {
@@ -1016,6 +1060,32 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <li><strong>Status logic:</strong> Sent campaigns are marked automatically; replies are matched by inbound email sync and bookings by Google Calendar sync.</li>
               </ul>
             </div>
+
+            {kind === "brokerages" && (
+              <div className="border border-emerald-900/15 rounded-lg p-4 bg-white">
+                <p className="text-xs text-[#4B5D55] uppercase tracking-wider font-semibold mb-2">Google Calendar booking link</p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Input
+                    type="url"
+                    value={bookingUrl}
+                    onChange={(e) => setBookingUrl(e.target.value)}
+                    placeholder="https://calendar.app.google/..."
+                    className="flex-1 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSaveBookingUrl}
+                    disabled={savingBookingUrl}
+                    data-no-contrast-guard="true"
+                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-black"
+                    style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: savingBookingUrl ? 0.65 : 1 }}
+                  >
+                    {savingBookingUrl ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
+                    Save
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className="border border-emerald-900/15 rounded-lg p-4 bg-white">
               <p className="text-xs text-[#4B5D55] uppercase tracking-wider font-semibold mb-2">Test send</p>
