@@ -195,7 +195,7 @@ export function BrandedEmailComposer() {
     try {
       const { data, error } = await (supabase as any)
         .from("email_send_log")
-        .select("id, recipient_email, template_name, status, subject, created_at, error_message")
+        .select("id, to_email, template, status, subject, created_at, error")
         .order("created_at", { ascending: false })
         .limit(50);
       if (error) throw error;
