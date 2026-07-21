@@ -60,9 +60,13 @@ export default function BrokeragePortal() {
       supabase.from("crm_brokerages" as any).select("id", { count: "exact", head: true }).is("deleted_at", null),
       supabase.from("crm_brokers" as any).select("id", { count: "exact", head: true }),
       supabase.from("crm_brokers" as any).select("id", { count: "exact", head: true }).or("database_source.not.is.null,original_filename.not.is.null,upload_source.not.is.null"),
-      supabase.from("crm_brokers" as any).select("id", { count: "exact", head: true }).not("updated_at", "is", null),
+      // Truthful "updated" count: only rows edited AFTER creation (>5s gap excludes seed/import churn).
+      supabase.rpc("count_truly_updated_brokers" as any).then(
+        (r: any) => ({ count: typeof r?.data === "number" ? r.data : 0, error: r?.error ?? null }),
+        () => ({ count: 0, error: null })
+      ),
     ]);
-    return { agencies: agencies.count ?? 0, brokers: brokers.count ?? 0, uploaded: uploaded.count ?? 0, updated: updated.count ?? 0 };
+    return { agencies: agencies.count ?? 0, brokers: brokers.count ?? 0, uploaded: uploaded.count ?? 0, updated: (updated as any).count ?? 0 };
   }});
 
   const visibleBrokerages = useMemo(() => {
