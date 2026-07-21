@@ -204,11 +204,12 @@ export default function PendingBrokerageImportsSection() {
       </div>
 
       <div className="mt-4 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] overflow-x-auto max-h-[520px] overflow-y-auto">
-        <table className="w-full min-w-[900px] text-sm">
+        <table className="w-full min-w-[1050px] text-sm">
           <thead className="sticky top-0 bg-[#EFE6D6] z-10">
             <tr className="text-left text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/70">
               <th className="px-3 py-2 w-10"></th>
-              <th className="px-3 py-2">Brokerage</th>
+              <th className="px-3 py-2">Brokerage (EN)</th>
+              <th className="px-3 py-2">Brokerage (AR)</th>
               <th className="px-3 py-2 whitespace-nowrap">Office #</th>
               <th className="px-3 py-2">Email</th>
               <th className="px-3 py-2 whitespace-nowrap">Phone</th>
@@ -217,9 +218,9 @@ export default function PendingBrokerageImportsSection() {
           </thead>
           <tbody>
             {pendingQ.isLoading ? (
-              <tr><td colSpan={6} className="px-4 py-6 text-center text-[#1A1A1A]/60">Loading pending imports…</td></tr>
+              <tr><td colSpan={7} className="px-4 py-6 text-center text-[#1A1A1A]/60">Loading pending imports…</td></tr>
             ) : visible.length === 0 ? (
-              <tr><td colSpan={6} className="px-4 py-8 text-center text-[#1A1A1A]/60">
+              <tr><td colSpan={7} className="px-4 py-8 text-center text-[#1A1A1A]/60">
                 {rows.length === 0 ? "No pending brokerages — all uploaded rows already exist in the directory." : "No matches for this search."}
               </td></tr>
             ) : visible.map((r) => (
@@ -236,9 +237,11 @@ export default function PendingBrokerageImportsSection() {
                     <Building2 className="size-4 text-[#064E3B] shrink-0" />
                     <span className="truncate max-w-[280px]" title={r.company_name}>{r.company_name}</span>
                   </span>
-                  {r.company_name_ar && (
-                    <div className="text-[11px] text-[#1A1A1A]/55 mt-0.5 truncate max-w-[280px]" dir="rtl">{r.company_name_ar}</div>
-                  )}
+                </td>
+                <td className="px-3 py-2 text-[#1A1A1A]" dir="rtl">
+                  <span className="truncate max-w-[260px] inline-block align-middle" title={r.company_name_ar || ""}>
+                    {r.company_name_ar || "—"}
+                  </span>
                 </td>
                 <td className="px-3 py-2 text-[#1A1A1A] whitespace-nowrap">{r.dld_office_number || "—"}</td>
                 <td className="px-3 py-2 text-[#1A1A1A]">{r.email || "—"}</td>
@@ -257,6 +260,7 @@ export default function PendingBrokerageImportsSection() {
                 </td>
               </tr>
             ))}
+
           </tbody>
         </table>
       </div>
