@@ -37030,3 +37030,33 @@ html body #root [data-branded-email-panel="true"] [data-citi-lock-toggle="locked
   transform: none !important;
   scale: 1 !important;
 }
+
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"],
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:hover,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:focus,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:active,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:hover :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="unlocked"]:focus :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"],
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:hover,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:focus,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:active,
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:hover :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:focus :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+  opacity: 1 !important;
+  transform: none !important;
+  scale: 1 !important;
+}
