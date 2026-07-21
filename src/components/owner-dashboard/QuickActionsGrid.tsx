@@ -44,7 +44,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { label: "Leads Inbox", description: "All CRM leads inbox", icon: FileText, path: "/owner/crm?entity=leads&view=all" },
   { label: "CRM Chat", description: "Client communications", icon: MessageSquare, path: "/owner/crm" },
   { label: "Contract Vault", description: "Developer agreements & AI contract upload", icon: FileSignature, path: "/owner/contracts" },
-  { label: "Agency Activity", description: "Reminders, calls & notes logged on UAE agencies", icon: Bell, path: "/owner/crm/relationships/activity" },
+  { label: "Agency Activity", description: "Reminders, calls & notes logged on UAE agencies", icon: Bell, path: "/owner/crm/jbj/owner-relationships-activity" },
   { label: "Brokers Registry", description: "Every broker & company they work for", icon: Users, path: "/owner/crm?entity=brokers&view=directory" },
 ];
 
