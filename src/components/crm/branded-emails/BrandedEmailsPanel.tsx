@@ -1153,7 +1153,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             <button
               type="button"
               onClick={handleSendLive}
-              disabled={sending || !selectedTemplate || audienceCount === 0}
+              disabled={sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl)}
               data-branded-email-live-action="true"
               data-keep-gold="true"
               className="jj-cta-gold-metallic"
@@ -1162,13 +1162,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
                 color: "#3a2a08",
                 WebkitTextFillColor: "#3a2a08",
-                cursor: sending || !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
-                opacity: sending || !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
+                cursor: sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl) ? "not-allowed" : "pointer",
+                opacity: sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl) ? 0.5 : 1,
               }}
             >
               <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />
-              {sending ? "Sending…" : `Send live to ${selectedSendableCount.toLocaleString()} ${kind} with email`}
+              {sending
+                ? "Sending…"
+                : kind === "brokerages" && !bookingUrl
+                  ? "Save Google Calendar link to enable live send"
+                  : `Send live to ${selectedSendableCount.toLocaleString()} ${kind} with email`}
             </button>
+
 
             <p className="text-xs text-[#4B5D55]">
               Test sends immediately to the address above. Live send goes through the locked outreach pipeline — you'll be asked to confirm before delivery.
