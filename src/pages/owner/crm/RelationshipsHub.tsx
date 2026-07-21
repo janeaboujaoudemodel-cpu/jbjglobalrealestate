@@ -133,23 +133,50 @@ function useSegmentKpis(segment: Segment) {
 /* ------------------------------------------------------------------ */
 /* Rows query                                                         */
 /* ------------------------------------------------------------------ */
-function useSegmentRows(segment: Segment, statusFilter: Status | "all", search: string, newTodayOnly: boolean) {
+function useSegmentRows(
+  segment: Segment,
+  statusFilter: Status | "all",
+  search: string,
+  newTodayOnly: boolean,
+  dld: DLDFilterValue,
+) {
   return useQuery({
-    queryKey: ["rel-hub-rows", segment, statusFilter, search, newTodayOnly],
+    queryKey: ["rel-hub-rows", segment, statusFilter, search, newTodayOnly, dld.category, dld.detail ?? ""],
     queryFn: async () => {
       const cfg = SEGMENT_TO_TABLE[segment];
-      const cols = ["id", cfg.nameCol, "relationship_status", "last_contacted_at", "first_seen_at", ...cfg.extra].join(",");
-      let q: any = supabase.from(cfg.table as any).select(cols).limit(300).order("first_seen_at", { ascending: false });
+      // Include DLD-native fields so the filter dropdown + export always have them.
+      const extraCols = [
+        ...cfg.extra,
+        "dld_license_category",
+        "dld_area",
+        "dld_broker_no",
+        "dld_office_no",
+        "name_ar",
+      ];
+      const cols = ["id", cfg.nameCol, "relationship_status", "last_contacted_at", "first_seen_at", ...extraCols].join(",");
+      let q: any = supabase.from(cfg.table as any).select(cols).limit(500).order("first_seen_at", { ascending: false });
       if (cfg.brokerFilter) q = cfg.brokerFilter(q);
       if (statusFilter !== "all") q = q.eq("relationship_status", statusFilter);
       if (newTodayOnly) q = q.gte("first_seen_at", startOfTodayUtcIso());
       if (search.trim()) q = q.ilike(cfg.nameCol, `%${search.trim()}%`);
+
+      // DLD-style filters
+      if (dld.category !== "all") {
+        if (dld.category === "by_area" && dld.detail) {
+          q = q.eq("dld_area", dld.detail);
+        } else if (dld.category === "by_project" && dld.detail) {
+          q = q.eq("dld_project", dld.detail);
+        } else if (dld.category !== "by_area" && dld.category !== "by_project") {
+          q = q.eq("dld_license_category", dld.category);
+        }
+      }
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as any[];
     },
   });
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Activity feed                                                      */
