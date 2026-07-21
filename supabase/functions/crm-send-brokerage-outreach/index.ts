@@ -319,9 +319,8 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // HARD LOCK: brokerage outreach is always sent from CitiDevelopers@jbj.ae
-    // (verified Resend domain). Reply-To matches so replies thread to the
-    // same branded mailbox.
+    // HARD LOCK: brokerage outreach is always sent from info@jbj.ae.
+    // Reply-To matches so replies thread to the same brokerage mailbox.
     const FORCED_FROM_EMAIL = PRIMARY_SENDER;
     const FORCED_FROM_DISPLAY = PRIMARY_SENDER_NAME;
     const fromName = FORCED_FROM_DISPLAY;

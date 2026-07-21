@@ -25,6 +25,7 @@ type Recipient = {
   email: string | null;
   meta?: string | null;
   logoUrl?: string | null;
+  websiteUrl?: string | null;
   registrationStatus?: string | null;
 };
 
@@ -36,10 +37,23 @@ type Template = {
   category: string | null;
 };
 
-const SENDER = {
+const DEVELOPER_SENDER = {
   name: "Amelia",
   title: "Head of Business Development",
-  email: "CONTACT@JBJ.AE",
+  email: "contact@jbj.ae",
+};
+
+const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
+  developers: {
+    name: "Amelia",
+    title: "Head of Business Development",
+    email: "contact@jbj.ae",
+  },
+  brokerages: {
+    name: "JBJ Team",
+    title: "Brokerage Relations",
+    email: "info@jbj.ae",
+  },
 };
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
@@ -79,6 +93,7 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       email: r.developer_email || null,
       meta: r.country || r.website || r.source || null,
       logoUrl: r.logo_url || null,
+      websiteUrl: r.website || null,
       registrationStatus: r.status || "not_started",
     }));
     const deduped = new Map<string, Recipient>();
@@ -159,10 +174,12 @@ function personalizeTemplate(html: string, sampleName = "Developer Team") {
       .replace(/\{\{contact_full_name\}\}/g, sampleName)
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
-    .replace(/Jane Bou Jaoude/gi, SENDER.name)
-    .replace(/Founder\s*&\s*CEO/gi, SENDER.title)
-    .replace(/contact@jbj\.ae/gi, SENDER.email)
-    .replace(/jbj\.ae/gi, "JBJ.AE")
+      .replace(/Jane Bou Jaoude/gi, SENDER_BY_KIND.developers.name)
+    .replace(/Founder\s*&\s*CEO/gi, SENDER_BY_KIND.developers.title)
+    .replace(/contact@jbj\.ae/gi, SENDER_BY_KIND.developers.email)
+    .replace(/CONTACT@JBJ\.ae/gi, SENDER_BY_KIND.developers.email)
+    .replace(/<b>JBJ<\/b>\.AE/g, "<a href=\"https://jbj.ae\" target=\"_blank\" rel=\"noreferrer\" style=\"color:#0a0a0a;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;\">jbj.ae</a>")
+    .replace(/>JBJ\.AE</g, "><a href=\"https://jbj.ae\" target=\"_blank\" rel=\"noreferrer\" style=\"color:#0a0a0a;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;\">jbj.ae</a><")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
@@ -251,6 +268,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   );
   const eligibleTotal = eligibleRecipients.length;
   const allSelected = audienceCount === eligibleTotal && eligibleTotal > 0;
+  const previewRecipient = useMemo(
+    () => recipients.find((r) => selectedIds.has(r.id)) || recipients[0] || null,
+    [recipients, selectedIds]
+  );
+  const previewRecipientName = previewRecipient?.name || (kind === "developers" ? "Developer Team" : "Brokerage Team");
+  const sender = SENDER_BY_KIND[kind];
 
   useEffect(() => {
     if (!isDeveloperRegistrationCampaign(kind, selectedTemplate)) return;
@@ -306,7 +329,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       return;
     }
     const ok = window.confirm(
-      `Send "${selectedTemplate.name}" live to ${audienceCount} ${kind}?\n\nThis will be delivered from ${SENDER.email}. This action is logged.`
+      `Send "${selectedTemplate.name}" live to ${audienceCount} ${kind}?\n\nThis will be delivered from ${sender.email}. This action is logged.`
     );
     if (!ok) return;
     const selectedRecipients = recipients.filter((r) => selectedIds.has(r.id) && r.email);
@@ -467,8 +490,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                 src={r.logoUrl}
                                 alt={`${r.name} logo`}
                                 name={r.name}
+                                websiteUrl={r.websiteUrl}
                                 variant="tile"
-                                renderFallback={false}
                                 className="!size-8 !rounded-md !border-emerald-900/15 !bg-white !p-1"
                               />
                             ) : (
@@ -505,20 +528,20 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
           <section>
             <StepHeader n={3} label="Preview" Icon={Eye} />
             {selectedTemplate ? (
-              <div className="border border-emerald-900/15 rounded-lg bg-white overflow-hidden">
-                <div className="px-4 py-3 border-b border-emerald-900/10 bg-[#F8FAF9]">
+              <div className="border rounded-lg bg-white overflow-hidden shadow-[0_20px_55px_-42px_rgba(6,78,59,0.45)]" style={{ borderColor: "rgba(184,149,85,0.5)" }}>
+                <div className="px-5 py-4 border-b bg-[#F8FAF9]" style={{ borderColor: "rgba(184,149,85,0.35)" }}>
                   <p className="text-[11px] text-[#4B5D55] uppercase tracking-wider">Subject</p>
                   <p className="font-bold text-[#0F1A16]">
-                    {personalizeSubject(selectedTemplate.subject, recipients.find((r) => selectedIds.has(r.id))?.name || (kind === "developers" ? "Developer Team" : "Brokerage Team"))}
+                    {personalizeSubject(selectedTemplate.subject, previewRecipientName)}
                   </p>
                   <p className="text-[11px] text-[#4B5D55] mt-1">
                     Template: <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span>
                   </p>
                 </div>
-                <ScrollArea className="h-[320px]">
+                <ScrollArea className="h-[min(68vh,720px)]">
                   <div
-                    className="p-6 prose prose-sm max-w-none text-[#0F1A16]"
-                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, recipients.find((r) => selectedIds.has(r.id))?.name || (kind === "developers" ? "Developer Team" : "Brokerage Team")) }}
+                    className="p-4 md:p-8 prose prose-sm max-w-none text-[#0F1A16] [&_*]:!max-w-full [&_a]:!text-[#0a0a0a] [&_a]:!font-bold [&_a]:underline [&_a]:decoration-[#B89555]"
+                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, previewRecipientName) }}
                   />
                 </ScrollArea>
               </div>
@@ -537,7 +560,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                 <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
                 <li><strong>Audience:</strong> {audienceCount} of {eligibleTotal} {kind}</li>
-                <li><strong>From:</strong> {SENDER.name}, {SENDER.title} &lt;{SENDER.email}&gt;</li>
+                <li><strong>From:</strong> {sender.name}, {sender.title} &lt;{sender.email}&gt;</li>
                 <li><strong>Registration pack:</strong> saved link included in the template</li>
               </ul>
             </div>

@@ -10,9 +10,9 @@
 
 export const ALLOWED_SENDER_DOMAIN = "jbj.ae";
 
-export const PRIMARY_SENDER = "CitiDevelopers@jbj.ae";
-export const PRIMARY_SENDER_NAME = "CITI Developers";
-export const DEFAULT_REPLY_TO = "CitiDevelopers@jbj.ae";
+export const PRIMARY_SENDER = "info@jbj.ae";
+export const PRIMARY_SENDER_NAME = "JBJ Global Real Estate";
+export const DEFAULT_REPLY_TO = "info@jbj.ae";
 export const DEFAULT_CC = "infoo.jane@gmail.com";
 
 export const TEST_DEFAULTS = {
@@ -21,7 +21,7 @@ export const TEST_DEFAULTS = {
   from_email: PRIMARY_SENDER,
   from_name: PRIMARY_SENDER_NAME,
   reply_to: DEFAULT_REPLY_TO,
-  sample_brokerage_name: "ABC Real Estates",
+  sample_brokerage_name: "Sample Brokerage",
 };
 
 /** Force production identity onto any inbound payload. */
