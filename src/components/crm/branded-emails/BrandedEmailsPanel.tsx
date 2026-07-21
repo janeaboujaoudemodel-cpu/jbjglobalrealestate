@@ -241,7 +241,7 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
         name={recipient.name}
         websiteUrl={recipient.websiteUrl}
         variant="bare"
-        className="!size-9 !rounded-md !border-0 !bg-white !p-1.5 shadow-none ring-1 ring-[#064E3B]/15"
+        className="!size-10 !rounded-md !border-0 !bg-white !p-2 shadow-none ring-1 ring-[#064E3B]/15 [&_img]:!object-contain [&_img]:!max-h-full [&_img]:!max-w-full"
       />
     );
   }
