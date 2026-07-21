@@ -229,9 +229,7 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
   const logoUrl = isValidDeveloperLogoUrl(recipient.logoUrl) ? recipient.logoUrl : fallbackLogoUrl;
   const hasLogo = isValidDeveloperLogoUrl(logoUrl);
 
-  const hasVerifiedStoredLogo = isValidDeveloperLogoUrl(recipient.logoUrl);
-
-  if (hasLogo && hasVerifiedStoredLogo) {
+  if (hasLogo) {
     return (
       <DeveloperLogo
         src={logoUrl}
