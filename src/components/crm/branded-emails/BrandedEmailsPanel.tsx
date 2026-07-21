@@ -59,6 +59,32 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
 
+const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; alt: string; wordmark: string; tagline: string }> = {
+  developers: {
+    url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/jbj-monogram-dark.png",
+    alt: "JBJ Global Real Estate",
+    wordmark: "JBJ GLOBAL REAL ESTATE",
+    tagline: "Developer Relations",
+  },
+  brokerages: {
+    url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/citi-developers-gold.png",
+    alt: "Citi Developers",
+    wordmark: "CITI DEVELOPERS",
+    tagline: "Brokerage Partnerships",
+  },
+};
+
+function buildBrandHeaderHtml(kind: BrandedAudienceKind): string {
+  const b = BRAND_HEADER_BY_KIND[kind];
+  return `<table role="presentation" data-jbj-brand-header="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;">
+  <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);">
+    <img src="${b.url}" alt="${b.alt}" width="96" height="96" style="display:block;width:96px;height:96px;max-width:96px;margin:0 auto 10px;object-fit:contain;" />
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">${b.wordmark}</div>
+    <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">${b.tagline}</div>
+  </td></tr>
+</table>`;
+}
+
 const recipientsCache = new Map<BrandedAudienceKind, Recipient[]>();
 const templatesCache = new Map<BrandedAudienceKind, Template[]>();
 const inflightCache = new Map<BrandedAudienceKind, Promise<[Recipient[], Template[]]>>();
@@ -204,7 +230,13 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
   const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
   const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
-  return html
+  const brandHeader = buildBrandHeaderHtml(audienceKind);
+  const htmlWithBrand = /data-jbj-brand-header="true"/.test(html)
+    ? html
+    : (html.match(/<body[^>]*>/i)
+        ? html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>${brandHeader}`)
+        : brandHeader + html);
+  return htmlWithBrand
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
       [data-jbj-contact-note], [data-jbj-contact-note] *, [data-jbj-contact-note] a {
         color:#0a0a0a !important;
