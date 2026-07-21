@@ -4522,3 +4522,41 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* --- Quick Create inline sheet (replaces /new redirect) --- */
+.jc-quick-create__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background: var(--jbjcrm-metallic-emerald-h);
+  color: #fff;
+  border-bottom: 1px solid var(--jbjcrm-emerald-line);
+}
+.jc-quick-create__title { color: #fff !important; font-size: 16px; font-weight: 600; margin: 0; }
+.jc-quick-create__close {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  width: 30px; height: 30px;
+  border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.jc-quick-create__close:hover { background: rgba(255,255,255,0.15); }
+.jc-quick-create__body {
+  padding: 20px 24px 96px;
+  overflow-y: auto;
+  height: calc(100vh - 64px);
+}
+.jc-quick-create__actions {
+  position: sticky;
+  bottom: 0;
+  left: 0; right: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px 0 6px;
+  background: linear-gradient(to top, #fff 70%, rgba(255,255,255,0));
+  margin-top: 16px;
+}
