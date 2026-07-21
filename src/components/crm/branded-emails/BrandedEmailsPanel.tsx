@@ -707,14 +707,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                             )}
                             {r.registrationStatus === "registered" && (
                               <span
+                                data-label-emerald-only
                                 data-no-contrast-guard="true"
-                                className="text-[10px] font-black uppercase tracking-[0.1em] rounded-full px-2 py-0.5"
-                                style={{
-                                  background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)",
-                                  color: "#FFFFFF",
-                                  WebkitTextFillColor: "#FFFFFF",
-                                  border: "1px solid #064E3B",
-                                }}
+                                className="jj-pill-emerald-metallic allow-white text-white border-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-[0.1em] whitespace-nowrap"
                               >
                                 Registered
                               </span>
