@@ -37138,7 +37138,7 @@ html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:foc
   width: 18px;
   height: 18px;
 }
-[data-relationships-hub] .rh-tile-label {
+html body #root [data-relationships-hub] .rh-tile-label {
   flex: 1 1 auto;
   min-width: 0;
   white-space: nowrap !important;
