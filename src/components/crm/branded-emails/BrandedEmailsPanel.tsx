@@ -446,7 +446,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
             <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
               <Users className="size-4" />
-              Sending to <strong className="text-[#064E3B]">{audienceCount}</strong> of {eligibleTotal}
+              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {eligibleTotal}
             </div>
           </div>
         </SheetHeader>
