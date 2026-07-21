@@ -1,98 +1,74 @@
+## What's still broken (from screenshots)
 
-# JBJ Hub — Full DLD + Portal Cleanup Plan
+1. **Header title "Relationships Hub"** renders in gold/champagne — global heading CSS is overriding my inline `color: #FFFFFF`. Same for subtitle.
+2. **"Back" and "Refresh" pills** — icons/text look faded/dark against emerald. Global icon-lock isn't winning specificity.
+3. **Active segment tile ("Brokers · Secondary")** — label + sub-text render dark on emerald (invisible). Global rules are forcing dark ink.
+4. **Segment labels wrap vertically** ("Bro / kera / ges", "Deve / lopers") because the icon column + Cormorant 18px + padding overflow a narrow flex row when the preview is split.
+5. **KPI cards** — values are emerald on white (OK) but the "TOTAL/UNTOUCHED" eyebrow labels are muted; user wants them clearer. Also the empty-state values need contrast pass.
+6. **Wiring gaps**: sending a branded email must increment per-record `emails_sent`, log to activity feed, and update status; Google Calendar bookings must flip status to `briefing_booked` automatically.
 
-Big request, so I'm splitting it into 7 phases and asking you to confirm before I ship. Nothing here touches raw DLD data — location/contact enrichment is stored in **separate columns** so the "never touch the database" rule is preserved.
+## Fix plan
 
----
+### Phase 1 — Kill contrast overrides on the Hub (frontend only)
 
-## Phase 1 — Global icon contrast lock (fast, visual only)
+Wrap the entire page in `<div data-relationships-hub data-no-contrast-guard>` and add a scoped CSS block in `src/index.css` that wins by specificity + `!important` on the properties that global rules keep flipping:
 
-- Force **pure white** fill/stroke on every `+` (add) button and every "send" (paper-plane) arrow button that sits inside an emerald pill/box, across:
-  - JBJ Hub top bar (`+`, search, notifications, calendar)
-  - Branded Emails "Save" button next to booking link
-  - Branded Emails "Send test" arrow
-  - "Send live to N brokerages/developers" CTA arrow (kept gold background, but arrow forced white)
-  - Broker/Developer portal toolbar `+` buttons
-- Enforcement via a single CSS lock in `src/index.css` targeting `[data-emerald-icon-lock]` + patching the offending components (no per-page tweaks).
+- `[data-relationships-hub] .rh-header *` → `color: #FFFFFF !important` (title, subtitle, back/refresh text + svg).
+- `[data-relationships-hub] .rh-tile-active` → force white text/icon on emerald; inactive tiles → ink `#0F1A16` on white.
+- `[data-relationships-hub] .rh-tile-label` → `white-space: nowrap; font-size: clamp(15px, 1.2vw, 18px)` so labels never wrap. Give the icon column `flex-shrink: 0` and the label `min-width: 0; overflow: hidden; text-overflow: ellipsis`.
+- Restructure each tile as a two-row layout (icon + label on row 1, sub on row 2) instead of icon+label competing for horizontal space with the sub-copy — matches the mockup and stops the "Bro/kera/ges" wrap at any viewport.
 
-## Phase 2 — Card layout + status dropdown
+### Phase 2 — Header pills
 
-- Rebuild the brokerage/developer card grid so every card has the **same row heights** (Not Registered / group status / dld_register / Specialty / Email / Phone / Contacts / Status). Uses CSS grid with fixed row tracks, so 100 KEYS and 100 YARDS line up perfectly.
-- Replace the single **"Mark briefing done"** button with a status dropdown offering:
-  - **None / Pending** (default — no status)
-  - **Scheduled**
-  - **Postponed**
-  - **Briefing done**
-  - **Declined**
-  - **Rejected**
-  Clicking always re-opens the menu; selecting **None** clears the status. Same control on Broker Portal, Developer Portal, and inside the pending-approval list.
-- New column `briefing_status` on `crm_brokerages` and `crm_developer_registry` (enum, nullable). Migration includes GRANTs + RLS.
+Rebuild Back/Refresh as `.rh-pill` with:
+- background `rgba(255,255,255,0.12)`, hover `0.20`
+- 1px border `rgba(255,255,255,0.45)`
+- text + icon locked to `#FFFFFF !important`
+- consistent padding/height so they read as buttons, not chips
 
-## Phase 3 — Location + logo enrichment (backend-only, never rendered on public site)
+### Phase 3 — KPI strip polish
 
-- New edge function `crm-enrich-brokerage` and `crm-enrich-developer`:
-  - Reads company website (or Googles the company name via Firecrawl `/search`) → scrapes `/contact` / homepage → extracts **office address, phone, website, logo URL**.
-  - Writes to `enriched_location`, `enriched_phone`, `enriched_website`, `enriched_logo_url` **new columns** — raw DLD fields stay untouched.
-  - Skips rows where the field is already present.
-- Runs nightly after the DLD sync, plus an owner-only "Enrich now" button on the Relationships Hub.
-- **Frontend rules (locked):**
-  - Public site: brokers/brokerages → **never show** location or contact.
-  - Public site: developers → show everything **except** location + contact (unchanged from your earlier rule).
-  - Owner backend only: enriched fields are visible in the card.
-- Developer logo fallback replaced: dropdown pulls `enriched_logo_url` first, then falls back to a subtle emerald monogram (no generic building icon).
+- Eyebrow labels: `#0F1A16` at 10px/700 uppercase tracking-widest (currently `#4B5D55` — too faded).
+- Value: Cormorant 28px `#064E3B`. When `0`, render `—` in `#8A9891` so empty states read as "no data yet" instead of a stark zero.
 
-## Phase 4 — DLD brokers (individuals) scrape
+### Phase 4 — Email → record wiring (already partly in place, verify + patch)
 
-- Fully activate the individual-brokers DLD source (`.../licensed-real-estate-brokers-list/`) that you paused earlier.
-- Ingested into `crm_brokers_individual` and split into **Sale** / **Lease** (per your earlier rule — no off-plan/secondary split for individuals).
-- Dedup logic: match by (full name + DLD license #). New rows go to pending approval; conflicts (same person, new phone/email) flag into `dld_scrape_conflicts` as you already have wired.
-- Nightly cron already covers this; I'll just enable the module and add the two segment tabs in the hub.
+Confirm and, where missing, add:
+- `crm-send-brokerage-outreach` and `crm-send-developer-registration` write a row to `crm_relationship_activity` (`kind='email_sent'`, target segment + record id, subject, template) and `UPDATE crm_brokerages / crm_developer_registry SET emails_sent = emails_sent + 1, last_email_at = now(), status = CASE WHEN status='untouched' THEN 'needs_follow_up' ELSE status END`.
+- `comm-inbound-sync` on reply: append `kind='email_reply'` activity, set status to `engaged` (or `registered` if AI extracts a registration link + confirmation phrase).
+- Hub table gets an "Emails / Last contact / Last reply" column so the outreach loop is visible per row.
 
-## Phase 5 — Branded Emails cleanup
+### Phase 5 — Google Calendar booking → `briefing_booked`
 
-- **Brokerage panel:** remove the Google Drive link field entirely (it's a developer-only field).
-- **Developer panel:** remove the Google Drive link field from the send panel — the Drive link is already saved once in Developer Contracts; the send function reads it from there. One canonical Drive link per developer, no re-paste.
-- "10,262 eligible selected" summary chip → emerald→black gradient with white text (matches Send Live gold CTA rhythm).
-- Save-booking-link button arrow forced white on emerald.
+Root cause of the "Calendar is blocked" flow:
+- The Google Calendar Appointment Schedule link (`calendar.app.google/...`) is being wrapped by Resend click-tracking → the wrapped URL fails Google's referrer check → Chrome shows "refused to connect".
+- Fix already partially done via `data-no-link-tracking="true"`; confirm the Resend send config also disables click tracking for that specific anchor, or move the CTA to a plain `https://calendar.app.google/...` link with `rel="noopener"` and no wrapper.
 
-## Phase 6 — Google Calendar connector (real setup, no API key)
+Booking → status wiring (no Google API key required):
+- Add `google_calendar_webhook_secret` (Cloud secret). In your Google Calendar Appointment Schedule, enable **"Add a description"** and instruct booker email to include `[JBJ-REL:{record_id}]` (auto-appended via query param `?prefill_description=...` in the CTA URL).
+- Google Calendar sends a confirmation email to `helpdesk@jbj.ae` / `infoo.jane@gmail.com`. `comm-inbound-sync` already reads that mailbox — extend the parser to detect Google Calendar confirmation subjects (`New booking: ...`) and the `[JBJ-REL:xxx]` token, then update the matched record `status = 'briefing_booked'`, insert `crm_relationship_activity kind='briefing_booked'`, and store the meeting time.
+- Optional upgrade (later, only if user wants deeper sync): connect the **google_calendar App User Connector** and mirror events to a `crm_calendar_events` table so bookings show inside the Hub without email parsing.
 
-Root cause of `calendar.google.com is blocked`: you were pasting the **calendar.google.com/calendar/appointments/schedules/...** internal edit URL (which Google refuses to iframe/redirect). The public booking URL is `https://calendar.app.google/...` — different host, no block.
+### Phase 6 — E2E validation
 
-Fix in three parts:
-1. **Connector auto-open:** on first visit to Branded Emails (brokerages) with no saved link, auto-launch the App User Connector flow for `google_calendar` so the owner grants access once.
-2. **Auto-fetch public booking URL:** after consent, `crm-fetch-calendar-booking-url` edge function calls `GET /calendar/v3/users/me/calendarList` + `appointmentSchedules` and stores the public `calendar.app.google/...` URL into `crm_owner_settings.google_calendar_booking_url` automatically. No manual paste required.
-3. **Two-way sync (already wired via `breakfast-calendar-sync`) is extended:** every booking on that schedule → creates a row in `crm_meetings`, sends the owner an email reminder 1h before, adds a task to your daily schedule, and triggers a reminder email to the brokerage 24h before.
+Playwright script at `/tmp/browser/rh-e2e.mjs`:
+1. Load `/owner/crm/jbj/owner-relationships-activity`; screenshot header, all 4 tiles, KPI strip at 1280 and 900 viewports (split-screen simulation).
+2. Assert computed `color` on `.rh-header h1`, back/refresh buttons, and active tile label is `rgb(255,255,255)`.
+3. Assert active-tile label has `white-space: nowrap` (no wrap).
+4. Click "Send test" from Branded Emails panel to `infoo.jane@gmail.com`, then confirm a new row appears in the Hub activity feed and the target record's `emails_sent` bumped.
+5. Post a fake Google Calendar confirmation email into the inbound webhook fixture; assert record flips to `briefing_booked`.
+6. Save screenshots + a pass/fail summary.
 
-Also: WhatsApp `+971 54 716 7107`, website `citideveloper.com`, and office address links are all pre-validated with a redirect check so they never open a blocked page.
+## Technical files touched
 
-## Phase 7 — Kill the old backend, once and for all
+- `src/pages/owner/crm/RelationshipsHub.tsx` — restructure header, tiles, KPI strip; add `.rh-*` class hooks; add per-row emails/last-contact columns.
+- `src/index.css` — new scoped `[data-relationships-hub]` block (Phase 1/2/3 rules).
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` and `crm-send-developer-registration/index.ts` — ensure activity row + counter bump.
+- `supabase/functions/comm-inbound-sync/index.ts` — Google Calendar confirmation parser + `[JBJ-REL:xxx]` token handling.
+- `supabase/migrations/*` — add `emails_sent`, `last_email_at`, `last_reply_at` columns on the three tables if missing, and a `crm_calendar_bookings` audit table.
+- `tests/e2e/relationships-hub.spec.ts` (new) — the Playwright checks above.
 
-**Root cause:** two shells exist — the "Owner Panel/Overview" legacy shell and the emerald JBJ Hub. Some cards (Relationships Hub, DLD sync alert) were mounted **inside the legacy shell's `/owner/*` routes** instead of the emerald hub's `/owner/crm/jbj/*` namespace. When you click from the emerald sidebar it links into the correct route; when you land via an old bookmark or from an older link it lands on the legacy shell.
+## What I need you to confirm before I build
 
-Fix:
-- Add a **route guard** at the `<App />` level: any hit on the legacy `/owner/panel`, `/owner/overview`, `/owner/backend/*` paths **301-redirects** to the matching emerald `/owner/crm/jbj/*` route.
-- Delete the legacy sidebar entries (`Owner Panel`, `Overview`, etc.) — the emerald shell becomes the only entry point.
-- Every card/component the legacy shell used to render is re-mounted under the emerald hub. `RelationshipsHub`, `DldSyncStatusAlert`, `PendingBrokerageImportsSection`, `BrandedEmailsPanel` are re-verified to render only inside the emerald shell.
-- Add a **route-registry lint rule** that fails CI if any component renders under a `/owner/panel|/owner/overview|/owner/backend` route — this is what will actually prevent recurrence.
-
----
-
-## E2E validation (Playwright, screenshots posted back)
-
-Once each phase lands I'll drive Playwright headless against localhost and post screenshots for:
-1. Emerald hub `+` and send buttons (white icons).
-2. Brokerage cards aligned side-by-side.
-3. Status dropdown open on a card, selecting **Scheduled** then reverting to **None**.
-4. DLD sync run completing with brokers-individual segment populated.
-5. Enriched location + logo showing in the owner card but **not** on the public brokerage listing.
-6. Google Calendar booking auto-URL populated + a test booking flowing into `crm_meetings`.
-7. Old `/owner/panel` URL redirecting to `/owner/crm/jbj/home`.
-
----
-
-## Confirm before I start
-
-Reply "**go**" and I execute phases 1→7 in that order (each phase is independently shippable). If you want me to change ordering (e.g. start with the Google Calendar fix), tell me which phase to run first.
-
-One question on Google Drive: you asked whether to **merge** the new file into the existing Developer Contracts Drive folder. My recommendation is **merge** — one canonical `/JBJ/Developer Contracts/<developer slug>/` folder per developer, no duplicate links to maintain. Confirm and I'll wire the merge in Phase 5.
+1. **Google Calendar link** — do you already have your Appointment Schedule public URL (something like `https://calendar.app.google/xxxxx`)? If yes paste it and I'll wire it as the canonical CTA. If not, I'll leave the CTA disabled until you paste it in CRM Settings.
+2. **Deeper Google Calendar sync** — do you want me to also connect the **google_calendar App User Connector** now (event mirror + reminders inside the Hub), or start with the email-parsing approach and add the connector later?

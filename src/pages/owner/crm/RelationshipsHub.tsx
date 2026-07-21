@@ -241,32 +241,30 @@ export default function RelationshipsHub() {
   const cfg = SEGMENT_TO_TABLE[seg];
 
   return (
-    <div className="min-h-screen" style={{ background: "#F7F5EF" }} data-no-contrast-guard>
+    <div data-relationships-hub data-no-contrast-guard className="min-h-screen" style={{ background: "#F7F5EF" }}>
       <SEOHead title="Relationships Hub · JBJ CRM" description="Unified brokers · brokerages · developers hub with daily DLD sync." />
       {/* Emerald page header band */}
       <div
-        className="w-full"
+        className="rh-header w-full"
         style={{
           background: "linear-gradient(180deg,#064E3B 0%,#042c1c 55%,#010806 100%)",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
-        data-emerald-icon-lock
       >
         <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
               onClick={() => nav("/owner/crm/jbj")}
-              className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-semibold"
-              style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.22)" }}
+              className="rh-pill inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-semibold shrink-0"
             >
               <ArrowLeft className="h-4 w-4" /> Back
             </button>
-            <div>
-              <h1 className="text-3xl font-black leading-none" style={{ color: "#FFFFFF", fontFamily: "'Cormorant Garamond', serif" }}>
+            <div className="min-w-0">
+              <h1 className="text-3xl font-black leading-none truncate">
                 Relationships Hub
               </h1>
-              <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.78)" }}>
+              <p className="text-xs mt-1" style={{ opacity: 0.85 }}>
                 Daily DLD sync · segmented outreach · unified activity feed.
               </p>
             </div>
@@ -274,8 +272,7 @@ export default function RelationshipsHub() {
           <button
             type="button"
             onClick={() => { kpis.refetch(); rows.refetch(); feed.refetch(); }}
-            className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-semibold"
-            style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.22)" }}
+            className="rh-pill inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-semibold shrink-0"
           >
             <RefreshCw className="h-4 w-4" /> Refresh
           </button>
@@ -297,8 +294,7 @@ export default function RelationshipsHub() {
                 key={s.key}
                 type="button"
                 onClick={() => { setSeg(s.key); setStatusFilter("all"); setNewTodayOnly(false); }}
-                data-emerald-icon-lock={active ? "true" : undefined}
-                className="group relative rounded-xl p-4 text-left transition-all overflow-hidden min-h-[112px]"
+                className={`rh-tile ${active ? "rh-tile-active" : "rh-tile-inactive"} rounded-xl p-4 text-left transition-all overflow-hidden min-h-[112px]`}
                 style={{
                   border: active ? "1px solid rgba(255,255,255,0.35)" : "1px solid rgba(6,78,59,0.18)",
                   background: active
@@ -309,21 +305,11 @@ export default function RelationshipsHub() {
                     : "0 1px 2px rgba(15,23,42,0.05)",
                 }}
               >
-                <div className="flex items-center gap-2" style={{ color: active ? "#FFFFFF" : "#064E3B" }}>
-                  <Icon className="h-4 w-4 shrink-0" style={{ color: active ? "#FFFFFF" : "#064E3B" }} />
-                  <span
-                    className="text-[13px] font-black tracking-tight whitespace-nowrap"
-                    style={{ color: active ? "#FFFFFF" : "#0F1A16", fontFamily: "'Cormorant Garamond', serif", fontSize: "18px", lineHeight: 1.1 }}
-                  >
-                    {s.label}
-                  </span>
+                <div className="rh-tile-row">
+                  <Icon className="rh-tile-icon" />
+                  <span className="rh-tile-label">{s.label}</span>
                 </div>
-                <p
-                  className="text-[11.5px] mt-2 leading-snug"
-                  style={{ color: active ? "rgba(255,255,255,0.86)" : "#4B5D55" }}
-                >
-                  {s.sub}
-                </p>
+                <p className="rh-tile-sub">{s.sub}</p>
               </button>
             );
           })}
@@ -348,14 +334,9 @@ export default function RelationshipsHub() {
                 boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
               }}
             >
-              <p className="text-[10px] uppercase tracking-widest font-black" style={{ color: "#4B5D55" }}>
-                {s.label}
-              </p>
-              <p
-                className="mt-1 text-2xl font-black leading-none"
-                style={{ color: "#064E3B", fontFamily: "'Cormorant Garamond', serif" }}
-              >
-                {kpis.isLoading ? "…" : s.v.toLocaleString()}
+              <p className="rh-kpi-label">{s.label}</p>
+              <p className="rh-kpi-value" data-empty={!kpis.isLoading && s.v === 0 ? "true" : undefined}>
+                {kpis.isLoading ? "…" : s.v === 0 ? "—" : s.v.toLocaleString()}
               </p>
             </div>
           ))}
