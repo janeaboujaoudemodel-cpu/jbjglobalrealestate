@@ -241,32 +241,48 @@ export default function RelationshipsHub() {
   const cfg = SEGMENT_TO_TABLE[seg];
 
   return (
-    <div className="min-h-screen bg-[#F7F1E4]/40" data-no-contrast-guard>
+    <div className="min-h-screen" style={{ background: "#F7F5EF" }} data-no-contrast-guard>
       <SEOHead title="Relationships Hub · JBJ CRM" description="Unified brokers · brokerages · developers hub with daily DLD sync." />
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 space-y-5">
-        {/* Header */}
-        <div className="flex items-center justify-between gap-3">
+      {/* Emerald page header band */}
+      <div
+        className="w-full"
+        style={{
+          background: "linear-gradient(180deg,#064E3B 0%,#042c1c 55%,#010806 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+        }}
+        data-emerald-icon-lock
+      >
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" onClick={() => nav("/owner/crm")} className="border-[#B89555]/40">
-              <ArrowLeft className="h-4 w-4 mr-1" /> Back
-            </Button>
+            <button
+              type="button"
+              onClick={() => nav("/owner/crm/jbj")}
+              className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-semibold"
+              style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.22)" }}
+            >
+              <ArrowLeft className="h-4 w-4" /> Back
+            </button>
             <div>
-              <h1 className="font-[Cormorant_Garamond] text-3xl font-black text-[#0F1A16] leading-none">
+              <h1 className="text-3xl font-black leading-none" style={{ color: "#FFFFFF", fontFamily: "'Cormorant Garamond', serif" }}>
                 Relationships Hub
               </h1>
-              <p className="text-xs text-[#4B5D55] mt-1">
+              <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.78)" }}>
                 Daily DLD sync · segmented outreach · unified activity feed.
               </p>
             </div>
           </div>
-          <Button
-            variant="outline" size="sm"
-            className="border-[#064E3B] text-[#064E3B]"
+          <button
+            type="button"
             onClick={() => { kpis.refetch(); rows.refetch(); feed.refetch(); }}
+            className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-semibold"
+            style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.22)" }}
           >
-            <RefreshCw className="h-4 w-4 mr-1" /> Refresh
-          </Button>
+            <RefreshCw className="h-4 w-4" /> Refresh
+          </button>
         </div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 space-y-5">
 
         {/* DLD scraper health — red banner if the nightly scrape fails or goes stale. */}
         <DldSyncStatusAlert />
