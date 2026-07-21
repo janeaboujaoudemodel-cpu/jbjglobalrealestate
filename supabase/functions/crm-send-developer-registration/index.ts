@@ -201,6 +201,25 @@ serve(async (req: Request) => {
       });
     }
 
+    // HARD LOCK — Developer Portal must NEVER contact CITI Developers.
+    // Jane is a CITI employee; sending JBJ agency outreach to CITI would look
+    // like competitor solicitation. Block by recipient domain and developer
+    // name. Do NOT remove without owner approval.
+    const recipientLc = recipient.toLowerCase();
+    const devNameLc = String(dev?.developer_name || "").toLowerCase();
+    const CITI_DOMAINS = ["citideveloper.com", "citideveloper.ae", "citideveloper.co"];
+    const isCitiRecipient =
+      CITI_DOMAINS.some((d) => recipientLc.endsWith("@" + d) || recipientLc.endsWith("." + d)) ||
+      /\bciti\s*developer/.test(devNameLc);
+    if (isCitiRecipient) {
+      return new Response(JSON.stringify({
+        error: "BLOCKED_CITI_DEVELOPERS",
+        message: "Developer Portal outreach to CITI Developers is permanently blocked. Jane is employed by CITI — JBJ agency emails must never be sent to CITI. Use the Brokerage Portal for CITI-related sends.",
+      }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
 
