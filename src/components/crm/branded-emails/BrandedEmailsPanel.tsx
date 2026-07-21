@@ -339,11 +339,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     }
     setSending(true);
     try {
-      const sampleName = kind === "developers" ? "Test Developer" : "Test Brokerage";
+      const sampleName = previewRecipientName;
       const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
       const body = kind === "developers"
-        ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testDeveloperName: sampleName, subjectOverride: `[TEST] ${personalizeSubject(selectedTemplate.subject, sampleName)}` }
-        : { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testBrokerageName: sampleName, subjectOverride: `[TEST] ${personalizeSubject(selectedTemplate.subject, sampleName)}` };
+        ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testDeveloperName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) }
+        : { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testBrokerageName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) };
       const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
       if (error) throw error;
       if (data?.error) throw new Error(data.message || data.error);
@@ -395,7 +395,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         data-branded-email-panel="true"
         data-no-contrast-guard="true"
         data-ink-emerald-opt-out="true"
-        className="w-full sm:max-w-5xl p-0 flex flex-col bg-white"
+        aria-describedby={undefined}
+        className="w-full sm:max-w-6xl p-0 flex flex-col bg-white"
       >
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
@@ -428,7 +429,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 No templates configured for this audience.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 {templates.map((t) => {
                     const active = t.variant === selectedTemplateId;
                   return (
@@ -436,18 +437,29 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                       key={t.variant}
                       type="button"
                       onClick={() => setSelectedTemplateId(t.variant)}
-                      className={`text-left p-4 rounded-lg border transition ${
-                        active
-                          ? "border-[#064E3B] bg-[#064E3B]/5 ring-2 ring-[#064E3B]/30"
-                          : "border-emerald-900/15 hover:border-[#064E3B]/50 bg-white"
-                      }`}
+                      className="group overflow-hidden rounded-lg border p-0 text-left transition-colors"
+                      style={{
+                        borderColor: active ? "rgba(184,149,85,0.72)" : "rgba(6,78,59,0.16)",
+                        background: active ? "#F8F3E9" : "#FFFFFF",
+                        boxShadow: active ? "inset 0 0 0 1px rgba(184,149,85,0.45)" : "none",
+                      }}
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] uppercase tracking-wider text-[#064E3B] font-black">{t.category || "Template"}</span>
-                        {active && <Badge className="bg-[#064E3B] !text-white border-0 text-[10px]">Selected</Badge>}
+                      <div className="grid min-h-[74px] grid-cols-[112px_1fr] group-hover:bg-[#F8F3E9]">
+                        <div className="flex items-center justify-center border-r px-3 py-3" style={{ borderColor: "rgba(184,149,85,0.28)", background: active ? "#EFE5D3" : "#FAF8F3" }}>
+                          <span className="text-center text-[10px] font-black uppercase leading-tight tracking-[0.12em] text-[#064E3B]">{t.category || "Template"}</span>
+                        </div>
+                        <div className="min-w-0 p-3">
+                          <div className="mb-1 flex items-start gap-2">
+                            {active && (
+                              <Badge className="shrink-0 border text-[10px] font-black" style={{ background: "#FFFFFF", color: "#0F1A16", WebkitTextFillColor: "#0F1A16", borderColor: "rgba(6,78,59,0.22)" }}>
+                                Selected
+                              </Badge>
+                            )}
+                            <p className="font-black leading-tight text-[#0F1A16] break-words">{t.name}</p>
+                          </div>
+                          <p className="mt-1 line-clamp-2 break-words text-xs text-[#4B5D55]">{personalizeSubject(t.subject, previewRecipientName)}</p>
+                        </div>
                       </div>
-                      <p className="font-bold text-[#0F1A16] leading-tight">{t.name}</p>
-                      <p className="text-xs text-[#4B5D55] mt-1 line-clamp-2">{t.subject}</p>
                     </button>
                   );
                 })}
@@ -515,21 +527,15 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                       const checked = selectedIds.has(r.id);
                       return (
                         <li key={r.id}>
-                          <label className="flex items-center gap-3 px-3 py-2 hover:bg-emerald-50/50 cursor-pointer">
+                          <label className="flex cursor-pointer items-center gap-3 px-3 py-2" style={{ backgroundColor: checked ? "rgba(6,78,59,0.035)" : "#FFFFFF" }}>
                             <Checkbox
                               checked={checked}
                               onCheckedChange={() => toggleId(r.id)}
-                              className="data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#064E3B]"
+                              className="border-[#064E3B]/35 data-[state=checked]:border-[#064E3B] data-[state=checked]:bg-[#064E3B] data-[state=checked]:text-white"
+                              style={{ boxShadow: "none" }}
                             />
                             {kind === "developers" ? (
-                              <DeveloperLogo
-                                src={r.logoUrl}
-                                alt={`${r.name} logo`}
-                                name={r.name}
-                                websiteUrl={r.websiteUrl}
-                                variant="tile"
-                                className="!size-8 !rounded-md !border-emerald-900/15 !bg-white !p-1"
-                              />
+                              <AudienceLogo recipient={r} />
                             ) : (
                               <span className="inline-flex items-center justify-center size-8 rounded-md bg-white border border-emerald-900/10 overflow-hidden shrink-0">
                                 <span className="text-[10px] font-black text-[#064E3B]">{initialsOf(r.name)}</span>
@@ -577,7 +583,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <ScrollArea className="h-[min(68vh,720px)]">
                   <div
                     className="p-4 md:p-8 prose prose-sm max-w-none text-[#0F1A16] [&_*]:!max-w-full [&_a]:!text-[#0a0a0a] [&_a]:!font-bold [&_a]:underline [&_a]:decoration-[#B89555]"
-                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, previewRecipientName) }}
+                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, previewRecipientName, kind) }}
                   />
                 </ScrollArea>
               </div>
