@@ -545,7 +545,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 />
               </div>
               <span className="text-xs text-[#4B5D55] ml-auto">
-                <strong className="text-[#064E3B]">{audienceCount}</strong> of {eligibleTotal} selected
+                <strong className="text-[#0F1A16]">{audienceCount}</strong> of {eligibleTotal} selected
               </span>
             </div>
 
