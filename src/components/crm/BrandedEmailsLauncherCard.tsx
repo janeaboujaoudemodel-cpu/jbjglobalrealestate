@@ -110,6 +110,8 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
             )}
             <button
               type="button"
+              data-branded-email-launch-action="true"
+              className="jbj-force-white-button"
               onClick={() => openWith(c.kind)}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 6, justifyContent: "center",
