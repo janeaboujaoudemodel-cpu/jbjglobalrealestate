@@ -256,6 +256,12 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/\{\{salutation\}\}/g, sampleName)
       .replace(/\{\{contact_first_name\}\}/g, "Team")
       .replace(/\{\{contact_full_name\}\}/g, sampleName)
+      .replace(/\{\{owner_first_name\}\}/g, "Jane")
+      .replace(/\{\{project_name\}\}/g, "AMRA")
+      .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
+      .replace(/\{\{project_url\}\}/g, "https://citideveloper.com/e-catalogue/amra")
+      .replace(/\{\{booking_url\}\}/g, "https://calendar.app.google/")
+      .replace(/\{\{group_status_line\}\}/g, "We would love to formalise a partnership with your team and align on how CITI Developers can support your brokers on AMRA and upcoming launches.")
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
     .replace(/\{\{reply_to_lower\}\}/g, sender.email)
@@ -870,9 +876,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   <p className="font-bold text-[#0F1A16]">
                     {personalizeSubject(selectedTemplate.subject, previewPersonalizationName)}
                   </p>
-                  <p className="text-[11px] text-[#4B5D55] mt-1">
-                    Template: <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span>
-                  </p>
+                  <div className="mt-2 grid gap-1 text-[11px] text-[#4B5D55] sm:grid-cols-2">
+                    <p><span className="uppercase tracking-wider">From:</span> <span className="text-[#0F1A16] font-semibold">{sender.name}</span> &lt;<span className="text-[#064E3B] font-semibold">{sender.email.toUpperCase()}</span>&gt;</p>
+                    <p><span className="uppercase tracking-wider">Reply-to:</span> <span className="text-[#064E3B] font-semibold">{sender.email.toUpperCase()}</span></p>
+                    <p className="sm:col-span-2"><span className="uppercase tracking-wider">Template:</span> <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span></p>
+                  </div>
                 </div>
                 <iframe
                   title="Branded email preview"
