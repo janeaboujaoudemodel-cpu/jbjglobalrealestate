@@ -230,6 +230,7 @@ serve(async (req: Request) => {
       sender_phone_tel: "tel:+971547167107",
     });
     html = hardenRenderedDeveloperHtml(html, dev.developer_name, replyTo);
+    html = injectJbjBrandHeader(html);
     const baseSubject = isTest && body.subjectOverride && body.subjectOverride.trim()
       ? body.subjectOverride.trim()
       : template.subject;
