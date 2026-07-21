@@ -245,12 +245,13 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
   return (
     <span
       data-branded-email-fallback-logo="true"
+      data-no-contrast-guard="true"
       className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md border-0 shadow-none ring-1 ring-[#064E3B]/20"
       style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
       aria-label={`${recipient.name} logo pending`}
       title={recipient.name}
     >
-      <span className="text-[10px] font-black leading-none allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
+      <span data-no-contrast-guard="true" className="text-[10px] font-black leading-none allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
         {initialsOf(recipient.name)}
       </span>
     </span>
