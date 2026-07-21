@@ -32,7 +32,7 @@ export function DldSyncStatusAlert() {
         .limit(1)
         .maybeSingle();
       if (error) throw error;
-      return (data ?? null) as Run | null;
+      return (data ?? null) as unknown as Run | null;
     },
     refetchInterval: 60_000,
   });
