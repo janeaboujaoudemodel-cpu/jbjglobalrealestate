@@ -141,12 +141,22 @@ export default function BrokeragePortal() {
     </div>
     <BrokerageExcelImportDialog open={importOpen} onOpenChange={setImportOpen} onDone={() => { qc.invalidateQueries({ queryKey: ["brokerage-portal-brokerages"] }); qc.invalidateQueries({ queryKey: ["brokerage-portal-lists"] }); qc.invalidateQueries({ queryKey: ["brokerage-portal-members"] }); }} />
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      {[
-        ["Total agencies", statsQ.data?.agencies],
-        ["Total brokers", statsQ.data?.brokers],
-        ["Uploaded brokers", statsQ.data?.uploaded],
-        ["Updated brokers", statsQ.data?.updated],
-      ].map(([label, value]) => <Card key={label as string} className="p-4 bg-[#F7F2EA] border border-[#B89555]/30"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{label}</p><p className="mt-1 text-2xl font-black text-[#064E3B]">{typeof value === "number" ? value.toLocaleString() : "—"}</p></Card>)}
+      {([
+        ["Total agencies", statsQ.data?.agencies, "all"],
+        ["Total brokers", statsQ.data?.brokers, "jbj"],
+        ["Uploaded brokers", statsQ.data?.uploaded, "list"],
+        ["Updated brokers", statsQ.data?.updated, "jbj"],
+      ] as const).map(([label, value, target]) => (
+        <button
+          key={label}
+          type="button"
+          onClick={() => setView(target as any)}
+          className={`p-4 rounded-xl text-left transition bg-[#F7F2EA] border ${view === target ? "border-[#064E3B] ring-1 ring-[#064E3B]/30" : "border-[#B89555]/30 hover:border-[#064E3B]/40"}`}
+        >
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{label}</p>
+          <p className="mt-1 text-2xl font-black text-[#064E3B]">{typeof value === "number" ? value.toLocaleString() : "—"}</p>
+        </button>
+      ))}
     </div>
     <AutomationsStrip />
     <BrandedEmailsLauncherCard variant="owner" />
