@@ -5,10 +5,10 @@
  * Every outreach edge function must import from here — never hardcode
  * sender or CC emails inline.
  *
- * Brokerage outreach is sent via Resend on the verified jbj.ae domain.
+ * Brokerage outreach is sent via Resend on the currently verified sender domain.
  */
 
-export const ALLOWED_SENDER_DOMAIN = "jbj.ae";
+export const ALLOWED_SENDER_DOMAIN = "maisonjane.ae";
 
 export const PRIMARY_SENDER = "info@jbj.ae";
 export const PRIMARY_SENDER_NAME = "JBJ Global Real Estate";
@@ -53,7 +53,7 @@ export function fixCcEmail(v: string | null | undefined): string {
 }
 
 /**
- * Guard: ensure the From address is on the verified Resend domain (jbj.ae).
+ * Guard: ensure the From address is on the verified Resend domain.
  * Throws an Error if not — caller should map to HTTP 400.
  */
 export function enforceAllowedSender(fromEmail: string): void {

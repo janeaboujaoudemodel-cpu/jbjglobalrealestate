@@ -303,7 +303,7 @@ serve(async (req: Request) => {
       }
     }
 
-    // Brokerage outreach is sent via Resend on the verified jbj.ae domain.
+    // Brokerage outreach is sent via Resend on the verified sender domain.
     // No Gmail connector — Gmail rewrites the From: header to the connected
     // mailbox (e.g. janeaboujaoudemodel@gmail.com) which is not what we want.
     if (!Deno.env.get("RESEND_API_KEY")) {
@@ -320,15 +320,14 @@ serve(async (req: Request) => {
       "CITI Developer";
 
     // HARD LOCK: brokerage outreach must never expose the JBJ brand to the
-    // recipient. Envelope From is on the verified jbj.ae domain (Resend
-    // requires this), but the DISPLAY NAME is "CITI Developers · Partnerships"
+    // recipient. Envelope From is on the verified sender domain (Resend
+    // requires this), but the DISPLAY NAME is "CITI Developers · Sales & Training Department"
     // and the REPLY-TO is Jane's Gmail so recipients only see CITI branding
     // and any reply goes to Jane's personal inbox — never to info@jbj.ae.
     // TODO: once citidevelopers.com is verified in Resend, set
     // FORCED_ENVELOPE_FROM = "partnerships@citidevelopers.com" so the raw
-    // envelope also stops leaking jbj.ae.
-    const FORCED_ENVELOPE_FROM = "partnerships@jbj.ae";
-    const FORCED_FROM_DISPLAY = "CITI Developers · Partnerships";
+    const FORCED_ENVELOPE_FROM = "partnerships@maisonjane.ae";
+    const FORCED_FROM_DISPLAY = "CITI Developers · Sales & Training Department";
     const fromName = FORCED_FROM_DISPLAY;
     const replyTo = "infoo.jane@gmail.com";
     try {
@@ -365,8 +364,8 @@ serve(async (req: Request) => {
     // Owner identity is HARDCODED — never derived from a company-name setting
     // (which previously turned "Citi Developer" into a first name "Citi").
     const ownerFirstName = "Jane";
-    const ownerFullName = "Jane Bou Jaoude";
-    const ownerDepartment = "Sales & Channel Partner Activation";
+    const ownerFullName = "Jane Bujold";
+    const ownerDepartment = "Sales & Training Department";
 
     // ---------- Personalization resolution ----------
     const personalization: Personalization = body.personalization || {};
@@ -425,12 +424,12 @@ serve(async (req: Request) => {
     const FORBIDDEN_BOOKING_HOSTS = ["jbj.ae", "www.jbj.ae", "/breakfast-booking"];
     const bookingUrlLower = bookingUrl.toLowerCase();
     const bookingUrlForbidden = FORBIDDEN_BOOKING_HOSTS.some((h) => bookingUrlLower.includes(h));
-    if (variant === "brokerage_breakfast_invite" && (!bookingUrl || bookingUrlForbidden)) {
+    if (!bookingUrl || bookingUrlForbidden) {
       return new Response(JSON.stringify({
         error: "BREAKFAST_BOOKING_URL_MISSING",
         message: bookingUrlForbidden
           ? "Send blocked — the saved booking URL points back to jbj.ae. Replace it with your Google Calendar appointment link (https://calendar.app.google/…) in CRM Settings → Brokerage Outreach."
-          : "Send blocked — no Google Calendar booking link configured. Open CRM Settings → Brokerage Outreach and paste your dedicated breakfast Google Calendar appointment link.",
+          : "Send blocked — no Google Calendar appointment booking link is saved yet. Paste your Google Calendar booking page link in CRM Settings → Brokerage Outreach first.",
       }), { status: 412, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
@@ -460,13 +459,13 @@ serve(async (req: Request) => {
       preferred_event_time_iso: preferredSlotIso || "",
       owner_first_name: ownerFirstName,
       owner_full_name: ownerFullName,
-      owner_last_name: "Bou Jaoude",
+      owner_last_name: "Bujold",
       owner_department: ownerDepartment,
       reply_to: replyTo,
       reply_to_display: replyTo,
       reply_to_lower: replyTo,
       developer_website: "https://www.citidevelopers.com",
-      developer_map: "https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18",
+      developer_map: "https://www.google.com/maps/search/?api=1&query=CITI%20Developers%20Sales%20Gallery%20Dubai",
       developer_phone_display: "+971 54 716 7107",
       developer_phone_tel: "tel:+971547167107",
       whatsapp_url: "https://wa.me/971547167107",
@@ -598,7 +597,7 @@ serve(async (req: Request) => {
       }
     }
 
-    // Send via Resend (verified jbj.ae domain). Quota + 2 req/s throttle
+    // Send via Resend (verified sender domain). Quota + 2 req/s throttle
     // are enforced inside sendViaResend.
     const resendResult = await sendViaResend({
       from: `${fromName} <${FORCED_ENVELOPE_FROM}>`,
@@ -641,7 +640,7 @@ serve(async (req: Request) => {
     if (isTest) {
       return new Response(JSON.stringify({
         ok: true, test: true, recipient, messageId, threadId,
-        from_email: replyTo, sent_via: "resend",
+        from_email: FORCED_ENVELOPE_FROM, reply_to: replyTo, sent_via: "resend",
         quota: resendResult.quota,
       }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -667,7 +666,7 @@ serve(async (req: Request) => {
       sent_via: "resend",
       external_message_id: messageId,
       thread_id: threadId,
-      from_email: replyTo,
+      from_email: FORCED_ENVELOPE_FROM,
       to_emails: [recipient],
       cc_emails: cc,
       subject,
@@ -675,7 +674,7 @@ serve(async (req: Request) => {
       sent_at: new Date().toISOString(),
     });
 
-    return new Response(JSON.stringify({ ok: true, recipient, messageId, threadId, variant, from_email: replyTo, sent_via: "resend", quota: resendResult.quota }), {
+    return new Response(JSON.stringify({ ok: true, recipient, messageId, threadId, variant, from_email: FORCED_ENVELOPE_FROM, reply_to: replyTo, sent_via: "resend", quota: resendResult.quota }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e: any) {
