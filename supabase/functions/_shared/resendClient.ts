@@ -1,10 +1,5 @@
 // Shared Resend sender — single chokepoint that enforces the
-// daily/monthly cap aligned with the Resend free plan.
-//
-// Free plan limits (https://resend.com/pricing):
-//   - 100 emails / day
-//   - 3,000 emails / month
-//   - 2 requests / second
+// daily/monthly delivery policy configured in `email_send_quota_config`.
 //
 // All outbound mail in the project should funnel through `sendViaResend`
 // so the cap, throttle, and observability live in one place.
@@ -76,9 +71,9 @@ export async function sendViaResend(input: ResendSendInput): Promise<ResendSendR
       error: c?.code ?? "QUOTA_REJECTED",
       quota: {
         sent_today: c?.sent_today ?? 0,
-        daily_limit: c?.daily_limit ?? 100,
+      daily_limit: c?.daily_limit ?? 0,
         sent_month: c?.sent_month ?? 0,
-        monthly_limit: c?.monthly_limit ?? 2900,
+      monthly_limit: c?.monthly_limit ?? 0,
       },
     };
   }
