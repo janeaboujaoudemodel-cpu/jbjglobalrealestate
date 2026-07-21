@@ -1,64 +1,76 @@
-# Broker/Developer Portal Automation & Truthful Feedback
+# Backend Rebuild Plan — Enrichment, Developer Profile, CRM Quick-Add
 
-Fixes eight related issues from your message. Grouped into phases so each ships verifiable.
+Scope is large. I'll batch it into four phases, all landing in the emerald Hub shell with white-on-emerald contrast, no gold/champagne, no highlight halos, no page redirects.
 
-## Phase 1 — Kill fake success messages (platform-wide)
+## Phase 1 — Enrichment Review page (card-by-card rebuild)
 
-Rule: no toast/pop-up says "success / pulled / synced / sent / verified" unless the backend response actually returned a non-zero, verified action.
+Problems observed:
+- Emerald pills (DEVELOPER / PENDING / Approve) render black text on emerald.
+- Raw JSON (custom_fields) leaking as unformatted HTML/text inside cards.
+- Pending/Approve counters mismatched; duplicate suggestion rows for the same source.
+- Layout inconsistent, background highlight halos behind cards.
 
-- Broker Portal `Run now` (DLD daily sync): only toast success when the edge function returns `rowsInserted + rowsUpdated > 0`. If zero, show "No new records from DLD" (neutral, not green).
-- Developer Portal same rule.
-- `Sync now` (Gmail): only success when `messagesFetched > 0`; otherwise neutral "Inbox is up to date".
-- Distribute / Send email / Verify / etc.: audit `src/components/**/*.tsx` and `src/pages/owner/**/*.tsx` for `toast.success(...)` calls that fire before/without checking the response payload — gate every one on the real result.
+Fix:
+- Rewrite `EnrichmentReviewPage.tsx` + `EnrichmentSuggestionCard.tsx`:
+  - Header row: entity badge (DEVELOPER), model chip, status pill — all `bg-emerald-900 text-white` with `!important` locks.
+  - Deduplicate by `(entity_id, field_name)`, keep newest suggestion only.
+  - Render JSON fields via a `<FieldDiff>` component: labeled key/value rows, no raw braces. Long text truncates to 6 lines with expand.
+  - Reject / Approve buttons: emerald filled + emerald outline, both white text, matched height.
+  - Remove card `bg-muted` halo; use flat `bg-white border border-emerald-900/10`.
+- Fix Pending count = suggestions with status='pending' AND fill_count > 0. "Approve (fill 0)" rows get filtered out or show "Nothing to fill" state.
 
-## Phase 2 — Auto-sync (no manual clicks)
+## Phase 2 — Developer Profile rebuild
 
-- **Gmail inbox**: pg_cron job every 10 min → invokes `gmail-sync` edge function for the owner's connected mailbox. Uses existing `CRON_SHARED_SECRET` if present.
-- **DLD brokerage sync**: pg_cron job daily at 06:00 GST → invokes `dld-brokerage-sync`. Removes need to press Run now (button stays for manual override).
-- Both write to `sync_runs` audit table so the UI can show real "Last run" + real counts.
+Problems: Contacts & Reps tab is minimal; no live preview; no filter/search on reps; contract upload missing; highlight halos behind "Developer contact" / "Registered sales representatives".
 
-## Phase 3 — Replace "Sync now" with "Inbox" button
+Fix:
+- **Live Preview strip** at top of profile: pill row linking to public pages:
+  - Developer page · Projects · Emirates · Areas · Communities · Locations
+  - Each opens in a new tab to the front-end route (read-only preview).
+- **Portfolio tab** — each project card gets a "View public page ↗" link to `/projects/:slug`.
+- **Contacts & Reps rebuild** (`DeveloperRepsSection.tsx`):
+  - Add-rep dialog inline (no redirect): name, position, country dial-code dropdown, phone, WhatsApp, email, nationality, languages (multi), notes, photo upload.
+  - Filter bar: search + facets (position, country, nationality, language).
+  - List view with avatar, contact chips, edit/delete inline.
+- Remove `bg-muted/bg-accent/50` halos from section wrappers globally in `crmShell.css`.
 
-Next to "Gmail Inbox · infoo.jane@gmail.com":
-- Primary button: **Inbox** → opens `/owner/mailbox` (in-page, emerald shell), listing latest ingested messages with search, filter by developer/brokerage, and click-through to the original Gmail thread.
-- Manual "Sync" moved to a small refresh icon (secondary).
+## Phase 3 — Enrichment content extraction
 
-## Phase 4 — Email → status automation
+- Extend `extract-developer-content` edge function to crawl developer site's e-catalogue pages (Amra, Allura, Arya, Aveline, Agua) per developer.
+- For each project found: create/update `projects` row with location, emirate, community, area, handover, units, brochure links.
+- Auto-link projects → developer, emirate, area, community entities so profile cards show correct list (fixes "wrong projects for Citi").
+- Download any PDF brochures/materials to `developer-brochures` bucket; run text extract into `project_documents` for AI enrichment.
+- Dedupe projects by `(developer_id, normalized_name)` — resolves duplicate project cards.
 
-Edge function `email-status-reconciler` runs after every Gmail sync:
-- For each new inbound/outbound message, match `From/To/Subject/Body` against `developers.name`, `developers.website`, `brokerages.name`, `brokerages.email_domains`.
-- On match, update the card:
-  - Inbound reply → status `responded`, append note `"Replied on {date}: {subject}"`.
-  - Outbound with no prior send → status `contacted`.
-  - Bounce/complaint → status `bounced`.
-- Writes `activity_log` row so you see the audit trail on the developer/brokerage profile.
+## Phase 4 — CRM inline quick-add
 
-## Phase 5 — Clickable portal stat cards
+Problem: "Register Meeting / Deal / Event" opens new page and redirects to CRM.
 
-Total Agencies · Total Brokers · Uploaded · Updated cards become buttons:
-- `Total Agencies` → in-page drawer listing every agency (paginated, search).
-- `Total Brokers` → in-page drawer of brokers.
-- `Uploaded` → filtered list `uploaded_at IS NOT NULL`.
-- `Updated` → filtered list where `updated_at > created_at` (real edits only).
+Fix:
+- Replace the header CTA with a `QuickAddPopover` (radix Popover), same pattern as the "+" button:
+  - Options: Log Call · Meeting · Task · Deal · Event · Note.
+  - Each opens an inline `<Sheet>` on the same page with the form, saves via existing mutations, no navigation.
+- Same component reused across CRM, JBJ Hub, Developer profile, Broker profile.
 
-All drawers open inside the JBJ Hub shell — no navigation to legacy backend.
+## Contrast / structural guarantees (applied in all phases)
 
-## Phase 6 — Truthful "Updated brokers" count
+- `crmShell.css`: 
+  - `.emerald-pill, [data-status], [data-badge]` → `bg-emerald-900 !text-white`.
+  - Remove `background-color` from `.card-halo, [data-card-bg]` wrappers.
+  - Enforce `#064E3B` (not tailwind `green-*`) across every button variant used in Hub.
+- No route inside Owner Backend may `navigate()` to a champagne path; add router guard.
 
-Current count (32,651) reflects any row touched by seed/import, not real edits. Fix:
-- Recompute `Updated brokers` as `COUNT(*) WHERE last_manual_update_at IS NOT NULL`.
-- Add `last_manual_update_at` column; populate only on genuine field edits (not bulk imports, not cron reconciler unless it changed a field).
-- Backfill: set NULL for all existing rows so the count starts at 0 and grows only when you or the auto-reconciler actually change something.
+## Verification
 
-## Phase 7 — Answer on CRON_SHARED_SECRET
+Playwright E2E on:
+1. `/owner/enrichment-review` — screenshot each card state (pending, approve>0, approve=0, rejected).
+2. `/owner/developer-profiles/citi-developers` — screenshot Overview, Portfolio (live links), Contacts & Reps (add + filter).
+3. `/owner/crm` — click Register Meeting → confirm popover opens same page, submit meeting, confirm no navigation.
+4. Assert computed color of every status pill = `rgb(255,255,255)` on emerald bg.
 
-I asked to delete it earlier because during owner-auth-middleware cleanup I mistakenly treated it as orphaned. It is **not** orphaned — the new cron jobs in Phase 2 use it. I'll regenerate it now and keep it. Skip the delete approval you saw.
+All screenshots saved to `/tmp/browser/rebuild/` and reviewed before I report back.
 
-## Technical notes
+## Out of scope for this pass
 
-- New tables: `sync_runs(id, kind, started_at, finished_at, rows_inserted, rows_updated, error)`, `activity_log(id, entity_type, entity_id, kind, payload, created_at)`.
-- New column: `brokerages.last_manual_update_at timestamptz`, `developers.last_manual_update_at timestamptz`.
-- Cron: `pg_cron` + `pg_net` with `CRON_SHARED_SECRET` header check inside each edge function.
-- No changes to Zoho-mirrored pages.
-
-Reply "go" to execute, or tell me which phases to reorder/skip.
+- Zoho-mirrored pages (untouched per prior rule).
+- Front-end public pages (only linked to, not restyled).
