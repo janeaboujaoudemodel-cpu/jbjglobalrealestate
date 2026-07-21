@@ -87,6 +87,11 @@ function extractFirstEmail(value: unknown): string | null {
   return match?.[0]?.trim().toLowerCase() || null;
 }
 
+function isCitiRecipient(r: Pick<Recipient, "name">): boolean {
+  const n = (r.name || "").toLowerCase();
+  return /\bciti\b/.test(n) || /\bcity\s+developers?\b/.test(n);
+}
+
 async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
   if (kind === "developers") {
     const { data, error } = await (supabase as any)
