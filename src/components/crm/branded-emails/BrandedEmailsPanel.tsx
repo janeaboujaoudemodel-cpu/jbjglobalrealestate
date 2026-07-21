@@ -197,7 +197,10 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
-    .replace(/<div([^>]*background:#FAF5EA[^>]*)>/gi, '<div data-jbj-contact-note="true"$1 style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">')
+    .replace(/<div([^>]*style=(['"])(?=[^'"]*background:#FAF5EA)([^'"]*)\2[^>]*)>/gi, (match, attrs) => {
+      const withMarker = attrs.includes("data-jbj-contact-note") ? attrs : ` data-jbj-contact-note="true"${attrs}`;
+      return `<div${withMarker.replace(/style=(['"])([^'"]*)\1/i, (_styleMatch, quote, styleValue) => `style=${quote}${styleValue};color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;${quote}`)}>`;
+    })
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
