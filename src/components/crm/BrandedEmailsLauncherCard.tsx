@@ -5,10 +5,10 @@
  * IN PLACE — no redirect to the Relationships Hub. All template + audience
  * curation happens inside the current portal (Broker / Developer / Owner).
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Mail } from "lucide-react";
-import BrandedEmailsPanel, { type BrandedAudienceKind } from "./branded-emails/BrandedEmailsPanel";
+import BrandedEmailsPanel, { preloadBrandedEmailsData, type BrandedAudienceKind } from "./branded-emails/BrandedEmailsPanel";
 
 type Variant = "owner" | "broker" | "developer";
 
@@ -47,6 +47,13 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
     setKind(k);
     setOpen(true);
   };
+
+  const warm = (k: BrandedAudienceKind) => preloadBrandedEmailsData(k);
+
+  useEffect(() => {
+    warm(c.kind);
+    if (variant === "owner") warm("brokerages");
+  }, [c.kind, variant]);
 
   return (
     <>
@@ -95,6 +102,9 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
             {variant === "owner" && (
               <button
                 type="button"
+                data-branded-email-secondary-action="true"
+                onPointerEnter={() => warm("brokerages")}
+                onFocus={() => warm("brokerages")}
                 onClick={() => openWith("brokerages")}
                 style={{
                   display: "inline-flex", alignItems: "center", justifyContent: "center",
@@ -112,6 +122,8 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
               type="button"
               data-branded-email-launch-action="true"
               className="jbj-force-white-button"
+              onPointerEnter={() => warm(c.kind)}
+              onFocus={() => warm(c.kind)}
               onClick={() => openWith(c.kind)}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 6, justifyContent: "center",

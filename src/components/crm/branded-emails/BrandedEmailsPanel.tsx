@@ -59,6 +59,10 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
 
+const recipientsCache = new Map<BrandedAudienceKind, Recipient[]>();
+const templatesCache = new Map<BrandedAudienceKind, Template[]>();
+const inflightCache = new Map<BrandedAudienceKind, Promise<[Recipient[], Template[]]>>();
+
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -163,6 +167,29 @@ async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
     .filter((t): t is Template => Boolean(t));
 }
 
+async function loadBrandedEmailData(kind: BrandedAudienceKind): Promise<[Recipient[], Template[]]> {
+  const cachedRecipients = recipientsCache.get(kind);
+  const cachedTemplates = templatesCache.get(kind);
+  if (cachedRecipients && cachedTemplates) return [cachedRecipients, cachedTemplates];
+
+  const inflight = inflightCache.get(kind);
+  if (inflight) return inflight;
+
+  const promise = Promise.all([loadRecipients(kind), loadTemplates(kind)])
+    .then(([r, t]) => {
+      recipientsCache.set(kind, r);
+      templatesCache.set(kind, t);
+      return [r, t] as [Recipient[], Template[]];
+    })
+    .finally(() => inflightCache.delete(kind));
+  inflightCache.set(kind, promise);
+  return promise;
+}
+
+export function preloadBrandedEmailsData(kind: BrandedAudienceKind) {
+  loadBrandedEmailData(kind).catch(() => undefined);
+}
+
 function stripHtml(html: string) {
   return html.replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<script[\s\S]*?<\/script>/gi, "")
@@ -172,7 +199,7 @@ function stripHtml(html: string) {
     .trim();
 }
 
-function personalizeTemplate(html: string, sampleName = "Developer Team", audienceKind: BrandedAudienceKind = "developers") {
+function personalizeTemplate(html: string, sampleName = "Recipient Developer Name", audienceKind: BrandedAudienceKind = "developers") {
   const sender = SENDER_BY_KIND[audienceKind];
   const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
@@ -203,6 +230,9 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
+    .replace(/Dear\s+<strong>[^<]+<\/strong>\s+Broker Relations Team/gi, `Dear <strong>${sampleName}</strong> Broker Relations Team`)
+    .replace(/Dear\s+[^,<\n]+\s+Broker Relations Team/gi, `Dear ${sampleName} Broker Relations Team`)
+    .replace(/Dear\s+<strong>[^<]+<\/strong>\s+team/gi, `Dear <strong>${sampleName}</strong> team`)
     .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${sampleName}`)
     .replace(/<div([^>]*style=(['"])(?=[^'"]*background:#FAF5EA)([^'"]*)\2[^>]*)>/gi, (match, attrs) => {
       const withMarker = attrs.includes("data-jbj-contact-note") ? attrs : ` data-jbj-contact-note="true"${attrs}`;
@@ -211,13 +241,29 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
-function personalizeSubject(subject: string, sampleName = "Developer Team") {
+function personalizeSubject(subject: string, sampleName = "Recipient Developer Name") {
   return subject
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
       .replace(/\{\{project_name\}\}/g, "Citi Developer")
     .replace(/jbj\.ae/gi, "JBJ.AE")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+}
+
+function displayNameFromEmail(email: string, fallback: string) {
+  const normalized = email.trim().toLowerCase();
+  if (normalized === "infoo.jane@gmail.com") return "Jane";
+  const local = normalized.split("@")[0] || "";
+  const cleaned = local
+    .replace(/\+.*$/, "")
+    .replace(/[._\-0-9]+/g, " ")
+    .trim();
+  if (!cleaned) return fallback;
+  return cleaned
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 function initialsOf(name: string) {
@@ -277,10 +323,16 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    const hasCurrentData = recipients.length > 0 && templates.length > 0;
+    const cachedRecipients = recipientsCache.get(kind);
+    const cachedTemplates = templatesCache.get(kind);
+    if (cachedRecipients && cachedTemplates) {
+      setRecipients(cachedRecipients);
+      setTemplates(cachedTemplates);
+    }
+    const hasCurrentData = (cachedRecipients?.length || recipients.length) > 0 && (cachedTemplates?.length || templates.length) > 0;
     setLoading(!hasCurrentData);
     setLoadError(null);
-    Promise.all([loadRecipients(kind), loadTemplates(kind)])
+    loadBrandedEmailData(kind)
       .then(([r, t]) => {
         if (cancelled) return;
         setRecipients(r);
@@ -342,7 +394,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     () => recipients.find((r) => selectedIds.has(r.id)) || recipients[0] || null,
     [recipients, selectedIds]
   );
-  const previewRecipientName = previewRecipient?.name || (kind === "developers" ? "Developer Team" : "Brokerage Team");
+  const previewRecipientName = previewRecipient?.name || (kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name");
+  const previewPersonalizationName = kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name";
   const sender = SENDER_BY_KIND[kind];
 
   useEffect(() => {
@@ -373,7 +426,10 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     }
     setSending(true);
     try {
-      const sampleName = previewRecipientName;
+      const sampleName = displayNameFromEmail(
+        testEmail.trim(),
+        kind === "developers" ? "Test Recipient" : "Test Brokerage",
+      );
       const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
       const body = kind === "developers"
         ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testDeveloperName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) }
@@ -493,7 +549,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                             )}
                             <p className="font-black leading-tight text-[#0F1A16] break-words">{t.name}</p>
                           </div>
-                          <p className="mt-1 line-clamp-2 break-words text-xs text-[#4B5D55]">{personalizeSubject(t.subject, previewRecipientName)}</p>
+                          <p className="mt-1 line-clamp-2 break-words text-xs text-[#4B5D55]">{personalizeSubject(t.subject, previewPersonalizationName)}</p>
                         </div>
                       </div>
                     </button>
@@ -686,7 +742,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <div className="px-5 py-4 border-b bg-[#F8FAF9]" style={{ borderColor: "rgba(184,149,85,0.35)" }}>
                   <p className="text-[11px] text-[#4B5D55] uppercase tracking-wider">Subject</p>
                   <p className="font-bold text-[#0F1A16]">
-                    {personalizeSubject(selectedTemplate.subject, previewRecipientName)}
+                    {personalizeSubject(selectedTemplate.subject, previewPersonalizationName)}
                   </p>
                   <p className="text-[11px] text-[#4B5D55] mt-1">
                     Template: <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span>
@@ -695,8 +751,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <ScrollArea className="h-[min(68vh,720px)]">
                   <div
                     data-branded-email-preview-body="true"
-                    className="p-4 md:p-8 prose prose-sm max-w-none text-[#0F1A16] [&_*]:!max-w-full [&_a]:!text-[#0a0a0a] [&_a]:!font-bold [&_a]:underline [&_a]:decoration-[#B89555]"
-                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, previewRecipientName, kind) }}
+                    className="p-3 md:p-5 prose prose-sm max-w-none text-[#0F1A16] [&_*]:!max-w-full [&_table]:!w-full [&_table]:!max-w-full [&_td]:!max-w-full [&_td]:!box-border [&_a]:!text-[#0a0a0a] [&_a]:!font-bold [&_a]:underline [&_a]:decoration-[#B89555]"
+                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind) }}
                   />
                 </ScrollArea>
               </div>
