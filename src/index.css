@@ -1914,6 +1914,22 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
     opacity: 1 !important;
   }
 
+  [data-branded-email-panel="true"] [data-branded-email-checkbox="true"],
+  [data-branded-email-panel="true"] [data-branded-email-checkbox="true"][data-state="checked"],
+  [data-branded-email-panel="true"] [data-branded-email-checkbox="true"]:hover,
+  [data-branded-email-panel="true"] [data-branded-email-checkbox="true"]:focus {
+    border-color: #064E3B !important;
+    box-shadow: none !important;
+  }
+
+  [data-branded-email-panel="true"] [data-branded-email-fallback-logo="true"],
+  [data-branded-email-panel="true"] [data-branded-email-fallback-logo="true"] * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+  }
+
   /* ============================================================
    * GLOBAL DESIGN SYSTEM - JBJ GLOBAL REAL ESTATE
    * LOCKED - Applies to Front-End, Back-End, CRM, Employee Hub
