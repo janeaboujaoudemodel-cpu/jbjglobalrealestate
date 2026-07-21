@@ -876,9 +876,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   <p className="font-bold text-[#0F1A16]">
                     {personalizeSubject(selectedTemplate.subject, previewPersonalizationName)}
                   </p>
-                  <p className="text-[11px] text-[#4B5D55] mt-1">
-                    Template: <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span>
-                  </p>
+                  <div className="mt-2 grid gap-1 text-[11px] text-[#4B5D55] sm:grid-cols-2">
+                    <p><span className="uppercase tracking-wider">From:</span> <span className="text-[#0F1A16] font-semibold">{sender.name}</span> &lt;<span className="text-[#064E3B] font-semibold">{sender.email.toUpperCase()}</span>&gt;</p>
+                    <p><span className="uppercase tracking-wider">Reply-to:</span> <span className="text-[#064E3B] font-semibold">{sender.email.toUpperCase()}</span></p>
+                    <p className="sm:col-span-2"><span className="uppercase tracking-wider">Template:</span> <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span></p>
+                  </div>
                 </div>
                 <iframe
                   title="Branded email preview"
