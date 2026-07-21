@@ -364,7 +364,7 @@ serve(async (req: Request) => {
     // Owner identity is HARDCODED — never derived from a company-name setting
     // (which previously turned "Citi Developer" into a first name "Citi").
     const ownerFirstName = "Jane";
-    const ownerFullName = "Jane Bujold";
+    const ownerFullName = "Jane Bou Jaoude";
     const ownerDepartment = "Sales & Training Department";
 
     // ---------- Personalization resolution ----------
