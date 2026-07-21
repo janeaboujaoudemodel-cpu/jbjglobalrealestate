@@ -36,6 +36,7 @@ import { formatDistanceToNow } from "date-fns";
 import { DLDFilterDropdown, type DLDFilterValue } from "@/components/crm/DLDFilterDropdown";
 import { DLDExportButton, type DLDExportSegment } from "@/components/crm/DLDExportButton";
 import { DLDConflictsSection } from "@/components/crm/DLDConflictsSection";
+import { DldSyncStatusAlert } from "@/components/crm/DldSyncStatusAlert";
 
 
 type Segment = "broker_secondary" | "broker_offplan" | "brokerage" | "developer";
