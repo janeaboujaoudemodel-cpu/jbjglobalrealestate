@@ -33,6 +33,10 @@ import {
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { formatDistanceToNow } from "date-fns";
+import { DLDFilterDropdown, type DLDFilterValue } from "@/components/crm/DLDFilterDropdown";
+import { DLDExportButton, type DLDExportSegment } from "@/components/crm/DLDExportButton";
+import { DLDConflictsSection } from "@/components/crm/DLDConflictsSection";
+
 
 type Segment = "broker_secondary" | "broker_offplan" | "brokerage" | "developer";
 type Status =
