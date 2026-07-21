@@ -205,7 +205,7 @@ serve(async (req: Request) => {
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
 
     const fromName = "Amelia — JBJ Global Real Estate";
-    const replyTo = "contact@jbj.ae";
+    const replyTo = "helpdesk@jbj.ae";
     const activeCcArr = Array.isArray(settings.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
     const legacyCc = (settings.cc_email || "").trim();
     const ccList = body.ccEmailOverride
