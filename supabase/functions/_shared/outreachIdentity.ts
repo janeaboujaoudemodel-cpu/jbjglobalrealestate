@@ -58,7 +58,7 @@ export function fixCcEmail(v: string | null | undefined): string {
  */
 export function enforceAllowedSender(fromEmail: string): void {
   const lower = (fromEmail || "").trim().toLowerCase();
-  if (!lower.endsWith("@" + ALLOWED_SENDER_DOMAIN)) {
+  if (lower !== PRIMARY_SENDER) {
     throw new Error(
       `Sender ${fromEmail || "(empty)"} is not the approved brokerage sender. ` +
       `Brokerage outreach must use ${PRIMARY_SENDER}.`,
