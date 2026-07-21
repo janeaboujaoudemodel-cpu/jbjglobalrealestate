@@ -235,7 +235,7 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
       aria-label={`${recipient.name} logo pending`}
       title={recipient.name}
     >
-      <span className="text-[10px] font-black leading-none text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+      <span className="text-[10px] font-black leading-none" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
         {initialsOf(recipient.name)}
       </span>
     </span>
@@ -443,6 +443,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                       key={t.variant}
                       type="button"
                       onClick={() => setSelectedTemplateId(t.variant)}
+                        data-branded-email-template-card={active ? "active" : "inactive"}
                       className="group overflow-hidden rounded-lg border p-0 text-left transition-colors"
                       style={{
                         borderColor: active ? "rgba(184,149,85,0.72)" : "rgba(6,78,59,0.16)",
