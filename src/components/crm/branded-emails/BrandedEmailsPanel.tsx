@@ -487,10 +487,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const activeBrand = BRAND_HEADER_BY_KIND[kind];
 
   useEffect(() => {
-    if (!isDeveloperRegistrationCampaign(kind, selectedTemplate)) return;
     const eligible = new Set(eligibleRecipients.map((r) => r.id));
     setSelectedIds((current) => new Set([...current].filter((id) => eligible.has(id))));
-  }, [kind, selectedTemplate, eligibleRecipients]);
+  }, [eligibleRecipients]);
 
   const toggleId = (id: string) =>
     setSelectedIds((s) => {
