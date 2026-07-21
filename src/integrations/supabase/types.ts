@@ -7945,10 +7945,14 @@ export type Database = {
           deal_count_cached: number
           deleted_at: string | null
           directory_rank: number | null
+          dld_area: string | null
           dld_first_seen_at: string | null
           dld_last_synced_at: string | null
+          dld_license_category: string | null
           dld_license_number: string | null
+          dld_office_no: string | null
           dld_office_number: string | null
+          dld_source: string | null
           dnc_reason: string | null
           do_not_contact: boolean
           email: string | null
@@ -8080,10 +8084,14 @@ export type Database = {
           deal_count_cached?: number
           deleted_at?: string | null
           directory_rank?: number | null
+          dld_area?: string | null
           dld_first_seen_at?: string | null
           dld_last_synced_at?: string | null
+          dld_license_category?: string | null
           dld_license_number?: string | null
+          dld_office_no?: string | null
           dld_office_number?: string | null
+          dld_source?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
@@ -8215,10 +8223,14 @@ export type Database = {
           deal_count_cached?: number
           deleted_at?: string | null
           directory_rank?: number | null
+          dld_area?: string | null
           dld_first_seen_at?: string | null
           dld_last_synced_at?: string | null
+          dld_license_category?: string | null
           dld_license_number?: string | null
+          dld_office_no?: string | null
           dld_office_number?: string | null
+          dld_source?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
@@ -8352,10 +8364,14 @@ export type Database = {
           database_source: string | null
           date_of_birth: string | null
           department: string | null
+          dld_area: string | null
+          dld_broker_no: string | null
           dld_card_number: string | null
           dld_first_seen_at: string | null
           dld_last_synced_at: string | null
           dld_license_category: string | null
+          dld_project: string | null
+          dld_source: string | null
           driving_license: string | null
           email_lower: string | null
           emirate: string | null
@@ -8461,10 +8477,14 @@ export type Database = {
           database_source?: string | null
           date_of_birth?: string | null
           department?: string | null
+          dld_area?: string | null
+          dld_broker_no?: string | null
           dld_card_number?: string | null
           dld_first_seen_at?: string | null
           dld_last_synced_at?: string | null
           dld_license_category?: string | null
+          dld_project?: string | null
+          dld_source?: string | null
           driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
@@ -8570,10 +8590,14 @@ export type Database = {
           database_source?: string | null
           date_of_birth?: string | null
           department?: string | null
+          dld_area?: string | null
+          dld_broker_no?: string | null
           dld_card_number?: string | null
           dld_first_seen_at?: string | null
           dld_last_synced_at?: string | null
           dld_license_category?: string | null
+          dld_project?: string | null
+          dld_source?: string | null
           driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
@@ -9210,6 +9234,7 @@ export type Database = {
           developer_email: string | null
           developer_name: string
           developer_slug: string
+          dld_source: string | null
           dnc_reason: string | null
           do_not_contact: boolean
           documents: Json | null
@@ -9317,6 +9342,7 @@ export type Database = {
           developer_email?: string | null
           developer_name: string
           developer_slug: string
+          dld_source?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           documents?: Json | null
@@ -9424,6 +9450,7 @@ export type Database = {
           developer_email?: string | null
           developer_name?: string
           developer_slug?: string
+          dld_source?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           documents?: Json | null
@@ -16065,6 +16092,228 @@ export type Database = {
           data_key?: string
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      dld_scrape_conflicts: {
+        Row: {
+          created_at: string
+          dld_snapshot: Json
+          id: string
+          live_row_id: string
+          live_snapshot: Json
+          live_table: string
+          match_type: string
+          notes: string | null
+          resolution: string
+          resolved_at: string | null
+          resolved_by: string | null
+          segment: string
+          staging_row_id: string
+          staging_table: string
+        }
+        Insert: {
+          created_at?: string
+          dld_snapshot: Json
+          id?: string
+          live_row_id: string
+          live_snapshot: Json
+          live_table: string
+          match_type: string
+          notes?: string | null
+          resolution?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          segment: string
+          staging_row_id: string
+          staging_table: string
+        }
+        Update: {
+          created_at?: string
+          dld_snapshot?: Json
+          id?: string
+          live_row_id?: string
+          live_snapshot?: Json
+          live_table?: string
+          match_type?: string
+          notes?: string | null
+          resolution?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          segment?: string
+          staging_row_id?: string
+          staging_table?: string
+        }
+        Relationships: []
+      }
+      dld_scrape_staging_brokerages: {
+        Row: {
+          area: string | null
+          created_at: string
+          email: string | null
+          id: string
+          ingest_note: string | null
+          ingest_status: string
+          ingested_at: string | null
+          license_expiry: string | null
+          manager: string | null
+          name_ar: string | null
+          name_en: string | null
+          office_no: string | null
+          phone: string | null
+          raw_row: Json
+          run_id: string
+          scraped_at: string
+        }
+        Insert: {
+          area?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          ingest_note?: string | null
+          ingest_status?: string
+          ingested_at?: string | null
+          license_expiry?: string | null
+          manager?: string | null
+          name_ar?: string | null
+          name_en?: string | null
+          office_no?: string | null
+          phone?: string | null
+          raw_row?: Json
+          run_id: string
+          scraped_at?: string
+        }
+        Update: {
+          area?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          ingest_note?: string | null
+          ingest_status?: string
+          ingested_at?: string | null
+          license_expiry?: string | null
+          manager?: string | null
+          name_ar?: string | null
+          name_en?: string | null
+          office_no?: string | null
+          phone?: string | null
+          raw_row?: Json
+          run_id?: string
+          scraped_at?: string
+        }
+        Relationships: []
+      }
+      dld_scrape_staging_brokers: {
+        Row: {
+          area: string | null
+          broker_no: string | null
+          created_at: string
+          email: string | null
+          id: string
+          ingest_note: string | null
+          ingest_status: string
+          ingested_at: string | null
+          license_category: string | null
+          license_expiry: string | null
+          mobile: string | null
+          name_ar: string | null
+          name_en: string | null
+          office_name: string | null
+          raw_row: Json
+          run_id: string
+          scraped_at: string
+        }
+        Insert: {
+          area?: string | null
+          broker_no?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          ingest_note?: string | null
+          ingest_status?: string
+          ingested_at?: string | null
+          license_category?: string | null
+          license_expiry?: string | null
+          mobile?: string | null
+          name_ar?: string | null
+          name_en?: string | null
+          office_name?: string | null
+          raw_row?: Json
+          run_id: string
+          scraped_at?: string
+        }
+        Update: {
+          area?: string | null
+          broker_no?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          ingest_note?: string | null
+          ingest_status?: string
+          ingested_at?: string | null
+          license_category?: string | null
+          license_expiry?: string | null
+          mobile?: string | null
+          name_ar?: string | null
+          name_en?: string | null
+          office_name?: string | null
+          raw_row?: Json
+          run_id?: string
+          scraped_at?: string
+        }
+        Relationships: []
+      }
+      dld_scrape_staging_developers: {
+        Row: {
+          created_at: string
+          developer_no: string | null
+          email: string | null
+          id: string
+          ingest_note: string | null
+          ingest_status: string
+          ingested_at: string | null
+          license_no: string | null
+          name_ar: string | null
+          name_en: string | null
+          phone: string | null
+          raw_row: Json
+          run_id: string
+          scraped_at: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string
+          developer_no?: string | null
+          email?: string | null
+          id?: string
+          ingest_note?: string | null
+          ingest_status?: string
+          ingested_at?: string | null
+          license_no?: string | null
+          name_ar?: string | null
+          name_en?: string | null
+          phone?: string | null
+          raw_row?: Json
+          run_id: string
+          scraped_at?: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string
+          developer_no?: string | null
+          email?: string | null
+          id?: string
+          ingest_note?: string | null
+          ingest_status?: string
+          ingested_at?: string | null
+          license_no?: string | null
+          name_ar?: string | null
+          name_en?: string | null
+          phone?: string | null
+          raw_row?: Json
+          run_id?: string
+          scraped_at?: string
+          status?: string | null
         }
         Relationships: []
       }

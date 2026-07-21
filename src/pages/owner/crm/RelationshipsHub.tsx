@@ -33,6 +33,10 @@ import {
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { formatDistanceToNow } from "date-fns";
+import { DLDFilterDropdown, type DLDFilterValue } from "@/components/crm/DLDFilterDropdown";
+import { DLDExportButton, type DLDExportSegment } from "@/components/crm/DLDExportButton";
+import { DLDConflictsSection } from "@/components/crm/DLDConflictsSection";
+
 
 type Segment = "broker_secondary" | "broker_offplan" | "brokerage" | "developer";
 type Status =
@@ -129,23 +133,50 @@ function useSegmentKpis(segment: Segment) {
 /* ------------------------------------------------------------------ */
 /* Rows query                                                         */
 /* ------------------------------------------------------------------ */
-function useSegmentRows(segment: Segment, statusFilter: Status | "all", search: string, newTodayOnly: boolean) {
+function useSegmentRows(
+  segment: Segment,
+  statusFilter: Status | "all",
+  search: string,
+  newTodayOnly: boolean,
+  dld: DLDFilterValue,
+) {
   return useQuery({
-    queryKey: ["rel-hub-rows", segment, statusFilter, search, newTodayOnly],
+    queryKey: ["rel-hub-rows", segment, statusFilter, search, newTodayOnly, dld.category, dld.detail ?? ""],
     queryFn: async () => {
       const cfg = SEGMENT_TO_TABLE[segment];
-      const cols = ["id", cfg.nameCol, "relationship_status", "last_contacted_at", "first_seen_at", ...cfg.extra].join(",");
-      let q: any = supabase.from(cfg.table as any).select(cols).limit(300).order("first_seen_at", { ascending: false });
+      // Include DLD-native fields so the filter dropdown + export always have them.
+      const extraCols = [
+        ...cfg.extra,
+        "dld_license_category",
+        "dld_area",
+        "dld_broker_no",
+        "dld_office_no",
+        "name_ar",
+      ];
+      const cols = ["id", cfg.nameCol, "relationship_status", "last_contacted_at", "first_seen_at", ...extraCols].join(",");
+      let q: any = supabase.from(cfg.table as any).select(cols).limit(500).order("first_seen_at", { ascending: false });
       if (cfg.brokerFilter) q = cfg.brokerFilter(q);
       if (statusFilter !== "all") q = q.eq("relationship_status", statusFilter);
       if (newTodayOnly) q = q.gte("first_seen_at", startOfTodayUtcIso());
       if (search.trim()) q = q.ilike(cfg.nameCol, `%${search.trim()}%`);
+
+      // DLD-style filters
+      if (dld.category !== "all") {
+        if (dld.category === "by_area" && dld.detail) {
+          q = q.eq("dld_area", dld.detail);
+        } else if (dld.category === "by_project" && dld.detail) {
+          q = q.eq("dld_project", dld.detail);
+        } else if (dld.category !== "by_area" && dld.category !== "by_project") {
+          q = q.eq("dld_license_category", dld.category);
+        }
+      }
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as any[];
     },
   });
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Activity feed                                                      */
@@ -198,9 +229,11 @@ export default function RelationshipsHub() {
   const [statusFilter, setStatusFilter] = useState<Status | "all">("all");
   const [search, setSearch] = useState("");
   const [newTodayOnly, setNewTodayOnly] = useState(false);
+  const [dld, setDld] = useState<DLDFilterValue>({ category: "all" });
 
   const kpis = useSegmentKpis(seg);
-  const rows = useSegmentRows(seg, statusFilter, search, newTodayOnly);
+  const rows = useSegmentRows(seg, statusFilter, search, newTodayOnly, dld);
+
   const feed = useActivityFeed(seg);
 
   const segMeta = useMemo(() => SEGMENTS.find((s) => s.key === seg)!, [seg]);
@@ -291,6 +324,33 @@ export default function RelationshipsHub() {
               className="pl-8 h-9 border-[#B89555]/40 bg-white"
             />
           </div>
+
+          {/* DLD-style category dropdown (mirrors DLD's public list) */}
+          <DLDFilterDropdown
+            value={dld}
+            onChange={setDld}
+            showOffices={seg === "brokerage"}
+            areaOptions={Array.from(
+              new Set(((rows.data ?? []) as any[]).map((r) => r.dld_area).filter(Boolean)),
+            ).sort()}
+            projectOptions={Array.from(
+              new Set(((rows.data ?? []) as any[]).map((r) => r.dld_project).filter(Boolean)),
+            ).sort()}
+          />
+
+          {/* Export current filtered view (CSV + branded XLSX) */}
+          <DLDExportButton
+            segment={
+              seg === "brokerage"
+                ? "brokerage"
+                : seg === "developer"
+                ? "developer"
+                : "broker"
+            }
+            rows={(rows.data ?? []) as any[]}
+            filenameSuffix={seg}
+          />
+
           <div className="flex flex-wrap items-center gap-1">
             {(["all","untouched","needs_follow_up","briefing_booked","registered","declined"] as const).map((s) => (
               <button
@@ -321,6 +381,7 @@ export default function RelationshipsHub() {
             </button>
           </div>
         </div>
+
 
         {/* Table */}
         <Card className="bg-white border-[#B89555]/30 overflow-hidden">
@@ -441,12 +502,17 @@ export default function RelationshipsHub() {
           </Card>
         </div>
 
+        {/* DLD Conflicts — needs owner review; never auto-updates live rows. */}
+        <DLDConflictsSection />
+
         <div className="rounded-lg border border-[#B89555]/40 bg-[#F7F1E4]/60 p-4 text-[12px] text-[#4B5D55]">
-          <strong className="text-[#0F1A16]">Daily DLD sync:</strong> The background job runs at 06:00 Dubai time
-          and adds new brokers (auto-classified as Secondary or Off-plan from their DLD license category),
-          brokerages, and developers directly into this hub. Every new record gets status <em>Untouched</em>
-          and appears in the <em>New from DLD (today)</em> filter above.
+          <strong className="text-[#0F1A16]">Daily DLD sync:</strong> Nightly at 03:00 UTC (07:00 Dubai)
+          the scraper visits DLD's public developer, brokerage, and broker lists.
+          Existing rows are <strong>never overwritten</strong> — only net-new records are inserted, and
+          any partial match (same name but different email or phone) is flagged in the
+          <em> DLD Conflicts</em> panel above for your approval.
         </div>
+
       </div>
     </div>
   );
