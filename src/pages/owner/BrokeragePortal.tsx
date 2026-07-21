@@ -290,37 +290,41 @@ function AutomationsStrip() {
 function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDeleteAgent }: { row: any; agents: any[]; onPatch: (patch: Record<string, unknown>) => void; onAddAgent: () => void; onPatchAgent: (id: string, patch: Record<string, unknown>) => void; onDeleteAgent: (id: string) => void }) {
   const reg = row.registration_status || "not_registered";
   const group = row.group_status || "pending_group_status";
+  const briefing = row.briefing_status || "__none__";
   const color = statusColor(reg);
-  return <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)]">
+  return <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] flex flex-col h-full">
     <div className="flex items-start gap-3">
       {row.logo_url ? (
-        <img src={row.logo_url} alt={`${row.company_name || "Brokerage"} logo`} loading="lazy" className="size-12 rounded-xl object-contain bg-white border border-[#B89555]/25 p-1" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+        <img src={row.logo_url} alt={`${row.company_name || "Brokerage"} logo`} loading="lazy" className="size-12 rounded-xl object-contain bg-white border border-[#B89555]/25 p-1 shrink-0" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <div className="size-12 rounded-xl jj-emerald-metallic flex items-center justify-center text-white font-black">{String(row.company_name || "B").slice(0, 1).toUpperCase()}</div>
+        <div className="size-12 rounded-xl jj-emerald-metallic flex items-center justify-center text-white font-black shrink-0">{String(row.company_name || "B").slice(0, 1).toUpperCase()}</div>
       )}
       <div className="min-w-0 flex-1">
-        <p className="font-black text-[#1A1A1A] text-[16px] leading-tight truncate">{row.company_name || "Unnamed brokerage"}</p>
+        <p className="font-black text-[#1A1A1A] text-[16px] leading-tight line-clamp-2 min-h-[2.5em]">{row.company_name || "Unnamed brokerage"}</p>
         <p className="text-xs text-[#1A1A1A]/60 truncate">{row.emirate || row.country || row.office_location || "UAE brokerage"}</p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          <Badge style={{ backgroundColor: color.cssBg, color: color.cssFg }} className="border border-[#B89555]/30">{color.label}</Badge>
-          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{group.replace(/_/g, " ")}</Badge>
-          {row.attended_briefing && <Badge className="bg-[#064E3B] text-white border-0">Briefed</Badge>}
-          {(row.database_source || row.original_filename || row.source) && (
-            <Badge variant="outline" className="border-[#064E3B]/40 text-[#064E3B] bg-white gap-1"><Database className="size-3" /> {row.database_source || row.original_filename || row.source}</Badge>
-          )}
-        </div>
-        <div className="mt-2 flex flex-wrap items-center gap-1">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-black text-[#1A1A1A]/60 mr-1">Specialty</span>
-          {(["secondary", "off_plan", "both"] as const).map((s) => {
-            const dbVal = ({ secondary: "secondary_first", off_plan: "offplan_first", both: "equal" } as const)[s];
-            const active = row.specialty_focus === dbVal;
-            return <button key={s} type="button" onClick={() => onPatch({ specialty_focus: active ? null : dbVal })} className={`px-2 py-0.5 rounded-md text-[10px] font-black border transition ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Both" : "Secondary"}</button>;
-          })}
-        </div>
       </div>
     </div>
-    <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-[#1A1A1A]"><div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Email</p><Input value={row.email || ""} onChange={(e) => onPatch({ email: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="agency@email.com" /></div><div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Phone</p><Input value={row.phone || ""} onChange={(e) => onPatch({ phone: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="+971 …" /></div></div>
-    <div className="mt-3 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-3 space-y-2">
+    <div className="mt-3 flex flex-wrap gap-1.5 min-h-[28px]">
+      <Badge style={{ backgroundColor: color.cssBg, color: color.cssFg }} className="border border-[#B89555]/30">{color.label}</Badge>
+      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{group.replace(/_/g, " ")}</Badge>
+      {briefing !== "__none__" && <Badge className="bg-[#064E3B] text-white border-0 capitalize">{String(briefing).replace(/_/g, " ")}</Badge>}
+      {(row.database_source || row.original_filename || row.source) && (
+        <Badge variant="outline" className="border-[#064E3B]/40 text-[#064E3B] bg-white gap-1"><Database className="size-3" /> {row.database_source || row.original_filename || row.source}</Badge>
+      )}
+    </div>
+    <div className="mt-2 flex flex-wrap items-center gap-1 min-h-[26px]">
+      <span className="text-[10px] uppercase tracking-[0.14em] font-black text-[#1A1A1A]/60 mr-1">Specialty</span>
+      {(["secondary", "off_plan", "both"] as const).map((s) => {
+        const dbVal = ({ secondary: "secondary_first", off_plan: "offplan_first", both: "equal" } as const)[s];
+        const active = row.specialty_focus === dbVal;
+        return <button key={s} type="button" onClick={() => onPatch({ specialty_focus: active ? null : dbVal })} className={`px-2 py-0.5 rounded-md text-[10px] font-black border transition ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Both" : "Secondary"}</button>;
+      })}
+    </div>
+    <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-[#1A1A1A]">
+      <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Email</p><Input value={row.email || ""} onChange={(e) => onPatch({ email: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="agency@email.com" /></div>
+      <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Phone</p><Input value={row.phone || ""} onChange={(e) => onPatch({ phone: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="+971 …" /></div>
+    </div>
+    <div className="mt-3 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-3 space-y-2 flex-1">
       <div className="flex items-center justify-between gap-2"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Contacts</p><Button size="sm" variant="outline" onClick={onAddAgent}><Plus className="size-3.5 mr-1" /> Add new</Button></div>
       <datalist id={`brokerage-contact-role-${row.id}`}>{CONTACT_ROLE_OPTIONS.map((o) => <option key={o} value={o} />)}</datalist>
       {agents.length === 0 && <p className="text-xs text-[#1A1A1A]/55">No contact people saved yet.</p>}
@@ -331,6 +335,10 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
       </div>)}
       {agents.length > 4 && <p className="text-xs text-[#1A1A1A]/60">+{agents.length - 4} more contacts connected to this brokerage</p>}
     </div>
-    <div className="mt-3 grid gap-2"><Select value={reg} onValueChange={(v) => onPatch({ registration_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BROKERAGE_REGISTRATION_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select><Select value={group} onValueChange={(v) => onPatch({ group_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select><Button variant={row.attended_briefing ? "gold" : "outline"} size="sm" onClick={() => onPatch({ attended_briefing: !row.attended_briefing, briefing_count: row.attended_briefing ? row.briefing_count : Number(row.briefing_count ?? 0) + 1 })}>{row.attended_briefing ? "Briefing done" : "Mark briefing done"}</Button></div>
+    <div className="mt-3 grid gap-2">
+      <Select value={reg} onValueChange={(v) => onPatch({ registration_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BROKERAGE_REGISTRATION_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+      <Select value={group} onValueChange={(v) => onPatch({ group_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+      <Select value={briefing} onValueChange={(v) => onPatch({ briefing_status: v === "__none__" ? null : v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Briefing status" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BRIEFING_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+    </div>
   </Card>;
 }
