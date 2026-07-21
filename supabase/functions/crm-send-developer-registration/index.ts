@@ -149,8 +149,8 @@ serve(async (req: Request) => {
     let html = renderTemplate(template.html, {
       developer_name: dev.developer_name,
       drive_url: settings.drive_doc_pack_url,
-      reply_to: replyTo.toUpperCase(),
-      reply_to_display: replyTo.toUpperCase(),
+      reply_to: replyTo,
+      reply_to_display: replyTo,
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
@@ -166,7 +166,20 @@ serve(async (req: Request) => {
     const baseSubject = isTest && body.subjectOverride && body.subjectOverride.trim()
       ? body.subjectOverride.trim()
       : template.subject;
-    const subject = isTest ? `[TEST] ${baseSubject}` : baseSubject;
+    const renderedSubject = renderTemplate(baseSubject, {
+      developer_name: dev.developer_name,
+      drive_url: settings.drive_doc_pack_url,
+      reply_to: replyTo,
+      reply_to_display: replyTo,
+      reply_to_lower: replyTo,
+      cc_email: ccEmail,
+      from_name: fromName,
+      sender_name: "Amelia",
+      sender_title: "Head of Business Development",
+      sender_phone: "+971 54 716 7107",
+      sender_phone_tel: "tel:+971547167107",
+    });
+    const subject = isTest ? `[TEST] ${renderedSubject.replace(/^\[TEST\]\s*/i, "")}` : renderedSubject;
 
     const raw = buildRawMime({
       from: `${fromName} <${replyTo}>`,
