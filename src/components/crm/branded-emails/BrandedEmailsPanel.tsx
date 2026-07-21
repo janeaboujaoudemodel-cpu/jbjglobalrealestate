@@ -312,6 +312,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/\{\{whatsapp_url\}\}/g, CITI_WHATSAPP_URL)
       .replace(/\{\{developer_website\}\}/g, CITI_WEBSITE_URL)
       .replace(/\{\{developer_map\}\}/g, CITI_MAP_URL)
+      .replace(/\{\{office_location\}\}/g, CITI_OFFICE_LABEL)
       .replace(/\{\{group_status_line\}\}/g, "We would love to formalise a partnership with your team and align on how CITI Developers can support your brokers on AMRA and upcoming launches.")
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)

@@ -469,6 +469,7 @@ serve(async (req: Request) => {
       developer_phone_display: "+971 54 716 7107",
       developer_phone_tel: "tel:+971547167107",
       whatsapp_url: "https://wa.me/971547167107",
+      office_location: "CITI Developers Sales Gallery",
       developer_logo_url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/citi-developers-gold.png",
       cc_email: ccEmail,
       from_name: fromName,
