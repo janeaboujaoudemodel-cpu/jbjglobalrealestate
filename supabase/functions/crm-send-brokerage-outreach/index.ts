@@ -601,7 +601,7 @@ serve(async (req: Request) => {
     // Send via Resend (verified jbj.ae domain). Quota + 2 req/s throttle
     // are enforced inside sendViaResend.
     const resendResult = await sendViaResend({
-      from: `${fromName} <${replyTo}>`,
+      from: `${fromName} <${FORCED_ENVELOPE_FROM}>`,
       to: recipient,
       cc: cc.length ? cc : undefined,
       reply_to: replyTo,
