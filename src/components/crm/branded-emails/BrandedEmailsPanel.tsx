@@ -170,6 +170,7 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
   const sender = SENDER_BY_KIND[audienceKind];
   const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">jbj.ae</a>';
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email}</a>`;
+  const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
   return html
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
@@ -180,8 +181,9 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/Jane Bou Jaoude/gi, sender.name)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
-    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, senderMailLink)
-    .replace(/\b(?:contact|info)@jbj\.ae\b/gi, senderMailLink)
+    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
+    .replace(/\b(?:contact|info)@jbj\.ae\b/gi, senderMailToken)
+    .replace(new RegExp(senderMailToken, "g"), senderMailLink)
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
