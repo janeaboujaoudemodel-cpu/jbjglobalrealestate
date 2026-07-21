@@ -574,9 +574,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     () => {
       // Exclude Citi/City developers unless explicitly unlocked, and exclude
       // recipients who already have a sent outreach log so bulk sends don't repeat.
+      // Email campaigns also require a real recipient email, so "selected" and
+      // "send live" counts stay identical.
       return campaignRecipients.filter((r) => {
-        const alreadySent = !!r.email && previouslySentEmails.has(r.email.toLowerCase().trim());
-        return !alreadySent && (!isCitiRecipient(r) || unlockedCitiIds.has(r.id));
+        const normalizedEmail = r.email?.toLowerCase().trim();
+        const alreadySent = !!normalizedEmail && previouslySentEmails.has(normalizedEmail);
+        return !!normalizedEmail && !alreadySent && (!isCitiRecipient(r) || unlockedCitiIds.has(r.id));
       });
     },
     [campaignRecipients, unlockedCitiIds, previouslySentEmails]
@@ -584,6 +587,10 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const previouslySentCount = useMemo(
     () => campaignRecipients.filter((r) => !!r.email && previouslySentEmails.has(r.email.toLowerCase().trim())).length,
     [campaignRecipients, previouslySentEmails]
+  );
+  const missingEmailCount = useMemo(
+    () => campaignRecipients.filter((r) => !r.email?.trim()).length,
+    [campaignRecipients],
   );
   const eligibleTotal = eligibleRecipients.length;
   const allSelected = audienceCount === eligibleTotal && eligibleTotal > 0;
@@ -597,8 +604,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const delivery = DELIVERY_BY_KIND[kind];
   const activeBrand = BRAND_HEADER_BY_KIND[kind];
   const selectedSendableCount = useMemo(
-    () => recipients.filter((r) => selectedIds.has(r.id) && r.email?.trim()).length,
-    [recipients, selectedIds]
+    () => campaignRecipients.filter((r) => selectedIds.has(r.id) && r.email?.trim()).length,
+    [campaignRecipients, selectedIds]
   );
 
   useEffect(() => {
@@ -745,6 +752,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
               <Users className="size-4" />
               Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total.toLocaleString()} {kind}
+              {missingEmailCount > 0 && <span className="font-semibold text-[#064E3B]">· {missingEmailCount.toLocaleString()} missing email</span>}
               {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
               {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]">· {previouslySentCount} already sent</span>}
             </div>
@@ -844,6 +852,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               </div>
               <span className="text-xs text-[#4B5D55] ml-auto">
                 <strong className="text-[#0F1A16]">{audienceCount.toLocaleString()}</strong> selected of {total.toLocaleString()} total
+                {missingEmailCount > 0 && <span className="font-semibold text-[#064E3B]"> · {missingEmailCount.toLocaleString()} missing email</span>}
                 {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]"> · {lockedCitiCount} locked</span>}
                 {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]"> · {previouslySentCount} already sent</span>}
               </span>
@@ -862,8 +871,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     {filteredRecipients.slice(0, 350).map((r) => {
                       const checked = selectedIds.has(r.id);
                       const isCiti = isCitiRecipient(r);
+                      const missingEmail = !r.email?.trim();
                       const alreadySent = !!r.email && previouslySentEmails.has(r.email.toLowerCase().trim());
-                      const locked = (isCiti && !unlockedCitiIds.has(r.id)) || alreadySent;
+                      const locked = missingEmail || (isCiti && !unlockedCitiIds.has(r.id)) || alreadySent;
                       return (
                         <li key={r.id}>
                           <label
@@ -874,8 +884,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                           >
                             {locked ? (
                               <span
-                                aria-label={alreadySent ? "Already sent — excluded from this campaign" : "Locked — Citi developers excluded by default"}
-                                title={alreadySent ? "Already sent — excluded from this campaign" : "Locked — click unlock to include in this campaign"}
+                                aria-label={missingEmail ? "Missing email — excluded from this campaign" : alreadySent ? "Already sent — excluded from this campaign" : "Locked — Citi developers excluded by default"}
+                                title={missingEmail ? "Missing email — excluded from this campaign" : alreadySent ? "Already sent — excluded from this campaign" : "Locked — click unlock to include in this campaign"}
                                 className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-[4px]"
                                 style={{ border: "1px solid #064E3B", background: "#FDFBF7" }}
                               >
@@ -938,6 +948,15 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                 style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                               >
                                 Sent
+                              </span>
+                            )}
+                            {missingEmail && !alreadySent && (
+                              <span
+                                data-no-contrast-guard="true"
+                                className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em]"
+                                style={{ background: "#FDFBF7", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.35)" }}
+                              >
+                                No email
                               </span>
                             )}
                             {isCiti && !alreadySent && (
@@ -1048,7 +1067,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <p className="text-xs text-[#4B5D55] uppercase tracking-wider">Campaign summary</p>
               <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                 <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
-                <li><strong>Audience:</strong> {audienceCount.toLocaleString()} selected of {total.toLocaleString()} total {kind}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}{previouslySentCount > 0 ? ` · ${previouslySentCount} already sent` : ""}</li>
+                <li><strong>Audience:</strong> {audienceCount.toLocaleString()} sendable selected of {total.toLocaleString()} total {kind}{missingEmailCount > 0 ? ` · ${missingEmailCount.toLocaleString()} missing email` : ""}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}{previouslySentCount > 0 ? ` · ${previouslySentCount} already sent` : ""}</li>
                 <li><strong>From:</strong> {delivery.fromName} &lt;{delivery.fromEmail.toUpperCase()}&gt;</li>
                 <li><strong>Reply-To:</strong> {delivery.replyTo.toUpperCase()}</li>
                 {kind === "brokerages" ? (
@@ -1138,7 +1157,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               }}
             >
               <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />
-              {sending ? "Sending…" : `Send live to ${selectedSendableCount.toLocaleString()} ${kind}`}
+              {sending ? "Sending…" : `Send live to ${selectedSendableCount.toLocaleString()} ${kind} with email`}
             </button>
 
             <p className="text-xs text-[#4B5D55]">

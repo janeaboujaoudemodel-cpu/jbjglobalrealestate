@@ -14,6 +14,7 @@ type MappingValue = string | null;
 
 const FIELD_LABELS: Record<string, string> = {
   company_name: "Brokerage / Agency name",
+  name_arabic: "Brokerage / Agency name Arabic",
   website: "Website",
   phone: "Phone",
   email: "Email",
@@ -28,7 +29,8 @@ const FIELD_LABELS: Record<string, string> = {
 };
 
 const HEADER_MAP: Record<string, string[]> = {
-  company_name: ["brokerage", "agency", "company", "company name", "brokerage name", "office name", "name"],
+  company_name: ["brokerage", "agency", "company", "company name", "brokerage name", "office name", "name", "name english"],
+  name_arabic: ["name arabic", "arabic name", "company name arabic", "brokerage arabic", "agency arabic"],
   website: ["website", "web", "url", "site"],
   phone: ["phone", "telephone", "mobile", "contact number"],
   email: ["email", "contact email", "admin email"],
@@ -160,7 +162,7 @@ export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone 
       }).filter((r) => r.company_name);
       const dbSpecialty = ({ secondary: "secondary_first", off_plan: "offplan_first", both: "equal" } as const)[specialty];
       const { data, error } = await supabase.functions.invoke("bulk-import-brokerages", {
-        body: { rows: mappedRows, list_name: listName, source_filename: filename, source_label: sourceLabel || listName, merge_to_main: merge, assign_to_me: actions.assign_me, specialty_focus: dbSpecialty },
+        body: { rows: mappedRows, list_name: listName, source_filename: filename, source_label: sourceLabel || listName, merge_to_main: merge, assign_to_me: actions.assign_me, specialty_focus: dbSpecialty, preserve_exact: true },
       });
       if (error) throw error;
       setProgress(100); setResult(data); onDone?.();

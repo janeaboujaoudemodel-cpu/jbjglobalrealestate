@@ -9,16 +9,15 @@ type InRow = Record<string, unknown>;
 
 const norm = (s: unknown) => String(s ?? "").trim();
 const cleanKey = (s: unknown) => norm(s).toLowerCase().replace(/\b(real estate|brokerage|brokers|properties|property|llc|l\.l\.c|fz llc|group)\b/g, "").replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
-const phone = (s: unknown) => norm(s).replace(/[^\d+]/g, "").slice(0, 24);
+const phone = (s: unknown) => norm(s).slice(0, 80);
 const email = (s: unknown) => {
-  const v = norm(s).toLowerCase();
+  const v = norm(s);
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? v : "";
 };
 const website = (s: unknown) => {
   const v = norm(s);
   if (!v) return "";
-  if (/^https?:\/\//i.test(v)) return v;
-  return v.includes(".") && !v.includes(" ") ? `https://${v}` : "";
+  return v;
 };
 
 Deno.serve(async (req) => {
@@ -32,6 +31,7 @@ Deno.serve(async (req) => {
     if (!rows.length) return json({ created: 0, updated: 0, skipped: 0, total_unique: 0, list_id: null, changed: [] });
 
     const mergeToMain = body.merge_to_main === true;
+    const preserveExact = body.preserve_exact !== false;
     const assignToMe = body.assign_to_me === true;
     const rawSpec = String(body.specialty_focus || "");
     const specMap: Record<string, string> = { secondary: "secondary_first", off_plan: "offplan_first", both: "equal", secondary_first: "secondary_first", offplan_first: "offplan_first", equal: "equal" };
@@ -40,6 +40,47 @@ Deno.serve(async (req) => {
     const sourceLabel = norm(body.source_label) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "");
     const listName = norm(body.list_name) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "") || `Brokerage database ${new Date().toISOString().slice(0, 10)}`;
     const svc = createClient(SUPABASE_URL, SERVICE_ROLE);
+
+    if (body.restore_exact_from_excel === true) {
+      let brokerageRestored = 0;
+      let pendingRestored = 0;
+      const normalizedRows = rows.map(normalizeBrokerage).filter((row) => row.company_name && row.dld_office_number);
+      for (const row of normalizedRows) {
+        const exactPatch = {
+          company_name: row.company_name,
+          name_arabic: row.name_arabic || null,
+          website: row.website || null,
+          phone: row.phone || null,
+          email: row.email || null,
+          updated_at: new Date().toISOString(),
+        };
+        const { data: mainData, error: mainError } = await svc
+          .from("crm_brokerages")
+          .update(exactPatch)
+          .eq("dld_office_number", row.dld_office_number)
+          .is("deleted_at", null)
+          .select("id");
+        if (mainError) throw mainError;
+        brokerageRestored += mainData?.length ?? 0;
+
+        const { data: pendingData, error: pendingError } = await svc
+          .from("crm_pending_brokerage_imports")
+          .update({
+            company_name: row.company_name,
+            company_name_ar: row.name_arabic || null,
+            website: row.website || null,
+            phone: row.phone || null,
+            email: row.email || null,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("dld_office_number", row.dld_office_number)
+          .eq("status", "pending")
+          .select("id");
+        if (pendingError) throw pendingError;
+        pendingRestored += pendingData?.length ?? 0;
+      }
+      return json({ restored: brokerageRestored, pending_restored: pendingRestored, total_unique: normalizedRows.length });
+    }
 
     const { data: list, error: listErr } = await svc.from("crm_lead_lists").insert({
       owner_user_id: auth.userId,
@@ -81,8 +122,13 @@ Deno.serve(async (req) => {
       if (match) {
         const patch: Record<string, unknown> = {};
         for (const [k, v] of Object.entries(row)) {
-          if (["company_name", "raw"].includes(k) || v === null || v === "" || v === undefined) continue;
-          if (!norm(match[k])) patch[k] = v;
+          if (["raw"].includes(k) || v === null || v === "" || v === undefined) continue;
+          const exactFields = new Set(["company_name", "name_arabic", "website", "phone", "email", "dld_office_number"]);
+          if (preserveExact && exactFields.has(k)) {
+            if (norm(match[k]) !== norm(v)) patch[k] = v;
+          } else if (!norm(match[k])) {
+            patch[k] = v;
+          }
         }
         if (!norm(match.registration_status)) patch.registration_status = "not_registered";
         if (!norm(match.group_status)) patch.group_status = "pending_group_status";
@@ -100,6 +146,7 @@ Deno.serve(async (req) => {
         const { data: inserted, error } = await svc.from("crm_brokerages").insert({
           owner_id: auth.userId,
           company_name: row.company_name,
+          name_arabic: row.name_arabic || null,
           website: row.website || null,
           phone: row.phone || null,
           email: row.email || null,
@@ -157,6 +204,7 @@ function normalizeBrokerage(raw: InRow) {
   const r: any = raw;
   return {
     company_name: norm(r.company_name || r.name || r.agency || r.brokerage_name),
+    name_arabic: norm(r.name_arabic || r.company_name_ar || r.name_ar || r["Name Arabic"]),
     website: website(r.website || r.website_url || r.web),
     phone: phone(r.phone || r.mobile || r.telephone || r.contact_number),
     email: email(r.email || r.contact_email || r.admin_email),
@@ -167,14 +215,14 @@ function normalizeBrokerage(raw: InRow) {
     google_maps_link: norm(r.google_maps_link || r.google_maps_url || r.map_url),
     admin_name: norm(r.admin_name || r.contact_name || r.manager || r.primary_contact_name),
     admin_phone: phone(r.admin_phone || r.contact_phone || r.manager_phone),
-    dld_office_number: norm(r.dld_office_number || r.office_number || r.rera_license),
+    dld_office_number: norm(r.dld_office_number || r.office_number || r.rera_license || r["Office Number"]),
   };
 }
 
 async function loadExisting(svc: any, ownerId: string) {
   const out: any[] = [];
   for (let from = 0; ; from += 1000) {
-    const { data, error } = await svc.from("crm_brokerages").select("id,company_name,email,phone,website,emirate,country,office_location,office_address,google_maps_link,admin_name,admin_phone,dld_office_number,registration_status,group_status,source_history").eq("owner_id", ownerId).range(from, from + 999);
+    const { data, error } = await svc.from("crm_brokerages").select("id,company_name,name_arabic,email,phone,website,emirate,country,office_location,office_address,google_maps_link,admin_name,admin_phone,dld_office_number,registration_status,group_status,source_history").eq("owner_id", ownerId).range(from, from + 999);
     if (error) throw error;
     out.push(...(data ?? []));
     if ((data ?? []).length < 1000) break;
