@@ -229,9 +229,11 @@ export default function RelationshipsHub() {
   const [statusFilter, setStatusFilter] = useState<Status | "all">("all");
   const [search, setSearch] = useState("");
   const [newTodayOnly, setNewTodayOnly] = useState(false);
+  const [dld, setDld] = useState<DLDFilterValue>({ category: "all" });
 
   const kpis = useSegmentKpis(seg);
-  const rows = useSegmentRows(seg, statusFilter, search, newTodayOnly);
+  const rows = useSegmentRows(seg, statusFilter, search, newTodayOnly, dld);
+
   const feed = useActivityFeed(seg);
 
   const segMeta = useMemo(() => SEGMENTS.find((s) => s.key === seg)!, [seg]);
