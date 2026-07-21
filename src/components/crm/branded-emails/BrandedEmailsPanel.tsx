@@ -327,10 +327,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const total = recipients.length;
   const audienceCount = selectedIds.size;
   const eligibleRecipients = useMemo(
-    () => isDeveloperRegistrationCampaign(kind, selectedTemplate)
-      ? recipients.filter((r) => r.registrationStatus !== "registered")
-      : recipients,
-    [kind, recipients, selectedTemplate]
+    () => {
+      const base = isDeveloperRegistrationCampaign(kind, selectedTemplate)
+        ? recipients.filter((r) => r.registrationStatus !== "registered")
+        : recipients;
+      // Exclude Citi/City developers unless explicitly unlocked.
+      return base.filter((r) => !isCitiRecipient(r) || unlockedCitiIds.has(r.id));
+    },
+    [kind, recipients, selectedTemplate, unlockedCitiIds]
   );
   const eligibleTotal = eligibleRecipients.length;
   const allSelected = audienceCount === eligibleTotal && eligibleTotal > 0;
