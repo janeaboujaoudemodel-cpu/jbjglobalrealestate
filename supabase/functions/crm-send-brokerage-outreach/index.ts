@@ -319,14 +319,20 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // HARD LOCK: brokerage outreach is always sent from info@jbj.ae.
-    // Reply-To matches so replies thread to the same brokerage mailbox.
-    const FORCED_FROM_EMAIL = PRIMARY_SENDER;
-    const FORCED_FROM_DISPLAY = PRIMARY_SENDER_NAME;
+    // HARD LOCK: brokerage outreach must never expose the JBJ brand to the
+    // recipient. Envelope From is on the verified jbj.ae domain (Resend
+    // requires this), but the DISPLAY NAME is "CITI Developers · Partnerships"
+    // and the REPLY-TO is Jane's Gmail so recipients only see CITI branding
+    // and any reply goes to Jane's personal inbox — never to info@jbj.ae.
+    // TODO: once citidevelopers.com is verified in Resend, set
+    // FORCED_ENVELOPE_FROM = "partnerships@citidevelopers.com" so the raw
+    // envelope also stops leaking jbj.ae.
+    const FORCED_ENVELOPE_FROM = "partnerships@jbj.ae";
+    const FORCED_FROM_DISPLAY = "CITI Developers · Partnerships";
     const fromName = FORCED_FROM_DISPLAY;
-    const replyTo = DEFAULT_REPLY_TO;
+    const replyTo = "infoo.jane@gmail.com";
     try {
-      enforceAllowedSender(FORCED_FROM_EMAIL);
+      enforceAllowedSender(FORCED_ENVELOPE_FROM);
     } catch (senderErr: any) {
       return new Response(JSON.stringify({
         error: "INVALID_SENDER_DOMAIN",
@@ -346,7 +352,7 @@ serve(async (req: Request) => {
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
       : [...brkActiveCc];
     // Drop any self-CC (From == CC would just duplicate the message).
-    const SECONDARY_CC = FORCED_FROM_EMAIL;
+    const SECONDARY_CC = FORCED_ENVELOPE_FROM;
     const filteredCc = ccList.filter((c) => c.toLowerCase() !== SECONDARY_CC.toLowerCase());
     ccList.length = 0;
     ccList.push(...filteredCc);
@@ -595,7 +601,7 @@ serve(async (req: Request) => {
     // Send via Resend (verified jbj.ae domain). Quota + 2 req/s throttle
     // are enforced inside sendViaResend.
     const resendResult = await sendViaResend({
-      from: `${fromName} <${replyTo}>`,
+      from: `${fromName} <${FORCED_ENVELOPE_FROM}>`,
       to: recipient,
       cc: cc.length ? cc : undefined,
       reply_to: replyTo,
