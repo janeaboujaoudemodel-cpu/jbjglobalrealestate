@@ -84,11 +84,12 @@ export default function PendingBrokerageImportsSection() {
         const slice = ids.slice(i, i + chunk);
         const { data: pending, error: fetchErr } = await supabase
           .from("crm_pending_brokerage_imports" as any)
-          .select("id,dld_office_number,company_name,email,phone,website")
+          .select("id,dld_office_number,company_name,company_name_ar,email,phone,website")
           .in("id", slice);
         if (fetchErr) throw fetchErr;
         const inserts = (pending ?? []).map((p: any) => ({
           company_name: p.company_name,
+          name_arabic: p.company_name_ar || null,
           dld_office_number: p.dld_office_number,
           email: p.email,
           phone: p.phone,
