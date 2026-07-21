@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import {
   Target,
   UserCircle2,
@@ -16,22 +15,30 @@ import {
 
 type Item = { slug: string; label: string; icon: LucideIcon };
 
+/**
+ * Slugs here MUST match keys used by `moduleSchemas.ts` and `CRM_MODULE_MAP`
+ * so the inline sheet can resolve the correct field schema.
+ */
 const ITEMS: Item[] = [
-  { slug: "leads/new", label: "Lead", icon: Target },
-  { slug: "contacts/new", label: "Contact", icon: UserCircle2 },
-  { slug: "accounts/new", label: "Account", icon: Building2 },
-  { slug: "deals/new", label: "Deal", icon: Handshake },
-  { slug: "tasks/new", label: "Task", icon: CheckSquare },
-  { slug: "meetings/new", label: "Meeting", icon: CalendarDays },
-  { slug: "calls/new", label: "Call", icon: Phone },
-  { slug: "quotes/new", label: "Quote", icon: FileText },
-  { slug: "campaigns/new", label: "Campaign", icon: Megaphone },
-  { slug: "invoices/new", label: "Invoice", icon: ReceiptText },
+  { slug: "leads", label: "Lead", icon: Target },
+  { slug: "contacts", label: "Contact", icon: UserCircle2 },
+  { slug: "accounts", label: "Account", icon: Building2 },
+  { slug: "deals", label: "Deal", icon: Handshake },
+  { slug: "tasks", label: "Task", icon: CheckSquare },
+  { slug: "meetings", label: "Meeting", icon: CalendarDays },
+  { slug: "calls", label: "Call", icon: Phone },
+  { slug: "quotes", label: "Quote", icon: FileText },
+  { slug: "campaigns", label: "Campaign", icon: Megaphone },
+  { slug: "invoices", label: "Invoice", icon: ReceiptText },
 ];
 
-type Props = { open: boolean; onClose: () => void };
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  onSelect: (slug: string) => void;
+};
 
-export default function CrmQuickCreateMenu({ open, onClose }: Props) {
+export default function CrmQuickCreateMenu({ open, onClose, onSelect }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,15 +65,18 @@ export default function CrmQuickCreateMenu({ open, onClose }: Props) {
           const Icon = it.icon;
           return (
             <li key={it.slug}>
-              <Link
-                to={`/owner/crm/jbj/${it.slug}`}
+              <button
+                type="button"
                 className="jc-popover__row"
-                onClick={onClose}
                 role="menuitem"
+                onClick={() => {
+                  onSelect(it.slug);
+                  onClose();
+                }}
               >
                 <span className="jc-popover__icon"><Icon size={16} /></span>
                 <span>{it.label}</span>
-              </Link>
+              </button>
             </li>
           );
         })}
