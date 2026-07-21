@@ -158,7 +158,7 @@ export default function BrokeragePortal() {
       ))}
     </div>
     <AutomationsStrip />
-    <BrandedEmailsLauncherCard variant="owner" />
+    <BrandedEmailsLauncherCard variant="broker" />
 
 
     <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
