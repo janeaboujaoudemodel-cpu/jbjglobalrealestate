@@ -538,11 +538,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       >
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <span className="inline-grid place-items-center h-12 w-16 shrink-0 rounded-md border border-emerald-900/15 bg-white p-1.5 shadow-[0_8px_18px_-14px_rgba(6,78,59,0.45)]">
+            <span className="inline-grid place-items-center size-14 shrink-0 rounded-md border border-emerald-900/15 bg-white p-2 shadow-[0_8px_18px_-14px_rgba(6,78,59,0.45)]">
               <img
                 src={activeBrand.appUrl}
                 alt={activeBrand.alt}
-                className="block max-h-full max-w-full object-contain"
+                className="block h-full w-full object-contain"
+                style={{ display: "block", margin: "0 auto" }}
                 data-no-fallback
                 loading="eager"
                 decoding="async"
@@ -584,29 +585,27 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                       type="button"
                       onClick={() => setSelectedTemplateId(t.variant)}
                         data-branded-email-template-card={active ? "active" : "inactive"}
-                      className="group overflow-hidden rounded-lg border p-0 text-left transition-colors"
+                      className="group relative overflow-hidden rounded-lg border p-0 text-left transition-colors"
                       style={{
                         borderColor: active ? "rgba(184,149,85,0.72)" : "rgba(6,78,59,0.16)",
                         background: active ? "#F8F3E9" : "#FFFFFF",
                         boxShadow: active ? "inset 0 0 0 1px rgba(184,149,85,0.45)" : "none",
                       }}
                     >
-                      <div className="grid min-h-[74px] grid-cols-[112px_1fr] group-hover:bg-[#F8F3E9]">
+                      <div className="grid h-[96px] grid-cols-[112px_1fr] group-hover:bg-[#F8F3E9]">
                         <div className="flex items-center justify-center border-r px-3 py-3" style={{ borderColor: "rgba(184,149,85,0.28)", background: active ? "#EFE5D3" : "#FAF8F3" }}>
                           <span className="text-center text-[10px] font-black uppercase leading-tight tracking-[0.12em] text-[#064E3B]">{t.category || "Template"}</span>
                         </div>
-                        <div className="min-w-0 p-3">
-                          <div className="mb-1 flex items-start gap-2">
-                            {active && (
-                              <Badge className="shrink-0 border text-[10px] font-black" style={{ background: "#FFFFFF", color: "#0F1A16", WebkitTextFillColor: "#0F1A16", borderColor: "rgba(6,78,59,0.22)" }}>
-                                Selected
-                              </Badge>
-                            )}
-                            <p className="font-black leading-tight text-[#0F1A16] break-words">{t.name}</p>
-                          </div>
+                        <div className="min-w-0 p-3 pr-24 flex flex-col justify-center">
+                          <p className="font-black leading-tight text-[#0F1A16] break-words">{t.name}</p>
                           <p className="mt-1 line-clamp-2 break-words text-xs text-[#4B5D55]">{personalizeSubject(t.subject, previewPersonalizationName)}</p>
                         </div>
                       </div>
+                      {active && (
+                        <Badge className="absolute top-2 right-2 border text-[10px] font-black" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", borderColor: "#064E3B" }}>
+                          Selected
+                        </Badge>
+                      )}
                     </button>
                   );
                 })}
@@ -698,6 +697,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                 role="checkbox"
                                 aria-checked={checked}
                                 data-branded-email-checkbox="true"
+                                data-no-contrast-guard="true"
                                 onClick={(e) => {
                                   e.preventDefault();
                                   toggleId(r.id);
@@ -711,7 +711,22 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                   boxShadow: "none",
                                 }}
                               >
-                                {checked && <Check className="size-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} strokeWidth={3.2} />}
+                                {checked && (
+                                  <svg
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#FFFFFF"
+                                    strokeWidth={4}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                    style={{ display: "block", color: "#FFFFFF" }}
+                                  >
+                                    <polyline points="20 6 9 17 4 12" />
+                                  </svg>
+                                )}
                               </button>
                             )}
                             {kind === "developers" ? (
