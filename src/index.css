@@ -1882,7 +1882,7 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
     button[style*="background: #064E3B"],
     button[style*="background:#064E3B"],
     [data-branded-email-live-action="true"]
-  ) {
+  ):not([data-keep-gold]) {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
   }
@@ -1892,10 +1892,25 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
     button[style*="background: #064E3B"],
     button[style*="background:#064E3B"],
     [data-branded-email-live-action="true"]
-  ) :is(span, svg, path, line, polyline, circle, rect) {
+  ):not([data-keep-gold]) :is(span, svg, path, line, polyline, circle, rect) {
     color: #FFFFFF !important;
     stroke: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+
+  [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic,
+  [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:hover,
+  [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:focus {
+    color: #3a2a08 !important;
+    -webkit-text-fill-color: #3a2a08 !important;
+    transform: none !important;
+  }
+
+  [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic :is(span, svg, path, line, polyline, circle, rect) {
+    color: #3a2a08 !important;
+    stroke: #3a2a08 !important;
+    -webkit-text-fill-color: #3a2a08 !important;
     opacity: 1 !important;
   }
 
