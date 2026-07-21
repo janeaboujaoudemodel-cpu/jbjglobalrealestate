@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import BrokerageExcelImportDialog from "@/components/owner/BrokerageExcelImportDialog";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
+import PendingBrokerageImportsSection from "@/components/owner/PendingBrokerageImportsSection";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Building2, Download, FileSpreadsheet, Plus, Trash2, Upload, UserRound, Users, ChevronDown, Database, Inbox as InboxIcon, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
@@ -159,6 +160,7 @@ export default function BrokeragePortal() {
     </div>
     <AutomationsStrip />
     <BrandedEmailsLauncherCard variant="broker" />
+    <PendingBrokerageImportsSection />
 
 
     <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">

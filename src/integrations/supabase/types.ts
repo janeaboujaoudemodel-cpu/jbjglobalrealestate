@@ -11373,6 +11373,63 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_pending_brokerage_imports: {
+        Row: {
+          approved_brokerage_id: string | null
+          batch_id: string
+          company_name: string
+          company_name_ar: string | null
+          created_at: string
+          dld_office_number: string | null
+          email: string | null
+          id: string
+          notes: string | null
+          phone: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source: string
+          status: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          approved_brokerage_id?: string | null
+          batch_id: string
+          company_name: string
+          company_name_ar?: string | null
+          created_at?: string
+          dld_office_number?: string | null
+          email?: string | null
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          approved_brokerage_id?: string | null
+          batch_id?: string
+          company_name?: string
+          company_name_ar?: string | null
+          created_at?: string
+          dld_office_number?: string | null
+          email?: string | null
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       crm_profile_activity: {
         Row: {
           actor_id: string | null
