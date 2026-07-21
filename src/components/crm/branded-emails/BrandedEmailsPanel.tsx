@@ -53,7 +53,7 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
     email: "helpdesk@jbj.ae",
   },
   brokerages: {
-    name: "Jane Bujold",
+    name: "Jane Bou Jaoude",
     title: "CITI Developers · Sales & Training Department",
     email: "infoo.jane@gmail.com",
   },
