@@ -324,6 +324,33 @@ export default function RelationshipsHub() {
               className="pl-8 h-9 border-[#B89555]/40 bg-white"
             />
           </div>
+
+          {/* DLD-style category dropdown (mirrors DLD's public list) */}
+          <DLDFilterDropdown
+            value={dld}
+            onChange={setDld}
+            showOffices={seg === "brokerage"}
+            areaOptions={Array.from(
+              new Set(((rows.data ?? []) as any[]).map((r) => r.dld_area).filter(Boolean)),
+            ).sort()}
+            projectOptions={Array.from(
+              new Set(((rows.data ?? []) as any[]).map((r) => r.dld_project).filter(Boolean)),
+            ).sort()}
+          />
+
+          {/* Export current filtered view (CSV + branded XLSX) */}
+          <DLDExportButton
+            segment={
+              seg === "brokerage"
+                ? "brokerage"
+                : seg === "developer"
+                ? "developer"
+                : "broker"
+            }
+            rows={(rows.data ?? []) as any[]}
+            filenameSuffix={seg}
+          />
+
           <div className="flex flex-wrap items-center gap-1">
             {(["all","untouched","needs_follow_up","briefing_booked","registered","declined"] as const).map((s) => (
               <button
@@ -354,6 +381,7 @@ export default function RelationshipsHub() {
             </button>
           </div>
         </div>
+
 
         {/* Table */}
         <Card className="bg-white border-[#B89555]/30 overflow-hidden">
