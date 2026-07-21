@@ -12,7 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Mail, Search, Users, Send, Eye, FileText, Check } from "lucide-react";
+import { Loader2, Mail, Search, Users, Send, Eye, FileText, Check, Lock, Unlock } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -85,6 +85,11 @@ function extractFirstEmail(value: unknown): string | null {
   if (typeof value !== "string") return null;
   const match = value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
   return match?.[0]?.trim().toLowerCase() || null;
+}
+
+function isCitiRecipient(r: Pick<Recipient, "name">): boolean {
+  const n = (r.name || "").toLowerCase();
+  return /\bciti\b/.test(n) || /\bcity\s+developers?\b/.test(n);
 }
 
 async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
@@ -236,7 +241,7 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
         name={recipient.name}
         websiteUrl={recipient.websiteUrl}
         variant="bare"
-        className="!size-9 !rounded-md !border-0 !bg-white !p-1.5 shadow-none ring-1 ring-[#064E3B]/15"
+        className="!size-10 !rounded-md !border-0 !bg-white !p-2 shadow-none ring-1 ring-[#064E3B]/15 [&_img]:!object-contain [&_img]:!max-h-full [&_img]:!max-w-full"
       />
     );
   }
@@ -245,7 +250,7 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
     <span
       data-branded-email-fallback-logo="true"
       data-no-contrast-guard="true"
-      className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md border-0 shadow-none ring-1 ring-[#064E3B]/20"
+      className="inline-flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md border-0 shadow-none ring-1 ring-[#064E3B]/20"
       style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
       aria-label={`${recipient.name} logo pending`}
       title={recipient.name}
@@ -267,6 +272,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [testEmail, setTestEmail] = useState("infoo.jane@gmail.com");
   const [sending, setSending] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [unlockedCitiIds, setUnlockedCitiIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!open) return;
@@ -282,10 +288,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         const nextTemplateId = t.some((x) => x.variant === selectedTemplateId) ? selectedTemplateId : t[0]?.variant ?? null;
         setSelectedTemplateId(nextTemplateId);
         const firstTemplate = t.find((x) => x.variant === nextTemplateId) ?? t[0] ?? null;
-        const defaultAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
+        const baseAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
           ? r.filter((x) => x.registrationStatus !== "registered")
           : r;
+        // Citi/City developers are locked-out by default per owner rule.
+        const defaultAudience = baseAudience.filter((x) => !isCitiRecipient(x));
         setSelectedIds(new Set(defaultAudience.map((x) => x.id)));
+        setUnlockedCitiIds(new Set());
       })
       .catch((e) => {
         if (cancelled) return;
@@ -318,10 +327,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const total = recipients.length;
   const audienceCount = selectedIds.size;
   const eligibleRecipients = useMemo(
-    () => isDeveloperRegistrationCampaign(kind, selectedTemplate)
-      ? recipients.filter((r) => r.registrationStatus !== "registered")
-      : recipients,
-    [kind, recipients, selectedTemplate]
+    () => {
+      const base = isDeveloperRegistrationCampaign(kind, selectedTemplate)
+        ? recipients.filter((r) => r.registrationStatus !== "registered")
+        : recipients;
+      // Exclude Citi/City developers unless explicitly unlocked.
+      return base.filter((r) => !isCitiRecipient(r) || unlockedCitiIds.has(r.id));
+    },
+    [kind, recipients, selectedTemplate, unlockedCitiIds]
   );
   const eligibleTotal = eligibleRecipients.length;
   const allSelected = audienceCount === eligibleTotal && eligibleTotal > 0;
@@ -433,7 +446,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
             <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
               <Users className="size-4" />
-              Sending to <strong className="text-[#064E3B]">{audienceCount}</strong> of {eligibleTotal}
+              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {eligibleTotal}
             </div>
           </div>
         </SheetHeader>
@@ -532,7 +545,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 />
               </div>
               <span className="text-xs text-[#4B5D55] ml-auto">
-                <strong className="text-[#064E3B]">{audienceCount}</strong> of {eligibleTotal} selected
+                <strong className="text-[#0F1A16]">{audienceCount}</strong> of {eligibleTotal} selected
               </span>
             </div>
 
@@ -548,33 +561,47 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   <ul className="divide-y divide-emerald-900/5">
                     {filteredRecipients.map((r) => {
                       const checked = selectedIds.has(r.id);
+                      const isCiti = isCitiRecipient(r);
+                      const locked = isCiti && !unlockedCitiIds.has(r.id);
                       return (
                         <li key={r.id}>
                           <label
                             data-recipient-selected={checked ? "true" : undefined}
-                            className="flex cursor-pointer items-center gap-3 px-3 py-2"
-                            style={{ backgroundColor: checked ? "rgba(6,78,59,0.035)" : "#FFFFFF" }}
+                            data-recipient-locked={locked ? "true" : undefined}
+                            className={`flex items-center gap-3 px-3 py-2 ${locked ? "cursor-default" : "cursor-pointer"}`}
+                            style={{ backgroundColor: checked ? "rgba(6,78,59,0.035)" : "#FFFFFF", opacity: locked ? 0.6 : 1 }}
                           >
-                            <button
-                              type="button"
-                              role="checkbox"
-                              aria-checked={checked}
-                              data-branded-email-checkbox="true"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleId(r.id);
-                              }}
-                              className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-[4px]"
-                              style={{
-                                border: "1px solid #064E3B",
-                                background: checked ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FDFBF7",
-                                color: "#FFFFFF",
-                                WebkitTextFillColor: "#FFFFFF",
-                                boxShadow: "none",
-                              }}
-                            >
-                              {checked && <Check className="size-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} strokeWidth={3.2} />}
-                            </button>
+                            {locked ? (
+                              <span
+                                aria-label="Locked — Citi developers excluded by default"
+                                title="Locked — click unlock to include in this campaign"
+                                className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-[4px]"
+                                style={{ border: "1px solid #064E3B", background: "#FDFBF7" }}
+                              >
+                                <Lock className="size-3" style={{ color: "#064E3B", stroke: "#064E3B" }} strokeWidth={2.5} />
+                              </span>
+                            ) : (
+                              <button
+                                type="button"
+                                role="checkbox"
+                                aria-checked={checked}
+                                data-branded-email-checkbox="true"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  toggleId(r.id);
+                                }}
+                                className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-[4px]"
+                                style={{
+                                  border: "1px solid #064E3B",
+                                  background: checked ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FDFBF7",
+                                  color: "#FFFFFF",
+                                  WebkitTextFillColor: "#FFFFFF",
+                                  boxShadow: "none",
+                                }}
+                              >
+                                {checked && <Check className="size-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} strokeWidth={3.2} />}
+                              </button>
+                            )}
                             {kind === "developers" ? (
                               <AudienceLogo recipient={r} />
                             ) : (
@@ -587,8 +614,52 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                               {r.meta && <span className="block truncate text-[11px] text-[#4B5D55]">{r.meta}</span>}
                               {r.email && <span className="block truncate text-[11px] text-[#4B5D55]">{r.email}</span>}
                             </span>
+                            {isCiti && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setUnlockedCitiIds((prev) => {
+                                    const next = new Set(prev);
+                                    if (next.has(r.id)) {
+                                      next.delete(r.id);
+                                      setSelectedIds((s) => {
+                                        const ns = new Set(s);
+                                        ns.delete(r.id);
+                                        return ns;
+                                      });
+                                    } else {
+                                      next.add(r.id);
+                                    }
+                                    return next;
+                                  });
+                                }}
+                                data-no-contrast-guard="true"
+                                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em]"
+                                style={{
+                                  background: locked ? "#FFFFFF" : "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)",
+                                  color: locked ? "#064E3B" : "#FFFFFF",
+                                  WebkitTextFillColor: locked ? "#064E3B" : "#FFFFFF",
+                                  border: `1px solid ${locked ? "rgba(6,78,59,0.35)" : "#064E3B"}`,
+                                }}
+                                title={locked ? "Unlock to include Citi in this campaign" : "Locked — Citi excluded from send"}
+                              >
+                                {locked ? <Lock className="size-3" strokeWidth={2.6} /> : <Unlock className="size-3" strokeWidth={2.6} />}
+                                {locked ? "Locked" : "Unlocked"}
+                              </button>
+                            )}
                             {r.registrationStatus === "registered" && (
-                              <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[#064E3B] bg-emerald-50 border border-emerald-900/15 rounded-full px-2 py-0.5">
+                              <span
+                                data-no-contrast-guard="true"
+                                className="text-[10px] font-black uppercase tracking-[0.1em] rounded-full px-2 py-0.5"
+                                style={{
+                                  background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)",
+                                  color: "#FFFFFF",
+                                  WebkitTextFillColor: "#FFFFFF",
+                                  border: "1px solid #064E3B",
+                                }}
+                              >
                                 Registered
                               </span>
                             )}
