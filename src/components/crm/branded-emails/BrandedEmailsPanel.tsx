@@ -12,7 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Mail, Search, Users, Send, Eye, FileText, Check } from "lucide-react";
+import { Loader2, Mail, Search, Users, Send, Eye, FileText, Check, Lock, Unlock } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
