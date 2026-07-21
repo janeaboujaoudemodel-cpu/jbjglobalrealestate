@@ -60,8 +60,9 @@ export function DeveloperLogo({
 
     return (
       <div
-        className={cn(containerClass, "bg-white")}
+        className={cn(containerClass, !containerClass.includes("bg-") && "bg-white")}
         data-keep-gold={dataKeepGold}
+        data-no-contrast-guard="true"
         data-developer-logo="nameplate"
         aria-label={`${label} logo pending`}
         title={label}
