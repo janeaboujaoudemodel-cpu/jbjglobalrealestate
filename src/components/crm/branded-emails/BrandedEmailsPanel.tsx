@@ -272,6 +272,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [testEmail, setTestEmail] = useState("infoo.jane@gmail.com");
   const [sending, setSending] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [unlockedCitiIds, setUnlockedCitiIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!open) return;
