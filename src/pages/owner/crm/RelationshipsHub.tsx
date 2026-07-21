@@ -502,12 +502,17 @@ export default function RelationshipsHub() {
           </Card>
         </div>
 
+        {/* DLD Conflicts — needs owner review; never auto-updates live rows. */}
+        <DLDConflictsSection />
+
         <div className="rounded-lg border border-[#B89555]/40 bg-[#F7F1E4]/60 p-4 text-[12px] text-[#4B5D55]">
-          <strong className="text-[#0F1A16]">Daily DLD sync:</strong> The background job runs at 06:00 Dubai time
-          and adds new brokers (auto-classified as Secondary or Off-plan from their DLD license category),
-          brokerages, and developers directly into this hub. Every new record gets status <em>Untouched</em>
-          and appears in the <em>New from DLD (today)</em> filter above.
+          <strong className="text-[#0F1A16]">Daily DLD sync:</strong> Nightly at 03:00 UTC (07:00 Dubai)
+          the scraper visits DLD's public developer, brokerage, and broker lists.
+          Existing rows are <strong>never overwritten</strong> — only net-new records are inserted, and
+          any partial match (same name but different email or phone) is flagged in the
+          <em> DLD Conflicts</em> panel above for your approval.
         </div>
+
       </div>
     </div>
   );
