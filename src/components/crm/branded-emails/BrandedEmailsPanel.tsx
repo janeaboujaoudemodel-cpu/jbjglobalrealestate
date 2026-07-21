@@ -179,6 +179,9 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
       .replace(/\{\{contact_full_name\}\}/g, sampleName)
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
+    .replace(/\{\{reply_to_lower\}\}/g, sender.email)
+    .replace(/\{\{reply_to_display\}\}/g, sender.email)
+    .replace(/\{\{reply_to\}\}/g, sender.email)
       .replace(/Jane Bou Jaoude/gi, sender.name)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
@@ -530,7 +533,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                       const checked = selectedIds.has(r.id);
                       return (
                         <li key={r.id}>
-                          <label className="flex cursor-pointer items-center gap-3 px-3 py-2" style={{ backgroundColor: checked ? "rgba(6,78,59,0.035)" : "#FFFFFF" }}>
+                          <label
+                            data-recipient-selected={checked ? "true" : undefined}
+                            className="flex cursor-pointer items-center gap-3 px-3 py-2"
+                            style={{ backgroundColor: checked ? "rgba(6,78,59,0.035)" : "#FFFFFF" }}
+                          >
                             <Checkbox
                               checked={checked}
                               onCheckedChange={() => toggleId(r.id)}
@@ -625,6 +632,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   type="button"
                   onClick={handleSendTest}
                   disabled={sending || !selectedTemplate}
+                  data-branded-email-test-action="true"
                   style={{
                     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
                     minHeight: 40, padding: "8px 16px", borderRadius: 6, fontSize: 13, fontWeight: 700,
