@@ -716,11 +716,19 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                 }}
                                 title={locked ? "Unlock to include Citi in this campaign" : "Locked — Citi excluded from send"}
                               >
-                                {locked ? (
-                                  <Lock className="size-3" style={{ color: "#064E3B", stroke: "#064E3B", WebkitTextFillColor: "#064E3B" }} strokeWidth={2.6} />
-                                ) : (
-                                  <Unlock className="size-3" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} strokeWidth={2.6} />
-                                )}
+                                <span
+                                  aria-hidden="true"
+                                  data-citi-lock-glyph="true"
+                                  style={{
+                                    color: locked ? "#064E3B" : "#FFFFFF",
+                                    WebkitTextFillColor: locked ? "#064E3B" : "#FFFFFF",
+                                    fontSize: 11,
+                                    lineHeight: 1,
+                                    fontWeight: 900,
+                                  }}
+                                >
+                                  {locked ? "▣" : "▢"}
+                                </span>
                                 <span style={{ color: locked ? "#064E3B" : "#FFFFFF", WebkitTextFillColor: locked ? "#064E3B" : "#FFFFFF" }}>
                                   {locked ? "Locked" : "Unlocked"}
                                 </span>
