@@ -259,13 +259,15 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
     .replace(/\{\{reply_to_lower\}\}/g, sender.email)
-    .replace(/\{\{reply_to_display\}\}/g, sender.email)
+    .replace(/\{\{reply_to_display\}\}/g, sender.email.toUpperCase())
     .replace(/\{\{reply_to\}\}/g, sender.email)
       .replace(/Jane Bou Jaoude/gi, sender.name)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
-    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
-    .replace(/\b(?:contact|info)@jbj\.ae\b/gi, senderMailToken)
+    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
+    .replace(/\b(?:contact|info|helpdesk)@jbj\.ae\b/gi, senderMailToken)
     .replace(new RegExp(senderMailToken, "g"), senderMailLink)
+    .replace(/<a\b(?![^>]*\btarget=)([^>]*\bhref=["']https?:\/\/drive\.google\.com[^>]*>)/gi, '<a target="_blank" rel="noopener noreferrer" $1')
+    .replace(/<a\b(?![^>]*\btarget=)([^>]*\bhref=["']https?:\/\/[^>]*>)/gi, '<a target="_blank" rel="noopener noreferrer" $1')
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
@@ -822,7 +824,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <iframe
                   title="Branded email preview"
                   data-branded-email-preview-iframe="true"
-                  sandbox=""
+                  sandbox="allow-popups allow-popups-to-escape-sandbox"
                   className="w-full block"
                   style={{ height: "min(68vh, 720px)", border: "0", background: "#FDFBF7" }}
                   srcDoc={personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind)}
@@ -843,7 +845,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                 <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
                 <li><strong>Audience:</strong> {audienceCount} selected of {total} total {kind}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}</li>
-                <li><strong>From:</strong> {sender.name}, {sender.title} &lt;{sender.email}&gt;</li>
+                <li><strong>From:</strong> {sender.name}, {sender.title} &lt;{sender.email.toUpperCase()}&gt;</li>
                 <li><strong>Registration pack:</strong> saved link included in the template</li>
               </ul>
             </div>
