@@ -247,6 +247,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-settings" element={<OwnerCommSettings />} />
     <Route path="owner-security" element={<SecurityConsole />} />
     <Route path="owner-executive-assistant" element={<ExecutiveAssistant />} />
+    <Route path="owner-relationships-activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/RelationshipsHub")))}</Suspense>} />
     <Route path=":section" element={<CrmModulePage />} />
     <Route path=":section/new" element={<CrmCreatePage />} />
     <Route path=":section/:id" element={<CrmRecordPage />} />
