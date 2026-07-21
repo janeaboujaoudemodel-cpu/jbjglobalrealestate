@@ -36713,30 +36713,29 @@ html body #root [data-developer-directory] :is(.jj-emerald-metallic, .jj-cta-pri
 }
 
 /* PASS 175 — Branded Emails panel lock.
-   Active sections must keep white labels/icons, send controls must stay readable,
-   and this panel is intentionally isolated from global CRM contrast overrides. */
+   Active sections use premium champagne with black text; emerald actions keep white text.
+   The panel is intentionally isolated from global CRM contrast overrides. */
 html body #root [data-branded-email-panel="true"] [data-branded-email-tab="true"][data-state="active"],
 html body #root [data-branded-email-panel="true"] [data-branded-email-tab="true"][data-state="active"] * {
-  background: #064E3B !important;
-  background-color: #064E3B !important;
+  background: #EFE6D6 !important;
+  background-color: #EFE6D6 !important;
   background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: #064E3B !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  border-color: #B89555 !important;
   opacity: 1 !important;
 }
 
-html body #root [data-branded-email-panel="true"] [data-branded-email-tab="true"][data-state="active"] :is(svg, path, line, polyline, circle, rect),
-html body #root [data-branded-email-panel="true"] :is([data-branded-email-live-action="true"], [data-branded-email-live-action="true"] *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+html body #root [data-branded-email-panel="true"] [data-branded-email-tab="true"][data-state="active"] :is(svg, path, line, polyline, circle, rect) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
   opacity: 1 !important;
 }
 
 html body #root [data-branded-email-panel="true"] [data-branded-email-template-card="active"] {
-  border-color: #064E3B !important;
-  box-shadow: 0 0 0 2px rgba(6,78,59,0.28) !important;
+  border-color: #B89555 !important;
+  box-shadow: 0 0 0 1px rgba(184,149,85,0.22), inset 0 0 0 1px rgba(184,149,85,0.18) !important;
 }
 
 html body #root [data-branded-email-panel="true"] [data-branded-email-send="true"] input[data-branded-email-search-input="true"],
@@ -36795,6 +36794,16 @@ html body #root [data-branded-email-panel="true"] [data-branded-email-live-actio
   opacity: 1 !important;
 }
 
+html body #root [data-branded-email-panel="true"] [data-recipient-selected="true"] {
+  border-color: rgba(6, 78, 59, 0.28) !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-branded-email-panel="true"] [data-recipient-selected="true"] :is([class*="border-[#B89555]"], [class*="ring-[#B89555]"]) {
+  border-color: rgba(6, 78, 59, 0.28) !important;
+  --tw-ring-color: rgba(6, 78, 59, 0.16) !important;
+}
+
 /* PASS 176 — Branded Emails launcher + panel: lock hover scale/size so buttons never grow on hover. */
 [data-branded-launcher-actions] button:hover,
 [data-branded-launcher-actions] button:focus,
@@ -36809,4 +36818,32 @@ html body #root [data-branded-email-panel="true"] [data-branded-email-live-actio
 [data-branded-launcher-actions] button,
 [data-branded-email-panel] button {
   transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease !important;
+}
+
+/* PASS 177 — Branded Emails preview proof locks.
+   The email preview renders HTML from stored templates; keep the beige contact note
+   black/clickable and keep fallback logo initials white inside emerald tiles. */
+html body #root [data-branded-email-panel="true"] [data-branded-email-preview-body="true"] div[style*="background:#FAF5EA"],
+html body #root [data-branded-email-panel="true"] [data-branded-email-preview-body="true"] div[style*="background:#FAF5EA"] *,
+html body #root [data-branded-email-panel="true"] [data-branded-email-preview-body="true"] a[href^="mailto:"],
+html body #root [data-branded-email-panel="true"] [data-branded-email-preview-body="true"] a[href^="https://jbj.ae"] {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-branded-email-panel="true"] [data-branded-email-fallback-logo="true"],
+html body #root [data-branded-email-panel="true"] [data-branded-email-fallback-logo="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-branded-email-panel="true"] button[role="checkbox"][data-state="checked"],
+html body #root [data-branded-email-panel="true"] button[role="checkbox"][data-state="checked"] svg,
+html body #root [data-branded-email-panel="true"] button[role="checkbox"][data-state="checked"] svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
 }

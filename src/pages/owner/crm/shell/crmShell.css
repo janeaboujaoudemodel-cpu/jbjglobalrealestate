@@ -4449,7 +4449,6 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   .jc-flt__apply,
   .jc-get-started,
   [data-branded-email-live-action="true"],
-  [data-branded-email-send="true"] button,
   [data-developer-directory] button[class*="bg-[#064E3B]"],
   [data-developer-directory] a[class*="bg-[#064E3B]"]
 ) {
@@ -4469,7 +4468,6 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   .jc-flt__apply,
   .jc-get-started,
   [data-branded-email-live-action="true"],
-  [data-branded-email-send="true"] button,
   [data-developer-directory] button[class*="bg-[#064E3B]"],
   [data-developer-directory] a[class*="bg-[#064E3B]"]
 ) :is(span, strong, b, small, svg, path, circle, rect, line, polyline, polygon, ellipse) {
