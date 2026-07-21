@@ -67,10 +67,10 @@ const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmai
     dailyCapLabel: "Developer sends use the connected mailbox; test sends use the verified app email path.",
   },
   brokerages: {
-    fromName: "CITI Developers · Sales & Training Department",
-    fromEmail: "partnerships@maisonjane.ae",
+    fromName: "Jane Bou Jaoude",
+    fromEmail: "infoo.jane@gmail.com",
     replyTo: "infoo.jane@gmail.com",
-    dailyCapLabel: "Current verified Resend path is capped at 100 emails/day and 2 emails/second.",
+    dailyCapLabel: "No in-app 100-recipient cap. The full selected audience can be sent as one campaign; provider delivery speed still applies.",
   },
 };
 
@@ -305,7 +305,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/\{\{project_name\}\}/g, "AMRA")
       .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
       .replace(/\{\{project_url\}\}/g, "https://citideveloper.com/e-catalogue/amra")
-      .replace(/\{\{booking_url\}\}/g, bookingUrl || "#calendar-booking-url-not-configured")
+      .replace(/\{\{booking_url\}\}/g, bookingUrl || "#")
       .replace(/\{\{owner_full_name\}\}/g, "Jane Bou Jaoude")
       .replace(/\{\{developer_phone_display\}\}/g, CITI_PHONE_DISPLAY)
       .replace(/\{\{developer_phone_tel\}\}/g, CITI_PHONE_TEL)
@@ -580,7 +580,6 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const sender = SENDER_BY_KIND[kind];
   const delivery = DELIVERY_BY_KIND[kind];
   const activeBrand = BRAND_HEADER_BY_KIND[kind];
-  const sendCap = kind === "brokerages" ? 100 : null;
   const selectedSendableCount = useMemo(
     () => recipients.filter((r) => selectedIds.has(r.id) && r.email?.trim()).length,
     [recipients, selectedIds]
@@ -640,10 +639,6 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     }
     if (audienceCount === 0) {
       toast.error("Empty audience — select recipients first");
-      return;
-    }
-    if (sendCap && selectedSendableCount > sendCap) {
-      toast.error(`Select ${sendCap} or fewer brokerages for one send. Current verified path allows 100 emails/day.`);
       return;
     }
     const ok = window.confirm(
@@ -1013,11 +1008,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <li><strong>From:</strong> {delivery.fromName} &lt;{delivery.fromEmail.toUpperCase()}&gt;</li>
                 <li><strong>Reply-To:</strong> {delivery.replyTo.toUpperCase()}</li>
                 {kind === "brokerages" ? (
-                  <li><strong>Calendar:</strong> {bookingUrl ? "Google Calendar appointment link saved" : "Google Calendar appointment link missing"}</li>
+                  <li><strong>Calendar:</strong> {bookingUrl ? "Google Calendar appointment link saved — bookings sync into Meetings" : "Google Calendar appointment link missing — live send is blocked until saved"}</li>
                 ) : (
                   <li><strong>Registration pack:</strong> saved link included in the template</li>
                 )}
                 <li><strong>One-shot limit:</strong> {delivery.dailyCapLabel}</li>
+                <li><strong>Status logic:</strong> Sent campaigns are marked automatically; replies are matched by inbound email sync and bookings by Google Calendar sync.</li>
               </ul>
             </div>
 

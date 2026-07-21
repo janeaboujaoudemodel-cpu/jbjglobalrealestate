@@ -8,12 +8,12 @@
  * Brokerage outreach is sent via Resend on the currently verified sender domain.
  */
 
-export const ALLOWED_SENDER_DOMAIN = "maisonjane.ae";
+export const ALLOWED_SENDER_DOMAIN = "gmail.com";
 
-export const PRIMARY_SENDER = "info@jbj.ae";
-export const PRIMARY_SENDER_NAME = "JBJ Global Real Estate";
-export const DEFAULT_REPLY_TO = "info@jbj.ae";
-export const DEFAULT_CC = "infoo.jane@gmail.com";
+export const PRIMARY_SENDER = "infoo.jane@gmail.com";
+export const PRIMARY_SENDER_NAME = "Jane Bou Jaoude";
+export const DEFAULT_REPLY_TO = "infoo.jane@gmail.com";
+export const DEFAULT_CC = "";
 
 export const TEST_DEFAULTS = {
   to: "infoo.jane@gmail.com",
@@ -60,8 +60,8 @@ export function enforceAllowedSender(fromEmail: string): void {
   const lower = (fromEmail || "").trim().toLowerCase();
   if (!lower.endsWith("@" + ALLOWED_SENDER_DOMAIN)) {
     throw new Error(
-      `Sender ${fromEmail || "(empty)"} is not on the verified domain @${ALLOWED_SENDER_DOMAIN}. ` +
-      `Only @${ALLOWED_SENDER_DOMAIN} addresses can send brokerage outreach.`,
+      `Sender ${fromEmail || "(empty)"} is not the approved brokerage sender. ` +
+      `Brokerage outreach must use ${PRIMARY_SENDER}.`,
     );
   }
 }

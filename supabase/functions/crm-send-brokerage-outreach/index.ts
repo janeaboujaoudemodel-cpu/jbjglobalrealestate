@@ -319,15 +319,11 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // HARD LOCK: brokerage outreach must never expose the JBJ brand to the
-    // recipient. Envelope From is on the verified sender domain (Resend
-    // requires this), but the DISPLAY NAME is "CITI Developers · Sales & Training Department"
-    // and the REPLY-TO is Jane's Gmail so recipients only see CITI branding
-    // and any reply goes to Jane's personal inbox — never to info@jbj.ae.
-    // TODO: once citidevelopers.com is verified in Resend, set
-    // FORCED_ENVELOPE_FROM = "partnerships@citidevelopers.com" so the raw
-    const FORCED_ENVELOPE_FROM = "partnerships@maisonjane.ae";
-    const FORCED_FROM_DISPLAY = "CITI Developers · Sales & Training Department";
+    // HARD LOCK: brokerage outreach must never expose the JBJ brand or any
+    // placeholder/private sender domain to the recipient. From and Reply-To
+    // both stay on Jane's approved brokerage mailbox.
+    const FORCED_ENVELOPE_FROM = "infoo.jane@gmail.com";
+    const FORCED_FROM_DISPLAY = "Jane Bou Jaoude";
     const fromName = FORCED_FROM_DISPLAY;
     const replyTo = "infoo.jane@gmail.com";
     try {
@@ -653,7 +649,7 @@ serve(async (req: Request) => {
       last_outreach_at: new Date().toISOString(),
       outreach_count: (brk.outreach_count || 0) + 1,
       first_contact_at: brk.first_contact_at || new Date().toISOString(),
-      outreach_stage: brk.outreach_stage === "not_contacted" ? "introduced" : brk.outreach_stage,
+      outreach_stage: brk.outreach_stage === "not_contacted" ? "attempted" : brk.outreach_stage,
       attempt_count: (brk.attempt_count || 0) + 1,
       email: brk.email || recipient,
     }).eq("id", brk.id);
