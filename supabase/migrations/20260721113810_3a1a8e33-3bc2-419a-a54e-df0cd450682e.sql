@@ -1,0 +1,1 @@
+UPDATE crm_email_templates SET html = REPLACE(REPLACE(html, 'contact@jbj.ae', 'helpdesk@jbj.ae'), 'CONTACT@JBJ.AE', 'HELPDESK@JBJ.AE'), subject = REPLACE(subject, 'contact@jbj.ae', 'helpdesk@jbj.ae') WHERE variant IN ('developer_registration','developer_confirm_registered');
