@@ -376,17 +376,24 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     return recipients.filter((r) => r.name.toLowerCase().includes(q));
   }, [audienceSearch, recipients]);
 
-  const total = recipients.length;
+  const campaignRecipients = useMemo(
+    () => isDeveloperRegistrationCampaign(kind, selectedTemplate)
+      ? recipients.filter((r) => r.registrationStatus !== "registered")
+      : recipients,
+    [kind, recipients, selectedTemplate]
+  );
+  const total = campaignRecipients.length;
   const audienceCount = selectedIds.size;
+  const lockedCitiCount = useMemo(
+    () => campaignRecipients.filter((r) => isCitiRecipient(r) && !unlockedCitiIds.has(r.id)).length,
+    [campaignRecipients, unlockedCitiIds]
+  );
   const eligibleRecipients = useMemo(
     () => {
-      const base = isDeveloperRegistrationCampaign(kind, selectedTemplate)
-        ? recipients.filter((r) => r.registrationStatus !== "registered")
-        : recipients;
       // Exclude Citi/City developers unless explicitly unlocked.
-      return base.filter((r) => !isCitiRecipient(r) || unlockedCitiIds.has(r.id));
+      return campaignRecipients.filter((r) => !isCitiRecipient(r) || unlockedCitiIds.has(r.id));
     },
-    [kind, recipients, selectedTemplate, unlockedCitiIds]
+    [campaignRecipients, unlockedCitiIds]
   );
   const eligibleTotal = eligibleRecipients.length;
   const allSelected = audienceCount === eligibleTotal && eligibleTotal > 0;
@@ -502,7 +509,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
             <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
               <Users className="size-4" />
-              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {eligibleTotal}
+              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total} {kind}
+              {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
             </div>
           </div>
         </SheetHeader>
@@ -575,7 +583,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   whiteSpace: "nowrap",
                 }}
               >
-                {allSelected ? `All ${eligibleTotal} selected` : `Select all (${eligibleTotal})`}
+                {allSelected ? `All ${eligibleTotal} eligible selected` : `Select all eligible (${eligibleTotal})`}
               </button>
               <button
                 type="button"
@@ -601,7 +609,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 />
               </div>
               <span className="text-xs text-[#4B5D55] ml-auto">
-                <strong className="text-[#0F1A16]">{audienceCount}</strong> of {eligibleTotal} selected
+                <strong className="text-[#0F1A16]">{audienceCount}</strong> selected of {total} total
+                {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]"> · {lockedCitiCount} locked</span>}
               </span>
             </div>
 
@@ -687,11 +696,17 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                       });
                                     } else {
                                       next.add(r.id);
+                                      setSelectedIds((s) => {
+                                        const ns = new Set(s);
+                                        ns.add(r.id);
+                                        return ns;
+                                      });
                                     }
                                     return next;
                                   });
                                 }}
                                 data-no-contrast-guard="true"
+                                data-citi-lock-toggle={locked ? "locked" : "unlocked"}
                                 className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em]"
                                 style={{
                                   background: locked ? "#FFFFFF" : "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)",
@@ -701,8 +716,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                 }}
                                 title={locked ? "Unlock to include Citi in this campaign" : "Locked — Citi excluded from send"}
                               >
-                                {locked ? <Lock className="size-3" strokeWidth={2.6} /> : <Unlock className="size-3" strokeWidth={2.6} />}
-                                {locked ? "Locked" : "Unlocked"}
+                                {locked ? (
+                                  <Lock className="size-3" style={{ color: "#064E3B", stroke: "#064E3B", WebkitTextFillColor: "#064E3B" }} strokeWidth={2.6} />
+                                ) : (
+                                  <Unlock className="size-3" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} strokeWidth={2.6} />
+                                )}
+                                <span style={{ color: locked ? "#064E3B" : "#FFFFFF", WebkitTextFillColor: locked ? "#064E3B" : "#FFFFFF" }}>
+                                  {locked ? "Locked" : "Unlocked"}
+                                </span>
                               </button>
                             )}
                             {r.registrationStatus === "registered" && (
@@ -765,7 +786,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <p className="text-xs text-[#4B5D55] uppercase tracking-wider">Campaign summary</p>
               <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                 <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
-                <li><strong>Audience:</strong> {audienceCount} of {eligibleTotal} {kind}</li>
+                <li><strong>Audience:</strong> {audienceCount} selected of {total} total {kind}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}</li>
                 <li><strong>From:</strong> {sender.name}, {sender.title} &lt;{sender.email}&gt;</li>
                 <li><strong>Registration pack:</strong> saved link included in the template</li>
               </ul>
