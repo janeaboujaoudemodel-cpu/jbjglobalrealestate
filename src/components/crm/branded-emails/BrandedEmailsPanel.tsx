@@ -1081,8 +1081,17 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
 
             {kind === "brokerages" && (
-              <div className="border border-emerald-900/15 rounded-lg p-4 bg-white">
-                <p className="text-xs text-[#4B5D55] uppercase tracking-wider font-semibold mb-2">Google Calendar booking link</p>
+              <div
+                className={`border rounded-lg p-4 ${bookingUrl ? "border-emerald-900/15 bg-white" : "border-red-300 bg-red-50"}`}
+              >
+                <p className={`text-xs uppercase tracking-wider font-semibold mb-2 ${bookingUrl ? "text-[#4B5D55]" : "text-red-800"}`}>
+                  Google Calendar booking link {bookingUrl ? "" : "— required before live send"}
+                </p>
+                {!bookingUrl && (
+                  <p className="text-xs text-red-800 mb-2">
+                    Live send is blocked until you paste Jane's public Google Calendar appointment link (starts with <code>https://calendar.app.google/</code>) and click Save.
+                  </p>
+                )}
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Input
                     type="url"
@@ -1105,6 +1114,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 </div>
               </div>
             )}
+
 
             <div className="border border-emerald-900/15 rounded-lg p-4 bg-white">
               <p className="text-xs text-[#4B5D55] uppercase tracking-wider font-semibold mb-2">Test send</p>
