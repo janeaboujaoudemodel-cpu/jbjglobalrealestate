@@ -288,10 +288,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         const nextTemplateId = t.some((x) => x.variant === selectedTemplateId) ? selectedTemplateId : t[0]?.variant ?? null;
         setSelectedTemplateId(nextTemplateId);
         const firstTemplate = t.find((x) => x.variant === nextTemplateId) ?? t[0] ?? null;
-        const defaultAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
+        const baseAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
           ? r.filter((x) => x.registrationStatus !== "registered")
           : r;
+        // Citi/City developers are locked-out by default per owner rule.
+        const defaultAudience = baseAudience.filter((x) => !isCitiRecipient(x));
         setSelectedIds(new Set(defaultAudience.map((x) => x.id)));
+        setUnlockedCitiIds(new Set());
       })
       .catch((e) => {
         if (cancelled) return;
