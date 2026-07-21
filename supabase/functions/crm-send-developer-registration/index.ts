@@ -25,6 +25,7 @@ const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v
 
 interface Body {
   developerId?: string;
+  catalogDeveloperId?: string;
   variant?: "developer_registration" | "developer_confirm_registered";
   // When set, sends the email to this address only and DOES NOT update the
   // registry/log — used for "Send TEST to me" before broadcasting.
@@ -70,6 +71,29 @@ const buildRawMime = (opts: { from: string; to: string; cc: string[]; subject: s
 const renderTemplate = (html: string, vars: Record<string, string>) =>
   html.replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] ?? "");
 
+const extractFirstEmail = (value: unknown): string => {
+  if (typeof value !== "string") return "";
+  return value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]?.trim() || "";
+};
+
+const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
+  const contactMailLink = `<a href="mailto:${replyTo}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${replyTo.toUpperCase()}</a>`;
+  const jbjLink = `<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>`;
+  const mailToken = "__JBJ_CONTACT_MAIL_LINK__";
+  return html
+    .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
+    .replace(/Jane Bou Jaoude/gi, "Amelia")
+    .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
+    .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107")
+    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, mailToken)
+    .replace(/\b(?:contact|info)@jbj\.ae\b/gi, mailToken)
+    .replace(new RegExp(mailToken, "g"), contactMailLink)
+    .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
+    .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
+    .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
+    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+};
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -109,18 +133,35 @@ serve(async (req: Request) => {
       });
     }
 
-    // Resolve developer (skipped for tests without developerId)
+    // Resolve developer (skipped for tests without a specific developer row)
     let dev: any = null;
     let recipient = "";
-    if (isTest && !body.developerId) {
+    let sourceTable: "crm_developer_registry" | "developers" = "crm_developer_registry";
+    if (isTest && !body.developerId && !body.catalogDeveloperId) {
       recipient = body.testRecipient!;
       dev = { developer_name: body.testDeveloperName || "Sample Developer Co." };
     } else {
-      if (!body.developerId) throw new Error("developerId required");
-      const { data: d, error: devErr } = await service
-        .from("crm_developer_registry").select("*").eq("id", body.developerId).single();
-      if (devErr || !d) throw new Error("Developer not found");
-      dev = d;
+      if (body.catalogDeveloperId) {
+        sourceTable = "developers";
+        const { data: d, error: devErr } = await service
+          .from("developers")
+          .select("id, name, admin_email, registration_status")
+          .eq("id", body.catalogDeveloperId)
+          .single();
+        if (devErr || !d) throw new Error("Developer not found");
+        dev = {
+          id: d.id,
+          developer_name: d.name,
+          developer_email: extractFirstEmail(d.admin_email),
+          status: d.registration_status || "not_registered",
+        };
+      } else {
+        if (!body.developerId) throw new Error("developerId required");
+        const { data: d, error: devErr } = await service
+          .from("crm_developer_registry").select("*").eq("id", body.developerId).single();
+        if (devErr || !d) throw new Error("Developer not found");
+        dev = d;
+      }
       recipient = (isTest ? body.testRecipient : (body.overrideEmail || dev.developer_email || "")).trim();
     }
 
@@ -159,10 +200,7 @@ serve(async (req: Request) => {
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
     });
-    html = html
-      .replace(/Jane Bou Jaoude/gi, "Amelia")
-      .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
-      .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107");
+    html = hardenRenderedDeveloperHtml(html, dev.developer_name, replyTo);
     const baseSubject = isTest && body.subjectOverride && body.subjectOverride.trim()
       ? body.subjectOverride.trim()
       : template.subject;
@@ -218,15 +256,25 @@ serve(async (req: Request) => {
       });
     }
 
-    // Update registry — bump status from not_started to pending_application
-    const newStatus = dev.status === "not_started" ? "pending_application" : dev.status;
-    await service.from("crm_developer_registry").update({
-      last_outreach_at: new Date().toISOString(),
-      outreach_count: (dev.outreach_count || 0) + 1,
-      status: newStatus,
-      developer_email: dev.developer_email || recipient,
-      first_contact_at: dev.first_contact_at || new Date().toISOString(),
-    }).eq("id", dev.id);
+    const nowIso = new Date().toISOString();
+    const newStatus = sourceTable === "developers"
+      ? (dev.status === "not_registered" ? "application_pending" : dev.status)
+      : (dev.status === "not_started" ? "pending_application" : dev.status);
+
+    if (sourceTable === "developers") {
+      await service.from("developers").update({
+        registration_status: newStatus,
+        admin_email: dev.developer_email || recipient,
+      }).eq("id", dev.id);
+    } else {
+      await service.from("crm_developer_registry").update({
+        last_outreach_at: nowIso,
+        outreach_count: (dev.outreach_count || 0) + 1,
+        status: newStatus,
+        developer_email: dev.developer_email || recipient,
+        first_contact_at: dev.first_contact_at || nowIso,
+      }).eq("id", dev.id);
+    }
 
     // Log outbound email
     await service.from("crm_relationship_email_log").insert({
@@ -242,10 +290,10 @@ serve(async (req: Request) => {
       cc_emails: cc,
       subject,
       body_snippet: `Sent ${variant === "developer_confirm_registered" ? "confirmation request" : "broker registration package"} to ${dev.developer_name}`,
-      sent_at: new Date().toISOString(),
+      sent_at: nowIso,
     });
 
-    if (newStatus !== dev.status) {
+    if (sourceTable === "crm_developer_registry" && newStatus !== dev.status) {
       await service.from("crm_relationship_status_history").insert({
         owner_id: user.id,
         entity_type: "developer_registry",

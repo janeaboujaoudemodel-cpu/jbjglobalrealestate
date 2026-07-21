@@ -12,8 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Mail, Search, Users, Send, Eye, FileText } from "lucide-react";
+import { Loader2, Mail, Search, Users, Send, Eye, FileText, Check } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -22,6 +21,7 @@ export type BrandedAudienceKind = "developers" | "brokerages";
 
 type Recipient = {
   id: string;
+  catalogDeveloperId?: string;
   name: string;
   email: string | null;
   meta?: string | null;
@@ -81,32 +81,33 @@ const BROKERAGE_VARIANTS: Template["variant"][] = [
   "brokerage_breakfast_invite",
 ];
 
+function extractFirstEmail(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const match = value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+  return match?.[0]?.trim().toLowerCase() || null;
+}
+
 async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
   if (kind === "developers") {
-    const { data } = await (supabase as any)
-      .from("crm_developer_registry")
-      .select("id, developer_name, developer_email, logo_url, status, country, website, source")
-      .order("developer_name")
-      .limit(2000);
-    const mapped = (data ?? []).map((r: any) => ({
+    const { data, error } = await (supabase as any)
+      .from("developers")
+      .select("id, name, slug, admin_email, logo_url, website_url, registration_status, group_status, excel_order")
+      .or("is_hidden.is.null,is_hidden.eq.false")
+      .order("excel_order", { ascending: true, nullsFirst: false })
+      .order("name", { ascending: true })
+      .limit(1000);
+    if (error) throw error;
+
+    return (data ?? []).map((r: any) => ({
       id: String(r.id),
-      name: r.developer_name || "Developer",
-      email: r.developer_email || null,
-      meta: r.country || r.website || r.source || null,
+      catalogDeveloperId: String(r.id),
+      name: r.name || "Developer",
+      email: extractFirstEmail(r.admin_email),
+      meta: r.website_url || r.group_status || null,
       logoUrl: r.logo_url || null,
-      websiteUrl: r.website || null,
-      registrationStatus: r.status || "not_started",
+      websiteUrl: r.website_url || null,
+      registrationStatus: r.registration_status || "not_registered",
     }));
-    const deduped = new Map<string, Recipient>();
-    for (const r of mapped) {
-      const key = `${r.email || ""}::${r.name}`
-        .toLowerCase()
-        .replace(/\b(developers?|developments?|properties|property|realty|real\s*estate|group|llc|l\.?l\.?c)\b/g, "")
-        .replace(/[^a-z0-9@.]+/g, "") || r.id;
-      const prev = deduped.get(key);
-      if (!prev || (!prev.logoUrl && r.logoUrl) || (!prev.email && r.email)) deduped.set(key, r);
-    }
-    return Array.from(deduped.values()).sort((a, b) => a.name.localeCompare(b.name));
   }
   const { data } = await (supabase as any)
     .from("crm_brokerages")
@@ -168,8 +169,8 @@ function stripHtml(html: string) {
 
 function personalizeTemplate(html: string, sampleName = "Developer Team", audienceKind: BrandedAudienceKind = "developers") {
   const sender = SENDER_BY_KIND[audienceKind];
-  const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">jbj.ae</a>';
-  const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email}</a>`;
+  const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
+  const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
   const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
   return html
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
@@ -197,6 +198,7 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
+    .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${sampleName}`)
     .replace(/<div([^>]*style=(['"])(?=[^'"]*background:#FAF5EA)([^'"]*)\2[^>]*)>/gi, (match, attrs) => {
       const withMarker = attrs.includes("data-jbj-contact-note") ? attrs : ` data-jbj-contact-note="true"${attrs}`;
       return `<div${withMarker.replace(/style=(['"])([^'"]*)\1/i, (_styleMatch, quote, styleValue) => `style=${quote}${styleValue};color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;${quote}`)}>`;
@@ -226,9 +228,7 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
   const logoUrl = isValidDeveloperLogoUrl(recipient.logoUrl) ? recipient.logoUrl : fallbackLogoUrl;
   const hasLogo = isValidDeveloperLogoUrl(logoUrl);
 
-  const hasVerifiedStoredLogo = isValidDeveloperLogoUrl(recipient.logoUrl);
-
-  if (hasLogo && hasVerifiedStoredLogo) {
+  if (hasLogo) {
     return (
       <DeveloperLogo
         src={logoUrl}
@@ -244,12 +244,13 @@ function AudienceLogo({ recipient }: { recipient: Recipient }) {
   return (
     <span
       data-branded-email-fallback-logo="true"
+      data-no-contrast-guard="true"
       className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md border-0 shadow-none ring-1 ring-[#064E3B]/20"
       style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
       aria-label={`${recipient.name} logo pending`}
       title={recipient.name}
     >
-      <span className="text-[10px] font-black leading-none allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
+      <span data-no-contrast-guard="true" className="text-[10px] font-black leading-none allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}>
         {initialsOf(recipient.name)}
       </span>
     </span>
@@ -270,17 +271,17 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    setLoading(true);
+    const hasCurrentData = recipients.length > 0 && templates.length > 0;
+    setLoading(!hasCurrentData);
     setLoadError(null);
-    setSelectedTemplateId(null);
-    setAudienceSearch("");
     Promise.all([loadRecipients(kind), loadTemplates(kind)])
       .then(([r, t]) => {
         if (cancelled) return;
         setRecipients(r);
         setTemplates(t);
-        setSelectedTemplateId(t[0]?.variant ?? null);
-        const firstTemplate = t[0] ?? null;
+        const nextTemplateId = t.some((x) => x.variant === selectedTemplateId) ? selectedTemplateId : t[0]?.variant ?? null;
+        setSelectedTemplateId(nextTemplateId);
+        const firstTemplate = t.find((x) => x.variant === nextTemplateId) ?? t[0] ?? null;
         const defaultAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
           ? r.filter((x) => x.registrationStatus !== "registered")
           : r;
@@ -390,19 +391,21 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     if (!ok) return;
     const selectedRecipients = recipients.filter((r) => selectedIds.has(r.id) && r.email);
     setSending(true);
+    let sentCount = 0;
     try {
-      for (const r of selectedRecipients.slice(0, 50)) {
+      for (const r of selectedRecipients) {
         const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
         const body = kind === "developers"
-          ? { developerId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
+          ? { catalogDeveloperId: r.catalogDeveloperId ?? r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
           : { brokerageId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true };
         const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
         if (error) throw error;
         if (data?.error) throw new Error(data.message || data.error);
+        sentCount += 1;
       }
-      toast.success(`Queued ${selectedRecipients.length} ${kind} for "${selectedTemplate.name}".`);
+      toast.success(`Sent ${sentCount} ${kind} for "${selectedTemplate.name}".`);
     } catch (e: any) {
-      toast.error(`Live send failed: ${e?.message || "unknown error"}`);
+      toast.error(`Live send stopped after ${sentCount} sent: ${e?.message || "unknown error"}`);
     } finally {
       setSending(false);
     }
@@ -414,7 +417,6 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         side="right"
         data-branded-email-panel="true"
         data-no-contrast-guard="true"
-        data-ink-emerald-opt-out="true"
         aria-describedby={undefined}
         className="w-full sm:max-w-6xl p-0 flex flex-col bg-white"
       >
@@ -540,7 +542,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 {loadError}
               </div>
             ) : loading ? (
-                <div className="p-6 flex items-center gap-2 text-sm text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading…</div>
+                <div className="p-6 flex items-center gap-2 text-sm text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading audience…</div>
               ) : (
                 <ScrollArea className="h-[300px]">
                   <ul className="divide-y divide-emerald-900/5">
@@ -553,12 +555,26 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                             className="flex cursor-pointer items-center gap-3 px-3 py-2"
                             style={{ backgroundColor: checked ? "rgba(6,78,59,0.035)" : "#FFFFFF" }}
                           >
-                            <Checkbox
-                              checked={checked}
-                              onCheckedChange={() => toggleId(r.id)}
-                              className="border-[#064E3B]/35 data-[state=checked]:border-[#064E3B] data-[state=checked]:bg-[#064E3B] data-[state=checked]:text-white"
-                              style={{ boxShadow: "none" }}
-                            />
+                            <button
+                              type="button"
+                              role="checkbox"
+                              aria-checked={checked}
+                              data-branded-email-checkbox="true"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleId(r.id);
+                              }}
+                              className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-[4px]"
+                              style={{
+                                border: "1px solid #064E3B",
+                                background: checked ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FDFBF7",
+                                color: "#FFFFFF",
+                                WebkitTextFillColor: "#FFFFFF",
+                                boxShadow: "none",
+                              }}
+                            >
+                              {checked && <Check className="size-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} strokeWidth={3.2} />}
+                            </button>
                             {kind === "developers" ? (
                               <AudienceLogo recipient={r} />
                             ) : (
@@ -649,18 +665,19 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   onClick={handleSendTest}
                   disabled={sending || !selectedTemplate}
                   data-branded-email-test-action="true"
+                  data-keep-gold="true"
+                  className="jj-cta-gold-metallic"
                   style={{
                     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
                     minHeight: 40, padding: "8px 16px", borderRadius: 6, fontSize: 13, fontWeight: 700,
-                    background: "#064E3B", color: "#FFFFFF",
-                    WebkitTextFillColor: "#FFFFFF",
-                    border: "1px solid #064E3B",
+                    color: "#3a2a08",
+                    WebkitTextFillColor: "#3a2a08",
                     whiteSpace: "nowrap",
                     cursor: sending || !selectedTemplate ? "not-allowed" : "pointer",
                     opacity: sending || !selectedTemplate ? 0.5 : 1,
                   }}
                 >
-                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} /> : <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />}
+                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} /> : <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />}
                   Send test
                 </button>
               </div>
@@ -671,17 +688,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               onClick={handleSendLive}
               disabled={sending || !selectedTemplate || audienceCount === 0}
               data-branded-email-live-action="true"
+              data-keep-gold="true"
+              className="jj-cta-gold-metallic"
               style={{
                 width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
                 minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
-                background: "#064E3B", color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                border: "1px solid #064E3B",
+                color: "#3a2a08",
+                WebkitTextFillColor: "#3a2a08",
                 cursor: sending || !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
                 opacity: sending || !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
               }}
             >
-              <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />
+              <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />
               {sending ? "Sending…" : `Send live to ${audienceCount} ${kind}`}
             </button>
 
