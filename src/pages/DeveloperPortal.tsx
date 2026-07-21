@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
+import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
 import { DeveloperSelectDropdown } from "@/components/developer-portal/DeveloperSelectDropdown";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
@@ -906,6 +907,9 @@ const DeveloperPortal = () => {
         {/* Branded Emails — always visible at the top of the Developer Portal */}
         <div className="container mx-auto px-4 pt-6 max-w-4xl">
           <BrandedEmailsLauncherCard variant="developer" />
+        </div>
+        <div className="container mx-auto px-4 pt-4 max-w-4xl">
+          <BrandedEmailDashboard kind="developers" />
         </div>
         {/* Owner Mode Banner */}
         {isOwner && !isDeveloperMode && (

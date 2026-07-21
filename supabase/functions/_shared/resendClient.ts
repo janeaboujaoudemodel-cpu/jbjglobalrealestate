@@ -86,10 +86,10 @@ export async function sendViaResend(input: ResendSendInput): Promise<ResendSendR
   // 2. Honour 2 req/s throttle
   await throttle(c.last_send_at ?? null, c.rate_per_sec ?? 2);
 
-  // 3. Force Reply-To: contact@jbj.ae on every send unless caller provided one.
+  // 3. Force Reply-To: helpdesk@jbj.ae on every send unless caller provided one.
   //    This guarantees every recipient who hits "Reply" reaches a real inbox,
   //    even if the From: address is noreply@jbj.ae.
-  const REPLY_TO_CONTACT = "contact@jbj.ae";
+  const REPLY_TO_CONTACT = "helpdesk@jbj.ae";
   const hasReplyTo =
     (typeof input.reply_to === "string" && input.reply_to.trim().length > 0) ||
     (Array.isArray(input.reply_to) && input.reply_to.length > 0);

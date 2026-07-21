@@ -71,10 +71,10 @@ export function enforceAllowedSender(fromEmail: string): void {
  * marketing, broker, AI, etc.). Anything sent from noreply@jbj.ae must
  * route human replies to a real inbox.
  */
-export const REPLY_TO_CONTACT = "contact@jbj.ae";
+export const REPLY_TO_CONTACT = "helpdesk@jbj.ae";
 
 /**
- * Inject Reply-To: contact@jbj.ae into any Resend payload that doesn't
+ * Inject Reply-To: helpdesk@jbj.ae into any Resend payload that doesn't
  * already specify one. Use this in EVERY edge function that calls
  * resend.emails.send / the Resend gateway.
  */
@@ -101,7 +101,7 @@ export function buildNoreplyBounceHtml(originalSubject?: string): string {
           <tr><td style="padding-top:18px;font-size:14px;line-height:1.55;">
             <p style="margin:0 0 14px;">Hello,</p>
             <p style="margin:0 0 14px;">Thank you for writing in${subj ? ` regarding "<strong>${subj}</strong>"` : ""}. This inbox (<strong>noreply@jbj.ae</strong>) does not receive replies.</p>
-            <p style="margin:0 0 14px;">For anything you need, please email <a href="mailto:contact@jbj.ae" style="color:#1A1A1A;border-bottom:1px solid #B89555;text-decoration:none;"><strong>contact@jbj.ae</strong></a> and a real person on the JBJ team will get back to you shortly.</p>
+            <p style="margin:0 0 14px;">For anything you need, please email <a href="mailto:helpdesk@jbj.ae" style="color:#1A1A1A;border-bottom:1px solid #B89555;text-decoration:none;"><strong>HELPDESK@JBJ.AE</strong></a> and a real person on the JBJ team will get back to you shortly.</p>
             <p style="margin:18px 0 0;color:#1A1A1A;opacity:.7;font-size:12px;">— JBJ Global Real Estate</p>
           </td></tr>
         </table>

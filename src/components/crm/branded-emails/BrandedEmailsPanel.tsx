@@ -52,9 +52,9 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
     email: "helpdesk@jbj.ae",
   },
   brokerages: {
-    name: "JBJ Team",
-    title: "Brokerage Relations",
-    email: "info@jbj.ae",
+    name: "Jane",
+    title: "CITI Developers · Partnerships",
+    email: "infoo.jane@gmail.com",
   },
 };
 
@@ -259,13 +259,15 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
     .replace(/\{\{reply_to_lower\}\}/g, sender.email)
-    .replace(/\{\{reply_to_display\}\}/g, sender.email)
+    .replace(/\{\{reply_to_display\}\}/g, sender.email.toUpperCase())
     .replace(/\{\{reply_to\}\}/g, sender.email)
       .replace(/Jane Bou Jaoude/gi, sender.name)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
-    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
-    .replace(/\b(?:contact|info)@jbj\.ae\b/gi, senderMailToken)
+    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
+    .replace(/\b(?:contact|info|helpdesk)@jbj\.ae\b/gi, senderMailToken)
     .replace(new RegExp(senderMailToken, "g"), senderMailLink)
+    .replace(/<a\b(?![^>]*\btarget=)([^>]*\bhref=["']https?:\/\/drive\.google\.com[^>]*>)/gi, '<a target="_blank" rel="noopener noreferrer" $1')
+    .replace(/<a\b(?![^>]*\btarget=)([^>]*\bhref=["']https?:\/\/[^>]*>)/gi, '<a target="_blank" rel="noopener noreferrer" $1')
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
@@ -358,6 +360,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [sending, setSending] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [unlockedCitiIds, setUnlockedCitiIds] = useState<Set<string>>(new Set());
+  const [previouslySentEmails, setPreviouslySentEmails] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!open) return;
@@ -409,6 +412,36 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     [templates, selectedTemplateId]
   );
 
+  useEffect(() => {
+    if (!open || !selectedTemplate) return;
+    let cancelled = false;
+    const entityType = kind === "developers" ? "developer_registry" : "brokerage";
+    (async () => {
+      const { data } = await (supabase as any)
+        .from("crm_relationship_email_log")
+        .select("to_emails, direction, entity_type, created_at")
+        .eq("direction", "outbound")
+        .eq("entity_type", entityType)
+        .order("created_at", { ascending: false })
+        .limit(1000);
+      if (cancelled) return;
+      const sent = new Set<string>();
+      for (const row of data ?? []) {
+        const to = Array.isArray(row.to_emails) ? row.to_emails : [];
+        for (const email of to) {
+          const normalized = String(email || "").trim().toLowerCase();
+          if (normalized) sent.add(normalized);
+        }
+      }
+      setPreviouslySentEmails(sent);
+    })().catch(() => {
+      if (!cancelled) setPreviouslySentEmails(new Set());
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, kind, selectedTemplate?.variant]);
+
   const filteredRecipients = useMemo(() => {
     const q = audienceSearch.trim().toLowerCase();
     if (!q) return recipients;
@@ -429,10 +462,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   );
   const eligibleRecipients = useMemo(
     () => {
-      // Exclude Citi/City developers unless explicitly unlocked.
-      return campaignRecipients.filter((r) => !isCitiRecipient(r) || unlockedCitiIds.has(r.id));
+      // Exclude Citi/City developers unless explicitly unlocked, and exclude
+      // recipients who already have a sent outreach log so bulk sends don't repeat.
+      return campaignRecipients.filter((r) => {
+        const alreadySent = !!r.email && previouslySentEmails.has(r.email.toLowerCase().trim());
+        return !alreadySent && (!isCitiRecipient(r) || unlockedCitiIds.has(r.id));
+      });
     },
-    [campaignRecipients, unlockedCitiIds]
+    [campaignRecipients, unlockedCitiIds, previouslySentEmails]
+  );
+  const previouslySentCount = useMemo(
+    () => campaignRecipients.filter((r) => !!r.email && previouslySentEmails.has(r.email.toLowerCase().trim())).length,
+    [campaignRecipients, previouslySentEmails]
   );
   const eligibleTotal = eligibleRecipients.length;
   const allSelected = audienceCount === eligibleTotal && eligibleTotal > 0;
@@ -446,10 +487,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const activeBrand = BRAND_HEADER_BY_KIND[kind];
 
   useEffect(() => {
-    if (!isDeveloperRegistrationCampaign(kind, selectedTemplate)) return;
     const eligible = new Set(eligibleRecipients.map((r) => r.id));
     setSelectedIds((current) => new Set([...current].filter((id) => eligible.has(id))));
-  }, [kind, selectedTemplate, eligibleRecipients]);
+  }, [eligibleRecipients]);
 
   const toggleId = (id: string) =>
     setSelectedIds((s) => {
@@ -505,7 +545,10 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       `Send "${selectedTemplate.name}" live to ${audienceCount} ${kind}?\n\nThis will be delivered from ${sender.email}. This action is logged.`
     );
     if (!ok) return;
-    const selectedRecipients = recipients.filter((r) => selectedIds.has(r.id) && r.email);
+    const selectedRecipients = recipients.filter((r) => {
+      const email = r.email?.toLowerCase().trim();
+      return selectedIds.has(r.id) && email && !previouslySentEmails.has(email);
+    });
     setSending(true);
     let sentCount = 0;
     try {
@@ -559,6 +602,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <Users className="size-4" />
               Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total} {kind}
               {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
+              {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]">· {previouslySentCount} already sent</span>}
             </div>
           </div>
         </SheetHeader>
@@ -657,6 +701,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <span className="text-xs text-[#4B5D55] ml-auto">
                 <strong className="text-[#0F1A16]">{audienceCount}</strong> selected of {total} total
                 {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]"> · {lockedCitiCount} locked</span>}
+                {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]"> · {previouslySentCount} already sent</span>}
               </span>
             </div>
 
@@ -673,7 +718,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                     {filteredRecipients.map((r) => {
                       const checked = selectedIds.has(r.id);
                       const isCiti = isCitiRecipient(r);
-                      const locked = isCiti && !unlockedCitiIds.has(r.id);
+                      const alreadySent = !!r.email && previouslySentEmails.has(r.email.toLowerCase().trim());
+                      const locked = (isCiti && !unlockedCitiIds.has(r.id)) || alreadySent;
                       return (
                         <li key={r.id}>
                           <label
@@ -684,8 +730,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                           >
                             {locked ? (
                               <span
-                                aria-label="Locked — Citi developers excluded by default"
-                                title="Locked — click unlock to include in this campaign"
+                                aria-label={alreadySent ? "Already sent — excluded from this campaign" : "Locked — Citi developers excluded by default"}
+                                title={alreadySent ? "Already sent — excluded from this campaign" : "Locked — click unlock to include in this campaign"}
                                 className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-[4px]"
                                 style={{ border: "1px solid #064E3B", background: "#FDFBF7" }}
                               >
@@ -741,7 +787,16 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                               {r.meta && <span className="block truncate text-[11px] text-[#4B5D55]">{r.meta}</span>}
                               {r.email && <span className="block truncate text-[11px] text-[#4B5D55]">{r.email}</span>}
                             </span>
-                            {isCiti && (
+                            {alreadySent && (
+                              <span
+                                data-no-contrast-guard="true"
+                                className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em]"
+                                style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                              >
+                                Sent
+                              </span>
+                            )}
+                            {isCiti && !alreadySent && (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -822,7 +877,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <iframe
                   title="Branded email preview"
                   data-branded-email-preview-iframe="true"
-                  sandbox=""
+                  sandbox="allow-popups allow-popups-to-escape-sandbox"
                   className="w-full block"
                   style={{ height: "min(68vh, 720px)", border: "0", background: "#FDFBF7" }}
                   srcDoc={personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind)}
@@ -842,8 +897,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <p className="text-xs text-[#4B5D55] uppercase tracking-wider">Campaign summary</p>
               <ul className="mt-2 space-y-1 text-sm text-[#0F1A16]">
                 <li><strong>Template:</strong> {selectedTemplate?.name || "—"}</li>
-                <li><strong>Audience:</strong> {audienceCount} selected of {total} total {kind}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}</li>
-                <li><strong>From:</strong> {sender.name}, {sender.title} &lt;{sender.email}&gt;</li>
+                <li><strong>Audience:</strong> {audienceCount} selected of {total} total {kind}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}{previouslySentCount > 0 ? ` · ${previouslySentCount} already sent` : ""}</li>
+                <li><strong>From:</strong> {sender.name}, {sender.title} &lt;{sender.email.toUpperCase()}&gt;</li>
                 <li><strong>Registration pack:</strong> saved link included in the template</li>
               </ul>
             </div>
