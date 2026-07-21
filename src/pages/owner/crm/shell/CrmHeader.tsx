@@ -4,6 +4,7 @@ import { Bell, CalendarDays, CircleUserRound, Grip, Plus, Search, Settings, Stor
 import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
 import CrmSearchOverlay from "./CrmSearchOverlay";
 import CrmQuickCreateMenu from "./CrmQuickCreateMenu";
+import CrmQuickCreateSheet from "./CrmQuickCreateSheet";
 import CrmNotificationsPanel from "./CrmNotificationsPanel";
 import CrmZiaPanel from "./CrmZiaPanel";
 import jbjMonogram from "@/assets/jbj-monogram-light-on-dark.png";
@@ -16,6 +17,7 @@ export default function CrmHeader() {
   const [quickOpen, setQuickOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [ziaOpen, setZiaOpen] = useState(false);
+  const [quickSlug, setQuickSlug] = useState<string | null>(null);
   const unreadCount = 3;
 
   useEffect(() => {
@@ -66,7 +68,11 @@ export default function CrmHeader() {
           >
             <Plus size={22} strokeWidth={1.9} />
           </button>
-          <CrmQuickCreateMenu open={quickOpen} onClose={() => setQuickOpen(false)} />
+          <CrmQuickCreateMenu
+            open={quickOpen}
+            onClose={() => setQuickOpen(false)}
+            onSelect={(slug) => setQuickSlug(slug)}
+          />
         </div>
         <button
           className="jc-icon-btn"
@@ -117,6 +123,7 @@ export default function CrmHeader() {
       </div>
       <CrmSearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <CrmZiaPanel open={ziaOpen} onClose={() => setZiaOpen(false)} />
+      <CrmQuickCreateSheet slug={quickSlug} onClose={() => setQuickSlug(null)} />
     </header>
   );
 }
