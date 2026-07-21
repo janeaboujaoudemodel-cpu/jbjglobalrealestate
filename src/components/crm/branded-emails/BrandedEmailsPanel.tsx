@@ -180,6 +180,7 @@ function personalizeTemplate(html: string, sampleName = "Developer Team", audien
       .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
       .replace(/Jane Bou Jaoude/gi, sender.name)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
+    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, senderMailLink)
     .replace(/\b(?:contact|info)@jbj\.ae\b/gi, senderMailLink)
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
