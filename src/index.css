@@ -315,6 +315,35 @@ html body #root :is(
   opacity: 1 !important;
 }
 
+/* Emerald icon lock: force ALL SVG icons inside emerald backgrounds to pure white,
+   including lucide-react icons that set stroke via currentColor and any inline color styles. */
+html body #root :is(
+  .jj-filter-pill-fast,
+  .filter-emerald-action,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-pill-emerald-metallic,
+  [data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline),
+  [data-emerald-icon-lock="true"]
+) :is(svg, svg *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body #root :is(
+  .jj-filter-pill-fast,
+  .filter-emerald-action,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-pill-emerald-metallic,
+  [data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline),
+  [data-emerald-icon-lock="true"]
+) :is(svg[fill]:not([fill="none"]), svg[fill]:not([fill="none"]) *) {
+  fill: #FFFFFF !important;
+}
+
 html body #root :is(.jj-filter-pill-fast, .filter-emerald-action, .jj-emerald-metallic, .jj-emerald-action, .jj-pill-emerald-metallic, [data-filter-selected="true"], [role="tab"][data-state="active"]):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;

@@ -7929,6 +7929,9 @@ export type Database = {
           briefing_attendee_count: number
           briefing_count: number
           briefing_notes: string | null
+          briefing_status:
+            | Database["public"]["Enums"]["briefing_status_enum"]
+            | null
           closed_deals_broker_names: string[]
           closed_deals_count: number
           company_name: string
@@ -8068,6 +8071,9 @@ export type Database = {
           briefing_attendee_count?: number
           briefing_count?: number
           briefing_notes?: string | null
+          briefing_status?:
+            | Database["public"]["Enums"]["briefing_status_enum"]
+            | null
           closed_deals_broker_names?: string[]
           closed_deals_count?: number
           company_name: string
@@ -8207,6 +8213,9 @@ export type Database = {
           briefing_attendee_count?: number
           briefing_count?: number
           briefing_notes?: string | null
+          briefing_status?:
+            | Database["public"]["Enums"]["briefing_status_enum"]
+            | null
           closed_deals_broker_names?: string[]
           closed_deals_count?: number
           company_name?: string
@@ -9212,6 +9221,9 @@ export type Database = {
           ai_summary: string | null
           assigned_to: string | null
           attempt_count: number
+          briefing_status:
+            | Database["public"]["Enums"]["briefing_status_enum"]
+            | null
           catalog_developer_id: string | null
           channel_department_email: string | null
           channel_department_name: string | null
@@ -9320,6 +9332,9 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          briefing_status?:
+            | Database["public"]["Enums"]["briefing_status_enum"]
+            | null
           catalog_developer_id?: string | null
           channel_department_email?: string | null
           channel_department_name?: string | null
@@ -9428,6 +9443,9 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          briefing_status?:
+            | Database["public"]["Enums"]["briefing_status_enum"]
+            | null
           catalog_developer_id?: string | null
           channel_department_email?: string | null
           channel_department_name?: string | null
@@ -42896,6 +42914,12 @@ export type Database = {
         | "signature"
         | "letterhead"
         | "email_signature"
+      briefing_status_enum:
+        | "scheduled"
+        | "postponed"
+        | "briefing_done"
+        | "declined"
+        | "rejected"
       broker_channel: "whatsapp" | "email" | "sms" | "call" | "video"
       broker_conversation_status:
         | "active"
@@ -43589,6 +43613,13 @@ export const Constants = {
         "signature",
         "letterhead",
         "email_signature",
+      ],
+      briefing_status_enum: [
+        "scheduled",
+        "postponed",
+        "briefing_done",
+        "declined",
+        "rejected",
       ],
       broker_channel: ["whatsapp", "email", "sms", "call", "video"],
       broker_conversation_status: [
