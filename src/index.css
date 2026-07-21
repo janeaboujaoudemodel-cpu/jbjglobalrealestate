@@ -36878,3 +36878,103 @@ html body #root [data-branded-email-panel="true"] button[role="checkbox"][data-s
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* PASS 178 — Branded Email final interaction lock.
+   No mint hover, no button growth, compact 6px radius, and gold send/test CTAs keep ink text. */
+html body #root [data-branded-email-launcher-card="true"] button,
+html body #root [data-branded-email-launcher-card="true"] button:hover,
+html body #root [data-branded-email-launcher-card="true"] button:focus,
+html body #root [data-branded-email-launcher-card="true"] button:active,
+html body #root [data-branded-email-panel="true"] button,
+html body #root [data-branded-email-panel="true"] button:hover,
+html body #root [data-branded-email-panel="true"] button:focus,
+html body #root [data-branded-email-panel="true"] button:active {
+  transform: none !important;
+  scale: 1 !important;
+  border-radius: 6px !important;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, box-shadow 120ms ease !important;
+}
+
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-launch-action="true"],
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-launch-action="true"]:hover,
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-launch-action="true"]:focus,
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-launch-action="true"]:active {
+  background: #064E3B !important;
+  background-color: #064E3B !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 70%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #064E3B !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-secondary-action="true"],
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-secondary-action="true"]:hover,
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-secondary-action="true"]:focus,
+html body #root [data-branded-email-launcher-card="true"] [data-branded-email-secondary-action="true"]:active {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+  border-color: rgba(6,78,59,0.4) !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic,
+html body #root [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:hover,
+html body #root [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:focus,
+html body #root [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:active,
+html body #root [data-branded-email-panel="true"] [data-branded-email-test-action="true"],
+html body #root [data-branded-email-panel="true"] [data-branded-email-live-action="true"] {
+  background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%) !important;
+  background-color: #d8b86a !important;
+  border-color: rgba(184,149,85,0.8) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body #root [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body #root [data-branded-email-panel="true"] [data-branded-email-test-action="true"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body #root [data-branded-email-panel="true"] [data-branded-email-live-action="true"] :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body [data-branded-email-panel="true"] button,
+html body [data-branded-email-panel="true"] button:hover,
+html body [data-branded-email-panel="true"] button:focus,
+html body [data-branded-email-panel="true"] button:active {
+  transform: none !important;
+  scale: 1 !important;
+  border-radius: 6px !important;
+}
+
+html body [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic,
+html body [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:hover,
+html body [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:focus,
+html body [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic:active,
+html body [data-branded-email-panel="true"] [data-branded-email-test-action="true"],
+html body [data-branded-email-panel="true"] [data-branded-email-live-action="true"] {
+  background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%) !important;
+  background-color: #d8b86a !important;
+  border-color: rgba(184,149,85,0.8) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  transform: none !important;
+  scale: 1 !important;
+  border-radius: 6px !important;
+}
+
+html body [data-branded-email-panel="true"] [data-keep-gold].jj-cta-gold-metallic :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-branded-email-test-action="true"] :is(*, span, strong, svg, path, line, polyline, circle, rect),
+html body [data-branded-email-panel="true"] [data-branded-email-live-action="true"] :is(*, span, strong, svg, path, line, polyline, circle, rect) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}

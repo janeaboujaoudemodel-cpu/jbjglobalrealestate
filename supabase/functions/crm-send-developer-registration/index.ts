@@ -76,11 +76,26 @@ const extractFirstEmail = (value: unknown): string => {
   return value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]?.trim() || "";
 };
 
+const displayNameFromEmail = (email: string, fallback: string) => {
+  const normalized = String(email || "").trim().toLowerCase();
+  if (normalized === "infoo.jane@gmail.com") return "Jane";
+  const local = normalized.split("@")[0] || "";
+  const cleaned = local.replace(/\+.*$/, "").replace(/[._\-0-9]+/g, " ").trim();
+  if (!cleaned) return fallback;
+  return cleaned
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+};
+
 const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
   const contactMailLink = `<a href="mailto:${replyTo}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${replyTo.toUpperCase()}</a>`;
   const jbjLink = `<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>`;
   const mailToken = "__JBJ_CONTACT_MAIL_LINK__";
   return html
+    .replace(/Dear\s+<strong>[^<]+<\/strong>\s+Broker Relations Team/gi, `Dear <strong>${developerName}</strong> Broker Relations Team`)
+    .replace(/Dear\s+[^,<\n]+\s+Broker Relations Team/gi, `Dear ${developerName} Broker Relations Team`)
     .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
     .replace(/Jane Bou Jaoude/gi, "Amelia")
     .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
@@ -139,7 +154,7 @@ serve(async (req: Request) => {
     let sourceTable: "crm_developer_registry" | "developers" = "crm_developer_registry";
     if (isTest && !body.developerId && !body.catalogDeveloperId) {
       recipient = body.testRecipient!;
-      dev = { developer_name: body.testDeveloperName || "Sample Developer Co." };
+      dev = { developer_name: body.testDeveloperName || displayNameFromEmail(recipient, "Test Recipient") };
     } else {
       if (body.catalogDeveloperId) {
         sourceTable = "developers";
