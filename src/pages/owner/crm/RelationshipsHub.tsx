@@ -36,6 +36,7 @@ import { formatDistanceToNow } from "date-fns";
 import { DLDFilterDropdown, type DLDFilterValue } from "@/components/crm/DLDFilterDropdown";
 import { DLDExportButton, type DLDExportSegment } from "@/components/crm/DLDExportButton";
 import { DLDConflictsSection } from "@/components/crm/DLDConflictsSection";
+import { DldSyncStatusAlert } from "@/components/crm/DldSyncStatusAlert";
 
 
 type Segment = "broker_secondary" | "broker_offplan" | "brokerage" | "developer";
@@ -266,6 +267,9 @@ export default function RelationshipsHub() {
             <RefreshCw className="h-4 w-4 mr-1" /> Refresh
           </Button>
         </div>
+
+        {/* DLD scraper health — red banner if the nightly scrape fails or goes stale. */}
+        <DldSyncStatusAlert />
 
         {/* Segment tabs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -506,11 +510,11 @@ export default function RelationshipsHub() {
         <DLDConflictsSection />
 
         <div className="rounded-lg border border-[#B89555]/40 bg-[#F7F1E4]/60 p-4 text-[12px] text-[#4B5D55]">
-          <strong className="text-[#0F1A16]">Daily DLD sync:</strong> Nightly at 03:00 UTC (07:00 Dubai)
-          the scraper visits DLD's public developer, brokerage, and broker lists.
-          Existing rows are <strong>never overwritten</strong> — only net-new records are inserted, and
-          any partial match (same name but different email or phone) is flagged in the
-          <em> DLD Conflicts</em> panel above for your approval.
+          <strong className="text-[#0F1A16]">Daily DLD sync (fully automatic):</strong> runs nightly at 03:00 UTC
+          (07:00 Dubai) via pg_cron. The scraper visits DLD's public developer, brokerage, and broker lists.
+          Existing rows are <strong>never overwritten</strong> — only net-new records are inserted, and any
+          partial match (same name but different email or phone) is flagged in the <em>DLD Conflicts</em>
+          panel above. If a run fails or is missed, a red alert appears at the top of this page.
         </div>
 
       </div>

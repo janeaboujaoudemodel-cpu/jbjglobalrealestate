@@ -222,15 +222,25 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Log run summary
-    await admin.from("dld_daily_sync_runs").insert({
-      status: Object.values(perSegment).every((s: any) => s.ok) ? "completed" : "partial",
-      started_at,
-      completed_at: new Date().toISOString(),
-      summary: perSegment,
+    // Log run summary — schema uses run_started_at / run_finished_at / raw_summary.
+    const allOk = Object.values(perSegment).every((s: any) => s.ok);
+    const anyOk = Object.values(perSegment).some((s: any) => s.ok);
+    const status = allOk ? "completed" : anyOk ? "partial" : "failed";
+    const firstError = Object.values(perSegment).find((s: any) => !s.ok) as any;
+
+    const { error: logErr } = await admin.from("dld_daily_sync_runs").insert({
+      status,
+      run_started_at: started_at,
+      run_finished_at: new Date().toISOString(),
+      raw_summary: { run_id, segments: perSegment },
       source_urls: SOURCES,
-      run_id,
-    } as any).catch(() => { /* table shape optional */ });
+      error_message: firstError?.error ?? null,
+      brokers_secondary_new: 0,
+      brokers_offplan_new: 0,
+      brokerages_new: 0,
+      developers_new: 0,
+    } as any);
+    if (logErr) console.error("dld-daily-sync log insert failed:", logErr.message);
 
     // Fire ingest+dedupe (non-blocking)
     const ingestUrl = `${SUPABASE_URL}/functions/v1/dld-ingest-and-dedupe`;
