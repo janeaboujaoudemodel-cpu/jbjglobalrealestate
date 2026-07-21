@@ -76,6 +76,24 @@ const extractFirstEmail = (value: unknown): string => {
   return value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]?.trim() || "";
 };
 
+const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
+  const contactMailLink = `<a href="mailto:${replyTo}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${replyTo.toUpperCase()}</a>`;
+  const jbjLink = `<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>`;
+  const mailToken = "__JBJ_CONTACT_MAIL_LINK__";
+  return html
+    .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
+    .replace(/Jane Bou Jaoude/gi, "Amelia")
+    .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
+    .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107")
+    .replace(/<a\b[^>]*href=["']mailto:(?:contact|info)@jbj\.ae["'][^>]*>[\s\S]*?<\/a>/gi, mailToken)
+    .replace(/\b(?:contact|info)@jbj\.ae\b/gi, mailToken)
+    .replace(new RegExp(mailToken, "g"), contactMailLink)
+    .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
+    .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
+    .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
+    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+};
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -182,10 +200,7 @@ serve(async (req: Request) => {
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
     });
-    html = html
-      .replace(/Jane Bou Jaoude/gi, "Amelia")
-      .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
-      .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107");
+    html = hardenRenderedDeveloperHtml(html, dev.developer_name, replyTo);
     const baseSubject = isTest && body.subjectOverride && body.subjectOverride.trim()
       ? body.subjectOverride.trim()
       : template.subject;
