@@ -7963,6 +7963,7 @@ export type Database = {
           expertise_type: string
           field_sources: Json
           first_contact_at: string | null
+          first_seen_at: string
           google_maps_link: string | null
           google_reviews_count: number | null
           google_reviews_score: number | null
@@ -7981,6 +7982,7 @@ export type Database = {
           is_junk: boolean
           last_auto_reply_at: string | null
           last_contact_log_at: string | null
+          last_contacted_at: string | null
           last_deal_at: string | null
           last_directory_sync_at: string | null
           last_email_synced_at: string | null
@@ -8015,6 +8017,7 @@ export type Database = {
           primary_contact: Json | null
           region: string
           registration_status: string
+          relationship_status: Database["public"]["Enums"]["relationship_status_kind"]
           represented_developer_id: string | null
           represented_developer_name: string | null
           rera_license: string | null
@@ -8095,6 +8098,7 @@ export type Database = {
           expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
+          first_seen_at?: string
           google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
@@ -8113,6 +8117,7 @@ export type Database = {
           is_junk?: boolean
           last_auto_reply_at?: string | null
           last_contact_log_at?: string | null
+          last_contacted_at?: string | null
           last_deal_at?: string | null
           last_directory_sync_at?: string | null
           last_email_synced_at?: string | null
@@ -8147,6 +8152,7 @@ export type Database = {
           primary_contact?: Json | null
           region?: string
           registration_status?: string
+          relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           represented_developer_id?: string | null
           represented_developer_name?: string | null
           rera_license?: string | null
@@ -8227,6 +8233,7 @@ export type Database = {
           expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
+          first_seen_at?: string
           google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
@@ -8245,6 +8252,7 @@ export type Database = {
           is_junk?: boolean
           last_auto_reply_at?: string | null
           last_contact_log_at?: string | null
+          last_contacted_at?: string | null
           last_deal_at?: string | null
           last_directory_sync_at?: string | null
           last_email_synced_at?: string | null
@@ -8279,6 +8287,7 @@ export type Database = {
           primary_contact?: Json | null
           region?: string
           registration_status?: string
+          relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           represented_developer_id?: string | null
           represented_developer_name?: string | null
           rera_license?: string | null
@@ -8330,6 +8339,7 @@ export type Database = {
           blocked_by_user_id: string | null
           blocked_reason: string | null
           brand_primary_hex: string | null
+          broker_segment: Database["public"]["Enums"]["broker_segment_kind"]
           broker_type: string | null
           city: string | null
           closed_deals_count: number
@@ -8345,12 +8355,14 @@ export type Database = {
           dld_card_number: string | null
           dld_first_seen_at: string | null
           dld_last_synced_at: string | null
+          dld_license_category: string | null
           driving_license: string | null
           email_lower: string | null
           emirate: string | null
           employment_type: string | null
           event_source: string | null
           experience_years: number | null
+          first_seen_at: string
           full_name: string | null
           google_maps_link: string | null
           google_reviews_count: number | null
@@ -8375,11 +8387,13 @@ export type Database = {
           languages: string[] | null
           last_active_at: string | null
           last_contact_at: string | null
+          last_contacted_at: string | null
           last_verified_at: string | null
           linkedin_url: string | null
           logo_url: string | null
           must_reset_password: boolean
           nationality: string | null
+          next_action_at: string | null
           notes: string | null
           office_address: string | null
           original_filename: string | null
@@ -8397,6 +8411,7 @@ export type Database = {
           position_type: string | null
           region: string | null
           registration_status: string | null
+          relationship_status: Database["public"]["Enums"]["relationship_status_kind"]
           rera_license: string | null
           role_title: string | null
           seniority: string | null
@@ -8433,6 +8448,7 @@ export type Database = {
           blocked_by_user_id?: string | null
           blocked_reason?: string | null
           brand_primary_hex?: string | null
+          broker_segment?: Database["public"]["Enums"]["broker_segment_kind"]
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -8448,12 +8464,14 @@ export type Database = {
           dld_card_number?: string | null
           dld_first_seen_at?: string | null
           dld_last_synced_at?: string | null
+          dld_license_category?: string | null
           driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
           employment_type?: string | null
           event_source?: string | null
           experience_years?: number | null
+          first_seen_at?: string
           full_name?: string | null
           google_maps_link?: string | null
           google_reviews_count?: number | null
@@ -8478,11 +8496,13 @@ export type Database = {
           languages?: string[] | null
           last_active_at?: string | null
           last_contact_at?: string | null
+          last_contacted_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
           must_reset_password?: boolean
           nationality?: string | null
+          next_action_at?: string | null
           notes?: string | null
           office_address?: string | null
           original_filename?: string | null
@@ -8500,6 +8520,7 @@ export type Database = {
           position_type?: string | null
           region?: string | null
           registration_status?: string | null
+          relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           rera_license?: string | null
           role_title?: string | null
           seniority?: string | null
@@ -8536,6 +8557,7 @@ export type Database = {
           blocked_by_user_id?: string | null
           blocked_reason?: string | null
           brand_primary_hex?: string | null
+          broker_segment?: Database["public"]["Enums"]["broker_segment_kind"]
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -8551,12 +8573,14 @@ export type Database = {
           dld_card_number?: string | null
           dld_first_seen_at?: string | null
           dld_last_synced_at?: string | null
+          dld_license_category?: string | null
           driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
           employment_type?: string | null
           event_source?: string | null
           experience_years?: number | null
+          first_seen_at?: string
           full_name?: string | null
           google_maps_link?: string | null
           google_reviews_count?: number | null
@@ -8581,11 +8605,13 @@ export type Database = {
           languages?: string[] | null
           last_active_at?: string | null
           last_contact_at?: string | null
+          last_contacted_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
           must_reset_password?: boolean
           nationality?: string | null
+          next_action_at?: string | null
           notes?: string | null
           office_address?: string | null
           original_filename?: string | null
@@ -8603,6 +8629,7 @@ export type Database = {
           position_type?: string | null
           region?: string | null
           registration_status?: string | null
+          relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           rera_license?: string | null
           role_title?: string | null
           seniority?: string | null
@@ -9191,6 +9218,7 @@ export type Database = {
           expiry_date: string | null
           field_sources: Json
           first_contact_at: string | null
+          first_seen_at: string
           google_maps_link: string | null
           google_reviews_count: number | null
           google_reviews_score: number | null
@@ -9204,6 +9232,7 @@ export type Database = {
           inventory_file_url: string | null
           is_junk: boolean
           last_auto_reply_at: string | null
+          last_contacted_at: string | null
           last_email_synced_at: string | null
           last_inbound_at: string | null
           last_inbound_subject: string | null
@@ -9237,6 +9266,7 @@ export type Database = {
           registration_date: string | null
           registration_status: string | null
           registration_url: string | null
+          relationship_status: Database["public"]["Enums"]["relationship_status_kind"]
           required_docs_complete: boolean
           response_count: number
           source: Database["public"]["Enums"]["outreach_source"]
@@ -9295,6 +9325,7 @@ export type Database = {
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          first_seen_at?: string
           google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
@@ -9308,6 +9339,7 @@ export type Database = {
           inventory_file_url?: string | null
           is_junk?: boolean
           last_auto_reply_at?: string | null
+          last_contacted_at?: string | null
           last_email_synced_at?: string | null
           last_inbound_at?: string | null
           last_inbound_subject?: string | null
@@ -9341,6 +9373,7 @@ export type Database = {
           registration_date?: string | null
           registration_status?: string | null
           registration_url?: string | null
+          relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           required_docs_complete?: boolean
           response_count?: number
           source?: Database["public"]["Enums"]["outreach_source"]
@@ -9399,6 +9432,7 @@ export type Database = {
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          first_seen_at?: string
           google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
@@ -9412,6 +9446,7 @@ export type Database = {
           inventory_file_url?: string | null
           is_junk?: boolean
           last_auto_reply_at?: string | null
+          last_contacted_at?: string | null
           last_email_synced_at?: string | null
           last_inbound_at?: string | null
           last_inbound_subject?: string | null
@@ -9445,6 +9480,7 @@ export type Database = {
           registration_date?: string | null
           registration_status?: string | null
           registration_url?: string | null
+          relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           required_docs_complete?: boolean
           response_count?: number
           source?: Database["public"]["Enums"]["outreach_source"]
@@ -11496,6 +11532,64 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_relationship_activity: {
+        Row: {
+          activity_type: string
+          actor_id: string | null
+          created_at: string
+          deleted_at: string | null
+          detail: string | null
+          done: boolean
+          id: string
+          metadata: Json
+          occurred_at: string
+          segment: Database["public"]["Enums"]["relationship_segment_kind"]
+          status: Database["public"]["Enums"]["relationship_status_kind"] | null
+          target_id: string
+          target_label: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          activity_type: string
+          actor_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          detail?: string | null
+          done?: boolean
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          segment: Database["public"]["Enums"]["relationship_segment_kind"]
+          status?:
+            | Database["public"]["Enums"]["relationship_status_kind"]
+            | null
+          target_id: string
+          target_label: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          activity_type?: string
+          actor_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          detail?: string | null
+          done?: boolean
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          segment?: Database["public"]["Enums"]["relationship_segment_kind"]
+          status?:
+            | Database["public"]["Enums"]["relationship_status_kind"]
+            | null
+          target_id?: string
+          target_label?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       crm_relationship_contacts: {
         Row: {
@@ -15900,40 +15994,55 @@ export type Database = {
         Row: {
           agencies_inserted: number
           agencies_updated: number
+          brokerages_new: number
           brokers_inserted: number
+          brokers_offplan_new: number
+          brokers_secondary_new: number
           brokers_updated: number
           created_at: string
+          developers_new: number
           error_message: string | null
           id: string
           raw_summary: Json
           run_finished_at: string | null
           run_started_at: string
+          source_urls: Json
           status: string
         }
         Insert: {
           agencies_inserted?: number
           agencies_updated?: number
+          brokerages_new?: number
           brokers_inserted?: number
+          brokers_offplan_new?: number
+          brokers_secondary_new?: number
           brokers_updated?: number
           created_at?: string
+          developers_new?: number
           error_message?: string | null
           id?: string
           raw_summary?: Json
           run_finished_at?: string | null
           run_started_at?: string
+          source_urls?: Json
           status?: string
         }
         Update: {
           agencies_inserted?: number
           agencies_updated?: number
+          brokerages_new?: number
           brokers_inserted?: number
+          brokers_offplan_new?: number
+          brokers_secondary_new?: number
           brokers_updated?: number
           created_at?: string
+          developers_new?: number
           error_message?: string | null
           id?: string
           raw_summary?: Json
           run_finished_at?: string | null
           run_started_at?: string
+          source_urls?: Json
           status?: string
         }
         Relationships: []
@@ -42545,6 +42654,7 @@ export type Database = {
         | "waiting_client"
         | "closed"
         | "escalated"
+      broker_segment_kind: "secondary" | "offplan" | "both" | "unclassified"
       broker_specialty: "secondary" | "offplan" | "both"
       broker_specialty_focus: "secondary_first" | "offplan_first" | "equal"
       broker_task_status: "pending" | "in_progress" | "completed" | "overdue"
@@ -42923,6 +43033,18 @@ export type Database = {
         | "submitted"
         | "approved"
         | "rejected"
+      relationship_segment_kind:
+        | "broker_secondary"
+        | "broker_offplan"
+        | "brokerage"
+        | "developer"
+      relationship_status_kind:
+        | "untouched"
+        | "needs_follow_up"
+        | "briefing_booked"
+        | "registered"
+        | "declined"
+        | "archived"
       reward_type: "points" | "gift" | "badge" | "certificate"
       risk_level: "low" | "medium" | "high" | "critical"
       security_event_type:
@@ -43227,6 +43349,7 @@ export const Constants = {
         "closed",
         "escalated",
       ],
+      broker_segment_kind: ["secondary", "offplan", "both", "unclassified"],
       broker_specialty: ["secondary", "offplan", "both"],
       broker_specialty_focus: ["secondary_first", "offplan_first", "equal"],
       broker_task_status: ["pending", "in_progress", "completed", "overdue"],
@@ -43641,6 +43764,20 @@ export const Constants = {
         "submitted",
         "approved",
         "rejected",
+      ],
+      relationship_segment_kind: [
+        "broker_secondary",
+        "broker_offplan",
+        "brokerage",
+        "developer",
+      ],
+      relationship_status_kind: [
+        "untouched",
+        "needs_follow_up",
+        "briefing_booked",
+        "registered",
+        "declined",
+        "archived",
       ],
       reward_type: ["points", "gift", "badge", "certificate"],
       risk_level: ["low", "medium", "high", "critical"],
