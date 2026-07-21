@@ -417,7 +417,6 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         side="right"
         data-branded-email-panel="true"
         data-no-contrast-guard="true"
-        data-ink-emerald-opt-out="true"
         aria-describedby={undefined}
         className="w-full sm:max-w-6xl p-0 flex flex-col bg-white"
       >
