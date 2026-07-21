@@ -724,7 +724,7 @@ html body [data-ai-analyzer-select-content] [role="option"][data-highlighted] {
   justify-content: center;
   gap: 8px;
   font-weight: 600;
-  white-space: nowrap;
+  white-space: nowrap !important;
   border-radius: 10px;
   line-height: 1;
 }
@@ -3962,7 +3962,7 @@ body:not([data-homepage]) main :is([data-hero-dark], [data-hero], .jj-fullbleed,
     display: inline-flex;
     gap: 2.5rem;
     padding: 0.65rem 0;
-    white-space: nowrap;
+    white-space: nowrap !important;
     animation: jjNeonTicker 38s linear infinite;
     color: #E0F2FE;
     font-size: 0.72rem;
@@ -4486,7 +4486,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   font-feature-settings: 'tnum' 1, 'lnum' 1 !important;
   letter-spacing: -0.01em !important;
   line-height: 1.2 !important;
-  white-space: nowrap;
+  white-space: nowrap !important;
   text-shadow: none;
 }
 
@@ -4617,7 +4617,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   font-size: 0.75rem; /* 12px mobile */
   line-height: 1.125rem; /* 18px */
   letter-spacing: 0.02em;
-  white-space: nowrap;
+  white-space: nowrap !important;
   font-variant-numeric: tabular-nums;
 }
 
@@ -12553,7 +12553,7 @@ html body [data-surface="emerald"][data-cta="primary"] :is(span, svg, [class*="l
   background: transparent;
   border: 1px solid transparent;
   transition: all .2s ease;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 .jj-tab-pill:hover {
   color: var(--emerald-1);
@@ -18741,7 +18741,7 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.04em;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 :where(.jj-badge-dark, [data-jj-badge="default"], [data-jj-badge="destructive"]) {
   background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B, #042C1C)) !important;
@@ -22565,7 +22565,7 @@ html body :is(h2, h3):not([class*="text-"]):not([data-no-contrast-guard]):not([d
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 .mi-chip-emerald, .mi-chip-emerald *, .mi-chip-emerald > svg { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; stroke: #ffffff !important; }
 
@@ -22601,7 +22601,7 @@ html body :is(h2, h3):not([class*="text-"]):not([data-no-contrast-guard]):not([d
   -webkit-text-fill-color: #1A1A1A !important;
   font-size: 11px;
   font-weight: 800;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 .mi-chip-gold *, .mi-chip-gold svg { color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; stroke: #1A1A1A !important; }
 
@@ -33768,7 +33768,7 @@ html body #root :is(
 
 html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend]) :where(button, a, [role="button"], [role="tab"]) {
   min-width: max-content;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 
 html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend]) :where([data-jbj-allow-shrink], [data-jbj-allow-shrink] *) {
@@ -37141,7 +37141,7 @@ html body [data-branded-email-panel="true"] [data-citi-lock-toggle="locked"]:foc
 [data-relationships-hub] .rh-tile-label {
   flex: 1 1 auto;
   min-width: 0;
-  white-space: nowrap;
+  white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: 'Cormorant Garamond', serif !important;
