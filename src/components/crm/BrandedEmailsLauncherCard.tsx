@@ -43,7 +43,7 @@ const COPY: Record<Variant, {
 export default function BrandedEmailsLauncherCard({ variant = "owner" }: { variant?: Variant }) {
   const c = COPY[variant];
   const brand = c.kind === "brokerages"
-    ? { src: "/citi-developers-logo-transparent.png", alt: "Citi Developers", tileClass: "w-20", imgClass: "max-h-8 max-w-full" }
+    ? { src: citiDevelopersLogo, alt: "Citi Developers", tileClass: "w-16", imgClass: "max-h-10 max-w-full" }
     : { src: jbjMonogramCropped, alt: "JBJ Global Real Estate", tileClass: "w-14", imgClass: "max-h-11 max-w-full" };
   const [open, setOpen] = useState(false);
   const [kind, setKind] = useState<BrandedAudienceKind>(c.kind);
