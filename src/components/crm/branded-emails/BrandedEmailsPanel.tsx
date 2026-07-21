@@ -271,17 +271,17 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    setLoading(true);
+    const hasCurrentData = recipients.length > 0 && templates.length > 0;
+    setLoading(!hasCurrentData);
     setLoadError(null);
-    setSelectedTemplateId(null);
-    setAudienceSearch("");
     Promise.all([loadRecipients(kind), loadTemplates(kind)])
       .then(([r, t]) => {
         if (cancelled) return;
         setRecipients(r);
         setTemplates(t);
-        setSelectedTemplateId(t[0]?.variant ?? null);
-        const firstTemplate = t[0] ?? null;
+        const nextTemplateId = t.some((x) => x.variant === selectedTemplateId) ? selectedTemplateId : t[0]?.variant ?? null;
+        setSelectedTemplateId(nextTemplateId);
+        const firstTemplate = t.find((x) => x.variant === nextTemplateId) ?? t[0] ?? null;
         const defaultAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
           ? r.filter((x) => x.registrationStatus !== "registered")
           : r;
@@ -542,7 +542,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 {loadError}
               </div>
             ) : loading ? (
-                <div className="p-6 flex items-center gap-2 text-sm text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading…</div>
+                <div className="p-6 flex items-center gap-2 text-sm text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading audience…</div>
               ) : (
                 <ScrollArea className="h-[300px]">
                   <ul className="divide-y divide-emerald-900/5">
@@ -558,8 +558,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                             <Checkbox
                               checked={checked}
                               onCheckedChange={() => toggleId(r.id)}
-                              className="border-[#064E3B]/35 data-[state=checked]:border-[#064E3B] data-[state=checked]:bg-[#064E3B] data-[state=checked]:text-white"
-                              style={{ boxShadow: "none" }}
+                              data-branded-email-checkbox="true"
+                              className="!border-[#064E3B]/35 data-[state=checked]:!border-[#064E3B] data-[state=checked]:!bg-[#064E3B] data-[state=checked]:!text-white hover:!border-[#064E3B] focus:!border-[#064E3B] focus-visible:!ring-[#064E3B]/25"
+                              style={{ boxShadow: "none", borderColor: checked ? "#064E3B" : "rgba(6,78,59,0.35)" }}
                             />
                             {kind === "developers" ? (
                               <AudienceLogo recipient={r} />
@@ -651,18 +652,19 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   onClick={handleSendTest}
                   disabled={sending || !selectedTemplate}
                   data-branded-email-test-action="true"
+                  data-keep-gold="true"
+                  className="jj-cta-gold-metallic"
                   style={{
                     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
                     minHeight: 40, padding: "8px 16px", borderRadius: 6, fontSize: 13, fontWeight: 700,
-                    background: "#064E3B", color: "#FFFFFF",
-                    WebkitTextFillColor: "#FFFFFF",
-                    border: "1px solid #064E3B",
+                    color: "#3a2a08",
+                    WebkitTextFillColor: "#3a2a08",
                     whiteSpace: "nowrap",
                     cursor: sending || !selectedTemplate ? "not-allowed" : "pointer",
                     opacity: sending || !selectedTemplate ? 0.5 : 1,
                   }}
                 >
-                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} /> : <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />}
+                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} /> : <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />}
                   Send test
                 </button>
               </div>
@@ -673,17 +675,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               onClick={handleSendLive}
               disabled={sending || !selectedTemplate || audienceCount === 0}
               data-branded-email-live-action="true"
+              data-keep-gold="true"
+              className="jj-cta-gold-metallic"
               style={{
                 width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
                 minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
-                background: "#064E3B", color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                border: "1px solid #064E3B",
+                color: "#3a2a08",
+                WebkitTextFillColor: "#3a2a08",
                 cursor: sending || !selectedTemplate || audienceCount === 0 ? "not-allowed" : "pointer",
                 opacity: sending || !selectedTemplate || audienceCount === 0 ? 0.5 : 1,
               }}
             >
-              <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />
+              <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />
               {sending ? "Sending…" : `Send live to ${audienceCount} ${kind}`}
             </button>
 
