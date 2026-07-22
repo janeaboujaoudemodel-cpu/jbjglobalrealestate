@@ -509,11 +509,21 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     (async () => {
       const { data } = await (supabase as any)
         .from("crm_owner_settings")
-        .select("google_calendar_booking_url")
+        .select("google_calendar_booking_url, google_calendar_booking_url_business, google_calendar_booking_url_personal, google_calendar_active_account")
         .maybeSingle();
-      if (!cancelled) setBookingUrl(String(data?.google_calendar_booking_url || "").trim());
+      if (cancelled) return;
+      const legacy = String(data?.google_calendar_booking_url || "").trim();
+      const business = String(data?.google_calendar_booking_url_business || "").trim();
+      const personal = String(data?.google_calendar_booking_url_personal || legacy || "").trim();
+      const active = (data?.google_calendar_active_account === "business" ? "business" : "personal") as "business" | "personal";
+      setBookingUrlBusiness(business);
+      setBookingUrlPersonal(personal);
+      setActiveCalendarAccount(active);
     })().catch(() => {
-      if (!cancelled) setBookingUrl("");
+      if (!cancelled) {
+        setBookingUrlBusiness("");
+        setBookingUrlPersonal("");
+      }
     });
     return () => {
       cancelled = true;
