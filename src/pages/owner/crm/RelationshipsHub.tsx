@@ -64,28 +64,53 @@ const STATUS_META: Record<Status, { label: string; icon: any; color: string; bg:
   archived:        { label: "Archived",        icon: XCircle,       color: "#6B7280", bg: "rgba(107,114,128,0.10)" },
 };
 
-const SEGMENT_TO_TABLE: Record<Segment, { table: string; nameCol: string; extra: string[]; brokerFilter?: (q: any) => any }> = {
+// Per-segment column lists. Only include columns that actually exist on the
+// underlying table — mixing dld_office_no onto crm_brokers or phone_number onto
+// crm_brokerages / crm_developer_registry throws PostgREST "column does not
+// exist" errors and breaks the whole hub.
+const SEGMENT_TO_TABLE: Record<Segment, {
+  table: string;
+  nameCol: string;
+  extra: string[];
+  supportsDldArea?: boolean;
+  supportsDldProject?: boolean;
+  brokerFilter?: (q: any) => any;
+}> = {
   broker_secondary: {
     table: "crm_brokers",
     nameCol: "full_name",
-    extra: ["email_lower", "phone_e164", "current_company", "rera_license"],
+    extra: [
+      "email_lower", "phone_e164", "current_company", "rera_license",
+      "dld_license_category", "dld_area", "dld_project", "dld_broker_no",
+    ],
+    supportsDldArea: true,
+    supportsDldProject: true,
     brokerFilter: (q) => q.in("broker_segment", ["secondary", "both", "unclassified"]),
   },
   broker_offplan: {
     table: "crm_brokers",
     nameCol: "full_name",
-    extra: ["email_lower", "phone_e164", "current_company", "rera_license"],
+    extra: [
+      "email_lower", "phone_e164", "current_company", "rera_license",
+      "dld_license_category", "dld_area", "dld_project", "dld_broker_no",
+    ],
+    supportsDldArea: true,
+    supportsDldProject: true,
     brokerFilter: (q) => q.in("broker_segment", ["offplan", "both"]),
   },
   brokerage: {
     table: "crm_brokerages",
     nameCol: "company_name",
-    extra: ["email", "phone_number", "website"],
+    extra: [
+      "email", "phone", "website",
+      "dld_license_category", "dld_area", "dld_office_no", "name_arabic",
+    ],
+    supportsDldArea: true,
   },
   developer: {
     table: "crm_developer_registry",
-    nameCol: "name",
-    extra: ["email", "phone_number", "website"],
+    nameCol: "developer_name",
+    extra: ["developer_email", "phone", "website"],
   },
 };
 
@@ -145,29 +170,20 @@ function useSegmentRows(
     queryKey: ["rel-hub-rows", segment, statusFilter, search, newTodayOnly, dld.category, dld.detail ?? ""],
     queryFn: async () => {
       const cfg = SEGMENT_TO_TABLE[segment];
-      // Include DLD-native fields so the filter dropdown + export always have them.
-      const extraCols = [
-        ...cfg.extra,
-        "dld_license_category",
-        "dld_area",
-        "dld_broker_no",
-        "dld_office_no",
-        "name_ar",
-      ];
-      const cols = ["id", cfg.nameCol, "relationship_status", "last_contacted_at", "first_seen_at", ...extraCols].join(",");
+      const cols = ["id", cfg.nameCol, "relationship_status", "last_contacted_at", "first_seen_at", ...cfg.extra].join(",");
       let q: any = supabase.from(cfg.table as any).select(cols).limit(500).order("first_seen_at", { ascending: false });
       if (cfg.brokerFilter) q = cfg.brokerFilter(q);
       if (statusFilter !== "all") q = q.eq("relationship_status", statusFilter);
       if (newTodayOnly) q = q.gte("first_seen_at", startOfTodayUtcIso());
       if (search.trim()) q = q.ilike(cfg.nameCol, `%${search.trim()}%`);
 
-      // DLD-style filters
+      // DLD-style filters (skip when the segment's table doesn't have the column)
       if (dld.category !== "all") {
         if (dld.category === "by_area" && dld.detail) {
-          q = q.eq("dld_area", dld.detail);
+          if (cfg.supportsDldArea) q = q.eq("dld_area", dld.detail);
         } else if (dld.category === "by_project" && dld.detail) {
-          q = q.eq("dld_project", dld.detail);
-        } else if (dld.category !== "by_area" && dld.category !== "by_project") {
+          if (cfg.supportsDldProject) q = q.eq("dld_project", dld.detail);
+        } else if (cfg.extra.includes("dld_license_category")) {
           q = q.eq("dld_license_category", dld.category);
         }
       }
