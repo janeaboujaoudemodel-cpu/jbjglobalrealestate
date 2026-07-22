@@ -528,6 +528,7 @@ export function useProjects() {
  *            the full dataset shortly after.
  */
 export function useProjectsListing() {
+  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["projects-listing"],
     staleTime: 10 * 60 * 1000,
@@ -560,32 +561,48 @@ export function useProjectsListing() {
           .or("listing_kind.is.null,listing_kind.neq.leasing")
           .is("deleted_at", null);
 
-      // Fetch the full catalogue in bounded pages so filtering/search operates
-      // on the complete dataset from the first render. Previously a 90-row
-      // first-paint query returned early while a background fetch tried to
-      // hydrate the cache, but any filter/search applied in that window only
-      // matched within those 90 rows, and errors in the background pass left
-      // users stuck on the shrunken set.
-      const PAGE_SIZE = 1000;
-      const MAX_PAGES = 10; // hard ceiling = 10,000 rows safety net
-      const all: unknown[] = [];
+      // Stage 1: fast first paint. Return a bounded first page so the grid
+      // renders within one round-trip instead of waiting for the full catalogue.
+      const FAST_PAGE = 120;
+      const { data: firstData, error: firstError } = await baseQuery()
+        .order("created_at", { ascending: false })
+        .limit(FAST_PAGE);
+      if (firstError) throw firstError;
 
-      for (let page = 0; page < MAX_PAGES; page++) {
-        const from = page * PAGE_SIZE;
-        const to = from + PAGE_SIZE - 1;
-        const { data, error } = await baseQuery()
-          .order("created_at", { ascending: false })
-          .range(from, to);
+      const firstRows = (firstData ?? []) as unknown as UnifiedProject[];
+      const firstResult = sortPublicProjectsForListing(dedupePublicProjects(firstRows));
 
-        if (error) throw error;
-        const rows = data ?? [];
-        all.push(...rows);
-        if (rows.length < PAGE_SIZE) break;
+      // Stage 2: hydrate the rest of the catalogue in the background and
+      // merge into the React Query cache so filtering/search operate on the
+      // full dataset shortly after the first paint.
+      if (firstRows.length === FAST_PAGE) {
+        (async () => {
+          try {
+            const PAGE_SIZE = 1000;
+            const MAX_PAGES = 10;
+            const all: unknown[] = [...firstRows];
+            for (let page = 0; page < MAX_PAGES; page++) {
+              const from = FAST_PAGE + page * PAGE_SIZE;
+              const to = from + PAGE_SIZE - 1;
+              const { data, error } = await baseQuery()
+                .order("created_at", { ascending: false })
+                .range(from, to);
+              if (error) throw error;
+              const rows = data ?? [];
+              all.push(...rows);
+              if (rows.length < PAGE_SIZE) break;
+            }
+            const merged = sortPublicProjectsForListing(
+              dedupePublicProjects(all as unknown as UnifiedProject[]),
+            );
+            queryClient.setQueryData(["projects-listing"], merged);
+          } catch {
+            // Keep the fast-paint result on background failure.
+          }
+        })();
       }
 
-      return sortPublicProjectsForListing(
-        dedupePublicProjects(all as unknown as UnifiedProject[]),
-      );
+      return firstResult;
     },
   });
 }
