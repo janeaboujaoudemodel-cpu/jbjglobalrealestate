@@ -638,13 +638,25 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const clearAll = () => setSelectedIds(new Set());
 
   const handleSaveBookingUrl = async () => {
-    const normalized = bookingUrl.trim();
-    if (!/^https:\/\/(calendar\.app\.google|calendar\.google\.com)\//i.test(normalized)) {
-      toast.error("Paste Jane’s public Google Calendar booking link first.");
-      return;
-    }
-    if (/jbj\.ae|lovable\.dev|lovable\.app|auth-bridge/i.test(normalized)) {
-      toast.error("This is not a public Google Calendar booking link.");
+    const business = bookingUrlBusiness.trim();
+    const personal = bookingUrlPersonal.trim();
+    const validate = (url: string, label: string) => {
+      if (!url) return true;
+      if (!/^https:\/\/(calendar\.app\.google|calendar\.google\.com)\//i.test(url)) {
+        toast.error(`${label} link must start with https://calendar.app.google/ or https://calendar.google.com/`);
+        return false;
+      }
+      if (/jbj\.ae|lovable\.dev|lovable\.app|auth-bridge/i.test(url)) {
+        toast.error(`${label} link is not a public Google Calendar link.`);
+        return false;
+      }
+      return true;
+    };
+    if (!validate(business, "Business (contact@jbj.ae)")) return;
+    if (!validate(personal, "Personal (infoo.jane@gmail.com)")) return;
+    const active = (activeCalendarAccount === "business" ? business : personal) || personal || business;
+    if (!active) {
+      toast.error("Paste at least one Google Calendar booking link.");
       return;
     }
     setSavingBookingUrl(true);
@@ -654,10 +666,15 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       if (userError || !userId) throw new Error("Sign in required");
       const { error } = await (supabase as any)
         .from("crm_owner_settings")
-        .upsert({ owner_id: userId, google_calendar_booking_url: normalized }, { onConflict: "owner_id" });
+        .upsert({
+          owner_id: userId,
+          google_calendar_booking_url: active,
+          google_calendar_booking_url_business: business || null,
+          google_calendar_booking_url_personal: personal || null,
+          google_calendar_active_account: activeCalendarAccount,
+        }, { onConflict: "owner_id" });
       if (error) throw error;
-      setBookingUrl(normalized);
-      toast.success("Google Calendar booking link saved.");
+      toast.success(`Saved — active calendar: ${activeCalendarAccount === "business" ? "contact@jbj.ae" : "infoo.jane@gmail.com"}`);
     } catch (e: any) {
       toast.error(`Calendar link save failed: ${e?.message || "unknown error"}`);
     } finally {
