@@ -64,28 +64,53 @@ const STATUS_META: Record<Status, { label: string; icon: any; color: string; bg:
   archived:        { label: "Archived",        icon: XCircle,       color: "#6B7280", bg: "rgba(107,114,128,0.10)" },
 };
 
-const SEGMENT_TO_TABLE: Record<Segment, { table: string; nameCol: string; extra: string[]; brokerFilter?: (q: any) => any }> = {
+// Per-segment column lists. Only include columns that actually exist on the
+// underlying table — mixing dld_office_no onto crm_brokers or phone_number onto
+// crm_brokerages / crm_developer_registry throws PostgREST "column does not
+// exist" errors and breaks the whole hub.
+const SEGMENT_TO_TABLE: Record<Segment, {
+  table: string;
+  nameCol: string;
+  extra: string[];
+  supportsDldArea?: boolean;
+  supportsDldProject?: boolean;
+  brokerFilter?: (q: any) => any;
+}> = {
   broker_secondary: {
     table: "crm_brokers",
     nameCol: "full_name",
-    extra: ["email_lower", "phone_e164", "current_company", "rera_license"],
+    extra: [
+      "email_lower", "phone_e164", "current_company", "rera_license",
+      "dld_license_category", "dld_area", "dld_project", "dld_broker_no",
+    ],
+    supportsDldArea: true,
+    supportsDldProject: true,
     brokerFilter: (q) => q.in("broker_segment", ["secondary", "both", "unclassified"]),
   },
   broker_offplan: {
     table: "crm_brokers",
     nameCol: "full_name",
-    extra: ["email_lower", "phone_e164", "current_company", "rera_license"],
+    extra: [
+      "email_lower", "phone_e164", "current_company", "rera_license",
+      "dld_license_category", "dld_area", "dld_project", "dld_broker_no",
+    ],
+    supportsDldArea: true,
+    supportsDldProject: true,
     brokerFilter: (q) => q.in("broker_segment", ["offplan", "both"]),
   },
   brokerage: {
     table: "crm_brokerages",
     nameCol: "company_name",
-    extra: ["email", "phone_number", "website"],
+    extra: [
+      "email", "phone", "website",
+      "dld_license_category", "dld_area", "dld_office_no", "name_arabic",
+    ],
+    supportsDldArea: true,
   },
   developer: {
     table: "crm_developer_registry",
-    nameCol: "name",
-    extra: ["email", "phone_number", "website"],
+    nameCol: "developer_name",
+    extra: ["developer_email", "phone", "website"],
   },
 };
 
