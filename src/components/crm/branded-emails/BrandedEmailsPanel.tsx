@@ -452,8 +452,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [loadError, setLoadError] = useState<string | null>(null);
   const [unlockedCitiIds, setUnlockedCitiIds] = useState<Set<string>>(new Set());
   const [previouslySentEmails, setPreviouslySentEmails] = useState<Set<string>>(new Set());
-  const [bookingUrl, setBookingUrl] = useState("");
+  const [bookingUrlBusiness, setBookingUrlBusiness] = useState("");
+  const [bookingUrlPersonal, setBookingUrlPersonal] = useState("");
+  const [activeCalendarAccount, setActiveCalendarAccount] = useState<"business" | "personal">("personal");
   const [savingBookingUrl, setSavingBookingUrl] = useState(false);
+  const bookingUrl = (activeCalendarAccount === "business" ? bookingUrlBusiness : bookingUrlPersonal).trim();
 
   useEffect(() => {
     if (!open) return;
