@@ -452,8 +452,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [loadError, setLoadError] = useState<string | null>(null);
   const [unlockedCitiIds, setUnlockedCitiIds] = useState<Set<string>>(new Set());
   const [previouslySentEmails, setPreviouslySentEmails] = useState<Set<string>>(new Set());
-  const [bookingUrl, setBookingUrl] = useState("");
+  const [bookingUrlBusiness, setBookingUrlBusiness] = useState("");
+  const [bookingUrlPersonal, setBookingUrlPersonal] = useState("");
+  const [activeCalendarAccount, setActiveCalendarAccount] = useState<"business" | "personal">("personal");
   const [savingBookingUrl, setSavingBookingUrl] = useState(false);
+  const bookingUrl = (activeCalendarAccount === "business" ? bookingUrlBusiness : bookingUrlPersonal).trim();
 
   useEffect(() => {
     if (!open) return;
@@ -506,11 +509,21 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     (async () => {
       const { data } = await (supabase as any)
         .from("crm_owner_settings")
-        .select("google_calendar_booking_url")
+        .select("google_calendar_booking_url, google_calendar_booking_url_business, google_calendar_booking_url_personal, google_calendar_active_account")
         .maybeSingle();
-      if (!cancelled) setBookingUrl(String(data?.google_calendar_booking_url || "").trim());
+      if (cancelled) return;
+      const legacy = String(data?.google_calendar_booking_url || "").trim();
+      const business = String(data?.google_calendar_booking_url_business || "").trim();
+      const personal = String(data?.google_calendar_booking_url_personal || legacy || "").trim();
+      const active = (data?.google_calendar_active_account === "business" ? "business" : "personal") as "business" | "personal";
+      setBookingUrlBusiness(business);
+      setBookingUrlPersonal(personal);
+      setActiveCalendarAccount(active);
     })().catch(() => {
-      if (!cancelled) setBookingUrl("");
+      if (!cancelled) {
+        setBookingUrlBusiness("");
+        setBookingUrlPersonal("");
+      }
     });
     return () => {
       cancelled = true;
@@ -625,13 +638,25 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const clearAll = () => setSelectedIds(new Set());
 
   const handleSaveBookingUrl = async () => {
-    const normalized = bookingUrl.trim();
-    if (!/^https:\/\/(calendar\.app\.google|calendar\.google\.com)\//i.test(normalized)) {
-      toast.error("Paste Jane’s public Google Calendar booking link first.");
-      return;
-    }
-    if (/jbj\.ae|lovable\.dev|lovable\.app|auth-bridge/i.test(normalized)) {
-      toast.error("This is not a public Google Calendar booking link.");
+    const business = bookingUrlBusiness.trim();
+    const personal = bookingUrlPersonal.trim();
+    const validate = (url: string, label: string) => {
+      if (!url) return true;
+      if (!/^https:\/\/(calendar\.app\.google|calendar\.google\.com)\//i.test(url)) {
+        toast.error(`${label} link must start with https://calendar.app.google/ or https://calendar.google.com/`);
+        return false;
+      }
+      if (/jbj\.ae|lovable\.dev|lovable\.app|auth-bridge/i.test(url)) {
+        toast.error(`${label} link is not a public Google Calendar link.`);
+        return false;
+      }
+      return true;
+    };
+    if (!validate(business, "Business (contact@jbj.ae)")) return;
+    if (!validate(personal, "Personal (infoo.jane@gmail.com)")) return;
+    const active = (activeCalendarAccount === "business" ? business : personal) || personal || business;
+    if (!active) {
+      toast.error("Paste at least one Google Calendar booking link.");
       return;
     }
     setSavingBookingUrl(true);
@@ -641,10 +666,15 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       if (userError || !userId) throw new Error("Sign in required");
       const { error } = await (supabase as any)
         .from("crm_owner_settings")
-        .upsert({ owner_id: userId, google_calendar_booking_url: normalized }, { onConflict: "owner_id" });
+        .upsert({
+          owner_id: userId,
+          google_calendar_booking_url: active,
+          google_calendar_booking_url_business: business || null,
+          google_calendar_booking_url_personal: personal || null,
+          google_calendar_active_account: activeCalendarAccount,
+        }, { onConflict: "owner_id" });
       if (error) throw error;
-      setBookingUrl(normalized);
-      toast.success("Google Calendar booking link saved.");
+      toast.success(`Saved — active calendar: ${activeCalendarAccount === "business" ? "contact@jbj.ae" : "infoo.jane@gmail.com"}`);
     } catch (e: any) {
       toast.error(`Calendar link save failed: ${e?.message || "unknown error"}`);
     } finally {
@@ -1082,36 +1112,78 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
             {kind === "brokerages" && (
               <div
-                className={`border rounded-lg p-4 ${bookingUrl ? "border-emerald-900/15 bg-white" : "border-red-300 bg-red-50"}`}
+                className={`border rounded-lg p-4 space-y-3 ${bookingUrl ? "border-emerald-900/15 bg-white" : "border-red-300 bg-red-50"}`}
               >
-                <p className={`text-xs uppercase tracking-wider font-semibold mb-2 ${bookingUrl ? "text-[#4B5D55]" : "text-red-800"}`}>
-                  Google Calendar booking link {bookingUrl ? "" : "— required before live send"}
-                </p>
-                {!bookingUrl && (
-                  <p className="text-xs text-red-800 mb-2">
-                    Live send is blocked until you paste Jane's public Google Calendar appointment link (starts with <code>https://calendar.app.google/</code>) and click Save.
+                <div>
+                  <p className={`text-xs uppercase tracking-wider font-semibold ${bookingUrl ? "text-[#4B5D55]" : "text-red-800"}`}>
+                    Google Calendar booking links {bookingUrl ? "" : "— required before live send"}
                   </p>
-                )}
+                  <p className="text-xs text-[#4B5D55] mt-1">
+                    Save one link per account. Pick which one gets embedded in outgoing emails.
+                  </p>
+                </div>
+
+                {/* Account selector */}
                 <div className="flex flex-col sm:flex-row gap-2">
+                  {(["business", "personal"] as const).map((acc) => {
+                    const isActive = activeCalendarAccount === acc;
+                    const label = acc === "business" ? "contact@jbj.ae (Business)" : "infoo.jane@gmail.com (Personal)";
+                    return (
+                      <button
+                        key={acc}
+                        type="button"
+                        onClick={() => setActiveCalendarAccount(acc)}
+                        data-no-contrast-guard="true"
+                        className="flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black border transition"
+                        style={{
+                          background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FFFFFF",
+                          color: isActive ? "#FFFFFF" : "#0F1A16",
+                          WebkitTextFillColor: isActive ? "#FFFFFF" : "#0F1A16",
+                          borderColor: isActive ? "#064E3B" : "rgba(6,78,59,0.25)",
+                        }}
+                        aria-pressed={isActive}
+                      >
+                        {isActive ? <Check className="size-3" /> : null}
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#4B5D55]">
+                    Business link (contact@jbj.ae)
+                  </label>
                   <Input
                     type="url"
-                    value={bookingUrl}
-                    onChange={(e) => setBookingUrl(e.target.value)}
-                    placeholder="https://calendar.app.google/..."
-                    className="flex-1 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
+                    value={bookingUrlBusiness}
+                    onChange={(e) => setBookingUrlBusiness(e.target.value)}
+                    placeholder="https://calendar.app.google/... (contact@jbj.ae)"
+                    className="!bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
                   />
-                  <button
-                    type="button"
-                    onClick={handleSaveBookingUrl}
-                    disabled={savingBookingUrl}
-                    data-no-contrast-guard="true"
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-black"
-                    style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: savingBookingUrl ? 0.65 : 1 }}
-                  >
-                    {savingBookingUrl ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
-                    Save
-                  </button>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#4B5D55] pt-1">
+                    Personal link (infoo.jane@gmail.com)
+                  </label>
+                  <Input
+                    type="url"
+                    value={bookingUrlPersonal}
+                    onChange={(e) => setBookingUrlPersonal(e.target.value)}
+                    placeholder="https://calendar.app.google/... (infoo.jane@gmail.com)"
+                    className="!bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
+                  />
                 </div>
+
+                <button
+                  type="button"
+                  onClick={handleSaveBookingUrl}
+                  disabled={savingBookingUrl}
+                  data-no-contrast-guard="true"
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-black"
+                  style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: savingBookingUrl ? 0.65 : 1 }}
+                >
+                  {savingBookingUrl ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
+                  Save & use {activeCalendarAccount === "business" ? "contact@jbj.ae" : "infoo.jane@gmail.com"}
+                </button>
               </div>
             )}
 
