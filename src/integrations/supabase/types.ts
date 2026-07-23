@@ -11289,6 +11289,57 @@ export type Database = {
           },
         ]
       }
+      crm_outreach_cadence_log: {
+        Row: {
+          ai_reasoning: string | null
+          approved_at: string | null
+          approved_by: string | null
+          body: string | null
+          cadence_step: string
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          mode: string
+          owner_id: string
+          sent_email_log_id: string | null
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_reasoning?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          body?: string | null
+          cadence_step: string
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          mode: string
+          owner_id: string
+          sent_email_log_id?: string | null
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_reasoning?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          body?: string | null
+          cadence_step?: string
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          mode?: string
+          owner_id?: string
+          sent_email_log_id?: string | null
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       crm_outreach_tags: {
         Row: {
           category: string | null
