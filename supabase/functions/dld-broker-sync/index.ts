@@ -66,6 +66,12 @@ Deno.serve(async (req) => {
   const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
   const started = new Date().toISOString();
   const ownerId = await getDefaultOwnerId(supabase);
+  if (!ownerId) {
+    return new Response(
+      JSON.stringify({ ok: false, status: "failed", error: "OWNER_ID_MISSING" }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 412 },
+    );
+  }
 
   let agenciesInserted = 0, agenciesUpdated = 0;
   let brokersInserted = 0, brokersUpdated = 0;
@@ -105,12 +111,12 @@ Deno.serve(async (req) => {
       const slice = batches.slice(i, i + 500);
       const { data, error } = await supabase
         .from("crm_brokerages")
-        .upsert(slice, { onConflict: "company_name", ignoreDuplicates: false, count: "exact" })
+        .upsert(slice, { onConflict: "company_name", ignoreDuplicates: true, count: "exact" })
         .select("id,created_at");
       if (error) throw error;
       const createdNow = (data ?? []).filter((row: any) => isCreatedDuringRun(row.created_at, started)).length;
       agenciesInserted += createdNow;
-      agenciesUpdated += Math.max(0, (data?.length || 0) - createdNow);
+      agenciesUpdated += Math.max(0, slice.length - createdNow);
     }
   } catch (e) {
     status = "partial";
