@@ -41,14 +41,14 @@ type Template = {
 };
 
 const DEVELOPER_SENDER = {
-  name: "Amelia",
+  name: "Jane Bou Jaoude",
   title: "Head of Business Development",
   email: "helpdesk@jbj.ae",
 };
 
 const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
   developers: {
-    name: "Amelia",
+    name: "Jane Bou Jaoude",
     title: "Head of Business Development",
     email: "helpdesk@jbj.ae",
   },
@@ -61,7 +61,7 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
 
 const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmail: string; replyTo: string; dailyCapLabel: string }> = {
   developers: {
-    fromName: "Amelia — JBJ GLOBAL REAL ESTATE",
+    fromName: "Jane Bou Jaoude — JBJ GLOBAL REAL ESTATE",
     fromEmail: "helpdesk@jbj.ae",
     replyTo: "helpdesk@jbj.ae",
     dailyCapLabel: "Developer sends use the connected mailbox; test sends use the verified app email path.",

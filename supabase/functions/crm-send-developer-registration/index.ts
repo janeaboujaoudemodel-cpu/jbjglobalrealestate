@@ -112,7 +112,7 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
     .replace(/Dear\s+<strong>[^<]+<\/strong>\s+Broker Relations Team/gi, `Dear <strong>${developerName}</strong> Broker Relations Team`)
     .replace(/Dear\s+[^,<\n]+\s+Broker Relations Team/gi, `Dear ${developerName} Broker Relations Team`)
     .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
-    .replace(/Jane Bou Jaoude/gi, "Amelia")
+    .replace(/\bAmelia\b/g, "Jane Bou Jaoude")
     .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
     .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107")
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, mailToken)
@@ -223,7 +223,7 @@ serve(async (req: Request) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
 
-    const fromName = "Amelia — JBJ Global Real Estate";
+    const fromName = "Jane Bou Jaoude — JBJ Global Real Estate";
     const replyTo = "helpdesk@jbj.ae";
     const activeCcArr = Array.isArray(settings.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
     const legacyCc = (settings.cc_email || "").trim();
@@ -241,7 +241,7 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
-      sender_name: "Amelia",
+      sender_name: "Jane Bou Jaoude",
       sender_title: "Head of Business Development",
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
@@ -259,7 +259,7 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
-      sender_name: "Amelia",
+      sender_name: "Jane Bou Jaoude",
       sender_title: "Head of Business Development",
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
