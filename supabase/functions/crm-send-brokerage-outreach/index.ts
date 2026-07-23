@@ -18,7 +18,7 @@ import {
   enforceAllowedSender,
 } from "../_shared/outreachIdentity.ts";
 import { sendViaResend } from "../_shared/resendClient.ts";
-import { recordJbjResendSend, buildIdempotencyKey } from "../_shared/jbjSpine.ts";
+import { recordJbjResendSend, buildIntendedSendKey } from "../_shared/jbjSpine.ts";
 
 
 const corsHeaders = {
