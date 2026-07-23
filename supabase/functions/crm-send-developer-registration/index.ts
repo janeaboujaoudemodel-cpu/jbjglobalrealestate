@@ -125,7 +125,12 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
     .replace(/<b>JBJ<\/b>\.AE/gi, jbjLink)
     .replace(/>JBJ\.AE</gi, `>${jbjLink}<`)
     .replace(/>jbj\.ae</gi, `>${jbjLink}<`)
-    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE")
+    // Inject JBJ monogram image inside the card, above the wordmark — mirrors CITI card.
+    .replace(
+      /(<div\s+style="[^"]*letter-spacing:3px[^"]*text-transform:uppercase[^"]*">JBJ GLOBAL REAL ESTATE<\/div>)/i,
+      `<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png" alt="JBJ Global Real Estate" width="72" style="max-width:72px;height:auto;display:inline-block;border:0;margin:0 auto 12px;" />$1`,
+    );
 };
 
 serve(async (req: Request) => {
