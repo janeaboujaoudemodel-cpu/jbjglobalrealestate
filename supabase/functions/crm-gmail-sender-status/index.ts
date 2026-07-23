@@ -1,8 +1,7 @@
 /**
- * CRM Gmail Sender Status
- * Read-only: returns whether the connected Gmail mailbox is the required
- * outbound sender (infoo.jane@gmail.com). No Send-As alias is needed since
- * we send directly from the connected mailbox.
+ * CRM Brokerage Outreach Sender Status
+ * Read-only: confirms brokerage outreach sender configuration.
+ * Sender is jane@jbj.ae via Resend (jbj.ae domain is verified).
  * Owner-only.
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
@@ -19,8 +18,7 @@ const OWNER_EMAILS = [
   "janeaboujaoudemodel@gmail.com",
   "infoo.jane@gmail.com",
 ];
-const REQUIRED_FROM = "infoo.jane@gmail.com";
-const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
+const REQUIRED_FROM = "jane@jbj.ae";
 
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -36,44 +34,17 @@ serve(async (req: Request) => {
       return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: corsHeaders });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
-    if (!LOVABLE_API_KEY || !GMAIL_API_KEY) {
-      return new Response(JSON.stringify({
-        ok: false,
-        connected: false,
-        requiredAlias: REQUIRED_FROM,
-        message: "Gmail connector not connected.",
-      }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    }
-
-    // Fetch authenticated mailbox
-    const profRes = await fetch(`${GMAIL_GATEWAY}/users/me/profile`, {
-      headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "X-Connection-Api-Key": GMAIL_API_KEY },
-    });
-    if (!profRes.ok) {
-      const errJson = await profRes.json().catch(() => ({}));
-      return new Response(JSON.stringify({
-        ok: false,
-        connected: false,
-        requiredAlias: REQUIRED_FROM,
-        message: `Could not read Gmail profile (${profRes.status}).`,
-        details: errJson,
-      }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    }
-    const j = await profRes.json() as { emailAddress?: string };
-    const connectedEmail = (j.emailAddress || "").toLowerCase();
-    const matches = connectedEmail === REQUIRED_FROM.toLowerCase();
+    const resendConfigured = !!Deno.env.get("RESEND_API_KEY");
 
     return new Response(JSON.stringify({
-      ok: matches,
-      connected: true,
-      connectedEmail,
+      ok: resendConfigured,
+      connected: resendConfigured,
+      connectedEmail: REQUIRED_FROM,
       requiredAlias: REQUIRED_FROM,
-      verified: matches,
-      message: matches
-        ? `Sending directly from ${REQUIRED_FROM}.`
-        : `Connected mailbox is ${connectedEmail}, but outreach requires ${REQUIRED_FROM}. Reconnect Gmail using the correct account.`,
+      verified: resendConfigured,
+      message: resendConfigured
+        ? `Brokerage outreach sends from ${REQUIRED_FROM} via the verified jbj.ae domain. Replies route directly to Jane.`
+        : "Resend is not configured for this project — outbound brokerage email is disabled.",
     }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e?.message || "Internal error" }), {
