@@ -509,3 +509,20 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
     </div>
   </Card>;
 }
+
+function BrokerageLogo({ candidates, name }: { candidates: string[]; name?: string }) {
+  const [idx, setIdx] = useState(0);
+  const src = candidates[idx];
+  if (!src) {
+    return <div className="size-12 rounded-xl jj-emerald-metallic flex items-center justify-center text-white font-black shrink-0">{String(name || "B").slice(0, 1).toUpperCase()}</div>;
+  }
+  return (
+    <img
+      src={src}
+      alt={`${name || "Brokerage"} logo`}
+      loading="lazy"
+      className="size-12 rounded-xl object-contain bg-white border border-[#B89555]/25 p-1 shrink-0"
+      onError={() => setIdx((i) => i + 1)}
+    />
+  );
+}
