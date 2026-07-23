@@ -59,7 +59,7 @@ export default function BrokeragePortal() {
 
 
   const brokeragesQ = useQuery({ queryKey: ["brokerage-portal-brokerages"], queryFn: async () => {
-    const { data, error } = await supabase.from("crm_brokerages" as any).select("id,company_name,website,phone,email,emirate,country,office_location,office_address,registration_status,group_status,attended_briefing,briefing_count,briefing_status,database_source,original_filename,list_id,logo_url,source,source_detail,specialty_focus,assigned_to,updated_at").is("deleted_at", null).order("company_name").limit(5000);
+    const { data, error } = await supabase.from("crm_brokerages" as any).select("id,company_name,website,phone,email,emirate,country,office_location,office_address,registration_status,group_status,attended_briefing,briefing_count,briefing_status,agency_status,database_source,original_filename,list_id,logo_url,source,source_detail,specialty_focus,assigned_to,updated_at").is("deleted_at", null).order("company_name").limit(5000);
     if (error) throw error; return (data ?? []) as any[];
   }});
   const listsQ = useQuery({ queryKey: ["brokerage-portal-lists"], queryFn: async () => {
@@ -496,6 +496,9 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
     </div>
     <div className="mt-3 flex flex-wrap gap-1.5 min-h-[28px]">
       <Badge style={{ backgroundColor: color.cssBg, color: color.cssFg }} className="border border-[#B89555]/30">{color.label}</Badge>
+      <Badge className={row.agency_status === "inactive" ? "bg-neutral-200 text-neutral-700 border-0" : "bg-[#064E3B] text-white border-0"}>
+        {row.agency_status === "inactive" ? "Inactive agency" : "Active agency"}
+      </Badge>
       {group !== "pending_group_status" && <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{groupOption?.label || String(group).replace(/_/g, " ")}</Badge>}
       {briefing !== "__none__" && <Badge className="bg-[#064E3B] text-white border-0 capitalize">{String(briefing).replace(/_/g, " ")}</Badge>}
       {(row.database_source || row.original_filename || row.source) && (
@@ -525,6 +528,7 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
     </div>
     <div className="mt-3 grid gap-2">
       <Select value={reg} onValueChange={(v) => onPatch({ registration_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Registration status" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BROKERAGE_REGISTRATION_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+      <Select value={row.agency_status || "active"} onValueChange={(v) => onPatch({ agency_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Agency status" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40"><SelectItem value="active">Agency status · Active</SelectItem><SelectItem value="inactive">Agency status · Inactive</SelectItem></SelectContent></Select>
       <Select value={group} onValueChange={(v) => onPatch({ group_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Developer group status">{groupOption?.label}</SelectValue></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
       <Select value={briefing} onValueChange={(v) => onPatch({ briefing_status: v === "__none__" ? null : v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Briefing status">{briefingOption?.label}</SelectValue></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BRIEFING_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
     </div>

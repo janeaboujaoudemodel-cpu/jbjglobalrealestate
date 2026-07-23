@@ -8370,6 +8370,9 @@ export type Database = {
           blocked_reason: string | null
           brand_primary_hex: string | null
           broker_segment: Database["public"]["Enums"]["broker_segment_kind"]
+          broker_status:
+            | Database["public"]["Enums"]["agency_status_enum"]
+            | null
           broker_type: string | null
           city: string | null
           closed_deals_count: number
@@ -8445,6 +8448,7 @@ export type Database = {
           position_type: string | null
           region: string | null
           registration_status: string | null
+          registration_with: string | null
           relationship_status: Database["public"]["Enums"]["relationship_status_kind"]
           rera_license: string | null
           role_title: string | null
@@ -8483,6 +8487,9 @@ export type Database = {
           blocked_reason?: string | null
           brand_primary_hex?: string | null
           broker_segment?: Database["public"]["Enums"]["broker_segment_kind"]
+          broker_status?:
+            | Database["public"]["Enums"]["agency_status_enum"]
+            | null
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -8558,6 +8565,7 @@ export type Database = {
           position_type?: string | null
           region?: string | null
           registration_status?: string | null
+          registration_with?: string | null
           relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           rera_license?: string | null
           role_title?: string | null
@@ -8596,6 +8604,9 @@ export type Database = {
           blocked_reason?: string | null
           brand_primary_hex?: string | null
           broker_segment?: Database["public"]["Enums"]["broker_segment_kind"]
+          broker_status?:
+            | Database["public"]["Enums"]["agency_status_enum"]
+            | null
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -8671,6 +8682,7 @@ export type Database = {
           position_type?: string | null
           region?: string | null
           registration_status?: string | null
+          registration_with?: string | null
           relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           rera_license?: string | null
           role_title?: string | null
@@ -11228,6 +11240,78 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_my_deals: {
+        Row: {
+          broker_id: string | null
+          broker_name: string | null
+          brokerage_id: string | null
+          brokerage_name: string | null
+          client_contact: string | null
+          client_name: string
+          close_date: string | null
+          commission_amount_aed: number | null
+          commission_pct: number
+          created_at: string
+          deal_value_aed: number
+          developer_id: string | null
+          developer_name: string | null
+          id: string
+          notes: string | null
+          owner_id: string
+          portfolio: Database["public"]["Enums"]["deal_portfolio_enum"]
+          project_id: string | null
+          project_name: string | null
+          status: Database["public"]["Enums"]["deal_status_enum"]
+          updated_at: string
+        }
+        Insert: {
+          broker_id?: string | null
+          broker_name?: string | null
+          brokerage_id?: string | null
+          brokerage_name?: string | null
+          client_contact?: string | null
+          client_name: string
+          close_date?: string | null
+          commission_amount_aed?: number | null
+          commission_pct?: number
+          created_at?: string
+          deal_value_aed?: number
+          developer_id?: string | null
+          developer_name?: string | null
+          id?: string
+          notes?: string | null
+          owner_id: string
+          portfolio: Database["public"]["Enums"]["deal_portfolio_enum"]
+          project_id?: string | null
+          project_name?: string | null
+          status?: Database["public"]["Enums"]["deal_status_enum"]
+          updated_at?: string
+        }
+        Update: {
+          broker_id?: string | null
+          broker_name?: string | null
+          brokerage_id?: string | null
+          brokerage_name?: string | null
+          client_contact?: string | null
+          client_name?: string
+          close_date?: string | null
+          commission_amount_aed?: number | null
+          commission_pct?: number
+          created_at?: string
+          deal_value_aed?: number
+          developer_id?: string | null
+          developer_name?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          portfolio?: Database["public"]["Enums"]["deal_portfolio_enum"]
+          project_id?: string | null
+          project_name?: string | null
+          status?: Database["public"]["Enums"]["deal_status_enum"]
+          updated_at?: string
+        }
+        Relationships: []
       }
       crm_notes: {
         Row: {
@@ -42931,6 +43015,7 @@ export type Database = {
       }
     }
     Enums: {
+      agency_status_enum: "active" | "inactive"
       ai_action_status:
         | "pending"
         | "auto_responded"
@@ -43143,11 +43228,18 @@ export type Database = {
         | "news"
         | "global"
         | "internal"
+      deal_portfolio_enum: "citi_developers" | "jbj_global"
       deal_status:
         | "submitted"
         | "pending_verification"
         | "verified"
         | "rejected"
+        | "cancelled"
+      deal_status_enum:
+        | "draft"
+        | "signed"
+        | "invoiced"
+        | "commission_received"
         | "cancelled"
       developer_action_status:
         | "pending"
@@ -43624,6 +43716,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      agency_status_enum: ["active", "inactive"],
       ai_action_status: [
         "pending",
         "auto_responded",
@@ -43854,11 +43947,19 @@ export const Constants = {
         "global",
         "internal",
       ],
+      deal_portfolio_enum: ["citi_developers", "jbj_global"],
       deal_status: [
         "submitted",
         "pending_verification",
         "verified",
         "rejected",
+        "cancelled",
+      ],
+      deal_status_enum: [
+        "draft",
+        "signed",
+        "invoiced",
+        "commission_received",
         "cancelled",
       ],
       developer_action_status: [
