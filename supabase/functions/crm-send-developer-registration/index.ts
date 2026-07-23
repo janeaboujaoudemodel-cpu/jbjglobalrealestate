@@ -151,11 +151,7 @@ serve(async (req: Request) => {
     // Owner settings (drive link, from name, reply-to, cc)
     const { data: settings } = await service
       .from("crm_owner_settings").select("*").eq("owner_id", user.id).maybeSingle();
-    if (!settings?.drive_doc_pack_url) {
-      return new Response(JSON.stringify({ error: "Add a Google Drive document pack link in the Document Pack panel first." }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Document pack link is optional — templates handle absence gracefully.
 
     // Template
     const { data: template, error: tplErr } = await service
