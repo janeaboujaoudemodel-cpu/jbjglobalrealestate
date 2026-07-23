@@ -322,10 +322,10 @@ serve(async (req: Request) => {
     // HARD LOCK: brokerage outreach must never expose the JBJ brand or any
     // placeholder/private sender domain to the recipient. From and Reply-To
     // both stay on Jane's approved brokerage mailbox.
-    const FORCED_ENVELOPE_FROM = "infoo.jane@gmail.com";
+    const FORCED_ENVELOPE_FROM = "jane@jbj.ae";
     const FORCED_FROM_DISPLAY = "Jane Bou Jaoude";
     const fromName = FORCED_FROM_DISPLAY;
-    const replyTo = "infoo.jane@gmail.com";
+    const replyTo = "jane@jbj.ae";
     try {
       enforceAllowedSender(FORCED_ENVELOPE_FROM);
     } catch (senderErr: any) {
