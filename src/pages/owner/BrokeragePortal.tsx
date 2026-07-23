@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BrokerageExcelImportDialog from "@/components/owner/BrokerageExcelImportDialog";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
+import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
 import PendingBrokerageImportsSection from "@/components/owner/PendingBrokerageImportsSection";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { Building2, Download, FileSpreadsheet, Plus, Trash2, Upload, UserRound, Users, ChevronDown, Database, Inbox as InboxIcon, RefreshCw } from "lucide-react";
+import { Building2, Download, FileSpreadsheet, Plus, Trash2, Upload, UserRound, Users, ChevronDown, Database, Inbox as InboxIcon, RefreshCw, CalendarClock, Send } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { statusColor, BROKERAGE_REGISTRATION_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
@@ -243,6 +245,7 @@ function AutomationsStrip() {
         }
       }
       dldQ.refetch();
+      queryClientInvalidateBrokeragePortal();
     } catch (e: any) { toast.error(e?.message || "DLD sync failed"); } finally { setBusy(null); }
   };
   const last = dldQ.data as any;
@@ -278,6 +281,133 @@ function AutomationsStrip() {
         <div className="flex gap-2">
           <Button size="sm" variant="outline" disabled={busy === "dld"} onClick={() => runDld("market")}>{busy === "dld" ? "Running…" : "Market snapshot"}</Button>
           <Button size="sm" variant="gold" disabled={busy === "all"} onClick={() => runDld("all")}>{busy === "all" ? "Running…" : "Sync all (brokers + brokerages)"}</Button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function queryClientInvalidateBrokeragePortal() {
+  // Custom event lets this isolated strip refresh the parent portal queries
+  // without threading callbacks through the existing layout.
+  window.dispatchEvent(new CustomEvent("brokerage-portal-refresh"));
+}
+
+type DldRun = {
+  id: string;
+  run_started_at: string | null;
+  status: string | null;
+  agencies_inserted: number | null;
+  agencies_updated: number | null;
+  brokers_inserted: number | null;
+  brokers_updated: number | null;
+  brokerages_new: number | null;
+  developers_new: number | null;
+  error_message: string | null;
+  raw_summary: any;
+};
+
+function DldSyncHistoryPanel() {
+  const [mode, setMode] = useState<"all" | "daily">("daily");
+  const runsQ = useQuery({
+    queryKey: ["brokerage-portal-dld-runs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("dld_daily_sync_runs" as any)
+        .select("id,run_started_at,status,agencies_inserted,agencies_updated,brokers_inserted,brokers_updated,brokerages_new,developers_new,error_message,raw_summary")
+        .order("run_started_at", { ascending: false })
+        .limit(30);
+      if (error) throw error;
+      return (data ?? []) as DldRun[];
+    },
+    refetchInterval: 45_000,
+  });
+  const newBrokeragesQ = useQuery({
+    queryKey: ["brokerage-portal-dld-new-brokerages", mode],
+    queryFn: async () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let q = supabase
+        .from("crm_brokerages" as any)
+        .select("id,company_name,email,phone,website,office_location,dld_area,dld_office_number,first_seen_at,outreach_stage,last_outreach_at,relationship_status")
+        .eq("dld_source", "dld_daily")
+        .order("first_seen_at", { ascending: false })
+        .limit(mode === "daily" ? 120 : 500);
+      if (mode === "daily") q = q.gte("first_seen_at", today.toISOString());
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+    refetchInterval: 45_000,
+  });
+
+  const groupedRuns = useMemo(() => {
+    const map = new Map<string, DldRun[]>();
+    for (const run of runsQ.data ?? []) {
+      const day = run.run_started_at ? new Date(run.run_started_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "Unknown date";
+      map.set(day, [...(map.get(day) ?? []), run]);
+    }
+    return [...map.entries()];
+  }, [runsQ.data]);
+
+  const fmt = (v?: string | null) => (v ? new Date(v).toLocaleString() : "—");
+  const inserted = (run: DldRun) => Number(run.agencies_inserted ?? run.brokerages_new ?? run.raw_summary?.brokerage?.inserted ?? 0);
+  const updated = (run: DldRun) => Number(run.agencies_updated ?? run.raw_summary?.brokerage?.flagged ?? 0);
+
+  return (
+    <Card className="p-5 bg-white border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(6,78,59,0.35)]">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">DLD sync history</p>
+          <h2 className="text-xl font-black text-[#0F1A16]">Fresh imports and untouched agencies</h2>
+          <p className="text-sm text-[#4B5D55] mt-1">Counts refresh after each action. New DLD brokerages are labeled untouched until the first outreach email is logged.</p>
+        </div>
+        <div className="flex rounded-md border border-[#064E3B]/20 bg-white p-1">
+          {(["daily", "all"] as const).map((value) => (
+            <button key={value} type="button" onClick={() => setMode(value)} className="rounded px-3 py-1.5 text-xs font-black uppercase" style={{ background: mode === value ? "#064E3B" : "transparent", color: mode === value ? "#FFFFFF" : "#064E3B", WebkitTextFillColor: mode === value ? "#FFFFFF" : "#064E3B" }}>
+              {value === "daily" ? "Today" : "See all"}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-4">
+        <div className="rounded-lg border border-[#064E3B]/15 overflow-hidden bg-[#F8FAF9]">
+          <div className="px-3 py-2 bg-white border-b border-[#064E3B]/10 flex items-center gap-2 text-[#064E3B] font-black text-xs uppercase tracking-[0.16em]"><CalendarClock className="size-4" /> Daily log</div>
+          <div className="max-h-[360px] overflow-auto divide-y divide-[#064E3B]/10">
+            {runsQ.isLoading ? <p className="p-4 text-sm text-[#4B5D55]">Loading sync runs…</p> : groupedRuns.length === 0 ? <p className="p-4 text-sm text-[#4B5D55]">No DLD sync runs logged yet.</p> : groupedRuns.map(([day, runs]) => (
+              <div key={day} className="p-3">
+                <p className="text-xs font-black text-[#0F1A16]">{day}</p>
+                <div className="mt-2 space-y-2">
+                  {runs.map((run) => (
+                    <div key={run.id} className="rounded-md bg-white border border-[#064E3B]/10 p-2 text-xs text-[#4B5D55]">
+                      <div className="flex items-center justify-between gap-2"><span className="font-black text-[#0F1A16]">{fmt(run.run_started_at)}</span><span className="font-black text-[#064E3B] uppercase">{run.status || "unknown"}</span></div>
+                      <p className="mt-1">Added {inserted(run).toLocaleString()} agencies · flagged/updated {updated(run).toLocaleString()} · brokers {Number(run.brokers_inserted ?? 0).toLocaleString()}</p>
+                      {run.error_message && <p className="mt-1 text-[#8B1F1F] font-semibold">{run.error_message}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-lg border border-[#064E3B]/15 overflow-hidden bg-white">
+          <div className="px-3 py-2 bg-[#F8FAF9] border-b border-[#064E3B]/10 flex items-center justify-between gap-2">
+            <span className="text-[#064E3B] font-black text-xs uppercase tracking-[0.16em]">{mode === "daily" ? "New today" : "All new DLD brokerages"}</span>
+            <Badge variant="outline" className="border-[#064E3B]/35 text-[#064E3B]">{(newBrokeragesQ.data ?? []).length.toLocaleString()} shown</Badge>
+          </div>
+          <div className="max-h-[360px] overflow-auto">
+            {newBrokeragesQ.isLoading ? <p className="p-4 text-sm text-[#4B5D55]">Loading new agencies…</p> : (newBrokeragesQ.data ?? []).length === 0 ? <p className="p-4 text-sm text-[#4B5D55]">No new DLD brokerages for this view.</p> : (
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-white text-left text-[10px] uppercase tracking-[0.14em] text-[#064E3B]"><tr><th className="px-3 py-2">Agency</th><th className="px-3 py-2">Contact</th><th className="px-3 py-2">Status</th></tr></thead>
+                <tbody className="divide-y divide-[#064E3B]/10">
+                  {(newBrokeragesQ.data ?? []).map((row) => {
+                    const untouched = !row.last_outreach_at;
+                    return <tr key={row.id} className="text-[#0F1A16]"><td className="px-3 py-2"><p className="font-black">{row.company_name}</p><p className="text-xs text-[#4B5D55]">{row.dld_area || row.office_location || row.dld_office_number || "DLD register"}</p></td><td className="px-3 py-2 text-[#4B5D55]">{row.email || row.phone || row.website || "—"}</td><td className="px-3 py-2"><span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase" style={{ background: untouched ? "#064E3B" : "#EFE6D6", color: untouched ? "#FFFFFF" : "#0F1A16", WebkitTextFillColor: untouched ? "#FFFFFF" : "#0F1A16" }}>{untouched ? <Send className="size-3" /> : null}{untouched ? "Untouched" : "Outreach sent"}</span></td></tr>;
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
     </Card>
