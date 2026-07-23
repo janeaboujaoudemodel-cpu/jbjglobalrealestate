@@ -496,6 +496,9 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
     </div>
     <div className="mt-3 flex flex-wrap gap-1.5 min-h-[28px]">
       <Badge style={{ backgroundColor: color.cssBg, color: color.cssFg }} className="border border-[#B89555]/30">{color.label}</Badge>
+      <Badge className={row.agency_status === "inactive" ? "bg-neutral-200 text-neutral-700 border-0" : "bg-[#064E3B] text-white border-0"}>
+        {row.agency_status === "inactive" ? "Inactive agency" : "Active agency"}
+      </Badge>
       {group !== "pending_group_status" && <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{groupOption?.label || String(group).replace(/_/g, " ")}</Badge>}
       {briefing !== "__none__" && <Badge className="bg-[#064E3B] text-white border-0 capitalize">{String(briefing).replace(/_/g, " ")}</Badge>}
       {(row.database_source || row.original_filename || row.source) && (
