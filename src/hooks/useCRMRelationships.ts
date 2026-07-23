@@ -443,7 +443,7 @@ export const useOwnerSettings = () => {
       if (error) throw error;
       const base: any = data || {
         owner_id: user!.id,
-        drive_doc_pack_url: "",
+        drive_doc_pack_url: "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs",
         signature_html: "",
         cc_jane_enabled: true,
         cc_email: "",

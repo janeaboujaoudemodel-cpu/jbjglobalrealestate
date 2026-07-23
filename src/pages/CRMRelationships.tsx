@@ -1957,6 +1957,7 @@ const ClientsTab = () => {
    Developer Registry
 =========================================================== */
 const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "brokerage" | "developer" } = {}) => {
+  const defaultDeveloperPackUrl = "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs";
   const { data: settings, isLoading } = useOwnerSettings();
   const upsert = useUpsertOwnerSettings();
   const [draft, setDraft] = useState<any>(null);
@@ -1991,7 +1992,7 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
   const attachments: Array<{ label: string; url: string }> = Array.isArray(s[F.attachments]) ? s[F.attachments] : [];
   const workflows: Array<{ label: string; url: string }> = Array.isArray(s[F.workflows]) ? s[F.workflows] : [];
 
-  const driveUrl: string = s[F.drive] || "";
+  const driveUrl: string = !isBrk && !s[F.drive] ? defaultDeveloperPackUrl : (s[F.drive] || "");
   const savedSenders: string[] = Array.isArray(s[F.savedSenders]) ? s[F.savedSenders] : [];
   const replyTo: string = s[F.replyTo] || "";
   const savedCc: string[] = Array.isArray(s[F.savedCc]) ? s[F.savedCc] : [];
@@ -2037,12 +2038,12 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
             <Label className="text-xs text-[#1A1A1A] mb-1 block">
-              Google Drive document pack URL *
+              {isBrk ? "Google Drive document pack URL" : "Developer Document Hub URL"}
             </Label>
             <div className="flex flex-col sm:flex-row gap-2">
               <div className="min-w-0 flex-1">
                 <Input
-                  placeholder="https://drive.google.com/drive/folders/..."
+                  placeholder="https://drive.google.com/open?id=..."
                   value={driveUrl}
                   onChange={(e) => update({ [F.drive]: e.target.value })}
                   className="w-full"
@@ -2056,7 +2057,7 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
                   referrerPolicy="no-referrer"
                   className="inline-flex items-center justify-center px-4 h-10 rounded-md bg-[#EFE6D6] border border-[#B89555]/60 text-[#1A1A1A] text-sm font-semibold hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] whitespace-nowrap shrink-0"
                 >
-                  Open Pack ↗
+                  Document Hub ↗
                 </a>
               ) : null}
             </div>
@@ -2379,10 +2380,6 @@ const DeveloperRegistryTab = () => {
   };
 
   const sendOne = async (d: any) => {
-    if (!settings?.drive_doc_pack_url) {
-      toast.error("Add a Google Drive link in Document Pack panel first");
-      return;
-    }
     if (!quota.unlimited && quota.sentToday >= quota.dailyLimit) {
       toast.error("Daily email cap reached", {
         description: `${formatRemaining(quota.sentToday, quota.dailyLimit)}. Resets after UTC midnight, or upgrade to Pro to remove the cap.`,
@@ -2399,10 +2396,6 @@ const DeveloperRegistryTab = () => {
   };
 
   const bulkSend = async () => {
-    if (!settings?.drive_doc_pack_url) {
-      toast.error("Add a Google Drive link in Document Pack panel first");
-      return;
-    }
     const targets = data.filter((d: any) =>
       d.developer_email && d.status !== "registered"
     );
