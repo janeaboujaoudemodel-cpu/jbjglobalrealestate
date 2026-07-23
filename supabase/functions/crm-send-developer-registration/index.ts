@@ -241,7 +241,7 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
-      sender_name: "Amelia",
+      sender_name: "Jane Bou Jaoude",
       sender_title: "Head of Business Development",
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
