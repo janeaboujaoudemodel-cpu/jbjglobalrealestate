@@ -8,11 +8,14 @@
  * Brokerage outreach is sent via Resend on the currently verified sender domain.
  */
 
-export const ALLOWED_SENDER_DOMAIN = "gmail.com";
+export const ALLOWED_SENDER_DOMAIN = "jbj.ae";
 
-export const PRIMARY_SENDER = "infoo.jane@gmail.com";
+// Brokerage outreach sends from Jane's branded jbj.ae mailbox via Resend
+// (the jbj.ae domain is already verified in Resend for the developer portal).
+// Reply-To also lands on jane@jbj.ae — replies come straight to Jane, not helpdesk.
+export const PRIMARY_SENDER = "jane@jbj.ae";
 export const PRIMARY_SENDER_NAME = "Jane Bou Jaoude";
-export const DEFAULT_REPLY_TO = "infoo.jane@gmail.com";
+export const DEFAULT_REPLY_TO = "jane@jbj.ae";
 export const DEFAULT_CC = "";
 
 export const TEST_DEFAULTS = {
