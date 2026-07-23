@@ -1,74 +1,55 @@
-## What's still broken (from screenshots)
+# In-House Outreach Automation — Phased Build
 
-1. **Header title "Relationships Hub"** renders in gold/champagne — global heading CSS is overriding my inline `color: #FFFFFF`. Same for subtitle.
-2. **"Back" and "Refresh" pills** — icons/text look faded/dark against emerald. Global icon-lock isn't winning specificity.
-3. **Active segment tile ("Brokers · Secondary")** — label + sub-text render dark on emerald (invisible). Global rules are forcing dark ink.
-4. **Segment labels wrap vertically** ("Bro / kera / ges", "Deve / lopers") because the icon column + Cormorant 18px + padding overflow a narrow flex row when the preview is split.
-5. **KPI cards** — values are emerald on white (OK) but the "TOTAL/UNTOUCHED" eyebrow labels are muted; user wants them clearer. Also the empty-state values need contrast pass.
-6. **Wiring gaps**: sending a branded email must increment per-record `emails_sent`, log to activity feed, and update status; Google Calendar bookings must flip status to `briefing_booked` automatically.
+Goal: a "virtual admin/broker" that pushes both sides (brokerages ⇢ CITI Developers, developers ⇢ JBJ), follows up on its own, classifies replies, updates status, prepares drafts, and reports back daily. Bulk send already works today; this plan adds the automation on top **without** touching the bulk-send path you're about to use.
 
-## Fix plan
+## Phase 1 — Ship now, then you bulk-send (this turn)
 
-### Phase 1 — Kill contrast overrides on the Hub (frontend only)
+1. **Mirror AI classifier to brokerage inbound.** Brokerages currently only bump `outreach_stage` on reply. Extend `comm-inbound-sync` so brokerage replies also run the AI analyzer with brokerage-specific rules ("Are they registering with CITI Developers? registered / documents_required / pending_application / under_review / rejected"), and write `ai_summary`, `ai_next_action`, `registered_status`, requested-documents list, and a draft reply for Jane.
+2. **Register the outbound sends** already produced by `crm-send-brokerage-outreach` and `crm-send-developer-registration` into `crm_relationship_email_log` with `detected_status = "sent"` so cadence + digest can see them (some paths currently skip this).
+3. **Safety switch**: add `crm_owner_settings.automation_mode` = `off | draft_only | auto_send` (default `draft_only`). Everything Phase 2/3 respects this.
 
-Wrap the entire page in `<div data-relationships-hub data-no-contrast-guard>` and add a scoped CSS block in `src/index.css` that wins by specificity + `!important` on the properties that global rules keep flipping:
+## Phase 2 — Cadence engine (next turn, after you confirm Phase 1 works)
 
-- `[data-relationships-hub] .rh-header *` → `color: #FFFFFF !important` (title, subtitle, back/refresh text + svg).
-- `[data-relationships-hub] .rh-tile-active` → force white text/icon on emerald; inactive tiles → ink `#0F1A16` on white.
-- `[data-relationships-hub] .rh-tile-label` → `white-space: nowrap; font-size: clamp(15px, 1.2vw, 18px)` so labels never wrap. Give the icon column `flex-shrink: 0` and the label `min-width: 0; overflow: hidden; text-overflow: ellipsis`.
-- Restructure each tile as a two-row layout (icon + label on row 1, sub on row 2) instead of icon+label competing for horizontal space with the sub-copy — matches the mockup and stops the "Bro/kera/ges" wrap at any viewport.
+Nightly pg_cron `outreach-cadence-run` at 08:00 Dubai:
 
-### Phase 2 — Header pills
+```text
+brokerage — CITI Developers side
+  T+3d  no reply  → F1 nudge
+  T+7d  no reply  → F2 value-add (briefing invite)
+  T+14d no reply  → F3 last touch
+  T+21d no reply  → mark dormant
 
-Rebuild Back/Refresh as `.rh-pill` with:
-- background `rgba(255,255,255,0.12)`, hover `0.20`
-- 1px border `rgba(255,255,255,0.45)`
-- text + icon locked to `#FFFFFF !important`
-- consistent padding/height so they read as buttons, not chips
+developer — JBJ side
+  T+2d  no reply  → F1 polite ping
+  T+6d  no reply  → F2 attach JBJ trade licence
+  T+12d no reply  → F3 escalation to Jane
+  documents_required → auto-draft doc reply with attachments listed
+  pending_application → auto-draft "we've applied, awaiting review"
+```
 
-### Phase 3 — KPI strip polish
+In `draft_only` mode the engine writes a draft to `owner_comm_ai_drafts` and pings the Hub; in `auto_send` it sends via the existing send functions with the same signature/branding rules.
 
-- Eyebrow labels: `#0F1A16` at 10px/700 uppercase tracking-widest (currently `#4B5D55` — too faded).
-- Value: Cormorant 28px `#064E3B`. When `0`, render `—` in `#8A9891` so empty states read as "no data yet" instead of a stark zero.
+## Phase 3 — Daily digest + headless form-fill (later)
 
-### Phase 4 — Email → record wiring (already partly in place, verify + patch)
+- **08:15 Dubai digest** email to `infoo.jane@gmail.com`: sent yesterday, replies parsed, statuses changed, drafts awaiting approval, DLD deltas.
+- **Playwright form-fill worker** (separate Deno-Deploy-compatible runtime, not Supabase edge function): opens the developer's registration URL, fills fields from JBJ profile, screenshots each step, stores as draft submission for your approval. Not achievable inside a Supabase edge function — needs the worker split out.
 
-Confirm and, where missing, add:
-- `crm-send-brokerage-outreach` and `crm-send-developer-registration` write a row to `crm_relationship_activity` (`kind='email_sent'`, target segment + record id, subject, template) and `UPDATE crm_brokerages / crm_developer_registry SET emails_sent = emails_sent + 1, last_email_at = now(), status = CASE WHEN status='untouched' THEN 'needs_follow_up' ELSE status END`.
-- `comm-inbound-sync` on reply: append `kind='email_reply'` activity, set status to `engaged` (or `registered` if AI extracts a registration link + confirmation phrase).
-- Hub table gets an "Emails / Last contact / Last reply" column so the outreach loop is visible per row.
+## What I will NOT do this turn
 
-### Phase 5 — Google Calendar booking → `briefing_booked`
+- Touch `BrandedEmailsPanel.tsx` or the bulk-send buttons (you're about to use them).
+- Auto-send anything without `automation_mode = 'auto_send'`.
+- Build the Playwright form-fill (Phase 3 — different runtime).
 
-Root cause of the "Calendar is blocked" flow:
-- The Google Calendar Appointment Schedule link (`calendar.app.google/...`) is being wrapped by Resend click-tracking → the wrapped URL fails Google's referrer check → Chrome shows "refused to connect".
-- Fix already partially done via `data-no-link-tracking="true"`; confirm the Resend send config also disables click tracking for that specific anchor, or move the CTA to a plain `https://calendar.app.google/...` link with `rel="noopener"` and no wrapper.
+## E2E test in Phase 1
 
-Booking → status wiring (no Google API key required):
-- Add `google_calendar_webhook_secret` (Cloud secret). In your Google Calendar Appointment Schedule, enable **"Add a description"** and instruct booker email to include `[JBJ-REL:{record_id}]` (auto-appended via query param `?prefill_description=...` in the CTA URL).
-- Google Calendar sends a confirmation email to `helpdesk@jbj.ae` / `infoo.jane@gmail.com`. `comm-inbound-sync` already reads that mailbox — extend the parser to detect Google Calendar confirmation subjects (`New booking: ...`) and the `[JBJ-REL:xxx]` token, then update the matched record `status = 'briefing_booked'`, insert `crm_relationship_activity kind='briefing_booked'`, and store the meeting time.
-- Optional upgrade (later, only if user wants deeper sync): connect the **google_calendar App User Connector** and mirror events to a `crm_calendar_events` table so bookings show inside the Hub without email parsing.
+1. Insert a synthetic inbound brokerage reply row → assert AI summary, next_action, registered_status, and draft populated on the brokerage card.
+2. Insert a synthetic inbound developer reply saying "please share trade licence and RERA" → assert `status = documents_required` and requested_documents list populated.
+3. Send one live test email to `infoo.jane@gmail.com` via the brokerage path and verify the row lands in `crm_relationship_email_log` as outbound + `sent`.
+4. Playwright screenshot of the brokerage card showing the new AI summary + draft.
 
-### Phase 6 — E2E validation
+## Technical details
 
-Playwright script at `/tmp/browser/rh-e2e.mjs`:
-1. Load `/owner/crm/jbj/owner-relationships-activity`; screenshot header, all 4 tiles, KPI strip at 1280 and 900 viewports (split-screen simulation).
-2. Assert computed `color` on `.rh-header h1`, back/refresh buttons, and active tile label is `rgb(255,255,255)`.
-3. Assert active-tile label has `white-space: nowrap` (no wrap).
-4. Click "Send test" from Branded Emails panel to `infoo.jane@gmail.com`, then confirm a new row appears in the Hub activity feed and the target record's `emails_sent` bumped.
-5. Post a fake Google Calendar confirmation email into the inbound webhook fixture; assert record flips to `briefing_booked`.
-6. Save screenshots + a pass/fail summary.
-
-## Technical files touched
-
-- `src/pages/owner/crm/RelationshipsHub.tsx` — restructure header, tiles, KPI strip; add `.rh-*` class hooks; add per-row emails/last-contact columns.
-- `src/index.css` — new scoped `[data-relationships-hub]` block (Phase 1/2/3 rules).
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` and `crm-send-developer-registration/index.ts` — ensure activity row + counter bump.
-- `supabase/functions/comm-inbound-sync/index.ts` — Google Calendar confirmation parser + `[JBJ-REL:xxx]` token handling.
-- `supabase/migrations/*` — add `emails_sent`, `last_email_at`, `last_reply_at` columns on the three tables if missing, and a `crm_calendar_bookings` audit table.
-- `tests/e2e/relationships-hub.spec.ts` (new) — the Playwright checks above.
-
-## What I need you to confirm before I build
-
-1. **Google Calendar link** — do you already have your Appointment Schedule public URL (something like `https://calendar.app.google/xxxxx`)? If yes paste it and I'll wire it as the canonical CTA. If not, I'll leave the CTA disabled until you paste it in CRM Settings.
-2. **Deeper Google Calendar sync** — do you want me to also connect the **google_calendar App User Connector** now (event mirror + reminders inside the Hub), or start with the email-parsing approach and add the connector later?
+- Extend `analyzeDeveloperReply` in `supabase/functions/comm-inbound-sync/index.ts` into `analyzeInboundReply({ side: 'brokerage' | 'developer', ... })`. Brokerage prompt reframes: "we are CITI Developers inviting them to register with us."
+- Add columns via migration: `crm_brokerages.ai_summary`, `ai_next_action`, `ai_draft_reply`, `registered_status`, `requested_documents text[]`, `ai_generated_at`. Grants + RLS unchanged (owner-only already).
+- `crm_owner_settings.automation_mode text default 'draft_only' check (automation_mode in ('off','draft_only','auto_send'))`.
+- Cadence engine (Phase 2) will be new function `outreach-cadence-run` invoked by pg_cron; not created this turn.

@@ -7915,6 +7915,7 @@ export type Database = {
           admin_name: string | null
           admin_phone: string | null
           agency_status: Database["public"]["Enums"]["crm_agency_status"] | null
+          ai_draft_reply: string | null
           ai_generated_at: string | null
           ai_next_action: string | null
           ai_summary: string | null
@@ -8023,10 +8024,12 @@ export type Database = {
           phone: string | null
           primary_contact: Json | null
           region: string
+          registered_status: string | null
           registration_status: string
           relationship_status: Database["public"]["Enums"]["relationship_status_kind"]
           represented_developer_id: string | null
           represented_developer_name: string | null
+          requested_documents: string[] | null
           rera_license: string | null
           response_count: number
           secondary_contact: Json | null
@@ -8057,6 +8060,7 @@ export type Database = {
           agency_status?:
             | Database["public"]["Enums"]["crm_agency_status"]
             | null
+          ai_draft_reply?: string | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
@@ -8165,10 +8169,12 @@ export type Database = {
           phone?: string | null
           primary_contact?: Json | null
           region?: string
+          registered_status?: string | null
           registration_status?: string
           relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           represented_developer_id?: string | null
           represented_developer_name?: string | null
+          requested_documents?: string[] | null
           rera_license?: string | null
           response_count?: number
           secondary_contact?: Json | null
@@ -8199,6 +8205,7 @@ export type Database = {
           agency_status?:
             | Database["public"]["Enums"]["crm_agency_status"]
             | null
+          ai_draft_reply?: string | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
@@ -8307,10 +8314,12 @@ export type Database = {
           phone?: string | null
           primary_contact?: Json | null
           region?: string
+          registered_status?: string | null
           registration_status?: string
           relationship_status?: Database["public"]["Enums"]["relationship_status_kind"]
           represented_developer_id?: string | null
           represented_developer_name?: string | null
+          requested_documents?: string[] | null
           rera_license?: string | null
           response_count?: number
           secondary_contact?: Json | null
@@ -11360,6 +11369,7 @@ export type Database = {
           active_cc_emails: Json
           attachments_brokerage: Json
           attachments_developer: Json
+          automation_mode: string
           brokerage_active_cc_emails: Json
           brokerage_drive_doc_pack_url: string | null
           brokerage_from_name: string | null
@@ -11395,6 +11405,7 @@ export type Database = {
           active_cc_emails?: Json
           attachments_brokerage?: Json
           attachments_developer?: Json
+          automation_mode?: string
           brokerage_active_cc_emails?: Json
           brokerage_drive_doc_pack_url?: string | null
           brokerage_from_name?: string | null
@@ -11430,6 +11441,7 @@ export type Database = {
           active_cc_emails?: Json
           attachments_brokerage?: Json
           attachments_developer?: Json
+          automation_mode?: string
           brokerage_active_cc_emails?: Json
           brokerage_drive_doc_pack_url?: string | null
           brokerage_from_name?: string | null
