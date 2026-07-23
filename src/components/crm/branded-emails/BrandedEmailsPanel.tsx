@@ -763,6 +763,24 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         aria-describedby={undefined}
         className="w-full sm:max-w-6xl p-0 flex flex-col bg-white border-l-0 rounded-l-2xl shadow-[-24px_0_60px_-30px_rgba(6,78,59,0.35)] overflow-hidden"
       >
+        <style>{`
+          [data-branded-email-panel="true"] [data-cal-active-pill="true"],
+          [data-branded-email-panel="true"] [data-cal-save-btn="true"] {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-branded-email-panel="true"] [data-cal-active-pill="true"] *,
+          [data-branded-email-panel="true"] [data-cal-save-btn="true"] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-branded-email-panel="true"] [data-cal-active-pill="true"] svg,
+          [data-branded-email-panel="true"] [data-cal-save-btn="true"] svg {
+            color: #FFFFFF !important;
+            stroke: #FFFFFF !important;
+            fill: none !important;
+          }
+        `}</style>
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <span className="inline-grid place-items-center size-14 shrink-0 rounded-md border border-emerald-900/15 bg-white p-2 shadow-[0_8px_18px_-14px_rgba(6,78,59,0.45)]">
@@ -782,12 +800,29 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               </p>
               <SheetTitle className="text-xl font-black text-[#0F1A16]">Branded Emails</SheetTitle>
             </div>
-            <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
-              <Users className="size-4" />
-              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total.toLocaleString()} {kind}
-              {missingEmailCount > 0 && <span className="font-semibold text-[#064E3B]">· {missingEmailCount.toLocaleString()} missing email</span>}
-              {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
-              {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]">· {previouslySentCount} already sent</span>}
+            <div className="ml-auto flex items-center gap-3 text-xs text-[#4B5D55]">
+              <div className="hidden sm:flex items-center gap-2">
+                <Users className="size-4" />
+                Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total.toLocaleString()} {kind}
+                {missingEmailCount > 0 && <span className="font-semibold text-[#064E3B]">· {missingEmailCount.toLocaleString()} missing email</span>}
+                {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
+                {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]">· {previouslySentCount} already sent</span>}
+              </div>
+              <button
+                type="button"
+                onClick={() => onOpenChange(false)}
+                aria-label="Close Branded Emails"
+                title="Close (Esc)"
+                data-branded-email-close="true"
+                className="inline-grid place-items-center size-9 rounded-full border transition"
+                style={{
+                  background: "#FFFFFF",
+                  borderColor: "#064E3B",
+                  color: "#064E3B",
+                }}
+              >
+                <X className="size-4" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+              </button>
             </div>
           </div>
         </SheetHeader>
