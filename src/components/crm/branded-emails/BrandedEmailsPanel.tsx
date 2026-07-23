@@ -41,15 +41,15 @@ type Template = {
 };
 
 const DEVELOPER_SENDER = {
-  name: "Jane Bou Jaoude",
-  title: "Head of Business Development",
+  name: "JBJ Team",
+  title: "JBJ GLOBAL REAL ESTATE",
   email: "helpdesk@jbj.ae",
 };
 
 const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
   developers: {
-    name: "Jane Bou Jaoude",
-    title: "Head of Business Development",
+    name: "JBJ Team",
+    title: "JBJ GLOBAL REAL ESTATE",
     email: "helpdesk@jbj.ae",
   },
   brokerages: {
@@ -61,7 +61,7 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
 
 const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmail: string; replyTo: string; dailyCapLabel: string }> = {
   developers: {
-    fromName: "Jane Bou Jaoude — JBJ GLOBAL REAL ESTATE",
+    fromName: "JBJ GLOBAL REAL ESTATE",
     fromEmail: "helpdesk@jbj.ae",
     replyTo: "helpdesk@jbj.ae",
     dailyCapLabel: "Developer sends use the connected mailbox; test sends use the verified app email path.",
@@ -108,10 +108,10 @@ const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; appUrl: s
 function buildBrandHeaderHtml(kind: BrandedAudienceKind): string {
   const b = BRAND_HEADER_BY_KIND[kind];
   return `<table role="presentation" data-jbj-brand-header="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;">
-  <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);">
+  <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);text-align:center;">
     <img src="${b.url}" alt="${b.alt}" width="${b.width}" height="${b.height}" style="display:block;width:${b.width}px;height:${b.height}px;max-width:${b.width}px;margin:0 auto 10px;object-fit:contain;" />
-    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">${b.wordmark}</div>
-    <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">${b.tagline}</div>
+    <div style="display:block;width:100%;text-align:center;font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">${b.wordmark}</div>
+    <div style="display:block;width:100%;text-align:center;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">${b.tagline}</div>
   </td></tr>
 </table>`;
 }
@@ -186,7 +186,7 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       const to = from + PAGE_SIZE - 1;
       return (supabase as any)
         .from("crm_brokerages")
-        .select("id, company_name, email, emirate")
+        .select("id, company_name, email, emirate, website, logo_url")
         .order("company_name")
         .range(from, to);
     })
@@ -199,7 +199,8 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
     name: r.company_name || "Brokerage",
     email: r.email || null,
     meta: r.emirate || null,
-    logoUrl: null,
+    logoUrl: r.logo_url || null,
+    websiteUrl: r.website || null,
   }));
 }
 
@@ -326,8 +327,10 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/https?:\/\/(?:www\.)?citidevelopers\.com/gi, CITI_WEBSITE_URL)
       .replace(/\bwww\.citidevelopers\.com\b/gi, "citideveloper.com")
       .replace(/\bcitidevelopers\.com\b/gi, "citideveloper.com")
+      .replace(/Jane\s+Bouchaudey/gi, sender.name)
       .replace(/Jane Bou Jaoude/gi, sender.name)
       .replace(/Jane Bujold/gi, sender.name)
+      .replace(/\{\{sender_phone_name\}\}/g, "Jane Bou Jaoude")
       .replace(/<strong>Jane<\/strong>(\s*&middot;\s*Sales)/gi, `<strong>${sender.name}</strong>$1`)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
@@ -362,7 +365,20 @@ function personalizeSubject(subject: string, sampleName = "Recipient Developer N
 }
 
 function makePreviewHtmlSafe(html: string) {
-  return `<base target="_blank" />${html}`;
+  const bridge = `<base target="_blank" />
+<script>
+  document.addEventListener('click', function(event) {
+    var anchor = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+    if (!anchor) return;
+    var href = anchor.getAttribute('href') || '';
+    if (/^https:\/\/(drive\.google\.com|calendar\.google\.com|calendar\.app\.google)\//i.test(href)) {
+      event.preventDefault();
+      event.stopPropagation();
+      window.open(href, '_blank', 'noopener,noreferrer');
+    }
+  }, true);
+</script>`;
+  return `${bridge}${html}`;
 }
 
 function displayNameFromEmail(email: string, fallback: string) {
@@ -946,13 +962,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                 )}
                               </button>
                             )}
-                            {kind === "developers" ? (
-                              <AudienceLogo recipient={r} />
-                            ) : (
-                              <span className="inline-flex items-center justify-center size-8 rounded-md bg-white border border-emerald-900/10 overflow-hidden shrink-0" aria-label="Brokerage company">
-                                <Building2 className="size-4" aria-hidden="true" style={{ color: "#064E3B", stroke: "#064E3B" }} />
-                              </span>
-                            )}
+                            <AudienceLogo recipient={r} />
                             <span className="flex-1 min-w-0">
                               <span className="block truncate text-sm font-semibold text-[#0F1A16]">{r.name}</span>
                               {r.meta && <span className="block truncate text-[11px] text-[#4B5D55]">{r.meta}</span>}
@@ -1064,7 +1074,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <iframe
                   title="Branded email preview"
                   data-branded-email-preview-iframe="true"
-                  sandbox="allow-popups allow-popups-to-escape-sandbox"
+                  sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
                   className="w-full block"
                   style={{ height: "min(68vh, 720px)", border: "0", background: "#FDFBF7" }}
                   srcDoc={makePreviewHtmlSafe(personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind, bookingUrl))}
