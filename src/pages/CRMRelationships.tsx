@@ -2873,13 +2873,14 @@ const DeveloperRegistryTab = () => {
           emptyLabel="No developers match filters."
         />
       ) : (
-        <div className="grid gap-2">
+        <div className="w-full overflow-x-auto">
+        <div className="grid gap-2 min-w-[680px]">
           {devVisible.map((r: any) => {
             const sentDays = r.last_outreach_at
               ? Math.floor((Date.now() - new Date(r.last_outreach_at).getTime()) / 86400000)
               : null;
             return (
-            <Card key={r.id} className={`bg-[#FDFBF7] text-[#1A1A1A] border ${selected.has(r.id) ? "border-[#1A1A1A] ring-1 ring-black" : "border-[#1A1A1A]/10"} hover:shadow-lg transition rounded-2xl`}>
+            <Card key={r.id} className={`bg-[#FDFBF7] text-[#1A1A1A] border min-w-[680px] ${selected.has(r.id) ? "border-[#1A1A1A] ring-1 ring-black" : "border-[#1A1A1A]/10"} hover:shadow-lg transition rounded-2xl`}>
               <CardContent className="p-3">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-start gap-3 flex-1 min-w-[260px]">
