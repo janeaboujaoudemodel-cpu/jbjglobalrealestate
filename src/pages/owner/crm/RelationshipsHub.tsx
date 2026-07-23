@@ -457,13 +457,17 @@ export default function RelationshipsHub() {
                   const StatusIcon = meta.icon;
                   const name = r[cfg.nameCol] ?? "—";
                   const email = r.email_lower ?? r.email ?? r.developer_email ?? "";
-                  const phone = r.phone_e164 ?? r.phone_number ?? r.phone ?? "";
+                  const showLogo = seg === "brokerage" || seg === "developer";
                   return (
                     <tr key={r.id} className="border-t border-[#B89555]/15 hover:bg-[#F7F1E4]/30">
-                      <td className="px-3 py-2 font-semibold text-[#0F1A16]">{name}</td>
+                      <td className="px-3 py-2 font-semibold text-[#0F1A16]">
+                        <div className="inline-flex items-center gap-2">
+                          {showLogo && <EntityLogo name={name} website={r.website} logoUrl={r.logo_url} />}
+                          <span className="truncate">{name}</span>
+                        </div>
+                      </td>
                       <td className="px-3 py-2 text-[12px] text-[#4B5D55]">
-                        {email && <div>{email}</div>}
-                        {phone && <div>{phone}</div>}
+                        {email ? <div className="truncate">{email}</div> : <span className="text-[#B89555]/60">—</span>}
                       </td>
                       <td className="px-3 py-2">
                         <span
@@ -560,5 +564,35 @@ export default function RelationshipsHub() {
 
       </div>
     </div>
+  );
+}
+
+function EntityLogo({ name, website, logoUrl }: { name: string; website?: string | null; logoUrl?: string | null }) {
+  const [stage, setStage] = useState<0 | 1 | 2>(0);
+  const domain = (() => {
+    try {
+      if (!website) return null;
+      const u = new URL(website.startsWith("http") ? website : `https://${website}`);
+      return u.hostname.replace(/^www\./, "");
+    } catch { return null; }
+  })();
+  const src = stage === 0 && logoUrl ? logoUrl
+    : stage <= 1 && domain ? `https://logo.clearbit.com/${domain}`
+    : null;
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt=""
+        className="size-6 rounded object-contain bg-white border border-[#B89555]/25"
+        onError={() => setStage((s) => (s < 2 ? ((s + 1) as 0 | 1 | 2) : 2))}
+      />
+    );
+  }
+  const initial = (name || "?").trim().charAt(0).toUpperCase();
+  return (
+    <span className="size-6 rounded bg-[#064E3B] text-white text-[10px] font-black inline-flex items-center justify-center">
+      {initial}
+    </span>
   );
 }
