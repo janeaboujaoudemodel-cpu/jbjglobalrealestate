@@ -650,10 +650,11 @@ serve(async (req: Request) => {
         subject,
         resendMessageId: messageId,
         providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
-        idempotencyKey: buildIdempotencyKey([
-          "brokerage", variant, "test", recipient,
-          messageId || String(Date.now()),
-        ]),
+        idempotencyKey: buildIntendedSendKey({
+          portalKind: "brokerage", sendType: "test",
+          templateSlug: variant, entityId: brk?.id ?? null, emailNorm: recipient,
+          nonce: messageId || String(Date.now()),
+        }),
       });
       return new Response(JSON.stringify({
         ok: true, test: true, recipient, messageId, threadId,
