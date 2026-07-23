@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { statusColor, BROKERAGE_REGISTRATION_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 
 const GROUP_OPTIONS = [
-  { value: "pending_group_status", label: "Pending group status" },
+  { value: "pending_group_status", label: "None" },
   { value: "has_group", label: "Has group" },
   { value: "no_group", label: "No group" },
   { value: "group_not_required", label: "Group not required" },
