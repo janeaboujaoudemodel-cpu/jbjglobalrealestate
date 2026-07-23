@@ -462,8 +462,8 @@ export default function OwnerInbox() {
             disabled={isUpdating}
           />
 
-          {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 2xl:grid-cols-[minmax(300px,420px)_minmax(0,1fr)] gap-4 min-h-[720px] max-w-full">
+          {/* Main Content - Split View (opens side-by-side from lg upward, container is also widened) */}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] gap-4 min-h-[720px] max-w-full">
             {/* Thread List */}
             <div className="min-h-0 min-w-0 overflow-hidden">
               <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
