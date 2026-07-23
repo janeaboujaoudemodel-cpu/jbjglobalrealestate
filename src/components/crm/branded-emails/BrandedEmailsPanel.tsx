@@ -515,10 +515,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     if (!open) return;
     let cancelled = false;
     (async () => {
-      const { data } = await (supabase as any)
+      const { data: rows } = await (supabase as any)
         .from("crm_owner_settings")
-        .select("google_calendar_booking_url, google_calendar_booking_url_business, google_calendar_booking_url_personal, google_calendar_active_account")
-        .maybeSingle();
+        .select("google_calendar_booking_url, google_calendar_booking_url_business, google_calendar_booking_url_personal, google_calendar_active_account, updated_at")
+        .order("updated_at", { ascending: false, nullsFirst: false })
+        .limit(1);
+      const data = Array.isArray(rows) && rows.length ? rows[0] : null;
       if (cancelled) return;
       const legacy = String(data?.google_calendar_booking_url || "").trim();
       const business = String(data?.google_calendar_booking_url_business || "").trim();
