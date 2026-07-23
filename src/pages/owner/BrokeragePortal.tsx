@@ -271,13 +271,14 @@ function AutomationsStrip() {
   const lastCount = last ? `${last.agencies_inserted ?? 0} agencies · ${last.brokers_inserted ?? 0} brokers` : "";
   const lastStatus = last?.status as string | undefined;
   return (
-    <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-3">
-      <div className="flex items-center justify-between gap-3">
+    <Card className="p-0 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden">
+      <div className="flex flex-col justify-between gap-3 p-4 md:border-r border-[#B89555]/25 min-h-[160px]">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com <span className="ml-2 text-[#064E3B]/70">Auto · every 5 min</span></p>
-          <p className="text-xs text-[#1A1A1A]/70 mt-1">Last message ingested: <span className="font-black text-[#1A1A1A]">{fmt(inboxQ.data?.created_at)}</span></p>
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com</p>
+          <p className="text-[10px] uppercase tracking-[0.14em] font-black text-[#064E3B]/70 mt-0.5">Auto · every 5 min</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-2">Last message ingested: <span className="font-black text-[#1A1A1A]">{fmt(inboxQ.data?.created_at)}</span></p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button size="sm" variant="outline" disabled={busy === "gmail"} onClick={runGmail} title="Refresh now" aria-label="Refresh inbox now">
             <RefreshCw className={`size-4 ${busy === "gmail" ? "animate-spin" : ""}`} />
           </Button>
@@ -286,18 +287,19 @@ function AutomationsStrip() {
           </Button>
         </div>
       </div>
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col justify-between gap-3 p-4 min-h-[160px]">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync — brokers + brokerages <span className="ml-2 text-[#064E3B]/70">Auto · daily 03:00 UTC</span></p>
-          <p className="text-xs text-[#1A1A1A]/70 mt-1">
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync — brokers + brokerages</p>
+          <p className="text-[10px] uppercase tracking-[0.14em] font-black text-[#064E3B]/70 mt-0.5">Auto · daily 03:00 UTC</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-2">
             Last run: <span className="font-black text-[#1A1A1A]">{fmt(last?.run_started_at)}</span>{lastCount ? ` · ${lastCount}` : ""}
             {lastStatus && lastStatus !== "success" && <span className="ml-2 text-[#8B1F1F] font-black uppercase">· {lastStatus}</span>}
           </p>
-          <p className="text-[10px] text-[#1A1A1A]/55 mt-0.5">
+          <p className="text-[10px] text-[#1A1A1A]/55 mt-1">
             <span className="font-black">Market snapshot</span> pulls DLD market data only. <span className="font-black">Sync all</span> also imports brokers &amp; brokerages from the DLD register.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button size="sm" variant="outline" disabled={busy === "dld"} onClick={() => runDld("market")}>{busy === "dld" ? "Running…" : "Market snapshot"}</Button>
           <Button size="sm" variant="gold" disabled={busy === "all"} onClick={() => runDld("all")}>{busy === "all" ? "Running…" : "Sync all (brokers + brokerages)"}</Button>
         </div>
