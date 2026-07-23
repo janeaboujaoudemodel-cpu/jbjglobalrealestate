@@ -66,7 +66,7 @@ export function OutreachAttachmentsEditor({ context, attachments, workflows, onC
               <li key={i} className="flex items-center gap-2 text-xs bg-white border border-[#B89555]/30 rounded px-2 py-1.5">
                 <FileText className="w-3.5 h-3.5 text-[#B89555] shrink-0" />
                 <span className="font-semibold text-[#1A1A1A] truncate flex-1">{a.label}</span>
-                <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-0.5">
+                <a href={a.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-0.5">
                   Open <ExternalLink className="w-3 h-3" />
                 </a>
                 <button
@@ -111,7 +111,7 @@ export function OutreachAttachmentsEditor({ context, attachments, workflows, onC
             {workflows.map((w, i) => (
               <li key={i} className="flex items-center gap-2 text-xs bg-white border border-[#B89555]/30 rounded px-2 py-1.5">
                 <span className="font-semibold text-[#1A1A1A] truncate flex-1">{w.label}</span>
-                <a href={w.url} target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-0.5">
+                <a href={w.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-0.5">
                   Open <ExternalLink className="w-3 h-3" />
                 </a>
                 <button

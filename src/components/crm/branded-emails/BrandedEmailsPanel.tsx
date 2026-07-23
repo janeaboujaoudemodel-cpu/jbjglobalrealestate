@@ -362,13 +362,7 @@ function personalizeSubject(subject: string, sampleName = "Recipient Developer N
 }
 
 function makePreviewHtmlSafe(html: string) {
-  return html
-    .replace(
-      /(<a\b[^>]*\bhref=["'])https:\/\/(?:calendar\.app\.google|calendar\.google\.com)\/[^"']*(["'][^>]*>)/gi,
-      '$1#google-calendar-booking-preview$2',
-    )
-    .replace(/(<a\b[^>]*\bhref=["']#google-calendar-booking-preview["'][^>]*)\btarget=["'][^"']*["']/gi, "$1")
-    .replace(/(<a\b[^>]*\bhref=["']#google-calendar-booking-preview["'][^>]*)(>)/gi, '$1 title="Saved Google Calendar link is used in the real email; preview click is disabled."$2');
+  return `<base target="_blank" />${html}`;
 }
 
 function displayNameFromEmail(email: string, fallback: string) {

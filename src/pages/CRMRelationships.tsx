@@ -2053,6 +2053,7 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
                   href={driveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  referrerPolicy="no-referrer"
                   className="inline-flex items-center justify-center px-4 h-10 rounded-md bg-[#EFE6D6] border border-[#B89555]/60 text-[#1A1A1A] text-sm font-semibold hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] whitespace-nowrap shrink-0"
                 >
                   Open Pack ↗
