@@ -1,10 +1,15 @@
 /**
- * Site-wide WhatsApp link guard.
+ * Site-wide external link guard.
  *
  * Guarantees that EVERY WhatsApp link — whether opened via `window.open()`,
  * `window.location.href = …`, or a clicked `<a>` element — is rewritten to
  * the canonical `https://wa.me/{digits}[?text=…]` form, with phone digits
  * normalized (non-digit chars stripped, leading "00" removed).
+ *
+ * Also forces Google surfaces that refuse iframe embedding (Drive, Docs,
+ * Calendar, Maps) to escape the Lovable preview iframe. Otherwise the browser
+ * tries to render them inside the app frame and Google correctly blocks the
+ * load with frame-ancestors / X-Frame-Options.
  *
  * Why a guard instead of per-callsite refactor:
  *  - There are ~60 WhatsApp callsites scattered across the codebase, some
@@ -20,6 +25,8 @@
  */
 
 const WA_HOSTS = /^https?:\/\/(?:api\.whatsapp\.com|web\.whatsapp\.com|wa\.me)(\/.*)?$/i;
+
+const NO_FRAME_EXTERNAL_HOSTS = /^https?:\/\/(?:drive\.google\.com|docs\.google\.com|calendar\.app\.google|calendar\.google\.com|www\.google\.com\/maps|maps\.app\.goo\.gl)(\/.*)?$/i;
 
 const sanitizeDigits = (raw: string): string => {
   let d = raw.replace(/[^\d]/g, "");
@@ -73,7 +80,7 @@ export const installWhatsAppGuard = (): void => {
 
   const needsTopEscape = (url: string): boolean => {
     if (!url) return false;
-    return /^mailto:/i.test(url) || WA_HOSTS.test(url);
+    return /^mailto:/i.test(url) || WA_HOSTS.test(url) || NO_FRAME_EXTERNAL_HOSTS.test(url);
   };
 
   // 1) Patch window.open — rewrites WhatsApp URLs opened programmatically AND
@@ -105,7 +112,7 @@ export const installWhatsAppGuard = (): void => {
   }
 
   // 2) Click delegation — rewrites <a href="…whatsapp…"> at click time and
-  //    forces mailto/wa.me anchors to target=_top inside the preview iframe.
+  //    forces no-frame external anchors to target=_top inside the preview iframe.
   document.addEventListener(
     "click",
     (e) => {
