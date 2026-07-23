@@ -183,9 +183,9 @@ export default function BrokeragePortal() {
     <AutomationsStrip />
     <Tabs defaultValue="new-dld" className="w-full">
       <TabsList className="grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
-        <TabsTrigger value="new-dld" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">DLD daily additions</TabsTrigger>
-        <TabsTrigger value="email-status" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">Emails sent + replies</TabsTrigger>
-        <TabsTrigger value="approval" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">Uploaded approval</TabsTrigger>
+        <TabsTrigger value="new-dld" style={{ ['--tw-text-opacity' as any]: 1 }} className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">DLD daily additions</TabsTrigger>
+        <TabsTrigger value="email-status" className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
+        <TabsTrigger value="approval" className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">Uploaded approval</TabsTrigger>
       </TabsList>
       <TabsContent value="new-dld" className="mt-4"><DldSyncHistoryPanel /></TabsContent>
       <TabsContent value="email-status" className="mt-4 space-y-4"><BrandedEmailsLauncherCard variant="broker" /><BrandedEmailDashboard kind="brokerages" /></TabsContent>
