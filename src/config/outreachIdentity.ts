@@ -3,9 +3,9 @@
  * Used for display only — server forces these values regardless of client input.
  */
 
-export const PRIMARY_SENDER = "infoo.jane@gmail.com";
+export const PRIMARY_SENDER = "jane@jbj.ae";
 export const PRIMARY_SENDER_NAME = "Jane Bou Jaoude";
-export const DEFAULT_REPLY_TO = "infoo.jane@gmail.com";
+export const DEFAULT_REPLY_TO = "jane@jbj.ae";
 export const DEFAULT_CC = "";
 
 export const TEST_DEFAULTS = {
