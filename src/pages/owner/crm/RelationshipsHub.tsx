@@ -456,8 +456,8 @@ export default function RelationshipsHub() {
                   const meta = STATUS_META[status];
                   const StatusIcon = meta.icon;
                   const name = r[cfg.nameCol] ?? "—";
-                  const email = r.email_lower ?? r.email ?? "";
-                  const phone = r.phone_e164 ?? r.phone_number ?? "";
+                  const email = r.email_lower ?? r.email ?? r.developer_email ?? "";
+                  const phone = r.phone_e164 ?? r.phone_number ?? r.phone ?? "";
                   return (
                     <tr key={r.id} className="border-t border-[#B89555]/15 hover:bg-[#F7F1E4]/30">
                       <td className="px-3 py-2 font-semibold text-[#0F1A16]">{name}</td>
