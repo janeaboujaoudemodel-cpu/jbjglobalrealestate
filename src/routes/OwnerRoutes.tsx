@@ -197,6 +197,16 @@ export const OwnerRoutes = () => (
     <Route path="owner-crm-workspace" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="owner-data-hub" element={<DataHub />} />
     <Route path="owner-brokerages" element={<BrokeragePortal />} />
+    <Route
+      path="deals"
+      element={
+        <Suspense fallback={<PageLoader />}>
+          {React.createElement(
+            React.lazy(() => import("@/pages/owner/crm/DealsLedger"))
+          )}
+        </Suspense>
+      }
+    />
     <Route path="owner-developers" element={<DeveloperDirectory />} />
     <Route path="owner-developers/add" element={<DeveloperCompanyRegistration />} />
     <Route path="owner-developers/:slug" element={<DeveloperProfilePage />} />
