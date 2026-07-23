@@ -204,11 +204,19 @@ export default function OwnerInbox() {
 
 
 
+  const threadDetailRef = useRef<HTMLDivElement | null>(null);
   const handleThreadSelect = (thread: CommThread) => {
     setSelectedThread(thread);
     if (thread.unread_count > 0) {
       markAsRead(thread.id);
     }
+    // On small/medium screens the detail panel renders below the list —
+    // scroll it into view so the reply/AI panel is immediately visible.
+    requestAnimationFrame(() => {
+      if (window.innerWidth < 1280 && threadDetailRef.current) {
+        threadDetailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   };
 
   const handleStatCardClick = (filter: ActiveStatFilter) => {
