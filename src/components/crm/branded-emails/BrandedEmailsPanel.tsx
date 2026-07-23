@@ -116,8 +116,6 @@ function buildBrandHeaderHtml(kind: BrandedAudienceKind): string {
 </table>`;
 }
 
-const recipientsCache = new Map<BrandedAudienceKind, Recipient[]>();
-const templatesCache = new Map<BrandedAudienceKind, Template[]>();
 const inflightCache = new Map<BrandedAudienceKind, Promise<[Recipient[], Template[]]>>();
 
 type Props = {
@@ -241,19 +239,11 @@ async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
 }
 
 async function loadBrandedEmailData(kind: BrandedAudienceKind): Promise<[Recipient[], Template[]]> {
-  const cachedRecipients = recipientsCache.get(kind);
-  const cachedTemplates = templatesCache.get(kind);
-  if (cachedRecipients && cachedTemplates) return [cachedRecipients, cachedTemplates];
-
   const inflight = inflightCache.get(kind);
   if (inflight) return inflight;
 
   const promise = Promise.all([loadRecipients(kind), loadTemplates(kind)])
-    .then(([r, t]) => {
-      recipientsCache.set(kind, r);
-      templatesCache.set(kind, t);
-      return [r, t] as [Recipient[], Template[]];
-    })
+    .then(([r, t]) => [r, t] as [Recipient[], Template[]])
     .finally(() => inflightCache.delete(kind));
   inflightCache.set(kind, promise);
   return promise;
@@ -371,6 +361,16 @@ function personalizeSubject(subject: string, sampleName = "Recipient Developer N
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
+function makePreviewHtmlSafe(html: string) {
+  return html
+    .replace(
+      /(<a\b[^>]*\bhref=["'])https:\/\/(?:calendar\.app\.google|calendar\.google\.com)\/[^"']*(["'][^>]*>)/gi,
+      '$1#google-calendar-booking-preview$2',
+    )
+    .replace(/(<a\b[^>]*\bhref=["']#google-calendar-booking-preview["'][^>]*)\btarget=["'][^"']*["']/gi, "$1")
+    .replace(/(<a\b[^>]*\bhref=["']#google-calendar-booking-preview["'][^>]*)(>)/gi, '$1 title="Saved Google Calendar link is used in the real email; preview click is disabled."$2');
+}
+
 function displayNameFromEmail(email: string, fallback: string) {
   const normalized = email.trim().toLowerCase();
   if (normalized === "infoo.jane@gmail.com") return "Jane";
@@ -461,14 +461,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    const cachedRecipients = recipientsCache.get(kind);
-    const cachedTemplates = templatesCache.get(kind);
-    if (cachedRecipients && cachedTemplates) {
-      setRecipients(cachedRecipients);
-      setTemplates(cachedTemplates);
-    }
-    const hasCurrentData = (cachedRecipients?.length || recipients.length) > 0 && (cachedTemplates?.length || templates.length) > 0;
-    setLoading(!hasCurrentData);
+    setLoading(true);
     setLoadError(null);
     loadBrandedEmailData(kind)
       .then(([r, t]) => {
@@ -1080,7 +1073,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   sandbox="allow-popups allow-popups-to-escape-sandbox"
                   className="w-full block"
                   style={{ height: "min(68vh, 720px)", border: "0", background: "#FDFBF7" }}
-                  srcDoc={personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind, bookingUrl)}
+                  srcDoc={makePreviewHtmlSafe(personalizeTemplate(selectedTemplate.html, previewPersonalizationName, kind, bookingUrl))}
                 />
               </div>
             ) : (
@@ -1105,7 +1098,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 ) : (
                   <li><strong>Registration pack:</strong> saved link included in the template</li>
                 )}
-                <li><strong>One-shot limit:</strong> {delivery.dailyCapLabel}</li>
+                <li><strong>Delivery:</strong> {delivery.dailyCapLabel}</li>
                 <li><strong>Status logic:</strong> Sent campaigns are marked automatically; replies are matched by inbound email sync and bookings by Google Calendar sync.</li>
               </ul>
             </div>
