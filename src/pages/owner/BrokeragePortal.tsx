@@ -372,22 +372,38 @@ function DldSyncHistoryPanel() {
   const updated = (run: DldRun) => Number(run.agencies_updated ?? run.raw_summary?.brokerage?.flagged ?? 0);
 
   return (
-    <Card className="p-5 bg-white border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(6,78,59,0.35)]">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">DLD sync history</p>
-          <h2 className="text-xl font-black text-[#0F1A16]">Fresh imports and untouched agencies</h2>
-          <p className="text-sm text-[#4B5D55] mt-1">Counts refresh after each action. New DLD brokerages are labeled untouched until the first outreach email is logged.</p>
-        </div>
-        <div className="flex rounded-md border border-[#064E3B]/20 bg-white p-1">
-          {(["daily", "all"] as const).map((value) => (
-            <button key={value} type="button" onClick={() => setMode(value)} className="rounded px-3 py-1.5 text-xs font-black uppercase" style={{ background: mode === value ? "#064E3B" : "transparent", color: mode === value ? "#FFFFFF" : "#064E3B", WebkitTextFillColor: mode === value ? "#FFFFFF" : "#064E3B" }}>
-              {value === "daily" ? "Today" : "See all"}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="mt-4 grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-4">
+    <Card className="p-0 bg-white border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(6,78,59,0.35)] overflow-hidden">
+      <details className="group">
+        <summary className="list-none cursor-pointer flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between p-5 hover:bg-[#F8FAF9] transition">
+          <div className="flex items-start gap-3 min-w-0">
+            <span className="inline-flex size-8 items-center justify-center rounded-md bg-[#064E3B] text-white transition group-open:rotate-90" aria-hidden="true">
+              <CalendarClock className="size-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">DLD sync history</p>
+              <h2 className="text-xl font-black text-[#0F1A16]">Fresh imports and untouched agencies</h2>
+              <p className="text-sm text-[#4B5D55] mt-1">Click to expand. New DLD brokerages are labeled untouched until the first outreach email is logged.</p>
+            </div>
+          </div>
+          <div className="flex rounded-md border border-[#064E3B]/20 bg-white p-1 shrink-0" onClick={(e) => e.preventDefault()}>
+            {(["daily", "all"] as const).map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMode(value); }}
+                className="inline-flex items-center justify-center rounded px-3 h-8 min-w-[92px] text-xs font-black uppercase tracking-[0.12em] transition"
+                style={{
+                  background: mode === value ? "#064E3B" : "transparent",
+                  color: mode === value ? "#FFFFFF" : "#064E3B",
+                  WebkitTextFillColor: mode === value ? "#FFFFFF" : "#064E3B",
+                }}
+              >
+                {value === "daily" ? "Today" : "See all"}
+              </button>
+            ))}
+          </div>
+        </summary>
+        <div className="px-5 pb-5 grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-4">
         <div className="rounded-lg border border-[#064E3B]/15 overflow-hidden bg-[#F8FAF9]">
           <div className="px-3 py-2 bg-white border-b border-[#064E3B]/10 flex items-center gap-2 text-[#064E3B] font-black text-xs uppercase tracking-[0.16em]"><CalendarClock className="size-4" /> Daily log</div>
           <div className="max-h-[360px] overflow-auto divide-y divide-[#064E3B]/10">
@@ -419,14 +435,15 @@ function DldSyncHistoryPanel() {
                 <tbody className="divide-y divide-[#064E3B]/10">
                   {(newBrokeragesQ.data ?? []).map((row) => {
                     const untouched = !row.last_outreach_at;
-                    return <tr key={row.id} className="text-[#0F1A16]"><td className="px-3 py-2"><p className="font-black">{row.company_name}</p><p className="text-xs text-[#4B5D55]">{row.dld_area || row.office_location || row.dld_office_number || "DLD register"}</p></td><td className="px-3 py-2 text-[#4B5D55]">{row.email || row.phone || row.website || "—"}</td><td className="px-3 py-2"><span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase" style={{ background: untouched ? "#064E3B" : "#EFE6D6", color: untouched ? "#FFFFFF" : "#0F1A16", WebkitTextFillColor: untouched ? "#FFFFFF" : "#0F1A16" }}>{untouched ? <Send className="size-3" /> : null}{untouched ? "Untouched" : "Outreach sent"}</span></td></tr>;
+                    return <tr key={row.id} className="text-[#0F1A16]"><td className="px-3 py-2"><p className="font-black">{row.company_name}</p><p className="text-xs text-[#4B5D55]">{row.dld_area || row.office_location || row.dld_office_number || "DLD register"}</p></td><td className="px-3 py-2 text-[#4B5D55]">{row.email || row.website || "—"}</td><td className="px-3 py-2"><span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase" style={{ background: untouched ? "#064E3B" : "#EFE6D6", color: untouched ? "#FFFFFF" : "#0F1A16", WebkitTextFillColor: untouched ? "#FFFFFF" : "#0F1A16" }}>{untouched ? <Send className="size-3" /> : null}{untouched ? "Untouched" : "Outreach sent"}</span></td></tr>;
                   })}
                 </tbody>
               </table>
             )}
           </div>
         </div>
-      </div>
+        </div>
+      </details>
     </Card>
   );
 }
