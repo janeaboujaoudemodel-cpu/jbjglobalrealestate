@@ -226,15 +226,25 @@ async function markRelationshipReply(
     .maybeSingle();
 
   if (brokerage?.id) {
+    const analysis = await analyzeInboundReply({ side: "brokerage", subject: args.subject, snippet: args.snippet });
+    const nextStatus = inferRegistrationStatus({ analysis, subject: args.subject, snippet: args.snippet });
+    const requestedDocs = Array.isArray(analysis?.requestedDocuments) ? analysis.requestedDocuments.filter(Boolean) : [];
+    const docsSuffix = requestedDocs.length ? ` Requested documents: ${requestedDocs.join(", ")}.` : "";
+    const nextAction = [analysis?.nextAction, analysis?.draftResponse ? `Draft reply: ${analysis.draftResponse}` : ""].filter(Boolean).join("\n\n") || null;
     await admin.from("crm_brokerages").update({
       last_response_at: args.receivedAt,
       response_count: Number(brokerage.response_count || 0) + 1,
       last_interaction_at: args.receivedAt,
+      ...(nextStatus ? { registered_status: nextStatus } : {}),
+      ...(requestedDocs.length ? { requested_documents: requestedDocs } : {}),
+      ...(analysis?.summary ? { ai_summary: `${analysis.summary}${docsSuffix}`.trim(), ai_generated_at: new Date().toISOString() } : {}),
+      ...(nextAction ? { ai_next_action: nextAction } : {}),
+      ...(analysis?.draftResponse ? { ai_draft_reply: analysis.draftResponse } : {}),
       outreach_stage: ["not_contacted", "attempted"].includes(String(brokerage.outreach_stage || ""))
         ? "engaged"
         : brokerage.outreach_stage,
     }).eq("id", brokerage.id);
-    await logReply("brokerage", brokerage.id, brokerage.company_name || email);
+    await logReply("brokerage", brokerage.id, brokerage.company_name || email, analysis);
     return;
   }
 
@@ -246,8 +256,8 @@ async function markRelationshipReply(
     .maybeSingle();
 
   if (developer?.id) {
-    const analysis = await analyzeDeveloperReply({ subject: args.subject, snippet: args.snippet });
-    const nextStatus = inferDeveloperStatus({ analysis, subject: args.subject, snippet: args.snippet });
+    const analysis = await analyzeInboundReply({ side: "developer", subject: args.subject, snippet: args.snippet });
+    const nextStatus = inferRegistrationStatus({ analysis, subject: args.subject, snippet: args.snippet });
     const requestedDocs = Array.isArray(analysis?.requestedDocuments) && analysis.requestedDocuments.length
       ? ` Requested documents: ${analysis.requestedDocuments.join(", ")}.`
       : "";
