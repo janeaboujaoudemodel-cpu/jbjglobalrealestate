@@ -151,12 +151,12 @@ async function processOwner(admin: any, ownerId: string, mode: string) {
   // ─── Brokerages ───
   const { data: brokerages, error: brkErr } = await admin
     .from("crm_brokerages")
-    .select("id, company_name, primary_email, primary_contact_name, outreach_stage, last_outreach_at, last_response_at, attempt_count, do_not_contact")
+    .select("id, company_name, email, primary_contact, outreach_stage, last_outreach_at, last_response_at, attempt_count, do_not_contact")
     .eq("owner_id", ownerId)
     .eq("do_not_contact", false)
     .is("last_response_at", null)
     .not("last_outreach_at", "is", null)
-    .not("primary_email", "is", null);
+    .not("email", "is", null);
   if (brkErr) results.errors.push(`brokerages: ${brkErr.message}`);
 
   for (const brk of brokerages ?? []) {
