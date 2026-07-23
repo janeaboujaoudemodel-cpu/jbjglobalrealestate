@@ -131,7 +131,7 @@ export default function DeveloperOwnerCampaignDashboard() {
                 {statusCounts.map(([status, count]) => (
                   <Badge key={status} variant="outline" className="border-[#064E3B]/30 text-[#0F1A16] bg-[#F7F2EA]">
                     <span className="font-black mr-1">{count.toLocaleString()}</span>
-                    <span className="opacity-70">{status.replaceAll("_", " ")}</span>
+                    <span className="opacity-70">{status.replace(/_/g, " ")}</span>
                   </Badge>
                 ))}
               </div>
