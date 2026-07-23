@@ -249,6 +249,7 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
       { slug: "owner-brokerages", label: "Brokerage Portal", icon: Handshake },
       { slug: "owner-developers", label: "Developer Portal", icon: Building },
       { slug: "owner-relationships", label: "Relationships Hub", icon: Handshake },
+      { slug: "deals-ledger", label: "My Deals", icon: Wallet },
       { slug: "owner-careers", label: "Careers Portal", icon: BriefcaseBusiness },
     ],
   },
