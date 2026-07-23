@@ -108,10 +108,10 @@ const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; appUrl: s
 function buildBrandHeaderHtml(kind: BrandedAudienceKind): string {
   const b = BRAND_HEADER_BY_KIND[kind];
   return `<table role="presentation" data-jbj-brand-header="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;">
-  <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);">
+  <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);text-align:center;">
     <img src="${b.url}" alt="${b.alt}" width="${b.width}" height="${b.height}" style="display:block;width:${b.width}px;height:${b.height}px;max-width:${b.width}px;margin:0 auto 10px;object-fit:contain;" />
-    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">${b.wordmark}</div>
-    <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">${b.tagline}</div>
+    <div style="display:block;width:100%;text-align:center;font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">${b.wordmark}</div>
+    <div style="display:block;width:100%;text-align:center;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">${b.tagline}</div>
   </td></tr>
 </table>`;
 }
@@ -330,6 +330,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/Jane\s+Bouchaudey/gi, sender.name)
       .replace(/Jane Bou Jaoude/gi, sender.name)
       .replace(/Jane Bujold/gi, sender.name)
+      .replace(/\{\{sender_phone_name\}\}/g, "Jane Bou Jaoude")
       .replace(/<strong>Jane<\/strong>(\s*&middot;\s*Sales)/gi, `<strong>${sender.name}</strong>$1`)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, senderMailToken)
