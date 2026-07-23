@@ -18,14 +18,14 @@ import { Link } from "react-router-dom";
 import { statusColor, BROKERAGE_REGISTRATION_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 
 const GROUP_OPTIONS = [
-  { value: "pending_group_status", label: "None" },
+  { value: "pending_group_status", label: "Pending group" },
   { value: "has_group", label: "Has group" },
   { value: "no_group", label: "No group" },
   { value: "group_not_required", label: "Group not required" },
 ];
 
 const BRIEFING_STATUS_OPTIONS = [
-  { value: "__none__", label: "None" },
+  { value: "__none__", label: "Briefing status" },
   { value: "pending", label: "Pending" },
   { value: "scheduled", label: "Scheduled" },
   { value: "postponed", label: "Postponed" },
@@ -140,7 +140,26 @@ export default function BrokeragePortal() {
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" })); a.download = `JBJ-brokerage-portal-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
   };
 
-  return <div className="space-y-5 max-w-full overflow-hidden">
+  return <div data-brokerage-portal className="space-y-5 max-w-full overflow-hidden">
+    <style>{`
+      [data-brokerage-portal] .bp-tabs [data-state="active"] {
+        background: linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%) !important;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        box-shadow: none !important;
+      }
+      [data-brokerage-portal] .bp-tabs [data-state="active"] svg,
+      [data-brokerage-portal] .bp-emerald-active svg {
+        color: #FFFFFF !important;
+        stroke: #FFFFFF !important;
+      }
+      [data-brokerage-portal] .bp-emerald-active {
+        background: linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%) !important;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        border-color: #064E3B !important;
+      }
+    `}</style>
     <div className="rounded-[28px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_24px_60px_-42px_rgba(26,26,26,0.45)]">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
         <div className="flex items-start gap-4 min-w-0"><span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center"><Building2 className="size-5 text-white" /></span><div><p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Brokers</p><h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Broker Portal</h1><p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">Owner-only command center for JBJ brokers, external brokerage agencies, uploaded management databases, registration status, group status, briefings and exports.</p></div></div>
@@ -181,11 +200,11 @@ export default function BrokeragePortal() {
       ))}
     </div>
     <AutomationsStrip />
-    <Tabs defaultValue="new-dld" className="w-full">
-      <TabsList className="grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
-        <TabsTrigger value="new-dld" style={{ ['--tw-text-opacity' as any]: 1 }} className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">DLD daily additions</TabsTrigger>
-        <TabsTrigger value="email-status" className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
-        <TabsTrigger value="approval" className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">Uploaded approval</TabsTrigger>
+    <Tabs defaultValue="email-status" className="w-full">
+      <TabsList className="bp-tabs grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
+        <TabsTrigger value="new-dld" className="text-[#064E3B] font-black">DLD daily additions</TabsTrigger>
+        <TabsTrigger value="email-status" className="text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
+        <TabsTrigger value="approval" className="text-[#064E3B] font-black">Uploaded approval</TabsTrigger>
       </TabsList>
       <TabsContent value="new-dld" className="mt-4"><DldSyncHistoryPanel /></TabsContent>
       <TabsContent value="email-status" className="mt-4 space-y-4"><BrandedEmailsLauncherCard variant="broker" /><BrandedEmailDashboard kind="brokerages" /></TabsContent>
@@ -283,7 +302,7 @@ function AutomationsStrip() {
             <RefreshCw className={`size-4 ${busy === "gmail" ? "animate-spin" : ""}`} />
           </Button>
           <Button size="sm" variant="gold" asChild>
-            <Link to="/owner/inbox"><InboxIcon className="size-4 mr-1" /> Inbox</Link>
+            <Link to="/owner/crm/jbj/owner-inbox"><InboxIcon className="size-4 mr-1" /> Inbox</Link>
           </Button>
         </div>
       </div>
@@ -393,9 +412,9 @@ function DldSyncHistoryPanel() {
                 key={value}
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMode(value); }}
-                className="inline-flex items-center justify-center rounded px-3 h-8 min-w-[92px] text-xs font-black uppercase tracking-[0.12em] transition"
+                className={`inline-flex items-center justify-center rounded px-3 h-8 min-w-[92px] text-xs font-black uppercase tracking-[0.12em] transition ${mode === value ? "bp-emerald-active" : ""}`}
                 style={{
-                  background: mode === value ? "#064E3B" : "transparent",
+                  background: mode === value ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "transparent",
                   color: mode === value ? "#FFFFFF" : "#064E3B",
                   WebkitTextFillColor: mode === value ? "#FFFFFF" : "#064E3B",
                 }}
@@ -458,6 +477,8 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
   const group = row.group_status || "pending_group_status";
   const briefing = row.briefing_status || "__none__";
   const color = statusColor(reg);
+  const groupOption = GROUP_OPTIONS.find((o) => o.value === group);
+  const briefingOption = BRIEFING_STATUS_OPTIONS.find((o) => o.value === briefing);
   const domain = (() => {
     const raw = row.website || row.email || "";
     const m = String(raw).match(/@?([a-z0-9.-]+\.[a-z]{2,})/i);
@@ -474,7 +495,7 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
     </div>
     <div className="mt-3 flex flex-wrap gap-1.5 min-h-[28px]">
       <Badge style={{ backgroundColor: color.cssBg, color: color.cssFg }} className="border border-[#B89555]/30">{color.label}</Badge>
-      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{group.replace(/_/g, " ")}</Badge>
+      {group !== "pending_group_status" && <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{groupOption?.label || String(group).replace(/_/g, " ")}</Badge>}
       {briefing !== "__none__" && <Badge className="bg-[#064E3B] text-white border-0 capitalize">{String(briefing).replace(/_/g, " ")}</Badge>}
       {(row.database_source || row.original_filename || row.source) && (
         <Badge variant="outline" className="border-[#064E3B]/40 text-[#064E3B] bg-white gap-1"><Database className="size-3" /> {row.database_source || row.original_filename || row.source}</Badge>
@@ -497,15 +518,14 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
       {agents.length === 0 && <p className="text-xs text-[#1A1A1A]/55">No contact people saved yet.</p>}
       {agents.slice(0, 4).map((agent) => <div key={agent.id} className="rounded-lg border border-[#B89555]/20 bg-white p-2 space-y-2">
         <div className="grid grid-cols-2 gap-2"><Input list={`brokerage-contact-role-${row.id}`} value={agent.role || ""} onChange={(e) => onPatchAgent(agent.id, { role: e.target.value })} className="h-8 border-[#B89555]/25" placeholder="Position" /><Input value={agent.name || ""} onChange={(e) => onPatchAgent(agent.id, { name: e.target.value })} className="h-8 border-[#B89555]/25" placeholder="Name" /></div>
-        <div className="grid grid-cols-2 gap-2"><Input value={agent.email || ""} onChange={(e) => onPatchAgent(agent.id, { email: e.target.value })} className="h-8 border-[#B89555]/25" placeholder="Email" /><Input value={agent.phone || ""} onChange={(e) => onPatchAgent(agent.id, { phone: e.target.value })} className="h-8 border-[#B89555]/25" placeholder="Phone" /></div>
-        <div className="flex gap-2"><Input value={agent.whatsapp || ""} onChange={(e) => onPatchAgent(agent.id, { whatsapp: e.target.value })} className="h-8 border-[#B89555]/25" placeholder="WhatsApp" /><Button size="sm" variant="outline" onClick={() => onDeleteAgent(agent.id)}><Trash2 className="size-3.5" /></Button></div>
+        <div className="grid grid-cols-[1fr_auto] gap-2"><Input value={agent.email || ""} onChange={(e) => onPatchAgent(agent.id, { email: e.target.value })} className="h-8 border-[#B89555]/25" placeholder="Email" /><Button size="sm" variant="outline" aria-label="Remove contact" onClick={() => onDeleteAgent(agent.id)}><Trash2 className="size-3.5" /></Button></div>
       </div>)}
       {agents.length > 4 && <p className="text-xs text-[#1A1A1A]/60">+{agents.length - 4} more contacts connected to this brokerage</p>}
     </div>
     <div className="mt-3 grid gap-2">
-      <Select value={reg} onValueChange={(v) => onPatch({ registration_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BROKERAGE_REGISTRATION_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
-      <Select value={group} onValueChange={(v) => onPatch({ group_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
-      <Select value={briefing} onValueChange={(v) => onPatch({ briefing_status: v === "__none__" ? null : v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Briefing status" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BRIEFING_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+      <Select value={reg} onValueChange={(v) => onPatch({ registration_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Registration status" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BROKERAGE_REGISTRATION_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+      <Select value={group} onValueChange={(v) => onPatch({ group_status: v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Developer group status">{groupOption?.label}</SelectValue></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+      <Select value={briefing} onValueChange={(v) => onPatch({ briefing_status: v === "__none__" ? null : v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Briefing status">{briefingOption?.label}</SelectValue></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BRIEFING_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
     </div>
   </Card>;
 }
