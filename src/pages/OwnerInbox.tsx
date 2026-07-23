@@ -275,7 +275,7 @@ export default function OwnerInbox() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-x-hidden">
-        <div className="container mx-auto px-4 py-6 max-w-6xl" data-owner-batch-fix="inbox">
+        <div className="container mx-auto px-4 py-6 max-w-[1400px]" data-owner-batch-fix="inbox">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
