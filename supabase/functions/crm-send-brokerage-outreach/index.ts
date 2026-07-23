@@ -491,19 +491,11 @@ serve(async (req: Request) => {
     // No fallback rewriter. No AI paraphrase. No subject regeneration.
     let html = renderTemplate(template.html, varsMap);
 
-    // Brand header — Citi Developers logo for brokerage outreach.
-    const CITI_BRAND_HEADER = `<table role="presentation" data-jbj-brand-header="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;">
-  <tr><td align="center" style="padding:22px 16px 18px;background:#ffffff;border-bottom:1px solid rgba(184,149,85,0.4);">
-    <img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/citi-developers-gold.png" alt="Citi Developers" width="164" height="38" style="display:block;width:164px;height:38px;max-width:164px;margin:0 auto 10px;object-fit:contain;" />
-    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:0.22em;color:#0F1A16;text-transform:uppercase;">CITI DEVELOPERS</div>
-    <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.28em;color:#B89555;text-transform:uppercase;margin-top:4px;">Brokerage Partnerships</div>
-  </td></tr>
-</table>`;
-    if (!/data-jbj-brand-header="true"/.test(html)) {
-      html = /<body[^>]*>/i.test(html)
-        ? html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>${CITI_BRAND_HEADER}`)
-        : CITI_BRAND_HEADER + html;
-    }
+    // LOCKED SINGLE-CARD RULE: never inject a separate header block outside the
+    // template's own card. Every branded outreach email — brokerage, developer,
+    // investor — renders as ONE card only. The header, body, featured project,
+    // CTA, signature and contact strip all live inside the same wrapper defined
+    // by the DB template. Do NOT reintroduce a pre-<body> header table here.
 
     // Resend click tracking can rewrite deep links through a browser redirect,
     // which breaks mobile handlers for phone, WhatsApp, Maps and Calendar.

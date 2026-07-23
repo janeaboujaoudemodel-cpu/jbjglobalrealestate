@@ -98,11 +98,10 @@ const JBJ_BRAND_HEADER_HTML = `<table role="presentation" data-jbj-brand-header=
   </td></tr>
 </table>`;
 
-const injectJbjBrandHeader = (html: string) => {
-  if (/data-jbj-brand-header="true"/.test(html)) return html;
-  if (/<body[^>]*>/i.test(html)) return html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>${JBJ_BRAND_HEADER_HTML}`);
-  return JBJ_BRAND_HEADER_HTML + html;
-};
+// LOCKED SINGLE-CARD RULE: never inject a header block outside the template.
+// The DB template is the sole card. This helper is a no-op kept only so the
+// existing call site keeps compiling.
+const injectJbjBrandHeader = (html: string) => html;
 
 const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
   const contactMailLink = `<a href="mailto:${replyTo}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${replyTo.toUpperCase()}</a>`;
