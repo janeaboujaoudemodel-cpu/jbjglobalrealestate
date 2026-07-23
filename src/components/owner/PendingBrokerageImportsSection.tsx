@@ -79,36 +79,26 @@ export default function PendingBrokerageImportsSection() {
 
   const approve = useMutation({
     mutationFn: async (ids: string[]) => {
-      const chunk = 200;
+      // Chunk the RPC to avoid statement timeouts on very large batches.
+      const chunk = 500;
+      let inserted = 0;
+      let skipped = 0;
+      let approved = 0;
       for (let i = 0; i < ids.length; i += chunk) {
         const slice = ids.slice(i, i + chunk);
-        const { data: pending, error: fetchErr } = await supabase
-          .from("crm_pending_brokerage_imports" as any)
-          .select("id,dld_office_number,company_name,company_name_ar,email,phone,website")
-          .in("id", slice);
-        if (fetchErr) throw fetchErr;
-        const inserts = (pending ?? []).map((p: any) => ({
-          company_name: p.company_name,
-          name_arabic: p.company_name_ar || null,
-          dld_office_number: p.dld_office_number,
-          email: p.email,
-          phone: p.phone,
-          website: p.website,
-          entry_source: "dld_broker_offices_xls",
-        }));
-        if (inserts.length) {
-          const { error: insErr } = await supabase.from("crm_brokerages" as any).insert(inserts as any);
-          if (insErr) throw insErr;
-        }
-        const { error: updErr } = await supabase
-          .from("crm_pending_brokerage_imports" as any)
-          .update({ status: "approved", reviewed_at: new Date().toISOString() } as any)
-          .in("id", slice);
-        if (updErr) throw updErr;
+        const { data, error } = await (supabase as any).rpc("approve_pending_brokerage_imports", { _ids: slice });
+        if (error) throw error;
+        const row = Array.isArray(data) ? data[0] : data;
+        inserted += Number(row?.inserted_count ?? 0);
+        skipped += Number(row?.skipped_count ?? 0);
+        approved += Number(row?.approved_count ?? 0);
       }
+      return { inserted, skipped, approved };
     },
-    onSuccess: (_d, ids) => {
-      toast.success(`Approved ${ids.length} brokerage${ids.length === 1 ? "" : "s"} and merged into directory.`);
+    onSuccess: (res) => {
+      toast.success(
+        `Merged ${res.inserted} into directory${res.skipped ? ` · ${res.skipped} already existed` : ""}.`,
+      );
       setSelected(new Set());
       qc.invalidateQueries({ queryKey: ["pending-brokerage-imports"] });
       qc.invalidateQueries({ queryKey: ["brokerage-portal-brokerages"] });
@@ -119,14 +109,18 @@ export default function PendingBrokerageImportsSection() {
 
   const reject = useMutation({
     mutationFn: async (ids: string[]) => {
-      const { error } = await supabase
-        .from("crm_pending_brokerage_imports" as any)
-        .update({ status: "rejected", reviewed_at: new Date().toISOString() } as any)
-        .in("id", ids);
-      if (error) throw error;
+      const chunk = 500;
+      let count = 0;
+      for (let i = 0; i < ids.length; i += chunk) {
+        const slice = ids.slice(i, i + chunk);
+        const { data, error } = await (supabase as any).rpc("reject_pending_brokerage_imports", { _ids: slice });
+        if (error) throw error;
+        count += Number(data ?? 0);
+      }
+      return count;
     },
-    onSuccess: (_d, ids) => {
-      toast.success(`Rejected ${ids.length} entry${ids.length === 1 ? "" : "ies"}.`);
+    onSuccess: (count) => {
+      toast.success(`Rejected ${count} entr${count === 1 ? "y" : "ies"}.`);
       setSelected(new Set());
       qc.invalidateQueries({ queryKey: ["pending-brokerage-imports"] });
     },
