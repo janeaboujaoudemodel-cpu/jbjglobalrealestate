@@ -41669,6 +41669,14 @@ export type Database = {
       }
       anonymize_old_form_submissions: { Args: never; Returns: number }
       apply_dev_excel_import_2027: { Args: never; Returns: Json }
+      approve_pending_brokerage_imports: {
+        Args: { _ids: string[] }
+        Returns: {
+          approved_count: number
+          inserted_count: number
+          skipped_count: number
+        }[]
+      }
       assign_database_rows_to_me: { Args: { row_ids: string[] }; Returns: Json }
       auto_assign_lead_to_available_broker: {
         Args: { p_lead_id: string }
@@ -42738,6 +42746,10 @@ export type Database = {
       }
       refresh_auto_featured: { Args: { p_surface: string }; Returns: undefined }
       refresh_vault_ranking: { Args: never; Returns: undefined }
+      reject_pending_brokerage_imports: {
+        Args: { _ids: string[] }
+        Returns: number
+      }
       rel_followup_due_sends: {
         Args: never
         Returns: {
