@@ -704,9 +704,10 @@ serve(async (req: Request) => {
       subject,
       resendMessageId: messageId,
       providerResponse: { status: resendResult.status, data: resendResult.data },
-      idempotencyKey: buildIdempotencyKey([
-        "brokerage", variant, brk.id, new Date().toISOString().slice(0, 10),
-      ]),
+      idempotencyKey: buildIntendedSendKey({
+        portalKind: "brokerage", sendType: "live",
+        templateSlug: variant, entityId: brk.id, emailNorm: recipient,
+      }),
     });
 
 
