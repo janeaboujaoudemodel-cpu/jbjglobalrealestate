@@ -62,6 +62,7 @@ import {
   Inbox,
   Zap,
   AlertTriangle,
+  Wallet,
   type LucideIcon,
 } from "lucide-react";
 
