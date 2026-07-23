@@ -1166,6 +1166,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                         type="button"
                         onClick={() => setActiveCalendarAccount(acc)}
                         data-no-contrast-guard="true"
+                        data-cal-active-pill={isActive ? "true" : undefined}
                         className="flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black border transition"
                         style={{
                           background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FFFFFF",
@@ -1175,7 +1176,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                         }}
                         aria-pressed={isActive}
                       >
-                        {isActive ? <Check className="size-3" /> : null}
+                        {isActive ? <Check className="size-3" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> : null}
                         {label}
                       </button>
                     );
