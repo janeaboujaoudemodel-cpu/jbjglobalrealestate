@@ -18,7 +18,7 @@ import {
   enforceAllowedSender,
 } from "../_shared/outreachIdentity.ts";
 import { sendViaResend } from "../_shared/resendClient.ts";
-import { recordJbjResendSend, buildIdempotencyKey } from "../_shared/jbjSpine.ts";
+import { recordJbjResendSend, buildIntendedSendKey } from "../_shared/jbjSpine.ts";
 
 
 const corsHeaders = {
@@ -650,10 +650,11 @@ serve(async (req: Request) => {
         subject,
         resendMessageId: messageId,
         providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
-        idempotencyKey: buildIdempotencyKey([
-          "brokerage", variant, "test", recipient,
-          messageId || String(Date.now()),
-        ]),
+        idempotencyKey: buildIntendedSendKey({
+          portalKind: "brokerage", sendType: "test",
+          templateSlug: variant, entityId: brk?.id ?? null, emailNorm: recipient,
+          nonce: messageId || String(Date.now()),
+        }),
       });
       return new Response(JSON.stringify({
         ok: true, test: true, recipient, messageId, threadId,
@@ -703,9 +704,10 @@ serve(async (req: Request) => {
       subject,
       resendMessageId: messageId,
       providerResponse: { status: resendResult.status, data: resendResult.data },
-      idempotencyKey: buildIdempotencyKey([
-        "brokerage", variant, brk.id, new Date().toISOString().slice(0, 10),
-      ]),
+      idempotencyKey: buildIntendedSendKey({
+        portalKind: "brokerage", sendType: "live",
+        templateSlug: variant, entityId: brk.id, emailNorm: recipient,
+      }),
     });
 
 

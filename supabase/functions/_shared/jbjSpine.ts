@@ -75,7 +75,37 @@ export async function recordJbjResendSend(args: JbjRecordArgs): Promise<string |
   }
 }
 
-/** Convenience: build a stable idempotency key for a live send. */
+/**
+ * Convenience: build a stable idempotency key for a live send.
+ *
+ * Contract (Phase 1 correction):
+ *   `${portalKind}:${sendType}:${templateSlug}:${templateVersion||'v0'}:${entityId||emailNorm}`
+ * where `sendType` is 'live' | 'test'. Live keys collapse repeat sends of the
+ * same logical intent (same recipient + same template version) into one spine
+ * row. Test keys should include a fresh nonce (timestamp or Resend message id)
+ * to allow explicit re-tests.
+ *
+ * Accepts an array of parts for backwards-compat with existing callers.
+ */
 export function buildIdempotencyKey(parts: (string | null | undefined)[]): string {
   return parts.filter(Boolean).join(":").toLowerCase();
+}
+
+export interface IntendedSendKeyArgs {
+  portalKind: JbjPortalKind;
+  sendType: "live" | "test";
+  templateSlug: string;
+  templateVersion?: string | null;
+  entityId?: string | null;
+  emailNorm?: string | null;
+  nonce?: string | null; // only for test sends
+}
+
+/** Preferred key builder — intended-send-specific. */
+export function buildIntendedSendKey(a: IntendedSendKeyArgs): string {
+  const version = a.templateVersion ?? "v0";
+  const target = a.entityId ?? (a.emailNorm || "").toLowerCase();
+  const base = [a.portalKind, a.sendType, a.templateSlug, version, target];
+  if (a.sendType === "test") base.push(a.nonce || String(Date.now()));
+  return base.filter(Boolean).join(":").toLowerCase();
 }

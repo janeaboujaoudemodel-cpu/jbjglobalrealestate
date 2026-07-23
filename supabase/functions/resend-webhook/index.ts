@@ -4,10 +4,16 @@
 //
 // Configure in Resend dashboard → Webhooks → Add endpoint pointing at:
 //   https://<project>.supabase.co/functions/v1/resend-webhook
-// Optional signature verification requires `RESEND_WEBHOOK_SECRET`.
+// Then subscribe to: email.sent, email.delivered, email.delivery_delayed,
+//   email.bounced, email.complained, email.opened, email.clicked.
+//
+// Signature verification: Resend signs webhooks with Svix (svix-id,
+// svix-timestamp, svix-signature). If `RESEND_WEBHOOK_SECRET` is set (starts
+// with `whsec_`), we verify signatures and reject unsigned/mismatched deliveries.
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { Webhook } from "npm:svix@1.24.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -33,9 +39,40 @@ serve(async (req: Request) => {
     return new Response("Method not allowed", { status: 405, headers: corsHeaders });
   }
 
+  const rawBody = await req.text();
+  const secret = Deno.env.get("RESEND_WEBHOOK_SECRET") || "";
+
+  // Signature verification (mandatory when secret is configured).
+  if (secret) {
+    const svixId = req.headers.get("svix-id");
+    const svixTs = req.headers.get("svix-timestamp");
+    const svixSig = req.headers.get("svix-signature");
+    if (!svixId || !svixTs || !svixSig) {
+      console.warn("[resend-webhook] missing svix headers");
+      return new Response(JSON.stringify({ error: "missing_signature" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    try {
+      const wh = new Webhook(secret);
+      wh.verify(rawBody, {
+        "svix-id": svixId,
+        "svix-timestamp": svixTs,
+        "svix-signature": svixSig,
+      });
+    } catch (err) {
+      console.warn("[resend-webhook] signature invalid:", (err as Error).message);
+      return new Response(JSON.stringify({ error: "invalid_signature" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  } else {
+    console.warn("[resend-webhook] RESEND_WEBHOOK_SECRET not set — accepting unverified events");
+  }
+
   let payload: ResendEvent;
   try {
-    payload = (await req.json()) as ResendEvent;
+    payload = JSON.parse(rawBody) as ResendEvent;
   } catch {
     return new Response(JSON.stringify({ error: "invalid_json" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },

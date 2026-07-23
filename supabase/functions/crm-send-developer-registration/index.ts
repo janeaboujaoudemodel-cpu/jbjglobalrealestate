@@ -10,7 +10,7 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendViaResend } from "../_shared/resendClient.ts";
-import { recordJbjResendSend, buildIdempotencyKey } from "../_shared/jbjSpine.ts";
+import { recordJbjResendSend, buildIntendedSendKey } from "../_shared/jbjSpine.ts";
 
 
 const corsHeaders = {
@@ -327,10 +327,11 @@ serve(async (req: Request) => {
         subject,
         resendMessageId: resendResult.data?.id || null,
         providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
-        idempotencyKey: buildIdempotencyKey([
-          "developer", variant, "test", recipient,
-          resendResult.data?.id || String(Date.now()),
-        ]),
+        idempotencyKey: buildIntendedSendKey({
+          portalKind: "developer", sendType: "test",
+          templateSlug: variant, entityId: dev?.id ?? null, emailNorm: recipient,
+          nonce: resendResult.data?.id || String(Date.now()),
+        }),
       });
 
       return new Response(JSON.stringify({
@@ -435,9 +436,10 @@ serve(async (req: Request) => {
       subject,
       resendMessageId: messageId,
       providerResponse: { status: resendLive.status, data: resendLive.data },
-      idempotencyKey: buildIdempotencyKey([
-        "developer", variant, dev.id, nowIso.slice(0, 10),
-      ]),
+      idempotencyKey: buildIntendedSendKey({
+        portalKind: "developer", sendType: "live",
+        templateSlug: variant, entityId: dev.id, emailNorm: recipient,
+      }),
     });
 
     if (sourceTable === "crm_developer_registry" && newStatus !== dev.status) {
