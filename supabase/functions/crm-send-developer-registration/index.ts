@@ -315,6 +315,24 @@ serve(async (req: Request) => {
         });
       }
 
+      // Record test send in the spine too (for audit/idempotency visibility).
+      await recordJbjResendSend({
+        portalKind: "developer",
+        entityType: "developer",
+        entityId: dev?.id ?? null,
+        email: recipient,
+        templateSlug: variant,
+        senderEmail: replyTo,
+        replyTo,
+        subject,
+        resendMessageId: resendResult.data?.id || null,
+        providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
+        idempotencyKey: buildIdempotencyKey([
+          "developer", variant, "test", recipient,
+          resendResult.data?.id || String(Date.now()),
+        ]),
+      });
+
       return new Response(JSON.stringify({
         ok: true,
         test: true,
@@ -329,39 +347,44 @@ serve(async (req: Request) => {
       });
     }
 
-    if (!LOVABLE_API_KEY || !GMAIL_API_KEY) {
-      throw new Error("Gmail connector not configured");
-    }
-
-    const raw = buildRawMime({
+    // === LIVE SEND (Resend, verified domain) ===
+    const resendLive = await sendViaResend({
       from: `${fromName} <${replyTo}>`,
       to: recipient,
-      cc,
+      cc: cc.length ? cc : undefined,
+      reply_to: replyTo,
       subject,
       html,
-      replyTo,
-    });
-
-    const gmailRes = await fetch(`${GMAIL_GATEWAY}/users/me/messages/send`, {
-      method: "POST",
       headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-        "X-Connection-Api-Key": GMAIL_API_KEY,
-        "Content-Type": "application/json",
+        "X-JBJ-Outreach": "developer-registration",
+        "X-JBJ-Variant": variant,
       },
-      body: JSON.stringify({ raw }),
+      tags: [
+        { name: "variant", value: variant },
+        { name: "mode", value: "production" },
+        { name: "portal", value: "developer" },
+      ],
     });
 
-    const gmailJson = await gmailRes.json();
-    if (!gmailRes.ok) {
-      console.error("Gmail send failed:", gmailRes.status, gmailJson);
-      return new Response(JSON.stringify({ error: gmailJson?.error?.message || "Gmail send failed", details: gmailJson }), {
-        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    if (!resendLive.ok) {
+      console.error("Resend developer live failed:", resendLive.status, resendLive.error, resendLive.data);
+      const isAuth = resendLive.status === 401 || /api key/i.test(String(resendLive.error || ""));
+      return new Response(JSON.stringify({
+        error: isAuth
+          ? "Resend API key is invalid. Update RESEND_API_KEY in Cloud → Secrets."
+          : (resendLive.error || "Resend send failed"),
+        code: isAuth ? "RESEND_AUTH_INVALID" : "RESEND_SEND_FAILED",
+        upstream_status: resendLive.status,
+        details: resendLive.data,
+        quota: resendLive.quota,
+      }), {
+        status: resendLive.status >= 400 && resendLive.status < 600 ? resendLive.status : 502,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const messageId: string | null = gmailJson?.id || null;
-    const threadId: string | null = gmailJson?.threadId || null;
+    const messageId: string | null = resendLive.data?.id || null;
+    const threadId: string | null = null;
 
     const nowIso = new Date().toISOString();
     const newStatus = sourceTable === "developers"
@@ -383,13 +406,13 @@ serve(async (req: Request) => {
       }).eq("id", dev.id);
     }
 
-    // Log outbound email
+    // Legacy log (kept for backwards-compat while dashboards migrate).
     await service.from("crm_relationship_email_log").insert({
       owner_id: user.id,
       entity_type: "developer_registry",
       entity_id: dev.id,
       direction: "outbound",
-      sent_via: "gmail",
+      sent_via: "resend",
       external_message_id: messageId,
       thread_id: threadId,
       from_email: replyTo,
@@ -398,6 +421,23 @@ serve(async (req: Request) => {
       subject,
       body_snippet: `Sent ${variant === "developer_confirm_registered" ? "confirmation request" : "broker registration package"} to ${dev.developer_name}`,
       sent_at: nowIso,
+    });
+
+    // Canonical JBJ spine record.
+    await recordJbjResendSend({
+      portalKind: "developer",
+      entityType: "developer",
+      entityId: dev.id,
+      email: recipient,
+      templateSlug: variant,
+      senderEmail: replyTo,
+      replyTo,
+      subject,
+      resendMessageId: messageId,
+      providerResponse: { status: resendLive.status, data: resendLive.data },
+      idempotencyKey: buildIdempotencyKey([
+        "developer", variant, dev.id, nowIso.slice(0, 10),
+      ]),
     });
 
     if (sourceTable === "crm_developer_registry" && newStatus !== dev.status) {
@@ -412,9 +452,10 @@ serve(async (req: Request) => {
       });
     }
 
-    return new Response(JSON.stringify({ ok: true, recipient, messageId, threadId, variant }), {
+    return new Response(JSON.stringify({ ok: true, recipient, messageId, threadId, variant, sent_via: "resend", quota: resendLive.quota }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+
   } catch (e: any) {
     console.error("crm-send-developer-registration error:", e);
     return new Response(JSON.stringify({ error: e?.message || "Internal error" }), {
