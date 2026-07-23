@@ -173,27 +173,31 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       registrationStatus: r.registration_status || "not_registered",
     }));
   }
+  // Single paginated fetch with inline count — avoids a separate HEAD
+  // request that can fail with "Failed to fetch" in some browsers.
   const PAGE_SIZE = 1000;
-  const { count, error: countError } = await (supabase as any)
+  const rows: any[] = [];
+  let from = 0;
+  // Fetch first page with exact count so we know how many pages to pull.
+  const first = await (supabase as any)
     .from("crm_brokerages")
-    .select("id", { count: "exact", head: true });
-  if (countError) throw countError;
-  const total = Number(count ?? 0);
-  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const chunks = await Promise.all(
-    Array.from({ length: pages }, (_, page) => {
-      const from = page * PAGE_SIZE;
-      const to = from + PAGE_SIZE - 1;
-      return (supabase as any)
-        .from("crm_brokerages")
-        .select("id, company_name, email, emirate, website, logo_url")
-        .order("company_name")
-        .range(from, to);
-    })
-  );
-  const firstError = chunks.find((chunk: any) => chunk.error)?.error;
-  if (firstError) throw firstError;
-  const rows = chunks.flatMap((chunk: any) => chunk.data ?? []);
+    .select("id, company_name, email, emirate, website, logo_url", { count: "exact" })
+    .order("company_name")
+    .range(from, from + PAGE_SIZE - 1);
+  if (first.error) throw first.error;
+  rows.push(...(first.data ?? []));
+  const total = Number(first.count ?? rows.length);
+  from += PAGE_SIZE;
+  while (from < total) {
+    const next = await (supabase as any)
+      .from("crm_brokerages")
+      .select("id, company_name, email, emirate, website, logo_url")
+      .order("company_name")
+      .range(from, from + PAGE_SIZE - 1);
+    if (next.error) throw next.error;
+    rows.push(...(next.data ?? []));
+    from += PAGE_SIZE;
+  }
   return rows.map((r: any) => ({
     id: String(r.id),
     name: r.company_name || "Brokerage",
@@ -202,6 +206,7 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
     logoUrl: r.logo_url || null,
     websiteUrl: r.website || null,
   }));
+
 }
 
 function isDeveloperRegistrationCampaign(kind: BrandedAudienceKind, template: Template | null | undefined) {
