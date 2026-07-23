@@ -622,7 +622,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   useEffect(() => {
     if (!open || !selectedTemplate) return;
     let cancelled = false;
-    const entityType = kind === "developers" ? "developer_registry" : "brokerage";
+    const entityType = kind === "developers" ? "developer_registry" : kind === "clients" ? "investor" : "brokerage";
     (async () => {
       const { data } = await (supabase as any)
         .from("crm_relationship_email_log")
