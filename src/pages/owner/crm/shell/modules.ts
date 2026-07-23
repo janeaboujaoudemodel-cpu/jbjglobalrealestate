@@ -190,7 +190,7 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-featured-projects": "/owner/properties/featured",
   "owner-property-map": "/owner/map",
   "owner-listing-admin": "/owner/listing-admin",
-  "owner-inbox": "/owner/inbox",
+  "owner-inbox": "/owner/crm/jbj/owner-inbox",
   "owner-team-chat": "/owner/team-chat",
   "owner-relationships": "/owner/crm/jbj/owner-relationships",
   "owner-founder-assistant": "/owner/founder-assistant",
