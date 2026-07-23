@@ -223,7 +223,7 @@ serve(async (req: Request) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
 
-    const fromName = "Amelia — JBJ Global Real Estate";
+    const fromName = "Jane Bou Jaoude — JBJ Global Real Estate";
     const replyTo = "helpdesk@jbj.ae";
     const activeCcArr = Array.isArray(settings.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
     const legacyCc = (settings.cc_email || "").trim();
