@@ -56,6 +56,35 @@ function categoryToKey(raw?: string | null): string | null {
   return null;
 }
 
+function slugify(v?: string | null) {
+  const base = String(v || "developer")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 54);
+  return base || "developer";
+}
+
+async function getDefaultOwnerId(admin: ReturnType<typeof createClient>) {
+  const { data: brokerageOwner } = await admin
+    .from("crm_brokerages")
+    .select("owner_id")
+    .not("owner_id", "is", null)
+    .limit(1)
+    .maybeSingle();
+  if (brokerageOwner?.owner_id) return brokerageOwner.owner_id as string;
+
+  const { data: developerOwner } = await admin
+    .from("crm_developer_registry")
+    .select("owner_id")
+    .not("owner_id", "is", null)
+    .limit(1)
+    .maybeSingle();
+  return (developerOwner?.owner_id as string | undefined) ?? null;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -75,6 +104,14 @@ Deno.serve(async (req) => {
     }
 
     const summary: Record<string, any> = {};
+    const ownerId = await getDefaultOwnerId(admin);
+
+    if (!ownerId) {
+      return new Response(JSON.stringify({ error: "OWNER_ID_MISSING", message: "DLD ingest cannot merge rows until an owner record exists." }), {
+        status: 412,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // ── DEVELOPERS ────────────────────────────────────────────
     {
@@ -93,15 +130,15 @@ Deno.serve(async (req) => {
 
         const { data: candidates } = await admin
           .from("crm_developer_registry")
-          .select("id,name,email,phone_number")
-          .ilike("name", `%${(s.name_en || "").slice(0, 40)}%`)
+          .select("id,developer_name,developer_email,phone")
+          .ilike("developer_name", `%${(s.name_en || "").slice(0, 40)}%`)
           .limit(10);
 
         let exact = false, conflictRow: any = null;
         for (const c of candidates ?? []) {
-          const cname = normName(c.name);
-          const cemail = normEmail(c.email);
-          const cphone = normPhone(c.phone_number);
+          const cname = normName(c.developer_name);
+          const cemail = normEmail(c.developer_email);
+          const cphone = normPhone(c.phone);
           if (cname !== name) continue;
           if (cemail && email && cemail === email && cphone && phone && cphone === phone) {
             exact = true; break;
@@ -132,13 +169,22 @@ Deno.serve(async (req) => {
           continue;
         }
         // Insert new
+        const developerName = s.name_en || name;
         const { error: insErr } = await admin.from("crm_developer_registry").insert({
-          name: s.name_en,
-          name_ar: s.name_ar,
-          license_number: s.license_no,
-          phone_number: s.phone,
-          email: s.email,
-          status: s.status,
+          owner_id: ownerId,
+          developer_name: developerName,
+          developer_slug: `${slugify(developerName)}-${String(s.license_no || crypto.randomUUID()).replace(/[^a-zA-Z0-9]/g, "").slice(0, 10).toLowerCase()}`,
+          developer_email: s.email,
+          phone: s.phone,
+          developer_contact: {
+            name_arabic: s.name_ar ?? null,
+            license_number: s.license_no ?? null,
+            dld_status: s.status ?? null,
+            raw: s,
+          },
+          source_detail: "DLD Developer Register import",
+          database_source: "DLD",
+          original_filename: "DLD Developer Register",
           dld_source: "dld_daily",
           first_seen_at: new Date().toISOString(),
         } as any);
@@ -169,7 +215,7 @@ Deno.serve(async (req) => {
 
         const { data: candidates } = await admin
           .from("crm_brokerages")
-          .select("id,company_name,email,phone_number")
+          .select("id,company_name,email,phone")
           .ilike("company_name", `%${(s.name_en || "").slice(0, 40)}%`)
           .limit(10);
 
@@ -177,7 +223,7 @@ Deno.serve(async (req) => {
         for (const c of candidates ?? []) {
           const cname = normName(c.company_name);
           const cemail = normEmail(c.email);
-          const cphone = normPhone(c.phone_number);
+          const cphone = normPhone(c.phone);
           if (cname !== name) continue;
           if (cemail && email && cemail === email && cphone && phone && cphone === phone) {
             exact = true; break;
@@ -208,13 +254,20 @@ Deno.serve(async (req) => {
           continue;
         }
         const { error: insErr } = await admin.from("crm_brokerages").insert({
+          owner_id: ownerId,
           company_name: s.name_en,
-          name_ar: s.name_ar,
+          name_arabic: s.name_ar,
           manager: s.manager,
-          phone_number: s.phone,
+          phone: s.phone,
           email: s.email,
+          office_location: s.area,
           dld_office_no: s.office_no,
+          dld_office_number: s.office_no,
           dld_area: s.area,
+          source: "dld_register",
+          source_detail: "DLD Broker Offices import",
+          database_source: "DLD",
+          original_filename: "DLD Broker Offices Register",
           dld_source: "dld_daily",
           first_seen_at: new Date().toISOString(),
         } as any);

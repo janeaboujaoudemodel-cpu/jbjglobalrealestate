@@ -49,7 +49,7 @@ async function analyzeDeveloperReply(args: { subject: string; snippet: string })
     headers: { "Lovable-API-Key": key, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
   });
 
-  const prompt = `Analyze this inbound reply from a real-estate developer about broker/agency registration.\n\nSubject: ${args.subject}\n\nMessage:\n${args.snippet.slice(0, 6000)}\n\nReturn: summary, registrationStatus, registrationLink, requestedDocuments, nextAction, draftResponse. registrationStatus should be one of: registered, pending_application, documents_required, under_review, rejected, not_started. If they say JBJ is already registered, use registered. If they provide a registration form/link, include the link and use pending_application unless already registered. Keep draftResponse ready for Jane to send.`;
+  const prompt = `Analyze this inbound reply from a real-estate developer about broker/agency registration.\n\nSubject: ${args.subject}\n\nMessage:\n${args.snippet.slice(0, 6000)}\n\nReturn: summary, registrationStatus, registrationLink, requestedDocuments, nextAction, draftResponse. registrationStatus should be one of: registered, pending_application, documents_required, under_review, rejected, not_started.\n\nRules:\n- Use registered ONLY when the reply explicitly says JBJ / our company / our agency is already registered, approved, active, or onboarded.\n- A registration link by itself is NOT registered. Include registrationLink, but keep status not_started unless they ask us to submit/apply; use pending_application only if they say an application was submitted, is in progress, or should be completed through that link.\n- If they ask for missing documents, KYC, forms, license, passport, trade license, RERA, NOC, banking, or signatures, use documents_required and list every requested document.\n- If they say they are checking/reviewing, use under_review.\n- If they reject/decline, use rejected.\nKeep draftResponse ready for Jane Bou Jaoude to send.`;
 
   try {
     const { output } = await generateText({
@@ -75,6 +75,24 @@ function normalizeRegistrationStatus(value: unknown) {
   if (/review/.test(v)) return "under_review";
   if (/reject|declin/.test(v)) return "rejected";
   if (/link|form|apply|application/.test(v)) return "pending_application";
+  return null;
+}
+
+function inferDeveloperStatus(args: { analysis: any; subject: string; snippet: string }) {
+  const text = `${args.subject}\n${args.snippet}`.toLowerCase();
+  const status = normalizeRegistrationStatus(args.analysis?.registrationStatus);
+  const docs = Array.isArray(args.analysis?.requestedDocuments) ? args.analysis.requestedDocuments.filter(Boolean) : [];
+  if (docs.length > 0 || /\b(passport|trade license|trade licence|rera|noc|kyc|bank details|iban|signature|signed|documents?|missing|required document|license copy|licence copy)\b/i.test(text)) {
+    return "documents_required";
+  }
+  if (/\b(jbj|your company|your agency|your brokerage|you are|already|has been|have been|is)\b.{0,80}\b(registered|approved|active|onboarded)\b/i.test(text)) {
+    return "registered";
+  }
+  if (status === "registered") return null;
+  if (status) return status;
+  if (/\b(under review|reviewing|checking|pending approval|being processed)\b/i.test(text)) return "under_review";
+  if (/\b(rejected|declined|not accepting|cannot register)\b/i.test(text)) return "rejected";
+  if (/\b(submitted|application is pending|application is in progress|complete the application|fill the form|apply through|registration form)\b/i.test(text)) return "pending_application";
   return null;
 }
 
@@ -223,7 +241,7 @@ async function markRelationshipReply(
 
   if (developer?.id) {
     const analysis = await analyzeDeveloperReply({ subject: args.subject, snippet: args.snippet });
-    const nextStatus = normalizeRegistrationStatus(analysis?.registrationStatus) || (analysis?.registrationLink ? "pending_application" : null);
+    const nextStatus = inferDeveloperStatus({ analysis, subject: args.subject, snippet: args.snippet });
     const requestedDocs = Array.isArray(analysis?.requestedDocuments) && analysis.requestedDocuments.length
       ? ` Requested documents: ${analysis.requestedDocuments.join(", ")}.`
       : "";

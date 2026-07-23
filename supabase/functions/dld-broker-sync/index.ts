@@ -29,6 +29,29 @@ function parseCsv(text: string): Record<string, string>[] {
   return rows;
 }
 
+async function getDefaultOwnerId(supabase: ReturnType<typeof createClient>) {
+  const { data: brokerageOwner } = await supabase
+    .from("crm_brokerages")
+    .select("owner_id")
+    .not("owner_id", "is", null)
+    .limit(1)
+    .maybeSingle();
+  if (brokerageOwner?.owner_id) return brokerageOwner.owner_id as string;
+
+  const { data: developerOwner } = await supabase
+    .from("crm_developer_registry")
+    .select("owner_id")
+    .not("owner_id", "is", null)
+    .limit(1)
+    .maybeSingle();
+  return (developerOwner?.owner_id as string | undefined) ?? null;
+}
+
+function isCreatedDuringRun(createdAt: string | null | undefined, startedAt: string) {
+  if (!createdAt) return false;
+  return new Date(createdAt).getTime() >= new Date(startedAt).getTime() - 1000;
+}
+
 async function fetchCsv(url: string): Promise<Record<string, string>[]> {
   const res = await fetch(url, {
     headers: { "User-Agent": "JBJ-Broker-Sync/1.0" },
@@ -42,6 +65,13 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
   const started = new Date().toISOString();
+  const ownerId = await getDefaultOwnerId(supabase);
+  if (!ownerId) {
+    return new Response(
+      JSON.stringify({ ok: false, status: "failed", error: "OWNER_ID_MISSING" }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 412 },
+    );
+  }
 
   let agenciesInserted = 0, agenciesUpdated = 0;
   let brokersInserted = 0, brokersUpdated = 0;
@@ -58,12 +88,21 @@ Deno.serve(async (req) => {
       const name = r["office_name_en"] || r["office_name"] || r["name"];
       if (!name) continue;
       batches.push({
+        owner_id: ownerId,
         company_name: name,
         emirate: "Dubai",
         country: "United Arab Emirates",
         phone: r["phone"] || r["phone_no"] || null,
         email: r["email"] || null,
         office_address: r["address"] || r["office_address"] || null,
+        office_location: r["area"] || r["area_en"] || r["office_area"] || null,
+        dld_area: r["area"] || r["area_en"] || r["office_area"] || null,
+        dld_office_number: r["office_no"] || r["office_number"] || r["license_no"] || null,
+        dld_office_no: r["office_no"] || r["office_number"] || r["license_no"] || null,
+        dld_source: "dld_daily",
+        first_seen_at: started,
+        database_source: "DLD",
+        original_filename: "DLD Broker Offices Register",
         source: "dld_register",
         source_detail: "DLD Broker Offices import",
       });
@@ -72,10 +111,12 @@ Deno.serve(async (req) => {
       const slice = batches.slice(i, i + 500);
       const { data, error } = await supabase
         .from("crm_brokerages")
-        .upsert(slice, { onConflict: "company_name", ignoreDuplicates: false, count: "exact" })
-        .select("id");
+        .upsert(slice, { onConflict: "company_name", ignoreDuplicates: true, count: "exact" })
+        .select("id,created_at");
       if (error) throw error;
-      agenciesInserted += (data?.length || 0);
+      const createdNow = (data ?? []).filter((row: any) => isCreatedDuringRun(row.created_at, started)).length;
+      agenciesInserted += createdNow;
+      agenciesUpdated += Math.max(0, slice.length - createdNow);
     }
   } catch (e) {
     status = "partial";
@@ -106,9 +147,11 @@ Deno.serve(async (req) => {
       const { data, error } = await supabase
         .from("crm_brokers")
         .upsert(slice, { onConflict: "email_lower", ignoreDuplicates: false })
-        .select("id");
+        .select("id,created_at");
       if (error) throw error;
-      brokersInserted += (data?.length || 0);
+      const createdNow = (data ?? []).filter((row: any) => isCreatedDuringRun(row.created_at, started)).length;
+      brokersInserted += createdNow;
+      brokersUpdated += Math.max(0, (data?.length || 0) - createdNow);
     }
   } catch (e) {
     status = status === "partial" ? "failed" : "partial";
@@ -127,6 +170,7 @@ Deno.serve(async (req) => {
     brokers_updated: brokersUpdated,
     error_message: errMsg,
     raw_summary: summary,
+    brokerages_new: agenciesInserted,
   });
 
   return new Response(
@@ -134,7 +178,9 @@ Deno.serve(async (req) => {
       ok: status !== "failed",
       status,
       agencies_inserted: agenciesInserted,
+      agencies_updated: agenciesUpdated,
       brokers_inserted: brokersInserted,
+      brokers_updated: brokersUpdated,
       error: errMsg,
     }),
     { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 },
