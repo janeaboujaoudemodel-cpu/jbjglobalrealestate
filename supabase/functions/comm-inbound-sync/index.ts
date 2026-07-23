@@ -38,7 +38,9 @@ function cleanAiJson(text: string) {
   try { return JSON.parse(cleaned.slice(s, e + 1)); } catch { return null; }
 }
 
-async function analyzeDeveloperReply(args: { subject: string; snippet: string }) {
+type InboundSide = "developer" | "brokerage";
+
+async function analyzeInboundReply(args: { side: InboundSide; subject: string; snippet: string }) {
   const key = Deno.env.get("LOVABLE_API_KEY");
   const fallbackLink = firstUrl(`${args.subject}\n${args.snippet}`);
   if (!key) return fallbackLink ? { registrationLink: fallbackLink } : null;
@@ -49,7 +51,11 @@ async function analyzeDeveloperReply(args: { subject: string; snippet: string })
     headers: { "Lovable-API-Key": key, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
   });
 
-  const prompt = `Analyze this inbound reply from a real-estate developer about broker/agency registration.\n\nSubject: ${args.subject}\n\nMessage:\n${args.snippet.slice(0, 6000)}\n\nReturn: summary, registrationStatus, registrationLink, requestedDocuments, nextAction, draftResponse. registrationStatus should be one of: registered, pending_application, documents_required, under_review, rejected, not_started.\n\nRules:\n- Use registered ONLY when the reply explicitly says JBJ / our company / our agency is already registered, approved, active, or onboarded.\n- A registration link by itself is NOT registered. Include registrationLink, but keep status not_started unless they ask us to submit/apply; use pending_application only if they say an application was submitted, is in progress, or should be completed through that link.\n- If they ask for missing documents, KYC, forms, license, passport, trade license, RERA, NOC, banking, or signatures, use documents_required and list every requested document.\n- If they say they are checking/reviewing, use under_review.\n- If they reject/decline, use rejected.\nKeep draftResponse ready for Jane Bou Jaoude to send.`;
+  const contextBlock = args.side === "developer"
+    ? `Context: You (Jane Bou Jaoude at JBJ Global Real Estate) sent a request to register JBJ as a broker with this developer. The reply below is FROM the developer TO Jane. registrationStatus refers to whether JBJ is registered with the developer.`
+    : `Context: You (Jane Bou Jaoude at CITI Developers, Sales & Training) invited this brokerage to register with CITI Developers to sell CITI's projects. The reply below is FROM the brokerage TO Jane. registrationStatus refers to whether the brokerage is registered with CITI Developers.`;
+
+  const prompt = `${contextBlock}\n\nSubject: ${args.subject}\n\nMessage:\n${args.snippet.slice(0, 6000)}\n\nReturn: summary, registrationStatus, registrationLink, requestedDocuments, nextAction, draftResponse. registrationStatus MUST be one of: registered, pending_application, documents_required, under_review, rejected, not_started.\n\nRules:\n- Use registered ONLY when the reply explicitly says we are already registered / approved / active / onboarded.\n- A registration or portal link by itself is NOT registered. Set registrationLink, and use pending_application only if they say an application was submitted or must be completed through that link; otherwise keep not_started.\n- If they ask for missing documents, KYC, forms, license, passport, trade license, RERA, NOC, banking, signatures, or a signed agreement, use documents_required and list every requested document in requestedDocuments.\n- If they say they are checking/reviewing, use under_review.\n- If they reject/decline, use rejected.\n- draftResponse must be a ready-to-send reply from Jane Bou Jaoude, ${args.side === "developer" ? "signing off as Jane Bou Jaoude, JBJ Global Real Estate" : "signing off as Jane Bou Jaoude, CITI Developers"}.`;
 
   try {
     const { output } = await generateText({
@@ -78,11 +84,11 @@ function normalizeRegistrationStatus(value: unknown) {
   return null;
 }
 
-function inferDeveloperStatus(args: { analysis: any; subject: string; snippet: string }) {
+function inferRegistrationStatus(args: { analysis: any; subject: string; snippet: string }) {
   const text = `${args.subject}\n${args.snippet}`.toLowerCase();
   const status = normalizeRegistrationStatus(args.analysis?.registrationStatus);
   const docs = Array.isArray(args.analysis?.requestedDocuments) ? args.analysis.requestedDocuments.filter(Boolean) : [];
-  if (docs.length > 0 || /\b(passport|trade license|trade licence|rera|noc|kyc|bank details|iban|signature|signed|documents?|missing|required document|license copy|licence copy)\b/i.test(text)) {
+  if (docs.length > 0 || /\b(passport|trade license|trade licence|rera|noc|kyc|bank details|iban|signature|signed|documents?|missing|required document|license copy|licence copy|signed agreement)\b/i.test(text)) {
     return "documents_required";
   }
   if (/\b(jbj|your company|your agency|your brokerage|you are|already|has been|have been|is)\b.{0,80}\b(registered|approved|active|onboarded)\b/i.test(text)) {
@@ -91,7 +97,7 @@ function inferDeveloperStatus(args: { analysis: any; subject: string; snippet: s
   if (status === "registered") return null;
   if (status) return status;
   if (/\b(under review|reviewing|checking|pending approval|being processed)\b/i.test(text)) return "under_review";
-  if (/\b(rejected|declined|not accepting|cannot register)\b/i.test(text)) return "rejected";
+  if (/\b(rejected|declined|not accepting|cannot register|not interested)\b/i.test(text)) return "rejected";
   if (/\b(submitted|application is pending|application is in progress|complete the application|fill the form|apply through|registration form)\b/i.test(text)) return "pending_application";
   return null;
 }
@@ -220,15 +226,25 @@ async function markRelationshipReply(
     .maybeSingle();
 
   if (brokerage?.id) {
+    const analysis = await analyzeInboundReply({ side: "brokerage", subject: args.subject, snippet: args.snippet });
+    const nextStatus = inferRegistrationStatus({ analysis, subject: args.subject, snippet: args.snippet });
+    const requestedDocs = Array.isArray(analysis?.requestedDocuments) ? analysis.requestedDocuments.filter(Boolean) : [];
+    const docsSuffix = requestedDocs.length ? ` Requested documents: ${requestedDocs.join(", ")}.` : "";
+    const nextAction = [analysis?.nextAction, analysis?.draftResponse ? `Draft reply: ${analysis.draftResponse}` : ""].filter(Boolean).join("\n\n") || null;
     await admin.from("crm_brokerages").update({
       last_response_at: args.receivedAt,
       response_count: Number(brokerage.response_count || 0) + 1,
       last_interaction_at: args.receivedAt,
+      ...(nextStatus ? { registered_status: nextStatus } : {}),
+      ...(requestedDocs.length ? { requested_documents: requestedDocs } : {}),
+      ...(analysis?.summary ? { ai_summary: `${analysis.summary}${docsSuffix}`.trim(), ai_generated_at: new Date().toISOString() } : {}),
+      ...(nextAction ? { ai_next_action: nextAction } : {}),
+      ...(analysis?.draftResponse ? { ai_draft_reply: analysis.draftResponse } : {}),
       outreach_stage: ["not_contacted", "attempted"].includes(String(brokerage.outreach_stage || ""))
         ? "engaged"
         : brokerage.outreach_stage,
     }).eq("id", brokerage.id);
-    await logReply("brokerage", brokerage.id, brokerage.company_name || email);
+    await logReply("brokerage", brokerage.id, brokerage.company_name || email, analysis);
     return;
   }
 
@@ -240,8 +256,8 @@ async function markRelationshipReply(
     .maybeSingle();
 
   if (developer?.id) {
-    const analysis = await analyzeDeveloperReply({ subject: args.subject, snippet: args.snippet });
-    const nextStatus = inferDeveloperStatus({ analysis, subject: args.subject, snippet: args.snippet });
+    const analysis = await analyzeInboundReply({ side: "developer", subject: args.subject, snippet: args.snippet });
+    const nextStatus = inferRegistrationStatus({ analysis, subject: args.subject, snippet: args.snippet });
     const requestedDocs = Array.isArray(analysis?.requestedDocuments) && analysis.requestedDocuments.length
       ? ` Requested documents: ${analysis.requestedDocuments.join(", ")}.`
       : "";
