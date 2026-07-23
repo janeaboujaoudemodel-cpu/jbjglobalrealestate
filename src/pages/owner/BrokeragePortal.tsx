@@ -25,7 +25,8 @@ const GROUP_OPTIONS = [
 ];
 
 const BRIEFING_STATUS_OPTIONS = [
-  { value: "__none__", label: "None / Pending" },
+  { value: "__none__", label: "None" },
+  { value: "pending", label: "Pending" },
   { value: "scheduled", label: "Scheduled" },
   { value: "postponed", label: "Postponed" },
   { value: "briefing_done", label: "Briefing done" },
