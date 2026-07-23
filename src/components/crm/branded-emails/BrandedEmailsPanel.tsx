@@ -788,17 +788,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         `}</style>
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <span className="inline-grid place-items-center size-14 shrink-0 rounded-md border border-emerald-900/15 bg-white p-2 shadow-[0_8px_18px_-14px_rgba(6,78,59,0.45)]">
+            <span className="inline-grid place-items-center size-14 shrink-0 rounded-md border border-emerald-900/15 bg-white p-2 shadow-[0_8px_18px_-14px_rgba(6,78,59,0.45)] overflow-hidden">
               <img
                 src={activeBrand.appUrl}
-                alt={activeBrand.alt}
-                className="block h-full w-full object-contain"
-                style={{ display: "block", margin: "0 auto" }}
+                alt=""
+                aria-hidden="true"
+                className="block max-h-full max-w-full object-contain"
                 data-no-fallback
                 loading="eager"
                 decoding="async"
               />
             </span>
+
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">
                 {kind === "developers" ? "Developer Portal · Campaigns" : "Brokerage Portal · Campaigns"}
