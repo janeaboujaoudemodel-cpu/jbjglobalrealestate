@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { MailCheck, Eye, Reply, Send, Search, Loader2 } from "lucide-react";
 
-type Kind = "developers" | "brokerages";
+type Kind = "developers" | "brokerages" | "investors";
 
 type RelationshipLog = {
   id: string;
@@ -42,11 +42,13 @@ type DashboardRow = {
 const ENTITY_BY_KIND: Record<Kind, string> = {
   developers: "developer_registry",
   brokerages: "brokerage",
+  investors: "investor",
 };
 
 const titleByKind: Record<Kind, string> = {
   developers: "Developer campaign dashboard",
   brokerages: "Brokerage campaign dashboard",
+  investors: "Investor campaign dashboard",
 };
 
 const normalizeEmail = (email?: string | null) => String(email || "").trim().toLowerCase();
