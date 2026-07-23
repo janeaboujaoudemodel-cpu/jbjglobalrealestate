@@ -412,10 +412,17 @@ serve(async (req: Request) => {
     // Brokerages must book directly on Google — Google sends the
     // confirmation email and writes the event to Jane's dedicated
     // breakfast calendar. No website redirect, no jbj.ae link, ever.
-    let bookingUrl: string = (
-      (settings?.google_calendar_booking_url && String(settings.google_calendar_booking_url).trim()) ||
-      ""
-    );
+    const activeAccount = String(settings?.google_calendar_active_account || "").trim();
+    const businessUrl = String(settings?.google_calendar_booking_url_business || "").trim();
+    const personalUrl = String(settings?.google_calendar_booking_url_personal || "").trim();
+    const legacyUrl = String(settings?.google_calendar_booking_url || "").trim();
+    let bookingUrl: string =
+      (activeAccount === "business" && businessUrl) ||
+      (activeAccount === "personal" && personalUrl) ||
+      legacyUrl ||
+      personalUrl ||
+      businessUrl ||
+      "";
     // Hard guard: reject any booking URL that points back at the website.
     const FORBIDDEN_BOOKING_HOSTS = ["jbj.ae", "www.jbj.ae", "/breakfast-booking"];
     const bookingUrlLower = bookingUrl.toLowerCase();
