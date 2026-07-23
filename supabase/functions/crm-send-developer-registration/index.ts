@@ -112,7 +112,7 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
     .replace(/Dear\s+<strong>[^<]+<\/strong>\s+Broker Relations Team/gi, `Dear <strong>${developerName}</strong> Broker Relations Team`)
     .replace(/Dear\s+[^,<\n]+\s+Broker Relations Team/gi, `Dear ${developerName} Broker Relations Team`)
     .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
-    .replace(/Jane Bou Jaoude/gi, "Amelia")
+    .replace(/\bAmelia\b/g, "Jane Bou Jaoude")
     .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
     .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107")
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, mailToken)
