@@ -112,9 +112,12 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
     .replace(/Dear\s+<strong>[^<]+<\/strong>\s+Broker Relations Team/gi, `Dear <strong>${developerName}</strong> Broker Relations Team`)
     .replace(/Dear\s+[^,<\n]+\s+Broker Relations Team/gi, `Dear ${developerName} Broker Relations Team`)
     .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
-    .replace(/\bAmelia\b/g, "Jane Bou Jaoude")
-    .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
+    .replace(/\bAmelia\b/g, "JBJ Team")
+    .replace(/Jane\s+Bouchaudey/gi, "JBJ Team")
+    .replace(/Jane Bou Jaoude/gi, "JBJ Team")
+    .replace(/Founder\s*&\s*CEO|Head of Business Development/gi, "JBJ GLOBAL REAL ESTATE")
     .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107")
+    .replace(/\{\{sender_phone_name\}\}/g, "Jane Bou Jaoude")
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, mailToken)
     .replace(/\b(?:contact|info|helpdesk)@jbj\.ae\b/gi, mailToken)
     .replace(new RegExp(mailToken, "g"), contactMailLink)
@@ -223,7 +226,7 @@ serve(async (req: Request) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
 
-    const fromName = "Jane Bou Jaoude — JBJ Global Real Estate";
+    const fromName = "JBJ GLOBAL REAL ESTATE";
     const replyTo = "helpdesk@jbj.ae";
     const activeCcArr = Array.isArray(settings.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
     const legacyCc = (settings.cc_email || "").trim();
@@ -241,8 +244,9 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
-      sender_name: "Jane Bou Jaoude",
-      sender_title: "Head of Business Development",
+      sender_name: "JBJ Team",
+      sender_title: "JBJ GLOBAL REAL ESTATE",
+      sender_phone_name: "Jane Bou Jaoude",
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
     });
@@ -259,12 +263,18 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
-      sender_name: "Jane Bou Jaoude",
-      sender_title: "Head of Business Development",
+      sender_name: "JBJ Team",
+      sender_title: "JBJ GLOBAL REAL ESTATE",
+      sender_phone_name: "Jane Bou Jaoude",
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
     });
-    const subject = isTest ? `[TEST] ${renderedSubject.replace(/^\[TEST\]\s*/i, "")}` : renderedSubject;
+    const cleanSubject = renderedSubject
+      .replace(/\bAmelia\b/gi, "JBJ GLOBAL REAL ESTATE")
+      .replace(/Jane\s+Bouchaudey/gi, "JBJ GLOBAL REAL ESTATE")
+      .replace(/Jane Bou Jaoude/gi, "JBJ GLOBAL REAL ESTATE")
+      .replace(/\s+—\s+JBJ GLOBAL REAL ESTATE\s+—\s+JBJ GLOBAL REAL ESTATE/gi, " — JBJ GLOBAL REAL ESTATE");
+    const subject = isTest ? `[TEST] ${cleanSubject.replace(/^\[TEST\]\s*/i, "")}` : cleanSubject;
 
     if (isTest) {
       const resendResult = await sendViaResend({
