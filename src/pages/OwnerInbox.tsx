@@ -3,7 +3,7 @@
  * Single inbox merging all communication channels
  */
 
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect, useRef, type CSSProperties } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DeveloperActionsRail from "@/components/owner-inbox/DeveloperActionsRail";
 import { supabase } from "@/integrations/supabase/client";
@@ -204,11 +204,19 @@ export default function OwnerInbox() {
 
 
 
+  const threadDetailRef = useRef<HTMLDivElement | null>(null);
   const handleThreadSelect = (thread: CommThread) => {
     setSelectedThread(thread);
     if (thread.unread_count > 0) {
       markAsRead(thread.id);
     }
+    // On small/medium screens the detail panel renders below the list —
+    // scroll it into view so the reply/AI panel is immediately visible.
+    requestAnimationFrame(() => {
+      if (window.innerWidth < 1280 && threadDetailRef.current) {
+        threadDetailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   };
 
   const handleStatCardClick = (filter: ActiveStatFilter) => {
@@ -267,7 +275,7 @@ export default function OwnerInbox() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-x-hidden">
-        <div className="container mx-auto px-4 py-6 max-w-6xl" data-owner-batch-fix="inbox">
+        <div className="container mx-auto px-4 py-6 max-w-[1400px]" data-owner-batch-fix="inbox">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -390,39 +398,31 @@ export default function OwnerInbox() {
 
           {/* AI Category Filter */}
           <div className="flex flex-wrap items-center gap-2 mb-4 overflow-visible pb-2 max-w-full">
-            <button
-              onClick={() => setCategoryFilter('all')}
-              data-surface={categoryFilter === 'all' ? "emerald" : "champagne"}
-              data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
-              data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
-              data-inbox-category-pill={categoryFilter === 'all' ? "active" : "idle"}
-              style={categoryFilter === 'all'
-                ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
-                : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
-              className={`min-w-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-normal ${
- categoryFilter === 'all'
- ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
- : 'transition bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
- }`}
-            >All categories</button>
-            {Object.entries(CATEGORY_META).map(([key, meta]) => (
-              <button
-                key={key}
-                onClick={() => setCategoryFilter(key)}
-                data-surface={categoryFilter === key ? "emerald" : "champagne"}
-                data-emerald-action={categoryFilter === key ? "true" : undefined}
-                data-emerald-ok={categoryFilter === key ? "pill" : undefined}
-                data-inbox-category-pill={categoryFilter === key ? "active" : "idle"}
-                style={categoryFilter === key
-                  ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
-                  : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
-                className={`min-w-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-normal ${
- categoryFilter === key
- ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
- : 'transition bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
- }`}
-              >{meta.label}</button>
-            ))}
+            {(() => {
+              const entries: Array<[string, { label: string }]> = [
+                ['all', { label: 'All categories' }],
+                ...Object.entries(CATEGORY_META).map(([k, m]) => [k, { label: m.label }] as [string, { label: string }]),
+              ];
+              return entries.map(([key, meta]) => {
+                const active = categoryFilter === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setCategoryFilter(key)}
+                    data-inbox-category-pill={active ? "active" : "idle"}
+                    style={
+                      active
+                        ? { background: 'linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent' } as CSSProperties
+                        : { background: '#FFFFFF', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties
+                    }
+                    className={`min-w-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-normal transition-colors ${active ? 'shadow-sm' : 'hover:bg-[#FDFBF7]'}`}
+                  >
+                    <span style={{ color: active ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: active ? '#FFFFFF' : '#1A1A1A' }}>{meta.label}</span>
+                  </button>
+                );
+              });
+            })()}
           </div>
 
           {/* Developer Required Actions Rail */}
@@ -462,8 +462,8 @@ export default function OwnerInbox() {
             disabled={isUpdating}
           />
 
-          {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 2xl:grid-cols-[minmax(300px,420px)_minmax(0,1fr)] gap-4 min-h-[720px] max-w-full">
+          {/* Main Content - Split View (opens side-by-side from lg upward, container is also widened) */}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] gap-4 min-h-[720px] max-w-full">
             {/* Thread List */}
             <div className="min-h-0 min-w-0 overflow-hidden">
               <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
@@ -514,7 +514,7 @@ export default function OwnerInbox() {
             </div>
 
             {/* Thread Detail */}
-            <div className="min-h-0 min-w-0 overflow-hidden">
+            <div ref={threadDetailRef} className="min-h-0 min-w-0 overflow-hidden scroll-mt-4">
               {selectedThread ? (
                 <OwnerInboxThread
                   thread={selectedThread}
