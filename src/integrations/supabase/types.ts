@@ -23924,6 +23924,7 @@ export type Database = {
           entity_type: string
           error_message: string | null
           id: string
+          idempotency_key: string | null
           last_followup_at: string | null
           metadata: Json
           next_followup_at: string | null
@@ -23955,6 +23956,7 @@ export type Database = {
           entity_type: string
           error_message?: string | null
           id?: string
+          idempotency_key?: string | null
           last_followup_at?: string | null
           metadata?: Json
           next_followup_at?: string | null
@@ -23986,6 +23988,7 @@ export type Database = {
           entity_type?: string
           error_message?: string | null
           id?: string
+          idempotency_key?: string | null
           last_followup_at?: string | null
           metadata?: Json
           next_followup_at?: string | null
@@ -24213,6 +24216,7 @@ export type Database = {
           created_at: string
           event_type: string
           id: string
+          idempotency_key: string | null
           occurred_at: string
           payload: Json
           provider_id: string | null
@@ -24224,6 +24228,7 @@ export type Database = {
           created_at?: string
           event_type: string
           id?: string
+          idempotency_key?: string | null
           occurred_at?: string
           payload?: Json
           provider_id?: string | null
@@ -24235,6 +24240,7 @@ export type Database = {
           created_at?: string
           event_type?: string
           id?: string
+          idempotency_key?: string | null
           occurred_at?: string
           payload?: Json
           provider_id?: string | null
@@ -40779,6 +40785,26 @@ export type Database = {
           },
         ]
       }
+      jbj_phase1_reconciliation_v1: {
+        Row: {
+          accepted: number | null
+          automated_replies: number | null
+          deferred: number | null
+          delivered: number | null
+          generated_at: string | null
+          gmail_legacy_unknown: number | null
+          human_replies: number | null
+          invalid_domain: number | null
+          invalid_email: number | null
+          limit_blocked: number | null
+          matched_records: number | null
+          previously_marked_sent_but_corrected: number | null
+          rejected_other: number | null
+          total_records_reviewed: number | null
+          unmatched_records: number | null
+        }
+        Relationships: []
+      }
       jbj_portal_counts_v1: {
         Row: {
           automated_reply: number | null
@@ -43308,14 +43334,47 @@ export type Database = {
       }
       is_valid_image_url: { Args: { u: string }; Returns: boolean }
       is_verified_staff: { Args: { _user_id: string }; Returns: boolean }
+      jbj_apply_resend_webhook: {
+        Args: { _event_type: string; _message_id: string; _payload: Json }
+        Returns: string
+      }
+      jbj_backfill_inbound_replies: { Args: never; Returns: number }
+      jbj_classify_inbound_reply: {
+        Args: { _body: string; _from: string; _subject: string }
+        Returns: string
+      }
+      jbj_classify_legacy_outbound: {
+        Args: { _body: string; _from: string; _subject: string; _to: string }
+        Returns: Json
+      }
       jbj_dev_canon: { Args: { name: string }; Returns: string }
       jbj_developer_import_key: {
         Args: { _name: string; _website?: string }
         Returns: string
       }
+      jbj_map_entity_type: { Args: { _entity_type: string }; Returns: string }
+      jbj_map_portal_kind: { Args: { _entity_type: string }; Returns: string }
       jbj_project_publish_blockers_for_row: {
         Args: { project_row: Database["public"]["Tables"]["projects"]["Row"] }
         Returns: string[]
+      }
+      jbj_record_resend_send: {
+        Args: {
+          _email: string
+          _entity_id: string
+          _entity_type: string
+          _idempotency_key: string
+          _portal_kind: string
+          _provider_response: Json
+          _reply_to: string
+          _resend_message_id: string
+          _sender_email: string
+          _subject: string
+          _template_slug: string
+          _template_version: string
+          _thread_id?: string
+        }
+        Returns: string
       }
       jbj_text_is_real: { Args: { value: string }; Returns: boolean }
       jbj_url_is_valid_developer_logo: {

@@ -18,6 +18,8 @@ import {
   enforceAllowedSender,
 } from "../_shared/outreachIdentity.ts";
 import { sendViaResend } from "../_shared/resendClient.ts";
+import { recordJbjResendSend, buildIdempotencyKey } from "../_shared/jbjSpine.ts";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -637,6 +639,22 @@ serve(async (req: Request) => {
     const threadId: string | null = null;
 
     if (isTest) {
+      await recordJbjResendSend({
+        portalKind: "brokerage",
+        entityType: "brokerage",
+        entityId: brk?.id ?? null,
+        email: recipient,
+        templateSlug: variant,
+        senderEmail: FORCED_ENVELOPE_FROM,
+        replyTo,
+        subject,
+        resendMessageId: messageId,
+        providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
+        idempotencyKey: buildIdempotencyKey([
+          "brokerage", variant, "test", recipient,
+          messageId || String(Date.now()),
+        ]),
+      });
       return new Response(JSON.stringify({
         ok: true, test: true, recipient, messageId, threadId,
         from_email: FORCED_ENVELOPE_FROM, reply_to: replyTo, sent_via: "resend",
@@ -656,7 +674,7 @@ serve(async (req: Request) => {
       email: brk.email || recipient,
     }).eq("id", brk.id);
 
-    // Log outbound email
+    // Legacy log
     await service.from("crm_relationship_email_log").insert({
       owner_id: user.id,
       entity_type: "brokerage",
@@ -672,6 +690,24 @@ serve(async (req: Request) => {
       body_snippet: `Sent ${variant === "brokerage_breakfast_invite" ? "private breakfast invitation" : "channel-partner outreach"} to ${brk.company_name} · ${resolvedContactFullName || "(no contact)"} · ${resolvedGroupLabel}${preferredSlotLabel ? ` · suggested ${preferredSlotLabel}` : ""}`,
       sent_at: new Date().toISOString(),
     });
+
+    // Canonical JBJ spine record
+    await recordJbjResendSend({
+      portalKind: "brokerage",
+      entityType: "brokerage",
+      entityId: brk.id,
+      email: recipient,
+      templateSlug: variant,
+      senderEmail: FORCED_ENVELOPE_FROM,
+      replyTo,
+      subject,
+      resendMessageId: messageId,
+      providerResponse: { status: resendResult.status, data: resendResult.data },
+      idempotencyKey: buildIdempotencyKey([
+        "brokerage", variant, brk.id, new Date().toISOString().slice(0, 10),
+      ]),
+    });
+
 
     return new Response(JSON.stringify({ ok: true, recipient, messageId, threadId, variant, from_email: FORCED_ENVELOPE_FROM, reply_to: replyTo, sent_via: "resend", quota: resendResult.quota }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
