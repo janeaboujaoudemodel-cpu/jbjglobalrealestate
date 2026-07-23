@@ -82,7 +82,7 @@ const CITI_MAP_URL = "https://www.google.com/maps/search/?api=1&query=CITI%20Dev
 const CITI_OFFICE_LABEL = "CITI Developers Sales Gallery";
 const CALENDAR_PLACEHOLDER_URL = "https://calendar.google.com/calendar/appointments/schedules/REPLACE_WITH_JANE_PUBLIC_BOOKING_LINK";
 
-const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing";
+const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs";
 
 const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; appUrl: string; alt: string; wordmark: string; tagline: string; width: number; height: number }> = {
   developers: {

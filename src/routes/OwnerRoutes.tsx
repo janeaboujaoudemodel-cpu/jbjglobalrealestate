@@ -224,6 +224,8 @@ export const OwnerRoutes = () => (
     <Route path="owner-inbox" element={<OwnerInbox />} />
     <Route path="owner-team-chat" element={<TeamChat />} />
     <Route path="owner-relationships" element={<CRMRelationships />} />
+    <Route path="relationships" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />
+    <Route path="relationship-hub" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />
     <Route path="owner-founder-assistant" element={<FoundersAssistant />} />
     <Route path="owner-recommendations" element={<GlobalRecommendationsHub />} />
     <Route path="owner-ai-home-finder" element={<AIHomeFinderSubmissions />} />

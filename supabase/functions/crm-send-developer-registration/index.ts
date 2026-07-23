@@ -23,6 +23,7 @@ const OWNER_EMAILS = [
   "infoo.jane@gmail.com",
 ];
 const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
+const DEFAULT_REGISTRATION_PACKAGE_LINK = "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs";
 
 interface Body {
   developerId?: string;
@@ -151,7 +152,9 @@ serve(async (req: Request) => {
     // Owner settings (drive link, from name, reply-to, cc)
     const { data: settings } = await service
       .from("crm_owner_settings").select("*").eq("owner_id", user.id).maybeSingle();
-    // Document pack link is optional — templates handle absence gracefully.
+    const driveDocPackUrl = typeof settings?.drive_doc_pack_url === "string" && settings.drive_doc_pack_url.trim()
+      ? settings.drive_doc_pack_url.trim()
+      : DEFAULT_REGISTRATION_PACKAGE_LINK;
 
     // Template
     const { data: template, error: tplErr } = await service
@@ -224,17 +227,18 @@ serve(async (req: Request) => {
 
     const fromName = "JBJ GLOBAL REAL ESTATE";
     const replyTo = "helpdesk@jbj.ae";
-    const activeCcArr = Array.isArray(settings.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
-    const legacyCc = (settings.cc_email || "").trim();
+    const activeCcArr = Array.isArray(settings?.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
+    const legacyCc = (settings?.cc_email || "").trim();
     const ccList = body.ccEmailOverride
       ? [String(body.ccEmailOverride).trim()].filter(Boolean)
-      : (activeCcArr.length > 0 ? activeCcArr : (settings.cc_jane_enabled && legacyCc ? [legacyCc] : []));
+      : (activeCcArr.length > 0 ? activeCcArr : (settings?.cc_jane_enabled && legacyCc ? [legacyCc] : []));
     const ccEmail = ccList[0] || "";
     const cc = !isTest ? ccList : [];
 
     let html = renderTemplate(template.html, {
       developer_name: dev.developer_name,
-      drive_url: settings.drive_doc_pack_url,
+      drive_url: driveDocPackUrl,
+      registration_package_link: driveDocPackUrl,
       reply_to: replyTo,
       reply_to_display: replyTo,
       reply_to_lower: replyTo,
@@ -253,7 +257,8 @@ serve(async (req: Request) => {
       : template.subject;
     const renderedSubject = renderTemplate(baseSubject, {
       developer_name: dev.developer_name,
-      drive_url: settings.drive_doc_pack_url,
+      drive_url: driveDocPackUrl,
+      registration_package_link: driveDocPackUrl,
       reply_to: replyTo,
       reply_to_display: replyTo,
       reply_to_lower: replyTo,
