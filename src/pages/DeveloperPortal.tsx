@@ -28,6 +28,7 @@ import {
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
+import DeveloperOwnerCampaignDashboard from "@/components/crm/DeveloperOwnerCampaignDashboard";
 import { DeveloperSelectDropdown } from "@/components/developer-portal/DeveloperSelectDropdown";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
