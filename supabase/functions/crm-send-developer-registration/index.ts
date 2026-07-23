@@ -10,7 +10,7 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendViaResend } from "../_shared/resendClient.ts";
-import { recordJbjResendSend, buildIdempotencyKey } from "../_shared/jbjSpine.ts";
+import { recordJbjResendSend, buildIntendedSendKey } from "../_shared/jbjSpine.ts";
 
 
 const corsHeaders = {
