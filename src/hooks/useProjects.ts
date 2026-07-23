@@ -520,15 +520,12 @@ export function useProjects() {
  * Lightweight listing hook - no images/documents joins.
  * Use this for Properties page and other listing views.
  *
- * Progressive fetch strategy for fast first paint on a 2,500+ row catalogue:
- *   Stage 1: fetch the first FAST_PAGE rows and return them immediately so the
- *            grid renders within ~one network round-trip.
- *   Stage 2: in the background, fetch the rest in 1000-row pages and merge
- *            them into the React Query cache so filtering/sorting works on
- *            the full dataset shortly after.
+ * Fetches the full catalogue (bounded, paginated) in a single query so that
+ * search/filter always operate on the complete dataset. A progressive
+ * fast-paint variant was tried but left users on a 120-row shortlist whenever
+ * the background pass failed, so filters/search silently missed projects.
  */
 export function useProjectsListing() {
-  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["projects-listing"],
     staleTime: 10 * 60 * 1000,
@@ -561,51 +558,28 @@ export function useProjectsListing() {
           .or("listing_kind.is.null,listing_kind.neq.leasing")
           .is("deleted_at", null);
 
-      // Stage 1: fast first paint. Return a bounded first page so the grid
-      // renders within one round-trip instead of waiting for the full catalogue.
-      const FAST_PAGE = 120;
-      const { data: firstData, error: firstError } = await baseQuery()
-        .order("created_at", { ascending: false })
-        .limit(FAST_PAGE);
-      if (firstError) throw firstError;
-
-      const firstRows = (firstData ?? []) as unknown as UnifiedProject[];
-      const firstResult = sortPublicProjectsForListing(dedupePublicProjects(firstRows));
-
-      // Stage 2: hydrate the rest of the catalogue in the background and
-      // merge into the React Query cache so filtering/search operate on the
-      // full dataset shortly after the first paint.
-      if (firstRows.length === FAST_PAGE) {
-        (async () => {
-          try {
-            const PAGE_SIZE = 1000;
-            const MAX_PAGES = 10;
-            const all: unknown[] = [...firstRows];
-            for (let page = 0; page < MAX_PAGES; page++) {
-              const from = FAST_PAGE + page * PAGE_SIZE;
-              const to = from + PAGE_SIZE - 1;
-              const { data, error } = await baseQuery()
-                .order("created_at", { ascending: false })
-                .range(from, to);
-              if (error) throw error;
-              const rows = data ?? [];
-              all.push(...rows);
-              if (rows.length < PAGE_SIZE) break;
-            }
-            const merged = sortPublicProjectsForListing(
-              dedupePublicProjects(all as unknown as UnifiedProject[]),
-            );
-            queryClient.setQueryData(["projects-listing"], merged);
-          } catch {
-            // Keep the fast-paint result on background failure.
-          }
-        })();
+      const PAGE_SIZE = 1000;
+      const MAX_PAGES = 10; // bounded upper limit (10k rows)
+      const all: unknown[] = [];
+      for (let page = 0; page < MAX_PAGES; page++) {
+        const from = page * PAGE_SIZE;
+        const to = from + PAGE_SIZE - 1;
+        const { data, error } = await baseQuery()
+          .order("created_at", { ascending: false })
+          .range(from, to);
+        if (error) throw error;
+        const rows = data ?? [];
+        all.push(...rows);
+        if (rows.length < PAGE_SIZE) break;
       }
 
-      return firstResult;
+      return sortPublicProjectsForListing(
+        dedupePublicProjects(all as unknown as UnifiedProject[]),
+      );
     },
   });
 }
+
 
 /**
  * Ultra-light map hook: only fetch the fields needed by /map so the map route
