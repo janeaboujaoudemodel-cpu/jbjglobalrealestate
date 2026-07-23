@@ -18,14 +18,15 @@ import { Link } from "react-router-dom";
 import { statusColor, BROKERAGE_REGISTRATION_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 
 const GROUP_OPTIONS = [
-  { value: "pending_group_status", label: "Pending group status" },
+  { value: "pending_group_status", label: "None" },
   { value: "has_group", label: "Has group" },
   { value: "no_group", label: "No group" },
   { value: "group_not_required", label: "Group not required" },
 ];
 
 const BRIEFING_STATUS_OPTIONS = [
-  { value: "__none__", label: "None / Pending" },
+  { value: "__none__", label: "None" },
+  { value: "pending", label: "Pending" },
   { value: "scheduled", label: "Scheduled" },
   { value: "postponed", label: "Postponed" },
   { value: "briefing_done", label: "Briefing done" },
@@ -182,9 +183,9 @@ export default function BrokeragePortal() {
     <AutomationsStrip />
     <Tabs defaultValue="new-dld" className="w-full">
       <TabsList className="grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
-        <TabsTrigger value="new-dld" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">DLD daily additions</TabsTrigger>
-        <TabsTrigger value="email-status" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">Emails sent + replies</TabsTrigger>
-        <TabsTrigger value="approval" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">Uploaded approval</TabsTrigger>
+        <TabsTrigger value="new-dld" style={{ ['--tw-text-opacity' as any]: 1 }} className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">DLD daily additions</TabsTrigger>
+        <TabsTrigger value="email-status" className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
+        <TabsTrigger value="approval" className="data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:![-webkit-text-fill-color:#ffffff] text-[#064E3B] font-black">Uploaded approval</TabsTrigger>
       </TabsList>
       <TabsContent value="new-dld" className="mt-4"><DldSyncHistoryPanel /></TabsContent>
       <TabsContent value="email-status" className="mt-4 space-y-4"><BrandedEmailsLauncherCard variant="broker" /><BrandedEmailDashboard kind="brokerages" /></TabsContent>
@@ -270,13 +271,14 @@ function AutomationsStrip() {
   const lastCount = last ? `${last.agencies_inserted ?? 0} agencies · ${last.brokers_inserted ?? 0} brokers` : "";
   const lastStatus = last?.status as string | undefined;
   return (
-    <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-3">
-      <div className="flex items-center justify-between gap-3">
+    <Card className="p-0 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden">
+      <div className="flex flex-col justify-between gap-3 p-4 md:border-r border-[#B89555]/25 min-h-[160px]">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com <span className="ml-2 text-[#064E3B]/70">Auto · every 5 min</span></p>
-          <p className="text-xs text-[#1A1A1A]/70 mt-1">Last message ingested: <span className="font-black text-[#1A1A1A]">{fmt(inboxQ.data?.created_at)}</span></p>
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com</p>
+          <p className="text-[10px] uppercase tracking-[0.14em] font-black text-[#064E3B]/70 mt-0.5">Auto · every 5 min</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-2">Last message ingested: <span className="font-black text-[#1A1A1A]">{fmt(inboxQ.data?.created_at)}</span></p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button size="sm" variant="outline" disabled={busy === "gmail"} onClick={runGmail} title="Refresh now" aria-label="Refresh inbox now">
             <RefreshCw className={`size-4 ${busy === "gmail" ? "animate-spin" : ""}`} />
           </Button>
@@ -285,18 +287,19 @@ function AutomationsStrip() {
           </Button>
         </div>
       </div>
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col justify-between gap-3 p-4 min-h-[160px]">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync — brokers + brokerages <span className="ml-2 text-[#064E3B]/70">Auto · daily 03:00 UTC</span></p>
-          <p className="text-xs text-[#1A1A1A]/70 mt-1">
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync — brokers + brokerages</p>
+          <p className="text-[10px] uppercase tracking-[0.14em] font-black text-[#064E3B]/70 mt-0.5">Auto · daily 03:00 UTC</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-2">
             Last run: <span className="font-black text-[#1A1A1A]">{fmt(last?.run_started_at)}</span>{lastCount ? ` · ${lastCount}` : ""}
             {lastStatus && lastStatus !== "success" && <span className="ml-2 text-[#8B1F1F] font-black uppercase">· {lastStatus}</span>}
           </p>
-          <p className="text-[10px] text-[#1A1A1A]/55 mt-0.5">
+          <p className="text-[10px] text-[#1A1A1A]/55 mt-1">
             <span className="font-black">Market snapshot</span> pulls DLD market data only. <span className="font-black">Sync all</span> also imports brokers &amp; brokerages from the DLD register.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button size="sm" variant="outline" disabled={busy === "dld"} onClick={() => runDld("market")}>{busy === "dld" ? "Running…" : "Market snapshot"}</Button>
           <Button size="sm" variant="gold" disabled={busy === "all"} onClick={() => runDld("all")}>{busy === "all" ? "Running…" : "Sync all (brokers + brokerages)"}</Button>
         </div>
@@ -371,22 +374,38 @@ function DldSyncHistoryPanel() {
   const updated = (run: DldRun) => Number(run.agencies_updated ?? run.raw_summary?.brokerage?.flagged ?? 0);
 
   return (
-    <Card className="p-5 bg-white border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(6,78,59,0.35)]">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">DLD sync history</p>
-          <h2 className="text-xl font-black text-[#0F1A16]">Fresh imports and untouched agencies</h2>
-          <p className="text-sm text-[#4B5D55] mt-1">Counts refresh after each action. New DLD brokerages are labeled untouched until the first outreach email is logged.</p>
-        </div>
-        <div className="flex rounded-md border border-[#064E3B]/20 bg-white p-1">
-          {(["daily", "all"] as const).map((value) => (
-            <button key={value} type="button" onClick={() => setMode(value)} className="rounded px-3 py-1.5 text-xs font-black uppercase" style={{ background: mode === value ? "#064E3B" : "transparent", color: mode === value ? "#FFFFFF" : "#064E3B", WebkitTextFillColor: mode === value ? "#FFFFFF" : "#064E3B" }}>
-              {value === "daily" ? "Today" : "See all"}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="mt-4 grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-4">
+    <Card className="p-0 bg-white border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(6,78,59,0.35)] overflow-hidden">
+      <details className="group">
+        <summary className="list-none cursor-pointer flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between p-5 hover:bg-[#F8FAF9] transition">
+          <div className="flex items-start gap-3 min-w-0">
+            <span className="inline-flex size-8 items-center justify-center rounded-md bg-[#064E3B] text-white transition group-open:rotate-90" aria-hidden="true">
+              <CalendarClock className="size-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">DLD sync history</p>
+              <h2 className="text-xl font-black text-[#0F1A16]">Fresh imports and untouched agencies</h2>
+              <p className="text-sm text-[#4B5D55] mt-1">Click to expand. New DLD brokerages are labeled untouched until the first outreach email is logged.</p>
+            </div>
+          </div>
+          <div className="flex rounded-md border border-[#064E3B]/20 bg-white p-1 shrink-0" onClick={(e) => e.preventDefault()}>
+            {(["daily", "all"] as const).map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMode(value); }}
+                className="inline-flex items-center justify-center rounded px-3 h-8 min-w-[92px] text-xs font-black uppercase tracking-[0.12em] transition"
+                style={{
+                  background: mode === value ? "#064E3B" : "transparent",
+                  color: mode === value ? "#FFFFFF" : "#064E3B",
+                  WebkitTextFillColor: mode === value ? "#FFFFFF" : "#064E3B",
+                }}
+              >
+                {value === "daily" ? "Today" : "See all"}
+              </button>
+            ))}
+          </div>
+        </summary>
+        <div className="px-5 pb-5 grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-4">
         <div className="rounded-lg border border-[#064E3B]/15 overflow-hidden bg-[#F8FAF9]">
           <div className="px-3 py-2 bg-white border-b border-[#064E3B]/10 flex items-center gap-2 text-[#064E3B] font-black text-xs uppercase tracking-[0.16em]"><CalendarClock className="size-4" /> Daily log</div>
           <div className="max-h-[360px] overflow-auto divide-y divide-[#064E3B]/10">
@@ -418,14 +437,15 @@ function DldSyncHistoryPanel() {
                 <tbody className="divide-y divide-[#064E3B]/10">
                   {(newBrokeragesQ.data ?? []).map((row) => {
                     const untouched = !row.last_outreach_at;
-                    return <tr key={row.id} className="text-[#0F1A16]"><td className="px-3 py-2"><p className="font-black">{row.company_name}</p><p className="text-xs text-[#4B5D55]">{row.dld_area || row.office_location || row.dld_office_number || "DLD register"}</p></td><td className="px-3 py-2 text-[#4B5D55]">{row.email || row.phone || row.website || "—"}</td><td className="px-3 py-2"><span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase" style={{ background: untouched ? "#064E3B" : "#EFE6D6", color: untouched ? "#FFFFFF" : "#0F1A16", WebkitTextFillColor: untouched ? "#FFFFFF" : "#0F1A16" }}>{untouched ? <Send className="size-3" /> : null}{untouched ? "Untouched" : "Outreach sent"}</span></td></tr>;
+                    return <tr key={row.id} className="text-[#0F1A16]"><td className="px-3 py-2"><p className="font-black">{row.company_name}</p><p className="text-xs text-[#4B5D55]">{row.dld_area || row.office_location || row.dld_office_number || "DLD register"}</p></td><td className="px-3 py-2 text-[#4B5D55]">{row.email || row.website || "—"}</td><td className="px-3 py-2"><span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase" style={{ background: untouched ? "#064E3B" : "#EFE6D6", color: untouched ? "#FFFFFF" : "#0F1A16", WebkitTextFillColor: untouched ? "#FFFFFF" : "#0F1A16" }}>{untouched ? <Send className="size-3" /> : null}{untouched ? "Untouched" : "Outreach sent"}</span></td></tr>;
                   })}
                 </tbody>
               </table>
             )}
           </div>
         </div>
-      </div>
+        </div>
+      </details>
     </Card>
   );
 }
@@ -438,13 +458,15 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
   const group = row.group_status || "pending_group_status";
   const briefing = row.briefing_status || "__none__";
   const color = statusColor(reg);
+  const domain = (() => {
+    const raw = row.website || row.email || "";
+    const m = String(raw).match(/@?([a-z0-9.-]+\.[a-z]{2,})/i);
+    return m ? m[1].replace(/^www\./, "") : "";
+  })();
+  const logoCandidates = [row.logo_url, domain ? `https://logo.clearbit.com/${domain}` : null].filter(Boolean) as string[];
   return <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] flex flex-col h-full">
     <div className="flex items-start gap-3">
-      {row.logo_url ? (
-        <img src={row.logo_url} alt={`${row.company_name || "Brokerage"} logo`} loading="lazy" className="size-12 rounded-xl object-contain bg-white border border-[#B89555]/25 p-1 shrink-0" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
-      ) : (
-        <div className="size-12 rounded-xl jj-emerald-metallic flex items-center justify-center text-white font-black shrink-0">{String(row.company_name || "B").slice(0, 1).toUpperCase()}</div>
-      )}
+      <BrokerageLogo candidates={logoCandidates} name={row.company_name} />
       <div className="min-w-0 flex-1">
         <p className="font-black text-[#1A1A1A] text-[16px] leading-tight line-clamp-2 min-h-[2.5em]">{row.company_name || "Unnamed brokerage"}</p>
         <p className="text-xs text-[#1A1A1A]/60 truncate">{row.emirate || row.country || row.office_location || "UAE brokerage"}</p>
@@ -466,9 +488,8 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
         return <button key={s} type="button" onClick={() => onPatch({ specialty_focus: active ? null : dbVal })} className={`px-2 py-0.5 rounded-md text-[10px] font-black border transition ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Both" : "Secondary"}</button>;
       })}
     </div>
-    <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-[#1A1A1A]">
+    <div className="mt-4 text-xs text-[#1A1A1A]">
       <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Email</p><Input value={row.email || ""} onChange={(e) => onPatch({ email: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="agency@email.com" /></div>
-      <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Phone</p><Input value={row.phone || ""} onChange={(e) => onPatch({ phone: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="+971 …" /></div>
     </div>
     <div className="mt-3 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-3 space-y-2 flex-1">
       <div className="flex items-center justify-between gap-2"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Contacts</p><Button size="sm" variant="outline" onClick={onAddAgent}><Plus className="size-3.5 mr-1" /> Add new</Button></div>
@@ -487,4 +508,21 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
       <Select value={briefing} onValueChange={(v) => onPatch({ briefing_status: v === "__none__" ? null : v })}><SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Briefing status" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{BRIEFING_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
     </div>
   </Card>;
+}
+
+function BrokerageLogo({ candidates, name }: { candidates: string[]; name?: string }) {
+  const [idx, setIdx] = useState(0);
+  const src = candidates[idx];
+  if (!src) {
+    return <div className="size-12 rounded-xl jj-emerald-metallic flex items-center justify-center text-white font-black shrink-0">{String(name || "B").slice(0, 1).toUpperCase()}</div>;
+  }
+  return (
+    <img
+      src={src}
+      alt={`${name || "Brokerage"} logo`}
+      loading="lazy"
+      className="size-12 rounded-xl object-contain bg-white border border-[#B89555]/25 p-1 shrink-0"
+      onError={() => setIdx((i) => i + 1)}
+    />
+  );
 }
