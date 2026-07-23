@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { MailCheck, Eye, Reply, Send, Search, Loader2 } from "lucide-react";
+import { MailCheck, Eye, Reply, Send, Search, Loader2, Wand2, CheckSquare } from "lucide-react";
 
-type Kind = "developers" | "brokerages" | "investors";
+type Kind = "developers" | "brokerages" | "clients";
 
 type RelationshipLog = {
   id: string;
@@ -42,13 +42,13 @@ type DashboardRow = {
 const ENTITY_BY_KIND: Record<Kind, string> = {
   developers: "developer_registry",
   brokerages: "brokerage",
-  investors: "investor",
+  clients: "investor",
 };
 
 const titleByKind: Record<Kind, string> = {
   developers: "Developer campaign dashboard",
   brokerages: "Brokerage campaign dashboard",
-  investors: "Investor campaign dashboard",
+  clients: "Client campaign dashboard",
 };
 
 const normalizeEmail = (email?: string | null) => String(email || "").trim().toLowerCase();
@@ -71,8 +71,9 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
   const [logs, setLogs] = useState<RelationshipLog[]>([]);
   const [openLogs, setOpenLogs] = useState<OpenLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<"all" | "sent" | "opened" | "responded">("all");
+  const [statusFilter, setStatusFilter] = useState<"pending" | "responded">("pending");
   const [query, setQuery] = useState("");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -153,7 +154,7 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
   const filteredRows = useMemo(() => {
     const q = query.trim().toLowerCase();
     return rows.filter((row) => {
-      const statusOk = statusFilter === "all" || row.status === statusFilter;
+      const statusOk = statusFilter === "pending" ? row.status !== "responded" : row.status === "responded";
       const queryOk = !q || row.recipient.includes(q) || row.subject.toLowerCase().includes(q);
       return statusOk && queryOk;
     });
@@ -163,8 +164,15 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
     sent: rows.length,
     opened: rows.filter((r) => r.openedAt).length,
     responded: rows.filter((r) => r.respondedAt).length,
-    avoidRepeat: new Set(rows.map((r) => r.recipient).filter(Boolean)).size,
+    pending: rows.filter((r) => !r.respondedAt).length,
   }), [rows]);
+
+  const selectedPendingCount = useMemo(
+    () => filteredRows.filter((row) => selectedIds.has(row.id) && row.status !== "responded").length,
+    [filteredRows, selectedIds],
+  );
+  const pendingRows = useMemo(() => filteredRows.filter((row) => row.status !== "responded"), [filteredRows]);
+  const allPendingSelected = pendingRows.length > 0 && pendingRows.every((row) => selectedIds.has(row.id));
 
   return (
     <Card
@@ -192,35 +200,12 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
                 className="h-10 pl-10 pr-3 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
               />
             </div>
-            <div
-              role="tablist"
-              aria-label="Filter campaign status"
-              className="inline-grid grid-cols-4 h-10 rounded-md border border-emerald-900/25 bg-white overflow-hidden shrink-0"
-              style={{ minWidth: 360 }}
-            >
-              {(["all", "sent", "opened", "responded"] as const).map((status, idx) => {
-                const isActive = statusFilter === status;
-                return (
-                  <button
-                    key={status}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    onClick={() => setStatusFilter(status)}
-                    data-branded-dash-pill={isActive ? "active" : undefined}
-                    className="relative h-full flex items-center justify-center px-3 text-[11px] font-black uppercase tracking-wide whitespace-nowrap"
-                    style={{
-                      background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "transparent",
-                      color: isActive ? "#FFFFFF" : "#064E3B",
-                      WebkitTextFillColor: isActive ? "#FFFFFF" : "#064E3B",
-                      borderLeft: idx === 0 ? "none" : "1px solid rgba(6,78,59,0.18)",
-                    }}
-                  >
-                    {status}
-                  </button>
-                );
-              })}
-            </div>
+              <div className="inline-flex h-10 rounded-md border border-emerald-900/25 bg-white overflow-hidden shrink-0">
+                {(["pending", "responded"] as const).map((status) => {
+                  const isActive = statusFilter === status;
+                  return <button key={status} type="button" onClick={() => setStatusFilter(status)} className="px-4 text-[11px] font-black uppercase tracking-wide" style={{ background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FFFFFF", color: isActive ? "#FFFFFF" : "#064E3B", WebkitTextFillColor: isActive ? "#FFFFFF" : "#064E3B" }}>{status === "pending" ? "Pending response" : "Responded"}</button>;
+                })}
+              </div>
           </div>
         </div>
 
@@ -228,7 +213,14 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
           <StatCard icon={Send} label="Sent" value={stats.sent} />
           <StatCard icon={Eye} label="Opened" value={stats.opened} />
           <StatCard icon={Reply} label="Responded" value={stats.responded} />
-          <StatCard icon={MailCheck} label="Auto-skip repeats" value={stats.avoidRepeat} />
+          <StatCard icon={MailCheck} label="Pending response" value={stats.pending} />
+        </div>
+
+        <div className="flex flex-col gap-2 rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-3 sm:flex-row sm:items-center">
+          <button type="button" onClick={() => setSelectedIds(allPendingSelected ? new Set() : new Set(pendingRows.map((row) => row.id)))} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}><CheckSquare className="size-4" />{allPendingSelected ? "Clear pending" : "Select pending"}</button>
+          <button type="button" className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}><Wand2 className="size-4" />Prepare AI drafts ({selectedPendingCount})</button>
+          <button type="button" className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}><Send className="size-4" />Accept & send selected</button>
+          <span className="text-xs font-semibold text-[#4B5D55] sm:ml-auto">{stats.pending.toLocaleString()} unanswered campaigns need a reply decision.</span>
         </div>
 
         <div className="overflow-hidden rounded-lg border border-emerald-900/15 bg-white">
@@ -242,6 +234,7 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
                 <thead className="sticky top-0 bg-[#F8FAF9] text-[10px] uppercase tracking-[0.16em] text-[#064E3B]">
                   <tr>
                     <th className="px-3 py-2 font-black">Recipient</th>
+                    <th className="px-3 py-2 font-black">Select</th>
                     <th className="px-3 py-2 font-black">Subject</th>
                     <th className="px-3 py-2 font-black">Status</th>
                     <th className="px-3 py-2 font-black">Sent</th>
@@ -252,6 +245,7 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
                   {filteredRows.slice(0, 80).map((row) => (
                     <tr key={row.id} className="text-[#0F1A16]">
                       <td className="px-3 py-2 font-semibold">{row.recipient}</td>
+                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onChange={(e) => setSelectedIds((current) => { const next = new Set(current); if (e.target.checked) next.add(row.id); else next.delete(row.id); return next; })} disabled={row.status === "responded"} /></td>
                       <td className="px-3 py-2 max-w-[320px] truncate text-[#4B5D55]">{row.subject}</td>
                       <td className="px-3 py-2"><StatusBadge status={row.status} /></td>
                       <td className="px-3 py-2 whitespace-nowrap text-[#4B5D55]">{formatDate(row.sentAt)}</td>
