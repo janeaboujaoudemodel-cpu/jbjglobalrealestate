@@ -134,6 +134,7 @@ const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 const DeveloperDirectory = lazy(() => import("@/pages/developer-hub-admin/DeveloperDirectory"));
 const BrokeragePortal = lazy(() => import("@/pages/owner/BrokeragePortal"));
+const InvestorPortal = lazy(() => import("@/pages/owner/InvestorPortal"));
 const DeveloperEnrichmentQueue = lazy(() => import("@/pages/developer-hub-admin/DeveloperEnrichmentQueue"));
 const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
 const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
@@ -197,6 +198,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-crm-workspace" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="owner-data-hub" element={<DataHub />} />
     <Route path="owner-brokerages" element={<BrokeragePortal />} />
+    <Route path="owner-investors" element={<InvestorPortal />} />
     <Route
       path="deals"
       element={

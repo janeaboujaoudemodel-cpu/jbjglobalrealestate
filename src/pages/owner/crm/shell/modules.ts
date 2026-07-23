@@ -180,6 +180,7 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-crm-workspace": "/owner/crm/jbj",
   "owner-data-hub": "/owner/data-hub",
   "owner-brokerages": "/owner/brokerages",
+  "owner-investors": "/owner/crm/jbj/owner-investors",
   "deals-ledger": "/owner/crm/jbj/deals",
   "owner-developers": "/owner/developers",
   "owner-developer-projects": "/owner/developers/projects",
@@ -250,6 +251,7 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
     children: [
       { slug: "owner-brokerages", label: "Brokerage Portal", icon: Handshake },
       { slug: "owner-developers", label: "Developer Portal", icon: Building },
+      { slug: "owner-investors", label: "Investor Portal", icon: Users },
       { slug: "owner-relationships", label: "Relationships Hub", icon: Handshake },
       { slug: "deals-ledger", label: "My Deals", icon: Wallet },
       { slug: "owner-careers", label: "Careers Portal", icon: BriefcaseBusiness },
