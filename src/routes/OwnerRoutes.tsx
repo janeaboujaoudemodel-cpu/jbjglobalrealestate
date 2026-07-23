@@ -198,6 +198,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-crm-workspace" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="owner-data-hub" element={<DataHub />} />
     <Route path="owner-brokerages" element={<BrokeragePortal />} />
+    <Route path="owner-investors" element={<InvestorPortal />} />
     <Route
       path="deals"
       element={
