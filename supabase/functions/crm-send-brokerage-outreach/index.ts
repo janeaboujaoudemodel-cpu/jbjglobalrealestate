@@ -427,13 +427,16 @@ serve(async (req: Request) => {
     const FORBIDDEN_BOOKING_HOSTS = ["jbj.ae", "www.jbj.ae", "/breakfast-booking"];
     const bookingUrlLower = bookingUrl.toLowerCase();
     const bookingUrlForbidden = FORBIDDEN_BOOKING_HOSTS.some((h) => bookingUrlLower.includes(h));
-    if (!bookingUrl || bookingUrlForbidden) {
+    // Only hard-block URLs that point back at the website (looks like a competitor).
+    // An empty booking URL is allowed — the template simply omits the calendar CTA.
+    if (bookingUrlForbidden) {
       return new Response(JSON.stringify({
-        error: "BREAKFAST_BOOKING_URL_MISSING",
-        message: bookingUrlForbidden
-          ? "Send blocked — the saved booking URL points back to jbj.ae. Replace it with your Google Calendar appointment link (https://calendar.app.google/…) in CRM Settings → Brokerage Outreach."
-          : "Send blocked — no Google Calendar appointment booking link is saved yet. Paste your Google Calendar booking page link in CRM Settings → Brokerage Outreach first.",
+        error: "BREAKFAST_BOOKING_URL_FORBIDDEN",
+        message: "Send blocked — the saved booking URL points back to jbj.ae. Replace it with your Google Calendar appointment link (https://calendar.app.google/…) in CRM Settings → Brokerage Outreach.",
       }), { status: 412, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    if (!bookingUrl) {
+      console.warn("No Google Calendar booking URL saved — sending without booking CTA.");
     }
 
     // Resolve featured Citi project (defaults to AMRA).
