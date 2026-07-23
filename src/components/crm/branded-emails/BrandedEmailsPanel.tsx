@@ -286,12 +286,21 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
   const jbjLink = '<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>';
   const senderMailLink = `<a href="mailto:${sender.email}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${sender.email.toUpperCase()}</a>`;
   const senderMailToken = "__JBJ_SENDER_MAIL_LINK__";
-  const brandHeader = buildBrandHeaderHtml(audienceKind);
-  const htmlWithBrand = /data-jbj-brand-header="true"/.test(html)
-    ? html
-    : (html.match(/<body[^>]*>/i)
-        ? html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>${brandHeader}`)
-        : brandHeader + html);
+  // No outer white header — brand logos live inside each card.
+  // For developer cards, inject the JBJ monogram image right above the
+  // "JBJ GLOBAL REAL ESTATE" wordmark so it mirrors the CITI card layout.
+  let htmlWithBrand = html.replace(
+    /<table role="presentation"[^>]*data-jbj-brand-header="true"[\s\S]*?<\/table>/gi,
+    "",
+  );
+  if (audienceKind === "developers") {
+    const jbjLogoImg = `<img src="${BRAND_HEADER_BY_KIND.developers.url}" alt="JBJ Global Real Estate" width="72" style="max-width:72px;height:auto;display:inline-block;border:0;margin:0 auto 12px;" />`;
+    // Insert the JBJ monogram immediately before the first wordmark div.
+    htmlWithBrand = htmlWithBrand.replace(
+      /(<div\s+style="[^"]*letter-spacing:3px[^"]*text-transform:uppercase[^"]*">JBJ GLOBAL REAL ESTATE<\/div>)/i,
+      `${jbjLogoImg}$1`,
+    );
+  }
   const personalized = htmlWithBrand
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
       [data-jbj-contact-note], [data-jbj-contact-note] *, [data-jbj-contact-note] a {
