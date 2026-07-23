@@ -45,6 +45,16 @@ export default function BrokeragePortal() {
   const [visibleLimit, setVisibleLimit] = useState(60);
 
   useEffect(() => { setVisibleLimit(60); }, [search, view, listId, specialty]);
+  useEffect(() => {
+    const refresh = () => {
+      qc.invalidateQueries({ queryKey: ["brokerage-portal-brokerages"] });
+      qc.invalidateQueries({ queryKey: ["brokerage-portal-stats"] });
+      qc.invalidateQueries({ queryKey: ["brokerage-portal-dld-runs"] });
+      qc.invalidateQueries({ queryKey: ["brokerage-portal-dld-new-brokerages"] });
+    };
+    window.addEventListener("brokerage-portal-refresh", refresh);
+    return () => window.removeEventListener("brokerage-portal-refresh", refresh);
+  }, [qc]);
 
 
   const brokeragesQ = useQuery({ queryKey: ["brokerage-portal-brokerages"], queryFn: async () => {
@@ -170,8 +180,16 @@ export default function BrokeragePortal() {
       ))}
     </div>
     <AutomationsStrip />
-    <BrandedEmailsLauncherCard variant="broker" />
-    <PendingBrokerageImportsSection />
+    <Tabs defaultValue="new-dld" className="w-full">
+      <TabsList className="grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
+        <TabsTrigger value="new-dld" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">DLD daily additions</TabsTrigger>
+        <TabsTrigger value="email-status" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">Emails sent + replies</TabsTrigger>
+        <TabsTrigger value="approval" className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white font-black">Uploaded approval</TabsTrigger>
+      </TabsList>
+      <TabsContent value="new-dld" className="mt-4"><DldSyncHistoryPanel /></TabsContent>
+      <TabsContent value="email-status" className="mt-4 space-y-4"><BrandedEmailsLauncherCard variant="broker" /><BrandedEmailDashboard kind="brokerages" /></TabsContent>
+      <TabsContent value="approval" className="mt-4"><PendingBrokerageImportsSection /></TabsContent>
+    </Tabs>
 
 
     <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
@@ -312,13 +330,12 @@ function DldSyncHistoryPanel() {
   const runsQ = useQuery({
     queryKey: ["brokerage-portal-dld-runs"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("dld_daily_sync_runs" as any)
+      const { data, error } = await (supabase.from as any)("dld_daily_sync_runs")
         .select("id,run_started_at,status,agencies_inserted,agencies_updated,brokers_inserted,brokers_updated,brokerages_new,developers_new,error_message,raw_summary")
         .order("run_started_at", { ascending: false })
         .limit(30);
       if (error) throw error;
-      return (data ?? []) as DldRun[];
+      return (data ?? []) as unknown as DldRun[];
     },
     refetchInterval: 45_000,
   });
@@ -327,8 +344,7 @@ function DldSyncHistoryPanel() {
     queryFn: async () => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      let q = supabase
-        .from("crm_brokerages" as any)
+      let q = (supabase.from as any)("crm_brokerages")
         .select("id,company_name,email,phone,website,office_location,dld_area,dld_office_number,first_seen_at,outreach_stage,last_outreach_at,relationship_status")
         .eq("dld_source", "dld_daily")
         .order("first_seen_at", { ascending: false })
