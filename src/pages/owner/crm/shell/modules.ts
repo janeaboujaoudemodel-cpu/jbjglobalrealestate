@@ -180,6 +180,7 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-crm-workspace": "/owner/crm/jbj",
   "owner-data-hub": "/owner/data-hub",
   "owner-brokerages": "/owner/brokerages",
+  "deals-ledger": "/owner/crm/jbj/deals",
   "owner-developers": "/owner/developers",
   "owner-developer-projects": "/owner/developers/projects",
   "owner-developer-calendar": "/owner/developers/calendar",
