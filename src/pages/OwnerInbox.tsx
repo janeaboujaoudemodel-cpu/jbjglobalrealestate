@@ -3,7 +3,7 @@
  * Single inbox merging all communication channels
  */
 
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect, useRef, type CSSProperties } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DeveloperActionsRail from "@/components/owner-inbox/DeveloperActionsRail";
 import { supabase } from "@/integrations/supabase/client";
