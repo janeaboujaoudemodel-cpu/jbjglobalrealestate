@@ -1211,10 +1211,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   onClick={handleSaveBookingUrl}
                   disabled={savingBookingUrl}
                   data-no-contrast-guard="true"
+                  data-cal-save-btn="true"
                   className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-black"
                   style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: savingBookingUrl ? 0.65 : 1 }}
                 >
-                  {savingBookingUrl ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
+                  {savingBookingUrl ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> : <Check className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
                   Save & use {activeCalendarAccount === "business" ? "contact@jbj.ae" : "infoo.jane@gmail.com"}
                 </button>
               </div>
