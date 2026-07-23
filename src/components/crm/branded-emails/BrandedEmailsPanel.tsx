@@ -761,7 +761,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         data-branded-email-panel="true"
         data-no-contrast-guard="true"
         aria-describedby={undefined}
-        className="w-full sm:max-w-6xl p-0 flex flex-col bg-white border-l-0 rounded-l-2xl shadow-[-24px_0_60px_-30px_rgba(6,78,59,0.35)] overflow-hidden"
+        className="w-screen sm:max-w-none p-0 flex flex-col bg-white border-l-0 rounded-l-2xl shadow-[-24px_0_60px_-30px_rgba(6,78,59,0.35)] overflow-hidden"
       >
         <style>{`
           [data-branded-email-panel="true"] [data-cal-active-pill="true"],

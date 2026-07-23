@@ -176,8 +176,8 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
             <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">Campaign tracking</p>
             <h3 className="text-xl md:text-2xl font-black text-[#0F1A16]">{titleByKind[kind]}</h3>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 items-stretch">
-            <div className="relative flex items-center min-w-[240px]">
+          <div className="flex flex-col sm:flex-row gap-2 items-stretch w-full lg:w-auto">
+            <div className="relative flex items-center min-w-[240px] flex-1 sm:flex-none">
               <Search
                 className="pointer-events-none absolute left-3 size-4 text-[#064E3B]"
                 style={{ top: "50%", transform: "translateY(-50%)" }}
@@ -190,21 +190,28 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
                 className="h-10 pl-10 pr-3 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
               />
             </div>
-            <div className="flex flex-wrap rounded-md border border-emerald-900/20 bg-white p-1 h-10 items-center">
-              {(["all", "sent", "opened", "responded"] as const).map((status) => {
+            <div
+              role="tablist"
+              aria-label="Filter campaign status"
+              className="inline-grid grid-cols-4 h-10 rounded-md border border-emerald-900/25 bg-white overflow-hidden shrink-0"
+              style={{ minWidth: 360 }}
+            >
+              {(["all", "sent", "opened", "responded"] as const).map((status, idx) => {
                 const isActive = statusFilter === status;
                 return (
                   <button
                     key={status}
                     type="button"
+                    role="tab"
+                    aria-selected={isActive}
                     onClick={() => setStatusFilter(status)}
                     data-branded-dash-pill={isActive ? "active" : undefined}
-                    className="rounded px-2.5 py-1 text-[11px] font-black uppercase tracking-wide"
+                    className="relative h-full flex items-center justify-center px-3 text-[11px] font-black uppercase tracking-wide whitespace-nowrap"
                     style={{
                       background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "transparent",
                       color: isActive ? "#FFFFFF" : "#064E3B",
                       WebkitTextFillColor: isActive ? "#FFFFFF" : "#064E3B",
-                      border: "none",
+                      borderLeft: idx === 0 ? "none" : "1px solid rgba(6,78,59,0.18)",
                     }}
                   >
                     {status}
