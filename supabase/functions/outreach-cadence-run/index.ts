@@ -201,7 +201,7 @@ async function processOwner(admin: any, ownerId: string, mode: string) {
       side: "brokerage",
       step: nextStep.step,
       entityName: brk.company_name || "",
-      contactFirstName: (brk.primary_contact || "").split(" ")[0] || null,
+      contactFirstName: (typeof brk.primary_contact === "string" ? brk.primary_contact : brk.primary_contact?.name || brk.primary_contact?.full_name || "").split(" ")[0] || null,
       attemptNumber: attempts + 1,
     });
 
