@@ -70,9 +70,9 @@ function toDLDShape(segment: DLDExportSegment, r: Record<string, any>): Record<s
     return {
       office_no: r.dld_office_no ?? r.office_no ?? r.license_number ?? "",
       name_en: r.company_name ?? r.name_en ?? "",
-      name_ar: r.name_ar ?? "",
+      name_ar: r.name_arabic ?? r.name_ar ?? "",
       manager: r.manager ?? r.manager_name ?? "",
-      phone: r.phone_number ?? r.phone ?? "",
+      phone: r.phone ?? r.phone_number ?? "",
       email: r.email ?? "",
       area: r.dld_area ?? r.area ?? "",
       license_expiry: r.license_expiry ?? "",
@@ -80,11 +80,11 @@ function toDLDShape(segment: DLDExportSegment, r: Record<string, any>): Record<s
   }
   return {
     developer_no: r.developer_no ?? r.license_number ?? "",
-    name_en: r.name ?? r.name_en ?? "",
+    name_en: r.developer_name ?? r.name ?? r.name_en ?? "",
     name_ar: r.name_ar ?? "",
     license_no: r.license_no ?? r.license_number ?? "",
-    phone: r.phone_number ?? r.phone ?? "",
-    email: r.email ?? "",
+    phone: r.phone ?? r.phone_number ?? "",
+    email: r.developer_email ?? r.email ?? "",
     status: r.status ?? r.relationship_status ?? "",
   };
 }
