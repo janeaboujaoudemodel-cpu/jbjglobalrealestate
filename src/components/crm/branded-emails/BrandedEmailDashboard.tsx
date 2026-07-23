@@ -176,32 +176,41 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
             <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">Campaign tracking</p>
             <h3 className="text-xl md:text-2xl font-black text-[#0F1A16]">{titleByKind[kind]}</h3>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <div className="relative min-w-[220px]">
-              <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#064E3B]" />
+          <div className="flex flex-col sm:flex-row gap-2 items-stretch">
+            <div className="relative flex items-center min-w-[240px]">
+              <Search
+                className="pointer-events-none absolute left-3 size-4 text-[#064E3B]"
+                style={{ top: "50%", transform: "translateY(-50%)" }}
+                aria-hidden="true"
+              />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search sent emails…"
-                className="pl-9 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
+                className="h-10 pl-10 pr-3 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
               />
             </div>
-            <div className="flex rounded-md border border-emerald-900/20 bg-white p-1">
-              {(["all", "sent", "opened", "responded"] as const).map((status) => (
-                <button
-                  key={status}
-                  type="button"
-                  onClick={() => setStatusFilter(status)}
-                  className="rounded px-2.5 py-1 text-[11px] font-black uppercase"
-                  style={{
-                    background: statusFilter === status ? "#064E3B" : "transparent",
-                    color: statusFilter === status ? "#FFFFFF" : "#064E3B",
-                    WebkitTextFillColor: statusFilter === status ? "#FFFFFF" : "#064E3B",
-                  }}
-                >
-                  {status}
-                </button>
-              ))}
+            <div className="flex flex-wrap rounded-md border border-emerald-900/20 bg-white p-1 h-10 items-center">
+              {(["all", "sent", "opened", "responded"] as const).map((status) => {
+                const isActive = statusFilter === status;
+                return (
+                  <button
+                    key={status}
+                    type="button"
+                    onClick={() => setStatusFilter(status)}
+                    data-branded-dash-pill={isActive ? "active" : undefined}
+                    className="rounded px-2.5 py-1 text-[11px] font-black uppercase tracking-wide"
+                    style={{
+                      background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "transparent",
+                      color: isActive ? "#FFFFFF" : "#064E3B",
+                      WebkitTextFillColor: isActive ? "#FFFFFF" : "#064E3B",
+                      border: "none",
+                    }}
+                  >
+                    {status}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

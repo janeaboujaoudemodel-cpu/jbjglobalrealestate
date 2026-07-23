@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Building2, Loader2, Search, Users, Send, Eye, FileText, Check, Lock } from "lucide-react";
+import { Building2, Loader2, Search, Users, Send, Eye, FileText, Check, Lock, X } from "lucide-react";
 import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -763,6 +763,24 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         aria-describedby={undefined}
         className="w-full sm:max-w-6xl p-0 flex flex-col bg-white border-l-0 rounded-l-2xl shadow-[-24px_0_60px_-30px_rgba(6,78,59,0.35)] overflow-hidden"
       >
+        <style>{`
+          [data-branded-email-panel="true"] [data-cal-active-pill="true"],
+          [data-branded-email-panel="true"] [data-cal-save-btn="true"] {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-branded-email-panel="true"] [data-cal-active-pill="true"] *,
+          [data-branded-email-panel="true"] [data-cal-save-btn="true"] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-branded-email-panel="true"] [data-cal-active-pill="true"] svg,
+          [data-branded-email-panel="true"] [data-cal-save-btn="true"] svg {
+            color: #FFFFFF !important;
+            stroke: #FFFFFF !important;
+            fill: none !important;
+          }
+        `}</style>
         <SheetHeader className="px-6 py-4 border-b border-emerald-900/10 bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <span className="inline-grid place-items-center size-14 shrink-0 rounded-md border border-emerald-900/15 bg-white p-2 shadow-[0_8px_18px_-14px_rgba(6,78,59,0.45)]">
@@ -782,12 +800,29 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               </p>
               <SheetTitle className="text-xl font-black text-[#0F1A16]">Branded Emails</SheetTitle>
             </div>
-            <div className="ml-auto flex items-center gap-2 text-xs text-[#4B5D55]">
-              <Users className="size-4" />
-              Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total.toLocaleString()} {kind}
-              {missingEmailCount > 0 && <span className="font-semibold text-[#064E3B]">· {missingEmailCount.toLocaleString()} missing email</span>}
-              {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
-              {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]">· {previouslySentCount} already sent</span>}
+            <div className="ml-auto flex items-center gap-3 text-xs text-[#4B5D55]">
+              <div className="hidden sm:flex items-center gap-2">
+                <Users className="size-4" />
+                Sending to <strong className="text-[#0F1A16]">{audienceCount}</strong> of {total.toLocaleString()} {kind}
+                {missingEmailCount > 0 && <span className="font-semibold text-[#064E3B]">· {missingEmailCount.toLocaleString()} missing email</span>}
+                {lockedCitiCount > 0 && <span className="font-semibold text-[#064E3B]">· {lockedCitiCount} locked</span>}
+                {previouslySentCount > 0 && <span className="font-semibold text-[#064E3B]">· {previouslySentCount} already sent</span>}
+              </div>
+              <button
+                type="button"
+                onClick={() => onOpenChange(false)}
+                aria-label="Close Branded Emails"
+                title="Close (Esc)"
+                data-branded-email-close="true"
+                className="inline-grid place-items-center size-9 rounded-full border transition"
+                style={{
+                  background: "#FFFFFF",
+                  borderColor: "#064E3B",
+                  color: "#064E3B",
+                }}
+              >
+                <X className="size-4" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+              </button>
             </div>
           </div>
         </SheetHeader>
@@ -1131,6 +1166,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                         type="button"
                         onClick={() => setActiveCalendarAccount(acc)}
                         data-no-contrast-guard="true"
+                        data-cal-active-pill={isActive ? "true" : undefined}
                         className="flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black border transition"
                         style={{
                           background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FFFFFF",
@@ -1140,7 +1176,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                         }}
                         aria-pressed={isActive}
                       >
-                        {isActive ? <Check className="size-3" /> : null}
+                        {isActive ? <Check className="size-3" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> : null}
                         {label}
                       </button>
                     );
@@ -1175,10 +1211,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   onClick={handleSaveBookingUrl}
                   disabled={savingBookingUrl}
                   data-no-contrast-guard="true"
+                  data-cal-save-btn="true"
                   className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-black"
                   style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: savingBookingUrl ? 0.65 : 1 }}
                 >
-                  {savingBookingUrl ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
+                  {savingBookingUrl ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> : <Check className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
                   Save & use {activeCalendarAccount === "business" ? "contact@jbj.ae" : "infoo.jane@gmail.com"}
                 </button>
               </div>
