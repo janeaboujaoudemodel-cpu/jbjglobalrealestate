@@ -9,14 +9,14 @@ import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCar
 import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
 import { Users, MailCheck, Eye, Reply, ShieldCheck, Loader2, Search } from "lucide-react";
 
-function useInvestorStats() {
+function useClientStats() {
   return useQuery({
-    queryKey: ["investor-portal-stats"],
+    queryKey: ["client-portal-stats"],
     queryFn: async () => {
       const [inv, logRes, openRes] = await Promise.all([
         (supabase as any)
           .from("client_investors")
-          .select("id,email,full_name,phone,status,created_at")
+          .select("id,email,client_name,phone,project_name,unit_type,created_at")
           .order("created_at", { ascending: false })
           .limit(5000),
         (supabase as any)
@@ -40,7 +40,7 @@ function useInvestorStats() {
         if (l.direction === "outbound") { sent++; if (l.entity_id) contacted.add(l.entity_id); }
         if (l.direction === "inbound" && l.entity_id) responded.add(l.entity_id);
       }
-      const active = rows.filter((r) => (r.status ?? "active") !== "archived" && (r.status ?? "active") !== "closed").length;
+      const active = rows.length;
       return {
         total: rows.length,
         active,
@@ -56,7 +56,7 @@ function useInvestorStats() {
 
 export default function InvestorPortal() {
   const [search, setSearch] = useState("");
-  const q = useInvestorStats();
+  const q = useClientStats();
   const s = q.data;
 
   const visible = useMemo(() => {
@@ -64,12 +64,12 @@ export default function InvestorPortal() {
     const t = search.trim().toLowerCase();
     if (!t) return rows.slice(0, 100);
     return rows
-      .filter((r) => [r.full_name, r.email, r.phone, r.status].some((v) => String(v ?? "").toLowerCase().includes(t)))
+      .filter((r) => [r.client_name, r.email, r.phone, r.project_name, r.unit_type].some((v) => String(v ?? "").toLowerCase().includes(t)))
       .slice(0, 100);
   }, [s?.rows, search]);
 
   const tiles: Array<[string, number | undefined, JSX.Element]> = [
-    ["Total investors", s?.total, <Users className="size-4" />],
+    ["Total clients", s?.total, <Users className="size-4" />],
     ["Active pipeline", s?.active, <ShieldCheck className="size-4" />],
     ["Contacted", s?.contacted, <MailCheck className="size-4" />],
     ["Emails sent", s?.sent, <MailCheck className="size-4" />],
@@ -78,7 +78,7 @@ export default function InvestorPortal() {
   ];
 
   return (
-    <div data-investor-portal className="space-y-5 max-w-full overflow-hidden">
+      <div data-investor-portal className="space-y-5 max-w-full overflow-hidden">
       <style>{`
         [data-investor-portal] .ip-tabs [data-state="active"] {
           background: linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%) !important;
@@ -94,10 +94,10 @@ export default function InvestorPortal() {
             <Users className="size-5 text-white" />
           </span>
           <div>
-            <p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Investors</p>
-            <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Investor Portal</h1>
+            <p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Clients</p>
+            <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Client Portal</h1>
             <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">
-              JBJ investor pipeline, branded outreach and campaign tracking — the same layout as the brokerage and developer portals.
+              JBJ client pipeline for buyers and sellers, branded outreach and campaign tracking — mirrored with the brokerage and developer portals.
             </p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function InvestorPortal() {
 
       <Tabs defaultValue="email-status" className="w-full">
         <TabsList className="ip-tabs grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
-          <TabsTrigger value="pipeline" className="text-[#064E3B] font-black">Investor pipeline</TabsTrigger>
+          <TabsTrigger value="pipeline" className="text-[#064E3B] font-black">Client pipeline</TabsTrigger>
           <TabsTrigger value="email-status" className="text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
           <TabsTrigger value="activity" className="text-[#064E3B] font-black">Campaign activity</TabsTrigger>
         </TabsList>
@@ -129,7 +129,7 @@ export default function InvestorPortal() {
             <div className="flex items-center gap-3 mb-3">
               <div className="relative flex items-center min-w-[240px]">
                 <Search className="pointer-events-none absolute left-3 size-4 text-[#064E3B]" style={{ top: "50%", transform: "translateY(-50%)" }} />
-                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search investors…" className="h-10 pl-10 pr-3 !bg-white !text-[#0F1A16] border-emerald-900/20" />
+                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search clients…" className="h-10 pl-10 pr-3 !bg-white !text-[#0F1A16] border-emerald-900/20" />
               </div>
               <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-auto">
                 {visible.length.toLocaleString()} of {(s?.total ?? 0).toLocaleString()}
@@ -138,16 +138,16 @@ export default function InvestorPortal() {
             {q.isLoading ? (
               <div className="flex items-center gap-2 text-[#064E3B]"><Loader2 className="size-4 animate-spin" /> Loading…</div>
             ) : visible.length === 0 ? (
-              <p className="text-sm text-[#1A1A1A]/60">No investors match this filter yet.</p>
+              <p className="text-sm text-[#1A1A1A]/60">No clients match this filter yet.</p>
             ) : (
               <div className="divide-y divide-[#B89555]/20">
                 {visible.map((r) => (
                   <div key={r.id} className="py-2 flex items-center gap-3 flex-wrap">
-                    <p className="text-sm font-black text-[#0F1A16] min-w-[220px]">{r.full_name || r.email || "—"}</p>
+                    <p className="text-sm font-black text-[#0F1A16] min-w-[220px]">{r.client_name || r.email || "—"}</p>
                     <p className="text-xs text-[#1A1A1A]/70">{r.email || "—"}</p>
                     <p className="text-xs text-[#1A1A1A]/60">{r.phone || ""}</p>
                     <Badge variant="outline" className="border-[#064E3B]/30 text-[#0F1A16] bg-[#F7F2EA] ml-auto">
-                      {r.status || "active"}
+                      {r.project_name || r.unit_type || "client"}
                     </Badge>
                   </div>
                 ))}
@@ -157,12 +157,16 @@ export default function InvestorPortal() {
         </TabsContent>
 
         <TabsContent value="email-status" className="mt-4 space-y-4">
-          <BrandedEmailsLauncherCard variant="owner" />
-          <BrandedEmailDashboard kind="investors" />
+          <div className="grid gap-3 md:grid-cols-2">
+            <Card className="p-4 bg-[#F7F2EA] border border-[#B89555]/30"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Seller section</p><p className="text-sm font-semibold text-[#0F1A16] mt-1">Seller follow-up campaigns and unanswered replies.</p></Card>
+            <Card className="p-4 bg-[#F7F2EA] border border-[#B89555]/30"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Buyer section</p><p className="text-sm font-semibold text-[#0F1A16] mt-1">Buyer follow-up campaigns and unanswered replies.</p></Card>
+          </div>
+          <BrandedEmailsLauncherCard variant="client" />
+          <BrandedEmailDashboard kind="clients" />
         </TabsContent>
 
         <TabsContent value="activity" className="mt-4">
-          <BrandedEmailDashboard kind="investors" />
+          <BrandedEmailDashboard kind="clients" />
         </TabsContent>
       </Tabs>
     </div>

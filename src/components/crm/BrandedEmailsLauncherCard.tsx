@@ -12,7 +12,7 @@ import BrandedEmailsPanel, { preloadBrandedEmailsData, type BrandedAudienceKind 
 import jbjMonogramCropped from "@/assets/jbj-monogram-cropped.png";
 import citiDevelopersLogo from "@/assets/citi-developers-logo.png";
 
-type Variant = "owner" | "broker" | "developer";
+type Variant = "owner" | "broker" | "developer" | "client";
 
 const COPY: Record<Variant, {
   eyebrow: string;
@@ -38,6 +38,12 @@ const COPY: Record<Variant, {
     blurb: "Reach developers with registration and follow-up templates. Preview, test, then live — no redirects.",
     kind: "developers",
   },
+  client: {
+    eyebrow: "Client Portal · Campaigns",
+    title: "Branded Emails",
+    blurb: "Reach buyers and sellers with JBJ-branded follow-up templates. Preview, test, then prepare the client campaign — no redirects.",
+    kind: "clients",
+  },
 };
 
 export default function BrandedEmailsLauncherCard({ variant = "owner" }: { variant?: Variant }) {
@@ -58,6 +64,7 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
   useEffect(() => {
     warm(c.kind);
     if (variant === "owner") warm("brokerages");
+    if (variant === "client") warm("clients");
   }, [c.kind, variant]);
 
   return (

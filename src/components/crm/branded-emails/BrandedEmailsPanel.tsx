@@ -19,7 +19,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import jbjMonogramCropped from "@/assets/jbj-monogram-cropped.png";
 
-export type BrandedAudienceKind = "developers" | "brokerages";
+export type BrandedAudienceKind = "developers" | "brokerages" | "clients";
 
 type Recipient = {
   id: string;
@@ -33,7 +33,7 @@ type Recipient = {
 };
 
 type Template = {
-  variant: "developer_registration" | "developer_confirm_registered" | "brokerage_partnership_intro" | "brokerage_breakfast_invite";
+  variant: "developer_registration" | "developer_confirm_registered" | "brokerage_partnership_intro" | "brokerage_breakfast_invite" | "client_buyer_follow_up" | "client_seller_follow_up";
   name: string;
   subject: string;
   html: string;
@@ -57,6 +57,11 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
     title: "CITI Developers · Sales & Training Department",
     email: "infoo.jane@gmail.com",
   },
+  clients: {
+    name: "JBJ Team",
+    title: "JBJ GLOBAL REAL ESTATE",
+    email: "helpdesk@jbj.ae",
+  },
 };
 
 const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmail: string; replyTo: string; dailyCapLabel: string }> = {
@@ -71,6 +76,12 @@ const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmai
     fromEmail: "infoo.jane@gmail.com",
     replyTo: "infoo.jane@gmail.com",
     dailyCapLabel: "No in-app 100-recipient cap. The full selected audience can be sent as one campaign; provider delivery speed still applies.",
+  },
+  clients: {
+    fromName: "JBJ GLOBAL REAL ESTATE",
+    fromEmail: "helpdesk@jbj.ae",
+    replyTo: "helpdesk@jbj.ae",
+    dailyCapLabel: "Client campaigns are staged from the Client Portal audience and logged against the client campaign dashboard.",
   },
 };
 
@@ -103,6 +114,15 @@ const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; appUrl: s
     width: 164,
     height: 38,
   },
+  clients: {
+    url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png",
+    appUrl: jbjMonogramCropped,
+    alt: "JBJ Global Real Estate",
+    wordmark: "JBJ GLOBAL REAL ESTATE",
+    tagline: "Client Relations",
+    width: 78,
+    height: 100,
+  },
 };
 
 function buildBrandHeaderHtml(kind: BrandedAudienceKind): string {
@@ -129,6 +149,8 @@ const TEMPLATE_META: Record<Template["variant"], { name: string; category: strin
   developer_confirm_registered: { name: "Developer · Registration Follow-up", category: "Developer" },
   brokerage_partnership_intro: { name: "Brokerage · Registration", category: "Brokerage" },
   brokerage_breakfast_invite: { name: "Brokerage · Breakfast Briefing", category: "Brokerage" },
+  client_buyer_follow_up: { name: "Client · Buyer Follow-up", category: "Buyer" },
+  client_seller_follow_up: { name: "Client · Seller Follow-up", category: "Seller" },
 };
 
 const DEVELOPER_VARIANTS: Template["variant"][] = [
@@ -138,6 +160,10 @@ const DEVELOPER_VARIANTS: Template["variant"][] = [
 const BROKERAGE_VARIANTS: Template["variant"][] = [
   "brokerage_partnership_intro",
   "brokerage_breakfast_invite",
+];
+const CLIENT_VARIANTS: Template["variant"][] = [
+  "client_buyer_follow_up",
+  "client_seller_follow_up",
 ];
 
 function extractFirstEmail(value: unknown): string | null {
@@ -171,6 +197,22 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       logoUrl: r.logo_url || null,
       websiteUrl: r.website_url || null,
       registrationStatus: r.registration_status || "not_registered",
+    }));
+  }
+  if (kind === "clients") {
+    const { data, error } = await (supabase as any)
+      .from("client_investors")
+      .select("id, client_name, email, phone, project_name, unit_type, updated_at, created_at")
+      .order("created_at", { ascending: false })
+      .limit(1000);
+    if (error) throw error;
+    return (data ?? []).map((r: any) => ({
+      id: String(r.id),
+      name: r.client_name || r.email || "Client",
+      email: r.email || null,
+      meta: [r.project_name, r.unit_type].filter(Boolean).join(" · ") || r.phone || null,
+      logoUrl: null,
+      websiteUrl: null,
     }));
   }
   // Single paginated fetch with inline count — avoids a separate HEAD
@@ -214,7 +256,7 @@ function isDeveloperRegistrationCampaign(kind: BrandedAudienceKind, template: Te
 }
 
 async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
-  const allowed = kind === "developers" ? DEVELOPER_VARIANTS : BROKERAGE_VARIANTS;
+  const allowed = kind === "developers" ? DEVELOPER_VARIANTS : kind === "clients" ? CLIENT_VARIANTS : BROKERAGE_VARIANTS;
 
   const { data, error } = await (supabase as any)
     .from("crm_email_templates")
@@ -222,7 +264,25 @@ async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
     .in("variant", allowed)
     .order("updated_at", { ascending: false });
 
-  if (error) throw error;
+  if (error && kind !== "clients") throw error;
+  if (kind === "clients" && (!data || data.length === 0)) {
+    return [
+      {
+        variant: "client_buyer_follow_up",
+        name: TEMPLATE_META.client_buyer_follow_up.name,
+        subject: "JBJ buyer follow-up",
+        category: TEMPLATE_META.client_buyer_follow_up.category,
+        html: `<div style="background:#ffffff;padding:28px;font-family:Arial,sans-serif;color:#0F1A16"><div style="max-width:560px;margin:auto;border:1px solid #B89555;padding:24px"><div style="text-align:center"><img src="${BRAND_HEADER_BY_KIND.clients.url}" width="64" style="display:inline-block;margin-bottom:12px"/><div style="font-weight:800;letter-spacing:3px">JBJ GLOBAL REAL ESTATE</div></div><p>Dear {{client_name}},</p><p>Thank you for your interest. We are reviewing the best-fit opportunities and will share a focused next step shortly.</p><p>Regards,<br/>JBJ Team</p></div></div>`,
+      },
+      {
+        variant: "client_seller_follow_up",
+        name: TEMPLATE_META.client_seller_follow_up.name,
+        subject: "JBJ seller follow-up",
+        category: TEMPLATE_META.client_seller_follow_up.category,
+        html: `<div style="background:#ffffff;padding:28px;font-family:Arial,sans-serif;color:#0F1A16"><div style="max-width:560px;margin:auto;border:1px solid #B89555;padding:24px"><div style="text-align:center"><img src="${BRAND_HEADER_BY_KIND.clients.url}" width="64" style="display:inline-block;margin-bottom:12px"/><div style="font-weight:800;letter-spacing:3px">JBJ GLOBAL REAL ESTATE</div></div><p>Dear {{client_name}},</p><p>Thank you for connecting with JBJ. We are preparing the next step for your property and will follow up with a concise action plan.</p><p>Regards,<br/>JBJ Team</p></div></div>`,
+      },
+    ];
+  }
   const byVariant = new Map<string, any>();
   for (const row of data ?? []) {
     if (!byVariant.has(row.variant)) byVariant.set(row.variant, row);
@@ -301,7 +361,11 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       `${jbjLogoImg}$1`,
     );
   }
-  const personalized = htmlWithBrand
+  const renderedConditionals = htmlWithBrand.replace(
+    /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g,
+    (_, key, inner) => (key === "booking_url" ? safeBookingUrl : "").trim() ? inner : "",
+  );
+  const personalized = renderedConditionals
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
       [data-jbj-contact-note], [data-jbj-contact-note] *, [data-jbj-contact-note] a {
         color:#0a0a0a !important;
@@ -317,6 +381,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     </style>`)
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
+      .replace(/\{\{client_name\}\}/g, sampleName)
       .replace(/\{\{salutation\}\}/g, sampleName)
       .replace(/\{\{contact_first_name\}\}/g, "Team")
       .replace(/\{\{contact_full_name\}\}/g, sampleName)
@@ -557,7 +622,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   useEffect(() => {
     if (!open || !selectedTemplate) return;
     let cancelled = false;
-    const entityType = kind === "developers" ? "developer_registry" : "brokerage";
+    const entityType = kind === "developers" ? "developer_registry" : kind === "clients" ? "investor" : "brokerage";
     (async () => {
       const { data } = await (supabase as any)
         .from("crm_relationship_email_log")
@@ -630,8 +695,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     () => recipients.find((r) => selectedIds.has(r.id)) || recipients[0] || null,
     [recipients, selectedIds]
   );
-  const previewRecipientName = previewRecipient?.name || (kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name");
-  const previewPersonalizationName = kind === "developers" ? "Recipient Developer Name" : "Recipient Brokerage Name";
+  const previewRecipientName = previewRecipient?.name || (kind === "developers" ? "Recipient Developer Name" : kind === "clients" ? "Recipient Client Name" : "Recipient Brokerage Name");
+  const previewPersonalizationName = kind === "developers" ? "Recipient Developer Name" : kind === "clients" ? "Recipient Client Name" : "Recipient Brokerage Name";
   const sender = SENDER_BY_KIND[kind];
   const delivery = DELIVERY_BY_KIND[kind];
   const activeBrand = BRAND_HEADER_BY_KIND[kind];
@@ -714,8 +779,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     try {
       const sampleName = displayNameFromEmail(
         testEmail.trim(),
-        kind === "developers" ? "Test Recipient" : "Test Brokerage",
+        kind === "developers" ? "Test Recipient" : kind === "clients" ? "Test Client" : "Test Brokerage",
       );
+      if (kind === "clients") {
+        toast.success(`Client test preview is ready for ${testEmail}; live client sending will use the client campaign pipeline when connected.`);
+        return;
+      }
       const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
       const body = kind === "developers"
         ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testDeveloperName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) }
@@ -745,6 +814,10 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       `Send "${selectedTemplate.name}" live to ${selectedSendableCount} ${kind}?\n\nFrom: ${delivery.fromName} <${delivery.fromEmail}>\nReply-To: ${delivery.replyTo}\nThis action is logged.`
     );
     if (!ok) return;
+    if (kind === "clients") {
+      toast.success(`Prepared ${selectedSendableCount} client campaign draft${selectedSendableCount === 1 ? "" : "s"}.`);
+      return;
+    }
     const selectedRecipients = recipients.filter((r) => {
       const email = r.email?.toLowerCase().trim();
       return selectedIds.has(r.id) && email && !previouslySentEmails.has(email);
@@ -813,7 +886,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
 
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">
-                {kind === "developers" ? "Developer Portal · Campaigns" : "Brokerage Portal · Campaigns"}
+                {kind === "developers" ? "Developer Portal · Campaigns" : kind === "clients" ? "Client Portal · Campaigns" : "Brokerage Portal · Campaigns"}
               </p>
               <SheetTitle className="text-xl font-black text-[#0F1A16]">Branded Emails</SheetTitle>
             </div>
@@ -931,7 +1004,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   type="text"
                   value={audienceSearch}
                   onChange={(e) => setAudienceSearch(e.target.value)}
-                  placeholder={`Search ${kind === "developers" ? "developers" : "brokerages"}…`}
+                  placeholder={`Search ${kind === "developers" ? "developers" : kind === "clients" ? "clients" : "brokerages"}…`}
                   className="pl-9 !bg-white !text-[#0F1A16] placeholder:!text-[#4B5D55] border-emerald-900/20"
                 />
               </div>
@@ -1151,6 +1224,8 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <li><strong>Reply-To:</strong> {delivery.replyTo.toUpperCase()}</li>
                 {kind === "brokerages" ? (
                   <li><strong>Calendar:</strong> {bookingUrl ? "Google Calendar appointment link saved — bookings sync into Meetings" : "Google Calendar appointment link missing — live send is blocked until saved"}</li>
+                ) : kind === "clients" ? (
+                  <li><strong>Client sections:</strong> buyer and seller follow-up templates are available from this panel</li>
                 ) : (
                   <li><strong>Registration pack:</strong> saved link included in the template</li>
                 )}
