@@ -904,13 +904,20 @@ const DeveloperPortal = () => {
     <>
       <SEOHead title="Developer Portal | JBJ Global Real Estate" description="Submit projects, briefings, and marketing materials to JBJ GLOBAL REAL ESTATE." />
       <div data-backend-portal="developer" className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
-        {/* Branded Emails — always visible at the top of the Developer Portal */}
-        <div className="container mx-auto px-4 pt-6 max-w-4xl">
-          <BrandedEmailsLauncherCard variant="developer" />
-        </div>
-        <div className="container mx-auto px-4 pt-4 max-w-4xl">
-          <BrandedEmailDashboard kind="developers" />
-        </div>
+        {/* Owner Campaign Dashboard — mirrors Brokerage Portal (insights + tabs) */}
+        {isOwner && (
+          <div data-developer-owner-dashboard className="container mx-auto px-4 pt-6 max-w-6xl">
+            <style>{`
+              [data-developer-owner-dashboard] .dp-tabs [data-state="active"] {
+                background: linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%) !important;
+                color: #FFFFFF !important;
+                -webkit-text-fill-color: #FFFFFF !important;
+                box-shadow: none !important;
+              }
+            `}</style>
+            <DeveloperOwnerCampaignDashboard />
+          </div>
+        )}
         {/* Owner Mode Banner */}
         {isOwner && !isDeveloperMode && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
