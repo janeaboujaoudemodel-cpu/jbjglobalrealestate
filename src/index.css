@@ -4762,6 +4762,12 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
   color: currentColor;
 }
 
+/* Force white check/loader icons inside emerald calendar toggle & save buttons. */
+[data-cal-save-btn] svg,
+[data-cal-active-pill] svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+
 /* 5. Dark theme — re-bind defaults via the .dark scope so semantic tokens
       automatically resolve to their dark counterparts (no extra rules needed
       because the tokens themselves switch). The block below documents intent
