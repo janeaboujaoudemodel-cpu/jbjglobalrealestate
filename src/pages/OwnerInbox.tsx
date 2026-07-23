@@ -514,7 +514,7 @@ export default function OwnerInbox() {
             </div>
 
             {/* Thread Detail */}
-            <div className="min-h-0 min-w-0 overflow-hidden">
+            <div ref={threadDetailRef} className="min-h-0 min-w-0 overflow-hidden scroll-mt-4">
               {selectedThread ? (
                 <OwnerInboxThread
                   thread={selectedThread}
