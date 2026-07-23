@@ -23824,6 +23824,256 @@ export type Database = {
         }
         Relationships: []
       }
+      jbj_campaign_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_type: string
+          campaign_id: string | null
+          confidence: number | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          evidence_message_id: string | null
+          evidence_thread_id: string | null
+          field_name: string | null
+          id: string
+          new_value: Json | null
+          portal_kind: string | null
+          prev_value: Json | null
+          reason: string | null
+          recipient_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_type: string
+          campaign_id?: string | null
+          confidence?: number | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          evidence_message_id?: string | null
+          evidence_thread_id?: string | null
+          field_name?: string | null
+          id?: string
+          new_value?: Json | null
+          portal_kind?: string | null
+          prev_value?: Json | null
+          reason?: string | null
+          recipient_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_type?: string
+          campaign_id?: string | null
+          confidence?: number | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          evidence_message_id?: string | null
+          evidence_thread_id?: string | null
+          field_name?: string | null
+          id?: string
+          new_value?: Json | null
+          portal_kind?: string | null
+          prev_value?: Json | null
+          reason?: string | null
+          recipient_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_campaign_audit_log_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaign_counts_v1"
+            referencedColumns: ["campaign_id"]
+          },
+          {
+            foreignKeyName: "jbj_campaign_audit_log_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_campaign_audit_log_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaign_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_campaign_recipients: {
+        Row: {
+          accepted_at: string | null
+          attempted_at: string | null
+          bounced_at: string | null
+          business_status: string
+          campaign_id: string | null
+          clicked_at: string | null
+          complaint_at: string | null
+          created_at: string
+          delivered_at: string | null
+          delivery_status: string | null
+          email: string | null
+          email_norm: string | null
+          entity_id: string | null
+          entity_type: string
+          error_message: string | null
+          id: string
+          last_followup_at: string | null
+          metadata: Json
+          next_followup_at: string | null
+          opened_at: string | null
+          pre_send_status: string
+          provider: string | null
+          provider_response: Json | null
+          replied_at: string | null
+          reply_status: string
+          resend_message_id: string | null
+          send_status: string | null
+          thread_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          attempted_at?: string | null
+          bounced_at?: string | null
+          business_status?: string
+          campaign_id?: string | null
+          clicked_at?: string | null
+          complaint_at?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          delivery_status?: string | null
+          email?: string | null
+          email_norm?: string | null
+          entity_id?: string | null
+          entity_type: string
+          error_message?: string | null
+          id?: string
+          last_followup_at?: string | null
+          metadata?: Json
+          next_followup_at?: string | null
+          opened_at?: string | null
+          pre_send_status?: string
+          provider?: string | null
+          provider_response?: Json | null
+          replied_at?: string | null
+          reply_status?: string
+          resend_message_id?: string | null
+          send_status?: string | null
+          thread_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          attempted_at?: string | null
+          bounced_at?: string | null
+          business_status?: string
+          campaign_id?: string | null
+          clicked_at?: string | null
+          complaint_at?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          delivery_status?: string | null
+          email?: string | null
+          email_norm?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          error_message?: string | null
+          id?: string
+          last_followup_at?: string | null
+          metadata?: Json
+          next_followup_at?: string | null
+          opened_at?: string | null
+          pre_send_status?: string
+          provider?: string | null
+          provider_response?: Json | null
+          replied_at?: string | null
+          reply_status?: string
+          resend_message_id?: string | null
+          send_status?: string | null
+          thread_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_campaign_recipients_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaign_counts_v1"
+            referencedColumns: ["campaign_id"]
+          },
+          {
+            foreignKeyName: "jbj_campaign_recipients_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_campaigns: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          metadata: Json
+          portal_kind: string
+          preview_text: string | null
+          reply_to: string | null
+          scheduled_at: string | null
+          sender_email: string | null
+          sent_at: string | null
+          status: string
+          subject: string | null
+          template_id: string | null
+          template_version_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json
+          portal_kind: string
+          preview_text?: string | null
+          reply_to?: string | null
+          scheduled_at?: string | null
+          sender_email?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template_id?: string | null
+          template_version_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json
+          portal_kind?: string
+          preview_text?: string | null
+          reply_to?: string | null
+          scheduled_at?: string | null
+          sender_email?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template_id?: string | null
+          template_version_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       jbj_compliance_words: {
         Row: {
           category: string
@@ -23901,6 +24151,209 @@ export type Database = {
           },
         ]
       }
+      jbj_document_requirements: {
+        Row: {
+          created_at: string
+          doc_name: string
+          entity_id: string
+          entity_type: string
+          id: string
+          metadata: Json
+          notes: string | null
+          recipient_id: string | null
+          requested_at: string | null
+          source: string
+          status: string
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          doc_name: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          metadata?: Json
+          notes?: string | null
+          recipient_id?: string | null
+          requested_at?: string | null
+          source?: string
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          doc_name?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          metadata?: Json
+          notes?: string | null
+          recipient_id?: string | null
+          requested_at?: string | null
+          source?: string
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_document_requirements_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaign_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_email_events: {
+        Row: {
+          campaign_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          occurred_at: string
+          payload: Json
+          provider_id: string | null
+          recipient_id: string | null
+          source: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          occurred_at?: string
+          payload?: Json
+          provider_id?: string | null
+          recipient_id?: string | null
+          source?: string
+        }
+        Update: {
+          campaign_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          occurred_at?: string
+          payload?: Json
+          provider_id?: string | null
+          recipient_id?: string | null
+          source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_email_events_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaign_counts_v1"
+            referencedColumns: ["campaign_id"]
+          },
+          {
+            foreignKeyName: "jbj_email_events_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_email_events_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaign_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_email_template_versions: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          created_by: string | null
+          html_body: string
+          id: string
+          locked: boolean
+          preview_text: string | null
+          status: string
+          subject: string
+          template_id: string
+          text_body: string | null
+          version_number: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          html_body: string
+          id?: string
+          locked?: boolean
+          preview_text?: string | null
+          status?: string
+          subject: string
+          template_id: string
+          text_body?: string | null
+          version_number: number
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          html_body?: string
+          id?: string
+          locked?: boolean
+          preview_text?: string | null
+          status?: string
+          subject?: string
+          template_id?: string
+          text_body?: string | null
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_email_template_versions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_email_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_email_templates: {
+        Row: {
+          active_version_id: string | null
+          created_at: string
+          description: string | null
+          display_name: string
+          id: string
+          portal_kind: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          active_version_id?: string | null
+          created_at?: string
+          description?: string | null
+          display_name: string
+          id?: string
+          portal_kind: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          active_version_id?: string | null
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          id?: string
+          portal_kind?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       jbj_filters: {
         Row: {
           created_at: string | null
@@ -23930,6 +24383,74 @@ export type Database = {
           replacement_text?: string | null
         }
         Relationships: []
+      }
+      jbj_follow_up_tasks: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          created_by: string | null
+          due_at: string | null
+          entity_id: string | null
+          entity_type: string
+          expected_outcome: string | null
+          id: string
+          metadata: Json
+          recipient_id: string | null
+          required_outcome: string | null
+          risk_level: string
+          rule: string
+          status: string
+          suggested_reply: string | null
+          thread_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          entity_id?: string | null
+          entity_type: string
+          expected_outcome?: string | null
+          id?: string
+          metadata?: Json
+          recipient_id?: string | null
+          required_outcome?: string | null
+          risk_level?: string
+          rule: string
+          status?: string
+          suggested_reply?: string | null
+          thread_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          expected_outcome?: string | null
+          id?: string
+          metadata?: Json
+          recipient_id?: string | null
+          required_outcome?: string | null
+          risk_level?: string
+          rule?: string
+          status?: string
+          suggested_reply?: string | null
+          thread_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_follow_up_tasks_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_campaign_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       jbj_issue_reports: {
         Row: {
@@ -40186,6 +40707,40 @@ export type Database = {
           },
         ]
       }
+      jbj_campaign_counts_v1: {
+        Row: {
+          attempted: number | null
+          automated_reply: number | null
+          business_rejected: number | null
+          campaign_id: string | null
+          clicked: number | null
+          complaint: number | null
+          deferred: number | null
+          delivered: number | null
+          documents_required: number | null
+          eligible: number | null
+          excluded: number | null
+          failed: number | null
+          follow_up_required: number | null
+          hard_bounce: number | null
+          human_reply: number | null
+          invalid_domain: number | null
+          invalid_email: number | null
+          limit_blocked: number | null
+          missing_email: number | null
+          opened: number | null
+          pending: number | null
+          portal_kind: string | null
+          previously_contacted: number | null
+          provider_accepted: number | null
+          provider_rejected: number | null
+          registered: number | null
+          soft_bounce: number | null
+          total: number | null
+          unsubscribed: number | null
+        }
+        Relationships: []
+      }
       jbj_leads_secure: {
         Row: {
           assigned_broker_id: string | null
@@ -40223,6 +40778,28 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      jbj_portal_counts_v1: {
+        Row: {
+          automated_reply: number | null
+          business_rejected: number | null
+          delivered: number | null
+          documents_required: number | null
+          eligible: number | null
+          hard_bounce: number | null
+          human_reply: number | null
+          invalid_domain: number | null
+          invalid_email: number | null
+          limit_blocked: number | null
+          missing_email: number | null
+          pending: number | null
+          portal_entity: string | null
+          provider_accepted: number | null
+          registered: number | null
+          soft_bounce: number | null
+          total: number | null
+        }
+        Relationships: []
       }
       leads_secure: {
         Row: {
