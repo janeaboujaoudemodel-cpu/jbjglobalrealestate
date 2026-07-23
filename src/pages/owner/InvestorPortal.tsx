@@ -16,7 +16,7 @@ function useClientStats() {
       const [inv, logRes, openRes] = await Promise.all([
         (supabase as any)
           .from("client_investors")
-          .select("id,email,full_name,phone,status,created_at")
+          .select("id,email,client_name,phone,project_name,unit_type,created_at")
           .order("created_at", { ascending: false })
           .limit(5000),
         (supabase as any)
@@ -40,7 +40,7 @@ function useClientStats() {
         if (l.direction === "outbound") { sent++; if (l.entity_id) contacted.add(l.entity_id); }
         if (l.direction === "inbound" && l.entity_id) responded.add(l.entity_id);
       }
-      const active = rows.filter((r) => (r.status ?? "active") !== "archived" && (r.status ?? "active") !== "closed").length;
+      const active = rows.length;
       return {
         total: rows.length,
         active,
@@ -64,7 +64,7 @@ export default function InvestorPortal() {
     const t = search.trim().toLowerCase();
     if (!t) return rows.slice(0, 100);
     return rows
-      .filter((r) => [r.full_name, r.email, r.phone, r.status].some((v) => String(v ?? "").toLowerCase().includes(t)))
+      .filter((r) => [r.client_name, r.email, r.phone, r.project_name, r.unit_type].some((v) => String(v ?? "").toLowerCase().includes(t)))
       .slice(0, 100);
   }, [s?.rows, search]);
 
@@ -129,7 +129,7 @@ export default function InvestorPortal() {
             <div className="flex items-center gap-3 mb-3">
               <div className="relative flex items-center min-w-[240px]">
                 <Search className="pointer-events-none absolute left-3 size-4 text-[#064E3B]" style={{ top: "50%", transform: "translateY(-50%)" }} />
-                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search investors…" className="h-10 pl-10 pr-3 !bg-white !text-[#0F1A16] border-emerald-900/20" />
+                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search clients…" className="h-10 pl-10 pr-3 !bg-white !text-[#0F1A16] border-emerald-900/20" />
               </div>
               <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-auto">
                 {visible.length.toLocaleString()} of {(s?.total ?? 0).toLocaleString()}
@@ -143,11 +143,11 @@ export default function InvestorPortal() {
               <div className="divide-y divide-[#B89555]/20">
                 {visible.map((r) => (
                   <div key={r.id} className="py-2 flex items-center gap-3 flex-wrap">
-                    <p className="text-sm font-black text-[#0F1A16] min-w-[220px]">{r.full_name || r.email || "—"}</p>
+                    <p className="text-sm font-black text-[#0F1A16] min-w-[220px]">{r.client_name || r.email || "—"}</p>
                     <p className="text-xs text-[#1A1A1A]/70">{r.email || "—"}</p>
                     <p className="text-xs text-[#1A1A1A]/60">{r.phone || ""}</p>
                     <Badge variant="outline" className="border-[#064E3B]/30 text-[#0F1A16] bg-[#F7F2EA] ml-auto">
-                      {r.status || "active"}
+                      {r.project_name || r.unit_type || "client"}
                     </Badge>
                   </div>
                 ))}
