@@ -2,7 +2,7 @@
  * CRM Send Developer Registration Email — via Resend
  *
  * Loads the locked HTML template from `crm_email_templates` (variant) and
- * sends it via the owner's connected Gmail account so replies thread back
+ * sends it via Resend using the verified JBJ sender domain so replies thread back
  * to the configured JBJ inbox where crm-email-sync can pick them up.
  *
  * Owner-only.

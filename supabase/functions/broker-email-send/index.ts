@@ -2,7 +2,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { sendViaResend } from "../_shared/resendClient.ts";
-import { recordJbjResendSend, buildIntendedSendKey } from "../_shared/jbjSpine.ts";
+import { recordJbjResendSend, buildIntendedSendKey, type JbjPortalKind } from "../_shared/jbjSpine.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
@@ -17,8 +17,11 @@ Deno.serve(async (req) => {
     const { data: claims } = await u.auth.getClaims(auth.replace("Bearer ", ""));
     if (!claims?.claims?.sub) return j({ error: "Unauthorized" }, 401);
 
-    const { accountId, to, subject, body, cc, bcc, entityId, portalKind = "individual_broker" } = await req.json();
+    const { accountId, to, subject, body, cc, bcc, entityId, portalKind: rawPortalKind = "individual_broker" } = await req.json();
     if (!to || !subject || !body) return j({ error: "to, subject, body required" }, 400);
+    const allowedPortals = new Set(["brokerage", "developer", "individual_broker", "client_buyer", "client_seller", "career"]);
+    if (!allowedPortals.has(String(rawPortalKind))) return j({ error: "Invalid portalKind" }, 400);
+    const portalKind = String(rawPortalKind) as JbjPortalKind;
 
     const svc = createClient(SUPABASE_URL, SERVICE);
     let replyTo = "helpdesk@jbj.ae";
@@ -31,8 +34,8 @@ Deno.serve(async (req) => {
     const resendResult = await sendViaResend({
       from: "JBJ Global Real Estate <contact@jbj.ae>",
       to: arr(to),
-      cc: arr(cc),
-      bcc: arr(bcc),
+      cc: arr(cc).length ? arr(cc) : undefined,
+      bcc: arr(bcc).length ? arr(bcc) : undefined,
       reply_to: replyTo,
       subject,
       html: body,

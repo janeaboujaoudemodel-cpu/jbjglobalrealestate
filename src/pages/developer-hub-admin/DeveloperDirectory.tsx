@@ -78,6 +78,11 @@ const DEVELOPER_GROUP_OPTIONS = [
   { value: "group_not_required", label: "Group not required" },
 ];
 
+const normalizeRegistrationStatus = (status: string | null | undefined) => {
+  const key = String(status || "not_registered").toLowerCase();
+  return key === "application_pending" || key === "pending_registration" ? "pending" : key;
+};
+
 const developerProfilePath = (slug: string) => `/owner/crm/jbj/owner-developers/${slug}`;
 const developerPortfolioPath = (slug: string) => `${developerProfilePath(slug)}?tab=projects`;
 
@@ -554,7 +559,7 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 whitespace-nowrap min-w-[120px]"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap inline-flex min-w-[72px] justify-center">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
                     <td className="px-4 py-3 min-w-[260px] whitespace-nowrap">
                       <div className="flex flex-row items-center gap-1.5 flex-nowrap">
-                        <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
+                        <Select value={normalizeRegistrationStatus(d.registration_status)} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
                           <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs min-w-[110px]"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                         </Select>
@@ -660,7 +665,7 @@ export default function DeveloperDirectory() {
               <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
                   <p className="mb-1 text-[10px] uppercase tracking-[0.12em] font-black text-[#1A1A1A]/55">Registration</p>
-                  <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
+                  <Select value={normalizeRegistrationStatus(d.registration_status)} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
                   <SelectTrigger className="h-9 bg-white text-[#1A1A1A] w-full"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                   </Select>
