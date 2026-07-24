@@ -18,7 +18,7 @@ import {
   enforceAllowedSender,
 } from "../_shared/outreachIdentity.ts";
 import { sendViaResend } from "../_shared/resendClient.ts";
-import { recordJbjResendSend, buildIntendedSendKey } from "../_shared/jbjSpine.ts";
+import { recordJbjResendSend, buildCampaignIntendedSendKey } from "../_shared/jbjSpine.ts";
 
 
 const corsHeaders = {
@@ -639,6 +639,7 @@ serve(async (req: Request) => {
     const threadId: string | null = null;
 
     if (isTest) {
+      const intendedSendId = `test:${variant}:${messageId || crypto.randomUUID()}`;
       await recordJbjResendSend({
         portalKind: "brokerage",
         entityType: "brokerage",
@@ -650,10 +651,13 @@ serve(async (req: Request) => {
         subject,
         resendMessageId: messageId,
         providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
-        idempotencyKey: buildIntendedSendKey({
-          portalKind: "brokerage", sendType: "test",
-          templateSlug: variant, entityId: brk?.id ?? null, emailNorm: recipient,
-          nonce: messageId || String(Date.now()),
+        intendedSendId,
+        sendCategory: "test",
+        idempotencyKey: buildCampaignIntendedSendKey({
+          portalKind: "brokerage",
+          templateSlug: variant,
+          recipientId: brk?.id ?? recipient,
+          intendedSendId,
         }),
       });
       return new Response(JSON.stringify({
@@ -693,6 +697,7 @@ serve(async (req: Request) => {
     });
 
     // Canonical JBJ spine record
+    const intendedSendId = `campaign:${variant}:${brk.id}:${new Date().toISOString().slice(0, 10)}:${messageId || crypto.randomUUID()}`;
     await recordJbjResendSend({
       portalKind: "brokerage",
       entityType: "brokerage",
@@ -704,9 +709,13 @@ serve(async (req: Request) => {
       subject,
       resendMessageId: messageId,
       providerResponse: { status: resendResult.status, data: resendResult.data },
-      idempotencyKey: buildIntendedSendKey({
-        portalKind: "brokerage", sendType: "live",
-        templateSlug: variant, entityId: brk.id, emailNorm: recipient,
+      intendedSendId,
+      sendCategory: "campaign",
+      idempotencyKey: buildCampaignIntendedSendKey({
+        portalKind: "brokerage",
+        templateSlug: variant,
+        recipientId: brk.id,
+        intendedSendId,
       }),
     });
 
