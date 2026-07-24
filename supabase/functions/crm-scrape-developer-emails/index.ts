@@ -31,7 +31,7 @@ function pickBest(emails: string[], domainHint: string | null): string | null {
   return scored[0]?.e ?? null;
 }
 
-async function fetchText(url: string, timeoutMs = 8000): Promise<string | null> {
+async function fetchText(url: string, timeoutMs = 6000): Promise<string | null> {
   try {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -47,7 +47,10 @@ async function fetchText(url: string, timeoutMs = 8000): Promise<string | null> 
     if (!res.ok) return null;
     const ct = res.headers.get("content-type") || "";
     if (!ct.includes("text") && !ct.includes("html")) return null;
-    return await res.text();
+    const buf = await res.arrayBuffer();
+    // Cap at 500KB to protect worker memory
+    const slice = buf.byteLength > 500_000 ? buf.slice(0, 500_000) : buf;
+    return new TextDecoder("utf-8", { fatal: false }).decode(slice);
   } catch {
     return null;
   }
