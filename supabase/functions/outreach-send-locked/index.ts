@@ -20,6 +20,8 @@ const corsHeaders = {
 
 const OWNER_EMAILS = [
   "janeaboujaoudenails@gmail.com",
+  "janeaboujaoudemodel@gmail.com",
+  "contact@janeaboujaoude.net",
   "infoo.jane@gmail.com",
 ];
 
