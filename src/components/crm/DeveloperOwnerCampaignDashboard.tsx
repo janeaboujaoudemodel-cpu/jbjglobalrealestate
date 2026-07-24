@@ -13,15 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import BrandedEmailDashboard, { CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
-import { Building2, MailCheck, Reply, Eye, ShieldCheck, Loader2, Send, MousePointerClick, RotateCw, Ban, AlertTriangle, Bot } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
-type TileDef = {
-  key: string;
-  label: string;
-  icon: JSX.Element;
-  value: number | undefined;
-  filter: CanonicalStatus | null; // null = non-filterable (e.g. Total / Registered)
-};
 
 function useDeveloperCampaignStats() {
   return useQuery({
@@ -76,61 +69,14 @@ export default function DeveloperOwnerCampaignDashboard() {
     return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
   }, [s?.rows]);
 
-  const tiles: TileDef[] = [
-    { key: "total",       label: "Total developers", value: s?.total,     icon: <Building2 className="size-4" />,        filter: null },
-    { key: "contacted",   label: "Contacted",        value: s?.contacted, icon: <MailCheck className="size-4" />,        filter: "sent" },
-    { key: "sent",        label: "Emails sent",      value: s?.sent,      icon: <Send className="size-4" />,             filter: "sent" },
-    { key: "delivered",   label: "Delivered",        value: s?.delivered, icon: <MailCheck className="size-4" />,        filter: "delivered" },
-    { key: "opened",      label: "Opened",           value: s?.opened,    icon: <Eye className="size-4" />,              filter: "opened" },
-    { key: "clicked",     label: "Clicked",          value: s?.clicked,   icon: <MousePointerClick className="size-4" />, filter: "clicked" },
-    { key: "responded",   label: "Human replies",    value: s?.responded, icon: <Reply className="size-4" />,            filter: "responded" },
-    { key: "auto_reply",  label: "Auto replies",     value: s?.autoReply, icon: <Bot className="size-4" />,              filter: "auto_reply" },
-    { key: "pending",     label: "Pending response", value: s?.pending,   icon: <MailCheck className="size-4" />,        filter: "pending" },
-    { key: "retry",       label: "Retry eligible",   value: s?.retry,     icon: <RotateCw className="size-4" />,         filter: "retry_eligible" },
-    { key: "excluded",    label: "Permanently excluded", value: s?.excluded, icon: <Ban className="size-4" />,           filter: "permanently_excluded" },
-    { key: "temp_fail",   label: "Temporary failure", value: s?.temporaryFailure, icon: <AlertTriangle className="size-4" />, filter: "deferred" },
-    { key: "registered",  label: "Registered",       value: s?.registered, icon: <ShieldCheck className="size-4" />,     filter: null },
-  ];
+  // Top KPI grid intentionally removed — the "Developer campaign dashboard"
+  // under Campaign Tracking below is now the single source of KPI display and
+  // supports inline drill-down (click any chip to filter the log in place).
 
   return (
     <div className="space-y-4">
-      <div className="rounded-[24px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_18px_45px_-34px_rgba(6,78,59,0.35)]">
-        <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#B89555]">Developer Portal · Campaigns</p>
-        <h2 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Developer campaign dashboard</h2>
-        <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">
-          Canonical JBJ campaign spine — click any KPI to filter the campaign log below.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {tiles.map((t) => {
-          const clickable = t.filter !== null;
-          const active = clickable && filter === t.filter;
-          return (
-            <button
-              key={t.key}
-              type="button"
-              disabled={!clickable}
-              onClick={() => clickable && setFilter(t.filter!)}
-              className={`block w-full text-left rounded-lg transition-all whitespace-normal ${clickable ? "hover:shadow-md cursor-pointer" : "cursor-default"}`}
-              style={{ display: "block" }}
-              aria-pressed={active}
-            >
-              <Card className={`w-full p-4 border ${active ? "border-[#064E3B] ring-2 ring-[#064E3B]/30" : "border-[#B89555]/30"} bg-[#F7F2EA]`}>
-                <div className="flex items-center gap-2 text-[#064E3B] min-w-0">
-                  <span className="shrink-0">{t.icon}</span>
-                  <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55 min-w-0 break-words">{t.label}</p>
-                </div>
-                <p className="mt-1 text-2xl font-black text-[#064E3B]">
-                  {q.isLoading ? <Loader2 className="size-5 animate-spin" /> : typeof t.value === "number" ? t.value.toLocaleString() : "—"}
-                </p>
-              </Card>
-            </button>
-          );
-        })}
-      </div>
-
       <Tabs defaultValue="email-status" className="w-full">
+
         <TabsList className="dp-tabs grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
           <TabsTrigger value="registration" className="text-[#064E3B] font-black">Registration status</TabsTrigger>
           <TabsTrigger value="email-status" className="text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
