@@ -23767,6 +23767,360 @@ export type Database = {
         }
         Relationships: []
       }
+      jbj_booking_appointments: {
+        Row: {
+          audit: Json
+          booking_page_id: string | null
+          calendar_event_id: string | null
+          calendar_sync_status: string | null
+          cancellation_reason: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          email_verified: boolean
+          ends_at: string
+          event_type_id: string
+          form_data: Json
+          id: string
+          notes: string | null
+          starts_at: string
+          status: Database["public"]["Enums"]["jbj_booking_status"]
+          timezone: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          audit?: Json
+          booking_page_id?: string | null
+          calendar_event_id?: string | null
+          calendar_sync_status?: string | null
+          cancellation_reason?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          email_verified?: boolean
+          ends_at: string
+          event_type_id: string
+          form_data?: Json
+          id?: string
+          notes?: string | null
+          starts_at: string
+          status?: Database["public"]["Enums"]["jbj_booking_status"]
+          timezone?: string
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          audit?: Json
+          booking_page_id?: string | null
+          calendar_event_id?: string | null
+          calendar_sync_status?: string | null
+          cancellation_reason?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          email_verified?: boolean
+          ends_at?: string
+          event_type_id?: string
+          form_data?: Json
+          id?: string
+          notes?: string | null
+          starts_at?: string
+          status?: Database["public"]["Enums"]["jbj_booking_status"]
+          timezone?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_booking_appointments_booking_page_id_fkey"
+            columns: ["booking_page_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_booking_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_booking_appointments_event_type_id_fkey"
+            columns: ["event_type_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_booking_event_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jbj_booking_appointments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_booking_workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_booking_audit_log: {
+        Row: {
+          action: string
+          actor: string | null
+          appointment_id: string | null
+          created_at: string
+          details: Json | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          appointment_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          appointment_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_booking_audit_log_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_booking_appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_booking_email_verifications: {
+        Row: {
+          attempts: number
+          code_hash: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          slug: string
+          verified_at: string | null
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          slug: string
+          verified_at?: string | null
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          slug?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
+      jbj_booking_event_types: {
+        Row: {
+          created_at: string
+          date_overrides: Json
+          description: string | null
+          duration_minutes: number
+          id: string
+          interval_minutes: number
+          is_active: boolean
+          max_advance_days: number
+          min_notice_hours: number
+          name: string
+          updated_at: string
+          weekly_availability: Json
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_overrides?: Json
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          interval_minutes?: number
+          is_active?: boolean
+          max_advance_days?: number
+          min_notice_hours?: number
+          name: string
+          updated_at?: string
+          weekly_availability?: Json
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          date_overrides?: Json
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          interval_minutes?: number
+          is_active?: boolean
+          max_advance_days?: number
+          min_notice_hours?: number
+          name?: string
+          updated_at?: string
+          weekly_availability?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_booking_event_types_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_booking_workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_booking_guests: {
+        Row: {
+          appointment_id: string
+          created_at: string
+          email: string
+          id: string
+          invite_status: string
+          name: string | null
+        }
+        Insert: {
+          appointment_id: string
+          created_at?: string
+          email: string
+          id?: string
+          invite_status?: string
+          name?: string | null
+        }
+        Update: {
+          appointment_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          invite_status?: string
+          name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_booking_guests_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_booking_appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_booking_pages: {
+        Row: {
+          access_mode: Database["public"]["Enums"]["jbj_booking_access_mode"]
+          confirmation_message: string | null
+          created_at: string
+          event_type_id: string
+          form_fields: Json
+          id: string
+          is_active: boolean
+          page_title: string | null
+          promo_actions: Json
+          require_email_verification: boolean
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          access_mode?: Database["public"]["Enums"]["jbj_booking_access_mode"]
+          confirmation_message?: string | null
+          created_at?: string
+          event_type_id: string
+          form_fields?: Json
+          id?: string
+          is_active?: boolean
+          page_title?: string | null
+          promo_actions?: Json
+          require_email_verification?: boolean
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          access_mode?: Database["public"]["Enums"]["jbj_booking_access_mode"]
+          confirmation_message?: string | null
+          created_at?: string
+          event_type_id?: string
+          form_fields?: Json
+          id?: string
+          is_active?: boolean
+          page_title?: string | null
+          promo_actions?: Json
+          require_email_verification?: boolean
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jbj_booking_pages_event_type_id_fkey"
+            columns: ["event_type_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_booking_event_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jbj_booking_workspaces: {
+        Row: {
+          created_at: string
+          display_name: string
+          host_name: string
+          id: string
+          is_active: boolean
+          kind: Database["public"]["Enums"]["jbj_booking_workspace_kind"]
+          logo_url: string | null
+          notification_email: string
+          profile_image_url: string | null
+          reply_to_email: string
+          sender_email: string
+          sender_name: string
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          host_name: string
+          id?: string
+          is_active?: boolean
+          kind: Database["public"]["Enums"]["jbj_booking_workspace_kind"]
+          logo_url?: string | null
+          notification_email: string
+          profile_image_url?: string | null
+          reply_to_email: string
+          sender_email: string
+          sender_name: string
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          host_name?: string
+          id?: string
+          is_active?: boolean
+          kind?: Database["public"]["Enums"]["jbj_booking_workspace_kind"]
+          logo_url?: string | null
+          notification_email?: string
+          profile_image_url?: string | null
+          reply_to_email?: string
+          sender_email?: string
+          sender_name?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       jbj_brokers: {
         Row: {
           active_leads: number | null
@@ -43402,6 +43756,15 @@ export type Database = {
         Returns: string
       }
       jbj_backfill_inbound_replies: { Args: never; Returns: number }
+      jbj_booking_slot_is_free: {
+        Args: {
+          _ends_at: string
+          _event_type_id: string
+          _exclude_id?: string
+          _starts_at: string
+        }
+        Returns: boolean
+      }
       jbj_classify_inbound_reply: {
         Args: { _body: string; _from: string; _subject: string }
         Returns: string
@@ -44027,6 +44390,19 @@ export type Database = {
         | "rejected"
         | "not_interested"
       hunt_target_type: "investor" | "broker" | "employee"
+      jbj_booking_access_mode: "booking_only" | "with_promotion"
+      jbj_booking_status:
+        | "pending"
+        | "awaiting_email_verification"
+        | "awaiting_approval"
+        | "accepted"
+        | "confirmed"
+        | "rescheduled"
+        | "declined"
+        | "cancelled"
+        | "completed"
+        | "no_show"
+      jbj_booking_workspace_kind: "personal" | "business"
       leave_status:
         | "pending"
         | "manager_approved"
@@ -44757,6 +45133,20 @@ export const Constants = {
         "not_interested",
       ],
       hunt_target_type: ["investor", "broker", "employee"],
+      jbj_booking_access_mode: ["booking_only", "with_promotion"],
+      jbj_booking_status: [
+        "pending",
+        "awaiting_email_verification",
+        "awaiting_approval",
+        "accepted",
+        "confirmed",
+        "rescheduled",
+        "declined",
+        "cancelled",
+        "completed",
+        "no_show",
+      ],
+      jbj_booking_workspace_kind: ["personal", "business"],
       leave_status: [
         "pending",
         "manager_approved",
