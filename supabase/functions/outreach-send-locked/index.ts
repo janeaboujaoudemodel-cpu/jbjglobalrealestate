@@ -72,6 +72,22 @@ serve(async (req) => {
       return json({ ok: true, reused: true, message_id: row.provider_message_id ?? null }, 200);
     }
 
+    // Guard: Resend rejects public free-mail domains as From. Block stale rows
+    // still holding a gmail.com (or similar) sender before hitting the API.
+    const fromDomain = String(row.from_email || "").split("@")[1]?.toLowerCase() || "";
+    const FREE_MAIL_DOMAINS = new Set([
+      "gmail.com", "googlemail.com", "yahoo.com", "hotmail.com",
+      "outlook.com", "live.com", "icloud.com", "aol.com", "protonmail.com",
+    ]);
+    if (FREE_MAIL_DOMAINS.has(fromDomain)) {
+      const msg = `Resend cannot send from ${fromDomain}. Re-lock the payload with a verified domain sender (e.g. jane@jbj.ae).`;
+      await service.from("outreach_locked_payloads").update({
+        status: "failed",
+        send_error: msg,
+      }).eq("id", row.id);
+      return json({ error: "UNVERIFIED_SENDER_DOMAIN", message: msg }, 400);
+    }
+
     const ccEmails = Array.isArray(row.cc_emails) ? row.cc_emails.filter(Boolean) : [];
     const result = await sendViaResend({
       from: `${row.from_name} <${row.from_email}>`,
