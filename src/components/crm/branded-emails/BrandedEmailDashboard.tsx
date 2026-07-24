@@ -353,8 +353,8 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
 
   const pendingRows = useMemo(() => filteredRows.filter((row) => isRowPendingResponse(row)), [filteredRows]);
   const allPendingSelected = pendingRows.length > 0 && pendingRows.every((row) => selectedIds.has(row.id));
-  const selectedPendingCount = useMemo(
-    () => filteredRows.filter((row) => selectedIds.has(row.id) && isRowPendingResponse(row)).length,
+  const selectedActionCount = useMemo(
+    () => filteredRows.filter((row) => selectedIds.has(row.id)).length,
     [filteredRows, selectedIds],
   );
 
@@ -380,8 +380,8 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
 
   const prepareDrafts = async () => {
     const next: Record<string, string> = { ...draftOverrides };
-    const targets = selectedPendingCount > 0
-      ? filteredRows.filter((row) => selectedIds.has(row.id) && isRowPendingResponse(row))
+    const targets = selectedActionCount > 0
+      ? filteredRows.filter((row) => selectedIds.has(row.id))
       : activeRow ? [activeRow] : [];
     if (!targets.length) {
       toast.info("Select a recipient folder or open one row first.");
@@ -398,8 +398,8 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
   };
 
   const sendSelectedDrafts = async () => {
-    const targets = selectedPendingCount > 0
-      ? filteredRows.filter((row) => selectedIds.has(row.id) && isRowPendingResponse(row))
+    const targets = selectedActionCount > 0
+      ? filteredRows.filter((row) => selectedIds.has(row.id))
       : activeRow ? [activeRow] : [];
     if (!targets.length) {
       toast.info("Select pending recipient folders first.");
@@ -430,6 +430,31 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
       setSelectedIds(new Set());
     } catch (e: any) {
       toast.error(`Send stopped after ${sent}: ${e?.message || "unknown error"}`);
+    } finally {
+      setSendingDrafts(false);
+    }
+  };
+
+  const sendSingleDraft = async (row: any, draft: string) => {
+    setSendingDrafts(true);
+    try {
+      const { data, error } = await (supabase as any).functions.invoke("crm-send-campaign-reply", {
+        body: {
+          kind,
+          recipientEmail: row.recipient,
+          subject: `Re: ${row.subject.replace(/^re:\s*/i, "")}`,
+          bodyText: draft,
+          entityId: row.entityId,
+          entityType: row.entityType,
+          parentRecipientId: row.raw?.id,
+          threadId: row.raw?.thread_id || null,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Reply sent to ${row.recipient}.`);
+    } catch (e: any) {
+      toast.error(`Reply send failed: ${e?.message || "unknown error"}`);
     } finally {
       setSendingDrafts(false);
     }
@@ -495,7 +520,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
 
         <div className="flex flex-col gap-2 rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-3 sm:flex-row sm:items-center">
           <Button type="button" data-jbj-campaign-action="primary" data-surface="emerald" onClick={() => setSelectedIds(allPendingSelected ? new Set() : new Set(pendingRows.map((r) => r.id)))} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}><CheckSquare className="size-4" />{allPendingSelected ? "Clear pending" : "Select pending"}</Button>
-          <Button type="button" variant="outline" onClick={prepareDrafts} disabled={draftingIds.size > 0} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}>{draftingIds.size > 0 ? <Loader2 className="size-4 animate-spin" /> : <Wand2 className="size-4" />}Prepare AI draft{selectedPendingCount > 0 ? `s (${selectedPendingCount})` : ""}</Button>
+          <Button type="button" variant="outline" onClick={prepareDrafts} disabled={draftingIds.size > 0} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}>{draftingIds.size > 0 ? <Loader2 className="size-4 animate-spin" /> : <Wand2 className="size-4" />}Prepare AI draft{selectedActionCount > 0 ? `s (${selectedActionCount})` : ""}</Button>
           <Button type="button" variant="outline" onClick={sendSelectedDrafts} disabled={sendingDrafts} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}>{sendingDrafts ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}Accept & send selected</Button>
           <span className="text-xs font-semibold text-[#4B5D55] sm:ml-auto">{filteredRows.length.toLocaleString()} of {rows.length.toLocaleString()} shown · filter: {chipLabel[statusFilter]}.</span>
         </div>
@@ -524,7 +549,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
                   {filteredRows.slice(0, 200).map((row) => (
                     <tr key={row.id} data-campaign-recipient-row="true" className="cursor-pointer text-[#0F1A16] hover:bg-[#F8FAF9]" onClick={() => setActiveRowId(row.id)}>
                       <td className="px-3 py-2 font-semibold">{row.recipient}</td>
-                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onClick={(e) => e.stopPropagation()} onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })} disabled={!isRowPendingResponse(row)} /></td>
+                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onClick={(e) => e.stopPropagation()} onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })} /></td>
                       <td className="px-3 py-2 whitespace-nowrap text-[#064E3B]"><button type="button" onClick={(e) => { e.stopPropagation(); setActiveRowId(row.id); }} className="inline-flex items-center gap-1 font-black underline-offset-2 hover:underline"><FolderOpen className="size-3.5" /> {row.sentCount} sent · {row.respondedCount} {row.respondedCount === 1 ? "reply" : "replies"}</button></td>
                       <td className="px-3 py-2 max-w-[320px] truncate text-[#4B5D55]">{row.subject}</td>
                       <td className="px-3 py-2"><StatusBadge status={row.status} label={chipLabel[row.status] || row.status} /></td>
@@ -537,7 +562,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
             </div>
           )}
         </div>
-        <InsightPanel row={activeRow} draftOverride={activeRow ? draftOverrides[activeRow.id] : ""} onDraftChange={(value) => activeRow && setDraftOverrides((cur) => ({ ...cur, [activeRow.id]: value }))} onPrepareDraft={prepareDrafts} onClose={() => setActiveRowId(null)} />
+        <InsightPanel row={activeRow} draftOverride={activeRow ? draftOverrides[activeRow.id] : ""} onDraftChange={(value) => activeRow && setDraftOverrides((cur) => ({ ...cur, [activeRow.id]: value }))} onPrepareDraft={prepareDrafts} onSendDraft={sendSingleDraft} sendingDraft={sendingDrafts} onClose={() => setActiveRowId(null)} />
         </div>
       </div>
     </Card>
@@ -579,7 +604,7 @@ function StatusBadge({ status, label }: { status: string; label: string }) {
   );
 }
 
-function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onClose }: { row: any; draftOverride?: string; onDraftChange: (value: string) => void; onPrepareDraft: () => void; onClose: () => void }) {
+function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSendDraft, sendingDraft, onClose }: { row: any; draftOverride?: string; onDraftChange: (value: string) => void; onPrepareDraft: () => void; onSendDraft: (row: any, draft: string) => void; sendingDraft: boolean; onClose: () => void }) {
   if (!row) {
     return (
       <aside className="rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-4 text-sm font-semibold text-[#4B5D55]">
@@ -640,6 +665,10 @@ function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onClo
           <Button type="button" size="sm" variant="outline" onClick={onPrepareDraft} className="h-7 border-emerald-900/25 px-2 text-[10px] font-black text-[#064E3B]"><Wand2 className="mr-1 size-3" />Rewrite with AI</Button>
         </div>
         <textarea value={draft} onChange={(e) => onDraftChange(e.target.value)} className="min-h-28 w-full resize-y rounded-md border border-emerald-900/15 bg-[#F8FAF9] p-2 text-xs font-semibold leading-relaxed text-[#0F1A16] outline-none focus:border-[#064E3B]" />
+        <Button type="button" size="sm" onClick={() => onSendDraft(row, draft)} disabled={sendingDraft || !draft.trim()} data-surface="emerald" className="mt-2 h-8 w-full justify-center bg-[#064E3B] text-xs font-black text-white hover:bg-[#042c1c]">
+          {sendingDraft ? <Loader2 className="mr-1.5 size-3.5 animate-spin" /> : <Send className="mr-1.5 size-3.5" />}
+          Send draft reply
+        </Button>
       </div>
       <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
         <p className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">Actions</p>
