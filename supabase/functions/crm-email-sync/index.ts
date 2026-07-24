@@ -473,8 +473,8 @@ serve(async (req: Request) => {
             const { data: byCampaign } = await service.from("crm_brokerages").select("*").eq("id", campaign.entity_id).limit(1);
             if (byCampaign?.[0]) matched = { table: "crm_brokerages", entityType: "brokerage", row: byCampaign[0] };
           } else if (campaign?.entity_id && campaign.entity_type === "client") {
-            const { data: byCampaign } = await service.from("crm_clients").select("*").eq("id", campaign.entity_id).limit(1);
-            if (byCampaign?.[0]) matched = { table: "crm_clients", entityType: "client", row: byCampaign[0] };
+            const { data: byCampaign } = await service.from("client_investors").select("*").eq("id", campaign.entity_id).limit(1);
+            if (byCampaign?.[0]) matched = { table: "client_investors", entityType: "client", row: byCampaign[0] };
           }
         }
 
@@ -487,8 +487,8 @@ serve(async (req: Request) => {
 
         if (!matched) {
           const { data: clients } = await service
-            .from("crm_clients").select("*").eq("email", fromEmail).limit(1);
-          if (clients?.[0]) matched = { table: "crm_clients", entityType: "client", row: clients[0] };
+            .from("client_investors").select("*").eq("email", fromEmail).limit(1);
+          if (clients?.[0]) matched = { table: "client_investors", entityType: "client", row: clients[0] };
         }
 
         // Always log inbound email (even if no match)
@@ -501,7 +501,7 @@ serve(async (req: Request) => {
         // 4. Update record status if confident. Skip on AI errors so we don't
         //    mislabel real replies as "no_match" during an outage.
         let newStatus = "";
-        if (!ai.errored && matched && ai.intent !== "no_match" && ai.confidence >= 0.5) {
+        if (!ai.errored && matched && matched.table !== "client_investors" && ai.intent !== "no_match" && ai.confidence >= 0.5) {
           const map = matched.entityType === "developer_registry" ? STATUS_MAP_DEV
             : matched.entityType === "brokerage" ? STATUS_MAP_BROKERAGE
             : STATUS_MAP_CLIENT;
@@ -570,7 +570,7 @@ serve(async (req: Request) => {
           message_id: message.id,
           from: fromEmail,
           subject: message.subject,
-          matched: matched ? { type: matched.entityType, id: matched.row.id, name: matched.row.developer_name || matched.row.company_name || matched.row.full_name } : null,
+          matched: matched ? { type: matched.entityType, id: matched.row.id, name: matched.row.developer_name || matched.row.company_name || matched.row.full_name || matched.row.client_name } : null,
           ai_intent: ai.intent, ai_confidence: ai.confidence, ai_errored: ai.errored,
           new_status: newStatus || null,
           updated_campaign_rows: updatedCampaignRows,
