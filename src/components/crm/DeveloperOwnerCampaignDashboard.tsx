@@ -79,10 +79,11 @@ export default function DeveloperOwnerCampaignDashboard() {
   // Top KPI grid intentionally removed — the "Developer campaign dashboard"
   // under Campaign Tracking below is now the single source of KPI display and
   // supports inline drill-down (click any chip to filter the log in place).
-  void filter; void setFilter;
 
-
+  return (
+    <div className="space-y-4">
       <Tabs defaultValue="email-status" className="w-full">
+
         <TabsList className="dp-tabs grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
           <TabsTrigger value="registration" className="text-[#064E3B] font-black">Registration status</TabsTrigger>
           <TabsTrigger value="email-status" className="text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
