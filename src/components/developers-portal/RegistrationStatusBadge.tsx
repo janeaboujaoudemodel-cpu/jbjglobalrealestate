@@ -6,8 +6,8 @@ const MAP: Record<string, { label: string; cls: string }> = {
   registered:     { label: "Registered",     cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
   active:         { label: "Active",         cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
   pending:        { label: "Pending",        cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
-  application_pending: { label: "Application Pending", cls: "bg-[#FDE68A] text-[#1A1A1A] border border-[#B89555]/30" },
-  pending_registration: { label: "Pending Registration", cls: "bg-[#FDE68A] text-[#1A1A1A] border border-[#B89555]/30" },
+  application_pending: { label: "Pending", cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
+  pending_registration: { label: "Pending", cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
   not_registered: { label: "Not Registered", cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
   inactive:       { label: "Inactive",       cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
 };

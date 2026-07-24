@@ -67,8 +67,7 @@ const PAGE_SIZE = 60;
 
 const DEVELOPER_REGISTRATION_OPTIONS = [
   { value: "not_registered", label: "Not registered" },
-  { value: "application_pending", label: "Application pending" },
-  { value: "pending_registration", label: "Pending registration" },
+  { value: "pending", label: "Pending" },
   { value: "registered", label: "Registered" },
 ];
 
@@ -302,6 +301,8 @@ export default function DeveloperDirectory() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["dev-hub-directory"] });
+      qc.invalidateQueries({ queryKey: ["developer-owner-campaign-stats"] });
+      qc.invalidateQueries({ queryKey: ["portal-overview"] });
       toast.success("Developer status updated");
     },
     onError: (e: Error) => toast.error(e.message || "Could not update developer status"),

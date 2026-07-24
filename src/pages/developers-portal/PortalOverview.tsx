@@ -16,24 +16,21 @@ export default function PortalOverview() {
     queryKey: ["portal-overview"],
     queryFn: async () => {
       const [
-        { count: totalDevelopers },
-        { count: registered },
-        { count: pending },
+        countsRes,
         { count: reps },
         { count: openAccess },
         { count: missingLogos },
       ] = await Promise.all([
-        supabase.from("developers").select("*", { count: "exact", head: true }),
-        supabase.from("developers").select("*", { count: "exact", head: true }).eq("registration_status", "registered"),
-        supabase.from("developers").select("*", { count: "exact", head: true }).eq("registration_status", "pending"),
+        (supabase as any).from("jbj_portal_counts_v1").select("total,registered,pending_registration").eq("portal_entity", "developer").maybeSingle(),
         supabase.from("developer_sales_reps").select("*", { count: "exact", head: true }).eq("is_active", true),
         supabase.from("developer_rep_access_requests").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("developers").select("*", { count: "exact", head: true }).or("logo_url.is.null,logo_url.eq."),
       ]);
+      const counts = (countsRes as any).data ?? {};
       return {
-        totalDevelopers: totalDevelopers ?? 0,
-        registered: registered ?? 0,
-        pending: pending ?? 0,
+        totalDevelopers: counts.total ?? 0,
+        registered: counts.registered ?? 0,
+        pending: counts.pending_registration ?? 0,
         reps: reps ?? 0,
         openAccess: openAccess ?? 0,
         missingLogos: missingLogos ?? 0,
