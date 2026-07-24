@@ -1,69 +1,132 @@
-Implement the requested Phase 1.5 fixes and visible dashboard repair now, without starting Phase 2.
+# JBJ Campaign Truth Reconciliation Plan
 
-Confirmed current state from read-only checks:
-- `DeveloperOwnerCampaignDashboard.tsx` currently counts `crm_developer_registry` rows directly and counts `crm_relationship_email_log` outbound rows as contacted/sent, which explains the live misleading cards.
-- `BrandedEmailDashboard.tsx` currently reads `crm_relationship_email_log` and `crm_campaign_recipients`, not the canonical JBJ campaign spine/views.
-- Canonical campaign tables exist: `jbj_campaign_recipients` with `send_status`, `delivery_status`, `reply_status`, `business_status`, `provider`, `resend_message_id`, `idempotency_key`; and `jbj_email_events` with idempotent event keys.
-- Existing canonical views exist: `jbj_campaign_counts_v1`, `jbj_portal_counts_v1`, `jbj_phase1_reconciliation_v1`.
-- `RESEND_WEBHOOK_SECRET` is configured in backend secrets, so webhook hardening/testing can proceed.
-- Remaining Gmail outbound code is still present in the five named functions and `gmail-integration`/Gmail gateway send paths.
+The dashboard currently disagrees with reality because it reads from *intent* tables (queue rows, "attempted" flags) rather than *provider evidence*. This plan rebuilds the truth layer first, then rewires everything on top of it. No new schema until existing paths are wired.
 
-Plan:
+---
 
-1. Database/spine migration for Phase 1.5
-   - Add/adjust canonical schema support for a true `intended_send_id` model.
-   - Update `jbj_record_resend_send` so idempotency is based on one intended email:
-     - campaign: `campaign_id + campaign_recipient_id + intended_send_id`
-     - transactional: `workflow_instance_id + recipient_id + intended_send_id`
-   - Add webhook replay/idempotency safeguards using Resend/Svix event IDs and existing event idempotency.
-   - Add reconciliation exception storage/reporting and insert the missing `shahid.mukhtar@reportageuae.com` skipped remote-server failure as an exception, without fabricating a campaign recipient.
-   - Update canonical dashboard views so they expose correct developer/brokerage KPI counts: total, actual contacted, accepted/delivered sent, failed/excluded, human replies, automated replies, registered, pending response, retry eligible, permanently excluded.
+## Phase 0 — Read-only reconciliation (no code changes)
 
-2. Shared Resend sender service
-   - Update `_shared/jbjSpine.ts` to require/pass `intended_send_id` and build keys around intended sends.
-   - Ensure every Resend send writes provider message ID and event metadata into the spine.
-   - Keep retrying the same intended send idempotent while allowing later legitimate follow-ups and new campaigns to the same recipient/template.
+Produce one canonical reconciliation report before touching anything.
 
-3. Migrate/safely retire remaining outbound Gmail sender functions
-   - `breakfast-booking-confirm`: replace the owner notification Gmail send with Resend; preserve booking details, date/time, location/slot data, attendees, consent, and recipient info; write transactional spine/audit events.
-   - `send-registration-confirmation`: replace Gmail with Resend; write to the JBJ spine and keep developer registration logs.
-   - `send-developer-reply`: replace Gmail with Resend; preserve thread context via `In-Reply-To` and `References` headers where available; write reply event/spine metadata.
-   - `outreach-send-locked`: audit callers; if active, redirect to canonical Resend send while preserving locked-payload hash verification; if no active callers, make it return a clear retired/redirect response and remove outbound Gmail capability.
-   - `broker-email-send`: keep only broker-owned OAuth mailbox paths where required for per-broker identity; remove any JBJ Gmail fallback; add JBJ spine writes for broker sends. If the broker-owned mailbox path remains, label it as broker identity mail, not JBJ campaign mail.
-   - `gmail-integration/index.ts` send path: gate off/remove outbound sending; Gmail remains for inbound sync, reading threads, reply matching, classification, and attachments only.
+Inputs:
+- Gmail: `HELPDESK@JBJ.AE` and `infoo.jane@gmail.com` — Inbox, Sent, Threads, Auto-replies (via existing Gmail connector / `comm-inbound-sync`).
+- Resend: `/emails` list + webhook events already stored in `resend_events`.
+- Supabase spine: `jbj_campaign_recipients`, `jbj_campaign_sends`, `email_send_log`, `resend_events`, `crm_email_threads`, `developer_replies`.
 
-4. Resend webhook hardening and verification
-   - Make `RESEND_WEBHOOK_SECRET` mandatory: reject missing signatures, invalid signatures, expired timestamps, and replayed event IDs.
-   - Process events idempotently using Resend/Svix event ID plus message ID.
-   - Deploy and test the webhook with configured secret, including rejection cases and accepted event cases.
+Output: a single SQL view `jbj_recipient_truth_v1` keyed by `(campaign_id, developer_id, recipient_email)` with columns:
+`resend_accepted_at, resend_delivered_at, resend_bounced_at, resend_complained_at, resend_rejected_reason, gmail_sent_at, gmail_replied_at, gmail_auto_reply, manual_status, computed_status`.
 
-5. Reconciliation completion and lists
-   - Run a second reconciliation pass using available evidence: current spine rows, message IDs, thread IDs, delivery/status events, existing email logs, timestamps, subjects, and inbound/system messages.
-   - Keep `gmail_legacy_attempted` only where evidence is genuinely insufficient.
-   - Separate: attempted unknown, likely accepted by Gmail before limit, confirmed rejected, confirmed failed, confirmed temporary failure.
-   - Produce retry-eligible and permanently-excluded counts/lists; do not resend legacy recipients.
+Deliverable: markdown reconciliation report saved to `.lovable/reconciliation/2026-07-24.md` listing per-status counts and a diff vs. current dashboard.
 
-6. Wire developer campaign dashboard to canonical sources
-   - Replace old dashboard counting logic with canonical view/spine queries.
-   - Correct definitions:
-     - Total Developers from canonical developer table only.
-     - Contacted from actual contacted/accepted/delivered send records only, excluding Gmail legacy attempted, failed, invalid, rejected, bounced, deferred, and blocked.
-     - Emails Sent from provider accepted/delivered only, with the selected definition visible in UI.
-     - Registered from the canonical registration status field.
-     - Responded split into Human Replies and Automated Replies.
-   - Make every KPI card clickable and open the exact filtered records behind the number.
-   - Ensure cards, tabs, tables, exports/profiles use the same canonical filters.
+---
 
-7. Fix developer cards and status behavior
-   - Make every developer card clickable.
-   - Show correct registration status on each card.
-   - Use compact label `Pending` instead of `Application Pending`.
-   - Force three-dot/action icons on emerald backgrounds to pure white.
-   - After manual status edits, invalidate/refetch canonical dashboard and card queries immediately.
+## Phase 1 — Fix lock semantics
 
-8. Verification and final report
-   - Deploy changed edge functions.
-   - Run read-only data checks for before/after KPI values.
-   - Run edge-function tests for migrated senders, idempotency duplicate retry, legitimate follow-up, webhook signature/replay behavior, and breakfast/registration/developer-reply paths.
-   - Run Playwright visual verification on the developer portal/dashboard with screenshots proving clickable KPI/card behavior and registered-status display.
-   - Provide final evidence report only after verification, including: outbound provider map, Gmail inbound-only confirmation, migrated/retired functions, dashboard source views, before/after KPI numbers, clickable proof, status proof, webhook result, idempotency result, reconciliation totals, retry-eligible count, permanently-excluded count, and blockers if any.
+Current bug: every developer row is treated as sent/locked because a queue row exists.
+
+Rule: `locked = TRUE` only when `resend_accepted_at IS NOT NULL` OR `manual_status IN ('registered','replied','delivered')`.
+
+- Migration: recompute `jbj_campaign_recipients.locked` from `jbj_recipient_truth_v1`.
+- Unlock everything else → becomes retryable.
+- Update `outreach-lock-payload` and `outreach-send-locked` to only set locked on Resend `202` acceptance.
+- UI: the "437 already sent" pill reads from the truth view, not row count.
+
+---
+
+## Phase 2 — Preserve manual "Registered"
+
+- Add `developers.manual_registration_status` (already present as `registration_status_override` in some paths — audit and unify to one column).
+- `computed_status` in the truth view uses manual override as highest priority.
+- Never overwritten by campaign auto-classification.
+- Show on cards, filters, dashboard, campaign eligibility (registered = excluded from future sends unless owner opts in).
+
+---
+
+## Phase 3 — Canonical KPI source
+
+One view: `jbj_dashboard_kpis_v1` returning every KPI the user listed:
+Total, Eligible, Missing email, Registered, Pending, Queued, Accepted, Delivered, Opened, Clicked, Human replies, Auto replies, Rejected, Invalid email, Invalid domain, Mailbox full, Deferred, Complaint, Bounce, Retry required, Retry completed, Waiting follow-up, Follow-up completed, No response.
+
+- React components stop computing counts. All KPI tiles call `useJbjKpis()` which selects from the view.
+- Each tile carries a `filterKey` matching a case in `jbj_recipient_truth_v1.computed_status`.
+- Clicking a tile pushes `?filter=<key>` and `BrandedEmailDashboard` filters rows by the same key.
+
+---
+
+## Phase 4 — Sender chain audit + fix
+
+Preview says `helpdesk@jbj.ae` but recipients see `infoo.jane@gmail.com`.
+
+- Audit `outreach-send-locked`, `crm-send-developer-registration`, `crm-send-brokerage-outreach`, `_shared/outreachIdentity.ts`, `_shared/resend.ts` for the actual `from`, `envelope.from`, `reply_to`, `return_path` passed to Resend.
+- Verify Resend domain `jbj.ae` is verified; if not, block sends and surface a red banner instead of falling back to Gmail.
+- Force: `From: JBJ GLOBAL REAL ESTATE <helpdesk@jbj.ae>`, `Reply-To: helpdesk@jbj.ae`, `Cc: infoo.jane@gmail.com`, envelope = `helpdesk@jbj.ae`.
+- If a fallback sender is ever used, UI shows a "Sent via fallback: <address>" chip on the recipient row — no pretending.
+
+---
+
+## Phase 5 — Template contact block + template immutability
+
+- Add fixed block under the intro paragraph in every branded template (developer, brokerage, broker, client, career):
+
+  > If you have any questions regarding registration, required documents, onboarding, or partnership, please contact our Broker Relations & Administration team.
+  > **Broker & Admin Contact — Waleed** · [050-999-3839](tel:+971509993839)
+  > Email: **[helpdesk@jbj.ae](mailto:helpdesk@jbj.ae)** · CC: infoo.jane@gmail.com
+
+  `helpdesk@jbj.ae` and Waleed's phone rendered as clickable, visually prominent (emerald pill).
+- Restore Google Calendar booking button in the developer template.
+- Template versioning: freeze `template_versions.approved_at`; sends record `template_version_id`. Editing an approved template creates a new draft version — never mutates the approved row.
+
+---
+
+## Phase 6 — Follow-up Agent (real workflow)
+
+On inbound reply (`comm-inbound-sync` → `crm-email-sync`):
+1. Classify into one of: Registered, Application pending, Documents requested, Waiting broker, Waiting contracts, Commission discussion, Meeting requested, Call requested, Automatic reply, Vacation, Out of office, Rejected, Interested, Not interested, Wrong contact, Duplicate, Spam, Unknown.
+2. Apply side effects: update `developers.status`, `jbj_campaign_recipients.reply_status`, insert `crm_tasks` follow-up, generate AI draft into `crm_ai_drafts`, insert `user_notifications`, append `crm_timeline_events`.
+3. On AI 402 / 429, mark reply `classification_deferred` (not `no_match`) — already partially in place; verify.
+
+---
+
+## Phase 7 — Portal parity
+
+Replicate the developer-portal set (Campaigns, Templates, AI writer, Follow-up AI, Classification, Timeline, Analytics, Retry queue, Documents, Calendar, Provider status, Reply detection) into:
+- Brokerage Portal
+- Individual Broker Portal
+- Client Portal (Buyer + Seller)
+- Careers Portal
+
+Shared components: `PortalCampaignDashboard`, `BrandedEmailDashboard`, `useJbjKpis({ portal })`.
+
+---
+
+## Phase 8 — Performance
+
+- Server-side pagination on all recipient lists (25/page, cursor-based on `created_at`).
+- Indexes: `(campaign_id, computed_status)`, `(developer_id, campaign_id)`, `(recipient_email)` on truth view's base tables.
+- `useJbjKpis` cached via React Query with 30s staleTime + realtime invalidation on `resend_events` and `jbj_campaign_recipients`.
+- Prefetch dashboard KPIs on portal route enter.
+- Kill N+1 in developer cards: single join for `campaign_recipient + last_reply + manual_status`.
+
+---
+
+## Phase 9 — Verification
+
+- Run Phase 0 reconciliation again after fixes; diff must be zero.
+- Playwright: open `/owner/crm/jbj/owner-developers`, click each KPI tile, assert filtered row count === tile number.
+- Send a live test to `infoo.jane@gmail.com` and verify raw headers: `From: helpdesk@jbj.ae`, envelope matches, Reply-To matches.
+- Screenshot proof stored under `.lovable/verification/phase9/`.
+
+---
+
+## Technical notes
+
+- No new tables in Phases 1–6. Only views (`jbj_recipient_truth_v1`, `jbj_dashboard_kpis_v1`) and column additions on existing tables.
+- All views use `security_invoker=true`; base tables retain RLS.
+- Edge functions touched: `outreach-lock-payload`, `outreach-send-locked`, `crm-send-developer-registration`, `crm-send-brokerage-outreach`, `crm-email-sync`, `comm-inbound-sync`.
+- Frontend: `BrandedEmailDashboard.tsx`, `DeveloperOwnerCampaignDashboard.tsx`, `PortalOverview.tsx`, `BrandedEmailsPanel.tsx`, new `useJbjKpis.ts` hook.
+
+## Out of scope
+
+- New schema beyond the two reconciliation views + manual-status column unification.
+- Any UI redesign beyond wiring KPI tiles to filters and adding the contact block.
+- Migrating away from Resend or adding new providers.

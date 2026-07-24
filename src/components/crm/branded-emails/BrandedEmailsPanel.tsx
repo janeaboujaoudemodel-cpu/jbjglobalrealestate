@@ -622,23 +622,25 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   useEffect(() => {
     if (!open || !selectedTemplate) return;
     let cancelled = false;
+    // Truth source: only Resend-accepted / delivered / engaged sends lock a
+    // recipient. Legacy Gmail attempts, failures, and provider rejections are
+    // NOT considered "sent" — they remain retryable. This decouples the UI
+    // from historical noise in crm_relationship_email_log (which mixed in
+    // 400+ gmail_legacy_attempted rows).
     const entityType = kind === "developers" ? "developer_registry" : kind === "clients" ? "investor" : "brokerage";
     (async () => {
       const { data } = await (supabase as any)
-        .from("crm_relationship_email_log")
-        .select("to_emails, direction, entity_type, created_at")
-        .eq("direction", "outbound")
+        .from("jbj_campaign_recipients")
+        .select("email_norm, send_status, provider, business_status")
         .eq("entity_type", entityType)
-        .order("created_at", { ascending: false })
-        .limit(1000);
+        .eq("provider", "resend")
+        .in("send_status", ["provider_accepted", "delivered", "opened", "clicked", "responded"])
+        .limit(5000);
       if (cancelled) return;
       const sent = new Set<string>();
       for (const row of data ?? []) {
-        const to = Array.isArray(row.to_emails) ? row.to_emails : [];
-        for (const email of to) {
-          const normalized = String(email || "").trim().toLowerCase();
-          if (normalized) sent.add(normalized);
-        }
+        const normalized = String((row as any).email_norm || "").trim().toLowerCase();
+        if (normalized) sent.add(normalized);
       }
       setPreviouslySentEmails(sent);
     })().catch(() => {
