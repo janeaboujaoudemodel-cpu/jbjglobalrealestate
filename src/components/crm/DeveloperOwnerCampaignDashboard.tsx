@@ -1,19 +1,27 @@
 /**
- * DeveloperOwnerCampaignDashboard
+ * DeveloperOwnerCampaignDashboard — canonical spine dashboard.
  *
- * Mirrors the Brokerage Portal's campaign dashboard layout: insight tiles
- * (contacted, sent, opened, responded, registered) + tabbed body
- * (Registration status | Emails sent + replies | Campaign activity).
+ * Every KPI is read from `jbj_portal_counts_v1` (portal_entity='developer').
+ * Tiles are fully interactive: clicking a tile filters the embedded
+ * BrandedEmailDashboard to the exact dataset that produced that KPI.
  */
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
-import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
-import { Building2, MailCheck, Reply, Eye, ShieldCheck, Loader2 } from "lucide-react";
+import BrandedEmailDashboard, { CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
+import { Building2, MailCheck, Reply, Eye, ShieldCheck, Loader2, Send, MousePointerClick, RotateCw, Ban, AlertTriangle, Bot } from "lucide-react";
+
+type TileDef = {
+  key: string;
+  label: string;
+  icon: JSX.Element;
+  value: number | undefined;
+  filter: CanonicalStatus | null; // null = non-filterable (e.g. Total / Registered)
+};
 
 function useDeveloperCampaignStats() {
   return useQuery({
@@ -22,7 +30,7 @@ function useDeveloperCampaignStats() {
       const [countRes, regRes] = await Promise.all([
         (supabase as any)
           .from("jbj_portal_counts_v1")
-          .select("total,actual_contacted,provider_accepted,opened,human_reply,registered,pending_registration,pending_response,retry_eligible,permanently_excluded")
+          .select("total,actual_contacted,provider_accepted,delivered,opened,clicked,human_reply,automated_reply,registered,pending_registration,pending_response,retry_eligible,permanently_excluded,temporary_failure")
           .eq("portal_entity", "developer")
           .maybeSingle(),
         (supabase as any)
@@ -31,17 +39,22 @@ function useDeveloperCampaignStats() {
           .eq("is_hidden", false)
           .limit(1200),
       ]);
-
-      const counts = countRes.data ?? {};
+      const c = countRes.data ?? {};
       const regs = (regRes.data as any[]) ?? [];
       return {
-        totalDevelopers: Number(counts.total ?? regs.length),
-        registered: Number(counts.registered ?? regs.filter((r) => r.registration_status === "registered").length),
-        contacted: Number(counts.actual_contacted ?? 0),
-        sent: Number(counts.provider_accepted ?? 0),
-        opened: Number(counts.opened ?? 0),
-        responded: Number(counts.human_reply ?? 0),
-        pendingResponse: Number(counts.pending_response ?? 0),
+        total: Number(c.total ?? regs.length),
+        registered: Number(c.registered ?? regs.filter((r) => r.registration_status === "registered").length),
+        contacted: Number(c.actual_contacted ?? 0),
+        sent: Number(c.provider_accepted ?? 0),
+        delivered: Number(c.delivered ?? 0),
+        opened: Number(c.opened ?? 0),
+        clicked: Number(c.clicked ?? 0),
+        responded: Number(c.human_reply ?? 0),
+        autoReply: Number(c.automated_reply ?? 0),
+        pending: Number(c.pending_response ?? 0),
+        retry: Number(c.retry_eligible ?? 0),
+        excluded: Number(c.permanently_excluded ?? 0),
+        temporaryFailure: Number(c.temporary_failure ?? 0),
         rows: regs,
       };
     },
@@ -51,6 +64,7 @@ function useDeveloperCampaignStats() {
 export default function DeveloperOwnerCampaignDashboard() {
   const q = useDeveloperCampaignStats();
   const s = q.data;
+  const [filter, setFilter] = useState<CanonicalStatus>("all");
 
   const statusCounts = useMemo(() => {
     const rows = s?.rows ?? [];
@@ -62,14 +76,20 @@ export default function DeveloperOwnerCampaignDashboard() {
     return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
   }, [s?.rows]);
 
-  const tiles: Array<[string, number | undefined, JSX.Element]> = [
-    ["Total developers", s?.totalDevelopers, <Building2 className="size-4" />],
-    ["Contacted", s?.contacted, <MailCheck className="size-4" />],
-    ["Emails sent", s?.sent, <MailCheck className="size-4" />],
-    ["Opened", s?.opened, <Eye className="size-4" />],
-    ["Responded", s?.responded, <Reply className="size-4" />],
-    ["Pending response", s?.pendingResponse, <MailCheck className="size-4" />],
-    ["Registered", s?.registered, <ShieldCheck className="size-4" />],
+  const tiles: TileDef[] = [
+    { key: "total",       label: "Total developers", value: s?.total,     icon: <Building2 className="size-4" />,        filter: null },
+    { key: "contacted",   label: "Contacted",        value: s?.contacted, icon: <MailCheck className="size-4" />,        filter: "sent" },
+    { key: "sent",        label: "Emails sent",      value: s?.sent,      icon: <Send className="size-4" />,             filter: "sent" },
+    { key: "delivered",   label: "Delivered",        value: s?.delivered, icon: <MailCheck className="size-4" />,        filter: "delivered" },
+    { key: "opened",      label: "Opened",           value: s?.opened,    icon: <Eye className="size-4" />,              filter: "opened" },
+    { key: "clicked",     label: "Clicked",          value: s?.clicked,   icon: <MousePointerClick className="size-4" />, filter: "clicked" },
+    { key: "responded",   label: "Human replies",    value: s?.responded, icon: <Reply className="size-4" />,            filter: "responded" },
+    { key: "auto_reply",  label: "Auto replies",     value: s?.autoReply, icon: <Bot className="size-4" />,              filter: "auto_reply" },
+    { key: "pending",     label: "Pending response", value: s?.pending,   icon: <MailCheck className="size-4" />,        filter: "pending" },
+    { key: "retry",       label: "Retry eligible",   value: s?.retry,     icon: <RotateCw className="size-4" />,         filter: "retry_eligible" },
+    { key: "excluded",    label: "Permanently excluded", value: s?.excluded, icon: <Ban className="size-4" />,           filter: "permanently_excluded" },
+    { key: "temp_fail",   label: "Temporary failure", value: s?.temporaryFailure, icon: <AlertTriangle className="size-4" />, filter: "deferred" },
+    { key: "registered",  label: "Registered",       value: s?.registered, icon: <ShieldCheck className="size-4" />,     filter: null },
   ];
 
   return (
@@ -78,22 +98,35 @@ export default function DeveloperOwnerCampaignDashboard() {
         <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#B89555]">Developer Portal · Campaigns</p>
         <h2 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Developer campaign dashboard</h2>
         <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">
-          JBJ outreach to developers — insights, branded templates, and campaign tracking in one place.
+          Canonical JBJ campaign spine — click any KPI to filter the campaign log below.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
-        {tiles.map(([label, value, icon]) => (
-          <Card key={label} className="p-4 bg-[#F7F2EA] border border-[#B89555]/30">
-            <div className="flex items-center gap-2 text-[#064E3B]">
-              {icon}
-              <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{label}</p>
-            </div>
-            <p className="mt-1 text-2xl font-black text-[#064E3B]">
-              {q.isLoading ? <Loader2 className="size-5 animate-spin" /> : typeof value === "number" ? value.toLocaleString() : "—"}
-            </p>
-          </Card>
-        ))}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {tiles.map((t) => {
+          const clickable = t.filter !== null;
+          const active = clickable && filter === t.filter;
+          return (
+            <button
+              key={t.key}
+              type="button"
+              disabled={!clickable}
+              onClick={() => clickable && setFilter(t.filter!)}
+              className={`text-left rounded-lg transition-all ${clickable ? "hover:border-[#B89555] hover:shadow-md cursor-pointer" : "cursor-default"}`}
+              aria-pressed={active}
+            >
+              <Card className={`p-4 border ${active ? "border-[#064E3B] ring-2 ring-[#064E3B]/30" : "border-[#B89555]/30"} bg-[#F7F2EA]`}>
+                <div className="flex items-center gap-2 text-[#064E3B]">
+                  {t.icon}
+                  <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{t.label}</p>
+                </div>
+                <p className="mt-1 text-2xl font-black text-[#064E3B]">
+                  {q.isLoading ? <Loader2 className="size-5 animate-spin" /> : typeof t.value === "number" ? t.value.toLocaleString() : "—"}
+                </p>
+              </Card>
+            </button>
+          );
+        })}
       </div>
 
       <Tabs defaultValue="email-status" className="w-full">
@@ -125,11 +158,11 @@ export default function DeveloperOwnerCampaignDashboard() {
 
         <TabsContent value="email-status" className="mt-4 space-y-4">
           <BrandedEmailsLauncherCard variant="developer" />
-          <BrandedEmailDashboard kind="developers" />
+          <BrandedEmailDashboard kind="developers" filter={filter} onFilterChange={setFilter} />
         </TabsContent>
 
         <TabsContent value="activity" className="mt-4">
-          <BrandedEmailDashboard kind="developers" />
+          <BrandedEmailDashboard kind="developers" filter={filter} onFilterChange={setFilter} />
         </TabsContent>
       </Tabs>
     </div>
