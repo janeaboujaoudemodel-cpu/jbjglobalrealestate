@@ -166,7 +166,8 @@ export default function InvestorPortal() {
             <Card className="p-4 bg-[#F7F2EA] border border-[#B89555]/30"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Buyer section</p><p className="text-sm font-semibold text-[#0F1A16] mt-1">Buyer follow-up campaigns and unanswered replies.</p></Card>
           </div>
           <BrandedEmailsLauncherCard variant="client" />
-          <BrandedEmailDashboard kind="clients" />
+          <BrandedEmailDashboard kind="clients" filter={filter} onFilterChange={setFilter} />
+
         </TabsContent>
 
         <TabsContent value="activity" className="mt-4">
