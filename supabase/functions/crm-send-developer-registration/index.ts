@@ -77,36 +77,57 @@ const JBJ_BRAND_HEADER_HTML = `<table role="presentation" data-jbj-brand-header=
 // existing call site keeps compiling.
 const injectJbjBrandHeader = (html: string) => html;
 
-const DEVELOPER_REQUIREMENTS_BLOCK = `<div data-jbj-developer-requirements="true" style="margin:18px 0;padding:18px;border:1px solid #B89555;background:#FAF5EA;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.65;">
-  <p style="margin:0 0 6px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;font-size:12px;">Registration desk</p>
-  <p style="margin:0 0 14px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please send your registration form, agency code and onboarding documents to <strong>helpdesk@jbj.ae</strong>.</p>
+// Compact, premium requirements block. Lives INSIDE the main card (injected
+// right before the "Regards" sign-off), not as a standalone section below it.
+// Rules per owner:
+//  - Do NOT ask for trade-license / three-status options (they already have those docs).
+//  - Escrow is for THEIR projects (per-project escrow + corporate bank account).
+//  - WhatsApp group naming uses a straight slash and lives inside this block.
+//  - Admin contact (Walid Halabi) lives inside this block too — nothing below the card.
+const DEVELOPER_REQUIREMENTS_BLOCK = `<table role="presentation" data-jbj-developer-requirements="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:18px 0 8px;background:#FAF5EA;border:1px solid #B89555;border-radius:6px;font-family:Inter,Arial,sans-serif;font-size:13px;line-height:1.55;color:#0a0a0a;">
+  <tr><td style="padding:16px 18px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">
+    <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Registration desk</p>
+    <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Kindly reply with your registration form and requirements. Send documents to <strong>helpdesk@jbj.ae</strong>.</p>
 
-  <p style="margin:0 0 6px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;font-size:12px;">Registration status &amp; requirements</p>
-  <p style="margin:0 0 8px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Kindly confirm your current status in your reply using one of:</p>
-  <ul style="margin:0 0 14px 18px;padding:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">
-    <li style="margin:0 0 4px;"><strong>Status: Registered</strong> &mdash; and share your logo and marketing-material links.</li>
-    <li style="margin:0 0 4px;"><strong>Status: Pending</strong> &mdash; share your registration form and full requirements.</li>
-    <li style="margin:0;"><strong>Status: Active</strong> &mdash; confirm and share any updated documents.</li>
-  </ul>
+    <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Project escrow &amp; bank details</p>
+    <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">In your marketing-material link, please include <strong>one folder per project</strong> containing project details, the <strong>project escrow account</strong>, and the <strong>corporate bank account</strong> for that project. For any project not yet registered, mark it <em>&ldquo;Registration pending &mdash; documents pending from JBJ&rdquo;</em> with the reason.</p>
 
-  <p style="margin:0 0 6px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;font-size:12px;">Project folders &amp; escrow</p>
-  <p style="margin:0 0 14px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">In your marketing-material link, please include <strong>one folder per project</strong> containing the project details, the project escrow account, and the corporate bank account. For any project that is not yet registered with JBJ, please mark it as <em>&ldquo;Registration pending &mdash; documents pending from JBJ&rdquo;</em> and include the reason.</p>
+    <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">WhatsApp group</p>
+    <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please create a WhatsApp group named <strong style="white-space:nowrap;">{{developer_name}}&#x2009;/&#x2009;JBJ Global Real Estate</strong>, add <strong>Jane Bou Jaoude</strong> and <strong>Walid Halabi</strong> as admins, use your developer logo, and paste your marketing-material link in the group description.</p>
 
-  <p style="margin:0 0 6px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;font-size:12px;">WhatsApp group</p>
-  <p style="margin:0 0 14px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Kindly create a WhatsApp group named <strong>{{developer_name}} / JBJ Global Real Estate</strong>, add <strong>Jane Bou Jaoude</strong> and <strong>Walid Halabi</strong> as admins, use your developer logo, and paste your marketing-material link in the group description.</p>
+    <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Admin contact &mdash; urgent only</p>
+    <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Walid Halabi</strong> &middot; +971 54 366 2223 &middot; +971 50 999 3839 <span style="color:#4a4a4a;">&mdash; urgent registration/compliance only; standard correspondence stays on this thread.</span></p>
+  </td></tr>
+</table>`;
 
-  <p style="margin:0 0 6px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;font-size:12px;">Admin contact &mdash; urgent only</p>
-  <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Walid Halabi</strong> &middot; +971 54 366 2223 &middot; +971 50 999 3839<br/><span style="color:#4a4a4a;">For urgent registration or compliance questions only. All standard correspondence should remain on this email thread.</span></p>
-</div>`;
-
+// Injects the requirements block INSIDE the card (before the sign-off).
+// Also strips any pre-existing legacy block that may live in the DB template
+// body so we never render two copies stacked.
 const injectDeveloperRequirementsBlock = (html: string, developerName: string) => {
+  // Strip any earlier variant of this block (id-marked or heuristic).
+  let cleaned = html.replace(
+    /<(?:div|table)[^>]*data-jbj-developer-requirements="true"[\s\S]*?<\/(?:div|table)>/gi,
+    "",
+  );
+  // Strip the legacy DB-baked "Kindly reply to this email..." section — from
+  // its heading down to just before the Regards sign-off — so we don't render
+  // it twice below the new premium block above.
+  cleaned = cleaned.replace(
+    /(<(?:p|h[1-6]|div)[^>]*>[\s\S]*?Kindly reply to this email[\s\S]*?)(?=<(?:p|h[1-6]|div)[^>]*>\s*Regards)/i,
+    "",
+  );
+  // Strip stray trade-license asks — the developer already has those docs.
+  cleaned = cleaned.replace(
+    /<(p|li)[^>]*>[^<]*trade[\s\-]*licen[cs]e[\s\S]*?<\/\1>/gi,
+    "",
+  );
+
   const block = DEVELOPER_REQUIREMENTS_BLOCK.replace(/\{\{developer_name\}\}/g, developerName || "your team");
-  if (html.includes('data-jbj-developer-requirements="true"')) return html;
-  if (/<p[^>]*>\s*Regards,?/i.test(html)) {
-    return html.replace(/(<p[^>]*>\s*Regards,?)/i, `${block}$1`);
+  if (/<p[^>]*>\s*Regards,?/i.test(cleaned)) {
+    return cleaned.replace(/(<p[^>]*>\s*Regards,?)/i, `${block}$1`);
   }
-  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${block}</body>`);
-  return `${html}${block}`;
+  if (/<\/body>/i.test(cleaned)) return cleaned.replace(/<\/body>/i, `${block}</body>`);
+  return `${cleaned}${block}`;
 };
 
 const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
