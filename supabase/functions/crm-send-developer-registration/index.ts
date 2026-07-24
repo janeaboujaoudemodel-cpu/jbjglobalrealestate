@@ -109,10 +109,16 @@ const injectDeveloperRequirementsBlock = (html: string, developerName: string) =
     /<(?:div|table)[^>]*data-jbj-developer-requirements="true"[\s\S]*?<\/(?:div|table)>/gi,
     "",
   );
-  // Strip any orphan "Registration desk" / "Kindly reply to this email..." block
-  // that may have been baked into the DB template body previously.
+  // Strip the legacy DB-baked "Kindly reply to this email..." section — from
+  // its heading down to just before the Regards sign-off — so we don't render
+  // it twice below the new premium block above.
   cleaned = cleaned.replace(
-    /<p[^>]*>\s*Kindly reply to this email[\s\S]*?<\/p>/gi,
+    /(<(?:p|h[1-6]|div)[^>]*>[\s\S]*?Kindly reply to this email[\s\S]*?)(?=<(?:p|h[1-6]|div)[^>]*>\s*Regards)/i,
+    "",
+  );
+  // Strip stray trade-license asks — the developer already has those docs.
+  cleaned = cleaned.replace(
+    /<(p|li)[^>]*>[^<]*trade[\s\-]*licen[cs]e[\s\S]*?<\/\1>/gi,
     "",
   );
 
