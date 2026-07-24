@@ -26,7 +26,7 @@ import {
   History
 } from "lucide-react";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
-import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
+import BrandedEmailDashboard, { type CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
 import { format } from "date-fns";
 
 const TAB_STYLE = "text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[hsl(36,40%,70%)]/40 rounded-lg";
@@ -266,6 +266,7 @@ function DocumentVerificationSection() {
 export default function BrokerPortal() {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "dashboard");
+  const [campaignFilter, setCampaignFilter] = useState<CanonicalStatus>("pending");
   const { user } = useAuth();
   const { profile } = useBrokerProfile();
   const { invitations, respondToInvitation } = useMyEventInvitations();
@@ -287,7 +288,7 @@ export default function BrokerPortal() {
             <BrandedEmailsLauncherCard variant="broker" />
           </div>
           <div className="mb-6">
-            <BrandedEmailDashboard kind="brokerages" />
+            <BrandedEmailDashboard kind="brokerages" filter={campaignFilter} onFilterChange={setCampaignFilter} />
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>

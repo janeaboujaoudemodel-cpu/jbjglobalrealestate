@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MailCheck, Eye, Reply, Send, Search, Loader2, Wand2, CheckSquare, X } from "lucide-react";
+import QuickActivityActions from "@/components/crm/QuickActivityActions";
 
 type Kind = "developers" | "brokerages" | "clients";
 
@@ -106,6 +107,7 @@ interface Props {
 export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: Props) {
   const [recipientRows, setRecipientRows] = useState<any[]>([]);
   const [campaignRows, setCampaignRows] = useState<any[]>([]);
+  const [emailLogRows, setEmailLogRows] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [uncontrolledFilter, setUncontrolledFilter] = useState<CanonicalStatus>("pending");
   const [query, setQuery] = useState("");
@@ -124,7 +126,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
     Promise.all([
       (supabase as any)
         .from("jbj_campaign_recipients")
-        .select("id, campaign_id, email, email_norm, send_status, delivery_status, reply_status, business_status, provider, resend_message_id, provider_response, error_message, attempted_at, accepted_at, delivered_at, opened_at, clicked_at, replied_at, send_category, metadata, created_at, updated_at")
+          .select("id, campaign_id, entity_id, email, email_norm, send_status, delivery_status, reply_status, business_status, provider, resend_message_id, provider_response, error_message, attempted_at, accepted_at, delivered_at, opened_at, clicked_at, replied_at, thread_id, send_category, metadata, created_at, updated_at")
         .eq("entity_type", ENTITY_BY_KIND[kind])
         .neq("provider", "gmail_legacy")
         .order("updated_at", { ascending: false })
@@ -136,19 +138,37 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         .in("portal_kind", PORTAL_BY_KIND[kind])
         .order("created_at", { ascending: false })
         .limit(200),
+        (supabase as any)
+          .from("crm_relationship_email_log")
+          .select("id,entity_type,entity_id,thread_id,from_email,subject,body_snippet,detected_signal,detected_status,sent_at,created_at")
+          .eq("direction", "inbound")
+          .order("sent_at", { ascending: false })
+          .limit(1200),
     ])
-      .then(([r, cp]) => {
+      .then(([r, cp, logs]) => {
         if (cancelled) return;
         setRecipientRows(r.data ?? []);
         setCampaignRows(cp.data ?? []);
+        setEmailLogRows(logs.data ?? []);
       })
-      .catch(() => { if (!cancelled) { setRecipientRows([]); setCampaignRows([]); } })
+      .catch(() => { if (!cancelled) { setRecipientRows([]); setCampaignRows([]); setEmailLogRows([]); } })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, [kind]);
 
   const rows = useMemo(() => {
     const cById = new Map(campaignRows.map((c) => [c.id, c]));
+    const latestLogFor = (row: any) => {
+      const rowEntityId = String(row.entity_id || "");
+      const email = String(row.email_norm || row.email || "").toLowerCase();
+      const thread = String(row.thread_id || "");
+      return emailLogRows.find((log) => {
+        const logEntityId = String(log.entity_id || "");
+        const logFrom = String(log.from_email || "").toLowerCase();
+        const logThread = String(log.thread_id || "");
+        return (rowEntityId && rowEntityId === logEntityId) || (thread && thread === logThread) || (email && email === logFrom);
+      }) || null;
+    };
     const deduped = new Map<string, any>();
     for (const row of recipientRows) {
       const key = `${String(row.email_norm || row.email || "").toLowerCase()}::${String(row.metadata?.template_slug || row.send_category || "campaign")}`;
@@ -156,6 +176,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
     }
     return Array.from(deduped.values()).map((row) => {
       const campaign = row.campaign_id ? cById.get(row.campaign_id) : null;
+      const latestLog = latestLogFor(row);
       const subject = String(row.metadata?.subject || campaign?.subject || campaign?.title || "Campaign email");
       const response = row.provider_response || {};
       return {
@@ -165,18 +186,22 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         sentAt: row.accepted_at || row.attempted_at || row.created_at,
         status: classifyRow(row),
         raw: row,
+        entityType: kind === "developers" ? "developer" : kind === "brokerages" ? "brokerage" : "client",
+        entityId: row.entity_id || null,
         category: row.send_category || "campaign",
         providerMessageId: row.resend_message_id || null,
         evidence: row.delivery_status || row.send_status || row.reply_status || "recorded",
         emailContent: response?.html_preview_text || row.metadata?.html_preview_text || row.metadata?.body_text || row.metadata?.body_snippet || "",
-        inboundReply: row.metadata?.inbound_reply || row.metadata?.reply_text || row.metadata?.latest_reply || "",
-        aiSummary: row.metadata?.ai_summary || row.metadata?.inbound_summary || row.metadata?.summary || response?.ai_summary || "",
+        inboundReply: row.metadata?.inbound_reply || row.metadata?.reply_text || row.metadata?.latest_reply || latestLog?.body_snippet || "",
+        inboundSubject: row.metadata?.latest_reply_subject || latestLog?.subject || "",
+        inboundFrom: row.metadata?.latest_reply_from || latestLog?.from_email || "",
+        aiSummary: row.metadata?.ai_summary || row.metadata?.inbound_summary || row.metadata?.summary || response?.ai_summary || latestLog?.detected_signal || "",
         aiNextAction: row.metadata?.ai_next_action || row.metadata?.next_action || response?.ai_next_action || "",
         aiDraft: row.metadata?.ai_draft_reply || row.metadata?.draft_response || response?.ai_draft_reply || "",
-        respondedAt: row.replied_at || null,
+        respondedAt: row.replied_at || latestLog?.sent_at || null,
       };
     });
-  }, [campaignRows, recipientRows]);
+  }, [campaignRows, emailLogRows, kind, recipientRows]);
 
   const filteredRows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -371,7 +396,9 @@ function InsightPanel({ row, onClose }: { row: any; onClose: () => void }) {
       <dl className="space-y-2 text-xs">
         <InsightLine label="Subject" value={row.subject} />
         <InsightLine label="Email content" value={row.emailContent || "Stored for new sends from this point forward."} />
+        <InsightLine label="Latest reply subject" value={row.inboundSubject || "Waiting for mailbox sync."} />
         <InsightLine label="Latest reply" value={row.inboundReply || "Waiting for mailbox sync."} />
+        <InsightLine label="Reply from" value={row.inboundFrom || "—"} />
         <InsightLine label="Status" value={`${row.evidence}${isPendingResponseRow(raw) ? " · pending response" : ""}`} />
         <InsightLine label="Provider ID" value={row.providerMessageId || "Awaiting provider evidence"} />
         <InsightLine label="Sent" value={formatDate(row.sentAt)} />
@@ -382,6 +409,15 @@ function InsightPanel({ row, onClose }: { row: any; onClose: () => void }) {
       <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
         <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">AI draft</p>
         <p className="mt-1 whitespace-pre-wrap text-xs font-semibold leading-relaxed text-[#4B5D55]">{row.aiDraft || "A reply draft will appear here after the synced mailbox receives and classifies a response."}</p>
+      </div>
+      <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
+        <p className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">Actions</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button asChild size="sm" variant="outline" className="border-emerald-900/25 text-[#064E3B]">
+            <a href={`mailto:${row.recipient}?subject=${encodeURIComponent(`Re: ${row.subject}`)}`}><Reply className="mr-1.5 size-3.5" />Reply</a>
+          </Button>
+          {row.entityId ? <QuickActivityActions entityType={row.entityType} entityId={row.entityId} entityName={row.recipient} showLabels /> : null}
+        </div>
       </div>
     </aside>
   );

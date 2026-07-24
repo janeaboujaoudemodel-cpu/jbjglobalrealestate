@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
-import { Users, MailCheck, Eye, Reply, ShieldCheck, Loader2, Search } from "lucide-react";
+import { Users, Loader2, Search } from "lucide-react";
 
 import type { CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
 
@@ -15,28 +15,13 @@ function useClientStats() {
   return useQuery({
     queryKey: ["client-portal-stats-canonical"],
     queryFn: async () => {
-      const [invRes, countsRes] = await Promise.all([
-        (supabase as any)
-          .from("client_investors")
-          .select("id,email,client_name,phone,project_name,unit_type,created_at")
-          .order("created_at", { ascending: false })
-          .limit(5000),
-        (supabase as any)
-          .from("jbj_portal_counts_v1")
-          .select("portal_entity,total,actual_contacted,provider_accepted,delivered,opened,clicked,human_reply,automated_reply,pending_response,retry_eligible,permanently_excluded")
-          .in("portal_entity", ["client", "client_buyer", "client_seller"]),
-      ]);
+      const invRes = await (supabase as any)
+        .from("client_investors")
+        .select("id,email,client_name,phone,project_name,unit_type,created_at")
+        .order("created_at", { ascending: false })
+        .limit(5000);
       const rows = (invRes.data as any[]) ?? [];
-      const counts = ((countsRes.data as any[]) ?? []).reduce((acc, r) => {
-        acc.contacted += Number(r.actual_contacted || 0);
-        acc.sent += Number(r.provider_accepted || 0);
-        acc.delivered += Number(r.delivered || 0);
-        acc.opened += Number(r.opened || 0);
-        acc.responded += Number(r.human_reply || 0);
-        acc.pending += Number(r.pending_response || 0);
-        return acc;
-      }, { contacted: 0, sent: 0, delivered: 0, opened: 0, responded: 0, pending: 0 });
-      return { total: rows.length, active: rows.length, ...counts, rows };
+      return { total: rows.length, rows };
     },
   });
 }
@@ -55,17 +40,6 @@ export default function InvestorPortal() {
       .filter((r) => [r.client_name, r.email, r.phone, r.project_name, r.unit_type].some((v) => String(v ?? "").toLowerCase().includes(t)))
       .slice(0, 100);
   }, [s?.rows, search]);
-
-  const tiles: Array<{ label: string; value: number | undefined; icon: JSX.Element; filter: CanonicalStatus | null }> = [
-    { label: "Total clients",    value: s?.total,     icon: <Users className="size-4" />,      filter: null },
-    { label: "Active pipeline",  value: s?.active,    icon: <ShieldCheck className="size-4" />, filter: null },
-    { label: "Contacted",        value: s?.contacted, icon: <MailCheck className="size-4" />,  filter: "sent" },
-    { label: "Emails sent",      value: s?.sent,      icon: <MailCheck className="size-4" />,  filter: "sent" },
-    { label: "Delivered",        value: s?.delivered, icon: <MailCheck className="size-4" />,  filter: "delivered" },
-    { label: "Opened",           value: s?.opened,    icon: <Eye className="size-4" />,        filter: "opened" },
-    { label: "Responded",        value: s?.responded, icon: <Reply className="size-4" />,      filter: "responded" },
-    { label: "Pending response", value: s?.pending,   icon: <MailCheck className="size-4" />,  filter: "pending" },
-  ];
 
   return (
       <div data-investor-portal className="space-y-5 max-w-full overflow-hidden">
@@ -92,34 +66,6 @@ export default function InvestorPortal() {
           </div>
         </div>
       </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {tiles.map((t) => {
-          const clickable = t.filter !== null;
-          const active = clickable && filter === t.filter;
-          return (
-            <button
-              key={t.label}
-              type="button"
-              disabled={!clickable}
-              onClick={() => clickable && setFilter(t.filter!)}
-              className={`text-left rounded-lg transition-all ${clickable ? "hover:border-[#B89555] hover:shadow-md cursor-pointer" : "cursor-default"}`}
-              aria-pressed={active}
-            >
-              <Card className={`p-4 bg-[#F7F2EA] border ${active ? "border-[#064E3B] ring-2 ring-[#064E3B]/30" : "border-[#B89555]/30"}`}>
-                <div className="flex items-center gap-2 text-[#064E3B]">
-                  {t.icon}
-                  <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{t.label}</p>
-                </div>
-                <p className="mt-1 text-2xl font-black text-[#064E3B]">
-                  {q.isLoading ? <Loader2 className="size-5 animate-spin" /> : typeof t.value === "number" ? t.value.toLocaleString() : "—"}
-                </p>
-              </Card>
-            </button>
-          );
-        })}
-      </div>
-
 
       <Tabs defaultValue="email-status" className="w-full">
         <TabsList className="ip-tabs grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">

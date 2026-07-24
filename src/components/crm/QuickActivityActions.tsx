@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Bell, Calendar, FileText } from "lucide-react";
+import { Bell, Calendar, CheckSquare, FileText, PhoneCall } from "lucide-react";
 import QuickActivityDialog, { QuickActivityType, QuickEntity } from "./QuickActivityDialog";
 
 interface Props {
@@ -41,6 +41,8 @@ export default function QuickActivityActions({
     <TooltipProvider delayDuration={200}>
       <div className="inline-flex gap-1.5 items-center">
         <Btn type="note" icon={FileText} label="Note" />
+        <Btn type="task" icon={CheckSquare} label="Task" />
+        <Btn type="call" icon={PhoneCall} label="Call" />
         <Btn type="calendar_event" icon={Calendar} label="Calendar" />
         <Btn type="reminder" icon={Bell} label="Reminder" />
       </div>

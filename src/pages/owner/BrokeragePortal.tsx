@@ -16,6 +16,7 @@ import { Building2, Download, FileSpreadsheet, Plus, Trash2, Upload, UserRound, 
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { statusColor, BROKERAGE_REGISTRATION_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
+import type { CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
 
 const GROUP_OPTIONS = [
   { value: "pending_group_status", label: "Pending group" },
@@ -43,6 +44,7 @@ export default function BrokeragePortal() {
   const [view, setView] = useState<"all" | "jbj" | "list">("all");
   const [listId, setListId] = useState<string>("all");
   const [specialty, setSpecialty] = useState<"all" | "secondary" | "off_plan" | "both">("all");
+  const [campaignFilter, setCampaignFilter] = useState<CanonicalStatus>("pending");
   const [visibleLimit, setVisibleLimit] = useState(60);
 
   useEffect(() => { setVisibleLimit(60); }, [search, view, listId, specialty]);
@@ -207,7 +209,7 @@ export default function BrokeragePortal() {
         <TabsTrigger value="approval" className="text-[#064E3B] font-black">Uploaded approval</TabsTrigger>
       </TabsList>
       <TabsContent value="new-dld" className="mt-4"><DldSyncHistoryPanel /></TabsContent>
-      <TabsContent value="email-status" className="mt-4 space-y-4"><BrandedEmailsLauncherCard variant="broker" /><BrandedEmailDashboard kind="brokerages" /></TabsContent>
+      <TabsContent value="email-status" className="mt-4 space-y-4"><BrandedEmailsLauncherCard variant="broker" /><BrandedEmailDashboard kind="brokerages" filter={campaignFilter} onFilterChange={setCampaignFilter} /></TabsContent>
       <TabsContent value="approval" className="mt-4"><PendingBrokerageImportsSection /></TabsContent>
     </Tabs>
 
