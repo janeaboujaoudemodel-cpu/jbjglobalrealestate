@@ -35,7 +35,6 @@ const ComingSoon = lazy(() => import("@/pages/ComingSoon"));
 const SignDocument = lazy(() => import("@/pages/e-signature/SignDocument"));
 const PublicSignDocument = lazy(() => import("@/pages/PublicSignDocument"));
 const FooterPreviewPage = lazy(() => import("@/pages/dev/FooterPreviewPage"));
-const BookMeetingLanding = lazy(() => import("@/pages/BookMeetingLanding"));
 const PublicBookingLanding = lazy(() => import("@/pages/PublicBookingLanding"));
 const DownloadProxy = lazy(() => import("@/pages/DownloadProxy"));
 const BrokerActivate = lazy(() => import("@/pages/BrokerActivate"));
@@ -75,13 +74,7 @@ export const StandaloneRoutes = () => (
     <Route path="/coming-soon" element={<RouteErrorBoundary routeName="ComingSoon"><ComingSoon /></RouteErrorBoundary>} />
     <Route path="/maintenance" element={<RouteErrorBoundary routeName="Maintenance"><ComingSoon /></RouteErrorBoundary>} />
     <Route path="/card" element={<DigitalCard />} />
-    <Route path="/book" element={
-      <RouteErrorBoundary routeName="BookMeeting">
-        <Suspense fallback={<PageLoader />}>
-          <BookMeetingLanding />
-        </Suspense>
-      </RouteErrorBoundary>
-    } />
+    <Route path="/book" element={<Navigate to="/book/jane" replace />} />
     <Route path="/book/:slug" element={
       <RouteErrorBoundary routeName="PublicBooking">
         <Suspense fallback={<PageLoader />}>

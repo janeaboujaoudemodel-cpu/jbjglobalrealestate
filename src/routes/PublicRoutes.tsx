@@ -181,7 +181,6 @@ const Documents = lazy(() => import("@/pages/Documents"));
 const QRCodeGenerator = lazy(() => import("@/pages/QRCodeGenerator"));
 const ContractForms = lazy(() => import("@/pages/ContractForms"));
 const VideoMeeting = lazy(() => import("@/pages/VideoMeeting"));
-const BreakfastBooking = lazy(() => import("@/pages/BreakfastBooking"));
 // Presentations editor removed — route redirects to Document Studio
 const DocumentStudio = lazy(() => import("@/pages/DocumentStudio"));
 const Sitemap = lazy(() => import("@/pages/Sitemap"));
@@ -488,7 +487,7 @@ export const PublicRoutes = () => (
     <Route path="/qr-generator" element={<AuthRequiredRoute><QRCodeGenerator /></AuthRequiredRoute>} />
     <Route path="/contract-forms" element={<AuthRequiredRoute><ContractForms /></AuthRequiredRoute>} />
     <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
-    <Route path="/breakfast-booking" element={<BreakfastBooking />} />
+    <Route path="/breakfast-booking" element={<Navigate to="/book/jbj-private-breakfast" replace />} />
     {/* /presentations was the broken slide-deck builder — removed per owner directive (June 2026).
         Any stale link now lands on /document-studio which is the active document tool. */}
     <Route path="/presentations" element={<Navigate to="/document-studio" replace />} />
