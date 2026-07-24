@@ -13,15 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import BrandedEmailDashboard, { CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
-import { Building2, MailCheck, Reply, Eye, ShieldCheck, Loader2, Send, MousePointerClick, RotateCw, Ban, AlertTriangle, Bot } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
-type TileDef = {
-  key: string;
-  label: string;
-  icon: JSX.Element;
-  value: number | undefined;
-  filter: CanonicalStatus | null; // null = non-filterable (e.g. Total / Registered)
-};
 
 function useDeveloperCampaignStats() {
   return useQuery({
