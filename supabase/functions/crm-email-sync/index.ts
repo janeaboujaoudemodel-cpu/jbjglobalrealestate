@@ -27,6 +27,8 @@ type SyncMessage = {
   markRead: () => Promise<void>;
 };
 
+type SyncOptions = { maxResults: number; lookbackDays: number };
+
 const OWN_MAILBOXES = new Set([
   "helpdesk@jbj.ae",
   "contact@jbj.ae",
@@ -209,9 +211,9 @@ const updateCampaignSpineForReply = async (
   return rows.length;
 };
 
-const listGmailMessages = async (headers: Record<string, string>): Promise<SyncMessage[]> => {
+const listGmailMessages = async (headers: Record<string, string>, opts: SyncOptions): Promise<SyncMessage[]> => {
   const listRes = await fetch(
-    `${GMAIL_GATEWAY}/users/me/messages?maxResults=80&q=newer_than:21d+in:inbox`,
+    `${GMAIL_GATEWAY}/users/me/messages?maxResults=${opts.maxResults}&q=newer_than:${opts.lookbackDays}d+in:inbox`,
     { headers },
   );
   if (!listRes.ok) {
@@ -258,10 +260,10 @@ const listGmailMessages = async (headers: Record<string, string>): Promise<SyncM
   return synced;
 };
 
-const listOutlookMessages = async (headers: Record<string, string>): Promise<SyncMessage[]> => {
-  const since = new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString();
+const listOutlookMessages = async (headers: Record<string, string>, opts: SyncOptions): Promise<SyncMessage[]> => {
+  const since = new Date(Date.now() - opts.lookbackDays * 24 * 60 * 60 * 1000).toISOString();
   const params = new URLSearchParams({
-    "$top": "80",
+    "$top": String(opts.maxResults),
     "$select": "id,conversationId,subject,from,toRecipients,body,bodyPreview,receivedDateTime,isRead",
     "$orderby": "receivedDateTime desc",
     "$filter": `receivedDateTime ge ${since}`,
@@ -375,6 +377,12 @@ serve(async (req: Request) => {
       });
     }
     const service = createClient(supabaseUrl, serviceKey);
+    let body: any = {};
+    try { body = await req.json(); } catch { body = {}; }
+    const opts: SyncOptions = {
+      maxResults: Math.max(5, Math.min(35, Number(body?.maxResults ?? 25))),
+      lookbackDays: Math.max(1, Math.min(45, Number(body?.lookbackDays ?? 21))),
+    };
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
@@ -392,14 +400,14 @@ serve(async (req: Request) => {
         "Authorization": `Bearer ${LOVABLE_API_KEY}`,
         "X-Connection-Api-Key": GMAIL_API_KEY,
         "Content-Type": "application/json",
-      }));
+      }, opts));
     }
     if (OUTLOOK_API_KEY) {
       messages.push(...await listOutlookMessages({
         "Authorization": `Bearer ${LOVABLE_API_KEY}`,
         "X-Connection-Api-Key": OUTLOOK_API_KEY,
         "Content-Type": "application/json",
-      }));
+      }, opts));
     }
 
     const results: any[] = [];

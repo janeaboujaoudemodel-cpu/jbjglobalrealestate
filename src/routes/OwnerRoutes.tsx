@@ -173,6 +173,12 @@ export const OwnerRoutes = () => (
   >
     <Route index element={<CrmHome />} />
     <Route path="home" element={<CrmHome />} />
+    <Route path="developer" element={<Navigate to="/owner/crm/jbj/owner-developers" replace />} />
+    <Route path="developers" element={<Navigate to="/owner/crm/jbj/owner-developers" replace />} />
+    <Route path="brokerage" element={<Navigate to="/owner/crm/jbj/owner-brokerages" replace />} />
+    <Route path="brokerages" element={<Navigate to="/owner/crm/jbj/owner-brokerages" replace />} />
+    <Route path="client" element={<Navigate to="/owner/crm/jbj/owner-client-portal" replace />} />
+    <Route path="clients" element={<Navigate to="/owner/crm/jbj/owner-client-portal" replace />} />
     <Route path="reports" element={<CrmReports />} />
     <Route path="analytics" element={<CrmAnalytics />} />
     <Route path="setup" element={<CrmSetup />} />
