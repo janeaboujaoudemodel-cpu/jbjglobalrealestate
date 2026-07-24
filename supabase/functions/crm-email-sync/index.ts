@@ -22,7 +22,26 @@ type SyncMessage = {
   toEmails: string[];
   subject: string;
   body: string;
+  receivedAt: string | null;
+  isRead: boolean;
   markRead: () => Promise<void>;
+};
+
+const OWN_MAILBOXES = new Set([
+  "helpdesk@jbj.ae",
+  "contact@jbj.ae",
+  "jane@jbj.ae",
+  "partnerships@maisonjane.ae",
+]);
+
+const FREE_MAIL_DOMAINS = new Set([
+  "gmail.com", "googlemail.com", "yahoo.com", "hotmail.com", "outlook.com", "live.com", "icloud.com", "aol.com", "msn.com",
+]);
+
+const normalizedDomain = (email: string) => (email.split("@")[1] || "").toLowerCase();
+const usableDomain = (email: string) => {
+  const domain = normalizedDomain(email);
+  return domain && !FREE_MAIL_DOMAINS.has(domain) ? domain : "";
 };
 
 const decodeBase64Url = (s: string) => {
@@ -99,9 +118,100 @@ const STATUS_MAP_CLIENT: Record<string, string> = {
   no_match: "",
 };
 
+const ruleBasedClassify = (subject: string, body: string): { intent: string; confidence: number; reason: string; errored: boolean } | null => {
+  const text = `${subject}\n${body}`.toLowerCase();
+  if (/\b(out of office|automatic reply|auto(?:matic)? response|on leave|away from office)\b/.test(text)) {
+    return { intent: "no_match", confidence: 0.95, reason: "Automatic reply", errored: false };
+  }
+  if (/\b(successfully registered|registration approved|approved as|registered as|agency code|channel partner code|registration number|thank you for registering)\b/.test(text)) {
+    return { intent: "registered", confidence: 0.9, reason: "Registration approval detected", errored: false };
+  }
+  if (/\b(required documents|mandatory documents|pending documents|please provide|kindly provide|share the.*documents|trade license|rera|iban certificate|visa|noc|kyc|agreement|sign(?:ed)? and stamp|brokerage agreement)\b/.test(text)) {
+    return { intent: "documents_requested", confidence: 0.86, reason: "Documents or agreement requested", errored: false };
+  }
+  if (/\b(under review|we will review|will get back|in process|processing|submitted|received your request|acknowledge)\b/.test(text)) {
+    return { intent: "pending", confidence: 0.78, reason: "Pending review detected", errored: false };
+  }
+  if (/\b(rejected|declined|not accepting|cannot proceed|unable to register|expired)\b/.test(text)) {
+    return { intent: "rejected", confidence: 0.8, reason: "Rejection or expiry detected", errored: false };
+  }
+  return null;
+};
+
+const campaignEntityType = (entityType: string) => {
+  if (entityType === "developer_registry") return "developer";
+  if (entityType === "brokerage") return "brokerage";
+  if (entityType === "client") return "client";
+  return entityType;
+};
+
+const updateCampaignSpineForReply = async (
+  service: any,
+  matched: { table: string; entityType: string; row: any } | null,
+  fromEmail: string,
+  message: SyncMessage,
+  ai: { intent: string; confidence: number; reason: string; errored: boolean },
+) => {
+  if (ai.errored || ai.intent === "no_match") return 0;
+
+  const domain = usableDomain(fromEmail);
+  let query = service
+    .from("jbj_campaign_recipients")
+    .select("id,metadata")
+    .neq("provider", "gmail_legacy")
+    .order("updated_at", { ascending: false })
+    .limit(50);
+
+  if (matched?.row?.id) {
+    query = query
+      .eq("entity_type", campaignEntityType(matched.entityType))
+      .eq("entity_id", matched.row.id);
+  } else if (domain) {
+    query = query.or(`email_norm.eq.${fromEmail},email.ilike.%@${domain}`);
+  } else {
+    query = query.eq("email_norm", fromEmail);
+  }
+
+  const { data: recipients, error } = await query;
+  if (error) {
+    console.error("Campaign reply lookup failed", error);
+    return 0;
+  }
+
+  const rows = recipients ?? [];
+  for (const recipient of rows) {
+    const metadata = {
+      ...(recipient.metadata || {}),
+      latest_reply: message.body.slice(0, 1200),
+      latest_reply_subject: message.subject,
+      latest_reply_from: fromEmail,
+      latest_reply_at: message.receivedAt || new Date().toISOString(),
+      ai_summary: ai.reason,
+      ai_next_action: ai.intent === "documents_requested"
+        ? "Review requested documents and prepare the compliance reply."
+        : ai.intent === "registered"
+        ? "Confirm registration details and update the developer card."
+        : "Review the response and prepare the next follow-up.",
+      ai_draft_reply: ai.intent === "documents_requested"
+        ? "Thank you for sharing the requirements. We will review the requested documents and send the completed pack back on this thread."
+        : ai.intent === "registered"
+        ? "Thank you for confirming our registration. Please share the agency code, broker portal access, WhatsApp group details, and current marketing material link."
+        : "Thank you for your update. Please confirm the next step required from JBJ Global Real Estate.",
+    };
+    await service.from("jbj_campaign_recipients").update({
+      reply_status: "human_reply",
+      replied_at: message.receivedAt || new Date().toISOString(),
+      thread_id: message.threadId,
+      metadata,
+      updated_at: new Date().toISOString(),
+    }).eq("id", recipient.id);
+  }
+  return rows.length;
+};
+
 const listGmailMessages = async (headers: Record<string, string>): Promise<SyncMessage[]> => {
   const listRes = await fetch(
-    `${GMAIL_GATEWAY}/users/me/messages?maxResults=25&q=is:unread+newer_than:2d+in:inbox`,
+    `${GMAIL_GATEWAY}/users/me/messages?maxResults=80&q=newer_than:21d+in:inbox`,
     { headers },
   );
   if (!listRes.ok) {
@@ -123,6 +233,7 @@ const listGmailMessages = async (headers: Record<string, string>): Promise<SyncM
     const getH = (name: string) => rawHeaders.find((h: any) => h.name?.toLowerCase() === name.toLowerCase())?.value || "";
     const fromRaw = getH("From");
     if (!fromRaw) continue;
+    const labels = detail?.labelIds || [];
 
     synced.push({
       source: "gmail",
@@ -132,6 +243,8 @@ const listGmailMessages = async (headers: Record<string, string>): Promise<SyncM
       toEmails: getH("To") ? [getH("To")] : [],
       subject: getH("Subject"),
       body: extractBody(detail?.payload) || detail?.snippet || "",
+      receivedAt: detail?.internalDate ? new Date(Number(detail.internalDate)).toISOString() : null,
+      isRead: !labels.includes("UNREAD"),
       markRead: async () => {
         await fetch(`${GMAIL_GATEWAY}/users/me/messages/${message.id}/modify`, {
           method: "POST",
@@ -146,12 +259,12 @@ const listGmailMessages = async (headers: Record<string, string>): Promise<SyncM
 };
 
 const listOutlookMessages = async (headers: Record<string, string>): Promise<SyncMessage[]> => {
-  const since = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString();
+  const since = new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString();
   const params = new URLSearchParams({
-    "$top": "25",
+    "$top": "80",
     "$select": "id,conversationId,subject,from,toRecipients,body,bodyPreview,receivedDateTime,isRead",
     "$orderby": "receivedDateTime desc",
-    "$filter": `isRead eq false and receivedDateTime ge ${since}`,
+    "$filter": `receivedDateTime ge ${since}`,
   });
   const listRes = await fetch(`${OUTLOOK_GATEWAY}/me/messages?${params.toString()}`, { headers });
   if (!listRes.ok) {
@@ -179,6 +292,8 @@ const listOutlookMessages = async (headers: Record<string, string>): Promise<Syn
         : [],
       subject: message.subject || "",
       body,
+      receivedAt: message.receivedDateTime || null,
+      isRead: Boolean(message.isRead),
       markRead: async () => {
         await fetch(`${OUTLOOK_GATEWAY}/me/messages/${encodeURIComponent(message.id)}`, {
           method: "PATCH",
@@ -191,6 +306,9 @@ const listOutlookMessages = async (headers: Record<string, string>): Promise<Syn
 };
 
 const classifyWithAI = async (subject: string, body: string): Promise<{ intent: string; confidence: number; reason: string; errored: boolean }> => {
+  const rule = ruleBasedClassify(subject, body);
+  if (rule) return rule;
+
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   if (!LOVABLE_API_KEY) return { intent: "no_match", confidence: 0, reason: "No AI key", errored: true };
 
@@ -290,23 +408,63 @@ serve(async (req: Request) => {
       try {
         const { email: fromEmail } = parseFromAddress(message.fromRaw);
         if (!fromEmail) continue;
+        if (OWN_MAILBOXES.has(fromEmail)) continue;
+
+        const externalMessageId = message.source === "gmail" ? message.id : `outlook-${message.id}`;
+        const { data: existingLog } = await service
+          .from("crm_relationship_email_log")
+          .select("id,detected_signal")
+          .eq("external_message_id", externalMessageId)
+          .maybeSingle();
+        if (existingLog && existingLog.detected_signal !== "unclassified") {
+          results.push({ source: message.source, message_id: message.id, skipped: "already_synced" });
+          continue;
+        }
 
         // 2. Match to a CRM record
-        const fromDomain = fromEmail.split("@")[1] || "";
+        const fromDomain = usableDomain(fromEmail);
         let matched: { table: string; entityType: string; row: any } | null = null;
 
         // Try developer_registry by email or domain
-        const { data: devs } = await service
+        let devQuery = service
           .from("crm_developer_registry").select("*")
-          .or(`developer_email.ilike.%${fromEmail}%,developer_email.ilike.%@${fromDomain}`)
+          .or(`developer_email.ilike.%${fromEmail}%,channel_department_email.ilike.%${fromEmail}%`)
           .limit(1);
+        if (fromDomain) {
+          devQuery = service
+            .from("crm_developer_registry").select("*")
+            .or(`developer_email.ilike.%${fromEmail}%,channel_department_email.ilike.%${fromEmail}%,developer_email.ilike.%@${fromDomain},website.ilike.%${fromDomain}%`)
+            .limit(1);
+        }
+        const { data: devs } = await devQuery;
         if (devs?.[0]) matched = { table: "crm_developer_registry", entityType: "developer_registry", row: devs[0] };
 
         if (!matched) {
-          const { data: brokers } = await service
-            .from("crm_brokerages").select("*")
-            .or(`primary_contact->>email.ilike.%${fromEmail}%,website.ilike.%${fromDomain}%`)
+          const { data: campaignMatches } = await service
+            .from("jbj_campaign_recipients")
+            .select("entity_type,entity_id,email,email_norm")
+            .neq("provider", "gmail_legacy")
+            .or(fromDomain ? `email_norm.eq.${fromEmail},email.ilike.%@${fromDomain}` : `email_norm.eq.${fromEmail}`)
+            .not("entity_id", "is", null)
+            .order("updated_at", { ascending: false })
             .limit(1);
+          const campaign = campaignMatches?.[0];
+          if (campaign?.entity_id && campaign.entity_type === "developer") {
+            const { data: byCampaign } = await service.from("crm_developer_registry").select("*").eq("id", campaign.entity_id).limit(1);
+            if (byCampaign?.[0]) matched = { table: "crm_developer_registry", entityType: "developer_registry", row: byCampaign[0] };
+          } else if (campaign?.entity_id && campaign.entity_type === "brokerage") {
+            const { data: byCampaign } = await service.from("crm_brokerages").select("*").eq("id", campaign.entity_id).limit(1);
+            if (byCampaign?.[0]) matched = { table: "crm_brokerages", entityType: "brokerage", row: byCampaign[0] };
+          } else if (campaign?.entity_id && campaign.entity_type === "client") {
+            const { data: byCampaign } = await service.from("crm_clients").select("*").eq("id", campaign.entity_id).limit(1);
+            if (byCampaign?.[0]) matched = { table: "crm_clients", entityType: "client", row: byCampaign[0] };
+          }
+        }
+
+        if (!matched) {
+          let brokerageOr = `email.ilike.%${fromEmail}%,primary_contact->>email.ilike.%${fromEmail}%`;
+          if (fromDomain) brokerageOr += `,website.ilike.%${fromDomain}%`;
+          const { data: brokers } = await service.from("crm_brokerages").select("*").or(brokerageOr).limit(1);
           if (brokers?.[0]) matched = { table: "crm_brokerages", entityType: "brokerage", row: brokers[0] };
         }
 
@@ -321,6 +479,7 @@ serve(async (req: Request) => {
 
         // 3. AI classification
         const ai = await classifyWithAI(message.subject, message.body);
+        const updatedCampaignRows = await updateCampaignSpineForReply(service, matched, fromEmail, message, ai);
 
         // 4. Update record status if confident. Skip on AI errors so we don't
         //    mislabel real replies as "no_match" during an outage.
@@ -333,10 +492,10 @@ serve(async (req: Request) => {
           if (newStatus && newStatus !== matched.row.status) {
             await service.from(matched.table).update({
               status: newStatus,
-              last_interaction_at: new Date().toISOString(),
+              last_interaction_at: message.receivedAt || new Date().toISOString(),
               last_email_synced_at: new Date().toISOString(),
               last_inbound_subject: message.subject,
-              last_inbound_at: new Date().toISOString(),
+              last_inbound_at: message.receivedAt || new Date().toISOString(),
             }).eq("id", matched.row.id);
 
             if (ownerId) {
@@ -355,7 +514,7 @@ serve(async (req: Request) => {
             await service.from(matched.table).update({
               last_email_synced_at: new Date().toISOString(),
               last_inbound_subject: message.subject,
-              last_inbound_at: new Date().toISOString(),
+              last_inbound_at: message.receivedAt || new Date().toISOString(),
             }).eq("id", matched.row.id);
           }
         }
@@ -370,7 +529,7 @@ serve(async (req: Request) => {
             entity_id: matched?.row?.id || null,
             direction: "inbound",
             sent_via: message.source,
-            external_message_id: message.source === "gmail" ? message.id : `outlook-${message.id}`,
+            external_message_id: externalMessageId,
             thread_id: message.threadId,
             from_email: fromEmail,
             to_emails: message.toEmails,
@@ -378,14 +537,14 @@ serve(async (req: Request) => {
             body_snippet: message.body.slice(0, 500),
             detected_status: newStatus || null,
             detected_signal: ai.errored ? "unclassified" : ai.intent,
-            sent_at: new Date().toISOString(),
+            sent_at: message.receivedAt || new Date().toISOString(),
           });
           if (logError && logError.code !== "23505") console.error("email log insert failed", logError);
         }
 
         // 6. Mark mailbox message as read only when classification succeeded.
         //    On AI error we leave it UNREAD so the next run can retry.
-        if (!ai.errored) {
+        if (!ai.errored && !message.isRead) {
           await message.markRead();
         }
 
@@ -397,6 +556,7 @@ serve(async (req: Request) => {
           matched: matched ? { type: matched.entityType, id: matched.row.id, name: matched.row.developer_name || matched.row.company_name || matched.row.full_name } : null,
           ai_intent: ai.intent, ai_confidence: ai.confidence, ai_errored: ai.errored,
           new_status: newStatus || null,
+          updated_campaign_rows: updatedCampaignRows,
         });
       } catch (e) {
         console.error("Per-message error", e);
