@@ -36,7 +36,22 @@ function fallbackDraft(input: any) {
   if (/meeting|calendar|briefing|slot|call/i.test(source)) {
     return "Thank you for your reply. Please share the preferred meeting slot, or confirm if you would like us to send a calendar invitation on this same thread.";
   }
-  return "Thank you for your reply. We reviewed your message and will continue on this same thread. Please confirm the next step required from JBJ Global Real Estate.";
+  return "Thank you for your reply. We reviewed your message and will continue from our previous outreach on this same thread. Please confirm the next step required from JBJ Global Real Estate.";
+}
+
+function cleanThreadHistory(value: unknown) {
+  if (!Array.isArray(value)) return "";
+  return value
+    .slice(-12)
+    .map((item, index) => {
+      const direction = clean(item?.direction, 60) || "message";
+      const at = clean(item?.at, 80);
+      const from = clean(item?.from, 120);
+      const subject = clean(item?.subject, 220);
+      const body = clean(item?.body, 1800);
+      return `#${index + 1} ${direction}${from ? ` from ${from}` : ""}${at ? ` at ${at}` : ""}\nSubject: ${subject}\nBody: ${body}`;
+    })
+    .join("\n\n");
 }
 
 serve(async (req) => {
@@ -60,7 +75,8 @@ serve(async (req) => {
       return new Response(JSON.stringify({ ok: true, draft: fallback, source: "fallback" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const prompt = `Write a concise, premium CRM email reply body for JBJ Global Real Estate. Do not include a subject. Do not use emojis. Keep it under 130 words. Reply on the same thread and be operationally precise.\n\nPortal: ${clean(input.kind, 60)}\nRecipient: ${clean(input.recipient, 120)}\nSubject: ${clean(input.subject, 220)}\nInbound reply: ${clean(input.inboundReply, 2400)}\nSent context: ${clean(input.sentContent, 1600)}\nCurrent draft to improve: ${clean(input.currentDraft, 1200)}`;
+    const threadHistory = cleanThreadHistory(input.threadHistory);
+    const prompt = `Write a concise, premium CRM email reply body for JBJ Global Real Estate. Do not include a subject. Do not use emojis. Keep it under 130 words.\n\nCritical context:\n- JBJ/CITI started the outreach. The recipient is replying to us. Never write “thank you for reaching out” or imply they approached us first.\n- Read the actual thread below. Answer only the latest relevant inbound reply.\n- If the latest inbound reply asks for registration documents, requirements, a form, a portal link, agency code, project material, meeting slot, or clarification, respond directly to that request.\n- Be professional and specific. Do not use cheap filler such as “to proceed effectively on this thread”.\n- Do not mention CRM internals.\n\nPortal: ${clean(input.kind, 60)}\nRecipient: ${clean(input.recipient, 120)}\nCampaign subject: ${clean(input.subject, 220)}\nFull thread history, oldest to newest:\n${threadHistory || "No structured history provided."}\n\nLatest inbound reply:\n${clean(input.inboundReply, 2400)}\n\nLast email JBJ/CITI sent:\n${clean(input.sentContent, 1600)}\n\nCurrent draft to improve:\n${clean(input.currentDraft, 1200)}`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -72,7 +88,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3.6-flash",
         messages: [
-          { role: "system", content: "You write polished, concise CRM email replies for a Dubai real-estate brokerage." },
+          { role: "system", content: "You write polished, concise CRM email replies for a Dubai real-estate brokerage. You must infer who initiated the conversation from the thread and never reverse sender/recipient roles." },
           { role: "user", content: prompt },
         ],
         temperature: 0.4,
