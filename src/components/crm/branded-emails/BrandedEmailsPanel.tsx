@@ -236,32 +236,15 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       websiteUrl: null,
     }));
   }
-  // Single paginated fetch with inline count — avoids a separate HEAD
-  // request that can fail with "Failed to fetch" in some browsers.
-  const PAGE_SIZE = 1000;
-  const rows: any[] = [];
-  let from = 0;
-  // Fetch first page with exact count so we know how many pages to pull.
-  const first = await (supabase as any)
+  // Fast single-pass load for the campaign selector. Full database management
+  // stays in the portal table; the send panel must open immediately.
+  const { data, error } = await (supabase as any)
     .from("crm_brokerages")
-    .select("id, company_name, email, emirate, website, logo_url", { count: "exact" })
+    .select("id, company_name, email, emirate, website, logo_url")
     .order("company_name")
-    .range(from, from + PAGE_SIZE - 1);
-  if (first.error) throw first.error;
-  rows.push(...(first.data ?? []));
-  const total = Number(first.count ?? rows.length);
-  from += PAGE_SIZE;
-  while (from < total) {
-    const next = await (supabase as any)
-      .from("crm_brokerages")
-      .select("id, company_name, email, emirate, website, logo_url")
-      .order("company_name")
-      .range(from, from + PAGE_SIZE - 1);
-    if (next.error) throw next.error;
-    rows.push(...(next.data ?? []));
-    from += PAGE_SIZE;
-  }
-  return rows.map((r: any) => ({
+    .limit(5000);
+  if (error) throw error;
+  return (data ?? []).map((r: any) => ({
     id: String(r.id),
     name: r.company_name || "Brokerage",
     email: r.email || null,

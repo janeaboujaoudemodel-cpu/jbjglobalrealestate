@@ -90,10 +90,24 @@ function isPendingResponseRow(row: any) {
   return true;
 }
 
+function sanitizeCampaignSubject(subject: string) {
+  const cleaned = subject.trim();
+  if (!cleaned) return "Campaign email";
+  if (/legacy\s+backfill/i.test(cleaned)) return "Campaign email";
+  if (/^legacy\b/i.test(cleaned)) return cleaned.replace(/^legacy\s*[-:·]?\s*/i, "") || "Campaign email";
+  return cleaned;
+}
+
+function isRowPendingResponse(row: any) {
+  if (row?.respondedAt) return false;
+  return isPendingResponseRow(row?.raw || row);
+}
+
 function matchesStatusFilter(row: any, filter: CanonicalStatus) {
   if (filter === "all") return true;
   if (filter === "sent") return isAcceptedRow(row.raw);
-  if (filter === "pending") return isPendingResponseRow(row.raw);
+  if (filter === "pending") return isRowPendingResponse(row);
+  if (filter === "responded") return row.status === "responded" || Boolean(row.respondedAt);
   return row.status === filter;
 }
 
@@ -122,38 +136,46 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    Promise.all([
-      (supabase as any)
+    let firstLoad = true;
+    const load = async () => {
+      if (firstLoad) setLoading(true);
+      try {
+        const [r, cp, logs] = await Promise.all([
+          (supabase as any)
         .from("jbj_campaign_recipients")
           .select("id, campaign_id, entity_id, email, email_norm, send_status, delivery_status, reply_status, business_status, provider, resend_message_id, provider_response, error_message, attempted_at, accepted_at, delivered_at, opened_at, clicked_at, replied_at, thread_id, send_category, metadata, created_at, updated_at")
         .eq("entity_type", ENTITY_BY_KIND[kind])
         .neq("provider", "gmail_legacy")
         .order("updated_at", { ascending: false })
         .order("created_at", { ascending: false })
-        .limit(1200),
-      (supabase as any)
+        .limit(500),
+          (supabase as any)
         .from("jbj_campaigns")
         .select("id, subject, title")
         .in("portal_kind", PORTAL_BY_KIND[kind])
         .order("created_at", { ascending: false })
         .limit(200),
-        (supabase as any)
+          (supabase as any)
           .from("crm_relationship_email_log")
           .select("id,entity_type,entity_id,thread_id,from_email,subject,body_snippet,detected_signal,detected_status,sent_at,created_at")
           .eq("direction", "inbound")
           .order("sent_at", { ascending: false })
-          .limit(1200),
-    ])
-      .then(([r, cp, logs]) => {
+          .limit(500),
+        ]);
         if (cancelled) return;
         setRecipientRows(r.data ?? []);
         setCampaignRows(cp.data ?? []);
         setEmailLogRows(logs.data ?? []);
-      })
-      .catch(() => { if (!cancelled) { setRecipientRows([]); setCampaignRows([]); setEmailLogRows([]); } })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+      } catch {
+        if (!cancelled && firstLoad) { setRecipientRows([]); setCampaignRows([]); setEmailLogRows([]); }
+      } finally {
+        if (!cancelled) setLoading(false);
+        firstLoad = false;
+      }
+    };
+    load();
+    const timer = window.setInterval(load, 1000);
+    return () => { cancelled = true; window.clearInterval(timer); };
   }, [kind]);
 
   const rows = useMemo(() => {
@@ -177,20 +199,21 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
     return Array.from(deduped.values()).map((row) => {
       const campaign = row.campaign_id ? cById.get(row.campaign_id) : null;
       const latestLog = latestLogFor(row);
-      const subject = String(row.metadata?.subject || campaign?.subject || campaign?.title || "Campaign email");
+      const subject = sanitizeCampaignSubject(String(row.metadata?.subject || campaign?.subject || campaign?.title || "Campaign email"));
       const response = row.provider_response || {};
+      const hasHumanReply = Boolean(row.replied_at || latestLog?.sent_at || row.metadata?.latest_reply || row.metadata?.inbound_reply || row.metadata?.reply_text);
       return {
         id: row.id,
         recipient: String(row.email || "—").toLowerCase(),
         subject,
         sentAt: row.accepted_at || row.attempted_at || row.created_at,
-        status: classifyRow(row),
+        status: hasHumanReply ? "responded" : classifyRow(row),
         raw: row,
         entityType: kind === "developers" ? "developer" : kind === "brokerages" ? "brokerage" : "client",
         entityId: row.entity_id || null,
         category: row.send_category || "campaign",
         providerMessageId: row.resend_message_id || null,
-        evidence: row.delivery_status || row.send_status || row.reply_status || "recorded",
+        evidence: latestLog?.detected_signal || row.delivery_status || row.send_status || row.reply_status || "recorded",
         emailContent: response?.html_preview_text || row.metadata?.html_preview_text || row.metadata?.body_text || row.metadata?.body_snippet || "",
         inboundReply: row.metadata?.inbound_reply || row.metadata?.reply_text || row.metadata?.latest_reply || latestLog?.body_snippet || "",
         inboundSubject: row.metadata?.latest_reply_subject || latestLog?.subject || "",
@@ -216,8 +239,8 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
   const stats = useMemo(() => rows.reduce((acc, row) => ({
     sent: acc.sent + (isAcceptedRow(row.raw) ? 1 : 0),
     opened: acc.opened + (row.raw.opened_at || row.status === "opened" || row.status === "clicked" ? 1 : 0),
-    responded: acc.responded + (row.raw.reply_status === "human_reply" ? 1 : 0),
-    pending: acc.pending + (isPendingResponseRow(row.raw) ? 1 : 0),
+    responded: acc.responded + (row.status === "responded" || row.respondedAt ? 1 : 0),
+    pending: acc.pending + (isRowPendingResponse(row) ? 1 : 0),
   }), { sent: 0, opened: 0, responded: 0, pending: 0 }), [rows]);
 
   const activeRow = useMemo(
@@ -225,10 +248,10 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
     [activeRowId, filteredRows, rows],
   );
 
-  const pendingRows = useMemo(() => filteredRows.filter((row) => isPendingResponseRow(row.raw)), [filteredRows]);
+  const pendingRows = useMemo(() => filteredRows.filter((row) => isRowPendingResponse(row)), [filteredRows]);
   const allPendingSelected = pendingRows.length > 0 && pendingRows.every((row) => selectedIds.has(row.id));
   const selectedPendingCount = useMemo(
-    () => filteredRows.filter((row) => selectedIds.has(row.id) && isPendingResponseRow(row.raw)).length,
+    () => filteredRows.filter((row) => selectedIds.has(row.id) && isRowPendingResponse(row)).length,
     [filteredRows, selectedIds],
   );
 
@@ -320,7 +343,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
                   {filteredRows.slice(0, 200).map((row) => (
                     <tr key={row.id} className="cursor-pointer text-[#0F1A16] hover:bg-[#F8FAF9]" onClick={() => setActiveRowId(row.id)}>
                       <td className="px-3 py-2 font-semibold">{row.recipient}</td>
-                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onClick={(e) => e.stopPropagation()} onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })} disabled={!isPendingResponseRow(row.raw)} /></td>
+                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onClick={(e) => e.stopPropagation()} onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })} disabled={!isRowPendingResponse(row)} /></td>
                       <td className="px-3 py-2 max-w-[320px] truncate text-[#4B5D55]">{row.subject}</td>
                       <td className="px-3 py-2"><StatusBadge status={row.status} label={chipLabel[row.status] || row.status} /></td>
                       <td className="px-3 py-2 whitespace-nowrap text-[#4B5D55]">{formatDate(row.sentAt)}</td>
@@ -399,12 +422,12 @@ function InsightPanel({ row, onClose }: { row: any; onClose: () => void }) {
         <InsightLine label="Latest reply subject" value={row.inboundSubject || "Waiting for mailbox sync."} />
         <InsightLine label="Latest reply" value={row.inboundReply || "Waiting for mailbox sync."} />
         <InsightLine label="Reply from" value={row.inboundFrom || "—"} />
-        <InsightLine label="Status" value={`${row.evidence}${isPendingResponseRow(raw) ? " · pending response" : ""}`} />
+        <InsightLine label="Status" value={`${row.evidence}${isRowPendingResponse(row) ? " · pending response" : ""}`} />
         <InsightLine label="Provider ID" value={row.providerMessageId || "Awaiting provider evidence"} />
         <InsightLine label="Sent" value={formatDate(row.sentAt)} />
         <InsightLine label="Reply" value={formatDate(row.respondedAt)} />
         <InsightLine label="AI summary" value={row.aiSummary || "Waiting for inbound sync."} />
-        <InsightLine label="Next step" value={row.aiNextAction || (isPendingResponseRow(raw) ? "Prepare follow-up draft if no reply lands." : "No action required yet.")} />
+        <InsightLine label="Next step" value={row.aiNextAction || (isRowPendingResponse(row) ? "Prepare follow-up draft if no reply lands." : "No action required yet.")} />
       </dl>
       <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
         <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">AI draft</p>

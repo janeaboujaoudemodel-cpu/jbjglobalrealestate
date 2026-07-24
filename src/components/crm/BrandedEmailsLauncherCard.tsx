@@ -29,19 +29,19 @@ const COPY: Record<Variant, {
   broker: {
     eyebrow: "Broker Portal · Outreach",
     title: "Branded Emails",
-    blurb: "Reach brokerages with JBJ-branded templates. Preview, test, then live — no redirects.",
+    blurb: "Reach brokerages with the CITI Developers registration campaign and track replies in this portal.",
     kind: "brokerages",
   },
   developer: {
     eyebrow: "Developer Portal · Campaigns",
     title: "Branded Emails",
-    blurb: "Reach developers with registration and follow-up templates. Preview, test, then live — no redirects.",
+    blurb: "Send JBJ developer registration requests and manage every response in this portal.",
     kind: "developers",
   },
   client: {
     eyebrow: "Client Portal · Campaigns",
     title: "Branded Emails",
-    blurb: "Reach buyers and sellers with JBJ-branded follow-up templates. Preview, test, then prepare the client campaign — no redirects.",
+    blurb: "Prepare buyer and seller follow-ups and track every client reply in this portal.",
     kind: "clients",
   },
 };
