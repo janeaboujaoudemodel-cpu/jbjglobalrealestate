@@ -21,7 +21,7 @@ export type ChannelProvider = {
  * Provider registry — single source of truth for the Channels grid.
  */
 export const PROVIDERS: ChannelProvider[] = [
-  { id: "email_gmail",        label: "Gmail",                description: "Read and send emails from your Gmail inbox", connectorId: "google_mail" },
+  { id: "email_gmail",        label: "Gmail",                description: "Inbound-only Gmail sync for replies", connectorId: "google_mail" },
   { id: "email_outlook",      label: "Outlook / Microsoft 365", description: "Read and send from your Outlook mailbox", connectorId: "microsoft_outlook" },
   { id: "email_resend",       label: "Outbound Email (Resend)", description: "Send branded transactional email", connectorId: "resend" },
   { id: "email_hostinger",    label: "Hostinger Webmail",    description: "IMAP/SMTP — connect with username + app password", connectorId: null, customFlow: "hostinger" },

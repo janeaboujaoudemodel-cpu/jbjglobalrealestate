@@ -19,46 +19,29 @@ function useDeveloperCampaignStats() {
   return useQuery({
     queryKey: ["developer-owner-campaign-stats"],
     queryFn: async () => {
-      const [regRes, logRes, openRes] = await Promise.all([
+      const [countRes, regRes] = await Promise.all([
         (supabase as any)
-          .from("crm_developer_registry")
+          .from("jbj_portal_counts_v1")
+          .select("total,actual_contacted,provider_accepted,opened,human_reply,registered,pending_registration,pending_response,retry_eligible,permanently_excluded")
+          .eq("portal_entity", "developer")
+          .maybeSingle(),
+        (supabase as any)
+          .from("developers")
           .select("id,registration_status")
-          .limit(5000),
-        (supabase as any)
-          .from("crm_relationship_email_log")
-          .select("direction,to_emails,entity_id")
-          .eq("entity_type", "developer_registry")
-          .limit(2000),
-        (supabase as any)
-          .from("crm_campaign_recipients")
-          .select("email,opened_at")
-          .not("opened_at", "is", null)
-          .limit(2000),
+          .eq("is_hidden", false)
+          .limit(1200),
       ]);
 
+      const counts = countRes.data ?? {};
       const regs = (regRes.data as any[]) ?? [];
-      const logs = (logRes.data as any[]) ?? [];
-      const opens = (openRes.data as any[]) ?? [];
-
-      const contacted = new Set<string>();
-      let sentCount = 0;
-      let respondedEntities = new Set<string>();
-      for (const l of logs) {
-        if (l.direction === "outbound") {
-          sentCount++;
-          if (l.entity_id) contacted.add(l.entity_id);
-        }
-        if (l.direction === "inbound" && l.entity_id) {
-          respondedEntities.add(l.entity_id);
-        }
-      }
       return {
-        totalDevelopers: regs.length,
-        registered: regs.filter((r) => r.registration_status === "registered").length,
-        contacted: contacted.size,
-        sent: sentCount,
-        opened: opens.length,
-        responded: respondedEntities.size,
+        totalDevelopers: Number(counts.total ?? regs.length),
+        registered: Number(counts.registered ?? regs.filter((r) => r.registration_status === "registered").length),
+        contacted: Number(counts.actual_contacted ?? 0),
+        sent: Number(counts.provider_accepted ?? 0),
+        opened: Number(counts.opened ?? 0),
+        responded: Number(counts.human_reply ?? 0),
+        pendingResponse: Number(counts.pending_response ?? 0),
         rows: regs,
       };
     },
@@ -85,6 +68,7 @@ export default function DeveloperOwnerCampaignDashboard() {
     ["Emails sent", s?.sent, <MailCheck className="size-4" />],
     ["Opened", s?.opened, <Eye className="size-4" />],
     ["Responded", s?.responded, <Reply className="size-4" />],
+    ["Pending response", s?.pendingResponse, <MailCheck className="size-4" />],
     ["Registered", s?.registered, <ShieldCheck className="size-4" />],
   ];
 
@@ -98,7 +82,7 @@ export default function DeveloperOwnerCampaignDashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
         {tiles.map(([label, value, icon]) => (
           <Card key={label} className="p-4 bg-[#F7F2EA] border border-[#B89555]/30">
             <div className="flex items-center gap-2 text-[#064E3B]">

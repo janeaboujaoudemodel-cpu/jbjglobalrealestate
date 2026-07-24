@@ -1,11 +1,11 @@
 /**
- * CRM Send Brokerage Outreach Email — via Gmail
+ * CRM Send Brokerage Outreach Email — via Resend
  *
  * Mirror of crm-send-developer-registration, but for brokerages
  * (channel-partner outreach + private breakfast invitations).
  *
  * Loads the locked HTML template from `crm_email_templates` and sends it via
- * the owner's connected Gmail account so replies thread back to Jane's inbox.
+ * the verified sender domain so replies thread back to Jane's inbox.
  *
  * Owner-only.
  */
@@ -18,7 +18,7 @@ import {
   enforceAllowedSender,
 } from "../_shared/outreachIdentity.ts";
 import { sendViaResend } from "../_shared/resendClient.ts";
-import { recordJbjResendSend, buildIntendedSendKey } from "../_shared/jbjSpine.ts";
+import { recordJbjResendSend, buildCampaignIntendedSendKey } from "../_shared/jbjSpine.ts";
 
 
 const corsHeaders = {
@@ -32,7 +32,6 @@ const OWNER_EMAILS = [
   "janeaboujaoudemodel@gmail.com",
   "infoo.jane@gmail.com",
 ];
-const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
 
 type BrokerageVariant =
   | "brokerage_partnership_intro"
@@ -149,35 +148,6 @@ const formatSlotLabel = (iso: string): string => {
   } catch {
     return "";
   }
-};
-
-const base64UrlEncode = (str: string) => {
-  const bytes = new TextEncoder().encode(str);
-  let bin = "";
-  bytes.forEach((b) => { bin += String.fromCharCode(b); });
-  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-};
-
-// RFC 2047 encoded-word for non-ASCII subject lines (prevents Ã—/ÃƒÆ' mojibake)
-const encodeSubject = (s: string) => {
-  // ASCII-only? leave as-is.
-  if (/^[\x20-\x7E]*$/.test(s)) return s;
-  const b64 = btoa(unescape(encodeURIComponent(s)));
-  return `=?UTF-8?B?${b64}?=`;
-};
-
-const buildRawMime = (opts: { from: string; to: string; cc: string[]; subject: string; html: string; replyTo: string; }) => {
-  const headers = [
-    `From: ${opts.from}`,
-    `To: ${opts.to}`,
-    opts.cc.length ? `Cc: ${opts.cc.join(", ")}` : "",
-    `Reply-To: ${opts.replyTo}`,
-    `Subject: ${encodeSubject(opts.subject)}`,
-    "MIME-Version: 1.0",
-    'Content-Type: text/html; charset="UTF-8"',
-    "Content-Transfer-Encoding: 8bit",
-  ].filter(Boolean).join("\r\n");
-  return base64UrlEncode(headers + "\r\n\r\n" + opts.html);
 };
 
 const renderTemplate = (html: string, vars: Record<string, string>) => {
@@ -639,6 +609,7 @@ serve(async (req: Request) => {
     const threadId: string | null = null;
 
     if (isTest) {
+      const intendedSendId = `test:${variant}:${messageId || crypto.randomUUID()}`;
       await recordJbjResendSend({
         portalKind: "brokerage",
         entityType: "brokerage",
@@ -650,10 +621,13 @@ serve(async (req: Request) => {
         subject,
         resendMessageId: messageId,
         providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
-        idempotencyKey: buildIntendedSendKey({
-          portalKind: "brokerage", sendType: "test",
-          templateSlug: variant, entityId: brk?.id ?? null, emailNorm: recipient,
-          nonce: messageId || String(Date.now()),
+        intendedSendId,
+        sendCategory: "test",
+        idempotencyKey: buildCampaignIntendedSendKey({
+          portalKind: "brokerage",
+          templateSlug: variant,
+          recipientId: brk?.id ?? recipient,
+          intendedSendId,
         }),
       });
       return new Response(JSON.stringify({
@@ -693,6 +667,7 @@ serve(async (req: Request) => {
     });
 
     // Canonical JBJ spine record
+    const intendedSendId = `campaign:${variant}:${brk.id}:${new Date().toISOString().slice(0, 10)}:${messageId || crypto.randomUUID()}`;
     await recordJbjResendSend({
       portalKind: "brokerage",
       entityType: "brokerage",
@@ -704,9 +679,13 @@ serve(async (req: Request) => {
       subject,
       resendMessageId: messageId,
       providerResponse: { status: resendResult.status, data: resendResult.data },
-      idempotencyKey: buildIntendedSendKey({
-        portalKind: "brokerage", sendType: "live",
-        templateSlug: variant, entityId: brk.id, emailNorm: recipient,
+      intendedSendId,
+      sendCategory: "campaign",
+      idempotencyKey: buildCampaignIntendedSendKey({
+        portalKind: "brokerage",
+        templateSlug: variant,
+        recipientId: brk.id,
+        intendedSendId,
       }),
     });
 

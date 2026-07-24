@@ -164,38 +164,10 @@ serve(async (req) => {
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // === ACTION: send_email — Send an email ===
+    // === ACTION: send_email — Disabled. Gmail is inbound/read-only. ===
     if (action === "send_email") {
-      if (!access_token || !to || !subject) throw new Error("Missing access_token, to, or subject");
-
-      const rawEmail = [
-        `To: ${to}`,
-        `Subject: ${subject}`,
-        `Content-Type: text/html; charset=utf-8`,
-        "",
-        body || "",
-      ].join("\r\n");
-
-      const encoded = btoa(rawEmail).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-
-      const res = await fetch(`${GMAIL_API_BASE}/users/me/messages/send`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ raw: encoded }),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        return new Response(JSON.stringify({ error: "Failed to send email", details: err }), {
-          status: res.status, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const data = await res.json();
-      return new Response(JSON.stringify({ success: true, id: data.id }), {
+      return new Response(JSON.stringify({ error: "Gmail outbound sending is disabled. Use the Resend campaign service." }), {
+        status: 410,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

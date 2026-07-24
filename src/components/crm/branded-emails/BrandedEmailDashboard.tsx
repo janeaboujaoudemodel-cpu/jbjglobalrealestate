@@ -2,31 +2,46 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { MailCheck, Eye, Reply, Send, Search, Loader2, Wand2, CheckSquare } from "lucide-react";
 
 type Kind = "developers" | "brokerages" | "clients";
 
-type RelationshipLog = {
+type CountRow = {
+  portal_entity: string;
+  provider_accepted: number | null;
+  opened: number | null;
+  human_reply: number | null;
+  pending_response: number | null;
+  actual_contacted: number | null;
+  retry_eligible: number | null;
+  permanently_excluded: number | null;
+};
+
+type RecipientRow = {
   id: string;
-  entity_type: string | null;
-  entity_id: string | null;
-  direction: "outbound" | "inbound" | string | null;
-  from_email: string | null;
-  to_emails: string[] | null;
-  subject: string | null;
-  body_snippet: string | null;
-  detected_status: string | null;
-  sent_via: string | null;
-  sent_at: string | null;
+  campaign_id: string | null;
+  email: string | null;
+  send_status: string | null;
+  delivery_status: string | null;
+  reply_status: string | null;
+  business_status: string | null;
+  error_message: string | null;
+  attempted_at: string | null;
+  accepted_at: string | null;
+  delivered_at: string | null;
+  opened_at: string | null;
+  clicked_at: string | null;
+  replied_at: string | null;
+  send_category: string | null;
+  metadata: Record<string, unknown> | null;
   created_at: string | null;
 };
 
-type OpenLog = {
-  email: string | null;
-  status: string | null;
-  sent_at: string | null;
-  opened_at: string | null;
-  error_message: string | null;
+type CampaignRow = {
+  id: string;
+  subject: string | null;
+  title: string | null;
 };
 
 type DashboardRow = {
@@ -40,9 +55,15 @@ type DashboardRow = {
 };
 
 const ENTITY_BY_KIND: Record<Kind, string> = {
-  developers: "developer_registry",
+  developers: "developer",
   brokerages: "brokerage",
-  clients: "investor",
+  clients: "client",
+};
+
+const PORTAL_BY_KIND: Record<Kind, string[]> = {
+  developers: ["developer"],
+  brokerages: ["brokerage"],
+  clients: ["client", "client_buyer", "client_seller"],
 };
 
 const titleByKind: Record<Kind, string> = {
@@ -50,8 +71,6 @@ const titleByKind: Record<Kind, string> = {
   brokerages: "Brokerage campaign dashboard",
   clients: "Client campaign dashboard",
 };
-
-const normalizeEmail = (email?: string | null) => String(email || "").trim().toLowerCase();
 
 function formatDate(value: string | null) {
   if (!value) return "—";
@@ -68,8 +87,9 @@ function formatDate(value: string | null) {
 }
 
 export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
-  const [logs, setLogs] = useState<RelationshipLog[]>([]);
-  const [openLogs, setOpenLogs] = useState<OpenLog[]>([]);
+  const [countRows, setCountRows] = useState<CountRow[]>([]);
+  const [recipientRows, setRecipientRows] = useState<RecipientRow[]>([]);
+  const [campaignRows, setCampaignRows] = useState<CampaignRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<"pending" | "responded">("pending");
   const [query, setQuery] = useState("");
@@ -80,26 +100,34 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
     setLoading(true);
     Promise.all([
       (supabase as any)
-        .from("crm_relationship_email_log")
-        .select("id, entity_type, entity_id, direction, from_email, to_emails, subject, body_snippet, detected_status, sent_via, sent_at, created_at")
+        .from("jbj_portal_counts_v1")
+        .select("portal_entity, provider_accepted, opened, human_reply, pending_response, actual_contacted, retry_eligible, permanently_excluded")
+        .in("portal_entity", PORTAL_BY_KIND[kind]),
+      (supabase as any)
+        .from("jbj_campaign_recipients")
+        .select("id, campaign_id, email, send_status, delivery_status, reply_status, business_status, error_message, attempted_at, accepted_at, delivered_at, opened_at, clicked_at, replied_at, send_category, metadata, created_at")
         .eq("entity_type", ENTITY_BY_KIND[kind])
+        .neq("provider", "gmail_legacy")
         .order("created_at", { ascending: false })
         .limit(800),
       (supabase as any)
-        .from("crm_campaign_recipients")
-        .select("email, status, sent_at, opened_at, error_message")
-        .order("sent_at", { ascending: false, nullsFirst: false })
-        .limit(800),
+        .from("jbj_campaigns")
+        .select("id, subject, title")
+        .in("portal_kind", PORTAL_BY_KIND[kind])
+        .order("created_at", { ascending: false })
+        .limit(200),
     ])
-      .then(([relationshipRes, openRes]) => {
+      .then(([countRes, recipientsRes, campaignsRes]) => {
         if (cancelled) return;
-        setLogs(relationshipRes.data ?? []);
-        setOpenLogs(openRes.data ?? []);
+        setCountRows(countRes.data ?? []);
+        setRecipientRows(recipientsRes.data ?? []);
+        setCampaignRows(campaignsRes.data ?? []);
       })
       .catch(() => {
         if (cancelled) return;
-        setLogs([]);
-        setOpenLogs([]);
+        setCountRows([]);
+        setRecipientRows([]);
+        setCampaignRows([]);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -110,46 +138,24 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
   }, [kind]);
 
   const rows = useMemo<DashboardRow[]>(() => {
-    const inboundByEntity = new Map<string, RelationshipLog[]>();
-    const openedByEmail = new Map<string, OpenLog>();
-
-    for (const row of openLogs) {
-      const email = normalizeEmail(row.email);
-      if (!email) continue;
-      const current = openedByEmail.get(email);
-      if (!current || String(row.opened_at || row.sent_at || "") > String(current.opened_at || current.sent_at || "")) {
-        openedByEmail.set(email, row);
-      }
-    }
-
-    for (const row of logs) {
-      if (row.direction !== "inbound" || !row.entity_id) continue;
-      const list = inboundByEntity.get(row.entity_id) ?? [];
-      list.push(row);
-      inboundByEntity.set(row.entity_id, list);
-    }
-
-    return logs
-      .filter((row) => row.direction === "outbound")
+    const campaignById = new Map(campaignRows.map((campaign) => [campaign.id, campaign]));
+    return recipientRows
+      .filter((row) => row.send_status === "provider_accepted" || row.delivery_status || row.reply_status === "human_reply")
       .map((row) => {
-        const recipient = normalizeEmail(Array.isArray(row.to_emails) ? row.to_emails[0] : "");
-        const sentAt = row.sent_at || row.created_at;
-        const replies = row.entity_id ? inboundByEntity.get(row.entity_id) ?? [] : [];
-        const reply = replies.find((r) => !sentAt || String(r.created_at || r.sent_at || "") >= String(sentAt));
-        const opened = openedByEmail.get(recipient);
-        const openedAt = opened?.opened_at || null;
-        const status = reply ? "responded" : openedAt ? "opened" : "sent";
+        const campaign = row.campaign_id ? campaignById.get(row.campaign_id) : null;
+        const subject = String(row.metadata?.subject || campaign?.subject || campaign?.title || "Campaign email");
+        const status = row.reply_status === "human_reply" ? "responded" : row.opened_at ? "opened" : row.delivery_status === "delivered" ? "delivered" : "sent";
         return {
           id: row.id,
-          recipient: recipient || "—",
-          subject: row.subject || row.body_snippet || "Campaign email",
-          sentAt,
+          recipient: String(row.email || "—").toLowerCase(),
+          subject,
+          sentAt: row.accepted_at || row.attempted_at || row.created_at,
           status,
-          openedAt,
-          respondedAt: reply?.created_at || reply?.sent_at || null,
+          openedAt: row.opened_at || null,
+          respondedAt: row.replied_at || null,
         };
       });
-  }, [logs, openLogs]);
+  }, [campaignRows, recipientRows]);
 
   const filteredRows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -160,12 +166,12 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
     });
   }, [query, rows, statusFilter]);
 
-  const stats = useMemo(() => ({
-    sent: rows.length,
-    opened: rows.filter((r) => r.openedAt).length,
-    responded: rows.filter((r) => r.respondedAt).length,
-    pending: rows.filter((r) => !r.respondedAt).length,
-  }), [rows]);
+  const stats = useMemo(() => countRows.reduce((acc, row) => ({
+    sent: acc.sent + Number(row.provider_accepted || 0),
+    opened: acc.opened + Number(row.opened || 0),
+    responded: acc.responded + Number(row.human_reply || 0),
+    pending: acc.pending + Number(row.pending_response || 0),
+  }), { sent: 0, opened: 0, responded: 0, pending: 0 }), [countRows]);
 
   const selectedPendingCount = useMemo(
     () => filteredRows.filter((row) => selectedIds.has(row.id) && row.status !== "responded").length,
@@ -203,7 +209,7 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
               <div className="inline-flex h-10 rounded-md border border-emerald-900/25 bg-white overflow-hidden shrink-0">
                 {(["pending", "responded"] as const).map((status) => {
                   const isActive = statusFilter === status;
-                  return <button key={status} type="button" onClick={() => setStatusFilter(status)} className="px-4 text-[11px] font-black uppercase tracking-wide" style={{ background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FFFFFF", color: isActive ? "#FFFFFF" : "#064E3B", WebkitTextFillColor: isActive ? "#FFFFFF" : "#064E3B" }}>{status === "pending" ? "Pending response" : "Responded"}</button>;
+                  return <Button key={status} type="button" variant="ghost" onClick={() => setStatusFilter(status)} className="h-full rounded-none px-4 text-[11px] font-black uppercase tracking-wide hover:bg-[#EFE6D6]" style={{ background: isActive ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#FFFFFF", color: isActive ? "#FFFFFF" : "#064E3B", WebkitTextFillColor: isActive ? "#FFFFFF" : "#064E3B" }}>{status === "pending" ? "Pending response" : "Responded"}</Button>;
                 })}
               </div>
           </div>
@@ -217,9 +223,9 @@ export default function BrandedEmailDashboard({ kind }: { kind: Kind }) {
         </div>
 
         <div className="flex flex-col gap-2 rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-3 sm:flex-row sm:items-center">
-          <button type="button" onClick={() => setSelectedIds(allPendingSelected ? new Set() : new Set(pendingRows.map((row) => row.id)))} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}><CheckSquare className="size-4" />{allPendingSelected ? "Clear pending" : "Select pending"}</button>
-          <button type="button" className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}><Wand2 className="size-4" />Prepare AI drafts ({selectedPendingCount})</button>
-          <button type="button" className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}><Send className="size-4" />Accept & send selected</button>
+          <Button type="button" onClick={() => setSelectedIds(allPendingSelected ? new Set() : new Set(pendingRows.map((row) => row.id)))} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}><CheckSquare className="size-4" />{allPendingSelected ? "Clear pending" : "Select pending"}</Button>
+          <Button type="button" variant="outline" className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}><Wand2 className="size-4" />Prepare AI drafts ({selectedPendingCount})</Button>
+          <Button type="button" variant="outline" className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}><Send className="size-4" />Accept & send selected</Button>
           <span className="text-xs font-semibold text-[#4B5D55] sm:ml-auto">{stats.pending.toLocaleString()} unanswered campaigns need a reply decision.</span>
         </div>
 
@@ -272,7 +278,7 @@ function StatCard({ icon: Icon, label, value }: { icon: any; label: string; valu
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const label = status === "responded" ? "Responded" : status === "opened" ? "Opened" : "Sent";
+  const label = status === "responded" ? "Responded" : status === "opened" ? "Opened" : status === "delivered" ? "Delivered" : "Sent";
   return (
     <span
       className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em]"

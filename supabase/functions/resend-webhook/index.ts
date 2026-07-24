@@ -22,6 +22,7 @@ const corsHeaders = {
 };
 
 interface ResendEvent {
+  id?: string;
   type?: string;
   created_at?: string;
   data?: {
@@ -42,32 +43,34 @@ serve(async (req: Request) => {
   const rawBody = await req.text();
   const secret = Deno.env.get("RESEND_WEBHOOK_SECRET") || "";
 
-  // Signature verification (mandatory when secret is configured).
-  if (secret) {
-    const svixId = req.headers.get("svix-id");
-    const svixTs = req.headers.get("svix-timestamp");
-    const svixSig = req.headers.get("svix-signature");
-    if (!svixId || !svixTs || !svixSig) {
-      console.warn("[resend-webhook] missing svix headers");
-      return new Response(JSON.stringify({ error: "missing_signature" }), {
-        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    try {
-      const wh = new Webhook(secret);
-      wh.verify(rawBody, {
-        "svix-id": svixId,
-        "svix-timestamp": svixTs,
-        "svix-signature": svixSig,
-      });
-    } catch (err) {
-      console.warn("[resend-webhook] signature invalid:", (err as Error).message);
-      return new Response(JSON.stringify({ error: "invalid_signature" }), {
-        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-  } else {
-    console.warn("[resend-webhook] RESEND_WEBHOOK_SECRET not set — accepting unverified events");
+  if (!secret) {
+    console.error("[resend-webhook] RESEND_WEBHOOK_SECRET missing; refusing unverified webhook");
+    return new Response(JSON.stringify({ error: "webhook_secret_missing" }), {
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const svixId = req.headers.get("svix-id");
+  const svixTs = req.headers.get("svix-timestamp");
+  const svixSig = req.headers.get("svix-signature");
+  if (!svixId || !svixTs || !svixSig) {
+    console.warn("[resend-webhook] missing svix headers");
+    return new Response(JSON.stringify({ error: "missing_signature" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  try {
+    const wh = new Webhook(secret);
+    wh.verify(rawBody, {
+      "svix-id": svixId,
+      "svix-timestamp": svixTs,
+      "svix-signature": svixSig,
+    });
+  } catch (err) {
+    console.warn("[resend-webhook] signature invalid:", (err as Error).message);
+    return new Response(JSON.stringify({ error: "invalid_signature" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
   let payload: ResendEvent;
@@ -81,6 +84,7 @@ serve(async (req: Request) => {
 
   const eventType = payload?.type || "unknown";
   const messageId = payload?.data?.email_id || null;
+  const eventId = payload?.id || svixId;
 
   if (!messageId) {
     return new Response(JSON.stringify({ error: "missing_email_id", event: eventType }), {
@@ -94,10 +98,28 @@ serve(async (req: Request) => {
     { auth: { persistSession: false } },
   );
 
+  const replayKey = `wh:${eventId}`;
+  const { count: replayCount, error: replayErr } = await sb
+    .from("jbj_email_events")
+    .select("id", { count: "exact", head: true })
+    .eq("idempotency_key", replayKey);
+  if (replayErr) {
+    console.error("[resend-webhook] replay check failed:", replayErr);
+    return new Response(JSON.stringify({ error: replayErr.message }), {
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  if ((replayCount || 0) > 0) {
+    return new Response(JSON.stringify({ error: "replayed_event" }), {
+      status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   const { data, error } = await sb.rpc("jbj_apply_resend_webhook", {
     _event_type: eventType,
     _message_id: messageId,
     _payload: payload as any,
+    _event_id: eventId,
   });
 
   if (error) {

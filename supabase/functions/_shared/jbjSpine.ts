@@ -29,11 +29,11 @@ export interface JbjRecordArgs {
   subject: string;
   resendMessageId: string | null;
   providerResponse: unknown;
-  /**
-   * Stable per-logical-send key. Same key = same recipient row (upsert).
-   * Recommended: `${portal}:${templateSlug}:${entityId ?? email}:${dateBucket}`.
-   */
+  /** Stable per-intended-email key. Same key = retry of the same intended email. */
   idempotencyKey: string;
+  intendedSendId?: string | null;
+  workflowInstanceId?: string | null;
+  sendCategory?: "campaign" | "transactional" | "reply" | "test" | "legacy";
   threadId?: string | null;
 }
 
@@ -63,6 +63,9 @@ export async function recordJbjResendSend(args: JbjRecordArgs): Promise<string |
       _provider_response: (args.providerResponse ?? {}) as any,
       _idempotency_key: args.idempotencyKey,
       _thread_id: args.threadId ?? null,
+      _intended_send_id: args.intendedSendId ?? null,
+      _workflow_instance_id: args.workflowInstanceId ?? null,
+      _send_category: args.sendCategory ?? "campaign",
     });
     if (error) {
       console.error("[jbjSpine] jbj_record_resend_send failed:", error);
@@ -78,12 +81,9 @@ export async function recordJbjResendSend(args: JbjRecordArgs): Promise<string |
 /**
  * Convenience: build a stable idempotency key for a live send.
  *
- * Contract (Phase 1 correction):
- *   `${portalKind}:${sendType}:${templateSlug}:${templateVersion||'v0'}:${entityId||emailNorm}`
- * where `sendType` is 'live' | 'test'. Live keys collapse repeat sends of the
- * same logical intent (same recipient + same template version) into one spine
- * row. Test keys should include a fresh nonce (timestamp or Resend message id)
- * to allow explicit re-tests.
+ * Contract (Phase 1.5): the key must represent one intended email, not just
+ * recipient + template. That allows retries without duplicates while permitting
+ * future campaigns/follow-ups to the same recipient/template.
  *
  * Accepts an array of parts for backwards-compat with existing callers.
  */
@@ -93,19 +93,43 @@ export function buildIdempotencyKey(parts: (string | null | undefined)[]): strin
 
 export interface IntendedSendKeyArgs {
   portalKind: JbjPortalKind;
-  sendType: "live" | "test";
+  sendType: "campaign" | "transactional" | "reply" | "test" | "follow_up";
   templateSlug: string;
-  templateVersion?: string | null;
-  entityId?: string | null;
-  emailNorm?: string | null;
-  nonce?: string | null; // only for test sends
+  campaignId?: string | null;
+  campaignRecipientId?: string | null;
+  workflowInstanceId?: string | null;
+  recipientId?: string | null;
+  intendedSendId: string;
 }
 
 /** Preferred key builder — intended-send-specific. */
 export function buildIntendedSendKey(a: IntendedSendKeyArgs): string {
-  const version = a.templateVersion ?? "v0";
-  const target = a.entityId ?? (a.emailNorm || "").toLowerCase();
-  const base = [a.portalKind, a.sendType, a.templateSlug, version, target];
-  if (a.sendType === "test") base.push(a.nonce || String(Date.now()));
-  return base.filter(Boolean).join(":").toLowerCase();
+  const scope = a.sendType === "transactional" || a.sendType === "reply"
+    ? [a.workflowInstanceId, a.recipientId]
+    : [a.campaignId, a.campaignRecipientId || a.recipientId];
+  return [a.portalKind, a.sendType, a.templateSlug, ...scope, a.intendedSendId]
+    .filter(Boolean)
+    .join(":")
+    .toLowerCase();
+}
+
+export function buildCampaignIntendedSendKey(args: {
+  portalKind: JbjPortalKind;
+  templateSlug: string;
+  campaignId?: string | null;
+  campaignRecipientId?: string | null;
+  recipientId?: string | null;
+  intendedSendId: string;
+}) {
+  return buildIntendedSendKey({ ...args, sendType: "campaign" });
+}
+
+export function buildTransactionalIntendedSendKey(args: {
+  portalKind: JbjPortalKind;
+  templateSlug: string;
+  workflowInstanceId: string;
+  recipientId?: string | null;
+  intendedSendId: string;
+}) {
+  return buildIntendedSendKey({ ...args, sendType: "transactional" });
 }
