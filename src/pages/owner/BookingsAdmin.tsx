@@ -107,6 +107,13 @@ const detailTabs: Array<{ key: DetailKey; label: string; description: string; ic
 const asArray = <T,>(value: Json | null): T[] => (Array.isArray(value) ? (value as T[]) : []);
 const asRecord = (value: unknown): Record<string, unknown> =>
   value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+const guestCountFromFormData = (value: Json) => {
+  const form = asRecord(value);
+  const guests = form.guests ?? form.guest_emails ?? form.invite_guests;
+  if (Array.isArray(guests)) return guests.length;
+  if (typeof guests === "string" && guests.trim()) return guests.split(/[;,\n]/).filter((entry) => entry.trim()).length;
+  return 0;
+};
 
 const minutesToLabel = (minutes: number) => {
   const hours = Math.floor(minutes / 60);
@@ -186,7 +193,7 @@ export default function BookingsAdmin() {
       startsAt: appointment.starts_at,
       durationLabel: minutesToLabel(Math.round((new Date(appointment.ends_at).getTime() - new Date(appointment.starts_at).getTime()) / 60000)),
       status: appointment.status,
-      guests: Array.isArray(appointment.guest_emails) ? appointment.guest_emails.length : 0,
+      guests: guestCountFromFormData(appointment.form_data),
     }));
     const breakfast = legacyBreakfastBookings.map((booking) => ({
       id: booking.id,
