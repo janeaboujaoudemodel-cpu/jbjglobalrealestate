@@ -4592,6 +4592,7 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   gap: 18px;
   align-items: center;
   padding: 18px 20px;
+  min-height: 150px;
 }
 
 .jbj-bookings__eyebrow {
@@ -4674,6 +4675,9 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 .jbj-bookings__nav svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 .jbj-bookings__nav[data-active="true"],
 .jbj-bookings__nav:hover { background: rgba(255,255,255,0.16); }
+.jbj-bookings__nav span,
+.jbj-bookings__nav[data-active="true"] span,
+.jbj-bookings__nav:hover span { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
 
 .jbj-bookings__content { min-width: 0; }
 .jbj-bookings__panel { padding: 16px; }
