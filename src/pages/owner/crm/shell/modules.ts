@@ -217,6 +217,7 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-marketing-hub": "/owner/marketing-hub",
   "owner-news": "/owner/news",
   "owner-books": "/owner/books",
+  "owner-bookings": "/owner/bookings",
   "owner-careers": "/owner/careers-portal",
   "owner-analytics": "/owner/analytics",
   "owner-users": "/owner/users",
@@ -256,6 +257,7 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
       { slug: "owner-relationships", label: "Relationships Hub", icon: Handshake },
       { slug: "deals-ledger", label: "My Deals", icon: Wallet },
       { slug: "owner-careers", label: "Careers Portal", icon: BriefcaseBusiness },
+      { slug: "owner-bookings", label: "JBJ Bookings", icon: CalendarDays },
     ],
   },
   {
