@@ -95,6 +95,27 @@ const CALENDAR_PLACEHOLDER_URL = "https://calendar.google.com/calendar/appointme
 
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs";
 
+const DEVELOPER_REQUIREMENTS_BLOCK = `<div data-jbj-developer-requirements="true" style="margin:18px 0;padding:16px;border:1px solid #B89555;background:#FAF5EA;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.65;">
+  <p style="margin:0 0 10px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;">Kindly reply to this email and confirm the current registration status:</p>
+  <ul style="margin:0 0 12px 18px;padding:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">
+    <li style="margin:0 0 6px;">Status: Registered / Pending / Active.</li>
+    <li style="margin:0 0 6px;">If we are not registered yet, please share your registration form and full requirements.</li>
+    <li style="margin:0 0 6px;">Please add our team to the WhatsApp group on <strong>+971 54 716 7107</strong>.</li>
+    <li style="margin:0 0 6px;">Please share your logo and all current marketing material links.</li>
+    <li style="margin:0;">For compliance and escrow requirements, please coordinate with Waleed through this same thread or reply to <strong>HELPDESK@JBJ.AE</strong>.</li>
+  </ul>
+  <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please keep <strong>HELPDESK@JBJ.AE</strong> as the sender and reply destination so the CRM can attach your response to the correct developer card.</p>
+</div>`;
+
+function injectDeveloperRequirementsBlock(html: string) {
+  if (html.includes('data-jbj-developer-requirements="true"')) return html;
+  if (/<p[^>]*>\s*Regards,?/i.test(html)) {
+    return html.replace(/(<p[^>]*>\s*Regards,?)/i, `${DEVELOPER_REQUIREMENTS_BLOCK}$1`);
+  }
+  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${DEVELOPER_REQUIREMENTS_BLOCK}</body>`);
+  return `${html}${DEVELOPER_REQUIREMENTS_BLOCK}`;
+}
+
 const BRAND_HEADER_BY_KIND: Record<BrandedAudienceKind, { url: string; appUrl: string; alt: string; wordmark: string; tagline: string; width: number; height: number }> = {
   developers: {
     url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png",
@@ -365,7 +386,10 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g,
     (_, key, inner) => (key === "booking_url" ? safeBookingUrl : "").trim() ? inner : "",
   );
-  const personalized = renderedConditionals
+  const withDeveloperInstructions = audienceKind === "developers"
+    ? injectDeveloperRequirementsBlock(renderedConditionals)
+    : renderedConditionals;
+  const personalized = withDeveloperInstructions
     .replace(/<style>[\s\S]*?<\/style>/i, (styleBlock) => `${styleBlock}<style>
       [data-jbj-contact-note], [data-jbj-contact-note] *, [data-jbj-contact-note] a {
         color:#0a0a0a !important;
@@ -1224,13 +1248,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <li><strong>Audience:</strong> {audienceCount.toLocaleString()} sendable selected of {total.toLocaleString()} total {kind}{missingEmailCount > 0 ? ` · ${missingEmailCount.toLocaleString()} missing email` : ""}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}{previouslySentCount > 0 ? ` · ${previouslySentCount} already sent` : ""}</li>
                 <li><strong>From:</strong> {delivery.fromName} &lt;{delivery.fromEmail.toUpperCase()}&gt;</li>
                 <li><strong>Reply-To:</strong> {delivery.replyTo.toUpperCase()}</li>
-                {kind === "developers" && <li><strong>CC:</strong> INFOO.JANE@GMAIL.COM</li>}
+                {kind === "developers" && <li><strong>CC:</strong> INFOO.JANE@GMAIL.COM · replies must stay on HELPDESK@JBJ.AE</li>}
                 {kind === "brokerages" ? (
                   <li><strong>Calendar:</strong> {bookingUrl ? "Google Calendar appointment link saved — bookings sync into Meetings" : "Google Calendar appointment link missing — live send is blocked until saved"}</li>
                 ) : kind === "clients" ? (
                   <li><strong>Client sections:</strong> buyer and seller follow-up templates are available from this panel</li>
                 ) : (
-                  <li><strong>Registration pack:</strong> saved link included in the template</li>
+                  <li><strong>Registration request:</strong> asks for status, forms, requirements, logo, WhatsApp group, and marketing material links</li>
                 )}
                 <li><strong>Delivery:</strong> {delivery.dailyCapLabel}</li>
                 <li><strong>Status logic:</strong> Sent campaigns are marked automatically; replies are matched by inbound email sync and bookings by Google Calendar sync.</li>
