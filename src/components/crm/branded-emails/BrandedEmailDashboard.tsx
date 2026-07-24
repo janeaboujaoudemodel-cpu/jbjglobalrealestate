@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -81,6 +81,18 @@ function isAcceptedRow(row: any) {
   return row.send_status === "provider_accepted" || Boolean(row.accepted_at);
 }
 
+function isCampaignReplyRecord(row: any) {
+  const metadata = row?.metadata || {};
+  const response = row?.provider_response || {};
+  return (
+    row?.send_category === "reply" ||
+    metadata.send_category === "reply" ||
+    metadata.template_slug === "campaign_reply" ||
+    response.mode === "reply" ||
+    Boolean(response.parent_recipient_id)
+  );
+}
+
 function isPendingResponseRow(row: any) {
   if (!isAcceptedRow(row)) return false;
   if (["human_reply", "auto_reply", "automated_reply", "out_of_office"].includes(String(row.reply_status || ""))) return false;
@@ -97,6 +109,44 @@ function sanitizeCampaignSubject(subject: string) {
   if (/legacy\s+backfill/i.test(cleaned)) return "Campaign email";
   if (/^legacy\b/i.test(cleaned)) return cleaned.replace(/^legacy\s*[-:·]?\s*/i, "") || "Campaign email";
   return cleaned;
+}
+
+const OWNER_MAILBOXES = new Set([
+  "infoo.jane@gmail.com",
+  "jane@jbj.ae",
+  "helpdesk@jbj.ae",
+  "contact@jbj.ae",
+]);
+
+function normalizeSubject(value: unknown) {
+  return cleanEmailText(value)
+    .toLowerCase()
+    .replace(/^\s*(?:re|fw|fwd)\s*:\s*/i, "")
+    .replace(/^\s*\[[^\]]+\]\s*/g, "")
+    .replace(/[—–-].*$/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function subjectsRelate(a: unknown, b: unknown) {
+  const left = normalizeSubject(a);
+  const right = normalizeSubject(b);
+  if (!left || !right) return false;
+  if (left.length < 8 || right.length < 8) return false;
+  return left.includes(right) || right.includes(left);
+}
+
+function logTouchesRecipient(log: any, email: string) {
+  const target = email.toLowerCase();
+  const from = String(log.from_email || "").toLowerCase();
+  const tos = Array.isArray(log.to_emails) ? log.to_emails.map((v: unknown) => String(v).toLowerCase()) : [];
+  return from === target || tos.includes(target);
+}
+
+function logTouchesOwnerMailbox(log: any) {
+  const from = String(log.from_email || "").toLowerCase();
+  const tos = Array.isArray(log.to_emails) ? log.to_emails.map((v: unknown) => String(v).toLowerCase()) : [];
+  return OWNER_MAILBOXES.has(from) || tos.some((email: string) => OWNER_MAILBOXES.has(email));
 }
 
 function decodeHtmlEntities(value: string) {
@@ -142,7 +192,7 @@ function buildDraft(row: any) {
   if (/meeting|calendar|briefing|slot|call/i.test(`${reply} ${subject}`)) {
     return "Thank you for your reply. Please share the preferred meeting slot, or confirm if you would like us to send a calendar invitation on this same thread.";
   }
-  return "Thank you for your reply. We reviewed your message and will continue on this same thread. Please confirm the next step required from JBJ Global Real Estate.";
+  return "Thank you for your reply. We reviewed your message and will continue from our previous outreach on this same thread. Please confirm the next step required from JBJ Global Real Estate.";
 }
 
 function isRowPendingResponse(row: any) {
@@ -209,7 +259,6 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
           (supabase as any)
           .from("crm_relationship_email_log")
           .select("id,direction,entity_type,entity_id,thread_id,from_email,to_emails,subject,body_snippet,detected_signal,detected_status,sent_at,created_at")
-          .eq("direction", "inbound")
           .order("sent_at", { ascending: false })
           .limit(2000),
         ]);
@@ -231,15 +280,21 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
 
   const rows = useMemo(() => {
     const cById = new Map(campaignRows.map((c) => [c.id, c]));
-    const logsFor = (row: any) => {
+    const logsFor = (row: any, campaignSubject: string) => {
       const rowEntityId = String(row.entity_id || "");
       const email = String(row.email_norm || row.email || "").toLowerCase();
       const thread = String(row.thread_id || "");
       return emailLogRows.filter((log) => {
         const logEntityId = String(log.entity_id || "");
-        const logFrom = String(log.from_email || "").toLowerCase();
         const logThread = String(log.thread_id || "");
-        return (rowEntityId && rowEntityId === logEntityId) || (thread && thread === logThread) || (email && email === logFrom);
+        const entityMatch = Boolean(rowEntityId && rowEntityId === logEntityId);
+        const threadMatch = Boolean(thread && logThread && thread === logThread);
+        const subjectMatch = subjectsRelate(log.subject, campaignSubject);
+        const participantMatch = Boolean(email && logTouchesRecipient(log, email) && logTouchesOwnerMailbox(log));
+
+        // Never attach mailbox noise only because the same test mailbox appears.
+        // A log must belong to the same entity/thread, or share both campaign subject and participants.
+        return entityMatch || threadMatch || (participantMatch && subjectMatch);
       });
     };
     const dedupeLogs = (logs: any[]) => {
@@ -256,14 +311,16 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
       }
       return Array.from(out.values()).sort((a, b) => new Date(b.sent_at || b.created_at || 0).getTime() - new Date(a.sent_at || a.created_at || 0).getTime());
     };
-    const mapped = recipientRows.map((row) => {
+    const mapped = recipientRows.filter((row) => !isCampaignReplyRecord(row)).map((row) => {
       const campaign = row.campaign_id ? cById.get(row.campaign_id) : null;
-      const matchingLogs = dedupeLogs(logsFor(row));
-      const latestLog = matchingLogs[0] || null;
       const subject = sanitizeCampaignSubject(String(row.metadata?.subject || campaign?.subject || campaign?.title || "Campaign email"));
+      const matchingLogs = dedupeLogs(logsFor(row, subject));
+      const latestLog = matchingLogs[0] || null;
+      const inboundLogs = matchingLogs.filter((log) => log.direction === "inbound");
       const response = row.provider_response || {};
-      const hasHumanReply = Boolean(row.replied_at || matchingLogs.length || row.metadata?.latest_reply || row.metadata?.inbound_reply || row.metadata?.reply_text);
-      const inboundReply = cleanEmailText(row.metadata?.inbound_reply || row.metadata?.reply_text || row.metadata?.latest_reply || latestLog?.body_snippet || "");
+      const latestInboundLog = inboundLogs[0] || null;
+      const hasHumanReply = Boolean(row.replied_at || inboundLogs.length || row.metadata?.latest_reply || row.metadata?.inbound_reply || row.metadata?.reply_text);
+      const inboundReply = cleanEmailText(row.metadata?.inbound_reply || row.metadata?.reply_text || row.metadata?.latest_reply || latestInboundLog?.body_snippet || "");
       const aiSummary = normalizeAiText(row.metadata?.ai_summary || row.metadata?.inbound_summary || row.metadata?.summary || response?.ai_summary || latestLog?.detected_signal || "", inboundReply ? "Reply received and ready for review." : "Waiting for inbound sync.");
       return {
         id: row.id,
@@ -276,15 +333,15 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         entityId: row.entity_id || null,
         category: row.send_category || "campaign",
         providerMessageId: row.resend_message_id || null,
-        evidence: latestLog?.detected_signal || row.delivery_status || row.send_status || row.reply_status || "recorded",
+        evidence: latestInboundLog?.detected_signal || row.delivery_status || row.send_status || row.reply_status || "recorded",
         emailContent: cleanEmailText(response?.html_preview_text || row.metadata?.html_preview_text || row.metadata?.body_text || row.metadata?.body_snippet || ""),
         inboundReply,
-        inboundSubject: cleanEmailText(row.metadata?.latest_reply_subject || latestLog?.subject || ""),
-        inboundFrom: row.metadata?.latest_reply_from || latestLog?.from_email || "",
+        inboundSubject: cleanEmailText(row.metadata?.latest_reply_subject || latestInboundLog?.subject || ""),
+        inboundFrom: row.metadata?.latest_reply_from || latestInboundLog?.from_email || "",
         aiSummary,
         aiNextAction: normalizeAiText(row.metadata?.ai_next_action || row.metadata?.next_action || response?.ai_next_action || "", inboundReply ? "Prepare a reply draft and update the CRM status." : "Prepare follow-up draft if no reply lands."),
         aiDraft: cleanEmailText(row.metadata?.ai_draft_reply || row.metadata?.draft_response || response?.ai_draft_reply || ""),
-        respondedAt: row.replied_at || latestLog?.sent_at || null,
+        respondedAt: row.replied_at || latestInboundLog?.sent_at || null,
         templateSlug: row.metadata?.template_slug || response?.template_slug || row.metadata?.variant || "",
         replyLogs: matchingLogs,
       };
@@ -298,7 +355,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
     }
     return Array.from(grouped.values()).map((activities) => {
       const sorted = activities.sort((a, b) => new Date(b.respondedAt || b.sentAt || 0).getTime() - new Date(a.respondedAt || a.sentAt || 0).getTime());
-      const replyLogs = dedupeLogs(sorted.flatMap((a) => a.replyLogs || []));
+      const replyLogs = dedupeLogs(sorted.flatMap((a) => a.replyLogs || []).filter((log: any) => log.direction === "inbound"));
       const responded = replyLogs.length || (sorted.some((a) => a.status === "responded" || a.respondedAt) ? 1 : 0);
       const latest = sorted[0];
       const latestReply = replyLogs[0] || null;
@@ -347,7 +404,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
   }), { sent: 0, opened: 0, responded: 0, pending: 0 }), [rows]);
 
   const activeRow = useMemo(
-    () => rows.find((row) => row.id === activeRowId) ?? filteredRows[0] ?? null,
+    () => (activeRowId ? rows.find((row) => row.id === activeRowId) ?? null : null),
     [activeRowId, filteredRows, rows],
   );
 
@@ -360,6 +417,21 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
 
   const buildDraftWithAi = async (row: any) => {
     const fallback = buildDraft(row);
+    const threadHistory = [
+      ...(Array.isArray(row.activities) ? row.activities : [row]).map((activity: any) => ({
+        direction: "outbound_from_jbj",
+        at: activity.sentAt,
+        subject: activity.subject,
+        body: activity.emailContent,
+      })),
+      ...(Array.isArray(row.replyActivities) ? row.replyActivities : []).map((activity: any) => ({
+        direction: "inbound_to_jbj",
+        at: activity.respondedAt,
+        from: activity.inboundFrom,
+        subject: activity.subject,
+        body: activity.body,
+      })),
+    ].sort((a: any, b: any) => new Date(a.at || 0).getTime() - new Date(b.at || 0).getTime());
     try {
       const { data, error } = await (supabase as any).functions.invoke("crm-ai-campaign-draft", {
         body: {
@@ -368,6 +440,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
           subject: row.subject,
           inboundReply: row.inboundReply || row.latestReply?.body || "",
           sentContent: row.emailContent || "",
+          threadHistory,
           currentDraft: draftOverrides[row.id] || row.aiDraft || fallback,
         },
       });
@@ -521,44 +594,49 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         <div className="flex flex-col gap-2 rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-3 sm:flex-row sm:items-center">
           <Button type="button" data-jbj-campaign-action="primary" data-surface="emerald" onClick={() => setSelectedIds(allPendingSelected ? new Set() : new Set(pendingRows.map((r) => r.id)))} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}><CheckSquare className="size-4" />{allPendingSelected ? "Clear pending" : "Select pending"}</Button>
           <Button type="button" variant="outline" onClick={prepareDrafts} disabled={draftingIds.size > 0} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}>{draftingIds.size > 0 ? <Loader2 className="size-4 animate-spin" /> : <Wand2 className="size-4" />}Prepare AI draft{selectedActionCount > 0 ? `s (${selectedActionCount})` : ""}</Button>
-          <Button type="button" variant="outline" onClick={sendSelectedDrafts} disabled={sendingDrafts} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}>{sendingDrafts ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}Accept & send selected</Button>
+          <Button type="button" variant="outline" onClick={sendSelectedDrafts} disabled={sendingDrafts} className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide" style={{ background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid rgba(6,78,59,0.28)" }}>{sendingDrafts ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}Send selected emails now</Button>
           <span className="text-xs font-semibold text-[#4B5D55] sm:ml-auto">{filteredRows.length.toLocaleString()} of {rows.length.toLocaleString()} shown · filter: {chipLabel[statusFilter]}.</span>
         </div>
 
-        <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_420px]">
         <div className="overflow-hidden rounded-lg border border-emerald-900/15 bg-white">
           {loading ? (
             <div className="flex items-center gap-2 p-5 text-sm font-semibold text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading campaign history…</div>
           ) : filteredRows.length === 0 ? (
             <div className="p-5 text-sm font-semibold text-[#4B5D55]">No campaign rows for this filter.</div>
           ) : (
-            <div className="max-h-[420px] overflow-auto">
-              <table className="w-full text-left text-sm">
-                <thead className="sticky top-0 bg-[#F8FAF9] text-[10px] uppercase tracking-[0.16em] text-[#064E3B]">
-                  <tr>
-                    <th className="px-3 py-2 font-black">Recipient</th>
-                    <th className="px-3 py-2 font-black">Select</th>
-                    <th className="px-3 py-2 font-black">Activity folder</th>
-                    <th className="px-3 py-2 font-black">Latest subject</th>
-                    <th className="px-3 py-2 font-black">Status</th>
-                    <th className="px-3 py-2 font-black">Sent</th>
-                    <th className="px-3 py-2 font-black">Reply</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-emerald-900/10">
-                  {filteredRows.slice(0, 200).map((row) => (
-                    <tr key={row.id} data-campaign-recipient-row="true" className="cursor-pointer text-[#0F1A16] hover:bg-[#F8FAF9]" onClick={() => setActiveRowId(row.id)}>
-                      <td className="px-3 py-2 font-semibold">{row.recipient}</td>
-                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onClick={(e) => e.stopPropagation()} onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })} /></td>
-                      <td className="px-3 py-2 whitespace-nowrap text-[#064E3B]"><button type="button" onClick={(e) => { e.stopPropagation(); setActiveRowId(row.id); }} className="inline-flex items-center gap-1 font-black underline-offset-2 hover:underline"><FolderOpen className="size-3.5" /> {row.sentCount} sent · {row.respondedCount} {row.respondedCount === 1 ? "reply" : "replies"}</button></td>
-                      <td className="px-3 py-2 max-w-[320px] truncate text-[#4B5D55]">{row.subject}</td>
-                      <td className="px-3 py-2"><StatusBadge status={row.status} label={chipLabel[row.status] || row.status} /></td>
-                      <td className="px-3 py-2 whitespace-nowrap text-[#4B5D55]">{formatDate(row.sentAt)}</td>
-                      <td className="px-3 py-2 whitespace-nowrap text-[#4B5D55]">{formatDate(row.respondedAt)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="max-h-[520px] space-y-2 overflow-auto p-3">
+              {filteredRows.slice(0, 200).map((row) => (
+                <button
+                  key={row.id}
+                  type="button"
+                  data-campaign-recipient-row="true"
+                  onClick={() => setActiveRowId(row.id)}
+                  className={`block w-full rounded-lg border p-3 text-left transition ${activeRowId === row.id ? "border-[#064E3B] bg-[#F8FAF9]" : "border-emerald-900/10 bg-white hover:border-emerald-900/25"}`}
+                >
+                  <div className="flex flex-wrap items-start gap-3">
+                    <input
+                      type="checkbox"
+                      aria-label={`Select ${row.recipient}`}
+                      checked={selectedIds.has(row.id)}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })}
+                      className="mt-1 size-4 shrink-0 accent-[#064E3B]"
+                    />
+                    <div className="min-w-[220px] flex-1">
+                      <p className="break-all text-sm font-black text-[#0F1A16]">{row.recipient}</p>
+                      <p className="mt-1 line-clamp-2 text-xs font-semibold text-[#4B5D55]">{row.subject}</p>
+                    </div>
+                    <StatusBadge status={row.status} label={chipLabel[row.status] || row.status} />
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-black uppercase tracking-[0.08em] text-[#064E3B]">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-[#F8FAF9] px-2 py-1"><FolderOpen className="size-3.5" /> Email thread</span>
+                    <span className="rounded-md bg-[#F8FAF9] px-2 py-1">{row.sentCount} sent</span>
+                    <span className="rounded-md bg-[#F8FAF9] px-2 py-1">{row.respondedCount} {row.respondedCount === 1 ? "reply" : "replies"}</span>
+                    <span className="ml-auto normal-case tracking-normal text-[#4B5D55]">Sent {formatDate(row.sentAt)} · Reply {formatDate(row.respondedAt)}</span>
+                  </div>
+                </button>
+              ))}
             </div>
           )}
         </div>
@@ -595,7 +673,7 @@ function StatusBadge({ status, label }: { status: string; label: string }) {
   return (
     <span
       data-surface="emerald"
-      className="inline-flex min-h-6 items-center justify-center rounded-md px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.04em] whitespace-nowrap"
+      className="inline-flex min-h-6 shrink-0 items-center justify-center rounded-md px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.04em] whitespace-nowrap"
       style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
       data-status={status}
     >
@@ -605,10 +683,13 @@ function StatusBadge({ status, label }: { status: string; label: string }) {
 }
 
 function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSendDraft, sendingDraft, onClose }: { row: any; draftOverride?: string; onDraftChange: (value: string) => void; onPrepareDraft: () => void; onSendDraft: (row: any, draft: string) => void; sendingDraft: boolean; onClose: () => void }) {
+  const [openActivityId, setOpenActivityId] = useState<string | null>(null);
+  const replyRef = useRef<HTMLTextAreaElement | null>(null);
+
   if (!row) {
     return (
       <aside className="rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-4 text-sm font-semibold text-[#4B5D55]">
-        Select a campaign row to view email evidence and next steps.
+        Select an email thread to view sent messages, replies, draft the answer, and update next steps.
       </aside>
     );
   }
@@ -621,6 +702,8 @@ function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSen
     ...sentActivities.map((activity: any) => ({ ...activity, timelineType: "sent", timelineAt: activity.sentAt })),
     ...replyActivities.map((activity: any) => ({ ...activity, timelineType: "reply", timelineAt: activity.respondedAt })),
   ].sort((a, b) => new Date(b.timelineAt || 0).getTime() - new Date(a.timelineAt || 0).getTime());
+  const openActivity = timeline.find((activity: any) => `${activity.timelineType}:${activity.raw?.id || activity.id}` === openActivityId) || null;
+  const latestReplyText = row.inboundReply || openActivity?.body || "Waiting for mailbox sync.";
   return (
     <aside className="rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-4">
       <div className="mb-3 flex items-start gap-2">
@@ -631,10 +714,10 @@ function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSen
         <button type="button" onClick={onClose} aria-label="Close insights" className="inline-grid size-8 place-items-center rounded-md border border-emerald-900/20 bg-white text-[#064E3B]"><X className="size-4" /></button>
       </div>
       <dl className="space-y-2 text-xs">
-        <InsightLine label="Subject" value={row.subject} />
-        <InsightLine label="Email content" value={row.emailContent || "Stored for new sends from this point forward."} />
+        <InsightLine label="Campaign subject" value={row.subject} />
+        <InsightLine label="Last email we sent" value={row.emailContent || "Stored for new sends from this point forward."} />
         <InsightLine label="Latest reply subject" value={row.inboundSubject || "Waiting for mailbox sync."} />
-        <InsightLine label="Latest reply" value={row.inboundReply || "Waiting for mailbox sync."} />
+        <InsightLine label="Latest reply" value={latestReplyText} />
         <InsightLine label="Reply from" value={row.inboundFrom || "—"} />
         <InsightLine label="Status" value={`${row.evidence}${isRowPendingResponse(row) ? " · pending response" : ""}`} />
         <InsightLine label="Provider ID" value={row.providerMessageId || "Awaiting provider evidence"} />
@@ -644,37 +727,43 @@ function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSen
         <InsightLine label="Next step" value={row.aiNextAction || (isRowPendingResponse(row) ? "Prepare follow-up draft if no reply lands." : "No action required yet.")} />
       </dl>
       <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
-        <p className="mb-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]"><History className="size-3.5" /> Recipient activity</p>
+        <p className="mb-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]"><History className="size-3.5" /> Email thread</p>
         <div className="max-h-44 space-y-2 overflow-auto pr-1">
-          {timeline.map((activity: any) => (
-            <button type="button" key={`${activity.timelineType}:${activity.raw?.id || activity.id}`} className="block w-full rounded-md border border-emerald-900/10 bg-[#F8FAF9] p-2 text-left hover:border-emerald-900/25">
-              <div className="flex items-start justify-between gap-2">
-                <p className="min-w-0 truncate text-xs font-black text-[#0F1A16]">{activity.subject}</p>
+          {timeline.map((activity: any) => {
+            const key = `${activity.timelineType}:${activity.raw?.id || activity.id}`;
+            const opened = key === openActivityId;
+            const body = activity.timelineType === "reply" ? activity.body : activity.emailContent;
+            return (
+            <button type="button" key={key} onClick={() => setOpenActivityId(opened ? null : key)} className="block w-full rounded-md border border-emerald-900/10 bg-[#F8FAF9] p-2 text-left hover:border-emerald-900/25">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded bg-white px-1.5 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-[#064E3B]">{activity.timelineType === "reply" ? "Their reply" : "Sent by us"}</span>
+                <span className="text-[11px] font-semibold text-[#4B5D55]">{formatDate(activity.timelineAt)}</span>
                 <StatusBadge status={activity.timelineType === "reply" ? "responded" : activity.status} label={activity.timelineType === "reply" ? "Reply" : activity.status === "responded" ? "Responded" : activity.status === "pending" ? "Pending" : activity.status} />
               </div>
-              <p className="mt-1 text-[11px] font-semibold text-[#4B5D55]">{activity.timelineType === "reply" ? `Reply ${formatDate(activity.respondedAt)}${activity.inboundFrom ? ` · ${activity.inboundFrom}` : ""}` : `Sent ${formatDate(activity.sentAt)}`}</p>
-              {activity.timelineType === "reply" && activity.body ? <p className="mt-1 line-clamp-3 text-[11px] font-semibold text-[#0F1A16]">{activity.body}</p> : null}
+              <p className="mt-1 line-clamp-2 text-xs font-black text-[#0F1A16]">{activity.subject || row.subject}</p>
+              {body ? <p className={`${opened ? "" : "line-clamp-3"} mt-1 text-[11px] font-semibold leading-relaxed text-[#0F1A16]`}>{body}</p> : null}
             </button>
-          ))}
+            );
+          })}
           {timeline.length === 0 && <p className="text-[11px] font-semibold text-[#4B5D55]">No activity stored for this recipient yet.</p>}
         </div>
       </div>
       <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
         <div className="mb-2 flex items-center justify-between gap-2">
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">AI reply draft</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">Reply composer</p>
           <Button type="button" size="sm" variant="outline" onClick={onPrepareDraft} className="h-7 border-emerald-900/25 px-2 text-[10px] font-black text-[#064E3B]"><Wand2 className="mr-1 size-3" />Rewrite with AI</Button>
         </div>
-        <textarea value={draft} onChange={(e) => onDraftChange(e.target.value)} className="min-h-28 w-full resize-y rounded-md border border-emerald-900/15 bg-[#F8FAF9] p-2 text-xs font-semibold leading-relaxed text-[#0F1A16] outline-none focus:border-[#064E3B]" />
+        <textarea ref={replyRef} value={draft} onChange={(e) => onDraftChange(e.target.value)} className="min-h-28 w-full resize-y rounded-md border border-emerald-900/15 bg-[#F8FAF9] p-2 text-xs font-semibold leading-relaxed text-[#0F1A16] outline-none focus:border-[#064E3B]" />
         <Button type="button" size="sm" onClick={() => onSendDraft(row, draft)} disabled={sendingDraft || !draft.trim()} data-surface="emerald" className="mt-2 h-8 w-full justify-center bg-[#064E3B] text-xs font-black text-white hover:bg-[#042c1c]">
           {sendingDraft ? <Loader2 className="mr-1.5 size-3.5 animate-spin" /> : <Send className="mr-1.5 size-3.5" />}
-          Send draft reply
+          Send this email now
         </Button>
       </div>
       <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
         <p className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">Actions</p>
         <div className="flex flex-wrap items-center gap-2">
-          <Button asChild size="sm" variant="outline" className="border-emerald-900/25 text-[#064E3B]">
-            <a href={`mailto:${row.recipient}?subject=${encodeURIComponent(`Re: ${row.subject}`)}`}><Reply className="mr-1.5 size-3.5" />Reply</a>
+          <Button type="button" size="sm" variant="outline" onClick={() => { replyRef.current?.focus(); replyRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }); }} className="border-emerald-900/25 text-[#064E3B]">
+            <Reply className="mr-1.5 size-3.5" />Write my reply
           </Button>
           {row.entityId ? <QuickActivityActions entityType={row.entityType} entityId={row.entityId} entityName={row.recipient} showLabels /> : null}
         </div>
