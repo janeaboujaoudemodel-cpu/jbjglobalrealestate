@@ -64,25 +64,36 @@ function domainOf(url: string): string | null {
   }
 }
 
+function extractEmails(html: string): string[] {
+  const out: string[] = [];
+  // Fast path: mailto: links
+  const mailtoRe = /mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
+  let m: RegExpExecArray | null;
+  while ((m = mailtoRe.exec(html)) !== null) out.push(m[1]);
+  if (out.length) return out;
+  // Fallback: plain-text emails, cap to first 5 matches to protect CPU
+  const re = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  for (let i = 0; i < 5; i++) {
+    const mm = re.exec(html);
+    if (!mm) break;
+    out.push(mm[0]);
+  }
+  return out;
+}
+
 async function findEmailForSite(website: string): Promise<{ email: string | null; source: string | null }> {
   const base = website.startsWith("http") ? website : `https://${website}`;
   const domain = domainOf(base);
-  const paths = ["", "/contact", "/contact-us", "/en/contact", "/about", "/en"];
+  // Only two paths to stay within CPU budget: homepage + /contact
+  const paths = ["", "/contact"];
   const foundBySource: { email: string; source: string }[] = [];
   for (const p of paths) {
     const url = base.replace(/\/$/, "") + p;
     const html = await fetchText(url);
     if (!html) continue;
-    // decode mailto entities first
-    const cleaned = html
-      .replace(/&#64;/g, "@")
-      .replace(/\s*\[at\]\s*/gi, "@")
-      .replace(/\s*\(at\)\s*/gi, "@")
-      .replace(/\s*\[dot\]\s*/gi, ".")
-      .replace(/\s*\(dot\)\s*/gi, ".");
-    const matches = cleaned.match(EMAIL_RE) || [];
-    for (const m of matches) foundBySource.push({ email: m, source: url });
-    if (matches.length && p) break; // /contact hit is enough
+    const emails = extractEmails(html);
+    for (const e of emails) foundBySource.push({ email: e, source: url });
+    if (foundBySource.length) break;
   }
   const best = pickBest(foundBySource.map((f) => f.email), domain);
   if (!best) return { email: null, source: null };
