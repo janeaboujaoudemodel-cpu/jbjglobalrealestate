@@ -74,9 +74,9 @@ const STATUS_MAP_CLIENT: Record<string, string> = {
   no_match: "",
 };
 
-const classifyWithAI = async (subject: string, body: string): Promise<{ intent: string; confidence: number; reason: string }> => {
+const classifyWithAI = async (subject: string, body: string): Promise<{ intent: string; confidence: number; reason: string; errored: boolean }> => {
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-  if (!LOVABLE_API_KEY) return { intent: "no_match", confidence: 0, reason: "No AI key" };
+  if (!LOVABLE_API_KEY) return { intent: "no_match", confidence: 0, reason: "No AI key", errored: true };
 
   const prompt = `You classify replies from real-estate developers/brokerages to a brokerage's registration request.
 
@@ -104,8 +104,14 @@ ${body.slice(0, 2000)}`;
       }),
     });
     if (!res.ok) {
-      console.error("AI classify failed", res.status, await res.text());
-      return { intent: "no_match", confidence: 0, reason: "AI error" };
+      const detail = await res.text();
+      console.error("AI classify failed", res.status, detail);
+      const reason = res.status === 402
+        ? "AI credits depleted (402) — classification deferred"
+        : res.status === 429
+        ? "AI rate limited (429) — classification deferred"
+        : `AI error ${res.status}`;
+      return { intent: "unclassified", confidence: 0, reason, errored: true };
     }
     const j = await res.json();
     const text = j?.choices?.[0]?.message?.content || "{}";
@@ -114,10 +120,11 @@ ${body.slice(0, 2000)}`;
       intent: parsed.intent || "no_match",
       confidence: Number(parsed.confidence) || 0,
       reason: parsed.reason || "",
+      errored: false,
     };
   } catch (e) {
     console.error("AI classify exception", e);
-    return { intent: "no_match", confidence: 0, reason: String(e) };
+    return { intent: "unclassified", confidence: 0, reason: String(e), errored: true };
   }
 };
 
