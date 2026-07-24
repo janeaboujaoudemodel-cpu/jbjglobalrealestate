@@ -74,6 +74,18 @@ serve(async (req) => {
     if (body.subject.length > 250) {
       return json({ error: "Subject exceeds 250 chars" }, 400);
     }
+    // Resend rejects public free-mail domains as From — only verified domains allowed.
+    const fromDomain = String(body.from_email).split("@")[1]?.toLowerCase() || "";
+    const FREE_MAIL_DOMAINS = new Set([
+      "gmail.com", "googlemail.com", "yahoo.com", "hotmail.com",
+      "outlook.com", "live.com", "icloud.com", "aol.com", "protonmail.com",
+    ]);
+    if (FREE_MAIL_DOMAINS.has(fromDomain)) {
+      return json({
+        error: "UNVERIFIED_SENDER_DOMAIN",
+        message: `Resend cannot send from ${fromDomain}. Use a verified domain sender (e.g. jane@jbj.ae, helpdesk@jbj.ae). The gmail address can still be set as reply_to.`,
+      }, 400);
+    }
     // Reject any unresolved {{var}} placeholders — never freeze a broken render.
     const unresolved: string[] = [];
     for (const src of [body.subject, body.inner_html]) {
