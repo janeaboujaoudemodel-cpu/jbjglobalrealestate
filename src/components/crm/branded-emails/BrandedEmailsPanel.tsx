@@ -96,15 +96,11 @@ const CALENDAR_PLACEHOLDER_URL = "https://calendar.google.com/calendar/appointme
 const REGISTRATION_PACKAGE_LINK = "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs";
 
 const DEVELOPER_REQUIREMENTS_BLOCK = `<div data-jbj-developer-requirements="true" style="margin:18px 0;padding:16px;border:1px solid #B89555;background:#FAF5EA;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.65;">
-  <p style="margin:0 0 10px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;">Kindly reply to this email and confirm the current registration status:</p>
-  <ul style="margin:0 0 12px 18px;padding:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">
-    <li style="margin:0 0 6px;">Status: Registered / Pending / Active.</li>
-    <li style="margin:0 0 6px;">If we are not registered yet, please share your registration form and full requirements.</li>
-    <li style="margin:0 0 6px;">Please add our team to the WhatsApp group on <strong>+971 54 716 7107</strong>.</li>
-    <li style="margin:0 0 6px;">Please share your logo and all current marketing material links.</li>
-    <li style="margin:0;">For compliance and escrow requirements, please coordinate with Waleed through this same thread or reply to <strong>HELPDESK@JBJ.AE</strong>.</li>
-  </ul>
-  <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please keep <strong>HELPDESK@JBJ.AE</strong> as the sender and reply destination so the CRM can attach your response to the correct developer card.</p>
+  <p style="margin:0 0 10px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;">Kindly reply to this email with your current JBJ registration status and next step.</p>
+  <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Registration desk</strong><br/>Please send your registration form, agency code, and onboarding documents to <strong>HELPDESK@JBJ.AE</strong> with <strong>infoo.jane@gmail.com</strong> copied.</p>
+  <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Admin contact — Walid Halabi</strong><br/>+971 54 366 2223 &middot; +971 50 999 3839<br/><span style="color:#4a4a4a;">For urgent registration or compliance questions only. Standard correspondence can remain on this email thread.</span></p>
+  <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Project folders & escrow</strong><br/>In your marketing-material link, please include one folder per project containing project details, the project escrow account, and the corporate bank account / payment beneficiary. If a project is not yet registered, please mark it as <strong>Registration pending — documents pending from JBJ</strong> and include the reason.</p>
+  <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>WhatsApp group</strong><br/>Please create a WhatsApp group named <strong>{{developer_name}} / JBJ Global Real Estate</strong>, add <strong>Jane Bou Jaoude</strong> and <strong>Walid Halabi</strong> as admins, use your developer logo, and paste your marketing-material link in the group description.</p>
 </div>`;
 
 function injectDeveloperRequirementsBlock(html: string) {
@@ -236,15 +232,20 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
       websiteUrl: null,
     }));
   }
-  // Fast single-pass load for the campaign selector. Full database management
-  // stays in the portal table; the send panel must open immediately.
-  const { data, error } = await (supabase as any)
-    .from("crm_brokerages")
-    .select("id, company_name, email, emirate, website, logo_url")
-    .order("company_name")
-    .limit(5000);
-  if (error) throw error;
-  return (data ?? []).map((r: any) => ({
+  const allRows: any[] = [];
+  const pageSize = 1000;
+  for (let from = 0; from < 20000; from += pageSize) {
+    const { data, error } = await (supabase as any)
+      .from("crm_brokerages")
+      .select("id, company_name, email, emirate, website, logo_url")
+      .order("company_name")
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    const rows = data ?? [];
+    allRows.push(...rows);
+    if (rows.length < pageSize) break;
+  }
+  return allRows.map((r: any) => ({
     id: String(r.id),
     name: r.company_name || "Brokerage",
     email: r.email || null,
@@ -642,7 +643,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         .select("email_norm, send_status, provider, delivery_status, reply_status, business_status")
         .eq("entity_type", entityType)
         .eq("provider", "resend")
-        .limit(5000);
+        .limit(20000);
       if (cancelled) return;
       const sent = new Set<string>();
       for (const row of data ?? []) {
