@@ -23,6 +23,7 @@ const OWNER_EMAILS = [
   "janeaboujaoudemodel@gmail.com",
   "contact@janeaboujaoude.net",
   "infoo.jane@gmail.com",
+  "helpdesk@jbj.ae",
 ];
 
 interface SendBody {
@@ -82,7 +83,7 @@ serve(async (req) => {
       "outlook.com", "live.com", "icloud.com", "aol.com", "protonmail.com",
     ]);
     if (FREE_MAIL_DOMAINS.has(fromDomain)) {
-      const msg = `Resend cannot send from ${fromDomain}. Re-lock the payload with a verified domain sender (e.g. jane@jbj.ae).`;
+      const msg = `Resend cannot send from ${fromDomain}. Re-lock the payload with helpdesk@jbj.ae as the verified sender.`;
       await service.from("outreach_locked_payloads").update({
         status: "failed",
         send_error: msg,

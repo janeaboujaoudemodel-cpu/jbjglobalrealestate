@@ -23,6 +23,7 @@ const OWNER_EMAILS = [
   "janeaboujaoudenails@gmail.com",
   "janeaboujaoudemodel@gmail.com",
   "infoo.jane@gmail.com",
+  "helpdesk@jbj.ae",
 ];
 const DEFAULT_REGISTRATION_PACKAGE_LINK = "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs";
 
@@ -199,15 +200,17 @@ serve(async (req: Request) => {
       });
     }
 
-    const fromName = "JBJ GLOBAL REAL ESTATE";
+    const fromName = "JBJ Global Real Estate";
     const replyTo = "helpdesk@jbj.ae";
+    const forcedDeveloperCc = "infoo.jane@gmail.com";
     const activeCcArr = Array.isArray(settings?.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
     const legacyCc = (settings?.cc_email || "").trim();
-    const ccList = body.ccEmailOverride
+    const baseCcList = body.ccEmailOverride
       ? [String(body.ccEmailOverride).trim()].filter(Boolean)
       : (activeCcArr.length > 0 ? activeCcArr : (settings?.cc_jane_enabled && legacyCc ? [legacyCc] : []));
+    const ccList = Array.from(new Set([...baseCcList, forcedDeveloperCc].map((e) => String(e).trim().toLowerCase()).filter(Boolean)));
     const ccEmail = ccList[0] || "";
-    const cc = !isTest ? ccList : [];
+    const cc = ccList.filter((email) => email !== recipient.toLowerCase());
 
     let html = renderTemplate(template.html, {
       developer_name: dev.developer_name,
@@ -218,8 +221,8 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
-      sender_name: "JBJ Team",
-      sender_title: "JBJ GLOBAL REAL ESTATE",
+      sender_name: fromName,
+      sender_title: "Developer Registration Department",
       sender_phone_name: "__JBJ_PHONE_CONTACT_NAME__",
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
@@ -238,8 +241,8 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
-      sender_name: "JBJ Team",
-      sender_title: "JBJ GLOBAL REAL ESTATE",
+      sender_name: fromName,
+      sender_title: "Developer Registration Department",
       sender_phone_name: "__JBJ_PHONE_CONTACT_NAME__",
       sender_phone: "+971 54 716 7107",
       sender_phone_tel: "tel:+971547167107",
@@ -255,6 +258,7 @@ serve(async (req: Request) => {
       const resendResult = await sendViaResend({
         from: `${fromName} <${replyTo}>`,
         to: recipient,
+        cc: cc.length ? cc : undefined,
         reply_to: replyTo,
         subject,
         html,

@@ -25,6 +25,7 @@ const OWNER_EMAILS = [
   "janeaboujaoudemodel@gmail.com",
   "contact@janeaboujaoude.net",
   "infoo.jane@gmail.com",
+  "helpdesk@jbj.ae",
 ];
 
 interface LockBody {
@@ -85,7 +86,7 @@ serve(async (req) => {
     if (FREE_MAIL_DOMAINS.has(fromDomain)) {
       return json({
         error: "UNVERIFIED_SENDER_DOMAIN",
-        message: `Resend cannot send from ${fromDomain}. Use a verified domain sender (e.g. jane@jbj.ae, helpdesk@jbj.ae). The gmail address can still be set as reply_to.`,
+        message: `Resend cannot send from ${fromDomain}. Use the verified sender helpdesk@jbj.ae. The gmail address can still be copied or used for testing.`,
       }, 400);
     }
     // Reject any unresolved {{var}} placeholders — never freeze a broken render.

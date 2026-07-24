@@ -7,7 +7,7 @@
  * approves is byte-for-byte what the recipient gets.
  *
  * Identity rule (locked):
- *   From  = contact@jbj.ae · "JBJ GLOBAL REAL ESTATE"
+ *   From  = helpdesk@jbj.ae · "JBJ Global Real Estate"
  *   Cc    = infoo.jane@gmail.com (default, removable per send)
  */
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -45,9 +45,9 @@ const LANGUAGES = [
 const BOOK_URL = "https://www.jbj.ae/book";
 
 // === JBJ Brand identity (locked at the composer level) ============
-const JBJ_FROM_EMAIL = "contact@jbj.ae";
-const JBJ_FROM_NAME = "JBJ GLOBAL REAL ESTATE";
-const JBJ_REPLY_TO = "contact@jbj.ae";
+const JBJ_FROM_EMAIL = "helpdesk@jbj.ae";
+const JBJ_FROM_NAME = "JBJ Global Real Estate";
+const JBJ_REPLY_TO = "helpdesk@jbj.ae";
 const DEFAULT_CC_EMAIL = "infoo.jane@gmail.com";
 const TEST_DEFAULT_TO = ["contact@jbj.ae", "infoo.jane@gmail.com"];
 
