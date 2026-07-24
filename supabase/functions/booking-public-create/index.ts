@@ -141,6 +141,36 @@ Deno.serve(async (req) => {
     }
     const endsAtDate = new Date(startsAtDate.getTime() + evt.duration_minutes * 60_000);
 
+    // ── Rate limits (abuse-guard) ─────────────────────────────────────────
+    // Max 5 bookings per email per rolling 24h, and 10 per IP per hour.
+    const oneHourAgo = new Date(Date.now() - 60 * 60_000).toISOString();
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60_000).toISOString();
+    const ip = (req.headers.get('x-forwarded-for') ?? '').split(',')[0].trim() || null;
+
+    const { count: emailCount } = await sb
+      .from('jbj_booking_appointments')
+      .select('id', { count: 'exact', head: true })
+      .eq('customer_email', customer.email.toLowerCase())
+      .gte('created_at', oneDayAgo);
+    if ((emailCount ?? 0) >= 5) {
+      return new Response(JSON.stringify({ error: 'rate_limited_email' }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    if (ip) {
+      const { count: ipCount } = await sb
+        .from('jbj_booking_audit_log')
+        .select('id', { count: 'exact', head: true })
+        .contains('details', { ip })
+        .gte('created_at', oneHourAgo);
+      if ((ipCount ?? 0) >= 10) {
+        return new Response(JSON.stringify({ error: 'rate_limited_ip' }), {
+          status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+
     // Email verification path
     if (pageRow.require_email_verification) {
       if (!code) {
