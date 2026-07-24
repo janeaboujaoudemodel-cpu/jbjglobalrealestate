@@ -1,5 +1,5 @@
 /**
- * CRM Email Sync — pulls unread Gmail messages, classifies the sender's
+ * CRM Email Sync — pulls unread Gmail + Outlook messages, classifies the sender's
  * intent with Lovable AI, and updates matching CRM records (developers,
  * brokerages, clients) accordingly.
  *
@@ -7,14 +7,23 @@
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
+const GATEWAY_BASE = "https://connector-gateway.lovable.dev";
+const GMAIL_GATEWAY = `${GATEWAY_BASE}/google_mail/gmail/v1`;
+const OUTLOOK_GATEWAY = `${GATEWAY_BASE}/microsoft_outlook`;
 const AI_GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
+
+type SyncMessage = {
+  source: "gmail" | "outlook";
+  id: string;
+  threadId: string | null;
+  fromRaw: string;
+  toEmails: string[];
+  subject: string;
+  body: string;
+  markRead: () => Promise<void>;
+};
 
 const decodeBase64Url = (s: string) => {
   const pad = s.replace(/-/g, "+").replace(/_/g, "/");
@@ -50,6 +59,22 @@ const parseFromAddress = (raw: string): { name: string; email: string } => {
   return { name: "", email: raw.trim().toLowerCase() };
 };
 
+const stripHtml = (html: string) => html.replace(/<style[\s\S]*?<\/style>/gi, " ")
+  .replace(/<script[\s\S]*?<\/script>/gi, " ")
+  .replace(/<[^>]+>/g, " ")
+  .replace(/&nbsp;/g, " ")
+  .replace(/&amp;/g, "&")
+  .replace(/&lt;/g, "<")
+  .replace(/&gt;/g, ">")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const outlookAddress = (value: any) => {
+  const address = value?.emailAddress?.address || "";
+  const name = value?.emailAddress?.name || "";
+  return address ? `${name ? `${name} ` : ""}<${address}>` : "";
+};
+
 const STATUS_MAP_DEV: Record<string, string> = {
   registered: "registered",
   rejected: "rejected",
@@ -72,6 +97,97 @@ const STATUS_MAP_CLIENT: Record<string, string> = {
   pending: "negotiating",
   documents_requested: "negotiating",
   no_match: "",
+};
+
+const listGmailMessages = async (headers: Record<string, string>): Promise<SyncMessage[]> => {
+  const listRes = await fetch(
+    `${GMAIL_GATEWAY}/users/me/messages?maxResults=25&q=is:unread+newer_than:2d+in:inbox`,
+    { headers },
+  );
+  if (!listRes.ok) {
+    const detail = await listRes.text();
+    console.error("Gmail list failed", listRes.status, detail);
+    return [];
+  }
+
+  const listJson = await listRes.json();
+  const messages: { id: string }[] = listJson.messages || [];
+  const synced: SyncMessage[] = [];
+
+  for (const message of messages) {
+    const detailRes = await fetch(`${GMAIL_GATEWAY}/users/me/messages/${message.id}?format=full`, { headers });
+    if (!detailRes.ok) continue;
+
+    const detail = await detailRes.json();
+    const rawHeaders = detail?.payload?.headers || [];
+    const getH = (name: string) => rawHeaders.find((h: any) => h.name?.toLowerCase() === name.toLowerCase())?.value || "";
+    const fromRaw = getH("From");
+    if (!fromRaw) continue;
+
+    synced.push({
+      source: "gmail",
+      id: message.id,
+      threadId: detail?.threadId || null,
+      fromRaw,
+      toEmails: getH("To") ? [getH("To")] : [],
+      subject: getH("Subject"),
+      body: extractBody(detail?.payload) || detail?.snippet || "",
+      markRead: async () => {
+        await fetch(`${GMAIL_GATEWAY}/users/me/messages/${message.id}/modify`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ removeLabelIds: ["UNREAD"] }),
+        });
+      },
+    });
+  }
+
+  return synced;
+};
+
+const listOutlookMessages = async (headers: Record<string, string>): Promise<SyncMessage[]> => {
+  const since = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString();
+  const params = new URLSearchParams({
+    "$top": "25",
+    "$select": "id,conversationId,subject,from,toRecipients,body,bodyPreview,receivedDateTime,isRead",
+    "$orderby": "receivedDateTime desc",
+    "$filter": `isRead eq false and receivedDateTime ge ${since}`,
+  });
+  const listRes = await fetch(`${OUTLOOK_GATEWAY}/me/messages?${params.toString()}`, { headers });
+  if (!listRes.ok) {
+    const detail = await listRes.text();
+    console.error("Outlook list failed", listRes.status, detail);
+    return [];
+  }
+
+  const listJson = await listRes.json();
+  const messages: any[] = listJson.value || [];
+
+  return messages.map((message) => {
+    const bodyContent = message?.body?.content || message?.bodyPreview || "";
+    const body = message?.body?.contentType === "html" || /<[^>]+>/.test(bodyContent)
+      ? stripHtml(bodyContent)
+      : bodyContent;
+
+    return {
+      source: "outlook" as const,
+      id: message.id,
+      threadId: message.conversationId || null,
+      fromRaw: outlookAddress(message.from),
+      toEmails: Array.isArray(message.toRecipients)
+        ? message.toRecipients.map(outlookAddress).filter(Boolean)
+        : [],
+      subject: message.subject || "",
+      body,
+      markRead: async () => {
+        await fetch(`${OUTLOOK_GATEWAY}/me/messages/${encodeURIComponent(message.id)}`, {
+          method: "PATCH",
+          headers,
+          body: JSON.stringify({ isRead: true }),
+        });
+      },
+    };
+  }).filter((message) => message.id && message.fromRaw);
 };
 
 const classifyWithAI = async (subject: string, body: string): Promise<{ intent: string; confidence: number; reason: string; errored: boolean }> => {
@@ -129,53 +245,51 @@ ${body.slice(0, 2000)}`;
 };
 
 serve(async (req: Request) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const service = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!supabaseUrl || !serviceKey) {
+      return new Response(JSON.stringify({ error: "Backend credentials are not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const service = createClient(supabaseUrl, serviceKey);
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
-    if (!LOVABLE_API_KEY || !GMAIL_API_KEY) {
-      return new Response(JSON.stringify({ error: "Gmail connector not configured" }), { status: 500, headers: corsHeaders });
+    const OUTLOOK_API_KEY = Deno.env.get("MICROSOFT_OUTLOOK_API_KEY");
+    if (!LOVABLE_API_KEY || (!GMAIL_API_KEY && !OUTLOOK_API_KEY)) {
+      return new Response(JSON.stringify({ error: "No mailbox connector configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    const gmailHeaders = {
-      "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-      "X-Connection-Api-Key": GMAIL_API_KEY,
-      "Content-Type": "application/json",
-    };
-
-    // 1. List recent unread inbound messages
-    const listRes = await fetch(
-      `${GMAIL_GATEWAY}/users/me/messages?maxResults=25&q=is:unread+newer_than:2d+in:inbox`,
-      { headers: gmailHeaders },
-    );
-    if (!listRes.ok) {
-      const t = await listRes.text();
-      console.error("Gmail list failed", listRes.status, t);
-      return new Response(JSON.stringify({ error: "Gmail list failed", details: t }), { status: 502, headers: corsHeaders });
+    const messages: SyncMessage[] = [];
+    if (GMAIL_API_KEY) {
+      messages.push(...await listGmailMessages({
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": GMAIL_API_KEY,
+        "Content-Type": "application/json",
+      }));
     }
-    const listJson = await listRes.json();
-    const messages: { id: string }[] = listJson.messages || [];
+    if (OUTLOOK_API_KEY) {
+      messages.push(...await listOutlookMessages({
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": OUTLOOK_API_KEY,
+        "Content-Type": "application/json",
+      }));
+    }
 
     const results: any[] = [];
 
-    for (const m of messages) {
+    for (const message of messages) {
       try {
-        const detailRes = await fetch(`${GMAIL_GATEWAY}/users/me/messages/${m.id}?format=full`, { headers: gmailHeaders });
-        if (!detailRes.ok) continue;
-        const detail = await detailRes.json();
-
-        const headers = detail?.payload?.headers || [];
-        const getH = (n: string) => headers.find((h: any) => h.name?.toLowerCase() === n.toLowerCase())?.value || "";
-        const fromRaw = getH("From");
-        const subject = getH("Subject");
-        const { email: fromEmail, name: fromName } = parseFromAddress(fromRaw);
+        const { email: fromEmail } = parseFromAddress(message.fromRaw);
         if (!fromEmail) continue;
-
-        const body = extractBody(detail?.payload) || detail?.snippet || "";
 
         // 2. Match to a CRM record
         const fromDomain = fromEmail.split("@")[1] || "";
@@ -206,7 +320,7 @@ serve(async (req: Request) => {
         const ownerId = matched?.row?.owner_id || null;
 
         // 3. AI classification
-        const ai = await classifyWithAI(subject, body);
+        const ai = await classifyWithAI(message.subject, message.body);
 
         // 4. Update record status if confident. Skip on AI errors so we don't
         //    mislabel real replies as "no_match" during an outage.
@@ -221,7 +335,7 @@ serve(async (req: Request) => {
               status: newStatus,
               last_interaction_at: new Date().toISOString(),
               last_email_synced_at: new Date().toISOString(),
-              last_inbound_subject: subject,
+              last_inbound_subject: message.subject,
               last_inbound_at: new Date().toISOString(),
             }).eq("id", matched.row.id);
 
@@ -240,7 +354,7 @@ serve(async (req: Request) => {
           } else if (matched) {
             await service.from(matched.table).update({
               last_email_synced_at: new Date().toISOString(),
-              last_inbound_subject: subject,
+              last_inbound_subject: message.subject,
               last_inbound_at: new Date().toISOString(),
             }).eq("id", matched.row.id);
           }
@@ -250,42 +364,43 @@ serve(async (req: Request) => {
         //    On AI error, record signal as "unclassified" so downstream views
         //    don't treat the reply as a genuine "no_match".
         if (ownerId) {
-          await service.from("crm_relationship_email_log").insert({
+          const { error: logError } = await service.from("crm_relationship_email_log").insert({
             owner_id: ownerId,
             entity_type: matched?.entityType || null,
             entity_id: matched?.row?.id || null,
             direction: "inbound",
-            sent_via: "gmail",
-            external_message_id: m.id,
-            thread_id: detail?.threadId || null,
+            sent_via: message.source,
+            external_message_id: message.source === "gmail" ? message.id : `outlook-${message.id}`,
+            thread_id: message.threadId,
             from_email: fromEmail,
-            to_emails: getH("To") ? [getH("To")] : [],
-            subject,
-            body_snippet: body.slice(0, 500),
+            to_emails: message.toEmails,
+            subject: message.subject,
+            body_snippet: message.body.slice(0, 500),
             detected_status: newStatus || null,
             detected_signal: ai.errored ? "unclassified" : ai.intent,
             sent_at: new Date().toISOString(),
           });
+          if (logError && logError.code !== "23505") console.error("email log insert failed", logError);
         }
 
-        // 6. Mark Gmail message as read only when classification succeeded.
+        // 6. Mark mailbox message as read only when classification succeeded.
         //    On AI error we leave it UNREAD so the next run can retry.
         if (!ai.errored) {
-          await fetch(`${GMAIL_GATEWAY}/users/me/messages/${m.id}/modify`, {
-            method: "POST", headers: gmailHeaders,
-            body: JSON.stringify({ removeLabelIds: ["UNREAD"] }),
-          });
+          await message.markRead();
         }
 
         results.push({
-          gmail_id: m.id, from: fromEmail, subject,
+          source: message.source,
+          message_id: message.id,
+          from: fromEmail,
+          subject: message.subject,
           matched: matched ? { type: matched.entityType, id: matched.row.id, name: matched.row.developer_name || matched.row.company_name || matched.row.full_name } : null,
           ai_intent: ai.intent, ai_confidence: ai.confidence, ai_errored: ai.errored,
           new_status: newStatus || null,
         });
       } catch (e) {
         console.error("Per-message error", e);
-        results.push({ gmail_id: m.id, error: String(e) });
+        results.push({ source: message.source, message_id: message.id, error: String(e) });
       }
     }
 
