@@ -94,18 +94,32 @@ export default function InvestorPortal() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {tiles.map(([label, value, icon]) => (
-          <Card key={label} className="p-4 bg-[#F7F2EA] border border-[#B89555]/30">
-            <div className="flex items-center gap-2 text-[#064E3B]">
-              {icon}
-              <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{label}</p>
-            </div>
-            <p className="mt-1 text-2xl font-black text-[#064E3B]">
-              {q.isLoading ? <Loader2 className="size-5 animate-spin" /> : typeof value === "number" ? value.toLocaleString() : "—"}
-            </p>
-          </Card>
-        ))}
+        {tiles.map((t) => {
+          const clickable = t.filter !== null;
+          const active = clickable && filter === t.filter;
+          return (
+            <button
+              key={t.label}
+              type="button"
+              disabled={!clickable}
+              onClick={() => clickable && setFilter(t.filter!)}
+              className={`text-left rounded-lg transition-all ${clickable ? "hover:border-[#B89555] hover:shadow-md cursor-pointer" : "cursor-default"}`}
+              aria-pressed={active}
+            >
+              <Card className={`p-4 bg-[#F7F2EA] border ${active ? "border-[#064E3B] ring-2 ring-[#064E3B]/30" : "border-[#B89555]/30"}`}>
+                <div className="flex items-center gap-2 text-[#064E3B]">
+                  {t.icon}
+                  <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{t.label}</p>
+                </div>
+                <p className="mt-1 text-2xl font-black text-[#064E3B]">
+                  {q.isLoading ? <Loader2 className="size-5 animate-spin" /> : typeof t.value === "number" ? t.value.toLocaleString() : "—"}
+                </p>
+              </Card>
+            </button>
+          );
+        })}
       </div>
+
 
       <Tabs defaultValue="email-status" className="w-full">
         <TabsList className="ip-tabs grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
