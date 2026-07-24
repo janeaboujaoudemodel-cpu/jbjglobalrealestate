@@ -20,6 +20,8 @@ const corsHeaders = {
 
 const OWNER_EMAILS = [
   "janeaboujaoudenails@gmail.com",
+  "janeaboujaoudemodel@gmail.com",
+  "contact@janeaboujaoude.net",
   "infoo.jane@gmail.com",
 ];
 
@@ -102,7 +104,7 @@ serve(async (req) => {
         "X-JBJ-Payload-Hash": String(row.payload_hash),
       },
       tags: [
-        { name: "surface", value: String(row.surface || "locked_payload").slice(0, 256) },
+        { name: "surface", value: String(row.surface || "locked_payload").replace(/[^A-Za-z0-9_-]/g, "_").slice(0, 256) },
       ],
     });
 
