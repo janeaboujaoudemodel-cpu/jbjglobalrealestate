@@ -154,8 +154,6 @@ const updateCampaignSpineForReply = async (
   message: SyncMessage,
   ai: { intent: string; confidence: number; reason: string; errored: boolean },
 ) => {
-  if (ai.errored || ai.intent === "no_match") return 0;
-
   const domain = usableDomain(fromEmail);
   let query = service
     .from("jbj_campaign_recipients")
@@ -182,26 +180,37 @@ const updateCampaignSpineForReply = async (
 
   const rows = recipients ?? [];
   for (const recipient of rows) {
+    const isAutoReply = /out of office|automatic reply|auto(?:matic)? response|on leave|away from office/i.test(`${message.subject}\n${message.body}`);
+    const replyStatus = isAutoReply ? "auto_reply" : "human_reply";
+    const summary = ai.errored
+      ? "Reply received; AI classification is deferred."
+      : ai.intent === "no_match"
+      ? "Reply received; review content manually."
+      : ai.reason;
     const metadata = {
       ...(recipient.metadata || {}),
       latest_reply: message.body.slice(0, 1200),
       latest_reply_subject: message.subject,
       latest_reply_from: fromEmail,
       latest_reply_at: message.receivedAt || new Date().toISOString(),
-      ai_summary: ai.reason,
-      ai_next_action: ai.intent === "documents_requested"
+      ai_summary: summary,
+      ai_next_action: ai.errored || ai.intent === "no_match"
+        ? "Open the reply, review the thread, and choose the next CRM action."
+        : ai.intent === "documents_requested"
         ? "Review requested documents and prepare the compliance reply."
         : ai.intent === "registered"
         ? "Confirm registration details and update the developer card."
         : "Review the response and prepare the next follow-up.",
-      ai_draft_reply: ai.intent === "documents_requested"
+      ai_draft_reply: ai.errored || ai.intent === "no_match"
+        ? "Thank you for your reply. We are reviewing your message and will come back on this same thread with the required next step."
+        : ai.intent === "documents_requested"
         ? "Thank you for sharing the requirements. We will review the requested documents and send the completed pack back on this thread."
         : ai.intent === "registered"
         ? "Thank you for confirming our registration. Please share the agency code, broker portal access, WhatsApp group details, and current marketing material link."
         : "Thank you for your update. Please confirm the next step required from JBJ Global Real Estate.",
     };
     await service.from("jbj_campaign_recipients").update({
-      reply_status: "human_reply",
+      reply_status: replyStatus,
       replied_at: message.receivedAt || new Date().toISOString(),
       thread_id: message.threadId,
       metadata,
