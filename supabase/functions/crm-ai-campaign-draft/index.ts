@@ -31,12 +31,23 @@ function fallbackDraft(input: any) {
     return "Thank you for confirming our registration. Please share the agency code, portal access, WhatsApp group details, and the current marketing-material link so our team can update the records and proceed with the next step.";
   }
   if (/document|requirement|trade license|rera|form|agreement|pending/i.test(source)) {
-    return "Thank you for sharing the registration requirements. We will review the requested documents and revert on this same thread with the completed registration pack. If any item is pending from JBJ, please highlight it so we can resolve it quickly.";
+    return "Thank you for sharing the registration requirements. We will review the requested documents and return with the completed registration pack. If any item is pending from JBJ, please highlight it so we can resolve it quickly.";
   }
   if (/meeting|calendar|briefing|slot|call/i.test(source)) {
-    return "Thank you for your reply. Please share the preferred meeting slot, or confirm if you would like us to send a calendar invitation on this same thread.";
+    return "Thank you for your reply. Please share the preferred meeting slot, or confirm if you would like us to send a calendar invitation.";
   }
-  return "Thank you for your reply. We reviewed your message and will continue from our previous outreach on this same thread. Please confirm the next step required from JBJ Global Real Estate.";
+  return "Thank you for your reply. Please confirm the exact next step required from JBJ Global Real Estate so we can action it correctly.";
+}
+
+function sanitizeDraft(value: string, fallback: string) {
+  const cleaned = clean(value, 2000)
+    .replace(/\b(?:we['’]?ll|we will)\s+continue\s+from\s+our\s+previous\s+outreach\s+on\s+this\s+same\s+thread\.?/gi, "")
+    .replace(/\bon\s+this\s+same\s+thread\b/gi, "")
+    .replace(/\bsame\s+thread\b/gi, "email")
+    .replace(/thank\s+you\s+for\s+reaching\s+out[^.]*\.?/gi, "Thank you for your reply.")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  return cleaned || fallback;
 }
 
 function cleanThreadHistory(value: unknown) {
@@ -76,7 +87,7 @@ serve(async (req) => {
     }
 
     const threadHistory = cleanThreadHistory(input.threadHistory);
-    const prompt = `Write a concise, premium CRM email reply body for JBJ Global Real Estate. Do not include a subject. Do not use emojis. Keep it under 130 words.\n\nCritical context:\n- JBJ/CITI started the outreach. The recipient is replying to us. Never write “thank you for reaching out” or imply they approached us first.\n- Read the actual thread below. Answer only the latest relevant inbound reply.\n- If the latest inbound reply asks for registration documents, requirements, a form, a portal link, agency code, project material, meeting slot, or clarification, respond directly to that request.\n- Be professional and specific. Do not use cheap filler such as “to proceed effectively on this thread”.\n- Do not mention CRM internals.\n\nPortal: ${clean(input.kind, 60)}\nRecipient: ${clean(input.recipient, 120)}\nCampaign subject: ${clean(input.subject, 220)}\nFull thread history, oldest to newest:\n${threadHistory || "No structured history provided."}\n\nLatest inbound reply:\n${clean(input.inboundReply, 2400)}\n\nLast email JBJ/CITI sent:\n${clean(input.sentContent, 1600)}\n\nCurrent draft to improve:\n${clean(input.currentDraft, 1200)}`;
+    const prompt = `Write a concise, premium CRM email reply body for JBJ Global Real Estate. Do not include a subject. Do not use emojis. Keep it under 130 words.\n\nCritical context:\n- JBJ/CITI started the outreach. The recipient is replying to us. Never write “thank you for reaching out” or imply they approached us first.\n- Read the actual thread below. Answer only the latest relevant inbound reply.\n- If the latest inbound reply asks for registration documents, requirements, a form, a portal link, agency code, project material, meeting slot, or clarification, respond directly to that request.\n- Do not use filler about continuing prior outreach or continuing the conversation thread.\n- Be professional and specific. Do not use cheap filler such as “to proceed effectively on this thread”.\n- Do not mention CRM internals.\n\nPortal: ${clean(input.kind, 60)}\nRecipient: ${clean(input.recipient, 120)}\nCampaign subject: ${clean(input.subject, 220)}\nFull thread history, oldest to newest:\n${threadHistory || "No structured history provided."}\n\nLatest inbound reply:\n${clean(input.inboundReply, 2400)}\n\nLast email JBJ/CITI sent:\n${clean(input.sentContent, 1600)}\n\nCurrent draft to improve:\n${clean(input.currentDraft, 1200)}`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -95,7 +106,7 @@ serve(async (req) => {
       }),
     });
     const data = await response.json().catch(() => ({}));
-    const draft = clean(data?.choices?.[0]?.message?.content, 2000) || fallback;
+    const draft = sanitizeDraft(data?.choices?.[0]?.message?.content, fallback);
     return new Response(JSON.stringify({ ok: true, draft, source: response.ok ? "ai" : "fallback" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     return new Response(JSON.stringify({ error: (e as Error).message || "Draft failed" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });

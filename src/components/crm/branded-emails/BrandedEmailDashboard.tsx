@@ -77,6 +77,10 @@ function classifyRow(row: any): CanonicalStatus {
   return "pending";
 }
 
+function classifyRowWithoutReply(row: any): CanonicalStatus {
+  return classifyRow({ ...row, reply_status: null, replied_at: null });
+}
+
 function isAcceptedRow(row: any) {
   return row.send_status === "provider_accepted" || Boolean(row.accepted_at);
 }
@@ -184,15 +188,15 @@ function buildDraft(row: any) {
   const reply = cleanEmailText(row?.inboundReply || row?.latestReply?.body);
   const subject = String(row?.subject || "your email");
   if (/document|requirement|trade license|rera|form|agreement/i.test(`${reply} ${row?.aiSummary || ""}`)) {
-    return "Thank you for sharing the requirements. We will review the requested documents and revert on this same thread with the completed registration pack.";
+    return "Thank you for sharing the requirements. We will review the requested documents and return with the completed registration pack.";
   }
   if (/registered|approved|agency code|channel partner/i.test(`${reply} ${row?.aiSummary || ""}`)) {
     return "Thank you for confirming our registration. Please share the agency code, portal access, WhatsApp group details, and current marketing material links so we can update our CRM correctly.";
   }
   if (/meeting|calendar|briefing|slot|call/i.test(`${reply} ${subject}`)) {
-    return "Thank you for your reply. Please share the preferred meeting slot, or confirm if you would like us to send a calendar invitation on this same thread.";
+    return "Thank you for your reply. Please share the preferred meeting slot, or confirm if you would like us to send a calendar invitation.";
   }
-  return "Thank you for your reply. We reviewed your message and will continue from our previous outreach on this same thread. Please confirm the next step required from JBJ Global Real Estate.";
+  return "Thank you for your reply. Please confirm the exact next step required from JBJ Global Real Estate so we can action it correctly.";
 }
 
 function isRowPendingResponse(row: any) {
@@ -281,20 +285,17 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
   const rows = useMemo(() => {
     const cById = new Map(campaignRows.map((c) => [c.id, c]));
     const logsFor = (row: any, campaignSubject: string) => {
-      const rowEntityId = String(row.entity_id || "");
       const email = String(row.email_norm || row.email || "").toLowerCase();
       const thread = String(row.thread_id || "");
       return emailLogRows.filter((log) => {
-        const logEntityId = String(log.entity_id || "");
         const logThread = String(log.thread_id || "");
-        const entityMatch = Boolean(rowEntityId && rowEntityId === logEntityId);
         const threadMatch = Boolean(thread && logThread && thread === logThread);
         const subjectMatch = subjectsRelate(log.subject, campaignSubject);
         const participantMatch = Boolean(email && logTouchesRecipient(log, email) && logTouchesOwnerMailbox(log));
 
-        // Never attach mailbox noise only because the same test mailbox appears.
-        // A log must belong to the same entity/thread, or share both campaign subject and participants.
-        return entityMatch || threadMatch || (participantMatch && subjectMatch);
+        // Never attach mailbox noise only because the same entity/test mailbox appears.
+        // A log must belong to the exact thread, or share both campaign subject and participants.
+        return threadMatch || (participantMatch && subjectMatch);
       });
     };
     const dedupeLogs = (logs: any[]) => {
@@ -315,19 +316,21 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
       const campaign = row.campaign_id ? cById.get(row.campaign_id) : null;
       const subject = sanitizeCampaignSubject(String(row.metadata?.subject || campaign?.subject || campaign?.title || "Campaign email"));
       const matchingLogs = dedupeLogs(logsFor(row, subject));
-      const latestLog = matchingLogs[0] || null;
       const inboundLogs = matchingLogs.filter((log) => log.direction === "inbound");
       const response = row.provider_response || {};
       const latestInboundLog = inboundLogs[0] || null;
-      const hasHumanReply = Boolean(row.replied_at || inboundLogs.length || row.metadata?.latest_reply || row.metadata?.inbound_reply || row.metadata?.reply_text);
-      const inboundReply = cleanEmailText(row.metadata?.inbound_reply || row.metadata?.reply_text || row.metadata?.latest_reply || latestInboundLog?.body_snippet || "");
-      const aiSummary = normalizeAiText(row.metadata?.ai_summary || row.metadata?.inbound_summary || row.metadata?.summary || response?.ai_summary || latestLog?.detected_signal || "", inboundReply ? "Reply received and ready for review." : "Waiting for inbound sync.");
+      const hasExactInboundReply = Boolean(latestInboundLog?.body_snippet);
+      const hasHumanReply = Boolean(inboundLogs.length || (row.replied_at && hasExactInboundReply));
+      const inboundReply = cleanEmailText(latestInboundLog?.body_snippet || "");
+      const aiSummary = inboundReply
+        ? normalizeAiText(row.metadata?.ai_summary || row.metadata?.inbound_summary || row.metadata?.summary || response?.ai_summary || "", inboundReply)
+        : "";
       return {
         id: row.id,
         recipient: String(row.email || "—").toLowerCase(),
         subject,
         sentAt: row.accepted_at || row.attempted_at || row.created_at,
-        status: hasHumanReply ? "responded" : classifyRow(row),
+        status: hasHumanReply ? "responded" : classifyRowWithoutReply(row),
         raw: row,
         entityType: kind === "developers" ? "developer" : kind === "brokerages" ? "brokerage" : "client",
         entityId: row.entity_id || null,
@@ -336,10 +339,10 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         evidence: latestInboundLog?.detected_signal || row.delivery_status || row.send_status || row.reply_status || "recorded",
         emailContent: cleanEmailText(response?.html_preview_text || row.metadata?.html_preview_text || row.metadata?.body_text || row.metadata?.body_snippet || ""),
         inboundReply,
-        inboundSubject: cleanEmailText(row.metadata?.latest_reply_subject || latestInboundLog?.subject || ""),
-        inboundFrom: row.metadata?.latest_reply_from || latestInboundLog?.from_email || "",
+        inboundSubject: cleanEmailText(latestInboundLog?.subject || ""),
+        inboundFrom: latestInboundLog?.from_email || "",
         aiSummary,
-        aiNextAction: normalizeAiText(row.metadata?.ai_next_action || row.metadata?.next_action || response?.ai_next_action || "", inboundReply ? "Prepare a reply draft and update the CRM status." : "Prepare follow-up draft if no reply lands."),
+        aiNextAction: inboundReply ? normalizeAiText(row.metadata?.ai_next_action || row.metadata?.next_action || response?.ai_next_action || "", "Reply directly to the exact answer above.") : "",
         aiDraft: cleanEmailText(row.metadata?.ai_draft_reply || row.metadata?.draft_response || response?.ai_draft_reply || ""),
         respondedAt: row.replied_at || latestInboundLog?.sent_at || null,
         templateSlug: row.metadata?.template_slug || response?.template_slug || row.metadata?.variant || "",
@@ -356,7 +359,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
     return Array.from(grouped.values()).map((activities) => {
       const sorted = activities.sort((a, b) => new Date(b.respondedAt || b.sentAt || 0).getTime() - new Date(a.respondedAt || a.sentAt || 0).getTime());
       const replyLogs = dedupeLogs(sorted.flatMap((a) => a.replyLogs || []).filter((log: any) => log.direction === "inbound"));
-      const responded = replyLogs.length || (sorted.some((a) => a.status === "responded" || a.respondedAt) ? 1 : 0);
+      const responded = replyLogs.length;
       const latest = sorted[0];
       const latestReply = replyLogs[0] || null;
       return {
@@ -379,9 +382,9 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         inboundReply: cleanEmailText(latestReply?.body_snippet || latest.inboundReply || ""),
         inboundSubject: cleanEmailText(latestReply?.subject || latest.inboundSubject || ""),
         inboundFrom: latestReply?.from_email || latest.inboundFrom || "",
-        latestReplyAt: latestReply?.sent_at || latestReply?.created_at || sorted.find((a) => a.respondedAt)?.respondedAt || null,
-        respondedAt: latestReply?.sent_at || latestReply?.created_at || latest.respondedAt || null,
-        status: responded ? "responded" : latest.status,
+        latestReplyAt: latestReply?.sent_at || latestReply?.created_at || null,
+        respondedAt: latestReply?.sent_at || latestReply?.created_at || null,
+        status: responded ? "responded" : (latest.status === "responded" ? classifyRowWithoutReply(latest.raw) : latest.status),
       };
     });
   }, [campaignRows, emailLogRows, kind, recipientRows]);
@@ -598,7 +601,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
           <span className="text-xs font-semibold text-[#4B5D55] sm:ml-auto">{filteredRows.length.toLocaleString()} of {rows.length.toLocaleString()} shown · filter: {chipLabel[statusFilter]}.</span>
         </div>
 
-        <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_420px]">
+        <div className="grid gap-3 2xl:grid-cols-[minmax(0,1fr)_420px]">
         <div className="overflow-hidden rounded-lg border border-emerald-900/15 bg-white">
           {loading ? (
             <div className="flex items-center gap-2 p-5 text-sm font-semibold text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading campaign history…</div>
@@ -614,7 +617,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
                   onClick={() => setActiveRowId(row.id)}
                   className={`block w-full rounded-lg border p-3 text-left transition ${activeRowId === row.id ? "border-[#064E3B] bg-[#F8FAF9]" : "border-emerald-900/10 bg-white hover:border-emerald-900/25"}`}
                 >
-                  <div className="flex flex-wrap items-start gap-3">
+                  <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
                     <input
                       type="checkbox"
                       aria-label={`Select ${row.recipient}`}
@@ -623,8 +626,8 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
                       onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })}
                       className="mt-1 size-4 shrink-0 accent-[#064E3B]"
                     />
-                    <div className="min-w-[220px] flex-1">
-                      <p className="break-all text-sm font-black text-[#0F1A16]">{row.recipient}</p>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-black text-[#0F1A16]" title={row.recipient}>{row.recipient}</p>
                       <p className="mt-1 line-clamp-2 text-xs font-semibold text-[#4B5D55]">{row.subject}</p>
                     </div>
                     <StatusBadge status={row.status} label={chipLabel[row.status] || row.status} />
@@ -703,7 +706,7 @@ function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSen
     ...replyActivities.map((activity: any) => ({ ...activity, timelineType: "reply", timelineAt: activity.respondedAt })),
   ].sort((a, b) => new Date(b.timelineAt || 0).getTime() - new Date(a.timelineAt || 0).getTime());
   const openActivity = timeline.find((activity: any) => `${activity.timelineType}:${activity.raw?.id || activity.id}` === openActivityId) || null;
-  const latestReplyText = row.inboundReply || openActivity?.body || "Waiting for mailbox sync.";
+  const latestReplyText = row.inboundReply || "No exact inbound reply captured yet.";
   return (
     <aside className="rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-4">
       <div className="mb-3 flex items-start gap-2">
@@ -716,15 +719,14 @@ function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSen
       <dl className="space-y-2 text-xs">
         <InsightLine label="Campaign subject" value={row.subject} />
         <InsightLine label="Last email we sent" value={row.emailContent || "Stored for new sends from this point forward."} />
-        <InsightLine label="Latest reply subject" value={row.inboundSubject || "Waiting for mailbox sync."} />
-        <InsightLine label="Latest reply" value={latestReplyText} />
+        <ExactReplyBlock subject={row.inboundSubject} body={latestReplyText} from={row.inboundFrom} at={formatDate(row.respondedAt)} />
         <InsightLine label="Reply from" value={row.inboundFrom || "—"} />
         <InsightLine label="Status" value={`${row.evidence}${isRowPendingResponse(row) ? " · pending response" : ""}`} />
         <InsightLine label="Provider ID" value={row.providerMessageId || "Awaiting provider evidence"} />
         <InsightLine label="Sent" value={formatDate(row.sentAt)} />
         <InsightLine label="Reply" value={formatDate(row.respondedAt)} />
-        <InsightLine label="AI summary" value={normalizeAiText(row.aiSummary, row.inboundReply ? "Reply received and ready for review." : "Waiting for inbound sync.")} />
-        <InsightLine label="Next step" value={row.aiNextAction || (isRowPendingResponse(row) ? "Prepare follow-up draft if no reply lands." : "No action required yet.")} />
+        {row.aiSummary ? <InsightLine label="Thread classification" value={normalizeAiText(row.aiSummary, row.inboundReply)} /> : null}
+        {row.aiNextAction ? <InsightLine label="Next step" value={row.aiNextAction} /> : null}
       </dl>
       <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
         <p className="mb-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]"><History className="size-3.5" /> Email thread</p>
@@ -738,7 +740,6 @@ function InsightPanel({ row, draftOverride, onDraftChange, onPrepareDraft, onSen
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded bg-white px-1.5 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-[#064E3B]">{activity.timelineType === "reply" ? "Their reply" : "Sent by us"}</span>
                 <span className="text-[11px] font-semibold text-[#4B5D55]">{formatDate(activity.timelineAt)}</span>
-                <StatusBadge status={activity.timelineType === "reply" ? "responded" : activity.status} label={activity.timelineType === "reply" ? "Reply" : activity.status === "responded" ? "Responded" : activity.status === "pending" ? "Pending" : activity.status} />
               </div>
               <p className="mt-1 line-clamp-2 text-xs font-black text-[#0F1A16]">{activity.subject || row.subject}</p>
               {body ? <p className={`${opened ? "" : "line-clamp-3"} mt-1 text-[11px] font-semibold leading-relaxed text-[#0F1A16]`}>{body}</p> : null}
@@ -777,6 +778,22 @@ function InsightLine({ label, value }: { label: string; value: string }) {
     <div>
       <dt className="font-black uppercase tracking-[0.12em] text-[#064E3B]">{label}</dt>
       <dd className="mt-0.5 break-words font-semibold text-[#0F1A16]">{value || "—"}</dd>
+    </div>
+  );
+}
+
+function ExactReplyBlock({ subject, body, from, at }: { subject?: string; body: string; from?: string; at?: string }) {
+  const hasExactReply = body && body !== "No exact inbound reply captured yet.";
+  return (
+    <div className="rounded-md border border-emerald-900/15 bg-white p-3">
+      <dt className="font-black uppercase tracking-[0.12em] text-[#064E3B]">Exact latest answer</dt>
+      {subject ? <dd className="mt-1 text-[11px] font-black text-[#0F1A16]">{subject}</dd> : null}
+      <dd className="mt-1 whitespace-pre-wrap break-words text-xs font-semibold leading-relaxed text-[#0F1A16]">
+        {hasExactReply ? body : "No exact inbound reply captured yet."}
+      </dd>
+      <dd className="mt-2 text-[11px] font-semibold text-[#4B5D55]">
+        {from || "—"}{at && at !== "—" ? ` · ${at}` : ""}
+      </dd>
     </div>
   );
 }

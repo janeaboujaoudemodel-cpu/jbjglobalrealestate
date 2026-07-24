@@ -202,7 +202,7 @@ const updateCampaignSpineForReply = async (
         ? "Confirm registration details and update the developer card."
         : "Review the response and prepare the next follow-up.",
       ai_draft_reply: ai.errored || ai.intent === "no_match"
-        ? "Thank you for your reply. We are reviewing your message and will come back on this same thread with the required next step."
+        ? "Thank you for your reply. We are reviewing your message and will confirm the required next step shortly."
         : ai.intent === "documents_requested"
         ? "Thank you for sharing the requirements. We will review the requested documents and send the completed pack back on this thread."
         : ai.intent === "registered"
