@@ -9,53 +9,41 @@ import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCar
 import BrandedEmailDashboard from "@/components/crm/branded-emails/BrandedEmailDashboard";
 import { Users, MailCheck, Eye, Reply, ShieldCheck, Loader2, Search } from "lucide-react";
 
+import type { CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
+
 function useClientStats() {
   return useQuery({
-    queryKey: ["client-portal-stats"],
+    queryKey: ["client-portal-stats-canonical"],
     queryFn: async () => {
-      const [inv, logRes, openRes] = await Promise.all([
+      const [invRes, countsRes] = await Promise.all([
         (supabase as any)
           .from("client_investors")
           .select("id,email,client_name,phone,project_name,unit_type,created_at")
           .order("created_at", { ascending: false })
           .limit(5000),
         (supabase as any)
-          .from("crm_relationship_email_log")
-          .select("direction,entity_id")
-          .eq("entity_type", "investor")
-          .limit(2000),
-        (supabase as any)
-          .from("crm_campaign_recipients")
-          .select("email,opened_at")
-          .not("opened_at", "is", null)
-          .limit(2000),
+          .from("jbj_portal_counts_v1")
+          .select("portal_entity,total,actual_contacted,provider_accepted,delivered,opened,clicked,human_reply,automated_reply,pending_response,retry_eligible,permanently_excluded")
+          .in("portal_entity", ["client", "client_buyer", "client_seller"]),
       ]);
-      const rows = (inv.data as any[]) ?? [];
-      const logs = (logRes.data as any[]) ?? [];
-      const opens = (openRes.data as any[]) ?? [];
-      let sent = 0;
-      const responded = new Set<string>();
-      const contacted = new Set<string>();
-      for (const l of logs) {
-        if (l.direction === "outbound") { sent++; if (l.entity_id) contacted.add(l.entity_id); }
-        if (l.direction === "inbound" && l.entity_id) responded.add(l.entity_id);
-      }
-      const active = rows.length;
-      return {
-        total: rows.length,
-        active,
-        contacted: contacted.size,
-        sent,
-        opened: opens.length,
-        responded: responded.size,
-        rows,
-      };
+      const rows = (invRes.data as any[]) ?? [];
+      const counts = ((countsRes.data as any[]) ?? []).reduce((acc, r) => {
+        acc.contacted += Number(r.actual_contacted || 0);
+        acc.sent += Number(r.provider_accepted || 0);
+        acc.delivered += Number(r.delivered || 0);
+        acc.opened += Number(r.opened || 0);
+        acc.responded += Number(r.human_reply || 0);
+        acc.pending += Number(r.pending_response || 0);
+        return acc;
+      }, { contacted: 0, sent: 0, delivered: 0, opened: 0, responded: 0, pending: 0 });
+      return { total: rows.length, active: rows.length, ...counts, rows };
     },
   });
 }
 
 export default function InvestorPortal() {
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<CanonicalStatus>("all");
   const q = useClientStats();
   const s = q.data;
 
@@ -68,13 +56,15 @@ export default function InvestorPortal() {
       .slice(0, 100);
   }, [s?.rows, search]);
 
-  const tiles: Array<[string, number | undefined, JSX.Element]> = [
-    ["Total clients", s?.total, <Users className="size-4" />],
-    ["Active pipeline", s?.active, <ShieldCheck className="size-4" />],
-    ["Contacted", s?.contacted, <MailCheck className="size-4" />],
-    ["Emails sent", s?.sent, <MailCheck className="size-4" />],
-    ["Opened", s?.opened, <Eye className="size-4" />],
-    ["Responded", s?.responded, <Reply className="size-4" />],
+  const tiles: Array<{ label: string; value: number | undefined; icon: JSX.Element; filter: CanonicalStatus | null }> = [
+    { label: "Total clients",    value: s?.total,     icon: <Users className="size-4" />,      filter: null },
+    { label: "Active pipeline",  value: s?.active,    icon: <ShieldCheck className="size-4" />, filter: null },
+    { label: "Contacted",        value: s?.contacted, icon: <MailCheck className="size-4" />,  filter: "sent" },
+    { label: "Emails sent",      value: s?.sent,      icon: <MailCheck className="size-4" />,  filter: "sent" },
+    { label: "Delivered",        value: s?.delivered, icon: <MailCheck className="size-4" />,  filter: "delivered" },
+    { label: "Opened",           value: s?.opened,    icon: <Eye className="size-4" />,        filter: "opened" },
+    { label: "Responded",        value: s?.responded, icon: <Reply className="size-4" />,      filter: "responded" },
+    { label: "Pending response", value: s?.pending,   icon: <MailCheck className="size-4" />,  filter: "pending" },
   ];
 
   return (
