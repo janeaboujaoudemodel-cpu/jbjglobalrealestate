@@ -36,6 +36,7 @@ const SignDocument = lazy(() => import("@/pages/e-signature/SignDocument"));
 const PublicSignDocument = lazy(() => import("@/pages/PublicSignDocument"));
 const FooterPreviewPage = lazy(() => import("@/pages/dev/FooterPreviewPage"));
 const BookMeetingLanding = lazy(() => import("@/pages/BookMeetingLanding"));
+const PublicBookingLanding = lazy(() => import("@/pages/PublicBookingLanding"));
 const DownloadProxy = lazy(() => import("@/pages/DownloadProxy"));
 const BrokerActivate = lazy(() => import("@/pages/BrokerActivate"));
 const BrokerCRM = lazy(() => import("@/pages/broker/BrokerCRM"));
