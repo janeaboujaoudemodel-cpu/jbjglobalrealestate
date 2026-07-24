@@ -790,13 +790,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         testEmail.trim(),
         kind === "developers" ? "Test Recipient" : kind === "clients" ? "Test Client" : "Test Brokerage",
       );
-      if (kind === "clients") {
-        toast.success(`Client test preview is ready for ${testEmail}; live client sending will use the client campaign pipeline when connected.`);
-        return;
-      }
-      const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
+      const functionName = kind === "developers" ? "crm-send-developer-registration" : kind === "clients" ? "crm-send-client-followup" : "crm-send-brokerage-outreach";
       const body = kind === "developers"
         ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testDeveloperName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) }
+        : kind === "clients"
+        ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testClientName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) }
         : { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testBrokerageName: sampleName, subjectOverride: personalizeSubject(selectedTemplate.subject, sampleName) };
       const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
       if (error) throw new Error(await getInvokeErrorMessage(error));
@@ -823,10 +821,6 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       `Send "${selectedTemplate.name}" live to ${selectedSendableCount} ${kind}?\n\nFrom: ${delivery.fromName} <${delivery.fromEmail}>\nReply-To: ${delivery.replyTo}\nThis action is logged.`
     );
     if (!ok) return;
-    if (kind === "clients") {
-      toast.success(`Prepared ${selectedSendableCount} client campaign draft${selectedSendableCount === 1 ? "" : "s"}.`);
-      return;
-    }
     const selectedRecipients = recipients.filter((r) => {
       const email = r.email?.toLowerCase().trim();
       return selectedIds.has(r.id) && email && !previouslySentEmails.has(email);
@@ -835,9 +829,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     let sentCount = 0;
     try {
       for (const r of selectedRecipients) {
-        const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
+        const functionName = kind === "developers" ? "crm-send-developer-registration" : kind === "clients" ? "crm-send-client-followup" : "crm-send-brokerage-outreach";
         const body = kind === "developers"
           ? { catalogDeveloperId: r.catalogDeveloperId ?? r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
+          : kind === "clients"
+          ? { clientId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
           : { brokerageId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true };
         const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
         if (error) throw new Error(await getInvokeErrorMessage(error));
