@@ -23,7 +23,7 @@ export interface LockPayloadInput {
  * Flow:
  *   1. lockPayload(input)           → returns LockedPayload (status='locked')
  *   2. <DeliveryPreviewDialog />    → user reviews exact bytes
- *   3. sendLocked(payload.id)       → retired; live sends now use Resend only
+ *   3. sendLocked(payload.id)       → sends byte-for-byte through Resend
  *
  * Every outreach surface (CRM, registries, campaigns, hunting) uses this.
  */
