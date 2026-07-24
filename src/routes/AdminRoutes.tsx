@@ -41,6 +41,7 @@ const HRAgent = lazy(() => import("@/pages/HRAgent"));
 const HRAnnouncementsHub = lazy(() => import("@/pages/owner/HRAnnouncementsHub"));
 const ReferralAdmin = lazy(() => import("@/pages/ReferralAdmin"));
 const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
+const BookingsAdmin = lazy(() => import("@/pages/owner/BookingsAdmin"));
 const JobOfferTemplate = lazy(() => import("@/pages/JobOfferTemplate"));
 const ExecutiveAssistant = lazy(() => import("@/pages/ExecutiveAssistant"));
 const CallReview = lazy(() => import("@/pages/CallReview"));
