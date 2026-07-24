@@ -334,7 +334,7 @@ serve(async (req: Request) => {
           mode: "test",
           status: resendResult.status,
           data: resendResult.data,
-          html_preview_text: `From: ${fromName} <${replyTo}>\nReply-To: ${replyTo}\nCC: ${cc.join(", ")}\nSubject: ${subject}\n\nDeveloper registration request asks for status, forms, requirements, logo, WhatsApp group, marketing material links, and Waleed/compliance coordination.`,
+          html_preview_text: `From: ${fromName} <${replyTo}>\nReply-To: ${replyTo}\nCC: ${cc.join(", ")}\nSubject: ${subject}\n\nDeveloper registration request: status confirmation, registration form, requirements, logo, WhatsApp group setup (Jane + Walid Halabi as admins), and per-project folders with escrow + corporate bank account details.`,
         },
         intendedSendId,
         sendCategory: "test",
@@ -451,7 +451,7 @@ serve(async (req: Request) => {
       providerResponse: {
         status: resendLive.status,
         data: resendLive.data,
-        html_preview_text: `From: ${fromName} <${replyTo}>\nReply-To: ${replyTo}\nCC: ${cc.join(", ")}\nSubject: ${subject}\n\nDeveloper registration request asks for status, forms, requirements, logo, WhatsApp group, marketing material links, and Waleed/compliance coordination.`,
+        html_preview_text: `From: ${fromName} <${replyTo}>\nReply-To: ${replyTo}\nCC: ${cc.join(", ")}\nSubject: ${subject}\n\nDeveloper registration request: status confirmation, registration form, requirements, logo, WhatsApp group setup (Jane + Walid Halabi as admins), and per-project folders with escrow + corporate bank account details.`,
       },
       intendedSendId,
       sendCategory: "campaign",
