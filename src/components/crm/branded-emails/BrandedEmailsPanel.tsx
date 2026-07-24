@@ -41,15 +41,15 @@ type Template = {
 };
 
 const DEVELOPER_SENDER = {
-  name: "JBJ Team",
-  title: "JBJ GLOBAL REAL ESTATE",
+  name: "JBJ Global Real Estate",
+  title: "Developer Registration Department",
   email: "helpdesk@jbj.ae",
 };
 
 const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
   developers: {
-    name: "JBJ Team",
-    title: "JBJ GLOBAL REAL ESTATE",
+    name: "JBJ Global Real Estate",
+    title: "Developer Registration Department",
     email: "helpdesk@jbj.ae",
   },
   brokerages: {
@@ -58,18 +58,18 @@ const SENDER_BY_KIND: Record<BrandedAudienceKind, typeof DEVELOPER_SENDER> = {
     email: "infoo.jane@gmail.com",
   },
   clients: {
-    name: "JBJ Team",
-    title: "JBJ GLOBAL REAL ESTATE",
+    name: "JBJ Global Real Estate",
+    title: "Client Relations Department",
     email: "helpdesk@jbj.ae",
   },
 };
 
 const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmail: string; replyTo: string; dailyCapLabel: string }> = {
   developers: {
-    fromName: "JBJ GLOBAL REAL ESTATE",
+    fromName: "JBJ Global Real Estate",
     fromEmail: "helpdesk@jbj.ae",
     replyTo: "helpdesk@jbj.ae",
-    dailyCapLabel: "Developer sends use the connected mailbox; test sends use the verified app email path.",
+    dailyCapLabel: "Developer sends use helpdesk@jbj.ae with infoo.jane@gmail.com copied on live sends.",
   },
   brokerages: {
     fromName: "Jane Bou Jaoude",
@@ -78,7 +78,7 @@ const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmai
     dailyCapLabel: "No in-app 100-recipient cap. The full selected audience can be sent as one campaign; provider delivery speed still applies.",
   },
   clients: {
-    fromName: "JBJ GLOBAL REAL ESTATE",
+    fromName: "JBJ Global Real Estate",
     fromEmail: "helpdesk@jbj.ae",
     replyTo: "helpdesk@jbj.ae",
     dailyCapLabel: "Client campaigns are staged from the Client Portal audience and logged against the client campaign dashboard.",
@@ -409,6 +409,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
       .replace(/Jane\s+Bouchaudey/gi, sender.name)
       .replace(/Jane Bou Jaoude/gi, sender.name)
       .replace(/Jane Bujold/gi, sender.name)
+      .replace(/JBJ Team/gi, sender.name)
       .replace(/\{\{sender_phone_name\}\}/g, "Jane Bou Jaoude")
       .replace(/<strong>Jane<\/strong>(\s*&middot;\s*Sales)/gi, `<strong>${sender.name}</strong>$1`)
     .replace(/Founder\s*&\s*CEO/gi, sender.title)
@@ -430,7 +431,7 @@ function personalizeTemplate(html: string, sampleName = "Recipient Developer Nam
     })
     .replace(/City Developer/gi, "CITI Developers")
     .replace(/background:#064E3B/gi, "background:#064E3B;background-image:linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)")
-    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+    .replace(/JBJ Global Real Estate/g, audienceKind === "developers" || audienceKind === "clients" ? "JBJ Global Real Estate" : "JBJ GLOBAL REAL ESTATE");
   return normalizeTrackedLinks(personalized);
 }
 
@@ -440,7 +441,7 @@ function personalizeSubject(subject: string, sampleName = "Recipient Developer N
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
       .replace(/\{\{project_name\}\}/g, "Citi Developer")
     .replace(/jbj\.ae/gi, "JBJ.AE")
-    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+    .replace(/JBJ Global Real Estate/g, "JBJ Global Real Estate");
 }
 
 function makePreviewHtmlSafe(html: string) {
@@ -627,20 +628,19 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     // NOT considered "sent" — they remain retryable. This decouples the UI
     // from historical noise in crm_relationship_email_log (which mixed in
     // 400+ gmail_legacy_attempted rows).
-    const entityType = kind === "developers" ? "developer_registry" : kind === "clients" ? "investor" : "brokerage";
+    const entityType = kind === "developers" ? "developer" : kind === "clients" ? "client" : "brokerage";
     (async () => {
       const { data } = await (supabase as any)
         .from("jbj_campaign_recipients")
-        .select("email_norm, send_status, provider, business_status")
+        .select("email_norm, send_status, provider, delivery_status, reply_status, business_status")
         .eq("entity_type", entityType)
         .eq("provider", "resend")
-        .in("send_status", ["provider_accepted", "delivered", "opened", "clicked", "responded"])
         .limit(5000);
       if (cancelled) return;
       const sent = new Set<string>();
       for (const row of data ?? []) {
         const normalized = String((row as any).email_norm || "").trim().toLowerCase();
-        if (normalized) sent.add(normalized);
+        if ((row as any).send_status === "provider_accepted" && normalized) sent.add(normalized);
       }
       setPreviouslySentEmails(sent);
     })().catch(() => {
@@ -1224,6 +1224,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <li><strong>Audience:</strong> {audienceCount.toLocaleString()} sendable selected of {total.toLocaleString()} total {kind}{missingEmailCount > 0 ? ` · ${missingEmailCount.toLocaleString()} missing email` : ""}{lockedCitiCount > 0 ? ` · ${lockedCitiCount} locked` : ""}{previouslySentCount > 0 ? ` · ${previouslySentCount} already sent` : ""}</li>
                 <li><strong>From:</strong> {delivery.fromName} &lt;{delivery.fromEmail.toUpperCase()}&gt;</li>
                 <li><strong>Reply-To:</strong> {delivery.replyTo.toUpperCase()}</li>
+                {kind === "developers" && <li><strong>CC:</strong> INFOO.JANE@GMAIL.COM</li>}
                 {kind === "brokerages" ? (
                   <li><strong>Calendar:</strong> {bookingUrl ? "Google Calendar appointment link saved — bookings sync into Meetings" : "Google Calendar appointment link missing — live send is blocked until saved"}</li>
                 ) : kind === "clients" ? (
@@ -1333,18 +1334,19 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                   disabled={sending || !selectedTemplate}
                   data-branded-email-test-action="true"
                   data-keep-gold="true"
-                  className="jj-cta-gold-metallic"
+                  className="jj-emerald-metallic"
                   style={{
                     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
                     minHeight: 40, padding: "8px 16px", borderRadius: 6, fontSize: 13, fontWeight: 700,
-                    color: "#3a2a08",
-                    WebkitTextFillColor: "#3a2a08",
+                    background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)",
+                    color: "#FFFFFF",
+                    WebkitTextFillColor: "#FFFFFF",
                     whiteSpace: "nowrap",
                     cursor: sending || !selectedTemplate ? "not-allowed" : "pointer",
                     opacity: sending || !selectedTemplate ? 0.5 : 1,
                   }}
                 >
-                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} /> : <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />}
+                  {sending ? <Loader2 className="size-4 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} /> : <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />}
                   Send test
                 </button>
               </div>
@@ -1356,17 +1358,18 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               disabled={sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl)}
               data-branded-email-live-action="true"
               data-keep-gold="true"
-              className="jj-cta-gold-metallic"
+              className="jj-emerald-metallic"
               style={{
                 width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
                 minHeight: 48, padding: "12px 16px", borderRadius: 6, fontSize: 14, fontWeight: 800,
-                color: "#3a2a08",
-                WebkitTextFillColor: "#3a2a08",
+                background: "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)",
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
                 cursor: sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl) ? "not-allowed" : "pointer",
                 opacity: sending || !selectedTemplate || audienceCount === 0 || (kind === "brokerages" && !bookingUrl) ? 0.5 : 1,
               }}
             >
-              <Send className="size-4" style={{ color: "#3a2a08", stroke: "#3a2a08", WebkitTextFillColor: "#3a2a08" }} />
+              <Send className="size-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />
               {sending
                 ? "Sending…"
                 : kind === "brokerages" && !bookingUrl

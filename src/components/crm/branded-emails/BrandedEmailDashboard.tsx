@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MailCheck, Eye, Reply, Send, Search, Loader2, Wand2, CheckSquare } from "lucide-react";
+import { MailCheck, Eye, Reply, Send, Search, Loader2, Wand2, CheckSquare, X } from "lucide-react";
 
 type Kind = "developers" | "brokerages" | "clients";
 
@@ -75,6 +75,27 @@ function classifyRow(row: any): CanonicalStatus {
   return "pending";
 }
 
+function isAcceptedRow(row: any) {
+  return row.send_status === "provider_accepted" || Boolean(row.accepted_at);
+}
+
+function isPendingResponseRow(row: any) {
+  if (!isAcceptedRow(row)) return false;
+  if (["human_reply", "auto_reply", "automated_reply", "out_of_office"].includes(String(row.reply_status || ""))) return false;
+  const ds = String(row.delivery_status || "").toLowerCase();
+  const bs = String(row.business_status || "").toLowerCase();
+  if (["hard_bounce", "soft_bounce", "bounced", "complaint", "provider_rejected", "rejected", "invalid_email", "invalid_domain"].includes(ds)) return false;
+  if (["registered", "rejected", "closed", "permanently_excluded"].includes(bs)) return false;
+  return true;
+}
+
+function matchesStatusFilter(row: any, filter: CanonicalStatus) {
+  if (filter === "all") return true;
+  if (filter === "sent") return isAcceptedRow(row.raw);
+  if (filter === "pending") return isPendingResponseRow(row.raw);
+  return row.status === filter;
+}
+
 interface Props {
   kind: Kind;
   /** Optional controlled filter — when set, drives the row list. */
@@ -90,6 +111,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
   const [uncontrolledFilter, setUncontrolledFilter] = useState<CanonicalStatus>("pending");
   const [query, setQuery] = useState("");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [activeRowId, setActiveRowId] = useState<string | null>(null);
 
   const statusFilter: CanonicalStatus = filter ?? uncontrolledFilter;
   const setStatusFilter = (f: CanonicalStatus) => {
@@ -107,7 +129,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         .in("portal_entity", PORTAL_BY_KIND[kind]),
       (supabase as any)
         .from("jbj_campaign_recipients")
-        .select("id, campaign_id, email, send_status, delivery_status, reply_status, business_status, error_message, attempted_at, accepted_at, delivered_at, opened_at, clicked_at, replied_at, send_category, metadata, created_at")
+        .select("id, campaign_id, email, send_status, delivery_status, reply_status, business_status, provider, resend_message_id, error_message, attempted_at, accepted_at, delivered_at, opened_at, clicked_at, replied_at, send_category, metadata, created_at")
         .eq("entity_type", ENTITY_BY_KIND[kind])
         .neq("provider", "gmail_legacy")
         .order("created_at", { ascending: false })
@@ -141,6 +163,13 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         subject,
         sentAt: row.accepted_at || row.attempted_at || row.created_at,
         status: classifyRow(row),
+        raw: row,
+        category: row.send_category || "campaign",
+        providerMessageId: row.resend_message_id || null,
+        evidence: row.delivery_status || row.send_status || row.reply_status || "recorded",
+        aiSummary: row.metadata?.ai_summary || row.metadata?.inbound_summary || row.metadata?.summary || "",
+        aiNextAction: row.metadata?.ai_next_action || row.metadata?.next_action || "",
+        aiDraft: row.metadata?.ai_draft_reply || row.metadata?.draft_response || "",
         respondedAt: row.replied_at || null,
       };
     });
@@ -150,20 +179,23 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
     const q = query.trim().toLowerCase();
     return rows.filter((row) => {
       const statusOk =
-        statusFilter === "all" ? true :
-        statusFilter === "pending" ? row.status === "pending" :
-        row.status === statusFilter;
+        matchesStatusFilter(row, statusFilter);
       const queryOk = !q || row.recipient.includes(q) || row.subject.toLowerCase().includes(q);
       return statusOk && queryOk;
     });
   }, [query, rows, statusFilter]);
 
-  const stats = useMemo(() => countRows.reduce((acc, row) => ({
-    sent: acc.sent + Number(row.provider_accepted || 0),
-    opened: acc.opened + Number(row.opened || 0),
-    responded: acc.responded + Number(row.human_reply || 0),
-    pending: acc.pending + Number(row.pending_response || 0),
-  }), { sent: 0, opened: 0, responded: 0, pending: 0 }), [countRows]);
+  const stats = useMemo(() => rows.reduce((acc, row) => ({
+    sent: acc.sent + (isAcceptedRow(row.raw) ? 1 : 0),
+    opened: acc.opened + (row.raw.opened_at || row.status === "opened" || row.status === "clicked" ? 1 : 0),
+    responded: acc.responded + (row.raw.reply_status === "human_reply" ? 1 : 0),
+    pending: acc.pending + (isPendingResponseRow(row.raw) ? 1 : 0),
+  }), { sent: 0, opened: 0, responded: 0, pending: 0 }), [rows]);
+
+  const activeRow = useMemo(
+    () => rows.find((row) => row.id === activeRowId) ?? filteredRows[0] ?? null,
+    [activeRowId, filteredRows, rows],
+  );
 
   const pendingRows = useMemo(() => filteredRows.filter((row) => row.status === "pending"), [filteredRows]);
   const allPendingSelected = pendingRows.length > 0 && pendingRows.every((row) => selectedIds.has(row.id));
@@ -200,10 +232,10 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <StatCard icon={Send} label="Sent" value={stats.sent} />
-          <StatCard icon={Eye} label="Opened" value={stats.opened} />
-          <StatCard icon={Reply} label="Responded" value={stats.responded} />
-          <StatCard icon={MailCheck} label="Pending response" value={stats.pending} />
+          <StatCard icon={Send} label="Sent" value={stats.sent} active={statusFilter === "sent"} onClick={() => setStatusFilter("sent")} />
+          <StatCard icon={Eye} label="Opened" value={stats.opened} active={statusFilter === "opened"} onClick={() => setStatusFilter("opened")} />
+          <StatCard icon={Reply} label="Responded" value={stats.responded} active={statusFilter === "responded"} onClick={() => setStatusFilter("responded")} />
+          <StatCard icon={MailCheck} label="Pending response" value={stats.pending} active={statusFilter === "pending"} onClick={() => setStatusFilter("pending")} />
         </div>
 
         <div className="flex flex-wrap gap-1.5">
@@ -235,6 +267,7 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
           <span className="text-xs font-semibold text-[#4B5D55] sm:ml-auto">{filteredRows.length.toLocaleString()} of {rows.length.toLocaleString()} shown · filter: {chipLabel[statusFilter]}.</span>
         </div>
 
+        <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="overflow-hidden rounded-lg border border-emerald-900/15 bg-white">
           {loading ? (
             <div className="flex items-center gap-2 p-5 text-sm font-semibold text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading campaign history…</div>
@@ -255,9 +288,9 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
                 </thead>
                 <tbody className="divide-y divide-emerald-900/10">
                   {filteredRows.slice(0, 200).map((row) => (
-                    <tr key={row.id} className="text-[#0F1A16]">
+                    <tr key={row.id} className="cursor-pointer text-[#0F1A16] hover:bg-[#F8FAF9]" onClick={() => setActiveRowId(row.id)}>
                       <td className="px-3 py-2 font-semibold">{row.recipient}</td>
-                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })} disabled={row.status !== "pending"} /></td>
+                      <td className="px-3 py-2"><input type="checkbox" checked={selectedIds.has(row.id)} onClick={(e) => e.stopPropagation()} onChange={(e) => setSelectedIds((cur) => { const n = new Set(cur); if (e.target.checked) n.add(row.id); else n.delete(row.id); return n; })} disabled={!isPendingResponseRow(row.raw)} /></td>
                       <td className="px-3 py-2 max-w-[320px] truncate text-[#4B5D55]">{row.subject}</td>
                       <td className="px-3 py-2"><StatusBadge status={row.status} label={chipLabel[row.status] || row.status} /></td>
                       <td className="px-3 py-2 whitespace-nowrap text-[#4B5D55]">{formatDate(row.sentAt)}</td>
@@ -269,17 +302,30 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
             </div>
           )}
         </div>
+        <InsightPanel row={activeRow} onClose={() => setActiveRowId(null)} />
+        </div>
       </div>
     </Card>
   );
 }
 
-function StatCard({ icon: Icon, label, value }: { icon: any; label: string; value: number }) {
+function StatCard({ icon: Icon, label, value, active, onClick }: { icon: any; label: string; value: number; active?: boolean; onClick?: () => void }) {
   return (
-    <div className="rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-3">
-      <div className="flex items-center gap-2 text-[#064E3B]"><Icon className="size-4" /><span className="text-[10px] uppercase tracking-[0.14em] font-black">{label}</span></div>
-      <p className="mt-1 text-2xl font-black text-[#0F1A16]">{value}</p>
-    </div>
+    <button
+      type="button"
+      onClick={onClick}
+      data-no-contrast-guard="true"
+      className="rounded-lg border p-3 text-left transition-colors"
+      style={{
+        borderColor: active ? "#064E3B" : "rgba(6,78,59,0.15)",
+        background: active ? "linear-gradient(135deg,#064E3B 0%,#042c1c 70%,#000000 100%)" : "#F8FAF9",
+        color: active ? "#FFFFFF" : "#064E3B",
+        WebkitTextFillColor: active ? "#FFFFFF" : "#064E3B",
+      }}
+    >
+      <div className="flex items-center gap-2"><Icon className="size-4" style={{ color: active ? "#FFFFFF" : "#064E3B", stroke: active ? "#FFFFFF" : "#064E3B" }} /><span className="text-[10px] uppercase tracking-[0.14em] font-black">{label}</span></div>
+      <p className="mt-1 text-2xl font-black" style={{ color: active ? "#FFFFFF" : "#0F1A16", WebkitTextFillColor: active ? "#FFFFFF" : "#0F1A16" }}>{value}</p>
+    </button>
   );
 }
 
@@ -292,5 +338,50 @@ function StatusBadge({ status, label }: { status: string; label: string }) {
     >
       {label}
     </span>
+  );
+}
+
+function InsightPanel({ row, onClose }: { row: any; onClose: () => void }) {
+  if (!row) {
+    return (
+      <aside className="rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-4 text-sm font-semibold text-[#4B5D55]">
+        Select a campaign row to view email evidence and next steps.
+      </aside>
+    );
+  }
+
+  const raw = row.raw || {};
+  return (
+    <aside className="rounded-lg border border-emerald-900/15 bg-[#F8FAF9] p-4">
+      <div className="mb-3 flex items-start gap-2">
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#064E3B]">Immediate insights</p>
+          <h4 className="truncate text-base font-black text-[#0F1A16]">{row.recipient}</h4>
+        </div>
+        <button type="button" onClick={onClose} aria-label="Close insights" className="inline-grid size-8 place-items-center rounded-md border border-emerald-900/20 bg-white text-[#064E3B]"><X className="size-4" /></button>
+      </div>
+      <dl className="space-y-2 text-xs">
+        <InsightLine label="Subject" value={row.subject} />
+        <InsightLine label="Status" value={`${row.evidence}${isPendingResponseRow(raw) ? " · pending response" : ""}`} />
+        <InsightLine label="Provider ID" value={row.providerMessageId || "Awaiting provider evidence"} />
+        <InsightLine label="Sent" value={formatDate(row.sentAt)} />
+        <InsightLine label="Reply" value={formatDate(row.respondedAt)} />
+        <InsightLine label="AI summary" value={row.aiSummary || "Waiting for inbound sync."} />
+        <InsightLine label="Next step" value={row.aiNextAction || (isPendingResponseRow(raw) ? "Prepare follow-up draft if no reply lands." : "No action required yet.")} />
+      </dl>
+      <div className="mt-4 rounded-md border border-emerald-900/15 bg-white p-3">
+        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#064E3B]">AI draft</p>
+        <p className="mt-1 whitespace-pre-wrap text-xs font-semibold leading-relaxed text-[#4B5D55]">{row.aiDraft || "A reply draft will appear here after the synced mailbox receives and classifies a response."}</p>
+      </div>
+    </aside>
+  );
+}
+
+function InsightLine({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="font-black uppercase tracking-[0.12em] text-[#064E3B]">{label}</dt>
+      <dd className="mt-0.5 break-words font-semibold text-[#0F1A16]">{value || "—"}</dd>
+    </div>
   );
 }
