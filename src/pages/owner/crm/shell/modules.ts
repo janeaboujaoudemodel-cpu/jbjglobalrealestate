@@ -217,7 +217,7 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-marketing-hub": "/owner/marketing-hub",
   "owner-news": "/owner/news",
   "owner-books": "/owner/books",
-  "owner-bookings": "/owner/bookings",
+  "owner-bookings": "/owner/crm/jbj/owner-bookings",
   "owner-careers": "/owner/careers-portal",
   "owner-analytics": "/owner/analytics",
   "owner-users": "/owner/users",

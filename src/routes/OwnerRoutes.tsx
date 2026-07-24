@@ -30,6 +30,7 @@ const CrmAutomation = lazy(() => import("@/pages/owner/crm/shell/CrmAutomation")
 const CrmMarketplace = lazy(() => import("@/pages/owner/crm/shell/CrmMarketplace"));
 const CrmDocumentsLibrary = lazy(() => import("@/pages/owner/crm/shell/CrmDocumentsLibrary"));
 const CrmForecasts = lazy(() => import("@/pages/owner/crm/shell/CrmForecasts"));
+const BookingsAdmin = lazy(() => import("@/pages/owner/BookingsAdmin"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
@@ -255,6 +256,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-marketing-hub" element={<MarketingHub />} />
     <Route path="owner-news" element={<OwnerNewsHub />} />
     <Route path="owner-books" element={<OwnerBooks />} />
+    <Route path="owner-bookings" element={<BookingsAdmin />} />
     <Route path="owner-careers" element={<CareersPortal />} />
     <Route path="owner-analytics" element={<JBJAnalyticsDashboard />} />
     <Route path="owner-users" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerUsers")))}</Suspense>} />
@@ -345,6 +347,7 @@ export const OwnerRoutes = () => (
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />
+    <Route path="bookings" element={<Navigate to="/owner/crm/jbj/owner-bookings" replace />} />
     <Route path="careers-portal" element={<CareersPortal />} />
     <Route path="job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="analytics" element={<JBJAnalyticsDashboard />} />
