@@ -162,6 +162,17 @@ const LegacyOwnerEnvelopeDetail = () => {
 
 export const OwnerRoutes = () => (
   <>
+  {/* JBJ Bookings — dedicated Zoho-style shell with its own booking sidebar.
+      Mounted outside both OwnerDashboardShell and CrmShell to prevent duplicate sidebars. */}
+  <Route
+    path="/owner/bookings"
+    element={
+      <OwnerGuard>
+        <BookingsAdmin />
+      </OwnerGuard>
+    }
+  />
+
   {/* JBJ CRM — standalone shell, MUST be declared BEFORE the /owner shell route
       so React Router matches the more specific path first and only ONE sidebar mounts. */}
   <Route
@@ -256,7 +267,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-marketing-hub" element={<MarketingHub />} />
     <Route path="owner-news" element={<OwnerNewsHub />} />
     <Route path="owner-books" element={<OwnerBooks />} />
-    <Route path="owner-bookings" element={<BookingsAdmin />} />
+    <Route path="owner-bookings" element={<Navigate to="/owner/bookings" replace />} />
     <Route path="owner-careers" element={<CareersPortal />} />
     <Route path="owner-analytics" element={<JBJAnalyticsDashboard />} />
     <Route path="owner-users" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerUsers")))}</Suspense>} />
@@ -347,7 +358,7 @@ export const OwnerRoutes = () => (
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />
-    <Route path="bookings" element={<Navigate to="/owner/crm/jbj/owner-bookings" replace />} />
+    <Route path="bookings" element={<Navigate to="/owner/bookings" replace />} />
     <Route path="careers-portal" element={<CareersPortal />} />
     <Route path="job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="analytics" element={<JBJAnalyticsDashboard />} />
