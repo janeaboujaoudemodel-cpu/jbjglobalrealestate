@@ -23925,6 +23925,7 @@ export type Database = {
           error_message: string | null
           id: string
           idempotency_key: string | null
+          intended_send_id: string | null
           last_followup_at: string | null
           metadata: Json
           next_followup_at: string | null
@@ -23935,9 +23936,11 @@ export type Database = {
           replied_at: string | null
           reply_status: string
           resend_message_id: string | null
+          send_category: string
           send_status: string | null
           thread_id: string | null
           updated_at: string
+          workflow_instance_id: string | null
         }
         Insert: {
           accepted_at?: string | null
@@ -23957,6 +23960,7 @@ export type Database = {
           error_message?: string | null
           id?: string
           idempotency_key?: string | null
+          intended_send_id?: string | null
           last_followup_at?: string | null
           metadata?: Json
           next_followup_at?: string | null
@@ -23967,9 +23971,11 @@ export type Database = {
           replied_at?: string | null
           reply_status?: string
           resend_message_id?: string | null
+          send_category?: string
           send_status?: string | null
           thread_id?: string | null
           updated_at?: string
+          workflow_instance_id?: string | null
         }
         Update: {
           accepted_at?: string | null
@@ -23989,6 +23995,7 @@ export type Database = {
           error_message?: string | null
           id?: string
           idempotency_key?: string | null
+          intended_send_id?: string | null
           last_followup_at?: string | null
           metadata?: Json
           next_followup_at?: string | null
@@ -23999,9 +24006,11 @@ export type Database = {
           replied_at?: string | null
           reply_status?: string
           resend_message_id?: string | null
+          send_category?: string
           send_status?: string | null
           thread_id?: string | null
           updated_at?: string
+          workflow_instance_id?: string | null
         }
         Relationships: [
           {
@@ -24836,6 +24845,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      jbj_reconciliation_exceptions: {
+        Row: {
+          created_at: string
+          evidence: string
+          exception_type: string
+          id: string
+          metadata: Json
+          normalized_email: string | null
+          portal_kind: string
+          reason_unmatched: string
+          recipient_email: string
+          recommended_action: string
+          source_document: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          evidence: string
+          exception_type: string
+          id?: string
+          metadata?: Json
+          normalized_email?: string | null
+          portal_kind?: string
+          reason_unmatched: string
+          recipient_email: string
+          recommended_action: string
+          source_document?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          evidence?: string
+          exception_type?: string
+          id?: string
+          metadata?: Json
+          normalized_email?: string | null
+          portal_kind?: string
+          reason_unmatched?: string
+          recipient_email?: string
+          recommended_action?: string
+          source_document?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       key_rotation_schedule: {
         Row: {
@@ -40716,6 +40770,7 @@ export type Database = {
       jbj_campaign_counts_v1: {
         Row: {
           attempted: number | null
+          attempted_unknown: number | null
           automated_reply: number | null
           business_rejected: number | null
           campaign_id: string | null
@@ -40732,18 +40787,16 @@ export type Database = {
           human_reply: number | null
           invalid_domain: number | null
           invalid_email: number | null
-          limit_blocked: number | null
           missing_email: number | null
           opened: number | null
           pending: number | null
+          pending_response: number | null
           portal_kind: string | null
-          previously_contacted: number | null
           provider_accepted: number | null
           provider_rejected: number | null
           registered: number | null
           soft_bounce: number | null
           total: number | null
-          unsubscribed: number | null
         }
         Relationships: []
       }
@@ -40788,7 +40841,11 @@ export type Database = {
       jbj_phase1_reconciliation_v1: {
         Row: {
           accepted: number | null
+          attempted_but_unknown: number | null
           automated_replies: number | null
+          confirmed_failed: number | null
+          confirmed_rejected: number | null
+          confirmed_temporary_failure: number | null
           deferred: number | null
           delivered: number | null
           generated_at: string | null
@@ -40796,6 +40853,7 @@ export type Database = {
           human_replies: number | null
           invalid_domain: number | null
           invalid_email: number | null
+          likely_accepted_by_gmail_before_limit: number | null
           limit_blocked: number | null
           matched_records: number | null
           previously_marked_sent_but_corrected: number | null
@@ -40807,22 +40865,22 @@ export type Database = {
       }
       jbj_portal_counts_v1: {
         Row: {
+          actual_contacted: number | null
+          attempted_unknown: number | null
           automated_reply: number | null
-          business_rejected: number | null
+          campaign_rows: number | null
+          clicked: number | null
           delivered: number | null
-          documents_required: number | null
-          eligible: number | null
-          hard_bounce: number | null
           human_reply: number | null
-          invalid_domain: number | null
-          invalid_email: number | null
-          limit_blocked: number | null
-          missing_email: number | null
-          pending: number | null
+          opened: number | null
+          pending_registration: number | null
+          pending_response: number | null
+          permanently_excluded: number | null
           portal_entity: string | null
           provider_accepted: number | null
           registered: number | null
-          soft_bounce: number | null
+          retry_eligible: number | null
+          temporary_failure: number | null
           total: number | null
         }
         Relationships: []
@@ -43335,7 +43393,12 @@ export type Database = {
       is_valid_image_url: { Args: { u: string }; Returns: boolean }
       is_verified_staff: { Args: { _user_id: string }; Returns: boolean }
       jbj_apply_resend_webhook: {
-        Args: { _event_type: string; _message_id: string; _payload: Json }
+        Args: {
+          _event_id?: string
+          _event_type: string
+          _message_id: string
+          _payload: Json
+        }
         Returns: string
       }
       jbj_backfill_inbound_replies: { Args: never; Returns: number }
@@ -43364,15 +43427,18 @@ export type Database = {
           _entity_id: string
           _entity_type: string
           _idempotency_key: string
+          _intended_send_id?: string
           _portal_kind: string
           _provider_response: Json
           _reply_to: string
           _resend_message_id: string
+          _send_category?: string
           _sender_email: string
           _subject: string
           _template_slug: string
           _template_version: string
           _thread_id?: string
+          _workflow_instance_id?: string
         }
         Returns: string
       }
