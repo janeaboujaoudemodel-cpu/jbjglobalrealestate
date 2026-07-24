@@ -112,13 +112,14 @@ export default function DeveloperOwnerCampaignDashboard() {
               type="button"
               disabled={!clickable}
               onClick={() => clickable && setFilter(t.filter!)}
-              className={`text-left rounded-lg transition-all ${clickable ? "hover:border-[#B89555] hover:shadow-md cursor-pointer" : "cursor-default"}`}
+              className={`block w-full text-left rounded-lg transition-all whitespace-normal ${clickable ? "hover:shadow-md cursor-pointer" : "cursor-default"}`}
+              style={{ display: "block" }}
               aria-pressed={active}
             >
-              <Card className={`p-4 border ${active ? "border-[#064E3B] ring-2 ring-[#064E3B]/30" : "border-[#B89555]/30"} bg-[#F7F2EA]`}>
-                <div className="flex items-center gap-2 text-[#064E3B]">
-                  {t.icon}
-                  <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{t.label}</p>
+              <Card className={`w-full p-4 border ${active ? "border-[#064E3B] ring-2 ring-[#064E3B]/30" : "border-[#B89555]/30"} bg-[#F7F2EA]`}>
+                <div className="flex items-center gap-2 text-[#064E3B] min-w-0">
+                  <span className="shrink-0">{t.icon}</span>
+                  <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55 min-w-0 break-words">{t.label}</p>
                 </div>
                 <p className="mt-1 text-2xl font-black text-[#064E3B]">
                   {q.isLoading ? <Loader2 className="size-5 animate-spin" /> : typeof t.value === "number" ? t.value.toLocaleString() : "—"}
