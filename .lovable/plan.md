@@ -1,132 +1,73 @@
-# JBJ Campaign Truth Reconciliation Plan
+Plan to fix the developer campaign flow end to end:
 
-The dashboard currently disagrees with reality because it reads from *intent* tables (queue rows, "attempted" flags) rather than *provider evidence*. This plan rebuilds the truth layer first, then rewires everything on top of it. No new schema until existing paths are wired.
+1. Sender and locked payload correction
+- Set developer campaign sender display name to `JBJ Global Real Estate`.
+- Set developer From and Reply-To to `helpdesk@jbj.ae`.
+- Add CC to `infoo.jane@gmail.com` for developer sends.
+- Remove stale references to personal senders such as Jane / `jane@...` / old helpdesk variants from the developer send preview, lock dialog, and payload metadata.
+- Keep brokerage/client sender rules separate so this fix does not leak into other portals.
 
----
+2. Connect and validate the helpdesk mailbox
+- Open the Gmail connector flow so the `helpdesk@jbj.ae` mailbox can be linked as an additional project mailbox.
+- After connection, validate the connected Gmail profile email equals `helpdesk@jbj.ae` before using it for sync.
+- Update inbound sync to poll all linked Gmail connections, map each mailbox by actual profile email, and treat `helpdesk@jbj.ae` as the developer registration inbox.
+- If the connected account is not `helpdesk@jbj.ae`, show a clear setup warning instead of silently syncing the wrong mailbox.
 
-## Phase 0 — Read-only reconciliation (no code changes)
+3. Canonical campaign KPI fix
+- Rewire the Developer Campaign Dashboard so the top cards, filter chips, row table, and action bar all read from one canonical recipient row dataset.
+- Fix the confirmed mismatch: the current stat cards count canonical/legacy status differently from the table filters, so `Sent = 1` while the Sent filter can show zero, and `Pending response = 1` while the Pending filter can show zero.
+- Define one status classifier that supports overlapping states correctly:
+  - Sent = provider accepted / real send evidence.
+  - Delivered = delivered evidence.
+  - Opened = opened evidence.
+  - Responded = human reply evidence.
+  - Pending response = sent/delivered/opened/clicked and no human reply.
+  - Bounced/rejected/invalid/deferred excluded from successful delivery counts.
+- Make all KPI cards and filter chips clickable and show the exact rows behind the number.
+- Stop creating duplicate rows for the same intended developer test/send where a retry should update the same canonical row.
 
-Produce one canonical reconciliation report before touching anything.
+4. Dashboard UI/contrast repair
+- Find and override the winning CSS rule causing emerald buttons/pills to render black text/icons.
+- Lock active pills, status badges, Select Pending, Prepare AI Drafts, and Accept & Send buttons to the JBJ emerald gradient with pure white text/icons.
+- Fix the delivered/status badge wrapping by giving badges stable dimensions and non-wrapping text.
+- Keep row cards/table balanced and clickable without nested buttons or broken rounded edges.
 
-Inputs:
-- Gmail: `HELPDESK@JBJ.AE` and `infoo.jane@gmail.com` — Inbox, Sent, Threads, Auto-replies (via existing Gmail connector / `comm-inbound-sync`).
-- Resend: `/emails` list + webhook events already stored in `resend_events`.
-- Supabase spine: `jbj_campaign_recipients`, `jbj_campaign_sends`, `email_send_log`, `resend_events`, `crm_email_threads`, `developer_replies`.
+5. Click-through email detail workspace
+- Add a right-side vertical workspace/drawer when a campaign row is clicked.
+- Show: recipient/developer, subject, sent body, delivery/open/reply timeline, inbound reply content, detected status, next step, and AI recommendation.
+- Add AI draft controls: prepare draft, rewrite with AI, approve/send reply.
+- Connect this to the existing owner AI reply engine / inbox messages where possible, and keep secrets/model calls server-side.
 
-Output: a single SQL view `jbj_recipient_truth_v1` keyed by `(campaign_id, developer_id, recipient_email)` with columns:
-`resend_accepted_at, resend_delivered_at, resend_bounced_at, resend_complained_at, resend_rejected_reason, gmail_sent_at, gmail_replied_at, gmail_auto_reply, manual_status, computed_status`.
+6. Current Gmail status synchronization
+- Add a manual “Sync mailbox now” action for developer campaign tracking.
+- Sync current Gmail/helpdesk messages rather than starting fresh.
+- Match inbound replies by thread/message id, sender domain/email, and developer record.
+- Update campaign rows with `human_reply`, `automated_reply`, or `no_reply` based on real inbox evidence.
+- Only mark developer business status as registered when the email explicitly says an affirmative status like `Status: Registered`, not ambiguous wording like “registered?” or generic mentions.
 
-Deliverable: markdown reconciliation report saved to `.lovable/reconciliation/2026-07-24.md` listing per-status counts and a diff vs. current dashboard.
+7. Developer template rewrite
+- Rewrite developer registration templates to instruct developers to:
+  - Reply to the sender/helpdesk with all registration requirements and forms.
+  - Keep updating status using explicit lines such as `Status: Registered`, `Status: Pending`, `Status: Active`, or `Status: Pending Documents`.
+  - Create a WhatsApp group, add Jane and Waleed, and make both admins.
+  - Use their own developer logo in the group.
+  - Use group naming format: `{Developer Full Name} / JBJ Global Real Estate`.
+  - Put marketing-material links in the group description.
+  - Add sales managers and channel/agency department members.
+  - Keep JBJ posted on commissions, campaigns, launches, events, and registration progress.
+- Make Waleed an urgent-support contact only; do not tell developers to email/call Jane.
+- Keep Jane’s role limited to being added to the WhatsApp group and made admin, per your instruction.
 
----
+8. Phase 3 continuation
+- After the above fixes, continue Phase 3 by completing the AI reply agent workflow:
+  - mailbox sync,
+  - reply classification,
+  - developer card/profile updates from email content,
+  - AI-generated next steps/drafts,
+  - approval before sending.
+- Do not expose restricted developer location/contact details on the public/front-end cards; keep those visible only in owner/backend views.
 
-## Phase 1 — Fix lock semantics
-
-Current bug: every developer row is treated as sent/locked because a queue row exists.
-
-Rule: `locked = TRUE` only when `resend_accepted_at IS NOT NULL` OR `manual_status IN ('registered','replied','delivered')`.
-
-- Migration: recompute `jbj_campaign_recipients.locked` from `jbj_recipient_truth_v1`.
-- Unlock everything else → becomes retryable.
-- Update `outreach-lock-payload` and `outreach-send-locked` to only set locked on Resend `202` acceptance.
-- UI: the "437 already sent" pill reads from the truth view, not row count.
-
----
-
-## Phase 2 — Preserve manual "Registered"
-
-- Add `developers.manual_registration_status` (already present as `registration_status_override` in some paths — audit and unify to one column).
-- `computed_status` in the truth view uses manual override as highest priority.
-- Never overwritten by campaign auto-classification.
-- Show on cards, filters, dashboard, campaign eligibility (registered = excluded from future sends unless owner opts in).
-
----
-
-## Phase 3 — Canonical KPI source
-
-One view: `jbj_dashboard_kpis_v1` returning every KPI the user listed:
-Total, Eligible, Missing email, Registered, Pending, Queued, Accepted, Delivered, Opened, Clicked, Human replies, Auto replies, Rejected, Invalid email, Invalid domain, Mailbox full, Deferred, Complaint, Bounce, Retry required, Retry completed, Waiting follow-up, Follow-up completed, No response.
-
-- React components stop computing counts. All KPI tiles call `useJbjKpis()` which selects from the view.
-- Each tile carries a `filterKey` matching a case in `jbj_recipient_truth_v1.computed_status`.
-- Clicking a tile pushes `?filter=<key>` and `BrandedEmailDashboard` filters rows by the same key.
-
----
-
-## Phase 4 — Sender chain audit + fix
-
-Preview says `helpdesk@jbj.ae` but recipients see `infoo.jane@gmail.com`.
-
-- Audit `outreach-send-locked`, `crm-send-developer-registration`, `crm-send-brokerage-outreach`, `_shared/outreachIdentity.ts`, `_shared/resend.ts` for the actual `from`, `envelope.from`, `reply_to`, `return_path` passed to Resend.
-- Verify Resend domain `jbj.ae` is verified; if not, block sends and surface a red banner instead of falling back to Gmail.
-- Force: `From: JBJ GLOBAL REAL ESTATE <helpdesk@jbj.ae>`, `Reply-To: helpdesk@jbj.ae`, `Cc: infoo.jane@gmail.com`, envelope = `helpdesk@jbj.ae`.
-- If a fallback sender is ever used, UI shows a "Sent via fallback: <address>" chip on the recipient row — no pretending.
-
----
-
-## Phase 5 — Template contact block + template immutability
-
-- Add fixed block under the intro paragraph in every branded template (developer, brokerage, broker, client, career):
-
-  > If you have any questions regarding registration, required documents, onboarding, or partnership, please contact our Broker Relations & Administration team.
-  > **Broker & Admin Contact — Waleed** · [050-999-3839](tel:+971509993839)
-  > Email: **[helpdesk@jbj.ae](mailto:helpdesk@jbj.ae)** · CC: infoo.jane@gmail.com
-
-  `helpdesk@jbj.ae` and Waleed's phone rendered as clickable, visually prominent (emerald pill).
-- Restore Google Calendar booking button in the developer template.
-- Template versioning: freeze `template_versions.approved_at`; sends record `template_version_id`. Editing an approved template creates a new draft version — never mutates the approved row.
-
----
-
-## Phase 6 — Follow-up Agent (real workflow)
-
-On inbound reply (`comm-inbound-sync` → `crm-email-sync`):
-1. Classify into one of: Registered, Application pending, Documents requested, Waiting broker, Waiting contracts, Commission discussion, Meeting requested, Call requested, Automatic reply, Vacation, Out of office, Rejected, Interested, Not interested, Wrong contact, Duplicate, Spam, Unknown.
-2. Apply side effects: update `developers.status`, `jbj_campaign_recipients.reply_status`, insert `crm_tasks` follow-up, generate AI draft into `crm_ai_drafts`, insert `user_notifications`, append `crm_timeline_events`.
-3. On AI 402 / 429, mark reply `classification_deferred` (not `no_match`) — already partially in place; verify.
-
----
-
-## Phase 7 — Portal parity
-
-Replicate the developer-portal set (Campaigns, Templates, AI writer, Follow-up AI, Classification, Timeline, Analytics, Retry queue, Documents, Calendar, Provider status, Reply detection) into:
-- Brokerage Portal
-- Individual Broker Portal
-- Client Portal (Buyer + Seller)
-- Careers Portal
-
-Shared components: `PortalCampaignDashboard`, `BrandedEmailDashboard`, `useJbjKpis({ portal })`.
-
----
-
-## Phase 8 — Performance
-
-- Server-side pagination on all recipient lists (25/page, cursor-based on `created_at`).
-- Indexes: `(campaign_id, computed_status)`, `(developer_id, campaign_id)`, `(recipient_email)` on truth view's base tables.
-- `useJbjKpis` cached via React Query with 30s staleTime + realtime invalidation on `resend_events` and `jbj_campaign_recipients`.
-- Prefetch dashboard KPIs on portal route enter.
-- Kill N+1 in developer cards: single join for `campaign_recipient + last_reply + manual_status`.
-
----
-
-## Phase 9 — Verification
-
-- Run Phase 0 reconciliation again after fixes; diff must be zero.
-- Playwright: open `/owner/crm/jbj/owner-developers`, click each KPI tile, assert filtered row count === tile number.
-- Send a live test to `infoo.jane@gmail.com` and verify raw headers: `From: helpdesk@jbj.ae`, envelope matches, Reply-To matches.
-- Screenshot proof stored under `.lovable/verification/phase9/`.
-
----
-
-## Technical notes
-
-- No new tables in Phases 1–6. Only views (`jbj_recipient_truth_v1`, `jbj_dashboard_kpis_v1`) and column additions on existing tables.
-- All views use `security_invoker=true`; base tables retain RLS.
-- Edge functions touched: `outreach-lock-payload`, `outreach-send-locked`, `crm-send-developer-registration`, `crm-send-brokerage-outreach`, `crm-email-sync`, `comm-inbound-sync`.
-- Frontend: `BrandedEmailDashboard.tsx`, `DeveloperOwnerCampaignDashboard.tsx`, `PortalOverview.tsx`, `BrandedEmailsPanel.tsx`, new `useJbjKpis.ts` hook.
-
-## Out of scope
-
-- New schema beyond the two reconciliation views + manual-status column unification.
-- Any UI redesign beyond wiring KPI tiles to filters and adding the contact block.
-- Migrating away from Resend or adding new providers.
+9. Validation
+- Trigger a live test send to `infoo.jane@gmail.com` after the sender and CC rules are fixed.
+- Run the developer portal flow visually with Playwright screenshots: dashboard counts, filter clicks, active pill contrast, row click workspace, test-send row update, and mailbox sync result.
+- Confirm the test row updates consistently across Sent / Delivered / Opened / Pending Response / Responded views based on real evidence.
