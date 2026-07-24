@@ -208,9 +208,10 @@ serve(async (req: Request) => {
         // 3. AI classification
         const ai = await classifyWithAI(subject, body);
 
-        // 4. Update record status if confident
+        // 4. Update record status if confident. Skip on AI errors so we don't
+        //    mislabel real replies as "no_match" during an outage.
         let newStatus = "";
-        if (matched && ai.intent !== "no_match" && ai.confidence >= 0.5) {
+        if (!ai.errored && matched && ai.intent !== "no_match" && ai.confidence >= 0.5) {
           const map = matched.entityType === "developer_registry" ? STATUS_MAP_DEV
             : matched.entityType === "brokerage" ? STATUS_MAP_BROKERAGE
             : STATUS_MAP_CLIENT;
@@ -245,7 +246,9 @@ serve(async (req: Request) => {
           }
         }
 
-        // 5. Log inbound message (idempotent via unique external_message_id)
+        // 5. Log inbound message (idempotent via unique external_message_id).
+        //    On AI error, record signal as "unclassified" so downstream views
+        //    don't treat the reply as a genuine "no_match".
         if (ownerId) {
           await service.from("crm_relationship_email_log").insert({
             owner_id: ownerId,
@@ -260,21 +263,24 @@ serve(async (req: Request) => {
             subject,
             body_snippet: body.slice(0, 500),
             detected_status: newStatus || null,
-            detected_signal: ai.intent,
+            detected_signal: ai.errored ? "unclassified" : ai.intent,
             sent_at: new Date().toISOString(),
           });
         }
 
-        // 6. Mark Gmail message as read so we don't reprocess
-        await fetch(`${GMAIL_GATEWAY}/users/me/messages/${m.id}/modify`, {
-          method: "POST", headers: gmailHeaders,
-          body: JSON.stringify({ removeLabelIds: ["UNREAD"] }),
-        });
+        // 6. Mark Gmail message as read only when classification succeeded.
+        //    On AI error we leave it UNREAD so the next run can retry.
+        if (!ai.errored) {
+          await fetch(`${GMAIL_GATEWAY}/users/me/messages/${m.id}/modify`, {
+            method: "POST", headers: gmailHeaders,
+            body: JSON.stringify({ removeLabelIds: ["UNREAD"] }),
+          });
+        }
 
         results.push({
           gmail_id: m.id, from: fromEmail, subject,
           matched: matched ? { type: matched.entityType, id: matched.row.id, name: matched.row.developer_name || matched.row.company_name || matched.row.full_name } : null,
-          ai_intent: ai.intent, ai_confidence: ai.confidence,
+          ai_intent: ai.intent, ai_confidence: ai.confidence, ai_errored: ai.errored,
           new_status: newStatus || null,
         });
       } catch (e) {
