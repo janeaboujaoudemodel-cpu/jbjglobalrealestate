@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendViaResend } from "../_shared/resendClient.ts";
 import { recordJbjResendSend, buildIntendedSendKey, type JbjEntityType, type JbjPortalKind } from "../_shared/jbjSpine.ts";
+import { wrapEmailHtml, htmlToPlainText } from "../_shared/email-shell.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,13 +16,41 @@ const OWNER_EMAILS = new Set([
   "helpdesk@jbj.ae",
 ]);
 
-function textToHtml(value: string) {
+function escapeHtml(value: string) {
+  return value.replace(/[&<>]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[ch] || ch));
+}
+
+function textToBrandedHtml(value: string, identityLabel: string, portalKind: JbjPortalKind) {
   const paragraphs = value
     .split(/\n{2,}/)
     .map((part) => part.trim())
     .filter(Boolean)
-    .map((part) => part.replace(/[&<>]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[ch] || ch)).replace(/\n/g, "<br/>"));
-  return `<div style="font-family:Inter,Arial,sans-serif;color:#0F1A16;font-size:14px;line-height:1.7;background:#ffffff;padding:24px;max-width:620px;margin:0 auto;">${paragraphs.map((p) => `<p style="margin:0 0 14px;">${p}</p>`).join("")}<p style="margin:18px 0 0;">Regards,<br/><strong>JBJ Global Real Estate</strong></p></div>`;
+    .map((part) => escapeHtml(part).replace(/\n/g, "<br/>"));
+
+  const isBrokerage = portalKind === "brokerage";
+  const eyebrow = isBrokerage ? "CITI Developers" : "JBJ Global Real Estate";
+  const signature = isBrokerage ? "Jane Bou Jaoude" : "JBJ Global Real Estate";
+  const role = isBrokerage ? "Sales & Training Department" : "Developer Registration Desk";
+  const innerHtml = `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+      <tr><td align="center" style="padding:0 0 18px;border-bottom:1px solid #B89555;">
+        <div style="font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.2;font-weight:700;color:#064E3B;letter-spacing:0;text-align:center;">${escapeHtml(eyebrow)}</div>
+        <div style="font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#B89555;margin-top:6px;text-align:center;">${escapeHtml(identityLabel)}</div>
+      </td></tr>
+      <tr><td style="padding:22px 0 6px;font-family:Inter,Arial,sans-serif;color:#0F1A16;font-size:14px;line-height:1.7;">
+        ${paragraphs.map((p) => `<p style="margin:0 0 14px;color:#0F1A16;">${p}</p>`).join("")}
+        <p style="margin:22px 0 0;color:#0F1A16;">Regards,<br/><strong>${escapeHtml(signature)}</strong><br/><span style="color:#4B5D55;">${escapeHtml(role)}</span></p>
+      </td></tr>
+    </table>`;
+
+  return wrapEmailHtml({
+    innerHtml,
+    preheader: paragraphs[0]?.replace(/<br\/>/g, " ") || "JBJ CRM reply",
+    brandColor: "#B89555",
+    bgPage: "#FDFBF7",
+    bgCard: "#FFFFFF",
+    textColor: "#0F1A16",
+  });
 }
 
 function identity(kind: string) {
@@ -61,14 +90,17 @@ serve(async (req) => {
     const entityId = body.entityId || null;
     const service = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
 
+    const html = textToBrandedHtml(bodyText, id.fromName, id.portalKind);
+    const text = htmlToPlainText(html);
+
     const result = await sendViaResend({
       from: `${id.fromName} <${id.fromEmail}>`,
       to: recipientEmail,
       reply_to: id.replyTo,
       cc: id.portalKind === "developer" ? "infoo.jane@gmail.com" : undefined,
       subject,
-      html: textToHtml(bodyText),
-      text: bodyText,
+      html,
+      text,
       headers: { "X-JBJ-Campaign-Reply": "true" },
       tags: [
         { name: "portal", value: id.portalKind },
