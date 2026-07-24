@@ -99,13 +99,14 @@ const DEVELOPER_REQUIREMENTS_BLOCK = `<div data-jbj-developer-requirements="true
   <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Walid Halabi</strong> &middot; +971 54 366 2223 &middot; +971 50 999 3839<br/><span style="color:#4a4a4a;">For urgent registration or compliance questions only. All standard correspondence should remain on this email thread.</span></p>
 </div>`;
 
-const injectDeveloperRequirementsBlock = (html: string) => {
+const injectDeveloperRequirementsBlock = (html: string, developerName: string) => {
+  const block = DEVELOPER_REQUIREMENTS_BLOCK.replace(/\{\{developer_name\}\}/g, developerName || "your team");
   if (html.includes('data-jbj-developer-requirements="true"')) return html;
   if (/<p[^>]*>\s*Regards,?/i.test(html)) {
-    return html.replace(/(<p[^>]*>\s*Regards,?)/i, `${DEVELOPER_REQUIREMENTS_BLOCK}$1`);
+    return html.replace(/(<p[^>]*>\s*Regards,?)/i, `${block}$1`);
   }
-  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${DEVELOPER_REQUIREMENTS_BLOCK}</body>`);
-  return `${html}${DEVELOPER_REQUIREMENTS_BLOCK}`;
+  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${block}</body>`);
+  return `${html}${block}`;
 };
 
 const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
