@@ -113,7 +113,7 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
   const contactMailLink = `<a href="mailto:${replyTo}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${replyTo.toUpperCase()}</a>`;
   const jbjLink = `<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>`;
   const mailToken = "__JBJ_CONTACT_MAIL_LINK__";
-  return injectDeveloperRequirementsBlock(html)
+  return injectDeveloperRequirementsBlock(html, developerName)
     .replace(/Dear\s+<strong>[^<]+<\/strong>\s+Broker Relations Team/gi, `Dear <strong>${developerName}</strong> Broker Relations Team`)
     .replace(/Dear\s+[^,<\n]+\s+Broker Relations Team/gi, `Dear ${developerName} Broker Relations Team`)
     .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
