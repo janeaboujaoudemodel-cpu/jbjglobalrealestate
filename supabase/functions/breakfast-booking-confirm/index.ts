@@ -9,6 +9,8 @@
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { sendViaResend } from "../_shared/resendClient.ts";
+import { recordJbjResendSend, buildTransactionalIntendedSendKey } from "../_shared/jbjSpine.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -190,17 +192,14 @@ serve(async (req: Request) => {
       }
     }
 
-    // Email Jane with the booking summary (best-effort, non-blocking)
+    // Email Jane with the booking summary via Resend (best-effort, non-blocking)
     try {
-      const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-      const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
-      if (LOVABLE_API_KEY && GMAIL_API_KEY) {
-        const slotPretty = new Intl.DateTimeFormat("en-GB", {
-          weekday: "long", day: "numeric", month: "long", year: "numeric",
-          hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Asia/Dubai",
-        }).format(new Date(slot.slot_at)) + " (GST)";
+      const slotPretty = new Intl.DateTimeFormat("en-GB", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric",
+        hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Asia/Dubai",
+      }).format(new Date(slot.slot_at)) + " (GST)";
 
-        const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
+      const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
 <div style="background:linear-gradient(180deg,#FDFBF7 0%,#F7F2EA 100%);padding:40px 16px">
   <div style="max-width:600px;margin:0 auto;background:#FFFFFF;border:1px solid #B89555;border-radius:14px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
     <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:18px">JBJ Global · Breakfast Booked</div>
@@ -220,28 +219,44 @@ serve(async (req: Request) => {
   </div>
 </div></body></html>`;
 
-        const subj = `Breakfast booked — ${invite.brokerage_name} · ${dateStr} ${timeStr}`;
-        const headers = [
-          `From: JBJ Breakfast <contact@jbj.ae>`,
-          `To: janeaboujaoudenails@gmail.com`,
-          `Cc: infoo.jane@gmail.com`,
-          `Reply-To: ${body.email}`,
-          `Subject: ${subj}`,
-          "MIME-Version: 1.0",
-          'Content-Type: text/html; charset="UTF-8"',
-        ].join("\r\n");
-        const bytes = new TextEncoder().encode(headers + "\r\n\r\n" + html);
-        let bin = ""; bytes.forEach((b) => bin += String.fromCharCode(b));
-        const raw = btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-        await fetch("https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-            "X-Connection-Api-Key": GMAIL_API_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ raw }),
-        });
+      const subj = `Breakfast booked — ${invite.brokerage_name} · ${dateStr} ${timeStr}`;
+      const resendResult = await sendViaResend({
+        from: "JBJ Breakfast <contact@jbj.ae>",
+        to: "janeaboujaoudenails@gmail.com",
+        cc: "infoo.jane@gmail.com",
+        reply_to: body.email,
+        subject: subj,
+        html,
+        tags: [
+          { name: "workflow", value: "breakfast_booking" },
+          { name: "portal", value: "brokerage" },
+        ],
+      });
+      const intendedSendId = `transactional:breakfast:${invite.id}`;
+      await recordJbjResendSend({
+        portalKind: "brokerage",
+        entityType: "brokerage",
+        entityId: invite.brokerage_id ?? null,
+        email: "janeaboujaoudenails@gmail.com",
+        templateSlug: "breakfast_booking_confirm",
+        senderEmail: "contact@jbj.ae",
+        replyTo: body.email,
+        subject: subj,
+        resendMessageId: resendResult.data?.id || null,
+        providerResponse: { status: resendResult.status, data: resendResult.data, error: resendResult.error },
+        intendedSendId,
+        workflowInstanceId: invite.id,
+        sendCategory: "transactional",
+        idempotencyKey: buildTransactionalIntendedSendKey({
+          portalKind: "brokerage",
+          templateSlug: "breakfast_booking_confirm",
+          workflowInstanceId: invite.id,
+          recipientId: "janeaboujaoudenails@gmail.com",
+          intendedSendId,
+        }),
+      });
+      if (!resendResult.ok) {
+        console.warn("Owner notify Resend failed:", resendResult.error);
       }
     } catch (mailErr) {
       console.warn("Owner notify email failed:", mailErr);
