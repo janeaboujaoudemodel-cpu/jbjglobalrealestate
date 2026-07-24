@@ -41,6 +41,7 @@ const HRAgent = lazy(() => import("@/pages/HRAgent"));
 const HRAnnouncementsHub = lazy(() => import("@/pages/owner/HRAnnouncementsHub"));
 const ReferralAdmin = lazy(() => import("@/pages/ReferralAdmin"));
 const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
+const BookingsAdmin = lazy(() => import("@/pages/owner/BookingsAdmin"));
 const JobOfferTemplate = lazy(() => import("@/pages/JobOfferTemplate"));
 const ExecutiveAssistant = lazy(() => import("@/pages/ExecutiveAssistant"));
 const CallReview = lazy(() => import("@/pages/CallReview"));
@@ -160,6 +161,7 @@ export const AdminRoutes = () => (
 
     {/* ── Owner Tools (in main layout) ── */}
     <Route path="/brand-palette" element={<OwnerGuard><BrandPaletteHub /></OwnerGuard>} />
+    <Route path="/owner/bookings" element={<OwnerGuard><Suspense fallback={<PageLoader />}><BookingsAdmin /></Suspense></OwnerGuard>} />
     <Route path="/owner/job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="/job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     {/* Public Jessica chat page — must NOT redirect into owner-only careers portal. */}
