@@ -171,7 +171,7 @@ export default function InvestorPortal() {
         </TabsContent>
 
         <TabsContent value="activity" className="mt-4">
-          <BrandedEmailDashboard kind="clients" />
+          <BrandedEmailDashboard kind="clients" filter={filter} onFilterChange={setFilter} />
         </TabsContent>
       </Tabs>
     </div>
