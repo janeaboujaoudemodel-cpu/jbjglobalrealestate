@@ -77,11 +77,32 @@ const JBJ_BRAND_HEADER_HTML = `<table role="presentation" data-jbj-brand-header=
 // existing call site keeps compiling.
 const injectJbjBrandHeader = (html: string) => html;
 
+const DEVELOPER_REQUIREMENTS_BLOCK = `<div data-jbj-developer-requirements="true" style="margin:18px 0;padding:16px;border:1px solid #B89555;background:#FAF5EA;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.65;">
+  <p style="margin:0 0 10px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:800;">Kindly reply to this email and confirm the current registration status:</p>
+  <ul style="margin:0 0 12px 18px;padding:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">
+    <li style="margin:0 0 6px;">Status: Registered / Pending / Active.</li>
+    <li style="margin:0 0 6px;">If we are not registered yet, please share your registration form and full requirements.</li>
+    <li style="margin:0 0 6px;">Please add our team to the WhatsApp group on <strong>+971 54 716 7107</strong>.</li>
+    <li style="margin:0 0 6px;">Please share your logo and all current marketing material links.</li>
+    <li style="margin:0;">For compliance and escrow requirements, please coordinate with Waleed through this same thread or reply to <strong>HELPDESK@JBJ.AE</strong>.</li>
+  </ul>
+  <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please keep <strong>HELPDESK@JBJ.AE</strong> as the sender and reply destination so the CRM can attach your response to the correct developer card.</p>
+</div>`;
+
+const injectDeveloperRequirementsBlock = (html: string) => {
+  if (html.includes('data-jbj-developer-requirements="true"')) return html;
+  if (/<p[^>]*>\s*Regards,?/i.test(html)) {
+    return html.replace(/(<p[^>]*>\s*Regards,?)/i, `${DEVELOPER_REQUIREMENTS_BLOCK}$1`);
+  }
+  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${DEVELOPER_REQUIREMENTS_BLOCK}</body>`);
+  return `${html}${DEVELOPER_REQUIREMENTS_BLOCK}`;
+};
+
 const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyTo: string) => {
   const contactMailLink = `<a href="mailto:${replyTo}" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">${replyTo.toUpperCase()}</a>`;
   const jbjLink = `<a href="https://jbj.ae" target="_blank" rel="noreferrer" style="color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;font-weight:700;text-decoration:underline;text-decoration-color:#B89555;">JBJ.AE</a>`;
   const mailToken = "__JBJ_CONTACT_MAIL_LINK__";
-  return html
+  return injectDeveloperRequirementsBlock(html)
     .replace(/Dear\s+<strong>[^<]+<\/strong>\s+Broker Relations Team/gi, `Dear <strong>${developerName}</strong> Broker Relations Team`)
     .replace(/Dear\s+[^,<\n]+\s+Broker Relations Team/gi, `Dear ${developerName} Broker Relations Team`)
     .replace(/Dear\s+(?:4\s*Direction|Four\s+Directions?)[^,<]*(?=,)/gi, `Dear ${developerName}`)
@@ -298,7 +319,12 @@ serve(async (req: Request) => {
         replyTo,
         subject,
         resendMessageId: resendResult.data?.id || null,
-        providerResponse: { mode: "test", status: resendResult.status, data: resendResult.data },
+        providerResponse: {
+          mode: "test",
+          status: resendResult.status,
+          data: resendResult.data,
+          html_preview_text: `From: ${fromName} <${replyTo}>\nReply-To: ${replyTo}\nCC: ${cc.join(", ")}\nSubject: ${subject}\n\nDeveloper registration request asks for status, forms, requirements, logo, WhatsApp group, marketing material links, and Waleed/compliance coordination.`,
+        },
         intendedSendId,
         sendCategory: "test",
         idempotencyKey: buildCampaignIntendedSendKey({
@@ -411,7 +437,11 @@ serve(async (req: Request) => {
       replyTo,
       subject,
       resendMessageId: messageId,
-      providerResponse: { status: resendLive.status, data: resendLive.data },
+      providerResponse: {
+        status: resendLive.status,
+        data: resendLive.data,
+        html_preview_text: `From: ${fromName} <${replyTo}>\nReply-To: ${replyTo}\nCC: ${cc.join(", ")}\nSubject: ${subject}\n\nDeveloper registration request asks for status, forms, requirements, logo, WhatsApp group, marketing material links, and Waleed/compliance coordination.`,
+      },
       intendedSendId,
       sendCategory: "campaign",
       idempotencyKey: buildCampaignIntendedSendKey({

@@ -37206,3 +37206,24 @@ html body #root [data-relationships-hub] .rh-tile-label {
 [data-relationships-hub] .rh-kpi-value[data-empty="true"] {
   color: #8A9891 !important;
 }
+
+/* Campaign dashboard active filters/cards — final pure-white lock. */
+html body #root [data-branded-email-dashboard="true"] [data-campaign-filter-chip="active"],
+html body #root [data-branded-email-dashboard="true"] [data-campaign-filter-chip="active"] *,
+html body #root [data-branded-email-dashboard="true"] [data-campaign-stat-card="active"],
+html body #root [data-branded-email-dashboard="true"] [data-campaign-stat-card="active"] *,
+html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action="primary"],
+html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action="primary"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-branded-email-dashboard="true"] [data-campaign-filter-chip="active"] :where(svg,path,line,rect,circle,polyline,polygon,[class*="lucide"]),
+html body #root [data-branded-email-dashboard="true"] [data-campaign-stat-card="active"] :where(svg,path,line,rect,circle,polyline,polygon,[class*="lucide"]),
+html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action="primary"] :where(svg,path,line,rect,circle,polyline,polygon,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
