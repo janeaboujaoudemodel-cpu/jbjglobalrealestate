@@ -48,8 +48,7 @@ async function fetchText(url: string, timeoutMs = 6000): Promise<string | null> 
     const ct = res.headers.get("content-type") || "";
     if (!ct.includes("text") && !ct.includes("html")) return null;
     const buf = await res.arrayBuffer();
-    // Cap at 500KB to protect worker memory
-    const slice = buf.byteLength > 500_000 ? buf.slice(0, 500_000) : buf;
+    const slice = buf.byteLength > 200_000 ? buf.slice(0, 200_000) : buf;
     return new TextDecoder("utf-8", { fatal: false }).decode(slice);
   } catch {
     return null;
