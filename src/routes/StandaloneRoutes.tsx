@@ -82,6 +82,13 @@ export const StandaloneRoutes = () => (
         </Suspense>
       </RouteErrorBoundary>
     } />
+    <Route path="/book/:slug" element={
+      <RouteErrorBoundary routeName="PublicBooking">
+        <Suspense fallback={<PageLoader />}>
+          <PublicBookingLanding />
+        </Suspense>
+      </RouteErrorBoundary>
+    } />
     <Route path="/card/:token" element={
       <Suspense fallback={<PageLoader />}>
         {React.createElement(React.lazy(() => import("@/pages/SharedBusinessCard")))}
