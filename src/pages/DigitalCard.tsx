@@ -252,7 +252,11 @@ const DigitalCard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] flex flex-col items-center justify-start px-4 py-8 sm:py-12 lg:py-16">
+    <div
+      data-ink-emerald-opt-out
+      className="min-h-screen flex flex-col items-center justify-start px-4 py-8 sm:py-12 lg:py-16"
+      style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
+    >
       
       {/* Main Card Container - RESPONSIVE: phone = narrow card, tablet/desktop = wider layout */}
       <motion.div
@@ -261,18 +265,20 @@ const DigitalCard = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl"
       >
-        {/* Card Body - Active Champagne Layer */}
+        {/* Card Body - Emerald Frame w/ Champagne Interior */}
         <div 
-          className="rounded-3xl p-1 shadow-2xl"
+          className="rounded-3xl p-[2px] shadow-2xl"
           style={{ 
-            background: GOLD.activeBackground,
-            boxShadow: `0 20px 60px rgba(200, 167, 102, 0.3), 0 10px 30px rgba(0, 0, 0, 0.2)`
+            background: "linear-gradient(135deg, #064E3B 0%, #B89555 50%, #064E3B 100%)",
+            boxShadow: `0 24px 70px rgba(6, 78, 59, 0.45), 0 10px 30px rgba(0, 0, 0, 0.35)`
           }}
         >
           {/* Inner Card - Locked Champagne - RESPONSIVE LAYOUT */}
           <div 
-            className="rounded-[22px] p-6 sm:p-8 lg:p-10 xl:p-12"
-            style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)" }}
+            data-surface="light"
+            data-ink-emerald-opt-out
+            className="rounded-[22px] p-6 sm:p-8 lg:p-10 xl:p-12 text-[#1A1A1A]"
+            style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)", color: "#1A1A1A" }}
           >
             {/* Profile Photo - CENTERED INSIDE the card, NOT cropping head */}
             <motion.div
