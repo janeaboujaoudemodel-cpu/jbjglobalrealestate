@@ -250,8 +250,8 @@ export default function BookingsAdmin() {
   return (
     <main className="booking-console" data-jbj-bookings>
       <header className="booking-console__topbar">
-        <div className="booking-console__brand"><span className="booking-console__brand-mark">✓</span><strong>Bookings</strong></div>
-        <div className="booking-console__top-actions"><span>JBJ Booking Workspace</span><Button type="button" size="icon" onClick={() => setView("event-types")}><Plus className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon"><CalendarDays className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon"><Settings className="h-4 w-4" /></Button><div className="booking-console__profile">JB</div></div>
+        <div className="booking-console__brand"><span className="booking-console__brand-mark">✓</span><strong>JBJ Bookings</strong></div>
+        <div className="booking-console__top-actions"><Button type="button" size="icon" onClick={() => setView("event-types")}><Plus className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon"><CalendarDays className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon"><Bell className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon"><Settings className="h-4 w-4" /></Button><div className="booking-console__profile">JB</div></div>
       </header>
       <aside className="booking-console__sidebar" aria-label="JBJ Bookings navigation">
         <button type="button" className="booking-console__workspace"><span>JB</span><strong>Jane Bou Jaoude</strong><ChevronDown className="h-4 w-4" /></button>
