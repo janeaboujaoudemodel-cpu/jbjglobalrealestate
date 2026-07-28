@@ -255,7 +255,10 @@ const DigitalCard = () => {
     <div
       data-ink-emerald-opt-out
       className="min-h-screen flex flex-col items-center justify-start px-4 py-8 sm:py-12 lg:py-16"
-      style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
+      style={{
+        background:
+          "radial-gradient(120% 90% at 20% 0%, #0a6b53 0%, #064E3B 28%, #032A1E 55%, #010806 82%, #000000 100%)",
+      }}
     >
       
       {/* Main Card Container - RESPONSIVE: phone = narrow card, tablet/desktop = wider layout */}
