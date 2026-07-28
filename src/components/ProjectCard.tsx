@@ -336,9 +336,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i - 1 + primaryImageCandidates.length) % primaryImageCandidates.length);
                 }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center opacity-0 group-hover/photo:opacity-100 focus:opacity-100 transition-opacity bg-black/45 backdrop-blur-sm border border-[#B89555] hover:bg-black/60"
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
               >
-                <ChevronLeft className="w-5 h-5" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.4} />
+                <ChevronLeft className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>
               <button
                 type="button"
@@ -348,9 +349,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i + 1) % primaryImageCandidates.length);
                 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center opacity-0 group-hover/photo:opacity-100 focus:opacity-100 transition-opacity bg-black/45 backdrop-blur-sm border border-[#B89555] hover:bg-black/60"
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
               >
-                <ChevronRight className="w-5 h-5" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.4} />
+                <ChevronRight className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-1 opacity-0 group-hover/photo:opacity-100 transition-opacity">
                 {primaryImageCandidates.slice(0, 6).map((_, idx) => (
