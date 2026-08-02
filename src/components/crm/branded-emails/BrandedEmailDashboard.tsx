@@ -278,8 +278,16 @@ export default function BrandedEmailDashboard({ kind, filter, onFilterChange }: 
       }
     };
     load();
-    const timer = window.setInterval(load, 1000);
-    return () => { cancelled = true; window.clearInterval(timer); };
+    // Poll at a sane cadence and only while the tab is visible.
+    const tick = () => { if (document.visibilityState === "visible") load(); };
+    const timer = window.setInterval(tick, 30000);
+    const onVisible = () => { if (document.visibilityState === "visible") load(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [kind]);
 
   const rows = useMemo(() => {
