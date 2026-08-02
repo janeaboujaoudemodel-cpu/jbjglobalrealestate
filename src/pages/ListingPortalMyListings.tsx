@@ -162,11 +162,13 @@ const ListingPortalMyListings = () => {
       company_name: companyName,
       status: 'pending',
     }, { onConflict: 'user_id' });
-    if (!error) {
-      toast.success('Verification submitted!');
-      setShowVerForm(false);
-      fetchAll();
+    if (error) {
+      toast.error(error.message || 'Could not submit verification');
+      return;
     }
+    toast.success('Verification submitted!');
+    setShowVerForm(false);
+    fetchAll();
   };
 
   const statusIcon = (status: string) => {
