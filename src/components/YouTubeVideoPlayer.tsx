@@ -95,11 +95,20 @@ export default function YouTubeVideoPlayer({
     });
   }, [videoId]);
 
+  const [fallback, setFallback] = useState(false);
+
   useEffect(() => {
     loadYouTubeAPI();
     onAPIReady(() => createPlayer());
 
+    // If the iframe API is blocked or slow, fall back to a plain embed so the
+    // video always plays.
+    const failsafe = window.setTimeout(() => {
+      if (!containerRef.current?.querySelector("iframe")) setFallback(true);
+    }, 3000);
+
     return () => {
+      window.clearTimeout(failsafe);
       playerRef.current?.destroy?.();
     };
   }, [videoId, createPlayer]);
@@ -130,6 +139,19 @@ export default function YouTubeVideoPlayer({
         className="absolute inset-0 w-full h-full"
         title={title}
       />
+
+      {fallback && (
+        <iframe
+          className="absolute inset-0 w-full h-full"
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`}
+          title={title}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+      )}
+
 
       {/* Logo overlay when video ends */}
       {ended && (

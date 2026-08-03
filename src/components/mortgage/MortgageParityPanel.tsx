@@ -129,17 +129,18 @@ export default function MortgageParityPanel({
   const subClass = isNavy ? "text-white/70" : "text-[#1A1A1A]/70";
 
   const Card = ({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) => (
-    <div className={`mortgage-parity-card rounded-xl p-4 md:p-5 ${className}`} style={{ background: cardBg, border: cardBorder }}>
+    <div className={`mortgage-parity-card rounded-xl p-4 md:p-5 flex flex-col h-full ${className}`} style={{ background: cardBg, border: cardBorder }}>
       <p className={`text-[11px] uppercase tracking-[0.16em] font-semibold mb-3 ${subClass}`}>{title}</p>
       {children}
     </div>
   );
 
   return (
-    <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
+    <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 items-stretch">
       {/* Residency + LTV */}
       <Card title="Residency & LTV Cap">
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3 lg:min-h-[68px] lg:content-start">
+
           {(Object.keys(RESIDENCY) as Residency[]).map((k) => {
             const active = residency === k;
             return (
@@ -176,7 +177,8 @@ export default function MortgageParityPanel({
           <span className="font-bold tabular-nums">{ltv}%</span>
         </div>
         <div
-          className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+          className="mt-3 lg:mt-auto lg:pt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+
           style={{
             background: ltvOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
             border: `1px solid ${ltvOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
@@ -190,26 +192,29 @@ export default function MortgageParityPanel({
 
       {/* Affordability */}
       <Card title="Affordability (DBR 50%)">
-        <label className={`text-xs font-semibold ${subClass}`}>Your monthly income (AED)</label>
-        <input
-          type="number"
-          value={monthlyIncome}
-          onChange={(e) => setMonthlyIncome(Number(e.target.value) || 0)}
-          data-no-contrast-guard
-          className="allow-white mt-1 w-full rounded-lg px-3 py-2 text-sm font-semibold tabular-nums"
-          style={{
-            background: isNavy ? "rgba(255,255,255,0.06)" : "#FFFFFF",
-            border: isNavy ? "1px solid rgba(147,197,253,0.35)" : "1px solid rgba(184,149,85,0.40)",
-            color: isNavy ? "#FFFFFF" : "#1A1A1A",
-          }}
-        />
-        <div className={`mt-3 text-sm ${inkClass}`}>
+        <div className="mb-3 lg:min-h-[68px]">
+          <label className={`text-xs font-semibold ${subClass}`}>Your monthly income (AED)</label>
+          <input
+            type="number"
+            value={monthlyIncome}
+            onChange={(e) => setMonthlyIncome(Number(e.target.value) || 0)}
+            data-no-contrast-guard
+            className="allow-white mt-1 w-full rounded-lg px-3 py-2 text-sm font-semibold tabular-nums"
+            style={{
+              background: isNavy ? "rgba(255,255,255,0.06)" : "#FFFFFF",
+              border: isNavy ? "1px solid rgba(147,197,253,0.35)" : "1px solid rgba(184,149,85,0.40)",
+              color: isNavy ? "#FFFFFF" : "#1A1A1A",
+            }}
+          />
+        </div>
+        <div className={`text-sm ${inkClass}`}>
           <div className="flex justify-between"><span className={subClass}>Monthly installment</span><span className="font-bold tabular-nums">{aed(monthlyPayment)}</span></div>
           <div className="flex justify-between mt-1"><span className={subClass}>50% DBR cap</span><span className="font-bold tabular-nums">{aed(dbrCap)}</span></div>
           <div className="flex justify-between mt-1"><span className={subClass}>DBR ratio</span><span className="font-bold tabular-nums">{dbrPct.toFixed(1)}%</span></div>
         </div>
         <div
-          className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+          className="mt-3 lg:mt-auto lg:pt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+
           style={{
             background: dbrOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
             border: `1px solid ${dbrOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
