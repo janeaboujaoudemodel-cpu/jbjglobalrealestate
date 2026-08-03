@@ -249,13 +249,13 @@ export default function BookingsAdmin() {
 
   return (
     <main className="booking-console" data-jbj-bookings data-no-contrast-guard>
-      <header className="booking-console__topbar">
+      <header className="booking-console__topbar" data-surface="light">
         <div className="booking-console__brand"><span className="booking-console__brand-mark">✓</span><strong>JBJ Bookings</strong></div>
         <div className="booking-console__top-actions"><Button type="button" size="icon" aria-label="Create event type" onClick={() => setView("event-types")}><Plus className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon" aria-label="Open calendar"><CalendarDays className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon" aria-label="Open notifications"><Bell className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon" aria-label="Open booking settings"><Settings className="h-4 w-4" /></Button><div className="booking-console__profile">JB</div></div>
       </header>
       <aside className="booking-console__sidebar" aria-label="JBJ Bookings navigation" data-surface="emerald">
-        <button type="button" className="booking-console__workspace" data-surface="emerald"><span>JB</span><strong>Jane Bou Jaoude</strong><ChevronDown className="h-4 w-4" /></button>
-        <nav>{navItems.map((item) => { const Icon = item.icon; return <button key={item.key} type="button" className="booking-console__nav-item" data-active={view === item.key && !detailOpen} onClick={() => { setView(item.key); setDetailOpen(false); }}><Icon className="h-4 w-4" /><span>{item.label}</span></button>; })}</nav>
+        <button type="button" className="booking-console__workspace" data-surface="emerald"><span data-surface="champagne">JB</span><strong>Jane Bou Jaoude</strong><ChevronDown className="h-4 w-4" /></button>
+        <nav>{navItems.map((item) => { const Icon = item.icon; const isActive = view === item.key && !detailOpen; return <button key={item.key} type="button" className="booking-console__nav-item" data-active={isActive} data-surface={isActive ? "champagne" : undefined} onClick={() => { setView(item.key); setDetailOpen(false); }}><Icon className="h-4 w-4" /><span>{item.label}</span></button>; })}</nav>
       </aside>
       <section className="booking-console__content">
         {detailOpen && activeEvent ? <EventDetailWorkspace event={activeEvent} page={activePage} detailTab={detailTab} setDetailTab={setDetailTab} availability={availability} formFields={formFields} promoActions={promoActions} editing={editingDetails} setEditing={setEditingDetails} onClose={() => setDetailOpen(false)} onShare={() => setShareOpen(true)} /> : <>

@@ -426,7 +426,7 @@ const SupportTicketBox = () => {
           transition={{ duration: 0.6 }}
         >
           {/* Main Card */}
-          <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.22),0_4px_15px_rgba(0,0,0,0.10)] overflow-hidden relative">
+          <div data-surface="champagne" className="max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.22),0_4px_15px_rgba(0,0,0,0.10)] overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
@@ -440,7 +440,7 @@ const SupportTicketBox = () => {
                        <PremiumHeadsetIcon size={28} color="#ffffff" />
                     </div>
                     <div>
-                      <span className="text-xs uppercase tracking-[0.2em] text-red-500 font-semibold">24/7 Support</span>
+                      <span className="text-xs uppercase tracking-[0.2em] text-foreground font-semibold">24/7 Support</span>
                       <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
                         Need Help?
                       </h2>

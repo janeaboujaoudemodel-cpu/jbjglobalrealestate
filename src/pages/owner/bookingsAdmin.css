@@ -164,10 +164,17 @@
   box-shadow: inset 3px 0 0 var(--booking-gold), 0 6px 18px -12px rgba(0,0,0,0.6);
 }
 .booking-console__nav-item[data-active="true"] {
-  background: linear-gradient(90deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
-  color: #fff !important;
+  background: var(--booking-faint);
+  color: var(--booking-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
   font-weight: 700;
-  box-shadow: inset 3px 0 0 var(--booking-gold);
+  box-shadow: inset 3px 0 0 var(--booking-gold), 0 6px 18px -12px rgba(0,0,0,0.45);
+}
+.booking-console__sidebar .booking-console__nav-item[data-active="true"][data-surface="champagne"],
+.booking-console__sidebar .booking-console__nav-item[data-active="true"][data-surface="champagne"] :is(span, svg, path, circle, rect, line, polyline, polygon) {
+  color: var(--booking-ink) !important;
+  -webkit-text-fill-color: var(--booking-ink) !important;
+  stroke: currentColor !important;
 }
 .booking-console__nav-item svg { color: currentColor; stroke-width: 2; opacity: 0.95; }
 
