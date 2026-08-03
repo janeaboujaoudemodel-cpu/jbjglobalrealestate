@@ -18013,90 +18013,24 @@ html body #root :is(.owner-dashboard-shell, [data-backend-portal]) :is(.jj-surfa
    Active/checked gets a solid emerald fill. Hover/focus is a
    lighter white wash so it never matches the active pill.
    ============================================================ */
-html body :is(
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  .cmdk-item,
-  [data-radix-collection-item]
-):hover,
-html body :is(
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  .cmdk-item,
-  [data-radix-collection-item]
-):focus,
-html body :is(
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  .cmdk-item,
-  [data-radix-collection-item]
-):focus-visible,
-html body :is(
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  .cmdk-item,
-  [data-radix-collection-item]
-)[data-highlighted] {
+html body :is([data-jbj-dropdown-item], .jj-dropdown-item):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):is(:hover, :focus, :focus-visible, [data-highlighted]) {
   background-color: rgba(255,255,255,0.12) !important;
   background-image: none !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body :is(
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  .cmdk-item,
-  [data-radix-collection-item]
-)[data-selected="true"],
-html body :is(
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  .cmdk-item,
-  [data-radix-collection-item]
-)[data-state="checked"],
-html body :is(
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  .cmdk-item,
-  [data-radix-collection-item]
-)[aria-selected="true"] {
+html body :is([data-jbj-dropdown-item], .jj-dropdown-item):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):is([data-selected="true"], [data-state="checked"], [aria-selected="true"]) {
   background-color: #065F46 !important;
   background-image: linear-gradient(135deg, #065F46 0%, #042C1C 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item],.cmdk-item,[data-radix-collection-item])[data-highlighted] *,
-html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item],.cmdk-item,[data-radix-collection-item])[data-selected="true"] *,
-html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item],.cmdk-item,[data-radix-collection-item]):hover *,
-html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item],.cmdk-item,[data-radix-collection-item]):focus * {
+html body :is([data-jbj-dropdown-item], .jj-dropdown-item):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):is([data-highlighted], [data-selected="true"], :hover, :focus) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item],.cmdk-item,[data-radix-collection-item])[data-highlighted] svg,
-html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item],.cmdk-item,[data-radix-collection-item]):hover svg,
-html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item],.cmdk-item,[data-radix-collection-item]):focus svg {
+html body :is([data-jbj-dropdown-item], .jj-dropdown-item):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):is([data-highlighted], :hover, :focus) svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
@@ -18799,7 +18733,7 @@ html body .jj-hero-search-bar input.jj-hero-search-input:hover {
   color: rgba(26, 26, 26, 0.58);
   -webkit-text-fill-color: rgba(26, 26, 26, 0.58);
 }
-:where(input[type="search"]:not([data-no-contrast-guard]), [data-search] input:not([data-no-contrast-guard]), .jj-search input:not([data-no-contrast-guard]), .search-input:not([data-no-contrast-guard])) {
+:where([data-search] input:not([data-no-contrast-guard]), .jj-search input:not([data-no-contrast-guard]), .search-input:not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
   background: transparent !important;
   background-image: none !important;
@@ -27023,11 +26957,11 @@ html body #root [data-insights-page] :is(
 /* Keep this bright-card ink guard out of nested FAQ items. An open FAQ item
    owns an emerald surface, so forcing ink on its descendants creates black
    text on emerald and defeats the component's data-state contrast styles. */
-html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, [data-slot="card"], .card, article, div[class*="rounded-2xl"][class*="border"], div[class*="rounded-xl"][class*="border"]):not([data-surface="emerald"]):not([data-premium-navigator]):not([data-toc-state="active"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,label,button):not(.jj-faq-item):not(.jj-faq-item *) {
+html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, [data-slot="card"], .card, article, div[class*="rounded-2xl"][class*="border"], div[class*="rounded-xl"][class*="border"]):not([data-surface="emerald"]):not([data-premium-navigator]):not([data-toc-state="active"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,label,button):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-surface] *):not(.jj-surface-emerald *):not(.jj-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-faq-item):not(.jj-faq-item *) {
   color: var(--jj-insights-ink) !important;
   -webkit-text-fill-color: var(--jj-insights-ink) !important;
 }
-html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, [data-slot="card"], .card, article, div[class*="rounded-2xl"][class*="border"], div[class*="rounded-xl"][class*="border"]):not([data-surface="emerald"]):not([data-premium-navigator]):not([data-toc-state="active"]) :is(p,li,small,figcaption,dd,td):not(.jj-faq-item *) {
+html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, [data-slot="card"], .card, article, div[class*="rounded-2xl"][class*="border"], div[class*="rounded-xl"][class*="border"]):not([data-surface="emerald"]):not([data-premium-navigator]):not([data-toc-state="active"]) :is(p,li,small,figcaption,dd,td):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-surface] *):not(.jj-surface-emerald *):not(.jj-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-faq-item *) {
   color: var(--jj-insights-muted) !important;
   -webkit-text-fill-color: var(--jj-insights-muted) !important;
 }
@@ -35458,7 +35392,7 @@ html body #root [data-insights-page] :is(.jj-service-card-animated, .jj-card-inn
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-html body #root [data-insights-page] :is(.jj-service-card-animated, .jj-card-inner, .jj-scope-card, .jj-disclaimer-card) :is(h1,h2,h3,h4,p,span,li,div):not(.allow-white):not([data-surface="emerald"] *):not(.jj-emerald-metallic *) {
+html body #root [data-insights-page] :is(.jj-service-card-animated, .jj-card-inner, .jj-scope-card, .jj-disclaimer-card) :is(h1,h2,h3,h4,p,span,li,div):not(.allow-white):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-surface] *):not(.jj-surface-emerald *):not(.jj-emerald-metallic *):not(.jj-cta-emerald *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
