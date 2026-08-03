@@ -1653,7 +1653,6 @@ export default function PublicAccess() {
                     type="button"
                     onClick={() => setSelectedAudience(active ? null : key)}
                     aria-expanded={active}
-                    data-surface="light"
                     className={`flex flex-col items-start gap-3 rounded-md border bg-white p-5 text-left transition hover:-translate-y-0.5 ${
                       active
                         ? "border-[#064E3B] shadow-[0_20px_44px_-30px_rgba(6,78,59,0.6)]"
