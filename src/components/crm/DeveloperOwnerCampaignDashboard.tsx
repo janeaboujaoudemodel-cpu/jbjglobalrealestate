@@ -77,10 +77,9 @@ export default function DeveloperOwnerCampaignDashboard() {
     <div className="space-y-4">
       <Tabs defaultValue="email-status" className="w-full">
 
-        <TabsList className="dp-tabs grid w-full grid-cols-3 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
+        <TabsList className="dp-tabs grid w-full grid-cols-2 bg-white border border-[#064E3B]/15 p-1 h-auto rounded-lg">
           <TabsTrigger value="registration" className="text-[#064E3B] font-black">Registration status</TabsTrigger>
-          <TabsTrigger value="email-status" className="text-[#064E3B] font-black">Emails sent + replies</TabsTrigger>
-          <TabsTrigger value="activity" className="text-[#064E3B] font-black">Campaign activity</TabsTrigger>
+          <TabsTrigger value="email-status" className="text-[#064E3B] font-black">Emails, replies &amp; activity</TabsTrigger>
         </TabsList>
 
         <TabsContent value="registration" className="mt-4">
