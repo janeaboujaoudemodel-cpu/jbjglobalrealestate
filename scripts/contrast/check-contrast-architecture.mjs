@@ -69,6 +69,21 @@ if (unsafeFinalRules.length) {
   violations.push('The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.');
 }
 
+const surfaceDescendantPaint = finalContract
+  .split('}')
+  .map((rule) => {
+    const [selector = '', body = ''] = rule.split('{');
+    return { selector, body };
+  })
+  .filter(({ selector, body }) =>
+    /\[data-surface\]/.test(selector)
+    && /\s:(?:where|is)\(/.test(selector)
+    && /(?:color|-webkit-text-fill-color):[^;]+!important/i.test(body)
+  );
+if (surfaceDescendantPaint.length) {
+  violations.push('Surface contrast must paint the surface boundary only; descendant paint leaks across nested surfaces.');
+}
+
 if (violations.length) {
   console.error('✗ Contrast architecture guard failed:\n');
   for (const v of violations) console.error(`  - ${v}`);

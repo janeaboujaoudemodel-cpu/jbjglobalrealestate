@@ -166,18 +166,34 @@ def slug(route: str) -> str:
 
 
 def discover_static_routes() -> list[str]:
-    """Build the proof inventory from real route declarations, not stale URLs."""
+    """Build a canonical proof inventory, resolving nested relative routes."""
     route_files = sorted(Path("src/routes").glob("*.tsx"))
     route_files.extend([Path("src/App.tsx")])
     found: set[str] = set()
     dynamic = re.compile(r"[:*]")
+
+    def add_route(path: str) -> None:
+        if not path.startswith("/") or dynamic.search(path):
+            return
+        found.add(path.rstrip("/") or "/")
+
     for route_file in route_files:
         if not route_file.exists():
             continue
-        for path in re.findall(r'path=["\']([^"\']+)', route_file.read_text(errors="ignore")):
-            if not path.startswith("/") or dynamic.search(path):
-                continue
-            found.add(path)
+        text = route_file.read_text(errors="ignore")
+        for path in re.findall(r'path=["\']([^"\']+)', text):
+            add_route(path)
+
+        # Route-group files use one absolute parent and relative children. A
+        # JSX parser is unnecessary here because these groups have a single
+        # shell parent; resolving the quoted declarations gives complete,
+        # deterministic coverage without inventing URLs from component names.
+        absolute_paths = re.findall(r'path=["\'](/[^"\']+)', text)
+        if len(absolute_paths) == 1:
+            parent = absolute_paths[0].rstrip("/")
+            for child in re.findall(r'path=["\']([^/][^"\']*)', text):
+                if not dynamic.search(child):
+                    add_route(f"{parent}/{child}")
     return sorted(found, key=lambda value: (value.count("/"), value))
 
 
