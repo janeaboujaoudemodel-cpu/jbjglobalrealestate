@@ -604,7 +604,8 @@
   position: absolute; inset: 0; margin: auto;
 }
 .jc-help-btn {
-  border: 0; background: #8B5CF6; color: #FFFFFF;
+  border: 0; background: var(--jbjcrm-sidebar); color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
   font-size: 14px; font-weight: 650;
   cursor: pointer;
 }

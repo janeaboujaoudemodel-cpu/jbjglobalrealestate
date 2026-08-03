@@ -718,12 +718,12 @@ const BuyerGuide = () => {
       <FounderPhilosophySection />
 
       {/* Final CTA - Next Step - 3-Layer System */}
-      <section className="py-20 md:py-28 bg-[#1A1A1A] relative overflow-hidden">
+      <section data-surface="emerald" className="py-20 md:py-28 bg-[#1A1A1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5" />
         
         <div className="jj-layer-2 relative z-10">
           <div className="max-w-3xl mx-auto">
-            <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center border-2 border-[#B89555]/50">
+            <div data-surface="champagne" className="jj-card-inner rounded-2xl p-8 md:p-12 text-center border-2 border-[#B89555]/50">
               <GuideSectionHeader icon={Sparkles} title="Next Step" centered />
               <p className="text-lg text-[#1A1A1A]/70 mb-6 max-w-2xl mx-auto">
                 If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
@@ -767,10 +767,10 @@ const BuyerGuide = () => {
       <DLDMarketWidget />
 
       {/* Legal Disclaimer - 3-Layer System */}
-      <section className="py-8 bg-[#1A1A1A]">
+      <section data-surface="emerald" className="py-8 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <div className="max-w-5xl mx-auto">
-            <div className="jj-card-inner rounded-lg p-6">
+            <div data-surface="champagne" className="jj-card-inner rounded-lg p-6">
               <h4 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                 <Shield className="w-4 h-4 text-[#1A1A1A]" />
                 Important Disclaimer
@@ -788,7 +788,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Guide Navigation - Active Layer Background */}
-      <section className="py-12 bg-[#1A1A1A]">
+      <section data-surface="emerald" className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
         </div>

@@ -548,7 +548,7 @@ const SellerGuide = () => {
         <FounderPhilosophySection />
 
         {/* Final CTA Section - Next Step - 3-Layer System */}
-        <section className="py-20 bg-[#1A1A1A]">
+        <section data-surface="emerald" className="py-20 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -556,7 +556,7 @@ const SellerGuide = () => {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto"
             >
-              <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center">
+              <div data-surface="champagne" className="jj-card-inner rounded-2xl p-8 md:p-12 text-center">
                 <Sparkles className="w-12 h-12 text-[#1A1A1A] mx-auto mb-4" />
                 <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
                   <span className="text-[#1A1A1A]">Next</span> Step
@@ -612,10 +612,10 @@ const SellerGuide = () => {
         </section>
 
         {/* Compliance Disclaimer - 3-Layer System */}
-        <section className="py-8 bg-[#1A1A1A]">
+        <section data-surface="emerald" className="py-8 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="max-w-5xl mx-auto">
-              <div className="jj-card-inner rounded-lg p-6">
+              <div data-surface="champagne" className="jj-card-inner rounded-lg p-6">
                 <h4 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-[#1A1A1A]" />
                   Important Disclaimer
