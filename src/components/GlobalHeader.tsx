@@ -792,7 +792,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             className="flex items-center gap-2 sm:gap-3 xl:gap-4 min-w-0 group transition-all duration-300"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative shrink-0 ml-0">
+            <div className="relative shrink-0 ml-0 w-10 h-10 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] overflow-hidden">
               {/* Logo glow backdrop */}
               <div 
                 className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -805,9 +805,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
-                className={`w-10 h-10 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] object-contain relative z-10 transition-transform duration-300 ${
+                className={`w-full h-full object-contain relative z-10 transition-transform duration-300 ${
                   useLightHeaderIdentity
-                    ? "scale-100 md:scale-[1.3] xl:scale-[1.35]"
+                    ? "scale-[1.75] md:scale-[2]"
                     : "scale-100"
                 }`}
                 style={{

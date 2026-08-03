@@ -37308,3 +37308,10 @@ html body #root header[data-header-surface="light"] :where(.jj-header-wordmark, 
   color: var(--jbj-header-foreground) !important;
   -webkit-text-fill-color: var(--jbj-header-foreground) !important;
 }
+
+/* Premium header controls are true dark surfaces, not translucent emerald
+   over bright/photographic pixels. This keeps their white labels above AA. */
+html body #root header[data-header-surface] :where(.jj-header-premium-control, .jj-emerald-metallic) {
+  background-color: #042c1c !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+}
