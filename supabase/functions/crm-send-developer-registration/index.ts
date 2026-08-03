@@ -159,7 +159,11 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
     .replace(
       /(<div\s+style="[^"]*letter-spacing:3px[^"]*text-transform:uppercase[^"]*">JBJ GLOBAL REAL ESTATE<\/div>)/i,
       `<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png" alt="JBJ Global Real Estate" width="72" style="max-width:72px;height:auto;display:inline-block;border:0;margin:0 auto 12px;" />$1`,
-    );
+    )
+    // Restore protected WhatsApp numbers AFTER phone normalization above.
+    .replace(/__JBJ_JANE_WA__/g, "+971 54 716 7107")
+    .replace(/__JBJ_WALID_WA1__/g, "+971 54 366 2223")
+    .replace(/__JBJ_WALID_WA2__/g, "+971 50 999 3839");
 };
 
 serve(async (req: Request) => {
