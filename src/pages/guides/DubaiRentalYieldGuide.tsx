@@ -142,7 +142,7 @@ const DubaiRentalYieldGuide = () => {
 
       {/* Snapshot bar */}
       <section className="border-y border-[#EFE6D6] bg-white">
-        <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="max-w-5xl mx-auto px-[var(--jj-page-gutter)] py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { label: "Top Yield Area", value: "JVC — 7.9%", icon: TrendingUp },
             { label: "Communities Covered", value: "13", icon: MapPin },
@@ -160,7 +160,7 @@ const DubaiRentalYieldGuide = () => {
 
       {/* Comparison table */}
       <section id="comparison" className="py-16 md:py-20 scroll-mt-24">
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-[var(--jj-page-gutter)]">
           <div className="flex items-center gap-3 mb-2">
             <PieChart className="w-6 h-6 text-[#B89555]" />
             <span className="text-xs uppercase tracking-widest text-[#8B7340]">Community Comparison</span>
@@ -215,7 +215,7 @@ const DubaiRentalYieldGuide = () => {
 
       {/* Calculator */}
       <section id="calculator" className="py-16 md:py-20 bg-gradient-to-br from-[#FAF6EE] via-[#F7F1E6]/40 to-[#FAF6EE] scroll-mt-24">
-        <div className="max-w-4xl mx-auto px-6">
+        <div className="max-w-4xl mx-auto px-[var(--jj-page-gutter)]">
           <div className="flex items-center gap-3 mb-2">
             <Calculator className="w-6 h-6 text-[#B89555]" />
             <span className="text-xs uppercase tracking-widest text-[#8B7340]">Interactive Tool</span>

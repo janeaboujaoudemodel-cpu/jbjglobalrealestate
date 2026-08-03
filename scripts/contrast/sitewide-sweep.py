@@ -165,6 +165,22 @@ def slug(route: str) -> str:
     return re.sub(r"[^a-zA-Z0-9]+", "-", route).strip("-") or "home"
 
 
+def discover_static_routes() -> list[str]:
+    """Build the proof inventory from real route declarations, not stale URLs."""
+    route_files = sorted(Path("src/routes").glob("*.tsx"))
+    route_files.extend([Path("src/App.tsx")])
+    found: set[str] = set()
+    dynamic = re.compile(r"[:*]")
+    for route_file in route_files:
+        if not route_file.exists():
+            continue
+        for path in re.findall(r'path=["\']([^"\']+)', route_file.read_text(errors="ignore")):
+            if not path.startswith("/") or dynamic.search(path):
+                continue
+            found.add(path)
+    return sorted(found, key=lambda value: (value.count("/"), value))
+
+
 def _lum(c):
     c = np.asarray(c, dtype=float) / 255.0
     c = np.where(c <= 0.03928, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
@@ -348,7 +364,8 @@ async def main():
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
 
-    routes = json.loads(Path(args.routes).read_text())[args.offset:]
+    routes_path = Path(args.routes)
+    routes = (json.loads(routes_path.read_text()) if routes_path.exists() else discover_static_routes())[args.offset:]
     if args.limit:
         routes = routes[: args.limit]
 

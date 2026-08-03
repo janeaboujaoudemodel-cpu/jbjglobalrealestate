@@ -349,9 +349,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const homeMobileFiberglassActive = isHomeHeroPath && isAtPageTop && !forceSolid;
   // One canonical surface state drives every header foreground and logo asset.
   // Never derive the image, wordmark, and controls from separate booleans.
-  const headerSurface: "dark" | "light" = shouldUseMobileHeader
-    ? (homeMobileFiberglassActive ? "dark" : "light")
-    : (isFullyTransparent ? "dark" : "light");
+  // Non-home routes always paint champagne chrome. Only the homepage may use
+  // the transparent dark identity over its photographic hero.
+  const headerSurface: "dark" | "light" = homeMobileFiberglassActive || (!shouldUseMobileHeader && isHomeHeroPath && isFullyTransparent)
+    ? "dark"
+    : "light";
   const useLightHeaderIdentity = headerSurface === "dark";
   const champagneFiberglassBackground =
     'linear-gradient(180deg, rgba(247,242,234,0.78) 0%, rgba(239,230,214,0.72) 100%)';
@@ -792,7 +794,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             className="flex items-center gap-2 sm:gap-3 xl:gap-4 min-w-0 group transition-all duration-300"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative shrink-0 ml-0 w-10 h-10 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] overflow-hidden">
+            <div className="relative shrink-0 ml-0 w-12 h-12 sm:w-16 sm:h-16 lg:w-14 lg:h-14 xl:w-16 xl:h-16 overflow-visible">
               {/* Logo glow backdrop */}
               <div 
                 className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -805,11 +807,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
-                className={`w-full h-full object-contain relative z-10 transition-transform duration-300 ${
-                  useLightHeaderIdentity
-                    ? "scale-[1.75] md:scale-[2]"
-                    : "scale-100"
-                }`}
+                className="w-full h-full object-contain relative z-10 transition-transform duration-300"
                 style={{
                   filter: useLightHeaderIdentity 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
