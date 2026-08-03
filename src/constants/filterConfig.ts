@@ -97,6 +97,9 @@ export const EMIRATES_OPTIONS = [
   { value: "Umm Al Quwain", label: "Umm Al Quwain", country: "UAE" },
   // International Priority Countries
   { value: "Cyprus", label: "Cyprus", country: "International" },
+  { value: "Greece", label: "Greece", country: "International" },
+  { value: "Lebanon", label: "Lebanon", country: "International" },
+  { value: "Georgia", label: "Georgia", country: "International" },
   { value: "Indonesia", label: "Indonesia", country: "International" },
   { value: "Oman", label: "Oman", country: "International" },
   { value: "Thailand", label: "Thailand", country: "International" },
