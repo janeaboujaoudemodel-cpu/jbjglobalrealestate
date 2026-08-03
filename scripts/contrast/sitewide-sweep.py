@@ -224,9 +224,22 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
             "*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;"
             "transition-duration:0s!important;transition-delay:0s!important}"
         ))
-        await page.wait_for_timeout(1600)
+        # Wait until the shell has actually painted content (guards/redirects on
+        # protected routes settle late and would otherwise produce blank PNGs).
+        for _ in range(24):
+            await page.wait_for_timeout(400)
+            try:
+                painted = await page.evaluate(
+                    "(document.body?.innerText||'').trim().length > 40"
+                )
+            except Exception:  # noqa: BLE001 - mid-navigation context swap
+                painted = False
+            if painted:
+                break
+        await page.wait_for_timeout(600)
         shot = shots / f"{slug(route)}--{viewport_name}.png"
         await page.screenshot(path=str(shot))
+
         data = await page.evaluate(CANDIDATES_JS)
         entry["screenshot"] = shot.name
 
