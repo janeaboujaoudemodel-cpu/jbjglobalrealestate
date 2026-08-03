@@ -750,7 +750,8 @@ export function useDeveloper(developerSlug: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("developers")
-        .select("*")
+        .select(DEVELOPERS_PUBLIC_SELECT)
+
         .eq("slug", developerSlug)
         .maybeSingle();
       
