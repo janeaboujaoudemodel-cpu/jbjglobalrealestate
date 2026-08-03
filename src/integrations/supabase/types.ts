@@ -43785,6 +43785,7 @@ export type Database = {
         Args: { _name: string; _website?: string }
         Returns: string
       }
+      jbj_is_hr_privileged: { Args: { _uid: string }; Returns: boolean }
       jbj_map_entity_type: { Args: { _entity_type: string }; Returns: string }
       jbj_map_portal_kind: { Args: { _entity_type: string }; Returns: string }
       jbj_project_publish_blockers_for_row: {

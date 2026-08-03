@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,13 +14,49 @@ serve(async (req) => {
   }
 
   try {
+    // ── AUTH: paid scraping/AI must never run for anonymous callers ──────────
+    const auth = await requireAuthenticatedUser(req);
+    if (!auth.authenticated || !auth.userId) {
+      return unauthorizedResponse("Authentication required to scrape property URLs");
+    }
+
+    const { response: rateLimited } = await enforceRateLimit(
+      req,
+      {
+        functionName: "scrape-property-url",
+        maxRequests: 20,
+        windowMinutes: 10,
+        keyType: "user",
+      },
+      corsHeaders,
+      auth.userId,
+    );
+    if (rateLimited) return rateLimited;
+
     const { url } = await req.json();
-    if (!url) {
+    if (!url || typeof url !== "string") {
       return new Response(
         JSON.stringify({ success: false, error: "URL is required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url);
+    } catch {
+      return new Response(
+        JSON.stringify({ success: false, error: "Invalid URL" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") {
+      return new Response(
+        JSON.stringify({ success: false, error: "Only http(s) URLs are supported" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
 
     const FIRECRAWL_API_KEY = Deno.env.get("FIRECRAWL_API_KEY");
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");

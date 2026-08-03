@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -428,19 +430,51 @@ serve(async (req) => {
       url,
       urls,
       files,
-      userId,
+      userId: _clientSuppliedUserId,
       albumName,
       auto_approve: _auto_approve_raw = false,
       queue = true,
       retryImportId,
       async_mode = false,
       job_id,
+      internal_user_id,
     } = body;
     parsedJobId = job_id || null;
+
+    // ── AUTH: never trust a client-supplied userId ───────────────────────────
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const bearer = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+    const isInternalCall = bearer.length > 0 && bearer === serviceRoleKey;
+
+    let userId: string | null = null;
+    if (isInternalCall) {
+      // Trusted self-invocation (async worker) — ownership already verified upstream
+      userId = typeof internal_user_id === "string" ? internal_user_id : null;
+    } else {
+      const auth = await requireAuthenticatedUser(req);
+      if (!auth.authenticated || !auth.userId) {
+        return unauthorizedResponse("Authentication required to submit extraction jobs");
+      }
+      userId = auth.userId;
+
+      const { response: rateLimited } = await enforceRateLimit(
+        req,
+        {
+          functionName: "extract-listing-from-link",
+          maxRequests: 20,
+          windowMinutes: 10,
+          keyType: "user",
+        },
+        corsHeaders,
+        userId,
+      );
+      if (rateLimited) return rateLimited;
+    }
 
     const urlList: string[] = urls || (url ? [url] : []);
     const fileList: { name: string; url: string; type: string }[] = Array.isArray(files) ? files : [];
     const auto_approve = false; // ENFORCED: Manual publish only
+
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -472,11 +506,12 @@ serve(async (req) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+          "Authorization": `Bearer ${serviceRoleKey}`,
         },
         body: JSON.stringify({
-          job_id: job.id, urls: urlList, files: fileList, userId, auto_approve, albumName,
+          job_id: job.id, urls: urlList, files: fileList, internal_user_id: userId, auto_approve, albumName,
         }),
+
       }).catch(err => console.error("[extract] Fire-and-forget error:", err));
 
       return new Response(
