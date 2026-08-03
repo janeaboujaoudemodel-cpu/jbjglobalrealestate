@@ -107,9 +107,6 @@ export default function DeveloperOwnerCampaignDashboard() {
           <BrandedEmailDashboard kind="developers" filter={filter} onFilterChange={setFilter} />
         </TabsContent>
 
-        <TabsContent value="activity" className="mt-4">
-          <BrandedEmailDashboard kind="developers" filter={filter} onFilterChange={setFilter} />
-        </TabsContent>
       </Tabs>
     </div>
   );
