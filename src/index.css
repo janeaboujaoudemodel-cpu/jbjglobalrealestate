@@ -13546,16 +13546,17 @@ html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="tru
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) *,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) * {
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   fill: none !important;
 }
+
 /* Inactive highlight hover: subtle champagne. */
 html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]):hover,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]):hover,
