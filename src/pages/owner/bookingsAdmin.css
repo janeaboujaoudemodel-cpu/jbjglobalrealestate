@@ -144,20 +144,26 @@
   border: 1px solid transparent;
   border-radius: var(--booking-radius);
   background: transparent;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.92) !important;
+  -webkit-text-fill-color: currentColor !important;
   text-align: left;
   cursor: pointer;
   transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
   position: relative;
 }
+.booking-console__nav-item :where(span, svg, path) {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  stroke: currentColor !important;
+}
 .booking-console__nav-item:hover {
   background: linear-gradient(90deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
-  color: #fff;
+  color: #fff !important;
   box-shadow: inset 3px 0 0 var(--booking-gold), 0 6px 18px -12px rgba(0,0,0,0.6);
 }
 .booking-console__nav-item[data-active="true"] {
   background: linear-gradient(90deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
-  color: #fff;
+  color: #fff !important;
   font-weight: 700;
   box-shadow: inset 3px 0 0 var(--booking-gold);
 }
@@ -246,8 +252,8 @@
   background: var(--booking-panel);
 }
 .booking-console__appointment-card > div { display: grid; gap: 3px; min-width: 0; }
-.booking-console strong { color: var(--booking-ink); }
-.booking-console small { color: var(--booking-muted); font-size: 12px; line-height: 1.35; }
+.booking-console__content strong { color: var(--booking-ink); }
+.booking-console__content small { color: var(--booking-muted); font-size: 12px; line-height: 1.35; }
 .booking-console__row-actions { display: flex !important; flex-direction: row; gap: 8px; }
 
 .booking-console__event-list-head > div:first-child { display: flex; align-items: center; gap: 9px; }

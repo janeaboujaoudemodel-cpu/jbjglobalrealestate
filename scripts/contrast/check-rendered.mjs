@@ -19,23 +19,65 @@ const allowlistPath = path.join(__dirname, 'allowlist.json');
 const reportDir = path.join(root, 'artifacts', 'contrast');
 
 const PREVIEW_URL = process.env.PREVIEW_URL || 'http://localhost:8080';
+const INSTALLED_CHROMIUM = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+  || '/opt/ms-playwright/chromium-1194/chrome-linux/chrome';
 
-// Public/representative routes. Owner-restricted routes are excluded
-// because they require authentication; they should be added with a
-// signed-in fixture once the test-user flow exists.
+// Canonical route-family coverage. Redirect aliases are validated separately
+// by the route inventory; these screens cover every distinct shell/surface
+// contract, including authenticated owner applications when a managed browser
+// session is available in the environment.
 const ROUTES = [
   '/',
   '/properties',
   '/resale-properties',
   '/developers',
   '/areas',
-  '/ai-hub',
-  '/property-map',
+  '/communities',
+  '/map',
+  '/list-property',
+  '/mortgage-calculator',
+  '/buyer-guide',
+  '/seller-guide',
+  '/guides',
+  '/insights',
+  '/broker-faq',
+  '/services',
   '/about',
   '/contact',
-  '/legal/terms',
-  '/legal/privacy',
+  '/terms',
+  '/privacy',
+  '/card',
+  '/book/jane',
+  '/owner',
+  '/owner/bookings',
+  '/owner/crm/jbj/home',
+  '/owner/crm/jbj/owner-brokerages',
+  '/owner/crm/jbj/owner-developers',
+  '/owner/documents/forms',
+  '/owner/developers',
 ];
+
+const VIEWPORTS = [
+  { name: 'desktop', width: 1440, height: 1100 },
+  { name: 'mobile', width: 390, height: 844 },
+];
+
+async function restoreManagedSession(page, context) {
+  const storageKey = process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY;
+  const sessionJson = process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON;
+  const cookiesJson = process.env.LOVABLE_BROWSER_SUPABASE_COOKIES_JSON;
+  if (cookiesJson) {
+    const cookies = JSON.parse(cookiesJson).map(({ domain: _domain, path: _path, ...cookie }) => ({
+      ...cookie,
+      url: PREVIEW_URL,
+    }));
+    await context.addCookies(cookies);
+  }
+  if (storageKey && sessionJson) {
+    await page.goto(PREVIEW_URL, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(([key, value]) => localStorage.setItem(key, value), [storageKey, sessionJson]);
+  }
+}
 
 async function loadAxeSource() {
   // axe-core is bundled with @axe-core/playwright; if not available we fall back
@@ -54,12 +96,19 @@ async function run() {
   const allowedSelectors = new Set(allowlist.axeNodeSelectors.map((a) => a.selector));
 
   const axeSource = await loadAxeSource();
-  const browser = await chromium.launch();
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const browser = await chromium.launch({
+    executablePath: fs.existsSync(INSTALLED_CHROMIUM) ? INSTALLED_CHROMIUM : undefined,
+  });
   const aggregate = [];
+  fs.mkdirSync(reportDir, { recursive: true });
 
-  for (const route of ROUTES) {
-    const page = await context.newPage();
+  for (const viewport of VIEWPORTS) {
+    const context = await browser.newContext({ viewport });
+    const bootstrapPage = await context.newPage();
+    await restoreManagedSession(bootstrapPage, context);
+    await bootstrapPage.close();
+    for (const route of ROUTES) {
+      const page = await context.newPage();
     const targetUrl = new URL(route, PREVIEW_URL).toString();
     try {
       await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 30000 });
@@ -81,19 +130,23 @@ async function run() {
             summary: n.failureSummary,
           })),
       );
-      aggregate.push({ route, violations: filtered });
-      console.log(`  ${filtered.length === 0 ? '✓' : '✗'} ${route} — ${filtered.length} violation(s)`);
+      const finalPath = new URL(page.url()).pathname;
+      const unexpectedRedirect = route.startsWith('/owner') && !finalPath.startsWith('/owner');
+      await page.screenshot({ path: path.join(reportDir, `${viewport.name}-${route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'home'}.png`) });
+      aggregate.push({ route, viewport: viewport.name, finalPath, unexpectedRedirect, violations: filtered });
+      console.log(`  ${filtered.length === 0 && !unexpectedRedirect ? '✓' : '✗'} [${viewport.name}] ${route} — ${filtered.length} violation(s)`);
     } catch (err) {
       console.error(`  ! ${route} — load error: ${err.message}`);
-      aggregate.push({ route, violations: [], error: err.message });
+      aggregate.push({ route, viewport: viewport.name, violations: [], error: err.message });
     } finally {
       await page.close();
     }
+    }
+    await context.close();
   }
 
   await browser.close();
 
-  fs.mkdirSync(reportDir, { recursive: true });
   fs.writeFileSync(
     path.join(reportDir, 'rendered.json'),
     JSON.stringify({ generatedAt: new Date().toISOString(), previewUrl: PREVIEW_URL, results: aggregate }, null, 2),
@@ -103,7 +156,7 @@ async function run() {
   let md = `## 🎨 Rendered Contrast Sweep\n\n`;
   md += `Preview: \`${PREVIEW_URL}\` · Rule: \`color-contrast\` (WCAG AA)\n\n`;
   md += `| Route | Violations |\n|---|---|\n`;
-  for (const r of aggregate) md += `| \`${r.route}\` | ${r.violations.length}${r.error ? ' ⚠️ ' + r.error : ''} |\n`;
+  for (const r of aggregate) md += `| \`${r.viewport}: ${r.route}\` | ${r.violations.length}${r.unexpectedRedirect ? ' ⚠️ unexpected redirect' : ''}${r.error ? ' ⚠️ ' + r.error : ''} |\n`;
   const totalViolations = aggregate.reduce((n, r) => n + r.violations.length, 0);
   if (totalViolations > 0) {
     md += `\n### Failures\n`;
@@ -116,10 +169,10 @@ async function run() {
   fs.writeFileSync(path.join(reportDir, 'rendered.md'), md);
 
   if (totalViolations > 0) {
-    console.error(`\n✗ ${totalViolations} rendered color-contrast violation(s) across ${ROUTES.length} routes.`);
+    console.error(`\n✗ ${totalViolations} rendered color-contrast violation(s) across ${ROUTES.length} canonical routes and ${VIEWPORTS.length} viewports.`);
     process.exit(1);
   }
-  console.log(`\n✓ No rendered contrast violations on ${ROUTES.length} routes.`);
+  console.log(`\n✓ No rendered contrast violations on ${ROUTES.length} canonical routes and ${VIEWPORTS.length} viewports.`);
 }
 
 run().catch((err) => {
