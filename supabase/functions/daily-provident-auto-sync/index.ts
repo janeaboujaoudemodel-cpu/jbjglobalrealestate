@@ -86,38 +86,86 @@ Deno.serve(async (req) => {
     extractionJobId = extractionJob?.id || null;
 
     // ═══════════════════════════════════════════════════════════════
-    // STEP 1: Full sync — discover all developers and their projects
+    // STEP 1: Discover developers, then sync each developer's projects
+    // in separate short calls. A single blocking step='full_sync' call
+    // iterates every developer inside one request and predictably hits
+    // the 150s edge-function idle timeout (504 IDLE_TIMEOUT), which used
+    // to abort this whole job before anything was written.
     // ═══════════════════════════════════════════════════════════════
-    console.log("[daily-provident-auto-sync] Step 1: Running provident-full-sync (full_sync)...");
+    const STEP1_TIME_BUDGET_MS = 100_000; // leave room for STEP 2 in this run
+    const PER_CALL_TIMEOUT_MS = 120_000;
+    const step1StartedAt = Date.now();
 
-    const fullSyncResponse = await fetch(`${supabaseUrl}/functions/v1/provident-full-sync`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${serviceKey}`,
-      },
-      body: JSON.stringify({
-        step: "full_sync",
-        limit: developerLimit,
-      }),
-    });
+    const callFullSync = async (payload: Record<string, unknown>) => {
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), PER_CALL_TIMEOUT_MS);
+      try {
+        const res = await fetch(`${supabaseUrl}/functions/v1/provident-full-sync`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${serviceKey}`,
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+        const text = await res.text();
+        if (!res.ok) {
+          return { ok: false as const, error: `${res.status} — ${text.substring(0, 200)}` };
+        }
+        return { ok: true as const, data: JSON.parse(text) };
+      } catch (e) {
+        return { ok: false as const, error: (e as Error).message };
+      } finally {
+        clearTimeout(t);
+      }
+    };
 
-    if (!fullSyncResponse.ok) {
-      const errText = await fullSyncResponse.text();
-      throw new Error(`provident-full-sync failed: ${fullSyncResponse.status} — ${errText.substring(0, 300)}`);
-    }
+    console.log("[daily-provident-auto-sync] Step 1a: discovering developers...");
+    const devDiscovery = await callFullSync({ step: "developers" });
 
-    const fullSyncResult = await fullSyncResponse.json();
-    stats.developers_found = fullSyncResult.developers_found ?? 0;
-    stats.developers_created = fullSyncResult.developers_created ?? 0;
-    stats.developers_updated = fullSyncResult.developers_updated ?? 0;
-    stats.projects_found = fullSyncResult.projects_synced ?? 0;
+    if (!devDiscovery.ok) {
+      // Discovery failure is recorded but must not kill the rest of the pipeline.
+      stats.errors.push(`provident-full-sync (developers) failed: ${devDiscovery.error}`);
+      console.error(`[daily-provident-auto-sync] Step 1a failed: ${devDiscovery.error}`);
+    } else {
+      const devResult = devDiscovery.data;
+      stats.developers_found = devResult.developers_found ?? 0;
+      stats.developers_created = devResult.created ?? 0;
+      stats.developers_updated = devResult.updated ?? 0;
 
-    if (fullSyncResult.errors && fullSyncResult.errors.length > 0) {
-      stats.errors.push(...fullSyncResult.errors.slice(0, 20));
+      const allDevelopers: Array<{ slug: string; name?: string }> = devResult.developers ?? [];
+      const developersToSync = developerLimit
+        ? allDevelopers.slice(0, developerLimit)
+        : allDevelopers;
+
+      console.log(`[daily-provident-auto-sync] Step 1b: syncing projects for ${developersToSync.length} developers...`);
+
+      let syncedDevelopers = 0;
+      for (const dev of developersToSync) {
+        if (Date.now() - step1StartedAt > STEP1_TIME_BUDGET_MS) {
+          const remaining = developersToSync.length - syncedDevelopers;
+          console.log(`[daily-provident-auto-sync] Step 1b time budget reached — ${remaining} developers deferred to next run`);
+          stats.errors.push(`Time budget reached: ${remaining} developers deferred to next run`);
+          break;
+        }
+
+        const projRes = await callFullSync({
+          step: "developer_projects",
+          developerSlug: dev.slug,
+        });
+        syncedDevelopers++;
+
+        if (!projRes.ok) {
+          stats.errors.push(`${dev.slug}: ${projRes.error}`);
+          continue;
+        }
+        stats.projects_found += projRes.data.projects_found ?? 0;
+      }
     }
 
     console.log(`[daily-provident-auto-sync] Step 1 done: ${stats.developers_found} devs, ${stats.projects_found} projects`);
+
 
     // ═══════════════════════════════════════════════════════════════
     // STEP 2: Deep scrape ALL projects missing ANY critical field
