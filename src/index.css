@@ -37017,9 +37017,9 @@ html body #root [data-relationships-hub] .rh-tile-label {
   white-space: normal;
 }
 [data-relationships-hub] .rh-tile-active,
-[data-relationships-hub] .rh-tile-active * {
+[data-relationships-hub] .rh-tile-active {
   color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  -webkit-text-fill-color: currentColor !important;
 }
 [data-relationships-hub] .rh-tile-active svg {
   color: #FFFFFF !important;
@@ -37063,14 +37063,10 @@ html body #root [data-relationships-hub] .rh-tile-label {
 
 /* Campaign dashboard active filters/cards — final pure-white lock. */
 html body #root [data-branded-email-dashboard="true"] [data-campaign-filter-chip="active"],
-html body #root [data-branded-email-dashboard="true"] [data-campaign-filter-chip="active"] *,
 html body #root [data-branded-email-dashboard="true"] [data-campaign-stat-card="active"],
-html body #root [data-branded-email-dashboard="true"] [data-campaign-stat-card="active"] *,
-html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action="primary"],
-html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action="primary"] * {
+html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action="primary"] {
   color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-fill-color: #FFFFFF !important;
+  -webkit-text-fill-color: currentColor !important;
   opacity: 1 !important;
 }
 

@@ -204,7 +204,7 @@ export const AdminRoutes = () => (
     <Route path="/hr-dashboard" element={<Navigate to="/owner/careers-portal?section=overview" replace />} />
     <Route path="/admin/onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
     <Route path="/admin-onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
-    <Route path="/contract-forms" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
+    {/* /contract-forms is the authenticated document surface in PublicRoutes. */}
     <Route path="/careers-portal" element={<Navigate to="/owner/careers-portal" replace />} />
 
 
