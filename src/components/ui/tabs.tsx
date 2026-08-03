@@ -37,33 +37,9 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => {
-  const localRef = React.useRef<React.ElementRef<typeof TabsPrimitive.Trigger>>(null);
-
-  React.useImperativeHandle(ref, () => localRef.current as React.ElementRef<typeof TabsPrimitive.Trigger>);
-
-  React.useEffect(() => {
-    const node = localRef.current;
-    if (!node) return;
-    const sync = () => {
-      const active = node.getAttribute("data-state") === "active" || node.getAttribute("aria-selected") === "true";
-      if (active) {
-        node.style.setProperty("color", "#FFFFFF", "important");
-        node.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
-      } else {
-        node.style.removeProperty("color");
-        node.style.removeProperty("-webkit-text-fill-color");
-      }
-    };
-    sync();
-    const observer = new MutationObserver(sync);
-    observer.observe(node, { attributes: true, attributeFilter: ["data-state", "aria-selected"] });
-    return () => observer.disconnect();
-  }, []);
-
-  return (
+>(({ className, ...props }, ref) => (
     <TabsPrimitive.Trigger
-      ref={localRef}
+      ref={ref}
       data-jj-segmented-trigger=""
       data-emerald-active=""
       className={cn(
@@ -72,8 +48,7 @@ const TabsTrigger = React.forwardRef<
       )}
       {...props}
     />
-  );
-});
+));
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
 const TabsContent = React.forwardRef<
