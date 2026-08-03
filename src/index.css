@@ -37271,3 +37271,14 @@ html body #root header[data-header-surface="dark"] :where(.jj-header-utility-ico
 html body #root header[data-header-surface="light"] :where(.jj-header-utility-icon, .jj-hamburger, .jj-hamburger-close) {
   filter: none;
 }
+
+/* Insights/guides use a fixed mobile header above a content shell whose first
+   painted pixel can be champagne. Give that header a real dark surface rather
+   than letting the bright shell bleed through behind its white identity. The
+   photographic home hero remains transparent because it does not set the MI
+   page-active marker. */
+@media (max-width: 1023px) {
+  html body[data-mi-page-active="true"] #root header[data-header-surface="dark"] {
+    background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  }
+}
