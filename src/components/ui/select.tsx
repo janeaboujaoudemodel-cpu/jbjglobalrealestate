@@ -124,7 +124,7 @@ const SelectContent = React.forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
-      data-no-contrast-guard
+      data-surface="light"
       className={cn(
         "jbj-form-popover relative z-[120000] max-h-96 min-w-[8rem] overflow-hidden rounded-xl max-w-[calc(100vw-2rem)] duration-0",
         "text-[#1A1A1A] border border-[#B89555]/40",
@@ -163,6 +163,7 @@ const SelectContentDark = React.forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
+      data-surface="dark"
       className={cn(
         "relative z-[120000] max-h-96 min-w-[8rem] overflow-hidden rounded-xl duration-0",
         "bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/30 text-white",

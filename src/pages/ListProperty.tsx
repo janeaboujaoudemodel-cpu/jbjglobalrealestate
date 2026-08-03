@@ -758,7 +758,7 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
                 color: "#FFFFFF",
               }}
             >
-              <Link to="/login?redirect=/list-property%23my-submissions">
+               <Link to="/auth?redirect=/list-property%23my-submissions">
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign in to continue</span>
                 <ArrowRight className="w-4 h-4 ml-2" style={{ color: "#FFFFFF" }} />
               </Link>

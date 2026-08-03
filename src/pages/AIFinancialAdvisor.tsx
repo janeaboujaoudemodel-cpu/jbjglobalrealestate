@@ -507,7 +507,7 @@ const AIFinancialAdvisor = () => {
 
                 {/* CTA */}
                 <div className="flex flex-wrap gap-4">
-                  <Link to="/mortgage-advisory" className="flex-1">
+                   <Link to="/services/mortgage-advisory" className="flex-1">
                     <button 
                       className="w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
                       style={{

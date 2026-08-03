@@ -102,14 +102,7 @@ export const DevelopersPortalRoutes = () => (
     {/* Redirects: old hub URLs → new portal */}
     <Route path="/developer-hub" element={<Navigate to="/developers-portal" replace />} />
     <Route path="/developer-hub/*" element={<Navigate to="/developers-portal" replace />} />
-    <Route path="/developer-hub-admin" element={<Navigate to="/owner/developers" replace />} />
-    <Route path="/developer-hub-admin/directory" element={<Navigate to="/owner/developers" replace />} />
-    <Route path="/developer-hub-admin/missing-logos" element={<Navigate to="/owner/developers/missing-logos" replace />} />
-    <Route path="/developer-hub-admin/enrichment" element={<Navigate to="/owner/developers/profile-rebuild" replace />} />
-    <Route path="/developer-hub-admin/briefings" element={<Navigate to="/owner/developers/briefings" replace />} />
-    <Route path="/developer-hub-admin/calendar" element={<Navigate to="/owner/developers/calendar" replace />} />
-    <Route path="/developer-hub-admin/projects" element={<Navigate to="/owner/developers/projects" replace />} />
-    <Route path="/developer-hub-admin/profile/:slug" element={<Navigate to="/owner/developers" replace />} />
-    <Route path="/developer-hub-admin/*" element={<Navigate to="/owner/developers" replace />} />
+    {/* /developer-hub-admin aliases are centralized in AdminRoutes so every
+        legacy sub-route has one deterministic owner-shell destination. */}
   </>
 );

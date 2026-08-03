@@ -344,7 +344,7 @@ export default function BrokerPortal() {
                     <CardContent className="p-6 flex items-center gap-4">
                       <div className="w-14 h-14 rounded-xl bg-[hsl(36,40%,70%)]/10 flex items-center justify-center flex-shrink-0"><Users className="w-7 h-7 text-[hsl(36,40%,70%)]" /></div>
                       <div className="flex-1"><h3 className="font-semibold text-foreground">JBJ Graduates</h3><p className="text-xs text-muted-foreground mt-0.5">View all graduated brokers</p></div>
-                      <Link to="/academy/graduates"><Button size="sm" variant="outline" className="border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)] hover:bg-[hsl(36,40%,70%)]/10">View <ArrowRight className="w-3.5 h-3.5 ml-1" /></Button></Link>
+                       <Link to="/jbj-academy"><Button size="sm" variant="outline" className="border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)] hover:bg-[hsl(36,40%,70%)]/10">View <ArrowRight className="w-3.5 h-3.5 ml-1" /></Button></Link>
                     </CardContent>
                   </Card>
                 </div>

@@ -138,7 +138,7 @@ const OverseasInvestorsStrip = () => {
       `}</style>
 
       <Link
-        to="/overseas-investors"
+         to="/investor-hub"
         aria-label="Invest in Dubai from anywhere in the world — discover the opportunity"
         data-surface="dark"
         data-on-dark

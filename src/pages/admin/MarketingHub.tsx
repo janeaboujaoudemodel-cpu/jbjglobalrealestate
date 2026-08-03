@@ -243,7 +243,7 @@ const MarketingHub: React.FC = () => {
                   AI Email
                 </Button>
               </Link>
-              <Link to="/founders-assistant">
+               <Link to="/owner/founder-assistant">
                 <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hidden md:flex">
                   <Bot className="h-3.5 w-3.5 mr-1.5 text-[#1A1A1A]" />
                   AI Assistant
@@ -540,7 +540,7 @@ const MarketingHub: React.FC = () => {
                 <Share2 className="w-3.5 h-3.5 mr-1.5 text-[#1A1A1A]" /> Social Post
               </Button>
             </Link>
-            <Link to="/founders-assistant">
+             <Link to="/owner/founder-assistant">
               <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] text-xs hover:bg-[#EFE6D6]/10">
                 <Bot className="w-3.5 h-3.5 mr-1.5 text-[#1A1A1A]" /> AI Assistant
               </Button>

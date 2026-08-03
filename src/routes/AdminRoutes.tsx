@@ -156,6 +156,7 @@ export const AdminRoutes = () => (
     <Route path="/listing-admin/preview/:id" element={<Navigate to="/owner/listing-admin" replace />} />
     <Route path="/automations" element={<Navigate to="/owner/automations" replace />} />
     <Route path="/founder-assistant" element={<Navigate to="/owner/founder-assistant" replace />} />
+    <Route path="/founders-assistant" element={<Navigate to="/owner/founder-assistant" replace />} />
     <Route path="/hr-hub" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
 
     {/* ── Owner Tools (in main layout) ── */}
@@ -204,7 +205,7 @@ export const AdminRoutes = () => (
     <Route path="/hr-dashboard" element={<Navigate to="/owner/careers-portal?section=overview" replace />} />
     <Route path="/admin/onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
     <Route path="/admin-onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
-    <Route path="/contract-forms" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
+    {/* /contract-forms is the authenticated document surface in PublicRoutes. */}
     <Route path="/careers-portal" element={<Navigate to="/owner/careers-portal" replace />} />
 
 

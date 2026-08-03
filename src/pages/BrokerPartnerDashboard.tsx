@@ -332,7 +332,7 @@ const BrokerPartnerDashboard = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      <Link to="/broker-resources">
+                       <Link to="/broker/portal">
                         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#1A1A1A] transition-colors cursor-pointer">
                           <FileText className="w-5 h-5 text-white/70" />
                           <span className="text-sm">Marketing Materials</span>
@@ -367,7 +367,7 @@ const BrokerPartnerDashboard = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <Link to="/broker-education">
+                       <Link to="/jbj-academy">
                         <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-colors cursor-pointer">
                           <p className="font-medium text-sm mb-1">Course Library</p>
                           <p className="text-xs text-white/90">Access broker training materials</p>
