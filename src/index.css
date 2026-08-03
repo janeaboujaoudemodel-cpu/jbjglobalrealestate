@@ -37285,13 +37285,13 @@ html body #root header[data-header-surface="light"] :where(.jj-header-utility-ic
 
 /* PASS 202 — SHARED RESPONSIVE SHELL CONTRACT */
 :root {
-  --jj-page-gutter: clamp(1rem, 4vw, 2.5rem);
+  --jj-page-gutter: clamp(1.5rem, 4vw, 2.5rem);
   --responsive-header-height: 88px;
 }
 
 @media (max-width: 767px) {
   :root {
-    --jj-page-gutter: 1rem;
+    --jj-page-gutter: 1.5rem;
     --responsive-header-height: 66px;
   }
 
@@ -37314,4 +37314,20 @@ html body #root header[data-header-surface="light"] :where(.jj-header-wordmark, 
 html body #root header[data-header-surface] :where(.jj-header-premium-control, .jj-emerald-metallic) {
   background-color: #042c1c !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+}
+
+/* PASS 203 — page geometry is owned by the shell, while content owns its
+   gutter. Never erase a hero's inner padding when making its background
+   full-bleed. This supersedes the legacy PASS 198 direct-child reset. */
+html body:not([data-homepage]) #root main.jj-main-shell:not(.jj-main-shell--standalone) [data-content-gutter="1"] [data-hero-dark] > :where(.relative, .container, [class*="max-w-"]) {
+  padding-left: var(--jj-page-gutter) !important;
+  padding-right: var(--jj-page-gutter) !important;
+  box-sizing: border-box !important;
+}
+
+/* Light chrome is an actual champagne surface. The foreground and identity
+   asset are therefore always ink; dark chrome is reserved for the home hero. */
+html body #root header[data-header-surface="light"] {
+  background: #FDFBF7 !important;
+  background-image: none !important;
 }
