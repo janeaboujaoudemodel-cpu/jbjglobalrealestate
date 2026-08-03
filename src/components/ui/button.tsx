@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 // PRIMARY: locked JBJ Emerald gradient with white foreground.
 // Contrast is locked globally by .jj-cta-* primitives in index.css.
 const BRAND_PRIMARY =
-  "jj-cta-primary jj-cta-emerald allow-white border-transparent shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)] hover:translate-y-0 active:translate-y-0";
+  "jj-cta-primary jj-cta-emerald border-transparent shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)] hover:translate-y-0 active:translate-y-0";
 
 // SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
@@ -133,7 +133,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const effectiveVariant = variant ?? "primary";
     const isPrimaryCta = effectiveVariant === "primary" || effectiveVariant === "default" || effectiveVariant === "destructive" || effectiveVariant === "gold" || effectiveVariant.startsWith("ai-");
     const classNameText = typeof className === "string" ? className : "";
-    const hasExplicitForeground = /(?:^|\s)!?text-|(?:^|\s)\[color:|(?:^|\s)text-\[/.test(classNameText);
     const hasEmeraldPrimitive = emeraldAction === "true"
       || /(?:^|\s)(?:jj-emerald-action|jj-cta-emerald|jj-surface-emerald|jj-emerald-metallic|jj-pill-emerald-metallic)(?:\s|$)/.test(classNameText);
     const surface = explicitSurface
@@ -159,11 +158,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-cta={cta}
         ref={ref}
         {...props}
-        style={{
-          ...(props.style ?? {}),
-          color: isPrimaryCta && !hasExplicitForeground ? "#FFFFFF" : props.style?.color,
-          WebkitTextFillColor: isPrimaryCta && !hasExplicitForeground ? "#FFFFFF" : (props.style as React.CSSProperties | undefined)?.WebkitTextFillColor,
-        }}
       />
     );
   },

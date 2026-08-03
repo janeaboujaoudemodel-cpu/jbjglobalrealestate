@@ -32,7 +32,7 @@ if (/installContrastGuard|new\s+MutationObserver|addEventListener\(['"](?:mouseo
 }
 
 const finalContractLabels = [
-  'SINGLE FINAL SURFACE CONTRAST CONTRACT',
+  'GLOBAL SEMANTIC CONTRAST CONTRACT',
   'STABLE SURFACE CONTRACT',
   'TRUE FINAL LIGHT-OWN-BACKGROUND LOCK',
   'ABSOLUTE OWN-LIGHT-SURFACE CONTRAST LOCK',
@@ -41,12 +41,12 @@ const finalContractLabels = [
   'FINAL SURFACE CONTRACT — own-background wins',
 ];
 const presentFinalContracts = finalContractLabels.filter((label) => stylesheet.includes(label));
-if (presentFinalContracts.length !== 1 || presentFinalContracts[0] !== 'SINGLE FINAL SURFACE CONTRAST CONTRACT') {
-  violations.push(`src/index.css must contain exactly one final contrast contract: SINGLE FINAL SURFACE CONTRAST CONTRACT. Found: ${presentFinalContracts.join(', ') || 'none'}.`);
+if (presentFinalContracts.length !== 1 || presentFinalContracts[0] !== 'GLOBAL SEMANTIC CONTRAST CONTRACT') {
+  violations.push(`src/index.css must contain exactly one final contrast contract: GLOBAL SEMANTIC CONTRAST CONTRACT. Found: ${presentFinalContracts.join(', ') || 'none'}.`);
 }
 
-const finalContractIndex = stylesheet.indexOf('SINGLE FINAL SURFACE CONTRAST CONTRACT');
-const finalContractEnd = stylesheet.indexOf('/* FINAL SIDEBAR LOCK', finalContractIndex);
+const finalContractIndex = stylesheet.lastIndexOf('GLOBAL SEMANTIC CONTRAST CONTRACT');
+const finalContractEnd = stylesheet.indexOf('/* PASS 200', finalContractIndex);
 const finalContract = finalContractIndex >= 0
   ? stylesheet.slice(finalContractIndex, finalContractEnd >= 0 ? finalContractEnd : undefined)
   : '';
@@ -78,7 +78,7 @@ const surfaceDescendantPaint = finalContract
   .filter(({ selector, body }) =>
     /\[data-surface\]/.test(selector)
     && /\s:(?:where|is)\(/.test(selector)
-    && /(?:color|-webkit-text-fill-color):[^;]+!important/i.test(body)
+    && /(?:color|-webkit-text-fill-color):\s*(?!inherit\b|currentColor\b)[^;]+!important/i.test(body)
   );
 if (surfaceDescendantPaint.length) {
   violations.push('Surface contrast must paint the surface boundary only; descendant paint leaks across nested surfaces.');

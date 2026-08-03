@@ -47,8 +47,8 @@ CANDIDATES_JS = r"""
     if (cs.visibility === 'hidden' || cs.display === 'none') return false;
     if (parseFloat(cs.opacity) < 0.2) return false;
     const r = el.getBoundingClientRect();
-    if (!(r.width > 3 && r.height > 3 && r.top >= 0 && r.left >= 0 &&
-      r.bottom <= innerHeight && r.right <= innerWidth)) return false;
+    if (!(r.width > 3 && r.height > 3 && r.bottom > 0 && r.right > 0 &&
+      r.top < innerHeight && r.left < innerWidth)) return false;
     // Ancestor chain must not be collapsed/faded/clipped away.
     let cur = el.parentElement;
     while (cur && cur.nodeType === 1) {
@@ -83,7 +83,6 @@ CANDIDATES_JS = r"""
   const selector = 'h1,h2,h3,h4,h5,h6,p,span,li,label,a,button,summary,td,th,strong,em,small,input,textarea,svg';
   const out = [];
   for (const el of Array.from(document.querySelectorAll(selector))) {
-    if (out.length >= 500) break;
     if (!visible(el)) continue;
     const tag = el.tagName.toLowerCase();
     const isSvg = tag === 'svg';
@@ -167,7 +166,7 @@ def slug(route: str) -> str:
 
 def discover_static_routes() -> list[str]:
     """Build a canonical proof inventory, resolving nested relative routes."""
-    route_files = sorted(Path("src/routes").glob("*.tsx"))
+    route_files = sorted(Path("src/routes").rglob("*.tsx"))
     route_files.extend([Path("src/App.tsx")])
     found: set[str] = set()
     dynamic = re.compile(r"[:*]")
@@ -293,7 +292,49 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
         if stable_samples < 2:
             entry["errors"].append("route content did not hydrate before the 30s proof timeout")
         await page.wait_for_timeout(300)
-        data = await page.evaluate(CANDIDATES_JS)
+        page_height = await page.evaluate("Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)")
+        viewport_height = VIEWPORTS[viewport_name]["height"]
+        scroll_positions = list(range(0, max(1, page_height - viewport_height + 1), max(320, viewport_height - 120)))
+        last_position = max(0, page_height - viewport_height)
+        if not scroll_positions or scroll_positions[-1] != last_position:
+            scroll_positions.append(last_position)
+
+        data = None
+        all_flagged = []
+        for scroll_y in scroll_positions:
+            await page.evaluate("y => window.scrollTo(0, y)", scroll_y)
+            await page.wait_for_timeout(80)
+            current_data = await page.evaluate(CANDIDATES_JS)
+            if data is None:
+                data = current_data
+            else:
+                data["overflow"] = max(data["overflow"], current_data["overflow"])
+                data["bodyText"] = max(data["bodyText"], current_data["bodyText"])
+            viewport_capture = await page.screenshot()
+            img = np.array(Image.open(__import__("io").BytesIO(viewport_capture)).convert("RGB"))
+            scale = img.shape[1] / VIEWPORTS[viewport_name]["width"]
+            for cand in current_data["candidates"]:
+                bg, r = measure(img, cand, scale)
+                if bg is None:
+                    continue
+                fg = cand["fg"]
+                white = min(fg) > 232
+                dark = max(fg) < 70
+                light_bg = _lum(np.asarray(bg)) > 0.5
+                dark_bg = _lum(np.asarray(bg)) < 0.16
+                tokens = []
+                if white and light_bg:
+                    tokens.append("white-on-light")
+                if dark and dark_bg:
+                    tokens.append("dark-on-dark")
+                if r < cand["threshold"]:
+                    tokens.append("low-ratio")
+                if tokens:
+                    all_flagged.append({**{k: cand[k] for k in ("tag", "text", "where", "surface", "threshold", "fgRaw", "i")},
+                                        "bg": [round(v) for v in bg], "ratio": round(r, 2), "tokens": tokens,
+                                        "rect": [round(v) for v in cand["rect"]], "scrollY": scroll_y})
+        if data is None:
+            raise RuntimeError("route produced no auditable document")
         entry["overflow"] = data["overflow"]
         entry["blank"] = data["bodyText"] < 40
         entry["landed"] = data["url"]
@@ -314,30 +355,7 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
         provisional.parent.mkdir(parents=True, exist_ok=True)
         await page.screenshot(path=str(provisional))
 
-        img = np.array(Image.open(provisional).convert("RGB"))
-        scale = img.shape[1] / VIEWPORTS[viewport_name]["width"]
-        flagged = []
-        for cand in data["candidates"]:
-            bg, r = measure(img, cand, scale)
-            if bg is None:
-                continue
-            fg = cand["fg"]
-            white = min(fg) > 232
-            dark = max(fg) < 70
-            light_bg = _lum(np.asarray(bg)) > 0.5
-            dark_bg = _lum(np.asarray(bg)) < 0.16
-            tokens = []
-            if white and light_bg:
-                tokens.append("white-on-light")
-            if dark and dark_bg:
-                tokens.append("dark-on-dark")
-            if r < cand["threshold"]:
-                tokens.append("low-ratio")
-            if not tokens:
-                continue
-            flagged.append({**{k: cand[k] for k in ("tag", "text", "where", "surface", "threshold", "fgRaw", "i")},
-                            "bg": [round(v) for v in bg], "ratio": round(r, 2), "tokens": tokens,
-                            "rect": [round(v) for v in cand["rect"]]})
+        flagged = all_flagged
         if flagged:
             rules = await page.evaluate(RULES_JS, [f["i"] for f in flagged])
             for f in flagged:
@@ -393,7 +411,7 @@ async def main():
     results: list[dict] = []
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(headless=True, executable_path="/bin/chromium")
         for view in views:
             shots = out / view
             chunks = [routes[i :: args.workers] for i in range(args.workers)]
