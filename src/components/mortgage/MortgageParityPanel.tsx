@@ -129,17 +129,18 @@ export default function MortgageParityPanel({
   const subClass = isNavy ? "text-white/70" : "text-[#1A1A1A]/70";
 
   const Card = ({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) => (
-    <div className={`mortgage-parity-card rounded-xl p-4 md:p-5 ${className}`} style={{ background: cardBg, border: cardBorder }}>
+    <div className={`mortgage-parity-card rounded-xl p-4 md:p-5 flex flex-col h-full ${className}`} style={{ background: cardBg, border: cardBorder }}>
       <p className={`text-[11px] uppercase tracking-[0.16em] font-semibold mb-3 ${subClass}`}>{title}</p>
       {children}
     </div>
   );
 
   return (
-    <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
+    <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 items-stretch">
       {/* Residency + LTV */}
       <Card title="Residency & LTV Cap">
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3 lg:min-h-[68px] lg:content-start">
+
           {(Object.keys(RESIDENCY) as Residency[]).map((k) => {
             const active = residency === k;
             return (
