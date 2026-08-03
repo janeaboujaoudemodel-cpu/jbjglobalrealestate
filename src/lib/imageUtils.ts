@@ -43,6 +43,8 @@ const BROKER_KIT_PATTERNS = [
   /fact[-_]?sheet/i,
   /brand[-_]?guideline/i,
   /broker[-_]?kit/i,
+  /agent[-_]?kit/i,
+  /\/kit\//i,
   /about[-_.](?:city|developer|us)/i,
   /about\.webp$/i,
   /material\.webp$/i,
@@ -55,6 +57,7 @@ const BROKER_KIT_PATTERNS = [
   /team[-_]?photo/i,
   /staff[-_]?photo/i,
 ];
+
 
 // Document patterns - these are PDFs/docs, not gallery images
 const DOCUMENT_PATTERNS = [
@@ -127,7 +130,12 @@ export function isValidImageUrl(url: unknown): url is string {
       }
     } catch { /* use original */ }
   }
-  
+
+  // An asset explicitly requested at icon dimensions (?w=48) is never a photo.
+  const widthHint = url.match(/[?&](?:w|width)=(\d{1,4})/i);
+  if (widthHint && parseInt(widthHint[1], 10) <= 96) return false;
+
+
   // Check for placeholder patterns (always reject these)
   for (const pattern of PLACEHOLDER_PATTERNS) {
     if (pattern.test(effectiveUrl)) return false;

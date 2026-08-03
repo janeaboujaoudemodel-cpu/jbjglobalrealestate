@@ -31130,6 +31130,7 @@ export type Database = {
       project_images: {
         Row: {
           alt_text: string | null
+          asset_role: string | null
           created_at: string
           data_source: string | null
           display_order: number | null
@@ -31139,6 +31140,7 @@ export type Database = {
         }
         Insert: {
           alt_text?: string | null
+          asset_role?: string | null
           created_at?: string
           data_source?: string | null
           display_order?: number | null
@@ -31148,6 +31150,7 @@ export type Database = {
         }
         Update: {
           alt_text?: string | null
+          asset_role?: string | null
           created_at?: string
           data_source?: string | null
           display_order?: number | null
@@ -42994,6 +42997,10 @@ export type Database = {
           p_window_minutes?: number
         }
         Returns: boolean
+      }
+      classify_project_image_url: {
+        Args: { p_alt: string; p_url: string }
+        Returns: string
       }
       cleanup_device_tracking_data: { Args: never; Returns: number }
       cleanup_expired_toolkit_data: { Args: never; Returns: undefined }
