@@ -815,7 +815,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
+                src={isFullyTransparent && !homeMobileFiberglassActive ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
                 className={`w-10 h-10 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] object-contain relative z-10 transition-transform duration-300 ${
                   useLightHeaderIdentity
