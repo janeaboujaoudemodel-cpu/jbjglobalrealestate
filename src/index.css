@@ -37129,108 +37129,56 @@ html body #root .jj-faq-item[data-state="open"]:not(#jj-faq-state):not(#jj-faq-s
 }
 
 /* ============================================================
-   TERMINAL TWO-SURFACE CONTRACT
-   Surface ownership must be explicit. Incidental Tailwind fragments are not
-   allowed to infer foreground colors. Nested own-surfaces are excluded from
-   their parent's contract so the nearest declared surface always wins.
+   TERMINAL SEMANTIC SURFACE CONTRACT
+   The nearest explicit surface owns an inherited foreground token. This is
+   intentionally token-based: an ancestor never needs to select descendants,
+   so a nested opposite surface cannot be repainted by its parent. New UI only
+   needs the correct data-surface value; no component-specific guard is needed.
+   The repeated root ID retires historical selector-inflation rules safely.
    ============================================================ */
-html body #root :where(
+html body #root#root#root#root#root#root#root#root :is(
   [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
   [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne,
   .surface-cream, .surface-raised, .surface-gold, .surface-pearl
-),
-html body #root :where(
-  [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
-  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne,
-  .surface-cream, .surface-raised, .surface-gold, .surface-pearl
-) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon):not(:where(
-  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"],
-  .surface-dark, .surface-ink, .jj-surface-emerald,
-  [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *,
-  .surface-dark *, .surface-ink *, .jj-surface-emerald *
-)) {
-  color: var(--jbj-ink) !important;
-  -webkit-text-fill-color: var(--jbj-ink) !important;
+) {
+  --jbj-surface-foreground: var(--jbj-ink);
 }
 
-html body #root :where(
+html body #root#root#root#root#root#root#root#root :is(
   [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"],
   .surface-dark, .surface-ink, .jj-surface-emerald
-),
-html body #root :where(
-  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"],
-  .surface-dark, .surface-ink, .jj-surface-emerald
-) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon):not(:where(
+) {
+  --jbj-surface-foreground: var(--jbj-white);
+}
+
+html body #root#root#root#root#root#root#root#root :is(
   [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
   [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  [data-surface="pearl"], .surface-light, .surface-page,
-  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-  .surface-pearl,
-  [data-surface="light"] *, [data-surface="page"] *, [data-surface="champagne"] *,
-  [data-surface="cream"] *, [data-surface="raised"] *, [data-surface="gold"] *,
-  [data-surface="pearl"] *, .surface-light *, .surface-page *,
-  .surface-champagne *, .surface-cream *, .surface-raised *, .surface-gold *,
-  .surface-pearl *
-)) {
-  color: var(--jbj-white) !important;
-  -webkit-text-fill-color: var(--jbj-white) !important;
+  [data-surface="pearl"], [data-surface="emerald"], [data-surface="dark"],
+  [data-surface="ink"], .surface-light, .surface-page, .surface-champagne,
+  .surface-cream, .surface-raised, .surface-gold, .surface-pearl,
+  .surface-dark, .surface-ink, .jj-surface-emerald
+),
+html body #root#root#root#root#root#root#root#root :is(
+  [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
+  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  [data-surface="pearl"], [data-surface="emerald"], [data-surface="dark"],
+  [data-surface="ink"], .surface-light, .surface-page, .surface-champagne,
+  .surface-cream, .surface-raised, .surface-gold, .surface-pearl,
+  .surface-dark, .surface-ink, .jj-surface-emerald
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
+  color: var(--jbj-surface-foreground) !important;
+  -webkit-text-fill-color: var(--jbj-surface-foreground) !important;
 }
 
-html body #root :where([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], .surface-dark, .surface-ink, .jj-surface-emerald)
-  :where(svg,[class*="lucide"],path,circle,rect,line,polyline,polygon):not(:where(
-    [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
-    [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-    [data-surface="pearl"], .surface-light, .surface-page,
-    .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-    .surface-pearl,
-    [data-surface="light"] *, [data-surface="page"] *, [data-surface="champagne"] *,
-    [data-surface="cream"] *, [data-surface="raised"] *, [data-surface="gold"] *,
-    [data-surface="pearl"] *, .surface-light *, .surface-page *,
-    .surface-champagne *, .surface-cream *, .surface-raised *, .surface-gold *,
-    .surface-pearl *
-  )) {
-  stroke: currentColor !important;
-}
-
-/* A nested surface owns itself and all of its content. These explicit nested
-   selectors intentionally carry enough specificity to retire older active,
-   tab, sidebar, and icon guards without inferring color from component state. */
-html body #root :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], .surface-dark, .surface-ink, .jj-surface-emerald)
-  :is([data-surface="light"], [data-surface="page"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-pearl),
-html body #root :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], .surface-dark, .surface-ink, .jj-surface-emerald)
-  :is([data-surface="light"], [data-surface="page"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-pearl) * {
-  color: var(--jbj-ink) !important;
-  -webkit-text-fill-color: var(--jbj-ink) !important;
-}
-
-html body #root :is([data-surface="light"], [data-surface="page"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-pearl)
-  :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], .surface-dark, .surface-ink, .jj-surface-emerald),
-html body #root :is([data-surface="light"], [data-surface="page"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-pearl)
-  :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], .surface-dark, .surface-ink, .jj-surface-emerald) * {
-  color: var(--jbj-white) !important;
-  -webkit-text-fill-color: var(--jbj-white) !important;
-}
-
-html body #root :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], .surface-dark, .surface-ink, .jj-surface-emerald)
-  :is([data-surface="light"], [data-surface="page"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-pearl)
-  :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon),
-html body #root :is([data-surface="light"], [data-surface="page"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-pearl)
-  :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], .surface-dark, .surface-ink, .jj-surface-emerald)
-  :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon) {
-  stroke: currentColor !important;
-}
-
-/* Explicit nested light controls in application chrome. The repeated root ID
-   is deliberate: legacy global guards used selector inflation, so the declared
-   surface must outrank them until those historical blocks are fully retired. */
-html body #root#root [data-surface="emerald"] [data-surface="champagne"],
-html body #root#root [data-surface="emerald"] [data-surface="champagne"] * {
-  color: var(--jbj-ink) !important;
-  -webkit-text-fill-color: var(--jbj-ink) !important;
-}
-
-html body #root#root [data-surface="emerald"] [data-surface="champagne"] :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon) {
+html body #root#root#root#root#root#root#root#root :is(
+  [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
+  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  [data-surface="pearl"], [data-surface="emerald"], [data-surface="dark"],
+  [data-surface="ink"], .surface-light, .surface-page, .surface-champagne,
+  .surface-cream, .surface-raised, .surface-gold, .surface-pearl,
+  .surface-dark, .surface-ink, .jj-surface-emerald
+) :where(svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
   stroke: currentColor !important;
 }
