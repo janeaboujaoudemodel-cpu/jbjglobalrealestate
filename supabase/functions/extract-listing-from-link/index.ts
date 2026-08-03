@@ -506,11 +506,12 @@ serve(async (req) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+          "Authorization": `Bearer ${serviceRoleKey}`,
         },
         body: JSON.stringify({
-          job_id: job.id, urls: urlList, files: fileList, userId, auto_approve, albumName,
+          job_id: job.id, urls: urlList, files: fileList, internal_user_id: userId, auto_approve, albumName,
         }),
+
       }).catch(err => console.error("[extract] Fire-and-forget error:", err));
 
       return new Response(
