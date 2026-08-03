@@ -60,7 +60,7 @@ export default function PortfolioDocumentsVault({ documentCounts }: PortfolioDoc
               <Lock className="w-4 h-4" />
               <span>Private to you and authorized JBJ administrators</span>
             </div>
-            <Link to="/investor-dashboard/documents">
+             <Link to="/documents">
               <Button variant="primary" className="gap-2">
                 View All Documents
                 <ArrowRight className="w-4 h-4" />

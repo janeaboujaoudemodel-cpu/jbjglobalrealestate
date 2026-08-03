@@ -138,7 +138,7 @@ const EducationHub = () => {
             </motion.div>
             <div className="mt-8 text-center">
               <Link
-                to="/broker-education"
+                 to="/jbj-academy"
                 className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-white border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
               >
                 Browse Full Books Library

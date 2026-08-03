@@ -481,15 +481,15 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                 <label className="flex gap-3 items-start cursor-pointer">
                   <Checkbox checked={consentTerms} onCheckedChange={(v) => setConsentTerms(!!v)} />
                   <span className="text-sm text-[#1A1A1A]">
-                    I agree to the <a href="/legal/terms" target="_blank" className="underline text-[#B89555]">Terms of Service</a> and{" "}
-                    <a href="/legal/aml-kyc-policy" target="_blank" className="underline text-[#B89555]">AML/KYC Policy</a>.
+                     I agree to the <a href="/terms" target="_blank" className="underline text-[#B89555]">Terms of Service</a> and{" "}
+                     <a href="/aml-kyc" target="_blank" className="underline text-[#B89555]">AML/KYC Policy</a>.
                   </span>
                 </label>
                 <label className="flex gap-3 items-start cursor-pointer">
                   <Checkbox checked={consentData} onCheckedChange={(v) => setConsentData(!!v)} />
                   <span className="text-sm text-[#1A1A1A]">
                     I consent to the processing of my personal data and identity documents for verification purposes, in line with the{" "}
-                    <a href="/legal/privacy" target="_blank" className="underline text-[#B89555]">Privacy Policy</a>.
+                     <a href="/privacy" target="_blank" className="underline text-[#B89555]">Privacy Policy</a>.
                   </span>
                 </label>
                 <label className="flex gap-3 items-start cursor-pointer">

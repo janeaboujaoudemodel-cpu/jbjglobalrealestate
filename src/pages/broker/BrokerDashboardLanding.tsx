@@ -319,7 +319,7 @@ export default function BrokerDashboardLanding() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-[#B89555]/25" />
                 <DropdownMenuItem asChild className="cursor-pointer focus:bg-[#EFE6D6] focus:text-[#1A1A1A]">
-                  <Link to="/broker/account"><UserIcon className="mr-2 h-4 w-4 text-[#1A1A1A]" /> My account</Link>
+                   <Link to="/broker/settings"><UserIcon className="mr-2 h-4 w-4 text-[#1A1A1A]" /> My account</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer focus:bg-[#EFE6D6] focus:text-[#1A1A1A]">
                   <Link to="/broker/settings"><SettingsIcon className="mr-2 h-4 w-4 text-[#1A1A1A]" /> Settings</Link>

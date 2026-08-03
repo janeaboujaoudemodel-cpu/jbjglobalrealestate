@@ -137,7 +137,7 @@ const AreasWeCover = () => {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10 md:mt-12">
           <PearlButton
-            to="/area-guides"
+             to="/areas"
             size="md"
             leadingIcon={<BookOpen strokeWidth={2.2} />}
             trailingIcon={<ArrowRight strokeWidth={2.2} />}
