@@ -96,6 +96,9 @@ export default function YouTubeVideoPlayer({
   }, [videoId]);
 
   const [fallback, setFallback] = useState(false);
+  const fallbackRef = useRef(false);
+  const apiTookOverRef = useRef(false);
+
 
   useEffect(() => {
     let cancelled = false;
