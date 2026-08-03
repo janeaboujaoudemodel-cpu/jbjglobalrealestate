@@ -5,8 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import LeadFormDialog from "@/components/gate/LeadFormDialog";
 import PaymentRequestDialog, { type PaymentRequestContext } from "@/components/gate/PaymentRequestDialog";
-import SignupDialog from "@/components/gate/SignupDialog";
-import LoginDialog from "@/components/gate/LoginDialog";
 import VideoBackground from "@/components/VideoBackground";
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import { BookCarousel } from "@/components/books/BookCarousel";
@@ -1393,13 +1391,12 @@ function PackageStrap({
 
 export default function PublicAccess() {
   const [leadOpen, setLeadOpen] = useState(false);
-  const [signupOpen, setSignupOpen] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
   const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
   const [selectedAudience, setSelectedAudience] = useState<"investor" | "developer" | "broker" | "agency" | null>(null);
 
   const navigate = useNavigate();
-  const openSignup = () => navigate("/signup");
+  const openSignup = () => navigate("/auth?mode=signup");
+  const openLogin = () => navigate("/auth");
   const openPayment = (audience: string, tier: Tier, sectionId: string) => {
     setPayCtx({
       audience,
@@ -1418,46 +1415,6 @@ export default function PublicAccess() {
     const onOpen = () => setLeadOpen(true);
     window.addEventListener("jbj:open-advisor", onOpen as EventListener);
     return () => window.removeEventListener("jbj:open-advisor", onOpen as EventListener);
-  }, []);
-
-
-  // Nuclear contrast lock — walks all access CTAs after paint and forces color/bg
-  // with priority 'important' via inline style, defeating ALL global rules.
-  React.useEffect(() => {
-    const paint = () => {
-      document.querySelectorAll<HTMLElement>("[data-jbj-cta-emerald]").forEach((el) => {
-        el.style.setProperty("color", "#FFFFFF", "important");
-        el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
-        el.querySelectorAll<HTMLElement>("*").forEach((c) => {
-          c.style.setProperty("color", "#FFFFFF", "important");
-          c.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
-          if (c.tagName === "svg" || c.tagName === "SVG" || c.tagName.toLowerCase() === "svg" || c instanceof SVGElement) {
-            c.style.setProperty("stroke", "#FFFFFF", "important");
-          }
-        });
-      });
-      document.querySelectorAll<HTMLElement>("[data-jbj-cta-white]").forEach((el) => {
-        const hovered = el.matches(":hover");
-        const ink = hovered ? "#FFFFFF" : "#0d3a2b";
-        el.style.setProperty("color", ink, "important");
-        el.style.setProperty("-webkit-text-fill-color", ink, "important");
-        el.style.setProperty("background-color", hovered ? "#064E3B" : "#FFFFFF", "important");
-        el.querySelectorAll<HTMLElement>("*").forEach((c) => {
-          c.style.setProperty("color", ink, "important");
-          c.style.setProperty("-webkit-text-fill-color", ink, "important");
-          if (c instanceof SVGElement) c.style.setProperty("stroke", ink, "important");
-        });
-      });
-    };
-    paint();
-    const t = setInterval(paint, 400);
-    document.addEventListener("mouseover", paint);
-    document.addEventListener("mouseout", paint);
-    return () => {
-      clearInterval(t);
-      document.removeEventListener("mouseover", paint);
-      document.removeEventListener("mouseout", paint);
-    };
   }, []);
 
 
@@ -1488,7 +1445,7 @@ export default function PublicAccess() {
 
           <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={() => setLoginOpen(true)}
+              onClick={openLogin}
               data-no-contrast-guard
               style={darkInkStyle}
               className={`${BTN_LIGHT_OUTLINE} h-10 whitespace-nowrap`}
@@ -1546,7 +1503,7 @@ export default function PublicAccess() {
                 Create account <ArrowRight className="h-4 w-4" />
               </button>
               <button
-                onClick={() => setLoginOpen(true)}
+                onClick={openLogin}
                 data-no-contrast-guard
                 style={emeraldInkStyle}
                 className={`${BTN_DARK_OUTLINE} h-12 flex-1 sm:flex-none min-w-[160px]`}
@@ -1769,7 +1726,7 @@ export default function PublicAccess() {
       </footer>
 
       {/* Welcome portal pop-up — explains this is the access gate, not the full site. */}
-      <WelcomePortalOverlay onCreateAccount={openSignup} onLogin={() => setLoginOpen(true)} />
+      <WelcomePortalOverlay onCreateAccount={openSignup} onLogin={openLogin} />
 
       {/* Unified Contact widget lives globally (SupportLauncher). This page just
           listens so the "Speak to an advisor" channel opens our LeadFormDialog. */}
@@ -1782,8 +1739,6 @@ export default function PublicAccess() {
         context={payCtx}
         sourcePage="/access"
       />
-      <SignupDialog open={signupOpen} onOpenChange={setSignupOpen} />
-      <LoginDialog open={loginOpen} onOpenChange={setLoginOpen} />
     </div>
   );
 }

@@ -17,37 +17,11 @@ interface Props {
  */
 export function PasskeyButton({ onSuccess, className }: Props) {
   const [supported, setSupported] = useState(false);
-  const [hasLocalPasskey, setHasLocalPasskey] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const webauthnOk = isPasskeySupported();
-      if (!webauthnOk) return;
-      // Must have conditional-mediation capability (modern platform authenticator).
-      let conditional = false;
-      try {
-        conditional =
-          typeof PublicKeyCredential !== 'undefined' &&
-          typeof (PublicKeyCredential as any).isConditionalMediationAvailable === 'function' &&
-          (await (PublicKeyCredential as any).isConditionalMediationAvailable());
-      } catch {
-        conditional = false;
-      }
-      // And this device must have previously enrolled a passkey for the app.
-      // Accept both legacy '1' and current 'true' values written by Auth.tsx.
-      const flag =
-        typeof window !== 'undefined'
-          ? window.localStorage.getItem('jbj_passkey_enrolled')
-          : null;
-      const enrolledFlag = flag === '1' || flag === 'true';
-      setSupported(webauthnOk && conditional);
-      setHasLocalPasskey(enrolledFlag);
-    })();
+    setSupported(isPasskeySupported());
   }, []);
-
-  // Hide entirely if the device has no enrolled passkey / no capability.
-  if (!supported || !hasLocalPasskey) return null;
 
   const handle = async () => {
     if (!supported) {

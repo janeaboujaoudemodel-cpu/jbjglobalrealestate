@@ -131,13 +131,13 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
     <div
       data-card-price-payment-row
       className={cn(
-        "flex items-end justify-between gap-3 min-w-0 min-h-[3.25rem]",
+        "grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-4 min-w-0 min-h-[3.75rem]",
         className,
       )}
     >
 
       {/* LEFT — Price from */}
-      <div className="flex flex-col min-w-0">
+      <div className="flex min-w-0 flex-col justify-end">
         <span data-area-price-label className="text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
           Price from
         </span>
@@ -145,7 +145,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
           data-no-contrast-guard
           style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
           className={cn(
-            "mt-1 font-semibold tabular-nums leading-tight truncate",
+            "mt-1 font-semibold tabular-nums leading-tight whitespace-nowrap",
             "text-[15px] sm:text-base",
           )}
         >
@@ -154,11 +154,11 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
       </div>
 
       {hasPlan && breakdown && breakdown.length > 0 && (
-      <div className="flex flex-col items-end min-w-0">
+      <div className="flex min-w-[5.75rem] flex-col items-end justify-end text-right">
         <span data-area-price-label className="text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
           Payment Plan
         </span>
-        <div className="mt-1 flex items-center gap-1.5">
+         <div className="mt-1 flex min-h-5 items-center justify-end gap-1.5 whitespace-nowrap">
           <span
             className={cn(
               "font-semibold tabular-nums leading-tight text-[#1A1A1A]",

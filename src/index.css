@@ -1765,7 +1765,7 @@ All colors MUST be HSL.
   -webkit-overflow-scrolling: touch;
 }
 .jj-auth-panel-wrap {
-  max-width: min(28rem, calc(100vw - 1.5rem));
+  max-width: min(36rem, calc(100vw - 1.5rem));
 }
 .jj-auth-card {
   overflow: visible;
@@ -13499,10 +13499,10 @@ html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label],
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-icon],
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) svg {
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label]:not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-icon]:not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) svg:not([data-emerald-icon-surface] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -13516,10 +13516,10 @@ html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"
   box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
   border-color: rgba(184,149,85,0.18) !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-label],
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-icon],
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover svg {
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-label]:not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-icon]:not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover svg:not([data-emerald-icon-surface] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
