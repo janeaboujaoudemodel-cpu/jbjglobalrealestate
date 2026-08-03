@@ -297,6 +297,7 @@ export const PublicRoutes = () => (
     <Route path="/guides" element={<InsightsPageScope><Guides /></InsightsPageScope>} />
     <Route path="/guides/golden-visa-uae" element={<Navigate to="/services/golden-visa" replace />} />
     <Route path="/guides/dubai-rental-yield" element={<InsightsPageScope><DubaiRentalYieldGuide /></InsightsPageScope>} />
+    <Route path="/guides/dubai-rental-yield-guide-2026" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/guides/selling-off-plan-dubai-before-handover" element={<InsightsPageScope><SellingOffPlanBeforeHandover /></InsightsPageScope>} />
     <Route path="/rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/dubai-rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
@@ -485,6 +486,7 @@ export const PublicRoutes = () => (
     <Route path="/spreadsheet" element={<AuthRequiredRoute><Spreadsheet /></AuthRequiredRoute>} />
     <Route path="/documents" element={<OwnerGuard><Documents /></OwnerGuard>} />
     <Route path="/qr-generator" element={<AuthRequiredRoute><QRCodeGenerator /></AuthRequiredRoute>} />
+    <Route path="/qr-code-generator" element={<Navigate to="/qr-generator" replace />} />
     <Route path="/contract-forms" element={<AuthRequiredRoute><ContractForms /></AuthRequiredRoute>} />
     <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
     <Route path="/breakfast-booking" element={<Navigate to="/book/jbj-private-breakfast" replace />} />

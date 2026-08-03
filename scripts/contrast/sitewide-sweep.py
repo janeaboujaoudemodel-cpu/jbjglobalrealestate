@@ -209,6 +209,12 @@ async def restore_session(context, page):
             "window.localStorage.setItem(%s, %s)"
             % (json.dumps(storage_key), json.dumps(session_json))
         )
+    # The consent banner is a separate audited component. Suppress it in route
+    # albums so fixed overlays cannot contaminate page contrast measurements.
+    await page.evaluate(
+        "window.localStorage.setItem('jj_cookies_consent', "
+        "JSON.stringify({status:'all',timestamp:new Date().toISOString()}))"
+    )
 
 
 async def audit(page, route, viewport_name, shots: Path, console_sink: list):
