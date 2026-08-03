@@ -33630,33 +33630,21 @@ html body #root :is(
   stroke: #FFFFFF !important;
 }
 
-/* =============================================================
-   PASS 212 — backend emerald + adaptive layout hard lock.
-   Fixes owner/admin vertical word wrapping and dark ink leaks on
-   emerald icon tiles, action buttons, status pills and cards.
-   ============================================================= */
-html body #root :is(
-  .owner-dashboard-shell,
-  [data-backend-portal],
-  [data-owner-backend],
-  [data-chrome="sidebar"]
-) :where(button, a, [role="button"], [role="tab"], .card, [class*="Card"], input, textarea, select, label, p, span, h1, h2, h3, h4, h5, h6) {
-  writing-mode: horizontal-tb !important;
-  text-orientation: mixed !important;
-  word-break: normal !important;
-  overflow-wrap: break-word !important;
-  letter-spacing: 0 !important;
+/* Backend controls must participate in their component's responsive layout.
+   Never impose max-content width or wrapping rules on every descendant: that
+   was the source of one-character labels and overflowing mobile toolbars. */
+html body #root :where(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend])
+  :where(button, a, [role="button"], [role="tab"], input, textarea, select) {
+  min-width: 0;
+  max-width: 100%;
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
 }
 
-html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend]) :where(button, a, [role="button"], [role="tab"]) {
-  min-width: max-content;
-  white-space: nowrap !important;
-}
-
-html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend]) :where([data-jbj-allow-shrink], [data-jbj-allow-shrink] *) {
-  min-width: 0 !important;
-  white-space: normal !important;
-  overflow-wrap: break-word !important;
+html body #root :where(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend])
+  :where(button, a, [role="button"], [role="tab"]) {
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 html body #root :is(
@@ -37110,21 +37098,18 @@ html body #root .jj-faq-item[data-state="open"]:not(#jj-faq-state):not(#jj-faq-s
 }
 
 /* ============================================================
-   GLOBAL SEMANTIC CONTRAST CONTRACT — single terminal authority
+   GLOBAL SEMANTIC CONTRAST CONTRACT
 
-   Every surface sets one inherited foreground variable. A nested surface
-   resets that variable, so dark/light sections can be composed safely without
-   ancestor descendant selectors repainting their children. Shared legacy
-   emerald primitives and the canonical Tailwind brand backgrounds are mapped
-   here once so existing pages and future shared components follow the same
-   white-on-dark / ink-on-light rule.
+   Surface boundaries own one inherited foreground. Nested surfaces reset the
+   variable naturally. New components must declare data-surface instead of
+   relying on class-name or background-string detection.
    ============================================================ */
 :root {
   --jbj-contrast-light: var(--jbj-ink, #1A1A1A);
   --jbj-contrast-dark: var(--jbj-white, #FFFFFF);
 }
 
-html body #root#root#root#root#root#root#root#root :is(
+html body #root :where(
   [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
   [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   [data-surface="pearl"], .surface-light, .surface-page, .surface-champagne,
@@ -37135,68 +37120,48 @@ html body #root#root#root#root#root#root#root#root :is(
   --jbj-surface-foreground: var(--jbj-contrast-light);
 }
 
-html body #root#root#root#root#root#root#root#root :is(
+html body #root :where(
   [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"],
   [data-emerald="true"], [data-emerald-action="true"], [data-emerald-icon-surface],
   [data-jj-segmented-trigger][data-state="active"],
   .jbj-form-option[data-state="checked"],
   .surface-dark, .surface-ink, .jj-surface-emerald, .jj-emerald-action,
   .jj-emerald-metallic, .jj-emerald-ombre, .jj-cta-emerald,
-  .jj-pill-emerald, .jj-pill-emerald-metallic,
-  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"],
-  [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"],
-  [class*="bg-[#02100A]"], [class*="bg-[#02100a]"],
-  [class*="bg-[#010806]"], [class*="bg-[#1A1A1A]"],
-  [class*="bg-[#1a1a1a]"], [class*="bg-[image:var(--jj-emerald-ombre)]"]
+  .jj-cta-primary, .jj-pill-emerald, .jj-pill-emerald-metallic
 ) {
   --jbj-surface-foreground: var(--jbj-contrast-dark);
 }
 
-html body #root#root#root#root#root#root#root#root :is(
+html body #root :where(
   [data-surface], [data-emerald="true"], [data-emerald-action="true"],
   [data-emerald-icon-surface], [data-jj-segmented-trigger], [data-jbj-field],
   .surface-light, .surface-page, .surface-champagne, .surface-cream,
   .surface-raised, .surface-gold, .surface-pearl, .surface-dark, .surface-ink,
   .jj-surface-emerald, .jj-emerald-action, .jj-emerald-metallic,
-  .jj-emerald-ombre, .jj-cta-emerald, .jj-pill-emerald,
-  .jj-pill-emerald-metallic, .jbj-form-popover, .jbj-form-option,
-  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"],
-  [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"],
-  [class*="bg-[#02100A]"], [class*="bg-[#02100a]"],
-  [class*="bg-[#010806]"], [class*="bg-[#1A1A1A]"],
-  [class*="bg-[#1a1a1a]"], [class*="bg-[image:var(--jj-emerald-ombre)]"]
+  .jj-emerald-ombre, .jj-cta-emerald, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jbj-form-popover, .jbj-form-option
 ),
-html body #root#root#root#root#root#root#root#root :is(
+html body #root :where(
   [data-surface], [data-emerald="true"], [data-emerald-action="true"],
   [data-emerald-icon-surface], [data-jj-segmented-trigger], [data-jbj-field],
   .surface-light, .surface-page, .surface-champagne, .surface-cream,
   .surface-raised, .surface-gold, .surface-pearl, .surface-dark, .surface-ink,
   .jj-surface-emerald, .jj-emerald-action, .jj-emerald-metallic,
-  .jj-emerald-ombre, .jj-cta-emerald, .jj-pill-emerald,
-  .jj-pill-emerald-metallic, .jbj-form-popover, .jbj-form-option,
-  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"],
-  [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"],
-  [class*="bg-[#02100A]"], [class*="bg-[#02100a]"],
-  [class*="bg-[#010806]"], [class*="bg-[#1A1A1A]"],
-  [class*="bg-[#1a1a1a]"], [class*="bg-[image:var(--jj-emerald-ombre)]"]
+  .jj-emerald-ombre, .jj-cta-emerald, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jbj-form-popover, .jbj-form-option
 ) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
   color: var(--jbj-surface-foreground) !important;
   -webkit-text-fill-color: var(--jbj-surface-foreground) !important;
 }
 
-html body #root#root#root#root#root#root#root#root :is(
+html body #root :where(
   [data-surface], [data-emerald="true"], [data-emerald-action="true"],
   [data-emerald-icon-surface], [data-jj-segmented-trigger],
   .surface-light, .surface-page, .surface-champagne, .surface-cream,
   .surface-raised, .surface-gold, .surface-pearl, .surface-dark, .surface-ink,
   .jj-surface-emerald, .jj-emerald-action, .jj-emerald-metallic,
-  .jj-emerald-ombre, .jj-cta-emerald, .jj-pill-emerald,
-  .jj-pill-emerald-metallic, .jbj-form-option,
-  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"],
-  [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"],
-  [class*="bg-[#02100A]"], [class*="bg-[#02100a]"],
-  [class*="bg-[#010806]"], [class*="bg-[#1A1A1A]"],
-  [class*="bg-[#1a1a1a]"], [class*="bg-[image:var(--jj-emerald-ombre)]"]
+  .jj-emerald-ombre, .jj-cta-emerald, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jbj-form-option
 ) :where(svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
   stroke: currentColor !important;
 }

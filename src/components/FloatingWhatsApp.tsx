@@ -70,6 +70,7 @@ const FloatingWhatsApp = () => {
     return (
       <button
         onClick={handleRestore}
+        data-floating-launcher
         data-surface="navy"
         className="surface-navy fixed bottom-6 right-6 z-50 w-10 h-10 bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
         aria-label="Show WhatsApp chat"
@@ -80,7 +81,7 @@ const FloatingWhatsApp = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50" data-floating-launcher>
       {/* Multi-layer gold and white pulse rings - Highly visible */}
       <span 
         className="absolute -inset-3 rounded-full pointer-events-none"
