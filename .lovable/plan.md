@@ -1,20 +1,41 @@
-## Change
+## What I found
 
-In `src/pages/Index.tsx` (line 326), the hero search bar wrapper currently uses:
+Two `!important` guard blocks in `src/index.css` are the ones overriding FAQ hover text and form-field backgrounds:
 
-```tsx
-<motion.div variants={fadeInUp} className="w-full mt-8 sm:mt-10 md:mt-12 lg:mt-14">
+**1. "PASS 220 — Sitewide Emerald FAQ Accordion Standard"** (lines ~35895–35958)
+Applies to *every* Radix accordion sitewide (front end and backend), forcing:
+- emerald gradient panel on `[data-radix-accordion-item]`
+- `color: #FFFFFF !important` + `-webkit-text-fill-color` on the trigger **and every descendant** (`[data-radix-accordion-trigger] *`), which is what defeats any component hover text color
+- an emerald hover background on the trigger
+Only opt-out today is the class `.no-faq-emerald`.
+
+**2. Global search/field background blanker** (lines ~18800–18804)
+```css
+:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i]... input...) {
+  border-color: ... !important;
+  background: transparent !important;
+  background-image: none !important;
+}
 ```
+The `[class*="search" i]` matcher is case-insensitive and unanchored, so it blanks the background of any field whose class merely contains "search", plus every `[type="search"]` input anywhere.
 
-Replace the responsive top-margin classes with a single fluid clamp:
+## Changes
 
-```tsx
-<motion.div variants={fadeInUp} className="w-full mt-[clamp(2rem,39.4vw,35.4rem)]">
-```
+**A. Invert PASS 220 from sitewide-forced to opt-in**
+- Change the block's selector base from
+  `[data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald)`
+  to an opt-in scope: `[data-faq-emerald] [data-radix-accordion-item]` (with `.no-faq-emerald` opt-out preserved).
+- Remove the `[data-radix-accordion-trigger] *` blanket white-text rule and the `:hover` background override from the global path, so each FAQ component's own hover/text classes win again.
+- Keep the layout-only accordion rules at ~19305 (flex/alignment) untouched.
 
-This scales the push proportionally with viewport width — 2rem minimum on narrow phones, up to 566.4px (35.4rem) at desktop widths.
+**B. Narrow the field-background blanker**
+- Replace the loose selector with an explicit, intentional list: `input[type="search"]`, `[data-search]`, `.jj-search`, `.search-input`, and the existing hero/newsletter pill inputs (which already have their own dedicated transparent rules below).
+- Drop `[class*="search" i]` entirely so component-defined form-field backgrounds (`bg-*`, inline styles, shadcn Input defaults) render as coded.
 
 ## Scope guard
 
-- Only that one `className` on the search wrapper changes.
-- No edits to `HomeHeroSearch`, the headline, hero container, or any other spacing/layout.
+- Only these two blocks in `src/index.css` change. No component files, no other guard blocks, no color tokens, no layout rules.
+
+## Verification
+
+- Playwright pass over a front-end FAQ page and a backend form page: screenshot FAQ hover state and a form field to confirm component styling shows and no other section shifted.

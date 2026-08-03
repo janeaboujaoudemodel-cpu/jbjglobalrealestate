@@ -18797,7 +18797,7 @@ html body .jj-hero-search-bar input.jj-hero-search-input:hover {
   color: rgba(26, 26, 26, 0.58) !important;
   -webkit-text-fill-color: rgba(26, 26, 26, 0.58) !important;
 }
-:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i]:not(.jj-hero-search-bar):not(.jj-hero-search-premium):not(.jj-newsletter-emerald):not(.jj-emerald-pill) input:not(.jj-hero-search-input):not([data-no-contrast-guard])) {
+:where(input[type="search"]:not([data-no-contrast-guard]), [data-search] input:not([data-no-contrast-guard]), .jj-search input:not([data-no-contrast-guard]), .search-input:not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
   background: transparent !important;
   background-image: none !important;
@@ -35893,12 +35893,12 @@ html body #root [data-insights-page] [data-mi-page] #presentation-standards > .j
 }
 
 /* =========================================================================
-   PASS 220 — Sitewide Emerald FAQ Accordion Standard
-   Applies to every Radix Accordion instance rendered by shadcn <Accordion>.
-   Effect: pure-white question + answer, connected emerald panel on open,
-   emerald hover, no gold/champagne outline. Opt-out with class `.no-faq-emerald`.
+   PASS 220 — Emerald FAQ Accordion Standard (OPT-IN)
+   Previously applied to every Radix Accordion sitewide with !important, which
+   overrode FAQ hover text colors everywhere. Now scoped: opt in by adding
+   [data-faq-emerald] on an ancestor. `.no-faq-emerald` remains an opt-out.
    ========================================================================= */
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) {
   background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%) !important;
   border: 1px solid rgba(6,78,59,0.9) !important;
   border-radius: 14px !important;
@@ -35906,54 +35906,46 @@ html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald
   box-shadow: 0 8px 24px -12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06) !important;
   transition: box-shadow 300ms ease, transform 300ms ease !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald)[data-state="open"] {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald)[data-state="open"] {
   box-shadow: 0 14px 40px -14px rgba(6,78,59,0.75), 0 0 0 1px rgba(16,185,129,0.35), inset 0 1px 0 rgba(255,255,255,0.09) !important;
   transform: translateY(-1px) !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) > h3,
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) > [data-orientation] {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) > h3,
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) > [data-orientation] {
   background: transparent !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) button[data-radix-accordion-trigger],
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-trigger] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) button[data-radix-accordion-trigger],
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-trigger] {
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
   background: transparent !important;
   padding: 1.1rem 1.25rem !important;
   font-weight: 600 !important;
   text-decoration: none !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-trigger] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-trigger]:hover {
-  background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(6,78,59,0.28) 100%) !important;
-}
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-trigger] svg {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-trigger] svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 0.9 !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald)[data-state="open"] [data-radix-accordion-trigger] {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald)[data-state="open"] [data-radix-accordion-trigger] {
   background: linear-gradient(135deg, rgba(16,185,129,0.22) 0%, rgba(6,78,59,0.32) 100%) !important;
   border-bottom: 1px solid rgba(16,185,129,0.32) !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-content] {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-content] {
   background: linear-gradient(180deg, rgba(4,44,28,0.55) 0%, rgba(1,8,6,0.75) 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-content] * {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-content] * {
   color: rgba(255,255,255,0.94) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.94) !important;
 }
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-content] > div {
+html body [data-faq-emerald] [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) [data-radix-accordion-content] > div {
   padding: 1rem 1.25rem 1.35rem 1.25rem !important;
 }
 /* Spacing between stacked FAQ items */
-html body [data-radix-accordion-root] > [data-radix-accordion-item] + [data-radix-accordion-item],
-html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) + [data-radix-accordion-item] {
+html body [data-radix-accordion-root] > [data-radix-accordion-item] + [data-radix-accordion-item] {
   margin-top: 0.75rem !important;
 }
 
