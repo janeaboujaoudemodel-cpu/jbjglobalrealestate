@@ -27032,20 +27032,6 @@ html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, [data-s
   -webkit-text-fill-color: var(--jj-insights-muted) !important;
 }
 
-/* FAQ items are stateful own-surfaces nested inside bright cards. Keep this
-   local contract after the generic light-surface guards so closed rows remain
-   ink on champagne while open rows become white on emerald. */
-html body #root .jj-faq-item[data-state="closed"] :is(.jj-faq-trigger, .jj-faq-content) {
-  color: var(--jj-insights-ink) !important;
-  -webkit-text-fill-color: var(--jj-insights-ink) !important;
-}
-html body #root .jj-faq-item[data-state="open"] :is(.jj-faq-trigger, .jj-faq-content),
-html body #root .jj-faq-item[data-state="open"] .jj-faq-trigger svg {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
 /* Remove side padding reservations that made MI/guide cards smaller than homepage cards. */
 @media (min-width: 1024px) {
   html body #root [data-insights-page] .jj-guide-content,
@@ -37238,4 +37224,19 @@ html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action=
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
+}
+
+/* FINAL FAQ STATE CONTRACT
+   FAQ rows are stateful own-surfaces nested inside bright Insights cards.
+   This deliberately follows every generic light/dark guard: closed rows are
+   ink on champagne; open rows and their chevrons are white on emerald. */
+html body #root .jj-faq-item[data-state="closed"] :is(.jj-faq-trigger, .jj-faq-content) {
+  color: var(--jj-insights-ink) !important;
+  -webkit-text-fill-color: var(--jj-insights-ink) !important;
+}
+html body #root .jj-faq-item[data-state="open"] :is(.jj-faq-trigger, .jj-faq-content),
+html body #root .jj-faq-item[data-state="open"] .jj-faq-trigger svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
