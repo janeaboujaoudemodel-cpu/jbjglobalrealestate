@@ -123,7 +123,7 @@ export default function SellingOffPlanBeforeHandover() {
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#032A1E] to-black text-white">
+      <section data-hero-dark data-surface="emerald" className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#032A1E] to-black text-white">
         <div className="absolute inset-0 opacity-20 [background:radial-gradient(60%_80%_at_15%_20%,rgba(184,149,85,0.35),transparent),radial-gradient(50%_60%_at_85%_85%,rgba(184,149,85,0.2),transparent)]" />
         <div className="relative mx-auto max-w-5xl px-6 lg:px-12 py-20 lg:py-28">
           <div className="inline-flex items-center gap-2 text-[10px] tracking-[0.42em] uppercase text-[#D4B87A]">
@@ -238,7 +238,7 @@ export default function SellingOffPlanBeforeHandover() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-[#064E3B] via-[#032A1E] to-black text-white">
+      <section data-hero-dark data-surface="emerald" className="bg-gradient-to-br from-[#064E3B] via-[#032A1E] to-black text-white">
         <div className="mx-auto max-w-4xl px-6 lg:px-12 py-16 lg:py-20 text-center">
           <h2 className="font-serif text-3xl md:text-4xl">Ready to resell your off-plan unit?</h2>
           <p className="mt-3 text-white/75 max-w-2xl mx-auto">

@@ -37165,3 +37165,55 @@ html body #root :where(
 ) :where(svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
   stroke: currentColor !important;
 }
+
+
+/* ============================================================
+   PASS 200 — SELF-DECLARED DARK SECTIONS KEEP THEIR DARK SURFACE
+   Category fix: any section that declares its own dark gradient
+   (emerald/near-black stops) together with text-white must never be
+   repainted champagne by page-level surface guards, and every
+   descendant inherits white foreground (icons included).
+   ============================================================ */
+html body #root section:is(
+  [data-hero-dark],
+  [class*="text-white"][class*="to-black"],
+  [class*="text-white"][class*="from-[#0"],
+  [class*="text-white"][class*="from-[#064E3B]"],
+  [class*="text-white"][class*="via-[#0a1712]"],
+  [class*="text-white"][class*="via-[#032A1E]"]
+) {
+  background-color: transparent !important;
+  background-image: linear-gradient(180deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  box-shadow: none !important;
+  --jbj-surface-foreground: #FFFFFF;
+}
+
+html body #root section:is(
+  [data-hero-dark],
+  [class*="text-white"][class*="to-black"],
+  [class*="text-white"][class*="from-[#0"],
+  [class*="text-white"][class*="from-[#064E3B]"],
+  [class*="text-white"][class*="via-[#0a1712]"],
+  [class*="text-white"][class*="via-[#032A1E]"]
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+
+/* PASS 201 — mobile hamburger must never be shrunk by global card/button
+   min-width:0 / max-width:100% guards. Fixed 28px bars, 44px tap target. */
+html body #root .jj-hamburger {
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+}
+html body #root .jj-hamburger .jj-hamburger-bar {
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: none !important;
+  height: 3px !important;
+  flex: 0 0 3px !important;
+}
