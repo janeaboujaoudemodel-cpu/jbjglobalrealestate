@@ -92,6 +92,8 @@ import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constan
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
 import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/lib/imageUtils";
+import { filterGalleryAssets } from "@/lib/media/classifyProjectImage";
+
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAreaUnit } from "@/hooks/useAreaUnit";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
@@ -514,16 +516,17 @@ function ProjectDetailLayoutInner({
     setPreviousProject(null);
   };
 
-  // Filter and normalize images (remove broken/placeholder URLs)
+  // Filter and normalize images (remove broken/placeholder URLs), then apply the
+  // media classifier so payment plans, fact sheets, floor plans, brochure pages,
+  // flags and logos can never render as project photos.
   const images = useMemo(() => {
     const raw = project.images?.filter((i) => i.url) || [];
-    // Dedup + validate, then upgrade every URL to its highest-res variant
-    // so the gallery never renders a low-res thumbnail next to its hi-res twin.
-    return filterValidImages(raw).map((img) => ({
+    return filterGalleryAssets(filterValidImages(raw)).map((img) => ({
       ...img,
       url: getHighResImageUrl(img.url!),
     }));
   }, [project.images]);
+
   // Fallback chain: project_images → cover_image_url → placeholder
   const heroImage = useMemo(() => {
     if (images[0]?.url) return { ...images[0], url: getHighResImageUrl(images[0].url!), alt: images[0].alt || project.name };

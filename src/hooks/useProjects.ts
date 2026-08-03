@@ -698,30 +698,49 @@ export function useProject(projectSlug: string) {
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select(`
+      const PROJECT_SELECT = `
           *,
           developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, upcoming_units, total_units_delivered, description, headquarters, ceo_name, website_url, specialization, parent_company, license_number, linkedin_url, instagram_url, portfolio_worth),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
-        `)
+        `;
+
+      const { data, error } = await supabase
+        .from("projects")
+        .select(PROJECT_SELECT)
         .eq("slug", projectSlug)
         .is("deleted_at", null)
         .maybeSingle();
-      
-      if (error) throw error;
-      if (!data) return null;
 
+      if (error) throw error;
+
+      // The exact slug may belong to a retired/soft-deleted duplicate (e.g.
+      // "arya" vs the live "arya-residences-citi-developers-dubai-islands").
+      // Resolve to the live, enriched record instead of falling through to a
+      // thin external record with placeholder facts and low-res assets.
+      let resolved: any = data;
+      if (!resolved && projectSlug) {
+        const { data: alias } = await supabase
+          .from("projects")
+          .select(PROJECT_SELECT)
+          .is("deleted_at", null)
+          .like("slug", `${projectSlug}-%`)
+          .order("updated_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        resolved = alias ?? null;
+      }
+      if (!resolved) return null;
       const { data: videos } = await supabase
         .from("project_videos")
         .select("id, url, title, display_order, is_visible")
-        .eq("project_id", data.id)
+        .eq("project_id", resolved.id)
         .or("is_visible.is.null,is_visible.eq.true")
         .order("display_order", { ascending: true });
 
-      return { ...(data as unknown as UnifiedProject), videos: (videos as any[]) || [] };
+      return { ...(resolved as unknown as UnifiedProject), videos: (videos as any[]) || [] };
+
     },
     enabled: !!projectSlug,
   });
