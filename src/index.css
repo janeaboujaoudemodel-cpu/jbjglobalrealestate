@@ -18764,14 +18764,16 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
   -webkit-text-fill-color: var(--jbj-ink) !important;
 }
 
-/* Forms and search components. */
+/* Forms and search components.
+   Background/ink are NON-important fallbacks so component-level classes
+   (bg-white/[0.06], text-white, dark surfaces, etc.) render as coded. */
 :where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([data-no-contrast-guard]):not(.jj-hero-search-input), textarea:not([data-no-contrast-guard]), select:not([data-no-contrast-guard]), [role="combobox"]:not([data-no-contrast-guard])) {
   min-height: var(--jbj-control-h);
   border-radius: var(--jbj-radius-md) !important;
   border: 1px solid var(--jbj-gold-soft) !important;
-  background: rgba(253, 251, 247, 0.96) !important;
-  color: var(--jbj-ink) !important;
-  -webkit-text-fill-color: var(--jbj-ink) !important;
+  background: rgba(253, 251, 247, 0.96);
+  color: var(--jbj-ink);
+  -webkit-text-fill-color: var(--jbj-ink);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
   transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
 }
@@ -18793,9 +18795,9 @@ html body .jj-hero-search-bar input.jj-hero-search-input:hover {
   min-height: 0 !important;
   border-radius: 0 !important;
 }
-:where(input, textarea)::placeholder {
-  color: rgba(26, 26, 26, 0.58) !important;
-  -webkit-text-fill-color: rgba(26, 26, 26, 0.58) !important;
+:where(input:not([data-no-contrast-guard]), textarea:not([data-no-contrast-guard]))::placeholder {
+  color: rgba(26, 26, 26, 0.58);
+  -webkit-text-fill-color: rgba(26, 26, 26, 0.58);
 }
 :where(input[type="search"]:not([data-no-contrast-guard]), [data-search] input:not([data-no-contrast-guard]), .jj-search input:not([data-no-contrast-guard]), .search-input:not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
@@ -19302,8 +19304,11 @@ body :where(.jj-side-tile, [data-sidebar-highlight-tile], [data-sidebar-section]
   stroke-width: 2.25 !important;
 }
 
-/* FAQ / accordion alignment and active icon contrast. */
-body :where([data-radix-accordion-trigger], .faq-trigger, [data-faq-trigger]) {
+/* FAQ / accordion alignment (layout only).
+   Icon/text COLOR is intentionally NOT forced here — components own their
+   own hover/active colors. Opt out of the layout lock entirely with
+   [data-no-contrast-guard]. */
+body :where([data-radix-accordion-trigger], .faq-trigger, [data-faq-trigger]):not([data-no-contrast-guard]) {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -19311,17 +19316,13 @@ body :where([data-radix-accordion-trigger], .faq-trigger, [data-faq-trigger]) {
   text-align: left !important;
 }
 
-body :where([data-radix-accordion-trigger], .faq-trigger, [data-faq-trigger]) > :where(svg,[class*="lucide"]) {
+body :where([data-radix-accordion-trigger], .faq-trigger, [data-faq-trigger]):not([data-no-contrast-guard]) > :where(svg,[class*="lucide"]) {
   width: 20px !important;
   height: 20px !important;
   flex: 0 0 20px !important;
-  color: var(--jbj-emerald) !important;
-  stroke: currentColor !important;
-}
-
-body :where([data-radix-accordion-trigger][data-state="open"], .faq-trigger[data-state="open"], [data-faq-trigger][data-state="open"]) > :where(svg,[class*="lucide"]) {
-  color: var(--jbj-emerald) !important;
-  stroke: currentColor !important;
+  /* non-important fallback: any component class/hover color wins */
+  color: var(--jbj-emerald);
+  stroke: currentColor;
 }
 
 /* Phase 1.B header-only control family lock.
@@ -19686,8 +19687,10 @@ html body [data-jbj-notification-badge] {
   vertical-align: middle !important;
   align-self: center !important;
 }
-html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]),
-html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item])[data-jbj-dropdown-selected="true"]:not([data-no-emerald-hover]) {
+/* Dropdown/menu emerald hover. Accordion + FAQ triggers are Radix collection
+   items too, so they are explicitly excluded — they own their own hover color. */
+html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item]):not(.jj-faq-trigger):not([data-radix-accordion-trigger]):not([data-faq-trigger]):not(.faq-trigger):not(.jj-faq-item):not([data-radix-accordion-item]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]),
+html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item]):not(.jj-faq-trigger):not([data-radix-accordion-trigger]):not([data-faq-trigger]):not(.faq-trigger):not(.jj-faq-item):not([data-radix-accordion-item])[data-jbj-dropdown-selected="true"]:not([data-no-emerald-hover]) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   color: #FFFFFF !important;
@@ -19696,8 +19699,8 @@ html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [dat
   box-shadow: 0 10px 24px -18px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.14) !important;
   transition: background-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out, filter 150ms ease-out !important;
 }
-html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) :is(span, p, svg, path, circle, rect, line, polyline, polygon),
-html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item])[data-jbj-dropdown-selected="true"]:not([data-no-emerald-hover]) :is(span, p, svg, path, circle, rect, line, polyline, polygon) {
+html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item]):not(.jj-faq-trigger):not([data-radix-accordion-trigger]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) :is(span, p, svg, path, circle, rect, line, polyline, polygon),
+html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [data-radix-collection-item]):not(.jj-faq-trigger):not([data-radix-accordion-trigger])[data-jbj-dropdown-selected="true"]:not([data-no-emerald-hover]) :is(span, p, svg, path, circle, rect, line, polyline, polygon) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
