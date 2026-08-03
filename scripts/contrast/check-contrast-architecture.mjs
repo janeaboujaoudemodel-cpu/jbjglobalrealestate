@@ -60,7 +60,11 @@ const unsafeFinalRules = finalContract
     const [selector = '', body = ''] = rule.split('{');
     return { selector, body };
   })
-  .filter(({ selector, body }) => /color:\s*(?:#fff(?:fff)?|#1a1a1a|var\(--jj-contrast-on-(?:light|dark)\))\s*!important/i.test(body) && /\bdiv\b|\[role/.test(selector));
+  .filter(({ selector, body }) => {
+    const positiveSelector = selector.replace(/:not\([^)]*\)/g, '');
+    return /color:\s*(?:#fff(?:fff)?|#1a1a1a|var\(--jj-contrast-on-(?:light|dark)\))\s*!important/i.test(body)
+      && /\bdiv\b|\[role/.test(positiveSelector);
+  });
 if (unsafeFinalRules.length) {
   violations.push('The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.');
 }
