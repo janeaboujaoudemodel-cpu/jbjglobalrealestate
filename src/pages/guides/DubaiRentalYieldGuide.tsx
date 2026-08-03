@@ -117,7 +117,7 @@ const DubaiRentalYieldGuide = () => {
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0d1f18] via-[#0a1712] to-[#0a1712] text-white">
+      <section data-hero-dark data-surface="emerald" className="relative overflow-hidden bg-gradient-to-b from-[#0d1f18] via-[#0a1712] to-[#0a1712] text-white">
         <div className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_top,_rgba(184,149,85,0.35),_transparent_60%)]" />
         <div className="relative max-w-5xl mx-auto px-6 md:px-8 py-20 md:py-28 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B89555]/60 text-[#E9D9AE] text-xs tracking-widest uppercase mb-6">
@@ -328,7 +328,7 @@ const DubaiRentalYieldGuide = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-[#0d1f18] via-[#0a1712] to-black text-white">
+      <section data-hero-dark data-surface="emerald" className="py-16 md:py-20 bg-gradient-to-br from-[#0d1f18] via-[#0a1712] to-black text-white">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
             Want a yield report for a <span className="text-[#E9D9AE]">specific address?</span>

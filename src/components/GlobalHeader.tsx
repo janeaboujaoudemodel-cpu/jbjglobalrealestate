@@ -860,7 +860,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Mobile Menu Trigger - Bare 3-line hamburger (no circle), emerald with 3D sheen */}
               <button
                 type="button"
-                className="inline-flex h-10 w-10 items-center justify-center appearance-none bg-transparent border-0 p-0 focus:outline-none shrink-0 group"
+                data-no-contrast-guard
+                className="inline-flex h-11 w-11 min-h-11 min-w-11 items-center justify-center appearance-none bg-transparent border-0 p-0 focus:outline-none shrink-0 group"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 data-tour-target="mobile-menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -881,19 +882,25 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 ) : (
                   <span
                     aria-hidden="true"
-                    className="flex flex-col items-end justify-center gap-[5px] w-7 transition-transform duration-300 group-active:scale-95"
+                    data-no-contrast-guard
+                    data-jbj-allow-shrink
+                    className="jj-hamburger flex flex-col items-center justify-center gap-[6px] transition-transform duration-300 group-active:scale-95"
                     style={{
+                      width: '28px',
+                      minWidth: '28px',
                       filter:
                         'drop-shadow(0 1px 0 rgba(255,238,200,0.55)) drop-shadow(0 2px 3px rgba(0,0,0,0.55))',
                     }}
                   >
-                    {[28, 24, 20].map((w, i) => (
+                    {[0, 1, 2].map((i) => (
                       <span
                         key={i}
-                        className="block rounded-full"
+                        className="jj-hamburger-bar block rounded-full"
                         style={{
-                          width: `${w}px`,
-                          height: '2.5px',
+                          width: '28px',
+                          minWidth: '28px',
+                          height: '3px',
+                          flex: '0 0 3px',
                           background:
                             'linear-gradient(180deg, #064E3B 0%, #042C1C 58%, #010806 100%)',
                           boxShadow:
