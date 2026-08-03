@@ -151,7 +151,7 @@ const asUnitTypes = (
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
-  const { data: reellyProject, isLoading: reellyLoading } = useReellyProjectBySlug(slug, !project && !isLoading);
+  const { data: reellyProject, isFetching: reellyLoading } = useReellyProjectBySlug(slug, !project && !isLoading);
   const [showReportModal, setShowReportModal] = useState(false);
   const { trackView } = useRecentSearches();
 
