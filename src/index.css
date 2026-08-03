@@ -4996,55 +4996,35 @@ a[class*="bg-red-"]:hover {
 }
 
 /* =====================================================================
-   COOKIE BANNER — RESPONSIVE LAYOUT LOCK (sidebar-aware + mobile compact)
-   - Offsets the banner past the vertical sidebar (48px collapsed / 240px expanded)
-     so "We value your privacy" never sits under the rail.
-   - Compacts the popup on phones so it does not consume half the screen.
+   COOKIE BANNER — CENTERED PREMIUM BAR (all devices)
+   Full-width fixed strip, content centered with a max width. Sidebar-aware
+   left inset so the bar never sits under the vertical rail on desktop.
    ===================================================================== */
 [data-chrome="cookie-banner"] {
-  width: min(26rem, calc(100vw - 1.5rem)) !important;
-  max-width: calc(100vw - 1.5rem) !important;
-  right: max(0.75rem, env(safe-area-inset-right)) !important;
-  left: auto !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  transition: right 180ms ease;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  transition: padding-left 180ms ease;
 }
-@media (min-width: 640px) {
-  body.jj-vertical-nav-collapsed [data-chrome="cookie-banner"] {
-    right: 1rem !important;
-  }
-  body.jj-vertical-nav-active [data-chrome="cookie-banner"] {
-    right: 1.25rem !important;
-  }
+[data-chrome="cookie-banner"] > div {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
-/* Mobile: compact popup — never wider than ~360px, sit above safe area, tighter padding */
+@media (min-width: 1024px) {
+  body.jj-vertical-nav-collapsed [data-chrome="cookie-banner"] { padding-left: 3rem; }
+  body.jj-vertical-nav-active [data-chrome="cookie-banner"] { padding-left: 15rem; }
+}
+/* Mobile: full-width card, stacked, comfortable tap target */
 @media (max-width: 639px) {
-  [data-chrome="cookie-banner"] {
-    padding: 0.5rem !important;
-    padding-bottom: max(0.5rem, env(safe-area-inset-bottom)) !important;
-  }
   [data-chrome="cookie-banner"] > div {
-    max-width: min(340px, calc(100vw - 1rem)) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    max-width: 100% !important;
     border-radius: 1rem !important;
-    max-height: 54vh !important;
-  }
-  [data-chrome="cookie-banner"] > div > div { padding: 0.625rem !important; }
-  [data-chrome="cookie-banner"] h3 { font-size: 0.82rem !important; margin-bottom: 0.125rem !important; }
-  [data-chrome="cookie-banner"] p { font-size: 0.66rem !important; line-height: 1.25 !important; }
-  [data-chrome="cookie-banner"] button {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
-    height: 2.25rem !important;
-    font-size: 0.78rem !important;
-  }
-  [data-chrome="cookie-banner"] .w-10,
-  [data-chrome="cookie-banner"] .sm\:w-12 {
-    width: 2rem !important; height: 2rem !important;
   }
 }
+
 
 
 /* =====================================================================

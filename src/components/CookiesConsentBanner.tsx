@@ -106,36 +106,41 @@ const CookiesConsentBanner = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
+          initial={{ y: 60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="cookie-banner pointer-events-none fixed bottom-3 right-3 z-50 w-[min(calc(100vw-1.5rem),26rem)] sm:bottom-4 sm:right-4 sm:w-[26rem]"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+          exit={{ y: 60, opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="cookie-banner pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-4 sm:pb-6"
+          style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}
           data-chrome="cookie-banner"
         >
           <div
             data-surface="emerald"
             data-emerald="true"
             data-no-contrast-guard
-            className="jj-emerald-metallic allow-white pointer-events-auto ml-auto flex w-full items-start gap-3 rounded-xl border border-white/25 px-4 py-3 shadow-[0_18px_45px_-22px_rgba(4,44,28,0.55)]"
+            className="jj-emerald-metallic allow-white pointer-events-auto mx-auto flex w-full max-w-[64rem] flex-col items-start gap-4 rounded-2xl border border-white/20 px-5 py-5 shadow-[0_28px_70px_-28px_rgba(4,44,28,0.72)] backdrop-blur-sm sm:flex-row sm:items-center sm:gap-6 sm:px-8 sm:py-6"
             style={{ color: "#FFFFFF" }}
           >
-            <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/15 border border-white/30">
-              <Cookie className="h-4 w-4 allow-white" style={{ color: "#FFFFFF" }} />
+            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10">
+              <Cookie className="h-5 w-5 allow-white" style={{ color: "#FFFFFF" }} />
             </div>
             <div className="flex-1 allow-white" style={{ color: "#FFFFFF" }}>
-              <p className="allow-white text-[12px] font-semibold leading-tight" style={{ color: "#FFFFFF" }}>We use essential cookies to keep this experience secure and reliable.</p>
-              <p className="allow-white mt-1 text-[11px] leading-snug" style={{ color: "rgba(255,255,255,0.88)" }}>
+              <p
+                className="allow-white font-serif text-[17px] leading-snug tracking-[0.01em] sm:text-[19px]"
+                style={{ color: "#FFFFFF" }}
+              >
+                We use essential cookies to keep this experience secure and reliable.
+              </p>
+              <p className="allow-white mt-1.5 max-w-[52rem] text-[12.5px] leading-relaxed sm:text-[13px]" style={{ color: "rgba(255,255,255,0.82)" }}>
                 By selecting Okay, your consent is recorded with date, time, browser and policy version. Read our{" "}
-                <a href="/cookies" className="allow-white font-semibold underline underline-offset-2" style={{ color: "#FFFFFF" }}>Cookies Policy</a>
+                <a href="/cookies" className="allow-white font-semibold underline underline-offset-4" style={{ color: "#FFFFFF" }}>Cookies Policy</a>
                 {" "}and{" "}
-                <a href="/privacy" className="allow-white font-semibold underline underline-offset-2" style={{ color: "#FFFFFF" }}>Privacy Policy</a>.
+                <a href="/privacy" className="allow-white font-semibold underline underline-offset-4" style={{ color: "#FFFFFF" }}>Privacy Policy</a>.
               </p>
             </div>
             <Button
               onClick={handleOkay}
-              className="allow-white h-8 flex-none rounded-md bg-white/15 hover:bg-white/25 border border-white/40 px-4 text-[11px] font-semibold"
+              className="allow-white h-11 w-full flex-none rounded-lg border border-white/40 bg-white/12 px-10 text-[12px] font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-white/25 sm:w-auto"
               data-cta="primary"
               data-surface="emerald"
               data-no-contrast-guard
@@ -144,7 +149,6 @@ const CookiesConsentBanner = () => {
               <span className="allow-white" style={{ color: "#FFFFFF" }}>Okay</span>
             </Button>
           </div>
-
         </motion.div>
       )}
     </AnimatePresence>
