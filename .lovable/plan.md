@@ -1,41 +1,28 @@
-## What I found
+# Scope the global emerald/background guards sitewide
 
-Two `!important` guard blocks in `src/index.css` are the ones overriding FAQ hover text and form-field backgrounds:
+## Current state (verified in `src/index.css`)
 
-**1. "PASS 220 — Sitewide Emerald FAQ Accordion Standard"** (lines ~35895–35958)
-Applies to *every* Radix accordion sitewide (front end and backend), forcing:
-- emerald gradient panel on `[data-radix-accordion-item]`
-- `color: #FFFFFF !important` + `-webkit-text-fill-color` on the trigger **and every descendant** (`[data-radix-accordion-trigger] *`), which is what defeats any component hover text color
-- an emerald hover background on the trigger
-Only opt-out today is the class `.no-faq-emerald`.
+- The PASS 220 emerald accordion block (line ~35896) is already **opt-in** via a `[data-faq-emerald]` ancestor, and the blanket `[data-radix-accordion-trigger] *` white-text + emerald `:hover` overrides are gone.
+- The field-background blanker (line ~18800) is already narrowed to `input[type="search"]`, `[data-search] input`, `.jj-search input`, `.search-input` — the loose `[class*="search" i]` matcher is gone.
 
-**2. Global search/field background blanker** (lines ~18800–18804)
-```css
-:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i]... input...) {
-  border-color: ... !important;
-  background: transparent !important;
-  background-image: none !important;
-}
-```
-The `[class*="search" i]` matcher is case-insensitive and unanchored, so it blanks the background of any field whose class merely contains "search", plus every `[type="search"]` input anywhere.
+So the two blocks named in the request are done. What remains is the sitewide sweep and visual validation.
 
-## Changes
+## Remaining work
 
-**A. Invert PASS 220 from sitewide-forced to opt-in**
-- Change the block's selector base from
-  `[data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald)`
-  to an opt-in scope: `[data-faq-emerald] [data-radix-accordion-item]` (with `.no-faq-emerald` opt-out preserved).
-- Remove the `[data-radix-accordion-trigger] *` blanket white-text rule and the `:hover` background override from the global path, so each FAQ component's own hover/text classes win again.
-- Keep the layout-only accordion rules at ~19305 (flex/alignment) untouched.
+1. **Audit for sibling guard blocks** that still force text color or blank backgrounds sitewide with `!important`:
+   - `:where(input, textarea)` placeholder/color locks
+   - any `html body ... *` descendant color locks that could beat component hover colors on accordions, list rows, and cards
+   - Scope each hit the same way: opt-in attribute or explicit selector list, plus a `[data-no-contrast-guard]` escape hatch. No new tokens, no component edits.
 
-**B. Narrow the field-background blanker**
-- Replace the loose selector with an explicit, intentional list: `input[type="search"]`, `[data-search]`, `.jj-search`, `.search-input`, and the existing hero/newsletter pill inputs (which already have their own dedicated transparent rules below).
-- Drop `[class*="search" i]` entirely so component-defined form-field backgrounds (`bg-*`, inline styles, shadcn Input defaults) render as coded.
+2. **Sitewide visual validation with Playwright** across representative routes (home, an FAQ page, contact/forms, a project detail page, and one backend/CRM form page):
+   - screenshot each page
+   - capture computed `background`/`color` on form fields and accordion triggers in default and hover states
+   - report any page where a guard still overrides component styling
 
 ## Scope guard
 
-- Only these two blocks in `src/index.css` change. No component files, no other guard blocks, no color tokens, no layout rules.
+Only `src/index.css` changes. No component files, no color tokens, no layout rules.
 
-## Verification
+## Note
 
-- Playwright pass over a front-end FAQ page and a backend form page: screenshot FAQ hover state and a form field to confirm component styling shows and no other section shifted.
+`/faq` and `/contact` sit behind the access gate in preview; validation will use the injected session so those routes render.
