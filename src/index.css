@@ -37127,7 +37127,10 @@ html body #root#root#root#root#root#root#root#root :is(
 
 html body #root#root#root#root#root#root#root#root :is(
   [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"],
-  .surface-dark, .surface-ink, .jj-surface-emerald
+  [data-emerald="true"], [data-emerald-action="true"],
+  .surface-dark, .surface-ink, .jj-surface-emerald, .jj-emerald-action,
+  .jj-emerald-metallic, .jj-cta-emerald, .jj-pill-emerald,
+  .jj-pill-emerald-metallic
 ) {
   --jbj-surface-foreground: var(--jbj-white);
 }
@@ -37136,17 +37139,23 @@ html body #root#root#root#root#root#root#root#root :is(
   [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
   [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   [data-surface="pearl"], [data-surface="emerald"], [data-surface="dark"],
-  [data-surface="ink"], .surface-light, .surface-page, .surface-champagne,
+  [data-surface="ink"], [data-emerald="true"], [data-emerald-action="true"],
+  .surface-light, .surface-page, .surface-champagne,
   .surface-cream, .surface-raised, .surface-gold, .surface-pearl,
-  .surface-dark, .surface-ink, .jj-surface-emerald
+  .surface-dark, .surface-ink, .jj-surface-emerald, .jj-emerald-action,
+  .jj-emerald-metallic, .jj-cta-emerald, .jj-pill-emerald,
+  .jj-pill-emerald-metallic
 ),
 html body #root#root#root#root#root#root#root#root :is(
   [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
   [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   [data-surface="pearl"], [data-surface="emerald"], [data-surface="dark"],
-  [data-surface="ink"], .surface-light, .surface-page, .surface-champagne,
+  [data-surface="ink"], [data-emerald="true"], [data-emerald-action="true"],
+  .surface-light, .surface-page, .surface-champagne,
   .surface-cream, .surface-raised, .surface-gold, .surface-pearl,
-  .surface-dark, .surface-ink, .jj-surface-emerald
+  .surface-dark, .surface-ink, .jj-surface-emerald, .jj-emerald-action,
+  .jj-emerald-metallic, .jj-cta-emerald, .jj-pill-emerald,
+  .jj-pill-emerald-metallic
 ) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
   color: var(--jbj-surface-foreground) !important;
   -webkit-text-fill-color: var(--jbj-surface-foreground) !important;
@@ -37156,9 +37165,12 @@ html body #root#root#root#root#root#root#root#root :is(
   [data-surface="light"], [data-surface="page"], [data-surface="champagne"],
   [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   [data-surface="pearl"], [data-surface="emerald"], [data-surface="dark"],
-  [data-surface="ink"], .surface-light, .surface-page, .surface-champagne,
+  [data-surface="ink"], [data-emerald="true"], [data-emerald-action="true"],
+  .surface-light, .surface-page, .surface-champagne,
   .surface-cream, .surface-raised, .surface-gold, .surface-pearl,
-  .surface-dark, .surface-ink, .jj-surface-emerald
+  .surface-dark, .surface-ink, .jj-surface-emerald, .jj-emerald-action,
+  .jj-emerald-metallic, .jj-cta-emerald, .jj-pill-emerald,
+  .jj-pill-emerald-metallic
 ) :where(svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
   stroke: currentColor !important;
 }

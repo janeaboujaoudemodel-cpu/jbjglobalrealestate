@@ -115,16 +115,33 @@ export interface ButtonProps
   variant?: ButtonVariant;
   size?: ButtonSize;
   asChild?: boolean;
+  "data-surface"?: "emerald" | "champagne" | "dark" | "light" | "ink" | "gold" | "page" | "pearl" | "cream" | "raised";
+  "data-emerald-action"?: "true" | "false";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({
+    className,
+    variant,
+    size,
+    asChild = false,
+    "data-surface": explicitSurface,
+    "data-emerald-action": emeraldAction,
+    ...props
+  }, ref) => {
     const Comp = asChild ? Slot : "button";
     const effectiveVariant = variant ?? "primary";
     const isPrimaryCta = effectiveVariant === "primary" || effectiveVariant === "default" || effectiveVariant === "destructive" || effectiveVariant === "gold" || effectiveVariant.startsWith("ai-");
     const classNameText = typeof className === "string" ? className : "";
     const hasExplicitForeground = /(?:^|\s)!?text-|(?:^|\s)\[color:|(?:^|\s)text-\[/.test(classNameText);
-    const surface = DARK_SURFACE_VARIANTS.has(effectiveVariant) ? "dark" : isPrimaryCta ? "emerald" : "champagne";
+    const hasEmeraldPrimitive = emeraldAction === "true"
+      || /(?:^|\s)(?:jj-emerald-action|jj-cta-emerald|jj-surface-emerald|jj-emerald-metallic|jj-pill-emerald-metallic)(?:\s|$)/.test(classNameText);
+    const surface = explicitSurface
+      ?? (DARK_SURFACE_VARIANTS.has(effectiveVariant)
+        ? "dark"
+        : isPrimaryCta || hasEmeraldPrimitive
+          ? "emerald"
+          : "champagne");
     const cta = DARK_SURFACE_VARIANTS.has(effectiveVariant)
       ? "dark"
       : LIGHT_CTA_VARIANTS.has(effectiveVariant)
@@ -138,6 +155,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         data-jbj-button=""
         data-surface={surface}
+        data-emerald-action={emeraldAction}
         data-cta={cta}
         ref={ref}
         {...props}
