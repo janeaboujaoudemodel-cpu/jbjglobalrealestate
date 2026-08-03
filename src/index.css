@@ -5013,7 +5013,7 @@ a[class*="bg-red-"]:hover {
   margin-left: auto !important;
   margin-right: auto !important;
 }
-@media (min-width: 640px) {
+@media (min-width: 1024px) {
   body.jj-vertical-nav-collapsed [data-chrome="cookie-banner"] { padding-left: 3rem; }
   body.jj-vertical-nav-active [data-chrome="cookie-banner"] { padding-left: 15rem; }
 }
