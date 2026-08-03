@@ -192,26 +192,29 @@ export default function MortgageParityPanel({
 
       {/* Affordability */}
       <Card title="Affordability (DBR 50%)">
-        <label className={`text-xs font-semibold ${subClass}`}>Your monthly income (AED)</label>
-        <input
-          type="number"
-          value={monthlyIncome}
-          onChange={(e) => setMonthlyIncome(Number(e.target.value) || 0)}
-          data-no-contrast-guard
-          className="allow-white mt-1 w-full rounded-lg px-3 py-2 text-sm font-semibold tabular-nums"
-          style={{
-            background: isNavy ? "rgba(255,255,255,0.06)" : "#FFFFFF",
-            border: isNavy ? "1px solid rgba(147,197,253,0.35)" : "1px solid rgba(184,149,85,0.40)",
-            color: isNavy ? "#FFFFFF" : "#1A1A1A",
-          }}
-        />
-        <div className={`mt-3 text-sm ${inkClass}`}>
+        <div className="mb-3 lg:min-h-[68px]">
+          <label className={`text-xs font-semibold ${subClass}`}>Your monthly income (AED)</label>
+          <input
+            type="number"
+            value={monthlyIncome}
+            onChange={(e) => setMonthlyIncome(Number(e.target.value) || 0)}
+            data-no-contrast-guard
+            className="allow-white mt-1 w-full rounded-lg px-3 py-2 text-sm font-semibold tabular-nums"
+            style={{
+              background: isNavy ? "rgba(255,255,255,0.06)" : "#FFFFFF",
+              border: isNavy ? "1px solid rgba(147,197,253,0.35)" : "1px solid rgba(184,149,85,0.40)",
+              color: isNavy ? "#FFFFFF" : "#1A1A1A",
+            }}
+          />
+        </div>
+        <div className={`text-sm ${inkClass}`}>
           <div className="flex justify-between"><span className={subClass}>Monthly installment</span><span className="font-bold tabular-nums">{aed(monthlyPayment)}</span></div>
           <div className="flex justify-between mt-1"><span className={subClass}>50% DBR cap</span><span className="font-bold tabular-nums">{aed(dbrCap)}</span></div>
           <div className="flex justify-between mt-1"><span className={subClass}>DBR ratio</span><span className="font-bold tabular-nums">{dbrPct.toFixed(1)}%</span></div>
         </div>
         <div
-          className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+          className="mt-3 lg:mt-auto lg:pt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+
           style={{
             background: dbrOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
             border: `1px solid ${dbrOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
