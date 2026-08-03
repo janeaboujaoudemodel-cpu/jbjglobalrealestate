@@ -247,6 +247,8 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
         entry["blank"] = data["bodyText"] < 40
         entry["landed"] = data["url"]
         entry["redirected"] = data["url"].rstrip("/") != route.rstrip("/")
+        protected_prefixes = ("/owner", "/broker", "/developer", "/account", "/automations", "/favorites")
+        entry["unexpectedProtectedRedirect"] = entry["redirected"] and route.startswith(protected_prefixes)
         entry["candidates"] = len(data["candidates"])
 
         img = np.array(Image.open(shot).convert("RGB"))
@@ -294,7 +296,7 @@ async def worker(browser, routes, viewport_name, shots, results):
         entry = await audit(page, route, viewport_name, shots, sink)
         results.append(entry)
         n = len(entry["failures"])
-        mark = "x" if (n or entry["errors"] or entry.get("blank")) else "."
+        mark = "x" if (n or entry["errors"] or entry.get("blank") or entry.get("unexpectedProtectedRedirect")) else "."
         print(f"{mark} [{viewport_name}] {route} fails={n} {';'.join(entry['errors'])[:70]}", flush=True)
     await ctx.close()
 
@@ -346,6 +348,7 @@ async def main():
         "routesWithErrors": [e["route"] for e in results if e["errors"]],
         "blankRoutes": sorted({e["route"] for e in results if e.get("blank")}),
         "overflowRoutes": sorted({e["route"] for e in results if (e.get("overflow") or 0) > 2}),
+        "protectedRedirectRoutes": sorted({e["route"] for e in results if e.get("unexpectedProtectedRedirect")}),
         "winningRules": [{"rule": k, "count": v["count"], "value": v["value"],
                           "routes": sorted(v["routes"])[:12], "samples": v["samples"]}
                          for k, v in ranked[:80]],

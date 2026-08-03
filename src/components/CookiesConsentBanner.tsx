@@ -110,28 +110,28 @@ const CookiesConsentBanner = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 60, opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="cookie-banner pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-4 sm:pb-6"
-          style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}
+          className="cookie-banner pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-3 pb-3 sm:px-4 sm:pb-6"
+          style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
           data-chrome="cookie-banner"
         >
           <div
             data-surface="emerald"
             data-emerald="true"
             data-no-contrast-guard
-            className="jj-emerald-metallic allow-white pointer-events-auto mx-auto flex w-full max-w-[64rem] flex-col items-start gap-4 rounded-2xl border border-white/20 px-5 py-5 shadow-[0_28px_70px_-28px_rgba(4,44,28,0.72)] backdrop-blur-sm sm:flex-row sm:items-center sm:gap-6 sm:px-8 sm:py-6"
+            className="jj-emerald-metallic allow-white pointer-events-auto mx-auto flex w-full max-w-[64rem] flex-col items-stretch gap-2.5 rounded-xl border border-white/20 px-4 py-3.5 shadow-[0_28px_70px_-28px_rgba(4,44,28,0.72)] backdrop-blur-sm sm:flex-row sm:items-center sm:gap-6 sm:rounded-2xl sm:px-8 sm:py-5"
             style={{ color: "#FFFFFF" }}
           >
-            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10">
+            <div className="hidden h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 sm:flex">
               <Cookie className="h-5 w-5 allow-white" style={{ color: "#FFFFFF" }} />
             </div>
             <div className="flex-1 allow-white" style={{ color: "#FFFFFF" }}>
               <p
-                className="allow-white font-serif text-[17px] leading-snug tracking-[0.01em] sm:text-[19px]"
+                className="allow-white font-serif text-[15px] leading-snug tracking-[0.01em] sm:text-[19px]"
                 style={{ color: "#FFFFFF" }}
               >
                 We use essential cookies to keep this experience secure and reliable.
               </p>
-              <p className="allow-white mt-1.5 max-w-[52rem] text-[12.5px] leading-relaxed sm:text-[13px]" style={{ color: "rgba(255,255,255,0.82)" }}>
+              <p className="allow-white mt-1 max-w-[52rem] text-[11px] leading-relaxed sm:mt-1.5 sm:text-[13px]" style={{ color: "rgba(255,255,255,0.82)" }}>
                 By selecting Okay, your consent is recorded with date, time, browser and policy version. Read our{" "}
                 <a href="/cookies" className="allow-white font-semibold underline underline-offset-4" style={{ color: "#FFFFFF" }}>Cookies Policy</a>
                 {" "}and{" "}
@@ -140,7 +140,7 @@ const CookiesConsentBanner = () => {
             </div>
             <Button
               onClick={handleOkay}
-              className="allow-white h-11 w-full flex-none rounded-lg border border-white/40 bg-white/12 px-10 text-[12px] font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-white/25 sm:w-auto"
+              className="allow-white h-9 w-full flex-none rounded-lg border border-white/40 bg-white/12 px-8 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-white/25 sm:h-11 sm:w-auto sm:px-10 sm:text-[12px]"
               data-cta="primary"
               data-surface="emerald"
               data-no-contrast-guard
