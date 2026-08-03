@@ -18,7 +18,6 @@ import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
-import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 import { formatBedroomRange } from "@/utils/formatBedroomRange";
 
@@ -264,14 +263,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           slug={project.slug}
           saleStatus={project.status_label}
           showSaleStatus={(project as any).show_sale_status}
+          projectName={project.name}
+          driveUrl={(project as any).google_drive_url}
           className="mt-[110px]"
-        />
-        <DriveLinkAttach
-          entityType="project"
-          entityId={project.id}
-          entityName={project.name}
-          currentUrl={(project as any).google_drive_url}
-          compact
         />
       </div>
 

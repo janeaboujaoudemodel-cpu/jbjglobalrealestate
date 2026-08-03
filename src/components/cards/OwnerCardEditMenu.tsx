@@ -25,12 +25,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
+import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
 
 interface OwnerCardEditMenuProps {
   projectId: string;
   slug?: string | null;
   saleStatus?: string | null;
   showSaleStatus?: boolean | null;
+  projectName?: string;
+  driveUrl?: string | null;
   className?: string;
 }
 
@@ -47,6 +50,8 @@ export default function OwnerCardEditMenu({
   slug,
   saleStatus,
   showSaleStatus,
+  projectName = "Project",
+  driveUrl,
   className,
 }: OwnerCardEditMenuProps) {
   const { effectiveOwner } = useEffectiveOwner();
@@ -93,13 +98,12 @@ export default function OwnerCardEditMenu({
           }}
           data-no-contrast-guard
           className={
-            "inline-flex items-center justify-center w-7 h-7 rounded-full " +
-            "bg-[#FDFBF7] border border-[#B89555] text-[#1A1A1A] " +
-            "shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:bg-[#EFE6D6] transition-colors " +
+            "inline-flex items-center justify-center min-h-11 min-w-11 text-[#1A1A1A] " +
+            "drop-shadow-[0_2px_3px_rgba(255,255,255,0.9)] hover:text-[#064E3B] transition-colors " +
             (className || "")
           }
         >
-          <Pencil className="w-3.5 h-3.5" />
+          <Pencil className="w-5 h-5" />
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -139,6 +143,15 @@ export default function OwnerCardEditMenu({
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="border-t border-[#B89555]/30 pt-3">
+            <DriveLinkAttach
+              entityType="project"
+              entityId={projectId}
+              entityName={projectName}
+              currentUrl={driveUrl}
+            />
           </div>
 
           <div className="flex items-center justify-between gap-2 pt-1">

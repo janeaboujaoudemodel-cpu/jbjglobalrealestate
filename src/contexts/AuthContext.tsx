@@ -272,7 +272,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const scheduleSessionRecovery = (delayMs = 900) => {
+    const scheduleSessionRecovery = (delayMs = 100) => {
       clearNullSessionRecoveryTimer();
       nullSessionRecoveryTimer = window.setTimeout(() => {
         supabase.auth.getSession()
@@ -283,18 +283,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               return;
             }
 
-            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 3) {
+            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 2) {
               nullSessionRecoveryAttempts += 1;
-              scheduleSessionRecovery(450 * nullSessionRecoveryAttempts);
+              scheduleSessionRecovery(150 * nullSessionRecoveryAttempts);
               return;
             }
 
             void applySession(null);
           })
           .catch(() => {
-            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 3) {
+            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 2) {
               nullSessionRecoveryAttempts += 1;
-              scheduleSessionRecovery(450 * nullSessionRecoveryAttempts);
+              scheduleSessionRecovery(150 * nullSessionRecoveryAttempts);
               return;
             }
             void applySession(null);
@@ -393,7 +393,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then(({ data: { session: existingSession } }) => {
         bootstrapped = true;
         if (!existingSession && hasPersistedAuthSession()) {
-          scheduleSessionRecovery(250);
+          scheduleSessionRecovery(100);
           return;
         }
         return applySession(existingSession);
@@ -401,7 +401,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .catch(() => {
         bootstrapped = true;
         if (hasPersistedAuthSession()) {
-          scheduleSessionRecovery(250);
+          scheduleSessionRecovery(100);
           return;
         }
         return applySession(null);

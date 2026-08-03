@@ -128,6 +128,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   useEffect(() => {
     const modeParam = searchParams.get("mode");
     if (modeParam === "reset") setMode("reset");
+    else if (modeParam === "signup") setMode("signup");
+    else if (modeParam === "forgot") setMode("forgot");
   }, [searchParams]);
 
   // Test-only: force reactivation dialog preview via /auth?test_reactivation=1
@@ -464,9 +466,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     setIsSubmitting(true);
     try {
       const safeReturnPath = getSafeReturnPath();
-      const redirectUrl = `${window.location.origin}/auth?returnTo=${encodeURIComponent(safeReturnPath)}`;
+      try { sessionStorage.setItem("jbj_post_login_redirect", safeReturnPath); } catch { /* ignore */ }
       const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: redirectUrl,
+        redirect_uri: window.location.origin,
         ...(provider === "google" ? { extraParams: { prompt: "select_account" } } : {}),
       });
       if (result?.error) {
@@ -478,6 +480,13 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (!user || mode === "reset" || isReactivationPreview) return;
+    const safe = getSafeReturnPath();
+    try { sessionStorage.removeItem("jbj_post_login_redirect"); } catch { /* ignore */ }
+    navigate(safe, { replace: true });
+  }, [user, mode, isReactivationPreview, navigate]);
 
   const offerPasskeyUpgrade = async () => {
     if (!isPasskeySupported()) return;
@@ -549,21 +558,6 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   // ─── Already signed in → auto-redirect (no interstitial screen) ───
   if (user && mode !== "reset" && !isReactivationPreview) {
-    // Accept canonical ?returnTo, legacy ?redirect, or sessionStorage backup.
-    let returnTo = searchParams.get("returnTo") || searchParams.get("redirect");
-    if (!returnTo) {
-      try { returnTo = sessionStorage.getItem("jbj_post_login_redirect"); } catch {}
-    }
-    const safe = returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
-    try { sessionStorage.removeItem("jbj_post_login_redirect"); } catch {}
-    // Fire a brief welcome toast once, then bounce the user straight to where they came from.
-    if (typeof window !== "undefined" && !(window as any).__jbjWelcomeBackShown) {
-      (window as any).__jbjWelcomeBackShown = true;
-      toast.success("Welcome back!");
-      setTimeout(() => { navigate(safe, { replace: true }); }, 50);
-    } else {
-      setTimeout(() => { navigate(safe, { replace: true }); }, 0);
-    }
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
@@ -636,7 +630,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     <div ref={ref} className="jj-auth-emerald-bg jj-auth-screen flex items-center justify-center px-3 py-3 sm:px-4 relative">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
-      <div className="relative z-10 w-full max-w-md jj-auth-panel-wrap">
+      <div className="relative z-10 w-full jj-auth-panel-wrap">
         <div className="jj-auth-card bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl p-6 sm:p-8 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.55)]">
 
           {/* Back button */}

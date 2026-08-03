@@ -1157,7 +1157,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                   aria-current={highlightActive ? 'page' : undefined}
                   className={`group flex items-center gap-3 px-3 min-h-11 text-[14px] transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
-                  iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true }}
+                  iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true, 'data-surface': 'emerald' }}
                   iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
                   iconClassName="w-3.5 h-3.5 transition-colors"
                   iconStrokeWidth={2.25}
@@ -1201,7 +1201,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
                     className="w-full flex items-center gap-3 px-3 min-h-11 text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-xl"
-                    iconWrapperData={{ 'data-emerald-icon-surface': true }}
+                    iconWrapperData={{ 'data-emerald-icon-surface': true, 'data-surface': 'emerald' }}
                     iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${getIconTileClass()}`}
                     iconClassName="w-3.5 h-3.5 transition-colors"
                     iconStrokeWidth={2.25}
