@@ -320,7 +320,7 @@ export const PublicRoutes = () => (
     <Route path="/landlord-guide" element={<InsightsPageScope><LandlordGuide /></InsightsPageScope>} />
     <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
     <Route path="/investor-education" element={<InsightsPageScope><InvestorEducation /></InsightsPageScope>} />
-    {/* /broker-education retired — merged into /jbj-academy */}
+    <Route path="/broker-education" element={<Navigate to="/jbj-academy" replace />} />
     <Route path="/faq" element={<InsightsPageScope><FAQ /></InsightsPageScope>} />
     <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<InsightsPageScope><BuyerFAQ /></InsightsPageScope>} />
@@ -500,7 +500,9 @@ export const PublicRoutes = () => (
     <Route path="/broker-toolkit" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerToolkit /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker-toolkit/dashboard" element={<OwnerAwareBrokerRedirect />} />
     <Route path="/broker-dashboard" element={<OwnerAwareBrokerRedirect />} />
-    {/* /broker-resources, /broker/training, /ai-broker-workspace retired — see /jbj-academy and /broker/portal/ai */}
+    <Route path="/broker-resources" element={<Navigate to="/broker-toolkit" replace />} />
+    <Route path="/broker/training" element={<Navigate to="/jbj-academy" replace />} />
+    <Route path="/ai-broker-workspace" element={<Navigate to="/broker/ai" replace />} />
     <Route path="/owner/broker-learning/voice" element={<OwnerGuard><BrokerLearningVoiceAdmin /></OwnerGuard>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
@@ -509,7 +511,7 @@ export const PublicRoutes = () => (
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
     {/* /broker-hub fully deleted — no route, no redirect. Falls through to NotFound. */}
     <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
-    {/* /academy/graduates retired — merged into /jbj-academy */}
+    <Route path="/academy/graduates" element={<Navigate to="/jbj-academy" replace />} />
     <Route path="/broker-portal" element={<OwnerAwareBrokerRedirect />} />
 
     {/* ── Canonical Broker Portal (nested /broker/* shell) ── */}

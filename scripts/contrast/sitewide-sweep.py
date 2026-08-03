@@ -279,7 +279,8 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
                       const gutter = document.querySelector('[data-content-gutter]');
                       if (!gutter) return '';
                       const visibleText = (gutter.innerText || '').trim();
-                      const hasPage = !!gutter.querySelector('h1, [role="main"], main, article, form, [data-page-ready]');
+                      const hasPage = gutter.matches('main, [role="main"], article, form, [data-page-ready]')
+                        || !!gutter.querySelector('h1, [role="main"], main, article, form, [data-page-ready]');
                       return hasPage && visibleText.length > 40 ? visibleText.slice(0, 500) : '';
                     }"""
                 )

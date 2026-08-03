@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const PUBLIC_PATHS = [
   "/access",
   "/signup",
+  "/login",
   "/auth",
   "/reset-password",
   "/forgot-password",

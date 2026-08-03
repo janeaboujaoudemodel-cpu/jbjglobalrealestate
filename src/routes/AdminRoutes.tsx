@@ -156,6 +156,7 @@ export const AdminRoutes = () => (
     <Route path="/listing-admin/preview/:id" element={<Navigate to="/owner/listing-admin" replace />} />
     <Route path="/automations" element={<Navigate to="/owner/automations" replace />} />
     <Route path="/founder-assistant" element={<Navigate to="/owner/founder-assistant" replace />} />
+    <Route path="/founders-assistant" element={<Navigate to="/owner/founder-assistant" replace />} />
     <Route path="/hr-hub" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
 
     {/* ── Owner Tools (in main layout) ── */}

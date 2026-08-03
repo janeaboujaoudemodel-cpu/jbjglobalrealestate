@@ -51,6 +51,7 @@ export const StandaloneRoutes = () => (
     <Route path="/access" element={<RouteErrorBoundary routeName="PublicAccess"><PublicAccess /></RouteErrorBoundary>} />
     <Route path="/signup" element={<RouteErrorBoundary routeName="Signup"><Suspense fallback={<PageLoader />}><Signup /></Suspense></RouteErrorBoundary>} />
     <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
+    <Route path="/login" element={<Navigate to="/auth" replace />} />
 
     <Route path="/.lovable/oauth/consent" element={
       <RouteErrorBoundary routeName="OAuthConsent">
