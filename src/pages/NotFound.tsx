@@ -64,7 +64,7 @@ const NotFound = () => {
   return (
     // Full-bleed light surface that fills the entire content lane (sidebar edge → right edge).
     // MainLayout already provides md:pt-[88px] for the header, so we only add comfortable inner padding.
-    <div className="w-full bg-background min-h-[calc(100dvh-88px)] flex items-center justify-center px-4 sm:px-6 lg:px-10 py-12 sm:py-16 mb-8">
+    <div data-testid="not-found-page" data-route-status="not-found" className="w-full bg-background min-h-[calc(100dvh-88px)] flex items-center justify-center px-4 sm:px-6 lg:px-10 py-12 sm:py-16 mb-8">
       <motion.div
         className="w-full max-w-3xl bg-card border border-border rounded-2xl shadow-sm text-center p-6 sm:p-10"
         initial="hidden"

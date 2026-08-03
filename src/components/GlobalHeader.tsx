@@ -309,38 +309,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     };
   }, [forceSolid]);
 
-  // Deterministic body-attribute toggle: on the homepage, paint the mobile
-  // header fiberglass while at-rest, switch to the light chrome once scrolled.
-  // CSS in index.css keys off body[data-home-hero-state] so we never rely
-  // on React-state propagation to win against other style sources.
+  // Mirror the canonical React header state to the body for the small number
+  // of shell-level CSS rules that cannot read component state directly.
+  // This is deliberately derived from `isSolid`; it must never run its own
+  // scroll calculation or the painted surface and identity can desynchronise.
   useEffect(() => {
     const isHome = location.pathname === "/" || location.pathname === "/index";
     if (!isHome) {
       document.body.removeAttribute("data-home-hero-state");
       return;
     }
-    let raf = 0;
-    let lastState = "";
-    const apply = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const state = window.scrollY > 80 ? "scrolled" : "atrest";
-        if (state !== lastState) {
-          lastState = state;
-          document.body.setAttribute("data-home-hero-state", state);
-        }
-      });
-    };
-    apply();
-    window.addEventListener("scroll", apply, { passive: true });
-    window.addEventListener("resize", apply);
+    document.body.setAttribute("data-home-hero-state", isSolid ? "scrolled" : "atrest");
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", apply);
-      window.removeEventListener("resize", apply);
       document.body.removeAttribute("data-home-hero-state");
     };
-  }, [location.pathname]);
+  }, [isSolid, location.pathname]);
 
 
 
@@ -357,7 +340,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     typeof window !== "undefined" &&
     window.scrollY <= window.innerHeight * 0.45;
   const forceHomeMobileFiberglass = shouldUseMobileHeader && isHomeHeroPath && !showSolidBackground;
-  const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest || forceHomeMobileFiberglass);
+  const showMobileFiberglass = isTransparentRoute && isHomeHeroPath && (isFullyTransparent || mobileHeroAtRest || forceHomeMobileFiberglass);
   const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
   const mobileFiberglassBackground =
     'linear-gradient(180deg, rgba(10,10,10,0.48) 0%, rgba(10,10,10,0.30) 100%)';
@@ -366,8 +349,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const homeMobileFiberglassActive = isHomeHeroPath && isAtPageTop && !forceSolid;
   // One canonical surface state drives every header foreground and logo asset.
   // Never derive the image, wordmark, and controls from separate booleans.
-  const headerSurface: "dark" | "light" =
-    isFullyTransparent || homeMobileFiberglassActive ? "dark" : "light";
+  const headerSurface: "dark" | "light" = shouldUseMobileHeader
+    ? (homeMobileFiberglassActive ? "dark" : "light")
+    : (isFullyTransparent ? "dark" : "light");
   const useLightHeaderIdentity = headerSurface === "dark";
   const champagneFiberglassBackground =
     'linear-gradient(180deg, rgba(247,242,234,0.78) 0%, rgba(239,230,214,0.72) 100%)';
@@ -799,7 +783,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* HEADER CONTENT */}
       <div
         ref={headerContentRef}
-        className="relative z-10 h-full flex items-center justify-between pl-2 sm:pl-3 lg:pl-4 xl:pl-6 2xl:pl-10 pr-2 sm:pr-3 lg:pr-4 xl:pr-4 2xl:pr-8"
+        className="relative z-10 h-full flex items-center justify-between px-[var(--jj-page-gutter)]"
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
         <div className="min-w-0 flex-1 sm:flex-[2]">

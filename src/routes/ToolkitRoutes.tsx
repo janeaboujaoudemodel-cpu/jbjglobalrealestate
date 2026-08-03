@@ -86,35 +86,36 @@ export const ToolkitRoutes = () => (
     <Route path="/studio/editor/:projectId" element={<OwnerGuard><L><StudioEditor /></L></OwnerGuard>} />
     <Route path="/studio/settings" element={<OwnerGuard><L><StudioSettings /></L></OwnerGuard>} />
 
-    {/* Master Suite Routes */}
+    {/* Unreleased creative/tool routes stay inaccessible until they pass the
+        owner-controlled tool visibility and responsive QA workflow. */}
     <Route path="/toolkit/video-studio" element={<Navigate to="/toolkit/video-suite" replace />} />
     <Route path="/toolkit/ai-video-suite" element={<Navigate to="/toolkit/video-suite" replace />} />
-    <Route path="/toolkit/video-suite" element={<L><VideoSuite /></L>} />
-    <Route path="/toolkit/voice-suite" element={<L><VoiceSuite /></L>} />
-    <Route path="/toolkit/photo-suite" element={<L><PhotoSuite /></L>} />
-    <Route path="/toolkit/pdf-suite" element={<L><PDFSuite /></L>} />
-    <Route path="/toolkit/property-suite" element={<L><PropertySuite /></L>} />
+    <Route path="/toolkit/video-suite" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/voice-suite" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/photo-suite" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/pdf-suite" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/property-suite" element={<Navigate to="/ai-hub" replace />} />
 
     {/* Individual toolkit tools */}
-    <Route path="/toolkit/video-resize-pack" element={<L><VideoResizePack /></L>} />
-    <Route path="/toolkit/smart-reframe" element={<L><VideoResizePack /></L>} />
-    <Route path="/toolkit/pdf-from-photos" element={<L><PdfFromPhotos /></L>} />
-    <Route path="/toolkit/pdf-editor" element={<L><PDFEditor /></L>} />
-    <Route path="/toolkit/image-resize" element={<L><ImageResize /></L>} />
-    <Route path="/toolkit/voice-studio" element={<L><VoiceStudio /></L>} />
-    <Route path="/toolkit/voice-studio-pro" element={<L><VoiceStudioPro /></L>} />
-    <Route path="/toolkit/ai-video-studio" element={<L><AIVideoStudioPage /></L>} />
-    <Route path="/toolkit/captions-translate" element={<L><CaptionsTranslate /></L>} />
-    <Route path="/toolkit/background-ai" element={<L><BackgroundAI /></L>} />
-    <Route path="/toolkit/beauty-filters" element={<L><BeautyFilters /></L>} />
-    <Route path="/virtual-staging-ai" element={<L><VirtualStagingPage /></L>} />
+    <Route path="/toolkit/video-resize-pack" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/smart-reframe" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/pdf-from-photos" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/pdf-editor" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/image-resize" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/voice-studio" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/voice-studio-pro" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/ai-video-studio" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/captions-translate" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/background-ai" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/beauty-filters" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/virtual-staging-ai" element={<Navigate to="/ai-hub" replace />} />
 
     {/* Business Suite Routes */}
-    <Route path="/business-suite/all" element={<L><AllToolsSuite /></L>} />
-    <Route path="/business-suite/real-estate" element={<L><RealEstateSuite /></L>} />
-    <Route path="/business-suite/broker" element={<L><BrokerGuard><BrokerSuite /></BrokerGuard></L>} />
-    <Route path="/business-suite/creative" element={<L><CreativeSuite /></L>} />
-    <Route path="/business-suite/productivity" element={<L><ProductivitySuite /></L>} />
-    <Route path="/suites" element={<L><SuitesHub /></L>} />
+    <Route path="/business-suite/all" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/business-suite/real-estate" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/business-suite/broker" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/business-suite/creative" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/business-suite/productivity" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/suites" element={<Navigate to="/ai-hub" replace />} />
   </>
 );
