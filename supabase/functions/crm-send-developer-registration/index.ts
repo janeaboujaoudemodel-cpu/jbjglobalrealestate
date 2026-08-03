@@ -93,10 +93,13 @@ const DEVELOPER_REQUIREMENTS_BLOCK = `<table role="presentation" data-jbj-develo
     <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">In your marketing-material link, please include <strong>one folder per project</strong> containing project details, the <strong>project escrow account</strong>, and the <strong>corporate bank account</strong> for that project. For any project not yet registered, mark it <em>&ldquo;Registration pending &mdash; documents pending from JBJ&rdquo;</em> with the reason.</p>
 
     <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">WhatsApp group</p>
-    <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please create a WhatsApp group named <strong style="white-space:nowrap;">{{developer_name}}&#x2009;/&#x2009;JBJ Global Real Estate</strong>, add <strong>Jane Bou Jaoude</strong> and <strong>Walid Halabi</strong> as admins, use your developer logo, and paste your marketing-material link in the group description.</p>
+    <p style="margin:0 0 8px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please create a WhatsApp group using both full company names, no emojis and no abbreviations &mdash; example: <strong style="white-space:nowrap;">ABC PROPERTIES&#x2009;/&#x2009;JBJ GLOBAL REAL ESTATE</strong>. For your team the group name would be <strong style="white-space:nowrap;">{{developer_name}}&#x2009;/&#x2009;JBJ GLOBAL REAL ESTATE</strong>. Kindly use your developer logo as the group icon and paste your marketing-material link in the group description.</p>
+    <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Please add <strong>both</strong> of us to the group and set <strong>both as group admins</strong>:<br/>
+      &bull; <strong>Ms. Jane Bou Jaoude</strong> (Founder) &middot; __JBJ_JANE_WA__<br/>
+      &bull; <strong>Walid Halabi</strong> &middot; __JBJ_WALID_WA1__ &middot; __JBJ_WALID_WA2__ <span style="color:#4a4a4a;">(both numbers)</span></p>
 
     <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Admin contact &mdash; urgent only</p>
-    <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Walid Halabi</strong> &middot; +971 54 366 2223 &middot; +971 50 999 3839 <span style="color:#4a4a4a;">&mdash; urgent registration/compliance only; standard correspondence stays on this thread.</span></p>
+    <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Walid Halabi</strong> &middot; __JBJ_WALID_WA1__ &middot; __JBJ_WALID_WA2__ <span style="color:#4a4a4a;">&mdash; urgent registration/compliance only; standard correspondence stays on this thread.</span></p>
   </td></tr>
 </table>`;
 
@@ -156,7 +159,11 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
     .replace(
       /(<div\s+style="[^"]*letter-spacing:3px[^"]*text-transform:uppercase[^"]*">JBJ GLOBAL REAL ESTATE<\/div>)/i,
       `<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png" alt="JBJ Global Real Estate" width="72" style="max-width:72px;height:auto;display:inline-block;border:0;margin:0 auto 12px;" />$1`,
-    );
+    )
+    // Restore protected WhatsApp numbers AFTER phone normalization above.
+    .replace(/__JBJ_JANE_WA__/g, "+971 54 716 7107")
+    .replace(/__JBJ_WALID_WA1__/g, "+971 54 366 2223")
+    .replace(/__JBJ_WALID_WA2__/g, "+971 50 999 3839");
 };
 
 serve(async (req: Request) => {
