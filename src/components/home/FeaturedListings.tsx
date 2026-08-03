@@ -89,9 +89,16 @@ const FeaturedListings = () => {
           </h2>
         </div>
 
+        {/* Phone: auto-scrolling + swipeable strip */}
+        {!isLoading && allProjects.length > 0 && (
+          <MobileHandpickedStrip projects={allProjects.slice(0, 6)} />
+        )}
+
         {/* Listings Grid — 3 per row on desktop, edge-to-edge full width.
             Increased gap for premium breathing room. */}
+        <div className="hidden sm:block">
         <CardGrid columns={3} className="jj-handpicked-grid items-stretch auto-rows-fr">
+
           {isLoading
             ? [1, 2, 3, 4, 5, 6].map((i) => (
                 <div
