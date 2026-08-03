@@ -18797,7 +18797,7 @@ html body .jj-hero-search-bar input.jj-hero-search-input:hover {
   color: rgba(26, 26, 26, 0.58) !important;
   -webkit-text-fill-color: rgba(26, 26, 26, 0.58) !important;
 }
-:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i]:not(.jj-hero-search-bar):not(.jj-hero-search-premium):not(.jj-newsletter-emerald):not(.jj-emerald-pill) input:not(.jj-hero-search-input):not([data-no-contrast-guard])) {
+:where(input[type="search"]:not([data-no-contrast-guard]), [data-search] input:not([data-no-contrast-guard]), .jj-search input:not([data-no-contrast-guard]), .search-input:not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
   background: transparent !important;
   background-image: none !important;
