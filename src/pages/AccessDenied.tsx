@@ -74,10 +74,11 @@ const AccessDenied = () => {
         }}
       >
         <div
+          data-surface="champagne"
           className="w-20 h-20 rounded-full border flex items-center justify-center mx-auto mb-6"
           style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)", borderColor: "#B89555" }}
         >
-          <ShieldX className="w-10 h-10" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+          <ShieldX className="w-10 h-10 !text-[#064E3B] !stroke-[#064E3B]" />
         </div>
 
         <h1

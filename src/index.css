@@ -6457,11 +6457,12 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 }
 
 /* ============================================================
- * SINGLE FINAL SURFACE CONTRAST CONTRACT
+ * RETIRED LEGACY SURFACE CONTRAST CONTRACT
  * Own surface decides contrast. Permission flags never decide color.
  * Light own-surface → ink. Dark own-surface → white.
  * Nested opposite surfaces override their parent.
  * ============================================================ */
+@media not all {
 
 :root {
   --jj-contrast-on-light: #1A1A1A;
@@ -6748,6 +6749,7 @@ html body :is(
   stroke: currentColor !important;
 }
 
+}
 /* FINAL SIDEBAR LOCK — expanded section titles gold; expanded sub-items ink with gold icons. */
 html body [data-sidebar-section],
 html body [data-sidebar-section] [data-sidebar-section-label],
@@ -8219,6 +8221,7 @@ html body .jj-pill-emerald:hover svg * {
    and SVG strokes WHITE at idle/hover/focus/active/disabled.
    No opt-outs. Replaces any prior rule that forced ink on dark.
    ============================================================ */
+@media not all {
 html body :is(
   [data-ink-emerald],
   [data-hero-dark],
@@ -8256,6 +8259,7 @@ html body :is(
 ) :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
 }
 
 /* Hover lock for .jj-pill-emerald — white text+icons on emerald fill */
@@ -20345,6 +20349,7 @@ html body .jj-cta-emerald:not([data-allow-ink]) svg * {
    tabs, icon tiles, CTAs, and backend/portal controls without changing
    champagne/soft/outline emerald accents.
    ============================================================ */
+@media not all {
 html body :is(
   [data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
   [data-studio-surface="emerald"],
@@ -20735,6 +20740,7 @@ html body :is(
   fill-opacity: 1 !important;
 }
 
+}
 /* PASS 108 — Header emerald controls are also emerald own-surfaces.
    Sidebar rail tiles are emerald only when active/collapse-control. */
 html body :is(.jj-header-premium-control, .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock),
@@ -21863,6 +21869,7 @@ html body #root :is(#ready-to-get-started, #section-cta) :is(svg, [class*="lucid
    own-surfaces = ink text/icons. Explicit nested opposite surfaces win.
    ============================================================== */
 
+@media not all {
 html body :is([data-surface="emerald"], [data-studio-surface="emerald"], [data-emerald-action], [data-emerald-action="true"], [data-emerald-filled], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], [data-cta="primary"], [data-cta="dark"], [data-mode-row="active"], [data-mode-select-pill], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .allow-white, .jj-surface-emerald, .jj-emerald-solid, .jj-emerald-fill, .jj-emerald-metallic, .jj-emerald-action, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-icon-tile-emerald, .jj-side-tile, .jbj-sidebar-collapse-control):not([data-allow-ink]):not([data-allow-ink] *),
 html body :is([data-surface="emerald"], [data-studio-surface="emerald"], [data-emerald-action], [data-emerald-action="true"], [data-emerald-filled], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], [data-cta="primary"], [data-cta="dark"], [data-mode-row="active"], [data-mode-select-pill], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .allow-white, .jj-surface-emerald, .jj-emerald-solid, .jj-emerald-fill, .jj-emerald-metallic, .jj-emerald-action, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-icon-tile-emerald, .jj-side-tile, .jbj-sidebar-collapse-control):not([data-allow-ink]) :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,b,i,small,li,dt,dd,th,td,div,time,svg,[data-lucide],[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="champagne"], [data-surface="champagne"] *, [data-surface="light"], [data-surface="light"] *, [data-surface="cream"], [data-surface="cream"] *, [data-surface="page"], [data-surface="page"] *, [data-allow-ink], [data-allow-ink] *)):not(#jj-emerald-lock-a):not(#jj-emerald-lock-b):not(#jj-emerald-lock-c):not(#jj-emerald-lock-d):not(#jj-emerald-lock-e):not(#jj-emerald-lock-f):not(#jj-emerald-lock-g):not(#jj-emerald-lock-h) {
   color: #FFFFFF !important;
@@ -21887,6 +21894,7 @@ html body :is([data-surface="champagne"], [data-surface="light"], [data-surface=
   filter: none !important;
   mix-blend-mode: normal !important;
   text-shadow: none !important;
+}
 }
 
 html body [data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,b,i,small,li,dt,dd,th,td,div,time,svg,[data-lucide],[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-mode-active-pill], [data-mode-active-pill] *)):not(#jj-mode-active-row-a):not(#jj-mode-active-row-b):not(#jj-mode-active-row-c):not(#jj-mode-active-row-d):not(#jj-mode-active-row-e):not(#jj-mode-active-row-f):not(#jj-mode-active-row-g):not(#jj-mode-active-row-h) {
@@ -29533,6 +29541,8 @@ html body:not([data-homepage]) #root main.jj-main-shell section.jj-project-hero 
   padding-right: 0 !important;
 }
 
+/* Retired descendant-paint contract; retained inert for history. */
+@media not all {
 /* Champagne/gold surfaces: black ink only. */
 html body :is(
   .jj-premium-shell,
@@ -29717,6 +29727,7 @@ html body :is(
   stroke: #FFFFFF !important;
   color: #FFFFFF !important;
   opacity: 1 !important;
+}
 }
 
 /* =====================================================================
@@ -30553,11 +30564,13 @@ html body :is([data-icon-circle="true"], .jj-icon-circle-lock, .jj-floating-acti
   place-items: center !important;
 }
 
+@media not all {
 html body :is([data-surface="emerald"], [data-emerald-action="true"], [data-emerald="true"], .jj-emerald-action, .jj-surface-emerald, .jj-cta-emerald, .jj-pill-emerald-metallic, .jj-project-pros-panel, .jj-project-pros-item, .jj-market-emerald-card, .jj-market-emerald-row):not([data-preserve-surface]) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-surface="light"] *, [data-surface="champagne"] *, [data-surface="gold"] *, .surface-light *, .surface-champagne *)) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
   opacity: 1 !important;
+}
 }
 
 /* ==========================================================================
@@ -33446,6 +33459,7 @@ html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald
    status dot inside the pill radius.
    ───────────────────────────────────────────────────────────────────────── */
 
+@media not all {
 html body :is(
   [data-surface="emerald"],
   .jj-cta-emerald,
@@ -33511,6 +33525,7 @@ html body :where(.bg-\[\#064E3B\], .bg-\[\#042c1c\], .bg-emerald-900, .bg-emeral
 html body :where(.bg-\[\#064E3B\], .bg-\[\#042c1c\], .bg-emerald-900, .bg-emerald-800, .bg-emerald-700):not([data-ink-emerald-opt-out]) svg {
   color: #FFFFFF !important;
   stroke: currentColor;
+}
 }
 
 /* Fix reported "dot leaking out of pill" — clamp status dots inside pill radius */
@@ -37142,6 +37157,22 @@ html body #root :where(
 ) :where(svg,[class*="lucide"]) {
   color: inherit;
   stroke: currentColor;
+}
+
+/* Terminal inheritance reset: legacy rules may not assign an explicit
+   foreground below a semantic boundary. Nested boundaries still establish
+   their own color above, so light-in-dark and dark-in-light controls work. */
+html body #root :where(
+  [data-surface], [data-emerald="true"], [data-emerald-action="true"],
+  [data-emerald-icon-surface], [data-jj-segmented-trigger],
+  .surface-light, .surface-page, .surface-champagne, .surface-cream,
+  .surface-raised, .surface-gold, .surface-pearl, .surface-dark, .surface-ink,
+  .jj-surface-emerald, .jj-emerald-action, .jj-emerald-metallic,
+  .jj-emerald-ombre, .jj-cta-emerald, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jbj-form-option
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,small,li,dt,dd,th,td,svg,[class*="lucide"]) {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
 }
 
 

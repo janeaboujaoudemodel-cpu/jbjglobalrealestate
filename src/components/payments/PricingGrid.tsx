@@ -72,7 +72,7 @@ export function PricingGrid({
     <>
       <section className="jj-section py-16 md:py-24">{/* payment-request flow (Stripe temporarily disabled) */}
         <div className="mx-auto max-w-6xl px-4">
-          <div className="text-center mb-10 md:mb-14">
+          <div data-surface="light" className="text-center mb-10 md:mb-14">
             {eyebrow ? (
               <div className="text-[11px] uppercase tracking-[0.32em] text-[#B89555] mb-3">
                 {eyebrow}
