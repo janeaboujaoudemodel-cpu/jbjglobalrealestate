@@ -1575,9 +1575,9 @@ export default function PublicAccess() {
           </div>
         </section>
 
-        {/* FEATURED PROPERTIES */}
-        <section id="featured" className="overflow-hidden bg-[#F7F2EA] px-5 py-16 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-7xl overflow-hidden rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] shadow-[0_26px_70px_-54px_rgba(6,78,59,0.5)]">
+        {/* FEATURED PROPERTIES — edge to edge on every device */}
+        <section id="featured" className="overflow-hidden bg-[#F7F2EA] py-16">
+          <div className="w-full overflow-hidden border-y border-[#0d3a2b]/10 bg-[#FDFBF7] shadow-[0_26px_70px_-54px_rgba(6,78,59,0.5)]">
             <div className="relative z-20 px-5 pb-4 pt-6 sm:px-7 md:flex md:items-end md:justify-between md:gap-6">
               <div className="max-w-3xl">
                 <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
@@ -1618,8 +1618,8 @@ export default function PublicAccess() {
               View library <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-            <div className="rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] py-5 shadow-[0_26px_70px_-54px_rgba(6,78,59,0.45)]">
+          <div className="w-full">
+            <div className="border-y border-[#0d3a2b]/10 bg-[#FDFBF7] py-5 shadow-[0_26px_70px_-54px_rgba(6,78,59,0.45)]">
               <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
             </div>
           </div>
