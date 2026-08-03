@@ -246,23 +246,15 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       if (found) { openWizard(found); setUrlInput(''); return; }
     }
 
-    // External URL — call scrape-property-url edge function
+    // External URL — call scrape-property-url edge function (requires a session)
     setScraping(true);
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/functions/v1/scrape-property-url`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({ url: raw }),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || 'Scraping failed');
+      const { data, error } = await supabase.functions.invoke('scrape-property-url', {
+        body: { url: raw },
+      });
+      if (error) throw new Error(error.message || 'Scraping failed');
+      if (!data?.success) throw new Error(data?.error || 'Scraping failed');
+
       const ext: ExternalProperty = { ...data.property, sourceUrl: raw, images: data.images || [] };
       setExternalProperty(ext);
       setSelectedProject(null);
