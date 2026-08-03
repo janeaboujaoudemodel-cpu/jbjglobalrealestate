@@ -285,9 +285,10 @@ const Index = () => {
             onError={() => setVideoLoaded(true)}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
-          {/* Lighter overlay: video visibility prioritized, headline still legible via its own text-shadow */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/45 z-[3] pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-[3] pointer-events-none" />
+          {/* The photograph remains visible, but the painted pixels behind all
+              white identity/copy stay dark enough to satisfy the surface rule. */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60 z-[3] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/15 to-black/35 z-[3] pointer-events-none" />
         </div>
 
         

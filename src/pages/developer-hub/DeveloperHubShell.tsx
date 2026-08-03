@@ -73,13 +73,13 @@ const DeveloperHubShell = () => {
       )}
 
       {!isMobile && (
-        <aside data-backend-sidebar="developer" data-surface="champagne" className="fixed left-0 top-[88px] h-[calc(100vh-88px)] w-64 border-r border-[#B89555]/40 z-40">
+        <aside data-backend-sidebar="developer" data-surface="champagne" className="fixed left-0 top-[var(--responsive-header-height)] h-[calc(100dvh-var(--responsive-header-height))] w-64 border-r border-[#B89555]/40 z-40">
           <SidebarContent />
         </aside>
       )}
 
       <main className={cn("flex-1", isMobile ? "ml-0" : "ml-64")}>
-        <header className="h-14 bg-[#F7F2EA] border-b border-[#B89555]/40 sticky top-[88px] z-30 flex items-center justify-between px-4 md:px-6">
+        <header data-surface="champagne" className="h-14 bg-[#F7F2EA] border-b border-[#B89555]/40 sticky top-[var(--responsive-header-height)] z-30 flex items-center justify-between px-[var(--jj-page-gutter)]">
           <div className="flex items-center gap-3 min-w-0">
             {isMobile && (
               <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-[#1A1A1A]">
@@ -104,7 +104,7 @@ const DeveloperHubShell = () => {
           </div>
         </header>
 
-        <div className="p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto">
+        <div className="px-[var(--jj-page-gutter)] py-5 md:py-6 lg:py-8 max-w-[1600px] mx-auto">
           <Outlet />
         </div>
       </main>

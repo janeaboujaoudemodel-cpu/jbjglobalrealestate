@@ -89,32 +89,9 @@ const NAV_ITEMS: NavItem[] = [
 
   // ── Creative & Tools ──
   { label: "Royal Tools Hub", href: "/ai-hub", icon: Sparkles, section: "TOOLS" },
-  { label: "Corporate Suite", href: "/toolkit/corporate-suite", icon: Building },
-  { label: "Real Estate Suite", href: "/toolkit/property-suite", icon: Home },
-  { label: "Video Suite", href: "/toolkit/video-suite", icon: Video },
-  { label: "Photo Suite", href: "/toolkit/photo-suite", icon: Image },
-  { label: "Voice & Audio", href: "/toolkit/voice-suite", icon: Mic },
-  { label: "PDF & Documents", href: "/toolkit/pdf-suite", icon: FileText },
-  { label: "Stamp Generator", href: "/toolkit/stamp-generator", icon: Stamp },
-  { label: "Business Card", href: "/toolkit/corporate-suite/business-card", icon: CreditCard },
-  { label: "Logo Maker", href: "/toolkit/corporate-suite/logo-creator", icon: Palette },
   // { label: "CV Builder", ... } — REMOVED per owner directive (broken)
-  { label: "Cover Letter", href: "/toolkit/corporate-suite/cover-letter", icon: Pen },
-  { label: "Company Profile Builder", href: "/toolkit/corporate-suite/company-profile", icon: Award },
-  { label: "Landing Page Builder", href: "/toolkit/corporate-suite/landing-page", icon: Globe },
   // { label: "E-Sign", ... } — REMOVED per owner directive (hidden until ready)
-  { label: "Scan & Sign", href: "/toolkit/scan-sign", icon: ScanLine },
   { label: "Brand Palette", href: "/brand-palette", icon: Palette },
-  { label: "Video Resize Pack", href: "/toolkit/video-resize-pack", icon: Video },
-  { label: "PDF from Photos", href: "/toolkit/pdf-from-photos", icon: FilePlus },
-  { label: "Image Resize", href: "/toolkit/image-resize", icon: Image },
-  { label: "Voice Studio", href: "/toolkit/voice-studio", icon: Mic },
-  { label: "Voice Studio Pro", href: "/toolkit/voice-studio-pro", icon: Mic },
-  { label: "AI Video Studio", href: "/toolkit/ai-video-studio", icon: Video },
-  { label: "Captions & Translate", href: "/toolkit/captions-translate", icon: Languages },
-  { label: "Background AI", href: "/toolkit/background-ai", icon: PaintBucket },
-  { label: "Beauty Filters", href: "/toolkit/beauty-filters", icon: Sparkles },
-  { label: "PDF Editor", href: "/toolkit/pdf-editor", icon: FileText },
 
   // ── AI Tools (merged into TOOLS section) ──
   { label: "AI Personal Shopper", href: "/ai-personal-shopper", icon: Store },
@@ -135,7 +112,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AI ROI Calculator", href: "/ai-roi-calculator", icon: Calculator },
   { label: "AI Email Generator", href: "/ai-email-generator", icon: Mail },
   { label: "AI Translation Hub", href: "/ai-translation-hub", icon: Languages },
-  { label: "AI Video Tour Script", href: "/toolkit/video-suite", icon: Video },
   { label: "AI Social Media", href: "/ai-social-media", icon: Share2 },
   { label: "AI Description Writer", href: "/ai-description-writer", icon: PenTool },
   { label: "AI Meeting Summarizer", href: "/ai-meeting-summarizer", icon: Mic },
@@ -264,12 +240,6 @@ const NAV_ITEMS: NavItem[] = [
 
 
   // ── Business Suites ──
-  { label: "Suites Hub", href: "/suites", icon: Boxes, section: "BUSINESS SUITES", megaMenu: 'suites' },
-  { label: "All Tools Suite", href: "/business-suite/all", icon: Package },
-  { label: "Real Estate Suite", href: "/business-suite/real-estate", icon: Building2 },
-  { label: "Broker Suite", href: "/business-suite/broker", icon: BriefcaseIcon },
-  { label: "Creative Suite", href: "/business-suite/creative", icon: Palette },
-  { label: "Productivity Suite", href: "/business-suite/productivity", icon: Cog },
 
   // ── Admin & Owner (shown conditionally) ──
   { label: "Command Center", href: "/owner", icon: Crown, section: "ADMIN & OWNER" },
@@ -481,12 +451,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
   account: ACCOUNT_SHORTCUTS_SIDEBAR.map(s => ({ label: s.label, icon: s.icon, href: s.href })),
   suites: [
-    { label: 'Suites Hub', icon: Boxes, href: '/suites' },
-    { label: 'All Tools Suite', icon: Package, href: '/business-suite/all' },
-    { label: 'Real Estate Suite', icon: Building2, href: '/business-suite/real-estate' },
-    { label: 'Broker Suite', icon: Handshake, href: '/business-suite/broker' },
-    { label: 'Creative Suite', icon: Palette, href: '/business-suite/creative' },
-    { label: 'Productivity Suite', icon: Cog, href: '/business-suite/productivity' },
+    { label: 'Royal Tools Hub', icon: Sparkles, href: '/ai-hub' },
   ],
 };
 

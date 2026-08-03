@@ -119,7 +119,7 @@ const DubaiRentalYieldGuide = () => {
       {/* Hero */}
       <section data-hero-dark data-surface="emerald" className="relative overflow-hidden bg-gradient-to-b from-[#0d1f18] via-[#0a1712] to-[#0a1712] text-white">
         <div className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_top,_rgba(184,149,85,0.35),_transparent_60%)]" />
-        <div className="relative max-w-5xl mx-auto px-6 md:px-8 py-20 md:py-28 text-center">
+        <div className="relative max-w-5xl mx-auto px-[var(--jj-page-gutter)] py-20 md:py-28 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B89555]/60 text-[#E9D9AE] text-xs tracking-widest uppercase mb-6">
             <TrendingUp className="w-3.5 h-3.5" /> 2026 Market Data
           </div>
