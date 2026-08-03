@@ -268,6 +268,25 @@ export function useCommunities() {
   });
 }
 
+/**
+ * Public-safe column list. `select("*")` is rejected with
+ * "permission denied for table developers" for anonymous visitors because
+ * sensitive columns (office_phone, admin_email, notes, …) are not granted
+ * to the anon role — so we must enumerate the public columns explicitly.
+ */
+const DEVELOPERS_PUBLIC_SELECT = [
+  "id", "name", "slug", "logo_url", "logo_url_processed", "logo_url_dark", "logo_bg_color",
+  "logo_verified", "logo_locked", "logo_source", "logo_status", "logo_candidates",
+  "description", "description_languages", "rank", "excel_order", "created_at", "updated_at",
+  "founded_year", "completed_projects", "offplan_projects", "portfolio_worth", "headquarters",
+  "feature_image_url", "website_url", "ceo_name", "total_units_delivered", "upcoming_units",
+  "expected_completion_year", "parent_company", "license_number", "specialization",
+  "instagram_url", "linkedin_url", "registration_status", "is_hidden", "has_active_rep",
+  "is_manually_verified", "manually_verified_at", "needs_review", "public_fields",
+  "whatsapp_group_url", "telegram_group_url", "google_drive_url", "group_status",
+  "focus_project_id", "focus_project_label",
+].join(",");
+
 export function useDevelopers(includeHidden = false) {
   return useQuery({
     queryKey: ["developers", includeHidden],
@@ -276,8 +295,9 @@ export function useDevelopers(includeHidden = false) {
     queryFn: async () => {
       let query = supabase
         .from("developers")
-        .select("*")
+        .select(DEVELOPERS_PUBLIC_SELECT)
         .order("rank");
+
       
       if (!includeHidden) {
         query = query.or("is_hidden.is.null,is_hidden.eq.false");
