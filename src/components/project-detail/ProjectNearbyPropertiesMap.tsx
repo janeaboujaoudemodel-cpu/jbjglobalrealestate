@@ -376,6 +376,7 @@ export default function ProjectNearbyPropertiesMap({
                   key={view}
                   type="button"
                   onClick={() => setMapView(view)}
+                  data-surface={active ? "emerald" : "light"}
                   data-emerald-action={active ? "true" : undefined}
                   className={
                     active

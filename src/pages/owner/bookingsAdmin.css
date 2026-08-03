@@ -111,6 +111,7 @@
   min-height: calc(100vh - 58px);
   overflow-y: auto;
   color: #fff;
+  -webkit-text-fill-color: currentColor;
   box-shadow: inset -1px 0 0 rgba(255,255,255,0.06), 6px 0 24px -18px rgba(0,0,0,0.6);
 }
 
@@ -125,8 +126,9 @@
   margin-bottom: 18px;
   text-align: left;
   color: #fff;
+  -webkit-text-fill-color: currentColor;
 }
-.booking-console__workspace strong { flex: 1; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
+.booking-console__workspace strong { flex: 1; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; -webkit-text-fill-color: currentColor; }
 .booking-console__workspace > span {
   background: linear-gradient(180deg, #f6e8c2 0%, var(--booking-gold) 100%);
   color: #1a1a1a;
