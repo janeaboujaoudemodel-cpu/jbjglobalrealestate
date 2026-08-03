@@ -94,7 +94,6 @@ export function FAQPageShell({
                   <AccordionItem
                     value={`${categoryIndex}-${faqIndex}`}
                     data-no-contrast-guard
-                    data-ink-emerald
                     className="jj-faq-item rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] px-5 data-[state=open]:bg-[image:var(--jj-emerald-ombre)] data-[state=open]:border-[#0d3a2b]/40 data-[state=open]:shadow-[0_10px_30px_-16px_rgba(6,78,59,0.55)] transition-colors"
                   >
                     <AccordionTrigger className="jj-faq-trigger text-left py-4 text-base font-medium text-[#1A1A1A] hover:no-underline data-[state=open]:text-white">

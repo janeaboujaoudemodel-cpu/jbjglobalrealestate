@@ -21,8 +21,9 @@ describe("FAQ open-state contrast cascade", () => {
     );
 
     expect(component).toContain("data-no-contrast-guard");
-    expect(component).toContain("data-ink-emerald");
     expect(component).toContain("data-[state=open]:bg-[image:var(--jj-emerald-ombre)]");
     expect(component).toContain("data-[state=open]:text-white");
+    expect(css).toContain('.jj-faq-item[data-state="closed"]');
+    expect(css).toContain('.jj-faq-item[data-state="open"]');
   });
 });
