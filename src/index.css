@@ -37278,7 +37278,7 @@ html body #root header[data-header-surface="light"] :where(.jj-header-utility-ic
    photographic home hero remains transparent because it does not set the MI
    page-active marker. */
 @media (max-width: 1023px) {
-  html body[data-mi-page-active="true"] #root header[data-header-surface="dark"] {
+  html body:has([data-insights-page]) #root header[data-header-surface="dark"] {
     background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   }
 }
