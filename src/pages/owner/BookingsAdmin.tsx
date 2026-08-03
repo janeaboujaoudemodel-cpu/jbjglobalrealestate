@@ -253,8 +253,8 @@ export default function BookingsAdmin() {
         <div className="booking-console__brand"><span className="booking-console__brand-mark">✓</span><strong>JBJ Bookings</strong></div>
         <div className="booking-console__top-actions"><Button type="button" size="icon" aria-label="Create event type" onClick={() => setView("event-types")}><Plus className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon" aria-label="Open calendar"><CalendarDays className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon" aria-label="Open notifications"><Bell className="h-4 w-4" /></Button><Button type="button" variant="ghost" size="icon" aria-label="Open booking settings"><Settings className="h-4 w-4" /></Button><div className="booking-console__profile">JB</div></div>
       </header>
-      <aside className="booking-console__sidebar" aria-label="JBJ Bookings navigation">
-        <button type="button" className="booking-console__workspace"><span>JB</span><strong>Jane Bou Jaoude</strong><ChevronDown className="h-4 w-4" /></button>
+      <aside className="booking-console__sidebar" aria-label="JBJ Bookings navigation" data-surface="emerald">
+        <button type="button" className="booking-console__workspace" data-surface="emerald"><span>JB</span><strong>Jane Bou Jaoude</strong><ChevronDown className="h-4 w-4" /></button>
         <nav>{navItems.map((item) => { const Icon = item.icon; return <button key={item.key} type="button" className="booking-console__nav-item" data-active={view === item.key && !detailOpen} onClick={() => { setView(item.key); setDetailOpen(false); }}><Icon className="h-4 w-4" /><span>{item.label}</span></button>; })}</nav>
       </aside>
       <section className="booking-console__content">
