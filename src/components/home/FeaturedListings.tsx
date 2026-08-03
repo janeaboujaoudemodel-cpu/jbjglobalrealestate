@@ -139,6 +139,8 @@ const FeaturedListings = () => {
             </div>
           )}
         </CardGrid>
+        </div>
+
 
         {/* View All CTA — navy blue, white text + icon */}
         <div className="text-center mt-10 md:mt-12">
