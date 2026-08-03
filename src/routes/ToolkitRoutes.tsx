@@ -6,13 +6,6 @@ import { Route, Navigate } from "react-router-dom";
 import OwnerGuard from "@/components/OwnerGuard";
 import PageLoader from "@/components/PageLoader";
 
-const VideoResizePack = lazy(() => import("@/pages/toolkit/VideoResizePack"));
-const PdfFromPhotos = lazy(() => import("@/pages/toolkit/PdfFromPhotos"));
-const ImageResize = lazy(() => import("@/pages/toolkit/ImageResize"));
-const VoiceStudio = lazy(() => import("@/pages/toolkit/VoiceStudio"));
-const VoiceStudioPro = lazy(() => import("@/pages/toolkit/VoiceStudioPro"));
-const VirtualStagingPage = lazy(() => import("@/pages/toolkit/VirtualStagingPage"));
-const AIVideoStudioPage = lazy(() => import("@/pages/toolkit/AIVideoStudioPage"));
 const StampGeneratorLanding = lazy(() => import("@/pages/toolkit/StampGeneratorPage"));
 const ScanSignToolkitPage = lazy(() => import("@/pages/toolkit/ScanSignPage"));
 const StampProjectsDashboard = lazy(() => import("@/components/stamp-generator/StampProjectsDashboard"));
@@ -21,15 +14,6 @@ const StampGeneratorMain = lazy(() => import("@/components/stamp-generator/Stamp
 const StampExportPage = lazy(() => import("@/components/stamp-generator/StampExportPage"));
 const StampGalleryPage = lazy(() => import("@/components/stamp-generator/StampGalleryPage"));
 const StampHistoryDashboard = lazy(() => import("@/components/stamp-generator/StampHistoryDashboard"));
-const CaptionsTranslate = lazy(() => import("@/pages/toolkit/CaptionsTranslate"));
-const BackgroundAI = lazy(() => import("@/pages/toolkit/BackgroundAI"));
-const BeautyFilters = lazy(() => import("@/pages/toolkit/BeautyFilters"));
-const PDFEditor = lazy(() => import("@/pages/toolkit/PDFEditor"));
-const VideoSuite = lazy(() => import("@/pages/toolkit/VideoSuite"));
-const VoiceSuite = lazy(() => import("@/pages/toolkit/VoiceSuite"));
-const PhotoSuite = lazy(() => import("@/pages/toolkit/PhotoSuite"));
-const PDFSuite = lazy(() => import("@/pages/toolkit/PDFSuite"));
-const PropertySuite = lazy(() => import("@/pages/toolkit/PropertySuite"));
 const CorporateSuite = lazy(() => import("@/pages/toolkit/CorporateSuite"));
 const BusinessCardDesigner = lazy(() => import("@/components/corporate-suite/BusinessCardDesigner"));
 
@@ -37,17 +21,9 @@ const CoverLetterGenerator = lazy(() => import("@/components/corporate-suite/Cov
 const LandingPageBuilder = lazy(() => import("@/components/corporate-suite/LandingPageBuilder"));
 const LogoCreator = lazy(() => import("@/components/corporate-suite/LogoCreator"));
 const CompanyProfileBuilder = lazy(() => import("@/components/corporate-suite/CompanyProfileBuilder"));
-const AllToolsSuite = lazy(() => import("@/pages/business-suite/AllToolsSuite"));
-const RealEstateSuite = lazy(() => import("@/pages/business-suite/RealEstateSuite"));
-const BrokerSuite = lazy(() => import("@/pages/business-suite/BrokerSuite"));
-const CreativeSuite = lazy(() => import("@/pages/business-suite/CreativeSuite"));
-const ProductivitySuite = lazy(() => import("@/pages/business-suite/ProductivitySuite"));
-const SuitesHub = lazy(() => import("@/pages/business-suite/SuitesHub"));
 const Studio = lazy(() => import("@/pages/Studio"));
 const StudioEditor = lazy(() => import("@/pages/StudioEditor"));
 const StudioSettings = lazy(() => import("@/pages/StudioSettings"));
-
-import BrokerGuard from "@/components/BrokerGuard";
 
 /** Wraps a lazy component with the standard PageLoader fallback */
 const L = ({ children }: { children: React.ReactNode }) => (

@@ -112,7 +112,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AI ROI Calculator", href: "/ai-roi-calculator", icon: Calculator },
   { label: "AI Email Generator", href: "/ai-email-generator", icon: Mail },
   { label: "AI Translation Hub", href: "/ai-translation-hub", icon: Languages },
-  { label: "AI Video Tour Script", href: "/toolkit/video-suite", icon: Video },
   { label: "AI Social Media", href: "/ai-social-media", icon: Share2 },
   { label: "AI Description Writer", href: "/ai-description-writer", icon: PenTool },
   { label: "AI Meeting Summarizer", href: "/ai-meeting-summarizer", icon: Mic },
@@ -452,12 +451,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
   account: ACCOUNT_SHORTCUTS_SIDEBAR.map(s => ({ label: s.label, icon: s.icon, href: s.href })),
   suites: [
-    { label: 'Suites Hub', icon: Boxes, href: '/suites' },
-    { label: 'All Tools Suite', icon: Package, href: '/business-suite/all' },
-    { label: 'Real Estate Suite', icon: Building2, href: '/business-suite/real-estate' },
-    { label: 'Broker Suite', icon: Handshake, href: '/business-suite/broker' },
-    { label: 'Creative Suite', icon: Palette, href: '/business-suite/creative' },
-    { label: 'Productivity Suite', icon: Cog, href: '/business-suite/productivity' },
+    { label: 'Royal Tools Hub', icon: Sparkles, href: '/ai-hub' },
   ],
 };
 

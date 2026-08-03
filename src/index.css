@@ -37282,3 +37282,29 @@ html body #root header[data-header-surface="light"] :where(.jj-header-utility-ic
     background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   }
 }
+
+/* PASS 202 — SHARED RESPONSIVE SHELL CONTRACT */
+:root {
+  --jj-page-gutter: clamp(1rem, 4vw, 2.5rem);
+  --responsive-header-height: 88px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --jj-page-gutter: 1rem;
+    --responsive-header-height: 66px;
+  }
+
+  html body #root :where(main, [data-content-gutter], .grid, [class*="grid-cols-"]) > * {
+    min-width: 0;
+  }
+
+  html body #root :where(input, textarea, select, button, [role="button"]) {
+    max-width: 100%;
+  }
+}
+
+html body #root header[data-header-surface="light"] :where(.jj-header-wordmark, .jj-header-tagline, .jj-header-utility-icon, .jj-hamburger, .jj-hamburger-close) {
+  color: var(--jbj-header-foreground) !important;
+  -webkit-text-fill-color: var(--jbj-header-foreground) !important;
+}

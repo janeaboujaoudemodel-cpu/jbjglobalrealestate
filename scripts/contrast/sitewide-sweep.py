@@ -215,7 +215,10 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
     entry = {"route": route, "viewport": viewport_name, "failures": [], "errors": []}
     console_sink.clear()
     try:
-        await page.goto(f"{BASE}{route}", wait_until="domcontentloaded", timeout=45000)
+        response = await page.goto(f"{BASE}{route}", wait_until="domcontentloaded", timeout=45000)
+        entry["httpStatus"] = response.status if response else None
+        if response and response.status >= 400:
+            entry["errors"].append(f"HTTP {response.status}")
         try:
             await page.wait_for_load_state("networkidle", timeout=15000)
         except Exception:  # noqa: BLE001
@@ -251,21 +254,28 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
         if stable_samples < 2:
             entry["errors"].append("route content did not hydrate before the 30s proof timeout")
         await page.wait_for_timeout(300)
-        shot = shots / f"{slug(route)}--{viewport_name}.png"
-        await page.screenshot(path=str(shot))
-
         data = await page.evaluate(CANDIDATES_JS)
-        entry["screenshot"] = shot.name
-
         entry["overflow"] = data["overflow"]
         entry["blank"] = data["bodyText"] < 40
         entry["landed"] = data["url"]
         entry["redirected"] = data["url"].rstrip("/") != route.rstrip("/")
+        entry["notFound"] = await page.locator('[data-route-status="not-found"]').count() > 0
         protected_prefixes = ("/owner", "/broker", "/developer", "/account", "/automations", "/favorites")
         entry["unexpectedProtectedRedirect"] = entry["redirected"] and route.startswith(protected_prefixes)
         entry["candidates"] = len(data["candidates"])
 
-        img = np.array(Image.open(shot).convert("RGB"))
+        if entry["notFound"]:
+            entry["errors"].append("rendered not-found route")
+        if entry["blank"]:
+            entry["errors"].append("blank route")
+        if entry["redirected"]:
+            entry["errors"].append(f"unexpected redirect to {entry['landed']}")
+
+        provisional = shots.parent / "failures" / viewport_name / f"{slug(route)}--{viewport_name}.png"
+        provisional.parent.mkdir(parents=True, exist_ok=True)
+        await page.screenshot(path=str(provisional))
+
+        img = np.array(Image.open(provisional).convert("RGB"))
         scale = img.shape[1] / VIEWPORTS[viewport_name]["width"]
         flagged = []
         for cand in data["candidates"]:
@@ -294,6 +304,13 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
             for f in flagged:
                 f["rule"] = rules.get(str(f["i"])) or rules.get(f["i"])
         entry["failures"] = flagged
+        entry["valid"] = not flagged and not entry["errors"] and (entry.get("overflow") or 0) <= 2
+        if entry["valid"]:
+            admitted = shots / provisional.name
+            provisional.replace(admitted)
+            entry["screenshot"] = admitted.name
+        else:
+            entry["failureScreenshot"] = str(provisional.relative_to(shots.parent))
     except Exception as exc:  # noqa: BLE001
         entry["errors"].append(str(exc)[:200])
     entry["consoleErrors"] = list(console_sink)[:5]
@@ -310,7 +327,7 @@ async def worker(browser, routes, viewport_name, shots, results):
         entry = await audit(page, route, viewport_name, shots, sink)
         results.append(entry)
         n = len(entry["failures"])
-        mark = "x" if (n or entry["errors"] or entry.get("blank") or entry.get("unexpectedProtectedRedirect")) else "."
+        mark = "." if entry.get("valid") else "x"
         print(f"{mark} [{viewport_name}] {route} fails={n} {';'.join(entry['errors'])[:70]}", flush=True)
     await ctx.close()
 
@@ -364,6 +381,9 @@ async def main():
         "blankRoutes": sorted({e["route"] for e in results if e.get("blank")}),
         "overflowRoutes": sorted({e["route"] for e in results if (e.get("overflow") or 0) > 2}),
         "protectedRedirectRoutes": sorted({e["route"] for e in results if e.get("unexpectedProtectedRedirect")}),
+        "notFoundRoutes": sorted({e["route"] for e in results if e.get("notFound")}),
+        "redirectRoutes": sorted({e["route"] for e in results if e.get("redirected")}),
+        "validCaptures": sum(1 for e in results if e.get("valid")),
         "winningRules": [{"rule": k, "count": v["count"], "value": v["value"],
                           "routes": sorted(v["routes"])[:12], "samples": v["samples"]}
                          for k, v in ranked[:80]],
