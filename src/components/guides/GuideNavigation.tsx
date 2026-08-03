@@ -24,8 +24,10 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="py-8"
+      className="py-8 bg-[#F7F2EA]"
       data-guide-nav
+      data-surface="champagne"
+
     >
       <div className="max-w-4xl mx-auto">
         {/* Start Here Block */}
