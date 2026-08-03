@@ -177,7 +177,8 @@ export default function MortgageParityPanel({
           <span className="font-bold tabular-nums">{ltv}%</span>
         </div>
         <div
-          className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+          className="mt-3 lg:mt-auto lg:pt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
+
           style={{
             background: ltvOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
             border: `1px solid ${ltvOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
