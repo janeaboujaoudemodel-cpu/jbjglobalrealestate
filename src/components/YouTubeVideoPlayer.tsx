@@ -98,20 +98,34 @@ export default function YouTubeVideoPlayer({
   const [fallback, setFallback] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     loadYouTubeAPI();
-    onAPIReady(() => createPlayer());
+    onAPIReady(() => {
+      // If the plain-embed fallback already took over, never mount a second
+      // player into the same container (that would stack two iframes and
+      // play overlapping audio).
+      if (cancelled || fallbackRef.current) return;
+      apiTookOverRef.current = true;
+      createPlayer();
+    });
 
     // If the iframe API is blocked or slow, fall back to a plain embed so the
     // video always plays.
     const failsafe = window.setTimeout(() => {
-      if (!containerRef.current?.querySelector("iframe")) setFallback(true);
+      if (cancelled || apiTookOverRef.current) return;
+      if (!containerRef.current?.querySelector("iframe")) {
+        fallbackRef.current = true;
+        setFallback(true);
+      }
     }, 3000);
 
     return () => {
+      cancelled = true;
       window.clearTimeout(failsafe);
       playerRef.current?.destroy?.();
     };
   }, [videoId, createPlayer]);
+
 
   const handleReplay = useCallback(() => {
     playerRef.current?.destroy?.();
