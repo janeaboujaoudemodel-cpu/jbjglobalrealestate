@@ -31,7 +31,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserAvatarPremium } from "@/components/account/UserAvatarPremium";
-import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import ModeSwitcher from "@/components/ModeSwitcher";
@@ -41,7 +40,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { cn } from "@/lib/utils";
 import { useIsTouchLayout } from "@/hooks/use-touch-layout";
 // jbj-monogram-dark-bg removed — use transparent variants only
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
@@ -366,7 +364,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Deterministic: on the homepage at mobile widths, always render the fiberglass
   // header at rest (state-independent), so a slow first paint never flashes white.
   const homeMobileFiberglassActive = isHomeHeroPath && isAtPageTop && !forceSolid;
-  const useLightHeaderIdentity = isFullyTransparent || homeMobileFiberglassActive;
+  // One canonical surface state drives every header foreground and logo asset.
+  // Never derive the image, wordmark, and controls from separate booleans.
+  const headerSurface: "dark" | "light" =
+    isFullyTransparent || homeMobileFiberglassActive ? "dark" : "light";
+  const useLightHeaderIdentity = headerSurface === "dark";
   const champagneFiberglassBackground =
     'linear-gradient(180deg, rgba(247,242,234,0.78) 0%, rgba(239,230,214,0.72) 100%)';
   const headerShellStyle: React.CSSProperties = {
@@ -728,6 +730,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       style={headerShellStyle}
       data-home-mobile-header={homeMobileFiberglassActive ? "true" : undefined}
       data-mobile-fiberglass={(showMobileFiberglass || homeMobileFiberglassActive) ? "true" : undefined}
+      data-header-surface={headerSurface}
+      data-surface={headerSurface === "dark" ? "dark" : "champagne"}
       data-tour-target="header"
 
     >
@@ -815,7 +819,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={isFullyTransparent && !homeMobileFiberglassActive ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
+                src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
                 className={`w-10 h-10 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] object-contain relative z-10 transition-transform duration-300 ${
                   useLightHeaderIdentity
@@ -834,7 +838,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <span
                 className={cn(
                   "font-bold text-[13px] sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.10em] sm:tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate",
-                  useLightHeaderIdentity ? "jj-transparent-header-wordmark" : "text-[#111111]"
+                  "jj-header-wordmark"
                 )}
               >
                 {/* Phone: short wordmark; ≥sm: full legal name */}
@@ -844,7 +848,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <span
                 className={cn(
                   "hidden sm:block text-[10px] sm:text-[11px] xl:text-[13px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate",
-                  useLightHeaderIdentity ? "jj-transparent-header-wordmark" : "text-[#1A1A1A]/70"
+                  "jj-header-tagline"
                 )}
               >
                 Excellence in Real Estate
@@ -857,10 +861,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
           {shouldUseMobileHeader && (
             <div className="flex items-center gap-2 shrink-0">
-              {/* Mobile Menu Trigger - Bare 3-line hamburger (no circle), emerald with 3D sheen */}
+              {/* Mobile Menu Trigger — clean surface-aware mark, no decorative gradient. */}
               <button
                 type="button"
-                data-no-contrast-guard
                 className="inline-flex h-11 w-11 min-h-11 min-w-11 items-center justify-center appearance-none bg-transparent border-0 p-0 focus:outline-none shrink-0 group"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 data-tour-target="mobile-menu"
@@ -868,44 +871,20 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               >
                 {mobileMenuOpen ? (
                   <span
-                    className="text-2xl font-light leading-none"
-                    style={{
-                      background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                      filter: 'drop-shadow(0 1px 0 rgba(255,238,200,0.55)) drop-shadow(0 1px 2px rgba(0,0,0,0.45))',
-                    }}
+                    className="jj-hamburger-close text-2xl font-light leading-none"
                   >
                     ✕
                   </span>
                 ) : (
                   <span
                     aria-hidden="true"
-                    data-no-contrast-guard
                     data-jbj-allow-shrink
                     className="jj-hamburger flex flex-col items-center justify-center gap-[6px] transition-transform duration-300 group-active:scale-95"
-                    style={{
-                      width: '28px',
-                      minWidth: '28px',
-                      filter:
-                        'drop-shadow(0 1px 0 rgba(255,238,200,0.55)) drop-shadow(0 2px 3px rgba(0,0,0,0.55))',
-                    }}
                   >
                     {[0, 1, 2].map((i) => (
                       <span
                         key={i}
                         className="jj-hamburger-bar block rounded-full"
-                        style={{
-                          width: '28px',
-                          minWidth: '28px',
-                          height: '3px',
-                          flex: '0 0 3px',
-                          background:
-                            'linear-gradient(180deg, #064E3B 0%, #042C1C 58%, #010806 100%)',
-                          boxShadow:
-                            'inset 0 1px 0 rgba(255,245,215,0.85), inset 0 -1px 0 rgba(90,65,25,0.55), 0 1px 2px rgba(0,0,0,0.35)',
-                        }}
                       />
                     ))}
                   </span>
@@ -1514,7 +1493,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 data-tour-target="search"
               >
                 <Search
-                  className={`w-5 h-5 transition-colors duration-100 text-[#064E3B] group-hover:text-[#042C1C] ${activeMegaMenu === 'search' ? '!text-[#042C1C]' : ''}`}
+                  className="jj-header-utility-icon w-5 h-5 transition-colors duration-100"
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
               </button>
@@ -1532,7 +1511,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 data-tour-target="language"
               >
                 <Globe
-                  className={`w-5 h-5 transition-colors duration-100 text-[#064E3B] group-hover:text-[#042C1C] ${activeMegaMenu === 'language' ? '!text-[#042C1C]' : ''}`}
+                  className="jj-header-utility-icon w-5 h-5 transition-colors duration-100"
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
               </button>
@@ -1561,7 +1540,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 data-tour-target="account"
               >
                 <User
-                  className={`w-5 h-5 transition-colors duration-100 text-[#064E3B] group-hover:text-[#042C1C] ${activeMegaMenu === 'account' ? '!text-[#042C1C]' : ''}`}
+                  className="jj-header-utility-icon w-5 h-5 transition-colors duration-100"
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
                 {totalUserAlerts > 0 && (

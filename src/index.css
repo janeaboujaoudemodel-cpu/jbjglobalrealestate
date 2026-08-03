@@ -37217,3 +37217,68 @@ html body #root .jj-hamburger .jj-hamburger-bar {
   height: 3px !important;
   flex: 0 0 3px !important;
 }
+
+/* ============================================================
+   CANONICAL GLOBAL HEADER SURFACE CONTRACT
+
+   Header identity is driven by one data-header-surface value in React.
+   This final boundary intentionally wins over legacy text utilities without
+   leaking into dropdowns, sheets, or other nested own-surfaces.
+   ============================================================ */
+html body #root header[data-header-surface="dark"] {
+  --jbj-header-foreground: var(--jbj-contrast-dark);
+  --jbj-header-muted: rgba(255, 255, 255, 0.82);
+  --jbj-header-control: var(--jbj-contrast-dark);
+}
+
+html body #root header[data-header-surface="light"] {
+  --jbj-header-foreground: var(--jbj-contrast-light);
+  --jbj-header-muted: rgba(26, 26, 26, 0.72);
+  --jbj-header-control: var(--jj-emerald, #064E3B);
+}
+
+html body #root header[data-header-surface] .jj-header-wordmark {
+  color: var(--jbj-header-foreground) !important;
+  -webkit-text-fill-color: var(--jbj-header-foreground) !important;
+}
+
+html body #root header[data-header-surface] .jj-header-tagline {
+  color: var(--jbj-header-muted) !important;
+  -webkit-text-fill-color: var(--jbj-header-muted) !important;
+}
+
+html body #root header[data-header-surface] :where(.jj-header-utility-icon, .jj-hamburger-close) {
+  color: var(--jbj-header-control) !important;
+  -webkit-text-fill-color: var(--jbj-header-control) !important;
+  stroke: currentColor !important;
+}
+
+html body #root header[data-header-surface] .jj-hamburger,
+html body #root header[data-header-surface] .jj-hamburger .jj-hamburger-bar {
+  color: var(--jbj-header-control) !important;
+}
+
+html body #root header[data-header-surface] .jj-hamburger .jj-hamburger-bar {
+  background: currentColor !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body #root header[data-header-surface="dark"] :where(.jj-header-utility-icon, .jj-hamburger, .jj-hamburger-close) {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55));
+}
+
+html body #root header[data-header-surface="light"] :where(.jj-header-utility-icon, .jj-hamburger, .jj-hamburger-close) {
+  filter: none;
+}
+
+/* Insights/guides use a fixed mobile header above a content shell whose first
+   painted pixel can be champagne. Give that header a real dark surface rather
+   than letting the bright shell bleed through behind its white identity. The
+   photographic home hero remains transparent because it does not set the MI
+   page-active marker. */
+@media (max-width: 1023px) {
+  html body:has([data-insights-page]) #root header[data-header-surface="dark"] {
+    background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  }
+}

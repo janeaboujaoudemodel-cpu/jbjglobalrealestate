@@ -2,7 +2,7 @@
 
 Usage:
     python3 scripts/contrast/sitewide-sweep.py [--routes file] [--limit N]
-        [--offset N] [--viewport desktop|mobile|both] [--out DIR] [--workers N]
+        [--offset N] [--viewport laptop|ipad|phone|all] [--out DIR] [--workers N]
 
 For every static route (public frontend + authenticated backend) it:
   * restores the managed Supabase session,
@@ -29,8 +29,9 @@ from playwright.async_api import async_playwright
 BASE = os.environ.get("SWEEP_BASE_URL", "http://localhost:8080")
 
 VIEWPORTS = {
-    "desktop": {"width": 1440, "height": 900},
-    "mobile": {"width": 390, "height": 844},
+    "laptop": {"width": 1440, "height": 900},
+    "ipad": {"width": 1024, "height": 1366},
+    "phone": {"width": 390, "height": 844},
 }
 
 CANDIDATES_JS = r"""
@@ -224,19 +225,32 @@ async def audit(page, route, viewport_name, shots: Path, console_sink: list):
             "*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;"
             "transition-duration:0s!important;transition-delay:0s!important}"
         ))
-        # Wait until the shell has actually painted content (guards/redirects on
-        # protected routes settle late and would otherwise produce blank PNGs).
-        for _ in range(24):
-            await page.wait_for_timeout(400)
+        # A shell/sidebar can paint thousands of characters before its lazy route
+        # module arrives. Wait for the actual content gutter to contain non-loader
+        # content, then require two stable samples before capturing proof.
+        stable_samples = 0
+        previous_sample = ""
+        for _ in range(60):
+            await page.wait_for_timeout(500)
             try:
-                painted = await page.evaluate(
-                    "(document.body?.innerText||'').trim().length > 40"
+                sample = await page.evaluate(
+                    """() => {
+                      const gutter = document.querySelector('[data-content-gutter]');
+                      if (!gutter) return '';
+                      const visibleText = (gutter.innerText || '').trim();
+                      const hasPage = !!gutter.querySelector('h1, [role="main"], main, article, form, [data-page-ready]');
+                      return hasPage && visibleText.length > 40 ? visibleText.slice(0, 500) : '';
+                    }"""
                 )
             except Exception:  # noqa: BLE001 - mid-navigation context swap
-                painted = False
-            if painted:
+                sample = ""
+            stable_samples = stable_samples + 1 if sample and sample == previous_sample else 0
+            previous_sample = sample
+            if stable_samples >= 2:
                 break
-        await page.wait_for_timeout(600)
+        if stable_samples < 2:
+            entry["errors"].append("route content did not hydrate before the 30s proof timeout")
+        await page.wait_for_timeout(300)
         shot = shots / f"{slug(route)}--{viewport_name}.png"
         await page.screenshot(path=str(shot))
 
@@ -306,7 +320,7 @@ async def main():
     ap.add_argument("--routes", default="/tmp/audit/static-routes.json")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--offset", type=int, default=0)
-    ap.add_argument("--viewport", default="desktop")
+    ap.add_argument("--viewport", default="laptop", choices=["laptop", "ipad", "phone", "all"])
     ap.add_argument("--out", default="/mnt/documents/sitewide-audit")
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
@@ -316,14 +330,15 @@ async def main():
         routes = routes[: args.limit]
 
     out = Path(args.out)
-    shots = out / "screenshots"
-    shots.mkdir(parents=True, exist_ok=True)
-    views = ["desktop", "mobile"] if args.viewport == "both" else [args.viewport]
+    views = list(VIEWPORTS) if args.viewport == "all" else [args.viewport]
+    for view in views:
+        (out / view).mkdir(parents=True, exist_ok=True)
     results: list[dict] = []
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         for view in views:
+            shots = out / view
             chunks = [routes[i :: args.workers] for i in range(args.workers)]
             await asyncio.gather(*[worker(browser, c, view, shots, results) for c in chunks if c])
         await browser.close()

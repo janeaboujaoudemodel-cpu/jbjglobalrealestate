@@ -3,8 +3,8 @@
 // Full Logo (Version B): for footer and PDFs/reports
 
 import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
@@ -32,8 +32,10 @@ export const JBJLogo = ({
 }: JBJLogoProps) => {
   const config = sizeConfig[size];
   
-  const logoSrc = variant === 'nobuffer' || variant === 'light'
-      ? jbjMonogramNobuffer 
+  const logoSrc = variant === 'light'
+    ? jbjMonogramLightTransparent
+    : variant === 'nobuffer'
+      ? jbjMonogramNobuffer
       : jbjMonogramDark;
   
   return (
@@ -47,7 +49,7 @@ export const JBJLogo = ({
         style={{ width: config.width, height: config.height }}
        loading="lazy" decoding="async" />
       {showText && (
-        <span className="text-[#1A1A1A] text-[10px] md:text-xs tracking-[0.2em] uppercase mt-2">
+        <span className={`${variant === 'light' ? 'text-white' : 'text-foreground'} text-[10px] md:text-xs tracking-[0.2em] uppercase mt-2`}>
           Real Estate
         </span>
       )}

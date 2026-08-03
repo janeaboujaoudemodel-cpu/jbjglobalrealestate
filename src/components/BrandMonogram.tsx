@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 // jbj-monogram-transparent.png: black J letters, no black box behind B - for light backgrounds
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
-// jbj-monogram-nobuffer.png: clean transparent variant (no buffer/black box)
-import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+// Official white monogram for emerald, black, and photographic surfaces.
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 type BrandMonogramVariant = "dark" | "light" | "transparent";
 type BrandMonogramSize = "xs" | "sm" | "md" | "lg" | "xl" | "footer";
@@ -37,10 +37,9 @@ export function BrandMonogram({
   className?: string;
 }) {
   const cfg = sizeConfig[size];
-  const wordmarkColor = variant === "light" ? "text-foreground" : "text-white";
-
-  // Always use nobuffer version (no background behind B)
-  const logoSrc = jbjMonogramNobuffer;
+  const isLightIdentity = variant === "light";
+  const wordmarkColor = isLightIdentity ? "text-white" : "text-foreground";
+  const logoSrc = isLightIdentity ? jbjMonogramLightTransparent : jbjMonogramTransparent;
 
   return (
     <div
@@ -80,7 +79,7 @@ export function BrandMonogram({
             JBJ GLOBAL REAL ESTATE
           </span>
           {subline && layout === "stacked" && (
-            <span className="mt-2 block text-[#1A1A1A] text-xs tracking-[0.2em] uppercase">
+            <span className={cn("mt-2 block text-xs tracking-[0.2em] uppercase", wordmarkColor)}>
               {subline}
             </span>
           )}
@@ -98,7 +97,7 @@ export function BrandMonogramHeader({ className = "" }: { className?: string }) 
       className={cn("flex items-center gap-2 md:gap-3", className)}
     >
       <img 
-        src={jbjMonogramNobuffer}
+        src={jbjMonogramLightTransparent}
         alt="JBJ"
         width={48}
         height={48}
