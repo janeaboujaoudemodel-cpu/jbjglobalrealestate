@@ -162,45 +162,52 @@ const developerTiers: Tier[] = [
   },
 ];
 
+// JBJ Certified Broker Program — mentorship ladder. Duration, live support and
+// market access are part of the offer, so they are stated on every tier.
 const brokerTiers: Tier[] = [
   {
-    name: "Associate",
-    audienceSize: "New / independent agent",
-    price: "AED 799",
-    cadence: "/year",
+    name: "Tier 1 · Foundation",
+    audienceSize: "1 month · new or aspiring agent",
+    price: "AED 1,499",
+    cadence: "one-time",
     features: [
-      "DLD-aligned coursework & agent playbook",
-      "JBJ-certified broker badge",
-      "Access to JBJ inventory & payment plans",
-      "Community & mentor Q&A",
+      "4-week JBJ Certified Broker curriculum (DLD-aligned)",
+      "2 live group training sessions per week",
+      "1 one-to-one video call with a JBJ mentor",
+      "JBJ-certified broker badge & digital certificate",
+      "Access to JBJ off-plan inventory and payment plans",
+      "WhatsApp study group with mentor answers",
     ],
   },
   {
-    name: "Professional",
-    audienceSize: "Licensed producing agent",
-    price: "AED 1,499",
-    cadence: "/year",
+    name: "Tier 2 · Professional",
+    audienceSize: "3 months · licensed producing agent",
+    price: "AED 3,999",
+    cadence: "one-time",
     featured: true,
     features: [
-      "Everything in Associate",
+      "Everything in Tier 1, extended over 12 weeks",
+      "Weekly one-to-one video coaching with a senior advisor",
+      "Live deal-review and objection-handling clinics",
       "Warm client introductions & shared pipeline",
-      "Invitations to every major UAE launch & gala",
-      "Direct access to developer principal desks",
-      "Hiring pathway into JBJ Global",
-      "Exclusive JBJ agent books & DLD references",
+      "Developer principal desk introductions",
+      "Partner access: UAE, Cyprus, Greece, Lebanon & Georgia",
+      "Printed & serial-numbered certificate",
     ],
   },
   {
-    name: "Elite",
-    audienceSize: "Senior top-producer",
-    price: "AED 2,999",
-    cadence: "/year",
+    name: "Tier 3 · Elite Partner",
+    audienceSize: "6-12 months · senior top-producer",
+    price: "AED 9,900",
+    cadence: "one-time",
     features: [
-      "Everything in Professional",
+      "Everything in Tier 2, over 6 to 12 months",
+      "Unlimited live support sessions & priority mentor line",
+      "1:1 principal advisor coaching and business planning",
       "First-look on JBJ private mandates",
-      "1:1 principal advisor coaching",
-      "Personal broker page inside JBJ",
-      "Co-marketing with JBJ on flagship launches",
+      "Personal broker page inside JBJ + co-marketing",
+      "Full partnership access across every JBJ market",
+      "Hiring pathway into JBJ Global Real Estate",
     ],
   },
 ];
@@ -708,8 +715,10 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
       onMouseLeave={() => { stateRef.current.paused = false; }}
       aria-label="Live property listings carousel"
     >
-      <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r ${isDark ? "from-[#02100a]" : "from-[#FDFBF7]"} to-transparent`} />
-      <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l ${isDark ? "from-[#02100a]" : "from-[#FDFBF7]"} to-transparent`} />
+      {/* Phone keeps a much narrower fade — a wide flash washed out the card
+          artwork on small screens. */}
+      <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r sm:w-20 ${isDark ? "from-[#02100a]/70 sm:from-[#02100a]" : "from-[#FDFBF7]/70 sm:from-[#FDFBF7]"} to-transparent`} />
+      <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l sm:w-20 ${isDark ? "from-[#02100a]/70 sm:from-[#02100a]" : "from-[#FDFBF7]/70 sm:from-[#FDFBF7]"} to-transparent`} />
       <div
         ref={scrollerRef}
         onPointerDown={onPointerDown}
@@ -1010,10 +1019,13 @@ function ServicesSection() {
                     <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
                       Signature discipline
                     </span>
+                    {/* Phone: no circular arrow on the card — the pager below
+                        already handles navigation and the circle rendered a
+                        dark arrow on the emerald frame. */}
                     <span
                       data-service-arrow
                       data-no-contrast-guard
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition"
+                      className="hidden h-8 w-8 items-center justify-center rounded-full border transition sm:inline-flex"
                     >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
@@ -1041,7 +1053,7 @@ function ServicesSection() {
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
               Page {pageIdx + 1} of {total}
             </span>
-            <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-3 sm:flex">
               {jbjServicePages.map((p, i) => {
                 const dotActive = i === pageIdx;
                 return (
@@ -1563,9 +1575,9 @@ export default function PublicAccess() {
           </div>
         </section>
 
-        {/* FEATURED PROPERTIES */}
-        <section id="featured" className="overflow-hidden bg-[#F7F2EA] px-5 py-16 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-7xl overflow-hidden rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] shadow-[0_26px_70px_-54px_rgba(6,78,59,0.5)]">
+        {/* FEATURED PROPERTIES — edge to edge on every device */}
+        <section id="featured" className="overflow-hidden bg-[#F7F2EA] py-16">
+          <div className="w-full overflow-hidden border-y border-[#0d3a2b]/10 bg-[#FDFBF7] shadow-[0_26px_70px_-54px_rgba(6,78,59,0.5)]">
             <div className="relative z-20 px-5 pb-4 pt-6 sm:px-7 md:flex md:items-end md:justify-between md:gap-6">
               <div className="max-w-3xl">
                 <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
@@ -1606,8 +1618,8 @@ export default function PublicAccess() {
               View library <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-            <div className="rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] py-5 shadow-[0_26px_70px_-54px_rgba(6,78,59,0.45)]">
+          <div className="w-full">
+            <div className="border-y border-[#0d3a2b]/10 bg-[#FDFBF7] py-5 shadow-[0_26px_70px_-54px_rgba(6,78,59,0.45)]">
               <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
             </div>
           </div>
@@ -1616,88 +1628,104 @@ export default function PublicAccess() {
         {/* SERVICES — lifted above all packages */}
         <ServicesSection />
 
-        {/* PACKAGES — all audiences shown as stacked rows */}
-        <section id="packages" className="scroll-mt-24 bg-[#F7F2EA] px-5 pt-16 pb-6 sm:px-8 lg:px-12">
+        {/* PACKAGES — one chooser row; the full tier grid only opens in place
+            when the visitor picks a path (keeps the phone page short). */}
+        <section id="packages" className="scroll-mt-24 bg-[#F7F2EA] px-5 pt-16 pb-10 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-6xl">
-            <div className="mb-4 text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">Packages</span>
-              <h2 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">Choose your path</h2>
-              <p className="mx-auto mt-2 max-w-2xl text-sm text-[#1A1A1A]/70">
-                Investor, Broker, Agency and Developer packages — three tiers per path.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <PackageStrap
-          id="investor-packages"
-          eyebrow="For Investors"
-          title="Investor packages"
-          description="Three tiers, from single-property investors to family offices. Pick the level of support that matches your portfolio."
-          tiers={investorTiers}
-          audience="Investor packages"
-          onSelect={openPayment}
-        >
-          <div className="mt-16">
             <div className="mb-8 text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
-                Included with the Signature tier
-              </span>
-              <h3 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">Signature perks</h3>
-              <p className="mx-auto mt-2 max-w-xl text-sm text-[#1A1A1A]/70">
-                Automatically unlocked on the Signature package (also included with Private Office).
+              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">Packages</span>
+              <h2 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">Explore our packages</h2>
+              <p className="mx-auto mt-2 max-w-2xl text-sm text-[#1A1A1A]/70">
+                One path per audience. Open the one that fits you — three tiers each.
               </p>
             </div>
-            <div className="grid gap-3 grid-cols-2 sm:grid-cols-5">
-              {investorSignaturePerks.map((perk) => {
-                const Icon = perk.icon;
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              {([
+                { key: "investor" as const, icon: TrendingUp, label: "Investors", from: investorTiers[0], blurb: "Launches, advisory and portfolio support." },
+                { key: "broker" as const, icon: Award, label: "Brokers", from: brokerTiers[0], blurb: "JBJ Certified Broker Program & mentorship." },
+                { key: "developer" as const, icon: Building2, label: "Developers", from: developerTiers[0], blurb: "Distribution across the JBJ broker network." },
+              ]).map(({ key, icon: Icon, label, from, blurb }) => {
+                const active = selectedAudience === key;
                 return (
-                  <div
-                    key={perk.label}
-                    className="flex flex-col items-center justify-center gap-2 rounded-xl border border-[#0d3a2b]/12 bg-white px-3 py-4 text-center shadow-[0_10px_24px_-20px_rgba(6,78,59,0.35)] transition hover:-translate-y-0.5 hover:border-[#064E3B]/40"
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setSelectedAudience(active ? null : key)}
+                    aria-expanded={active}
+                    className={`flex flex-col items-start gap-3 rounded-md border bg-white p-5 text-left transition hover:-translate-y-0.5 ${
+                      active
+                        ? "border-[#064E3B] shadow-[0_20px_44px_-30px_rgba(6,78,59,0.6)]"
+                        : "border-[#0d3a2b]/12 shadow-[0_14px_32px_-26px_rgba(6,78,59,0.4)] hover:border-[#064E3B]/45"
+                    }`}
                   >
                     <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-11 w-11 rounded-lg`}>
                       <Icon className="h-5 w-5" />
                     </span>
-                    <span className="text-[11px] font-semibold leading-snug text-[#0d3a2b]">{perk.label}</span>
-                  </div>
+                    <span className="font-serif text-2xl text-[#0d3a2b]">{label}</span>
+                    <span className="text-[13px] leading-relaxed text-[#1A1A1A]/70">{blurb}</span>
+                    <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#064E3B]">
+                      From {from.price} {from.cadence}
+                    </span>
+                    <span className="mt-auto inline-flex items-center gap-2 pt-2 text-[12px] font-bold uppercase tracking-[0.18em] text-[#0d3a2b]">
+                      {active ? "Hide packages" : "Explore more"}
+                      <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} />
+                    </span>
+                  </button>
                 );
               })}
             </div>
           </div>
-        </PackageStrap>
+        </section>
 
-        <PackageStrap
-          id="broker-packages"
-          eyebrow="For Brokers"
-          title="Broker Academy & enrollment"
-          description="Yearly enrollment for licensed and aspiring UAE agents. Mentorship, exclusive materials, and a direct pathway into JBJ Global."
-          tiers={brokerTiers}
-          audience="Broker Academy"
-          onSelect={openPayment}
-        />
-
-        <div className="bg-[#F7F2EA]">
+        {selectedAudience === "investor" && (
           <PackageStrap
-            id="agency-packages"
-            eyebrow="For Agencies"
-            title="Agency packages"
-            description="Team seats, CRM segmentation and lead systems for boutique and established Dubai agencies."
-            tiers={agencyTiers}
-            audience="Agency packages"
+            id="investor-packages"
+            eyebrow="For Investors"
+            title="Investor packages"
+            description="Three tiers, from single-property investors to family offices. Pick the level of support that matches your portfolio. Signature perks are described inside the Signature tier."
+            tiers={investorTiers}
+            audience="Investor packages"
             onSelect={openPayment}
           />
-        </div>
+        )}
 
-        <PackageStrap
-          id="developer-packages"
-          eyebrow="For Developers"
-          title="Developer programs"
-          description="From boutique launches to master developers — distribution, verified profile, and JBJ broker reach at every scale."
-          tiers={developerTiers}
-          audience="Developer programs"
-          onSelect={openPayment}
-        />
+        {selectedAudience === "broker" && (
+          <>
+            <PackageStrap
+              id="broker-packages"
+              eyebrow="JBJ Certified Broker Program"
+              title="Broker mentorship & certification"
+              description="For licensed and aspiring agents in the UAE and abroad. Live mentorship, one-to-one video sessions, certification, and access to our partner network across the UAE, Cyprus, Greece, Lebanon and Georgia."
+              tiers={brokerTiers}
+              audience="JBJ Certified Broker Program"
+              onSelect={openPayment}
+            />
+            <div className="bg-[#F7F2EA]">
+              <PackageStrap
+                id="agency-packages"
+                eyebrow="For Agencies"
+                title="Agency packages"
+                description="Team seats, CRM segmentation and lead systems for boutique and established agencies."
+                tiers={agencyTiers}
+                audience="Agency packages"
+                onSelect={openPayment}
+              />
+            </div>
+          </>
+        )}
+
+        {selectedAudience === "developer" && (
+          <PackageStrap
+            id="developer-packages"
+            eyebrow="For Developers"
+            title="Developer programs"
+            description="From boutique launches to master developers — distribution, verified profile, and JBJ broker reach at every scale."
+            tiers={developerTiers}
+            audience="Developer programs"
+            onSelect={openPayment}
+          />
+        )}
 
         <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
 
