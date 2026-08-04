@@ -1340,11 +1340,11 @@ export default function PublicAccess() {
               height={48}
               className="h-12 w-12 object-contain shrink-0 sm:h-11 sm:w-11"
             />
-            {/* Phone stacks the full wordmark over two lines so nothing is dropped. */}
-            <span className="font-serif text-[13px] leading-[1.15] text-[#0d3a2b] sm:text-[18px] sm:whitespace-nowrap">
-              <span className="block sm:inline">JBJ Global</span>
-              <span className="block sm:inline sm:ml-1">Real Estate</span>
+            {/* Single premium line on every device; scales down instead of wrapping. */}
+            <span className="font-serif whitespace-nowrap text-[clamp(12px,3.6vw,18px)] leading-none tracking-[0.01em] text-[#0d3a2b]">
+              JBJ Global Real Estate
             </span>
+
 
           </a>
 
