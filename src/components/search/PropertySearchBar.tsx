@@ -115,6 +115,7 @@ function Chip({ on, onClick, children }: { on?: boolean; onClick: () => void; ch
     <button
       type="button"
       onClick={onClick}
+      data-surface={on ? "emerald" : "light"}
       className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
       style={
         on
@@ -220,7 +221,7 @@ export default function PropertySearchBar({
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
       <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-2 mb-2">
         <div
-          className="flex h-12 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="flex h-12 min-w-[13.5rem] items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
           data-surface={dark ? "dark" : "light"}
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
@@ -242,7 +243,7 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-               className="relative h-full min-w-0 flex-1 px-5 text-xs font-semibold first:rounded-l-lg last:rounded-r-lg sm:min-w-[4.75rem]"
+               className="relative h-full min-w-0 flex-1 px-5 text-xs font-semibold whitespace-nowrap first:rounded-l-lg last:rounded-r-lg"
               style={
                 f.purpose === p.slug
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
@@ -346,6 +347,7 @@ export default function PropertySearchBar({
                   key={c}
                   type="button"
                   onClick={() => set({ category: c, types: [] })}
+                  data-surface={f.category === c ? "emerald" : "light"}
                   className="h-8 rounded-lg text-xs font-semibold capitalize"
                   style={f.category === c ? { backgroundImage: EMERALD_PAIR, color: "#FFF" } : { color: "#1A1A1A" }}
                 >
@@ -359,6 +361,7 @@ export default function PropertySearchBar({
                   key={t}
                   type="button"
                   onClick={() => set({ types: toggleIn(f.types, t) })}
+                  data-surface={f.types.includes(t) ? "emerald" : "light"}
                   className="h-9 rounded-full text-xs font-medium"
                   style={
                     f.types.includes(t)

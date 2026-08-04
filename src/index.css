@@ -37360,6 +37360,12 @@ html body #root [data-search-dropdown] :is(input, textarea, select, button) {
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
+html body #root [data-search-dropdown] [data-surface="emerald"],
+html body #root [data-search-dropdown] [data-surface="emerald"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
 /* Policy navigators are one continuous premium surface: rows do not become
    stacked outlined mini-cards. A slim white rail identifies the active row. */
 html body #root [data-guide-toc] [data-toc-item] {
