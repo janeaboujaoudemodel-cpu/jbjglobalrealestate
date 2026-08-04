@@ -22,7 +22,7 @@ interface PremiumEmeraldHeroProps {
 const HEIGHTS: Record<NonNullable<PremiumEmeraldHeroProps["height"]>, string> = {
   sm: "min-h-[44svh] md:min-h-[48svh]",
   md: "min-h-[52svh] md:min-h-[56svh]",
-  lg: "min-h-[60svh] md:min-h-[64svh]",
+  lg: "min-h-[48svh] md:min-h-[52svh]",
 };
 
 const HEADING_FONT = {
@@ -47,7 +47,7 @@ export function PremiumEmeraldHero({
       data-surface="emerald"
       data-no-contrast-guard
       data-premium-emerald-hero
-      className={`jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden ${HEIGHTS[height]}`}
+      className={`jj-mi-prada-hero relative flex w-full items-center justify-center overflow-hidden ${HEIGHTS[height]}`}
     >
       <div className="relative z-10 flex w-full items-center justify-center px-6 text-center">
         <motion.div
@@ -56,7 +56,7 @@ export function PremiumEmeraldHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <div data-no-contrast-guard className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-6 backdrop-blur-sm">
+          <div data-no-contrast-guard className="inline-flex items-center gap-2 border-b border-white/35 px-4 py-2 mb-6">
             <EyebrowIcon className="h-3.5 w-3.5 text-[#E8CF8A]" />
             <span className="text-[11px] uppercase tracking-[0.18em] text-[#E8CF8A] font-medium">
               {eyebrow}
@@ -73,7 +73,7 @@ export function PremiumEmeraldHero({
             <>
               <p
                 data-no-contrast-guard
-                className="jj-mi-hero-copy mx-auto mt-8 max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light text-[#E8CF8A] leading-relaxed"
+                className="jj-mi-hero-copy mx-auto mt-5 max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light text-[#E8CF8A] leading-relaxed"
                 style={{ ...HEADING_FONT, color: "#E8CF8A", WebkitTextFillColor: "#E8CF8A" }}
               >
                 {subtitle}
