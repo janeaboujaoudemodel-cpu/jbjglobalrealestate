@@ -1804,6 +1804,8 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // The X only appears after ~2.5s so the visitor has actually read the portal.
+  const [closeReady, setCloseReady] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -1814,17 +1816,20 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
     try {
       const dismissed = localStorage.getItem(WELCOME_PORTAL_KEY);
       if (!dismissed) {
-        const t = window.setTimeout(() => {
+        const timers: number[] = [];
+        timers.push(window.setTimeout(() => {
           setOpen(true);
           // small fade-in staging
-          window.setTimeout(() => setMounted(true), 30);
-        }, 900);
-        return () => window.clearTimeout(t);
+          timers.push(window.setTimeout(() => setMounted(true), 30));
+          timers.push(window.setTimeout(() => setCloseReady(true), 2500));
+        }, 900));
+        return () => timers.forEach((t) => window.clearTimeout(t));
       }
     } catch {
       // silent fail
     }
   }, [user]);
+
 
   const dismiss = () => {
     try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
