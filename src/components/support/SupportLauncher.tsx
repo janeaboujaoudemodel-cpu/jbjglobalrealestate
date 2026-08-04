@@ -285,10 +285,6 @@ export default function SupportLauncher() {
               <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-emerald-300/70 animate-ping" />
               <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-emerald-400/40 animate-ping" style={{ animationDelay: "0.4s" }} />
               <Phone aria-hidden style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block", position: "relative", zIndex: 1 }} />
-              <span
-                className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
-                style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8, zIndex: 2 }}
-              />
             </>
           )}
         </motion.button>
