@@ -326,7 +326,7 @@ export function paramsToSearch(p: URLSearchParams): PropertySearch {
     sizeMax: num(p.get("sizeMax")),
     country: p.get("country") ?? EMPTY_SEARCH.country,
     region: p.get("region"),
-    areasInclude: list(p.get("areas")),
+    areasInclude: list(p.get("areaSlugs")),
     areasExclude: list(p.get("excludeAreas")),
     furnishing:
       furnishRaw === "furnished" || furnishRaw === "unfurnished" ? furnishRaw : "any",
