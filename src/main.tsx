@@ -1,8 +1,20 @@
 import { StrictMode } from"react";
 import { createRoot } from"react-dom/client";
 import App from"./App";
+/* Styling entry order — see src/styles/README of responsibilities:
+ *   tokens    → semantic values (single source of truth)
+ *   base      → page-level defaults
+ *   surfaces  → data-surface boundary contract
+ *   index.css → legacy accumulated passes (being retired batch by batch)
+ *   components/utilities → shared component contracts (final layer, so a
+ *   declared component wins over a legacy global pass) */
+import"./styles/tokens.css";
+import"./styles/base.css";
 import"./styles/theme-tokens.css";
+import"./styles/surfaces.css";
 import"./index.css";
+import"./styles/components.css";
+import"./styles/utilities.css";
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";
 import { installLazyImageEnforcer } from"@/utils/lazyImageEnforcer";

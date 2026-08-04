@@ -774,12 +774,18 @@
 .jc-widget__scope svg { color: var(--jbjcrm-graphite-2); }
 .jc-widget__icon {
   width: 32px !important; height: 32px !important; border-radius: 8px; border: 0; cursor: pointer;
-  background: var(--jbjcrm-emerald) !important; color: #FFFFFF !important;
+  /* Emerald Pair Lock: emerald fills always use the brand pair gradient. */
+  background-image: var(--surface-emerald) !important;
+  background-color: var(--surface-emerald-2) !important;
+  color: #FFFFFF !important;
   display: inline-grid !important; place-items: center;
   flex: 0 0 32px;
 }
 .jc-widget__icon svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
-.jc-widget__icon:hover { background: var(--jbjcrm-emerald-ink) !important; color: #FFFFFF !important; }
+.jc-widget__icon:hover {
+  background-image: linear-gradient(135deg, var(--surface-emerald-2) 0%, var(--surface-emerald-3) 100%) !important;
+  color: #FFFFFF !important;
+}
 .jc-widget__icon:hover svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 .jc-widget__toolbar { display: flex; align-items: center; justify-content: space-between; }
 .jc-widget__viewall {

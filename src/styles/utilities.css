@@ -1,0 +1,12 @@
+/* =============================================================
+   UTILITIES — intentional helpers only.
+   -------------------------------------------------------------
+   Helpers must be opt-in and single-purpose. No contrast passes,
+   no class-fragment selectors, no generic descendant painting.
+   ============================================================= */
+
+/* Marks an element as carrying the surface's muted foreground
+   instead of its primary foreground. */
+[data-surface-muted] {
+  color: var(--surface-muted, var(--text-muted));
+}

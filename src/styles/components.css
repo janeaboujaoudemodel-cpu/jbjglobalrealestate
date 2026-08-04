@@ -1,0 +1,106 @@
+/* =============================================================
+   SHARED COMPONENT CONTRACTS — narrowly scoped, explicit.
+   -------------------------------------------------------------
+   Every rule here targets a component that DECLARES itself
+   (`data-control`, `data-chip`, `data-overlay`, ...). Nothing here
+   matches generic descendants, Tailwind class fragments or
+   arbitrary tags.
+
+   `!important` is used only where a legacy global pass in
+   `index.css` still competes; each occurrence is justified inline
+   and is removed together with the legacy group it fights.
+   ============================================================= */
+
+/* ── Icon control ─────────────────────────────────────────────
+   Square, self-sized control whose only child is an icon.
+   Justification for !important: the legacy global button painter
+   ("Button sizing: natural width, readable height") forces
+   min-height:44px + overflow:hidden on every button, which turned
+   32px square icon buttons into empty tiles with the glyph
+   clipped outside the box. */
+[data-control="icon"] {
+  padding: 0 !important;
+  overflow: visible !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto;
+  line-height: 1 !important;
+}
+
+[data-control="icon"] > svg,
+[data-control="icon"] > * > svg {
+  flex: 0 0 auto;
+  color: currentColor;
+  stroke: currentColor;
+}
+
+/* Explicitly sized icon controls keep their own box. */
+[data-control="icon"][data-control-size="sm"] {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+}
+
+[data-control="icon"][data-control-size="md"] {
+  width: var(--control-icon) !important;
+  height: var(--control-icon) !important;
+  min-width: var(--control-icon) !important;
+  min-height: var(--control-icon) !important;
+}
+
+/* ── Overlay contract ─────────────────────────────────────────
+   A modal backdrop is always translucent dark, never a page
+   surface colour. Justification for !important: legacy champagne
+   page passes leak into portal roots and repainted the backdrop
+   cream. */
+[data-overlay="modal"] {
+  background-color: var(--surface-overlay) !important;
+  background-image: none !important;
+}
+
+/* ── Chip contract ───────────────────────────────────────────
+   Selected chips are emerald-pair filled with white text and
+   white icons; unselected chips stay on their light panel with
+   ink text. State is read from the component, never inferred. */
+[data-chip] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+[data-chip][data-selected="true"] {
+  background-image: var(--surface-emerald) !important;
+  color: var(--text-on-emerald) !important;
+  -webkit-text-fill-color: var(--text-on-emerald) !important;
+  border-color: var(--border-on-dark) !important;
+}
+
+[data-chip][data-selected="true"] svg {
+  color: var(--text-on-emerald) !important;
+  stroke: var(--text-on-emerald) !important;
+}
+
+[data-chip][data-selected="false"] {
+  color: var(--text-primary);
+}
+
+[data-chip][data-selected="false"] svg {
+  color: currentColor;
+  stroke: currentColor;
+}
+
+[data-chip][disabled],
+[data-chip][aria-disabled="true"] {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Focus contract ──────────────────────────────────────────
+   One visible focus indicator for every declared control. */
+[data-control]:focus-visible,
+[data-chip]:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
