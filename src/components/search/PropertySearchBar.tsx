@@ -41,7 +41,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-2 h-14 sm:h-16 px-3.5 rounded-lg text-sm sm:text-base font-medium tracking-tight min-w-0 w-full transition-colors";
+  "flex items-center justify-between gap-2 h-14 sm:h-16 px-3 rounded-lg text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
 
 function Seg({
   label,
@@ -314,11 +314,11 @@ export default function PropertySearchBar({
             onClick={() => setConsultOpen(true)}
             data-surface="emerald"
             data-search-segment
-            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full lg:col-span-1 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full lg:col-span-1 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <CalendarCheck className="w-4 h-4 shrink-0" />
-            Free Consultation
+            <span className="whitespace-nowrap text-xs sm:text-[13px]">Free Consultation</span>
           </button>
         ) : null}
 
@@ -479,7 +479,7 @@ export default function PropertySearchBar({
             onClick={() => onSubmit(f)}
              data-surface="emerald"
              data-search-segment
-            className="h-14 sm:h-16 w-full rounded-lg text-sm sm:text-base font-semibold text-white px-4 whitespace-nowrap"
+            className="h-14 sm:h-16 w-full rounded-lg text-sm font-semibold text-white px-2 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             {count == null ? "Search" : `Show ${count.toLocaleString()}`}
