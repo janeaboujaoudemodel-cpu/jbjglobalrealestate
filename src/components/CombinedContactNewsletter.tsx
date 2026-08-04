@@ -81,7 +81,7 @@ const CombinedContactNewsletter = ({
       </div>
 
       {/* Contact tiles — premium rectangular emerald, white icons/text */}
-      <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 max-w-2xl mx-auto mb-5">
+      <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-6">
         {contactCards.map((card) => (
           <a
             key={card.label}
@@ -91,13 +91,18 @@ const CombinedContactNewsletter = ({
             data-surface="emerald"
             data-emerald-ok="button"
             data-no-contrast-guard
-            className="jj-emerald-metallic jj-ready-cta-metallic group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
+            className="jj-emerald-metallic jj-ready-cta-metallic group flex min-h-[132px] flex-col items-center justify-center gap-2.5 px-5 py-6 rounded-xl text-center"
             style={{ color: '#FFFFFF' }}
           >
-            <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-            <div className="min-w-0 text-left">
-              <p className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.label}</p>
-              <p className="text-xs sm:text-sm font-semibold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.value}</p>
+            <span
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border"
+              style={{ borderColor: 'rgba(255,255,255,0.35)', backgroundColor: 'rgba(255,255,255,0.10)' }}
+            >
+              <card.icon className="w-5 h-5" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.label}</p>
+              <p className="text-sm sm:text-base font-semibold break-words" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.value}</p>
             </div>
           </a>
         ))}
