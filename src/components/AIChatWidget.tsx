@@ -545,7 +545,15 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
+
+    // A human agent has taken over — deliver the message to them, no AI reply.
+    if (ownerJoined) {
+      await saveMessagesToDb(newMessages);
+      return;
+    }
+
     setIsLoading(true);
+
 
     // Create placeholder for streaming response
     const assistantMessageId = (Date.now() + 1).toString();
