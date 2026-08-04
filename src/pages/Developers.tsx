@@ -315,6 +315,18 @@ const Developers = () => {
         >
           <div className="w-full px-3 sm:px-4">
             <div className="p-0">
+              {/* Multi-country geography cascade — Country → Emirate/City → Area */}
+              <GeoFilterBar
+                value={geoFilters}
+                onChange={setGeoFilters}
+                onSearch={(f) => {
+                  window.location.assign(`/properties?${filtersToParams(f).toString()}`);
+                }}
+                variant="dark"
+                className="mb-3"
+                searchLabel="View inventory"
+              />
+
               <FilterShortcutBar
                 variant="dark"
                 filters={shortcutFilters}
