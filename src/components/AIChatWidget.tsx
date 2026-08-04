@@ -66,6 +66,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [ownerJoined, setOwnerJoined] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
@@ -468,7 +469,46 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     setStep('chatting');
   };
 
+  /**
+   * Live agent takeover: subscribe to this conversation so replies typed by the
+   * owner in the backend chat dashboard appear instantly for the visitor, and
+   * the AI stops auto-answering once a human has joined.
+   */
+  useEffect(() => {
+    if (!conversationId) return;
+
+    const applyRemote = (row: { owner_joined?: boolean | null; messages?: unknown }) => {
+      if (row.owner_joined) setOwnerJoined(true);
+      const remote = Array.isArray(row.messages)
+        ? (row.messages as Array<{ role: string; content: string; timestamp: string }>)
+        : [];
+      setMessages((prev) => {
+        if (remote.length <= prev.length) return prev;
+        return remote.map((m, i) => ({
+          id: `remote-${i}-${m.timestamp || ''}`,
+          role: m.role === 'user' ? 'user' : 'assistant',
+          content: m.content,
+          timestamp: m.timestamp ? new Date(m.timestamp) : new Date(),
+        })) as Message[];
+      });
+    };
+
+    const channel = supabase
+      .channel(`visitor-chat-${conversationId}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'chat_conversations', filter: `id=eq.${conversationId}` },
+        (payload) => applyRemote(payload.new as never),
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [conversationId]);
+
   // Save messages to database
+
   const saveMessagesToDb = async (newMessages: Message[]) => {
     if (!conversationId) return;
     
@@ -505,7 +545,15 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
+
+    // A human agent has taken over — deliver the message to them, no AI reply.
+    if (ownerJoined) {
+      await saveMessagesToDb(newMessages);
+      return;
+    }
+
     setIsLoading(true);
+
 
     // Create placeholder for streaming response
     const assistantMessageId = (Date.now() + 1).toString();
@@ -625,7 +673,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId]);
+  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, ownerJoined]);
 
   // Submit to team - saves full transcript to owner notes + sends email notification
   const handleSubmitToTeam = useCallback(async (inquirySummary?: string) => {
