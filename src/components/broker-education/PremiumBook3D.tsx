@@ -72,6 +72,15 @@ const STYLES = `
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+/* LOCK: never break a word across lines on book covers. Lines are
+   pre-computed word-by-word and each renders on a single line. */
+.jj-book-title, .jj-book-title * {
+  hyphens: none !important;
+  -webkit-hyphens: none !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+}
+.jj-book-title > span { white-space: nowrap !important; }
 `;
 
 function splitCoverTitle(title: string) {
@@ -106,11 +115,15 @@ export function PremiumBook3D({
     [paletteIndex],
   );
   const titleLines = useMemo(() => splitCoverTitle(title), [title]);
-  const titleSize = titleLines.length >= 4
-    ? "clamp(16px, 7.2cqw, 30px)"
-    : compact
-      ? "clamp(17px, 8.2cqw, 34px)"
-      : "clamp(18px, 8.8cqw, 38px)";
+  // Auto-fit: size the type so the LONGEST line always fits the cover's
+  // inner column on one line (no mid-word breaks, ever, on any device).
+  const titleSize = useMemo(() => {
+    const maxLen = Math.max(1, ...titleLines.map((l) => l.length));
+    const cap = titleLines.length >= 4 ? 30 : compact ? 34 : 38;
+    // inner column ≈ 72cqw; bold Inter avg glyph ≈ 0.60em
+    const fit = 72 / (maxLen * 0.6);
+    return `clamp(11px, ${fit.toFixed(2)}cqw, ${cap}px)`;
+  }, [titleLines, compact]);
 
   return (
     <div className={cn("jj-book-stage", className)} data-no-contrast-guard style={{ containerType: "inline-size" }}>
