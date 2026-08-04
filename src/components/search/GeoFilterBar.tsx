@@ -195,7 +195,7 @@ export default function GeoFilterBar({
     list.includes(v) ? list.filter((x) => x !== v) : [...list, v];
 
   /* --------------------------------------------------------------- labels */
-  const countryLabel = country?.name ?? "Country";
+  const countryLabel = country ? (country.slug === "uae" ? "UAE" : country.name) : "Country";
   const regionLabel = filters.region
     ? regions.find((r) => r.slug === filters.region)?.name ?? country?.regionLabel ?? "Region"
     : country?.regionLabel ?? "Region";
@@ -210,10 +210,10 @@ export default function GeoFilterBar({
       ? [filters.beds.length ? `${filters.beds.join("/")} bed` : null, filters.baths.length ? `${filters.baths.join("/")} bath` : null]
           .filter(Boolean)
           .join(" · ")
-      : "Beds & Baths";
+      : "Beds";
   const priceLabel =
     filters.priceMin == null && filters.priceMax == null
-      ? `Price (${currency})`
+      ? "Price"
       : `${filters.priceMin != null ? compactPrice(filters.priceMin, currency) : "Any"} – ${
           filters.priceMax != null ? compactPrice(filters.priceMax, currency) : "Any"
         }`;
@@ -280,9 +280,9 @@ export default function GeoFilterBar({
         </div>
 
         {/* Row 2 — cascading selects */}
-        <div className="grid grid-cols-2 md:flex md:items-center gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-2 md:flex md:items-center md:flex-nowrap gap-1.5 sm:gap-2">
           {/* Country */}
-          <div className="min-w-0 md:w-[15%] md:min-w-[11rem]">
+          <div className="min-w-0 md:w-auto md:min-w-[8rem] md:flex-1">
             <Seg dark={dark} label={countryLabel} active={!!filters.country} icon={<MapPin className="w-4 h-4 opacity-80" />}>
               <div className="p-2">
                 {GEO_COUNTRIES.map((c) => (
@@ -310,7 +310,7 @@ export default function GeoFilterBar({
 
           {/* Region (conditional) */}
           {showRegion && (
-            <div className="min-w-0 md:w-[14%] md:min-w-[8.5rem]">
+            <div className="min-w-0 md:w-auto md:min-w-[6.75rem] md:flex-1">
               <Seg dark={dark} label={regionLabel} active={!!filters.region}>
                 <div className="p-2 max-h-72 overflow-y-auto">
                   <button
@@ -337,7 +337,7 @@ export default function GeoFilterBar({
           )}
 
           {/* Areas (multi) */}
-          <div className="min-w-0 md:flex-1 md:min-w-[9rem]">
+          <div className="min-w-0 md:flex-1 md:min-w-[6.5rem]">
             <Seg dark={dark} label={areaLabel} active={filters.areas.length > 0}>
               <AreaPicker
                 areas={areas}
@@ -350,7 +350,7 @@ export default function GeoFilterBar({
           </div>
 
           {/* Beds & Baths */}
-          <div className="min-w-0 md:w-[16%] md:min-w-[10rem]">
+          <div className="min-w-0 md:w-auto md:min-w-[7.25rem] md:flex-1">
             <Seg dark={dark} label={bedsLabel} active={filters.beds.length > 0 || filters.baths.length > 0}>
               <div className="p-4 space-y-4">
                 <div>
@@ -390,7 +390,7 @@ export default function GeoFilterBar({
           </div>
 
           {/* Price */}
-          <div className="min-w-0 md:w-[16%] md:min-w-[10rem]">
+          <div className="min-w-0 md:w-auto md:min-w-[7.25rem] md:flex-1">
             <Seg dark={dark} label={priceLabel} active={filters.priceMin != null || filters.priceMax != null}>
               <div className="p-4 space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "#7A6230" }}>
@@ -421,10 +421,10 @@ export default function GeoFilterBar({
           </div>
 
           {/* More filters */}
-          <div className="min-w-0 md:w-[16%] md:min-w-[10rem]">
+          <div className="min-w-0 md:w-auto md:min-w-[7.25rem] md:flex-1">
             <Seg
               dark={dark}
-              label={moreCount ? `More Filters (${moreCount})` : "More Filters"}
+              label={moreCount ? `Filters (${moreCount})` : "More Filters"}
               active={moreCount > 0}
               icon={<SlidersHorizontal className="w-4 h-4 opacity-80" />}
             >

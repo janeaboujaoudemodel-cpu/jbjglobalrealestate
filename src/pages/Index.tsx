@@ -324,7 +324,7 @@ const Index = () => {
 
 
             {/* Hero global search — long-stretch bar with inline Book + Concierge CTAs */}
-            <motion.div variants={fadeInUp} className="w-full mt-[clamp(2rem,39.4vw,35.4rem)]">
+            <motion.div variants={fadeInUp} className="w-full mt-[clamp(1.5rem,9vw,7rem)]">
               <HomeHeroSearch onBookConsultation={() => setIsInquiryOpen(true)} />
             </motion.div>
 
