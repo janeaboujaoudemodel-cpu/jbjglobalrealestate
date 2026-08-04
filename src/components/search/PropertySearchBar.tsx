@@ -35,6 +35,9 @@ import {
 } from "@/lib/propertySearch";
 
 const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
+/** Readable frosted emerald surface for segments placed over the hero video. */
+const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,0.90) 55%,rgba(0,0,0,0.92) 100%)";
+
 
 const SEG =
   "flex items-center justify-between gap-1.5 h-12 px-2.5 rounded-xl text-[13px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
