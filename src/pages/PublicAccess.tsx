@@ -1535,7 +1535,7 @@ export default function PublicAccess() {
           className="scroll-mt-24 w-full overflow-hidden px-5 pt-16 pb-14 sm:px-8 lg:px-12"
           style={{
             background:
-              "linear-gradient(180deg, #FFFFFF 0%, #F4FAF7 22%, #CFE7DD 42%, #0d5a44 74%, #042c1c 100%)",
+              "linear-gradient(180deg, #FFFFFF 0%, #FCFEFD 30%, #F1F8F5 52%, #D9EAE3 64%, #0a4433 86%, #021b11 100%)",
           }}
 
         >
