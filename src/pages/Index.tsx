@@ -17,6 +17,7 @@ import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 import HomeHeroSearch from "@/components/home/HomeHeroSearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
+import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
 import ConversionBand from "@/components/marketing/ConversionBand";
 import { CONTACT_INFO } from "@/constants/stats";
 
@@ -266,7 +267,7 @@ const Index = () => {
             fetchPriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover z-[1]"
-           loading="lazy" />
+           loading="eager" />
 
           <video
             autoPlay loop muted playsInline
@@ -283,7 +284,7 @@ const Index = () => {
             onLoadedData={() => setVideoLoaded(true)}
             onCanPlay={() => setVideoLoaded(true)}
             onError={() => setVideoLoaded(true)}
-            src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
+            src="/hero-video.webm"
           />
           {/* The photograph remains visible, but the painted pixels behind all
               white identity/copy stay dark enough to satisfy the surface rule. */}
@@ -323,22 +324,25 @@ const Index = () => {
             </motion.h1>
 
             {/* Full company wordmark — sits directly below the headline, centred */}
-            <motion.p
+            <motion.div
               variants={fadeInUp}
               data-no-contrast-guard
               data-on-dark
-              className="allow-white font-display whitespace-nowrap mt-3 sm:mt-4"
+              className="allow-white mt-3 sm:mt-4 inline-flex items-center justify-center gap-2.5 sm:gap-3 whitespace-nowrap"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
-                fontSize: "clamp(0.72rem,2.5vw,1.05rem)",
-                letterSpacing: "0.3em",
-                textTransform: "uppercase",
                 textShadow: "0 2px 14px rgba(0,0,0,0.85)",
               }}
             >
-              JBJ Global Real Estate
-            </motion.p>
+              <img src={jbjMonogram} alt="" aria-hidden="true" className="h-6 sm:h-7 w-auto object-contain" />
+              <span
+                className="allow-white font-display uppercase"
+                style={{ fontSize: "clamp(0.68rem,2.3vw,1rem)", letterSpacing: "0.24em", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >
+                JBJ Global Real Estate
+              </span>
+            </motion.div>
 
             {/* Hero unified search + filter bar (single surface) */}
             <motion.div variants={fadeInUp} className="w-full mt-[clamp(1.5rem,7vw,5rem)]">
