@@ -79,7 +79,18 @@ function Seg({
 
           <span className="flex items-center gap-2 min-w-0">
             {icon}
-            <span className="truncate leading-none" style={{ color: active ? ink : muted, whiteSpace: "nowrap" }}>
+            <span
+              className="truncate leading-none"
+              style={{
+                color: active ? ink : muted,
+                WebkitTextFillColor: active ? ink : muted,
+                whiteSpace: "nowrap",
+                wordBreak: "keep-all",
+                overflowWrap: "normal",
+                hyphens: "none",
+              }}
+            >
+
               {label}
             </span>
           </span>
