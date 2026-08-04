@@ -371,7 +371,7 @@ const investorSignaturePerks = [
 // otherwise flip ink to black-on-emerald or white-on-white.
 const BTN_WHITE_HOVER_EMERALD =
   "group/btn relative overflow-hidden inline-flex items-center gap-2 rounded-md border border-[#0d3a2b]/30 bg-white px-5 text-sm font-bold transition " +
-  "hover:bg-[#064E3B] hover:border-[#064E3B] " +
+  "hover:bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:border-[#0d3a2b] " +
   "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent before:opacity-0 before:transition before:duration-700 hover:before:opacity-100 hover:before:translate-x-[400%]";
 
 const BTN_EMERALD_SOLID =
@@ -701,7 +701,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                 <span
                   data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                  className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+                  className="absolute left-3 top-3 rounded-full bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] !text-white"
                 >
                   Launch
                 </span>
@@ -725,7 +725,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                   </div>
                   <span
                     data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#064E3B] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] !text-white"
                   >
                     View <ArrowRight className="h-3.5 w-3.5" />
                   </span>
