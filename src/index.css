@@ -37332,7 +37332,7 @@ html body #root header[data-header-surface="light"] {
 /* Access portal — audience chooser cards keep a balanced, generous square-ish
    footprint (the global 44px tap-target floor must not compress them). */
 html body #root [data-package-chooser-card] {
-  min-height: 300px !important;
+  min-height: 440px !important;
   height: 100% !important;
   align-items: flex-start !important;
   justify-content: flex-start !important;
