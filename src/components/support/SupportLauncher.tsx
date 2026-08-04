@@ -181,7 +181,7 @@ export default function SupportLauncher() {
   return (
     <>
       {/* ============== MOBILE / TABLET (phone icon trigger + emerald panel — matches desktop) ============== */}
-      <div className="fixed bottom-5 right-4 z-[60] block lg:hidden pointer-events-none" data-floating-launcher data-no-contrast-guard>
+      <div className="fixed bottom-5 right-4 z-[60] block pointer-events-none" data-floating-launcher data-no-contrast-guard>
         <AnimatePresence>
           {open && (
             <>
