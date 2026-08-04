@@ -10,7 +10,9 @@
  * (#064E3B → #042c1c → #000) — never flat #064E3B alone.
  */
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, CalendarCheck, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { useTypewriter } from "@/hooks/useTypewriter";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { getRegions } from "@/data/geography";
