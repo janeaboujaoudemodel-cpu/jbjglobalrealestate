@@ -21,7 +21,7 @@ interface VideoBackgroundProps {
   eager?: boolean;
 }
 
-const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = false }: VideoBackgroundProps) => {
+const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = true }: VideoBackgroundProps) => {
   const [videoReady, setVideoReady] = useState(false);
   const [isVisible, setIsVisible] = useState(eager);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -82,7 +82,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = fal
           loop
           playsInline
           autoPlay
-          preload={eager ? "auto" : "metadata"}
+          preload="auto"
           onLoadedData={handleCanPlay}
           onCanPlay={handleCanPlay}
           className="absolute inset-0 w-full h-full object-cover"
