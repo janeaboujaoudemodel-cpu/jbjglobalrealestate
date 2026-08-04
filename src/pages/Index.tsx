@@ -17,7 +17,6 @@ import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 import HomeHeroSearch from "@/components/home/HomeHeroSearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
-import heroVideoAsset from "@/assets/hero-video.webm.asset.json";
 import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
 import ConversionBand from "@/components/marketing/ConversionBand";
 import { CONTACT_INFO } from "@/constants/stats";
@@ -285,7 +284,7 @@ const Index = () => {
             onLoadedData={() => setVideoLoaded(true)}
             onCanPlay={() => setVideoLoaded(true)}
             onError={() => setVideoLoaded(true)}
-            src={heroVideoAsset.url}
+            src="/hero-video.webm"
           />
           {/* The photograph remains visible, but the painted pixels behind all
               white identity/copy stay dark enough to satisfy the surface rule. */}
