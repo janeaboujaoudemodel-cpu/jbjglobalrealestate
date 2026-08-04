@@ -828,7 +828,10 @@ function ServicesSection() {
             className="group relative flex animate-fade-in flex-col overflow-hidden rounded-[20px] border border-[#0d3a2b]/12 bg-[#0d3a2b] shadow-[0_28px_60px_-32px_rgba(6,78,59,0.55)]"
           >
             <div className="relative aspect-[4/3] w-full overflow-hidden">
-              <img src={mobileItem.image} alt={mobileItem.title} loading="lazy" className="h-full w-full object-cover" />
+              {/* Bundled asset: decode it up front so the rotating card never
+                  flashes an empty emerald frame on phones. */}
+              <img src={mobileItem.image} alt={mobileItem.title} loading="eager" decoding="async" fetchPriority="high" className="h-full w-full object-cover" />
+
               <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
               <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
               <span data-surface="dark" className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-white/40 bg-black/50 px-3 font-serif text-[11px] tracking-[0.28em] !text-white backdrop-blur" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
@@ -865,7 +868,11 @@ function ServicesSection() {
                   <img
                     src={s.image}
                     alt={s.title}
-                    loading="lazy"
+                    /* First row is above the fold on tablet/desktop — lazy
+                       loading it produced visible empty cards. */
+                    loading={i < 3 ? "eager" : "lazy"}
+                    decoding="async"
+                    fetchPriority={i < 3 ? "high" : "low"}
                     className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.08]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
@@ -1371,17 +1378,20 @@ export default function PublicAccess() {
           {/* Minimal wash — keep the video readable */}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.75)_100%)]" />
 
-          <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
+          {/* Phone reserves room for the scroll cue so the monogram + wordmark
+              block sits optically centred instead of drifting low. */}
+          <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 pb-16 pt-4 text-center sm:px-8 sm:pb-0 sm:pt-0 lg:px-12">
             <img
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
               alt="JBJ"
-              className="h-[200px] w-[200px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[300px] sm:w-[300px] lg:h-[380px] lg:w-[380px]"
+              className="h-[150px] w-[150px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[300px] sm:w-[300px] lg:h-[380px] lg:w-[380px]"
             />
-            <h1 className="mt-6 font-serif text-3xl leading-[1.05] !text-white sm:text-6xl lg:text-[76px]">
+            <h1 className="mt-4 font-serif text-[28px] leading-[1.08] !text-white sm:mt-6 sm:text-6xl lg:text-[76px]">
               JBJ Global Real Estate
             </h1>
           </div>
+
 
           {/* Scroll cue — jumps instantly, no smooth easing */}
           <a
@@ -1505,9 +1515,12 @@ export default function PublicAccess() {
             </Link>
           </div>
           <div className="w-full">
-            {/* No panel/highlight behind the books — they sit directly on the band. */}
-            <BookCarousel books={ACCESS_BOOKS} size="sm" compact />
+            {/* No panel/highlight behind the books — they sit directly on the band.
+                On the gate every book tap routes to the sign-up gate: this page is
+                the entrance, the library itself lives inside the platform. */}
+            <BookCarousel books={ACCESS_BOOKS} size="sm" compact onBookClick={openSignup} />
           </div>
+
         </section>
 
         {/* SERVICES — lifted above all packages */}
@@ -1791,25 +1804,37 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
       onResolved();
       return;
     }
-    try {
-      const dismissed = localStorage.getItem(WELCOME_PORTAL_KEY);
-      if (dismissed) {
-        onResolved();
-      }
-      if (!dismissed) {
-        const timers: number[] = [];
-        timers.push(window.setTimeout(() => {
-          setOpen(true);
-          // small fade-in staging
-          timers.push(window.setTimeout(() => setMounted(true), 30));
-          timers.push(window.setTimeout(() => setCloseReady(true), 2500));
-        }, 900));
-        return () => timers.forEach((t) => window.clearTimeout(t));
-      }
-    } catch {
-      // silent fail
+    let dismissed: string | null = null;
+    try { dismissed = localStorage.getItem(WELCOME_PORTAL_KEY); } catch { /* silent */ }
+    if (dismissed) {
+      onResolved();
+      return;
     }
+
+    // The portal invitation is never thrown at a visitor on arrival: the hero
+    // video gets to play first, and only once they scroll past it (showing
+    // real interest) do we explain that this is the gate to the platform.
+    const timers: number[] = [];
+    let armed = false;
+    const reveal = () => {
+      if (armed) return;
+      armed = true;
+      window.removeEventListener("scroll", onScroll);
+      setOpen(true);
+      timers.push(window.setTimeout(() => setMounted(true), 30));
+      timers.push(window.setTimeout(() => setCloseReady(true), 2500));
+    };
+    const onScroll = () => {
+      if (window.scrollY > Math.min(window.innerHeight * 0.55, 520)) reveal();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      timers.forEach((t) => window.clearTimeout(t));
+    };
   }, [user]);
+
 
 
   const dismiss = () => {
@@ -1891,7 +1916,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
             Welcome to JBJ Global Real Estate
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-white/85">
-            This is your private access portal. Create an account or log in to explore the complete property platform, live opportunities, and advisory tools.
+            What you see here is the external entrance only. The full JBJ platform — live inventory, developer intelligence, brokerage tools, the library and advisory desk — sits behind this gate. Create an account or log in to step inside.
           </p>
           <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#EBD79A]">
             Unlock the full ecosystem

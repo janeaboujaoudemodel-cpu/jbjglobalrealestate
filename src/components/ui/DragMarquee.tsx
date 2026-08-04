@@ -39,7 +39,9 @@ export function DragMarquee({
     startX: 0,
     startTime: 0,
     moved: 0,
+    captured: false,
   });
+
   const [grabbing, setGrabbing] = React.useState(false);
 
   const items = React.Children.toArray(children);
@@ -100,8 +102,8 @@ export function DragMarquee({
     s.startX = e.clientX;
     s.startTime = Number(animationRef.current?.currentTime ?? 0);
     s.moved = 0;
+    s.captured = false;
     animationRef.current?.pause();
-    try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch { /* noop */ }
     setGrabbing(true);
   };
 
@@ -113,6 +115,12 @@ export function DragMarquee({
     // Only take over the gesture once it is clearly horizontal, so vertical
     // page scrolling on phones is never hijacked.
     if (s.moved > 6 && animationRef.current) {
+      // Pointer capture is claimed ONLY after the gesture proves to be a drag.
+      // Capturing on pointerdown retargets the resulting `click` to this
+      // container, which silently killed every card/book link inside the rail.
+      if (!s.captured) {
+        try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); s.captured = true; } catch { /* noop */ }
+      }
       const duration = (cycleWidthRef.current / speed) * 1000;
       let nextTime = (s.startTime - (dx / speed) * 1000) % duration;
       if (nextTime < 0) nextTime += duration;
@@ -120,13 +128,18 @@ export function DragMarquee({
     }
   };
 
-  const endDrag = () => {
+  const endDrag = (e?: React.PointerEvent) => {
     const s = stateRef.current;
     if (!s.dragging) return;
     s.dragging = false;
+    if (s.captured && e) {
+      try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* noop */ }
+    }
+    s.captured = false;
     animationRef.current?.play();
     setGrabbing(false);
   };
+
 
   return (
     <div
