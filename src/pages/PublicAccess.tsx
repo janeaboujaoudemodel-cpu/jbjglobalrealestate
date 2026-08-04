@@ -1653,7 +1653,7 @@ export default function PublicAccess() {
             </div>
 
 
-            <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+            <div className="grid items-stretch gap-5 sm:grid-cols-3 sm:gap-6">
               {([
                 { key: "investor" as const, icon: TrendingUp, label: "Investors", cta: "Get quotation", blurb: "Launches, advisory and portfolio support." },
                 { key: "broker" as const, icon: Award, label: "Brokers", cta: "Get quotation", blurb: "JBJ Certified Broker Program & mentorship." },
