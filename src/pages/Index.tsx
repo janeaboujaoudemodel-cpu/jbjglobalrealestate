@@ -17,7 +17,7 @@ import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 import HomeHeroSearch from "@/components/home/HomeHeroSearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
-import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
+import heroVideoAsset from "@/assets/hero-video.webm.asset.json";
 import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
 import ConversionBand from "@/components/marketing/ConversionBand";
 import { CONTACT_INFO } from "@/constants/stats";
