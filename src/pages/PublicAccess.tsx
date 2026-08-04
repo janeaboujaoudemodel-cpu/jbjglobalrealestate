@@ -1379,9 +1379,16 @@ export default function PublicAccess() {
             </h1>
           </div>
 
-          {/* Scroll cue */}
+          {/* Scroll cue — jumps instantly, no smooth easing */}
           <a
             href="#intro"
+            onClick={(e) => {
+              e.preventDefault();
+              const el = document.getElementById("intro");
+              if (!el) return;
+              const top = el.getBoundingClientRect().top + window.scrollY;
+              window.scrollTo({ top, behavior: "auto" });
+            }}
             className="absolute inset-x-0 bottom-8 mx-auto flex w-fit items-center gap-2 text-[10px] font-bold uppercase tracking-[0.32em] !text-white/70 hover:!text-white"
           >
             Scroll <ArrowRight className="h-3 w-3 rotate-90" />
@@ -1494,9 +1501,8 @@ export default function PublicAccess() {
             </Link>
           </div>
           <div className="w-full">
-            <div className="border-y border-[#0d3a2b]/10 bg-[#FDFBF7] py-5 shadow-[0_26px_70px_-54px_rgba(6,78,59,0.45)]">
-              <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
-            </div>
+            {/* No panel/highlight behind the books — they sit directly on the band. */}
+            <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
           </div>
         </section>
 

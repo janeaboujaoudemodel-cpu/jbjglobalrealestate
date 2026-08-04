@@ -44,6 +44,33 @@ export function DragMarquee({
   const items = React.Children.toArray(children);
   const duplicated = items.length > 1 ? [...items, ...items] : items;
 
+  const halfRef = React.useRef(0);
+
+  // Measure the wrap point once per layout change instead of reading
+  // `scrollWidth` inside the animation frame (that forced a synchronous
+  // layout every frame and is what made the rails feel stuck on phones).
+  React.useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const measure = () => {
+      halfRef.current = track.scrollWidth / 2;
+      if (halfRef.current > 0 && offsetRef.current > halfRef.current) {
+        offsetRef.current = offsetRef.current % halfRef.current;
+      }
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(track);
+    window.addEventListener("resize", measure);
+    // Images finishing decode can change the track width.
+    const t = window.setTimeout(measure, 600);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      window.clearTimeout(t);
+    };
+  }, [items.length]);
+
   React.useEffect(() => {
     const track = trackRef.current;
     if (!track || items.length < 2) return;
@@ -53,24 +80,25 @@ export function DragMarquee({
     let last = performance.now();
 
     const step = (now: number) => {
-      const dt = Math.min(64, now - last);
+      raf = requestAnimationFrame(step);
+      const dt = Math.min(48, now - last);
       last = now;
       const s = stateRef.current;
-      const half = track.scrollWidth / 2;
+      const half = halfRef.current;
       if (!s.paused && !s.dragging && now >= s.resumeAt && half > 0) {
         offsetRef.current += (speed * dt) / 1000;
         if (offsetRef.current >= half) offsetRef.current -= half;
+        track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`;
+      } else if (s.dragging) {
+        track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`;
       }
-      track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`;
-      raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
   }, [items.length, speed]);
 
   const wrap = (value: number) => {
-    const track = trackRef.current;
-    const half = track ? track.scrollWidth / 2 : 0;
+    const half = halfRef.current;
     if (half <= 0) return value;
     let next = value % half;
     if (next < 0) next += half;
@@ -83,6 +111,7 @@ export function DragMarquee({
     s.startX = e.clientX;
     s.startOffset = offsetRef.current;
     s.moved = 0;
+    try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch { /* noop */ }
     setGrabbing(true);
   };
 
@@ -100,7 +129,7 @@ export function DragMarquee({
     const s = stateRef.current;
     if (!s.dragging) return;
     s.dragging = false;
-    s.resumeAt = performance.now() + 900;
+    s.resumeAt = performance.now() + 700;
     setGrabbing(false);
   };
 
@@ -134,7 +163,7 @@ export function DragMarquee({
       <div
         ref={trackRef}
         className={`flex w-max items-stretch ${gapClassName}`}
-        style={{ willChange: "transform" }}
+        style={{ willChange: "transform", transform: "translate3d(0,0,0)", backfaceVisibility: "hidden" }}
       >
         {duplicated.map((child, i) => (
           <div key={i} className={`shrink-0 ${itemClassName ?? ""}`} draggable={false}>
