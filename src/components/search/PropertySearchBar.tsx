@@ -298,27 +298,15 @@ export default function PropertySearchBar({
               type="button"
               onClick={onConsultation}
               data-no-contrast-guard
-              className="shrink-0 hidden sm:inline-flex items-center gap-2 h-9 px-4 rounded-lg text-xs font-semibold"
+              className="shrink-0 inline-flex items-center gap-2 h-9 px-3 sm:px-4 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap"
               style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", border: "1px solid rgba(255,255,255,0.32)" }}
             >
-              <CalendarCheck className="w-4 h-4" />
+              <CalendarCheck className="w-4 h-4 shrink-0" />
               Free Consultation
             </button>
           ) : null}
         </div>
 
-        {onConsultation ? (
-          <button
-            type="button"
-            onClick={onConsultation}
-            data-no-contrast-guard
-            className="sm:hidden inline-flex w-full items-center justify-center gap-2 h-10 rounded-xl text-xs font-semibold"
-            style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-          >
-            <CalendarCheck className="w-4 h-4" />
-            Free Consultation
-          </button>
-        ) : null}
       </div>
 
 
