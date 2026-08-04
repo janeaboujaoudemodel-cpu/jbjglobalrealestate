@@ -39,6 +39,87 @@ import {
 
 const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
 
+
+/* --------------------------------------------------------------- primitives */
+
+const SEG_CLASS =
+  "flex items-center justify-between gap-2 h-11 sm:h-12 px-3 sm:px-3.5 rounded-xl text-[13px] sm:text-sm font-medium tracking-tight transition-colors min-w-0 w-full";
+
+/** One dropdown step of the filter bar. Module-level so its identity is stable
+ *  and Radix popovers survive ancestor re-renders (hero typewriter, etc.). */
+function Seg({
+  label,
+  active,
+  icon,
+  children,
+  dark,
+}: {
+  label: string;
+  active?: boolean;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  dark: boolean;
+}) {
+  const ink = dark ? "#FFFFFF" : "#1A1A1A";
+  const muted = dark ? "rgba(255,255,255,0.72)" : "rgba(26,26,26,0.62)";
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className={SEG_CLASS}
+          aria-label={label}
+          style={{
+            background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
+            border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)"}`,
+            color: ink,
+          }}
+        >
+          <span className="flex items-center gap-2 min-w-0">
+            {icon}
+            <span className="truncate" style={{ color: active ? ink : muted }}>
+              {label}
+            </span>
+          </span>
+          <ChevronDown className="w-4 h-4 shrink-0 opacity-70" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        className="w-[min(92vw,22rem)] p-0 z-[70]"
+        style={{ background: "#FFFFFF", border: "1px solid rgba(184,149,85,0.35)", color: "#1A1A1A" }}
+      >
+        {children}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function Pill({
+  selected,
+  onClick,
+  children,
+}: {
+  selected?: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="px-3 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all"
+      style={
+        selected
+          ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", border: "1px solid #042c1c" }
+          : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
 export interface GeoFilterBarProps {
   value?: GeoSearchFilters;
   onChange?: (next: GeoSearchFilters) => void;
@@ -208,7 +289,7 @@ export default function GeoFilterBar({
         <div className="grid grid-cols-2 md:flex md:items-center gap-1.5 sm:gap-2">
           {/* Country */}
           <div className="min-w-0 md:w-[15%] md:min-w-[9.5rem]">
-            <Seg label={countryLabel} active={!!filters.country} icon={<MapPin className="w-4 h-4 opacity-80" />}>
+            <Seg dark={dark} label={countryLabel} active={!!filters.country} icon={<MapPin className="w-4 h-4 opacity-80" />}>
               <div className="p-2">
                 {GEO_COUNTRIES.map((c) => (
                   <button
@@ -236,7 +317,7 @@ export default function GeoFilterBar({
           {/* Region (conditional) */}
           {showRegion && (
             <div className="min-w-0 md:w-[14%] md:min-w-[8.5rem]">
-              <Seg label={regionLabel} active={!!filters.region}>
+              <Seg dark={dark} label={regionLabel} active={!!filters.region}>
                 <div className="p-2 max-h-72 overflow-y-auto">
                   <button
                     type="button"
@@ -263,7 +344,7 @@ export default function GeoFilterBar({
 
           {/* Areas (multi) */}
           <div className="min-w-0 md:flex-1">
-            <Seg label={areaLabel} active={filters.areas.length > 0}>
+            <Seg dark={dark} label={areaLabel} active={filters.areas.length > 0}>
               <AreaPicker
                 areas={areas}
                 selected={filters.areas}
@@ -276,7 +357,7 @@ export default function GeoFilterBar({
 
           {/* Beds & Baths */}
           <div className="min-w-0 md:w-[16%] md:min-w-[10rem]">
-            <Seg label={bedsLabel} active={filters.beds.length > 0 || filters.baths.length > 0}>
+            <Seg dark={dark} label={bedsLabel} active={filters.beds.length > 0 || filters.baths.length > 0}>
               <div className="p-4 space-y-4">
                 <div>
                   <p className="text-xs font-semibold mb-2 uppercase tracking-wide" style={{ color: "#7A6230" }}>
@@ -316,7 +397,7 @@ export default function GeoFilterBar({
 
           {/* Price */}
           <div className="min-w-0 md:w-[16%] md:min-w-[10rem]">
-            <Seg label={priceLabel} active={filters.priceMin != null || filters.priceMax != null}>
+            <Seg dark={dark} label={priceLabel} active={filters.priceMin != null || filters.priceMax != null}>
               <div className="p-4 space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "#7A6230" }}>
                   Price ({currency})
@@ -348,6 +429,7 @@ export default function GeoFilterBar({
           {/* More filters */}
           <div className="min-w-0 md:w-[16%] md:min-w-[10rem]">
             <Seg
+              dark={dark}
               label={moreCount ? `More Filters (${moreCount})` : "More Filters"}
               active={moreCount > 0}
               icon={<SlidersHorizontal className="w-4 h-4 opacity-80" />}
