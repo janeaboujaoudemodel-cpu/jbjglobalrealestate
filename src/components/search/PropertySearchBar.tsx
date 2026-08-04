@@ -204,25 +204,38 @@ export default function PropertySearchBar({
 
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
-      {/* Row 1 — purpose + keyword */}
+      {/* Row 1 — purpose + keyword (+ Free Consultation inside the bar) */}
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <div
           className="flex items-center gap-1 p-1 rounded-xl"
           style={{
-            background: dark ? "rgba(255,255,255,0.08)" : "#F2EBDC",
-            border: dark ? "1px solid rgba(255,255,255,0.16)" : "1px solid rgba(184,149,85,0.3)",
+            backgroundImage: dark ? DARK_SURFACE : undefined,
+            background: dark ? undefined : "#F2EBDC",
+            backdropFilter: dark ? "blur(10px)" : undefined,
+            border: dark ? "1px solid rgba(255,255,255,0.34)" : "1px solid rgba(184,149,85,0.3)",
           }}
         >
           {PURPOSES.map((p) => (
             <button
               key={p.slug}
               type="button"
-              onClick={() => set({ purpose: p.slug })}
+              data-no-contrast-guard
+              onClick={() => {
+                if (p.slug === "sell") {
+                  set({ purpose: p.slug });
+                  onSellSelected?.();
+                  return;
+                }
+                set({ purpose: p.slug });
+              }}
               className="h-9 px-4 rounded-lg text-xs font-semibold"
               style={
                 f.purpose === p.slug
-                  ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF" }
-                  : { color: dark ? "#FFFFFF" : "#1A1A1A" }
+                  ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
+                  : {
+                      color: dark ? "#FFFFFF" : "#1A1A1A",
+                      WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
+                    }
               }
             >
               {p.label}
@@ -231,23 +244,72 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="flex items-center gap-2 h-11 px-3 rounded-xl flex-1 min-w-[200px]"
+          className="relative flex items-center gap-2 h-11 px-3 rounded-xl flex-1 min-w-[200px]"
           style={{
-            background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)"}`,
+            backgroundImage: dark ? DARK_SURFACE : undefined,
+            background: dark ? undefined : "#FDFBF7",
+            backdropFilter: dark ? "blur(10px)" : undefined,
+            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
           }}
         >
-          <Search className="w-4 h-4 opacity-60" style={{ color: dark ? "#FFF" : "#1A1A1A" }} />
+          <Search className="w-4 h-4 shrink-0 opacity-80" style={{ color: dark ? "#FFF" : "#1A1A1A" }} />
+          {!f.q && !qFocused && typewriterPhrases?.length ? (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-9 top-1/2 -translate-y-1/2 text-sm whitespace-nowrap overflow-hidden"
+              style={{
+                color: dark ? "rgba(255,255,255,0.82)" : "rgba(26,26,26,0.6)",
+                WebkitTextFillColor: dark ? "rgba(255,255,255,0.82)" : undefined,
+                maxWidth: "calc(100% - 48px)",
+              }}
+            >
+              {animatedPlaceholder}
+              <span className="jj-type-caret">|</span>
+            </span>
+          ) : null}
           <input
             value={f.q}
             onChange={(e) => set({ q: e.target.value })}
+            onFocus={() => setQFocused(true)}
+            onBlur={() => setQFocused(false)}
             onKeyDown={(e) => e.key === "Enter" && onSubmit(f)}
-            placeholder="Project, developer, community or keyword"
-            className="flex-1 bg-transparent text-sm outline-none"
-            style={{ color: dark ? "#FFFFFF" : "#1A1A1A" }}
+            placeholder={typewriterPhrases?.length ? "" : "Project, developer, community or keyword"}
+            data-no-contrast-guard
+            className="flex-1 min-w-0 bg-transparent text-sm outline-none"
+            style={{
+              color: dark ? "#FFFFFF" : "#1A1A1A",
+              WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
+              caretColor: dark ? "#FFFFFF" : "#1A1A1A",
+            }}
           />
+          {onConsultation ? (
+            <button
+              type="button"
+              onClick={onConsultation}
+              data-no-contrast-guard
+              className="shrink-0 hidden sm:inline-flex items-center gap-2 h-9 px-4 rounded-lg text-xs font-semibold"
+              style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", border: "1px solid rgba(255,255,255,0.32)" }}
+            >
+              <CalendarCheck className="w-4 h-4" />
+              Free Consultation
+            </button>
+          ) : null}
         </div>
+
+        {onConsultation ? (
+          <button
+            type="button"
+            onClick={onConsultation}
+            data-no-contrast-guard
+            className="sm:hidden inline-flex w-full items-center justify-center gap-2 h-10 rounded-xl text-xs font-semibold"
+            style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <CalendarCheck className="w-4 h-4" />
+            Free Consultation
+          </button>
+        ) : null}
       </div>
+
 
       {/* Row 2 — segments */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-2">
