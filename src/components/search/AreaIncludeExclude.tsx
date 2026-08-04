@@ -84,6 +84,7 @@ export default function AreaIncludeExclude({ country, region, include, exclude, 
             type="button"
             onClick={() => setMode(m)}
             data-emerald={mode === m ? "true" : undefined}
+            data-on-dark={mode === m ? "true" : undefined}
             className="h-8 rounded-lg text-xs font-semibold capitalize flex items-center justify-center gap-1"
             style={
               mode === m
