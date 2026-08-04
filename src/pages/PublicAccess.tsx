@@ -626,7 +626,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
       <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r sm:w-20 ${isDark ? "from-[#02100a]/70 sm:from-[#02100a]" : "from-[#FDFBF7]/70 sm:from-[#FDFBF7]"} to-transparent`} />
       <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l sm:w-20 ${isDark ? "from-[#02100a]/70 sm:from-[#02100a]" : "from-[#FDFBF7]/70 sm:from-[#FDFBF7]"} to-transparent`} />
       <DragMarquee
-        speed={34}
+        speed={92}
+        pauseOnHover={false}
         gapClassName="gap-7"
         className="px-4 pb-7 pt-4 sm:px-7"
         ariaLabel="Live property listings"
@@ -1502,7 +1503,7 @@ export default function PublicAccess() {
           </div>
           <div className="w-full">
             {/* No panel/highlight behind the books — they sit directly on the band. */}
-            <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
+            <BookCarousel books={ACCESS_BOOKS} size="sm" speed={76} compact />
           </div>
         </section>
 

@@ -26,7 +26,7 @@ interface BookCarouselProps {
 export function BookCarousel({
   books,
   size = "sm",
-  speed = 34,
+  speed = 76,
   className,
   onBookClick,
   compact = false,
@@ -41,6 +41,7 @@ export function BookCarousel({
   return (
     <DragMarquee
       speed={speed}
+      pauseOnHover={false}
       className={className}
       gapClassName="gap-6 md:gap-8"
       itemClassName="px-0"

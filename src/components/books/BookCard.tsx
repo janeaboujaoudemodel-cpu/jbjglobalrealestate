@@ -49,7 +49,7 @@ export const BookCard = forwardRef<HTMLElement, BookCardProps>(function BookCard
   );
 
   const commonCls = cn(
-    "group block flex-shrink-0 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/60 rounded-md",
+    "group block flex-shrink-0 select-none !border-0 !bg-transparent !p-0 !shadow-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/60 rounded-md",
     className,
   );
 
