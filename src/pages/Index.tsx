@@ -322,11 +322,29 @@ const Index = () => {
               Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
 
+            {/* Full company wordmark — sits directly below the headline, centred */}
+            <motion.p
+              variants={fadeInUp}
+              data-no-contrast-guard
+              data-on-dark
+              className="allow-white font-display whitespace-nowrap mt-3 sm:mt-4"
+              style={{
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                fontSize: "clamp(0.72rem,2.5vw,1.05rem)",
+                letterSpacing: "0.3em",
+                textTransform: "uppercase",
+                textShadow: "0 2px 14px rgba(0,0,0,0.85)",
+              }}
+            >
+              JBJ Global Real Estate
+            </motion.p>
 
-            {/* Hero global search — long-stretch bar with inline Book + Concierge CTAs */}
-            <motion.div variants={fadeInUp} className="w-full mt-[clamp(1.5rem,9vw,7rem)]">
+            {/* Hero unified search + filter bar (single surface) */}
+            <motion.div variants={fadeInUp} className="w-full mt-[clamp(1.5rem,7vw,5rem)]">
               <HomeHeroSearch onBookConsultation={() => setIsInquiryOpen(true)} />
             </motion.div>
+
 
             {/* Standalone "Book a Free Consultation" CTA removed — now lives inline inside the search bar above. */}
 
