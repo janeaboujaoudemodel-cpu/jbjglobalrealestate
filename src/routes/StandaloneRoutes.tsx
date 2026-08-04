@@ -75,6 +75,7 @@ export const StandaloneRoutes = () => (
     <Route path="/coming-soon" element={<RouteErrorBoundary routeName="ComingSoon"><ComingSoon /></RouteErrorBoundary>} />
     <Route path="/maintenance" element={<RouteErrorBoundary routeName="Maintenance"><ComingSoon /></RouteErrorBoundary>} />
     <Route path="/card" element={<DigitalCard />} />
+    <Route path="/cards" element={<DigitalCard />} />
     <Route path="/book" element={<Navigate to="/book/jane" replace />} />
     <Route path="/book/:slug" element={
       <RouteErrorBoundary routeName="PublicBooking">

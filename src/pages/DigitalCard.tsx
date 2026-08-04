@@ -34,9 +34,9 @@ const CONTACT_INFO = {
   phoneCompanyClean: "+9741515015",
   whatsappCompany: "9741515015",
   // Personal phone
-  phonePersonal: "+974 15 15 015",
-  phonePersonalClean: "+9741515015",
-  whatsappPersonal: "9741515015",
+  phonePersonal: "+971 50 44 88 763",
+  phonePersonalClean: "+971504488763",
+  whatsappPersonal: "971504488763",
   // LOCKED: Website as JBJ.AE (display), https://jbj.ae (link)
   website: "https://jbj.ae",
   websiteDisplay: "JBJ.AE",
