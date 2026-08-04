@@ -30,6 +30,8 @@ export function DragMarquee({
   ariaLabel?: string;
 }) {
   const trackRef = React.useRef<HTMLDivElement | null>(null);
+  const firstGroupRef = React.useRef<HTMLDivElement | null>(null);
+  const secondGroupRef = React.useRef<HTMLDivElement | null>(null);
   const offsetRef = React.useRef(0);
   const stateRef = React.useRef({
     paused: false,
@@ -42,25 +44,30 @@ export function DragMarquee({
   const [grabbing, setGrabbing] = React.useState(false);
 
   const items = React.Children.toArray(children);
-  const duplicated = items.length > 1 ? [...items, ...items] : items;
-
-  const halfRef = React.useRef(0);
+  const cycleWidthRef = React.useRef(0);
 
   // Measure the wrap point once per layout change instead of reading
   // `scrollWidth` inside the animation frame (that forced a synchronous
   // layout every frame and is what made the rails feel stuck on phones).
   React.useEffect(() => {
     const track = trackRef.current;
-    if (!track) return;
+    const firstGroup = firstGroupRef.current;
+    const secondGroup = secondGroupRef.current;
+    if (!track || !firstGroup || !secondGroup) return;
     const measure = () => {
-      halfRef.current = track.scrollWidth / 2;
-      if (halfRef.current > 0 && offsetRef.current > halfRef.current) {
-        offsetRef.current = offsetRef.current % halfRef.current;
+      // The distance between the two identical groups is the exact visual
+      // cycle, including the inter-group gap. Using half of scrollWidth was
+      // subtly wrong because a flex row with 2N items has 2N-1 gaps. That
+      // mismatch caused a hitch every time the rail wrapped.
+      cycleWidthRef.current = secondGroup.offsetLeft - firstGroup.offsetLeft;
+      if (cycleWidthRef.current > 0 && offsetRef.current >= cycleWidthRef.current) {
+        offsetRef.current %= cycleWidthRef.current;
       }
     };
     measure();
     const ro = new ResizeObserver(measure);
-    ro.observe(track);
+    ro.observe(firstGroup);
+    ro.observe(secondGroup);
     window.addEventListener("resize", measure);
     // Images finishing decode can change the track width.
     const t = window.setTimeout(measure, 600);
@@ -84,10 +91,10 @@ export function DragMarquee({
       const dt = Math.min(48, now - last);
       last = now;
       const s = stateRef.current;
-      const half = halfRef.current;
-      if (!s.paused && !s.dragging && now >= s.resumeAt && half > 0) {
+      const cycleWidth = cycleWidthRef.current;
+      if (!s.paused && !s.dragging && now >= s.resumeAt && cycleWidth > 0) {
         offsetRef.current += (speed * dt) / 1000;
-        if (offsetRef.current >= half) offsetRef.current -= half;
+        if (offsetRef.current >= cycleWidth) offsetRef.current %= cycleWidth;
         track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`;
       } else if (s.dragging) {
         track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`;
@@ -98,10 +105,10 @@ export function DragMarquee({
   }, [items.length, speed]);
 
   const wrap = (value: number) => {
-    const half = halfRef.current;
-    if (half <= 0) return value;
-    let next = value % half;
-    if (next < 0) next += half;
+    const cycleWidth = cycleWidthRef.current;
+    if (cycleWidth <= 0) return value;
+    let next = value % cycleWidth;
+    if (next < 0) next += cycleWidth;
     return next;
   };
 
@@ -129,7 +136,9 @@ export function DragMarquee({
     const s = stateRef.current;
     if (!s.dragging) return;
     s.dragging = false;
-    s.resumeAt = performance.now() + 700;
+    // Resume on the very next animation frame. A delayed restart reads as a
+    // broken/stalling rail, especially after ordinary taps on touch devices.
+    s.resumeAt = 0;
     setGrabbing(false);
   };
 
@@ -165,11 +174,20 @@ export function DragMarquee({
         className={`flex w-max items-stretch ${gapClassName}`}
         style={{ willChange: "transform", transform: "translate3d(0,0,0)", backfaceVisibility: "hidden" }}
       >
-        {duplicated.map((child, i) => (
-          <div key={i} className={`shrink-0 ${itemClassName ?? ""}`} draggable={false}>
-            {child}
-          </div>
-        ))}
+        <div ref={firstGroupRef} className={`flex shrink-0 items-stretch ${gapClassName}`}>
+          {items.map((child, i) => (
+            <div key={`first-${i}`} className={`shrink-0 ${itemClassName ?? ""}`} draggable={false}>
+              {child}
+            </div>
+          ))}
+        </div>
+        <div ref={secondGroupRef} className={`flex shrink-0 items-stretch ${gapClassName}`} aria-hidden="true">
+          {items.map((child, i) => (
+            <div key={`second-${i}`} className={`shrink-0 ${itemClassName ?? ""}`} draggable={false}>
+              {child}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
