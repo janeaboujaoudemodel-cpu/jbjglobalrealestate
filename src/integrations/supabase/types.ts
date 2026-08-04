@@ -25890,6 +25890,39 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_labels: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          sort_order: number
+          style: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          sort_order?: number
+          style?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          sort_order?: number
+          style?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       listing_notifications: {
         Row: {
           created_at: string | null
@@ -31442,6 +31475,7 @@ export type Database = {
           is_published: boolean | null
           is_serviced: boolean | null
           is_sold_out: boolean | null
+          labels: string[]
           last_enrichment_scan_at: string | null
           latitude: number | null
           launch_date: string | null
@@ -31562,6 +31596,7 @@ export type Database = {
           is_published?: boolean | null
           is_serviced?: boolean | null
           is_sold_out?: boolean | null
+          labels?: string[]
           last_enrichment_scan_at?: string | null
           latitude?: number | null
           launch_date?: string | null
@@ -31682,6 +31717,7 @@ export type Database = {
           is_published?: boolean | null
           is_serviced?: boolean | null
           is_sold_out?: boolean | null
+          labels?: string[]
           last_enrichment_scan_at?: string | null
           latitude?: number | null
           launch_date?: string | null
@@ -31783,6 +31819,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      property_alerts: {
+        Row: {
+          channel: string
+          created_at: string
+          filters: Json
+          frequency: string
+          id: string
+          is_active: boolean
+          last_sent_at: string | null
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          filters?: Json
+          frequency?: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          filters?: Json
+          frequency?: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       property_analysis_cache: {
         Row: {

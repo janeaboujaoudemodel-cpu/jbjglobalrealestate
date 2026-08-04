@@ -74,6 +74,9 @@ import { blueprintPagesSEO, trackingEvents } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import PropertySearchBar from "@/components/search/PropertySearchBar";
+import ResultsToolbar from "@/components/search/ResultsToolbar";
+import { paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
 import { CURRENCY_RATES, CURRENCY_SYMBOLS } from "@/hooks/useCurrency";
@@ -221,6 +224,18 @@ const BATHROOM_OPTIONS = [
 
 const Properties = () => {
   const [searchParams] = useSearchParams();
+  /** Unified Bayut-grade search model, hydrated from the URL. */
+  const [search, setSearch] = useState<PropertySearch>(() => paramsToSearch(searchParams));
+  useEffect(() => {
+    setSearch(paramsToSearch(searchParams));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.toString()]);
+  const submitSearch = useCallback((next: PropertySearch) => {
+    const qs = searchToParams(next).toString();
+    window.history.replaceState(null, "", `/properties${qs ? `?${qs}` : ""}`);
+    setSearch(next);
+    window.dispatchEvent(new CustomEvent("jbj:property-search", { detail: next }));
+  }, []);
   const { data: projects, isLoading } = useProjectsListing();
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
@@ -1212,6 +1227,16 @@ const Properties = () => {
               </div>
             );
           })()}
+
+          {/* Unified property search bar — identical surface site-wide */}
+          <div className="mt-3">
+            <PropertySearchBar value={search} onChange={setSearch} onSubmit={submitSearch} dark />
+          </div>
+
+          {/* Results toolbar — sort, view mode, alerts, quick status chips */}
+          <div className="mt-4">
+            <ResultsToolbar value={search} onChange={submitSearch} total={finalProjects.length} dark />
+          </div>
 
           {/* Premium shortcut chip bar (same as header) */}
           <div className="mt-3">
