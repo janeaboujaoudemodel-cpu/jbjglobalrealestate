@@ -335,7 +335,7 @@ const Index = () => {
                 textShadow: "0 2px 14px rgba(0,0,0,0.85)",
               }}
             >
-              <img src={jbjMonogram} alt="" aria-hidden="true" className="h-6 sm:h-7 w-auto object-contain" />
+              <img src={jbjMonogram} alt="" aria-hidden="true" className="h-10 sm:h-12 w-auto object-contain" />
               <span
                 className="allow-white font-display uppercase"
                 style={{ fontSize: "clamp(0.68rem,2.3vw,1rem)", letterSpacing: "0.24em", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}

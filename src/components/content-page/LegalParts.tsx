@@ -16,7 +16,8 @@ export const SectionCard = ({
   className?: string;
 }) => (
   <div
-    data-no-contrast-guard
+    data-surface="champagne"
+    data-legal-section-card
     style={{ color: "#1A1A1A" }}
     className={
       "relative rounded-2xl bg-[#FDFBF7] border border-[#B89555]/25 " +
@@ -40,7 +41,8 @@ export const SectionHeading = ({
 }) => (
   <div className="flex items-baseline gap-3 sm:gap-4 mb-4 sm:mb-5">
     <span
-      className="inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-[#064E3B] text-[#F5F0E0] text-sm font-semibold"
+      data-surface="emerald"
+      className="inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-[image:var(--jj-emerald-ombre)] text-white text-sm font-semibold"
       aria-hidden
     >
       {number}
