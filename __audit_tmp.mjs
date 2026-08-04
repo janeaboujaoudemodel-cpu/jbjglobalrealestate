@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ executablePath: '/opt/ms-playwright/chromium-1208/chrome-linux64/chrome' });
 const results = {};
 
 async function audit(viewport, label) {
