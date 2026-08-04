@@ -65,7 +65,6 @@ function Seg({
         <button
           type="button"
           aria-label={label}
-          data-search-segment
           className={SEG}
           data-no-contrast-guard
           style={{
@@ -224,7 +223,6 @@ export default function PropertySearchBar({
         <div
           className="flex h-12 min-w-[13.5rem] items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
           data-surface={dark ? "dark" : "light"}
-          data-search-segment
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#F2EBDC",
@@ -245,7 +243,7 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-                className="relative h-full min-w-0 flex-1 px-6 text-xs font-semibold whitespace-nowrap first:rounded-l-lg last:rounded-r-lg"
+               className="relative h-full min-w-0 flex-1 px-5 text-xs font-semibold whitespace-nowrap first:rounded-l-lg last:rounded-r-lg"
               style={
                 f.purpose === p.slug
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
@@ -257,7 +255,7 @@ export default function PropertySearchBar({
             >
               {p.label}
               {index < PURPOSES.length - 1 ? (
-                 <span aria-hidden="true" className="absolute right-0 top-1/2 h-5 w-px -translate-y-1/2 bg-white/45" />
+                 <span aria-hidden="true" className="absolute right-0 top-1/2 h-6 w-px -translate-y-1/2 bg-white/45" />
               ) : null}
             </button>
           ))}
@@ -266,7 +264,6 @@ export default function PropertySearchBar({
         <div
           className="relative flex items-center gap-2 h-12 px-3 rounded-lg min-w-0"
           data-surface={dark ? "dark" : "light"}
-          data-search-segment
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#FDFBF7",
@@ -311,7 +308,6 @@ export default function PropertySearchBar({
             type="button"
             onClick={onConsultation}
             data-surface="emerald"
-            data-search-segment
             className="jj-emerald-action inline-flex h-12 items-center justify-center gap-2 rounded-lg px-5 text-xs font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
@@ -452,7 +448,6 @@ export default function PropertySearchBar({
             }}
             className={SEG}
             data-no-contrast-guard
-            data-search-segment
             style={{
               backgroundImage: dark ? DARK_SURFACE : undefined,
               background: dark ? undefined : "#FDFBF7",
@@ -475,7 +470,6 @@ export default function PropertySearchBar({
             type="button"
             onClick={() => onSubmit(f)}
              data-surface="emerald"
-             data-search-segment
             className="h-12 rounded-xl text-sm font-semibold text-white px-3 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
