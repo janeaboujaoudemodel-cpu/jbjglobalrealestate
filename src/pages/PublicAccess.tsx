@@ -8,6 +8,7 @@ import PaymentRequestDialog, { type PaymentRequestContext } from "@/components/g
 import VideoBackground from "@/components/VideoBackground";
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import { BookCarousel } from "@/components/books/BookCarousel";
+import { DragMarquee } from "@/components/ui/DragMarquee";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { useSurfaceFeaturedProjects } from "@/hooks/useGateFeaturedProjects";
 import type { BookData } from "@/types/books";
@@ -606,94 +607,6 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
   const offPlanProjects = qualifiedProjects.filter(isOffPlanProject);
   const projects = (offPlanProjects.length >= limit ? offPlanProjects : qualifiedProjects).slice(0, limit);
 
-  const scrollerRef = React.useRef<HTMLDivElement | null>(null);
-  const resumeTimerRef = React.useRef<number | null>(null);
-  const stateRef = React.useRef({
-    dragging: false,
-    paused: false,
-    startX: 0,
-    startScroll: 0,
-    lastTs: 0,
-  });
-
-  const pauseBriefly = React.useCallback(() => {
-    stateRef.current.paused = true;
-    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
-    resumeTimerRef.current = window.setTimeout(() => {
-      stateRef.current.paused = false;
-    }, 2600);
-  }, []);
-
-  React.useEffect(() => () => {
-    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
-  }, []);
-
-  // Auto-scroll loop (pauses on hover, drag, or reduced motion)
-  React.useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el || projects.length < 2) return;
-    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
-
-    let raf = 0;
-    const SPEED = 34; // px/sec
-
-    const step = (ts: number) => {
-      const s = stateRef.current;
-      if (!s.lastTs) s.lastTs = ts;
-      const dt = (ts - s.lastTs) / 1000;
-      s.lastTs = ts;
-      if (!s.paused && !s.dragging) {
-        el.scrollLeft += SPEED * dt;
-        const half = el.scrollWidth / 2;
-        if (el.scrollLeft >= half) el.scrollLeft -= half;
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [projects.length]);
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    // Do NOT pause on simple taps — only on real drags. This keeps the mobile
-    // carousel visibly auto-scrolling even when users tap a card.
-    stateRef.current.dragging = false;
-    stateRef.current.startX = e.clientX;
-    stateRef.current.startScroll = el.scrollLeft;
-  };
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = scrollerRef.current;
-    const s = stateRef.current;
-    if (!el) return;
-    const dx = e.clientX - s.startX;
-    // Promote to a drag only after 6px of horizontal movement.
-    if (!s.dragging && Math.abs(dx) > 6) {
-      s.dragging = true;
-      s.paused = true;
-      try { el.setPointerCapture(e.pointerId); } catch {}
-      el.style.cursor = "grabbing";
-    }
-    if (s.dragging) el.scrollLeft = s.startScroll - dx;
-  };
-  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const wasDragging = stateRef.current.dragging;
-    stateRef.current.dragging = false;
-    try { el.releasePointerCapture(e.pointerId); } catch {}
-    el.style.cursor = "grab";
-    if (wasDragging) pauseBriefly();
-  };
-
-  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    pauseBriefly();
-    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if (delta !== 0) el.scrollLeft += delta;
-  };
-
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4" aria-label="Loading real projects">
@@ -706,37 +619,20 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
 
   if (projects.length === 0) return null;
 
-  const track = projects.length >= 3 ? [...projects, ...projects] : projects;
-
   return (
-    <div
-      className="relative w-full min-w-0"
-      onMouseEnter={() => { stateRef.current.paused = true; }}
-      onMouseLeave={() => { stateRef.current.paused = false; }}
-      aria-label="Live property listings carousel"
-    >
+    <div className="relative w-full min-w-0" aria-label="Live property listings carousel">
       {/* Phone keeps a much narrower fade — a wide flash washed out the card
           artwork on small screens. */}
       <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r sm:w-20 ${isDark ? "from-[#02100a]/70 sm:from-[#02100a]" : "from-[#FDFBF7]/70 sm:from-[#FDFBF7]"} to-transparent`} />
       <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l sm:w-20 ${isDark ? "from-[#02100a]/70 sm:from-[#02100a]" : "from-[#FDFBF7]/70 sm:from-[#FDFBF7]"} to-transparent`} />
-      <div
-        ref={scrollerRef}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onPointerLeave={(e) => { if (stateRef.current.dragging) endDrag(e); }}
-        onWheel={onWheel}
-        data-property-scroller
-        className="flex w-full gap-7 overflow-x-auto overflow-y-hidden px-4 pb-7 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
-        // touchAction: "pan-x pan-y" lets the user swipe the rail horizontally on
-        // phone/tablet AND still scroll the page vertically. Previous value "pan-y"
-        // blocked horizontal swipe entirely on mobile, freezing the strap-line.
-        // Do NOT set -webkit-overflow-scrolling: touch — on iOS it freezes the
-        // programmatic scrollLeft repaints the auto-marquee relies on.
-        style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto", willChange: "scroll-position", transform: "translateZ(0)" }}
+      <DragMarquee
+        speed={34}
+        gapClassName="gap-7"
+        className="px-4 pb-7 pt-4 sm:px-7"
+        ariaLabel="Live property listings"
       >
-        {track.map((p: any, idx) => {
+        {projects.map((p: any, idx) => {
+
           const cover = p.__cover;
           const priceVal = Number(p.starting_price ?? p.price_from ?? p.price ?? 0);
           const price = Number.isFinite(priceVal) && priceVal > 0 ? `AED ${priceVal.toLocaleString()}` : "Price on request";
@@ -769,14 +665,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
             <button
               type="button"
               key={`${p.id}-${idx}`}
-              onClick={(e) => {
-                // suppress click after drag
-                if (Math.abs(stateRef.current.startScroll - (scrollerRef.current?.scrollLeft ?? 0)) > 4) {
-                  e.preventDefault();
-                  return;
-                }
-                onClick();
-              }}
+              /* DragMarquee already swallows the click that ends a swipe. */
+              onClick={onClick}
               draggable={false}
               data-property-card
               className={`group/card relative !flex w-[310px] shrink-0 !flex-col !items-stretch !justify-start !gap-0 overflow-hidden rounded-md !p-0 !text-left align-top transition duration-500 hover:-translate-y-1 sm:w-[360px] ${
@@ -789,7 +679,11 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                 <img
                   src={cover}
                   alt={p.name || "Featured project"}
-                  loading="lazy"
+                  /* The rail is always in motion, so a lazy cover shows an
+                     empty frame the moment it walks into view. Load eagerly. */
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority={idx < 4 ? "high" : "auto"}
                   draggable={false}
                   onError={() => setFailedImageIds((prev) => new Set(prev).add(String(p.id)))}
                   className="pointer-events-none h-full w-full select-none object-cover transition duration-[900ms] group-hover/card:scale-[1.08]"
@@ -835,7 +729,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
             </button>
           );
         })}
-      </div>
+      </DragMarquee>
     </div>
   );
 }
@@ -949,29 +843,11 @@ function ServicesSection() {
             </div>
             <div className="relative flex flex-1 flex-col gap-4 bg-[#FDFBF7] px-6 py-6">
               <p className="text-[13.5px] leading-relaxed text-[#1A1A1A]/75">{mobileItem.body}</p>
-              <div className="mt-2 flex items-center justify-center gap-1.5">
-                {page.items.map((_, i) => (
-                  <span key={i} className={`h-1.5 rounded-full transition-all ${i === mobileIdx ? "w-6 bg-[#0d3a2b]" : "w-1.5 bg-[#0d3a2b]/25"}`} />
-                ))}
-              </div>
+              <p className="mt-1 text-center text-[10px] font-bold uppercase tracking-[0.28em] text-[#0d3a2b]/70">
+                Service {mobileIdx + 1} of {itemsLen}
+              </p>
             </div>
           </article>
-          <button
-            type="button"
-            aria-label="Previous service"
-            onClick={mobilePrev}
-            className="absolute left-2 top-[22%] inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/45 text-white backdrop-blur-md active:scale-95"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            aria-label="Next service"
-            onClick={mobileNext}
-            className="absolute right-2 top-[22%] inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/45 text-white backdrop-blur-md active:scale-95"
-          >
-            <ArrowRight className="h-5 w-5" />
-          </button>
         </div>
 
         {/* Desktop/tablet: magazine editorial grid */}
@@ -1051,7 +927,7 @@ function ServicesSection() {
 
           <div className="flex flex-col items-center gap-3">
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
-              Page {pageIdx + 1} of {total}
+              Chapter {pageIdx + 1} of {total} · {page.label}
             </span>
             <div className="hidden items-center gap-3 sm:flex">
               {jbjServicePages.map((p, i) => {
@@ -1440,12 +1316,14 @@ export default function PublicAccess() {
             <img
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt=""
-              width={36}
-              height={36}
-              className="h-9 w-9 object-contain shrink-0"
+              width={48}
+              height={48}
+              className="h-12 w-12 object-contain shrink-0 sm:h-11 sm:w-11"
             />
-            <span className="font-serif text-[16px] sm:text-[18px] text-[#0d3a2b] whitespace-nowrap truncate">
-              JBJ Global Real Estate
+            {/* Phone shows the short mark so the watermark never truncates. */}
+            <span className="font-serif text-[15px] leading-tight text-[#0d3a2b] sm:text-[18px] sm:whitespace-nowrap">
+              <span className="sm:hidden">JBJ Global</span>
+              <span className="hidden sm:inline">JBJ Global Real Estate</span>
             </span>
           </a>
 
@@ -1460,17 +1338,17 @@ export default function PublicAccess() {
               onClick={openLogin}
               data-no-contrast-guard
               style={darkInkStyle}
-              className={`${BTN_LIGHT_OUTLINE} h-10 whitespace-nowrap`}
+              className={`${BTN_LIGHT_OUTLINE} h-8 whitespace-nowrap !gap-1 !px-2.5 !text-[9.5px] sm:h-10 sm:!px-4 sm:!text-[11px]`}
             >
-              Log in <ArrowRight className="h-4 w-4" />
+              Log in <ArrowRight className="hidden h-4 w-4 sm:inline" />
             </button>
             <button
               onClick={openSignup}
               data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
               style={emeraldInkStyle}
-              className={`${BTN_EMERALD_SOLID} h-10 whitespace-nowrap`}
+              className={`${BTN_EMERALD_SOLID} h-8 whitespace-nowrap !gap-1 !px-2.5 !text-[9.5px] sm:h-10 sm:!px-4 sm:!text-[11px]`}
             >
-              Sign up <ArrowRight className="h-4 w-4" />
+              Sign up <ArrowRight className="hidden h-4 w-4 sm:inline" />
             </button>
           </div>
         </div>
@@ -1530,24 +1408,45 @@ export default function PublicAccess() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-l border-[#0d3a2b]/15 pl-8">
-              {[
-                { icon: Building2, v: "600+", l: "developers" },
-                { icon: Headphones, v: "24/7", l: "advisor desk" },
-                { icon: ShieldCheck, v: "AED", l: "backed reporting" },
-                { icon: FileCheck2, v: "100%", l: "verified inventory" },
-              ].map(({ icon: Icon, v, l }) => (
-                <div key={l} className="flex items-start gap-3">
-                  <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-11 w-11 shrink-0`}>
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="font-serif text-3xl text-[#0d3a2b] leading-none">{v}</p>
-                    <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/60">{l}</p>
-                  </div>
+            {/* Credentials panel — an engraved emerald plaque instead of four
+                loose icon+number pairs, which read as a cheap badge row. */}
+            <div
+              data-surface="dark"
+              data-no-contrast-guard
+              className="relative overflow-hidden rounded-[22px] border border-[#C9A84C]/35 p-px shadow-[0_40px_90px_-46px_rgba(6,78,59,0.75)]"
+              style={{ background: "linear-gradient(140deg, rgba(201,168,76,0.55) 0%, rgba(201,168,76,0.08) 45%, rgba(201,168,76,0.4) 100%)" }}
+            >
+              <div
+                className="rounded-[21px] px-6 py-7 sm:px-8 sm:py-9"
+                style={{ background: "linear-gradient(150deg, #064E3B 0%, #042c1c 58%, #010806 100%)" }}
+              >
+                <div className="flex items-center gap-3">
+                  <span aria-hidden className="h-px w-8 bg-[#C9A84C]" />
+                  <p className="text-[10px] font-bold uppercase tracking-[0.32em] !text-[#EBD79A]">
+                    The JBJ standard
+                  </p>
                 </div>
-              ))}
+
+                <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-7 sm:gap-x-10">
+                  {[
+                    { icon: Building2, v: "600+", l: "Developer partners" },
+                    { icon: Headphones, v: "24/7", l: "Advisory desk" },
+                    { icon: ShieldCheck, v: "AED", l: "Backed reporting" },
+                    { icon: FileCheck2, v: "100%", l: "Verified inventory" },
+                  ].map(({ icon: Icon, v, l }) => (
+                    <div key={l} className="min-w-0">
+                      <Icon className="h-4 w-4 !text-[#C9A84C]" strokeWidth={1.6} />
+                      <p className="mt-3 font-serif text-[34px] leading-none !text-white sm:text-[40px]">{v}</p>
+                      <span aria-hidden className="mt-3 block h-px w-9 bg-[#C9A84C]/70" />
+                      <p className="mt-3 text-[10.5px] font-semibold uppercase leading-snug tracking-[0.2em] !text-white/62">
+                        {l}
+                      </p>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             </div>
+
           </div>
         </section>
 
@@ -1913,7 +1812,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
             data-no-fallback
             src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
             alt="JBJ"
-            className="h-20 w-20 object-contain opacity-95 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-24 sm:w-24"
+            className="h-32 w-32 object-contain opacity-95 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-28 sm:w-28"
           />
 
           <h2 id="jbj-welcome-portal-title" className="mt-5 font-serif text-2xl leading-tight text-white sm:text-3xl">
@@ -1932,7 +1831,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
               onClick={handleCreateAccount}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-md text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
+              className="allow-white inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
@@ -1948,7 +1847,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
               onClick={handleLogin}
               data-no-contrast-guard
               style={emeraldInkStyle}
-              className={`${BTN_DARK_OUTLINE} h-12 flex-1`}
+              className={`${BTN_DARK_OUTLINE} h-10 flex-1 !text-[11px]`}
             >
               Log in <ArrowRight className="h-4 w-4" />
             </button>
@@ -1973,6 +1872,15 @@ const SUPPORT_GUIDE_TTL_MS = 24 * 60 * 60 * 1000;
 function SupportGuideOverlay() {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
+  // The single dismissal control appears only after 4s, so we can be confident
+  // the visitor actually read the guide before it can be closed.
+  const [okReady, setOkReady] = useState(false);
+
+  useEffect(() => {
+    if (!open) { setOkReady(false); return; }
+    const t = window.setTimeout(() => setOkReady(true), 4000);
+    return () => window.clearTimeout(t);
+  }, [open]);
 
   useEffect(() => {
     // Signed-in users: never show, and clear any stale flag.
@@ -2014,7 +1922,7 @@ function SupportGuideOverlay() {
     >
       <div
         className="absolute inset-0 bg-black/55 backdrop-blur-sm"
-        onClick={handleOkay}
+        onClick={() => { if (okReady) handleOkay(); }}
         aria-hidden
       />
       <div
@@ -2027,16 +1935,6 @@ function SupportGuideOverlay() {
           data-no-contrast-guard
           className="jj-emerald-metallic allow-white relative flex flex-col rounded-[14px] p-6 text-white sm:p-8"
         >
-          <button
-            type="button"
-            onClick={handleOkay}
-            aria-label="Close guide"
-            className="allow-white absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-white/85 hover:text-white hover:bg-white/10"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-          >
-            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
-          </button>
-
           <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80">Quick guide</span>
           <h3 id="jbj-support-guide-title" className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl">
             One widget. Every way to reach JBJ.
@@ -2067,12 +1965,14 @@ function SupportGuideOverlay() {
           </div>
 
 
+          {/* Rendered only once the 4s read window has elapsed. */}
+          {okReady && (
           <button
             type="button"
             onClick={handleOkay}
             data-allow-dark-cta
             data-no-contrast-guard
-            className="allow-white mt-6 inline-flex h-12 w-full items-center justify-center rounded-full text-[13px] font-bold uppercase tracking-[0.22em] text-white transition-[filter] hover:brightness-110"
+            className="allow-white mt-6 inline-flex h-12 w-full animate-in fade-in items-center justify-center rounded-full text-[13px] font-bold uppercase tracking-[0.22em] text-white duration-500 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
@@ -2083,6 +1983,7 @@ function SupportGuideOverlay() {
           >
             Okay, got it
           </button>
+          )}
         </div>
       </div>
     </div>
