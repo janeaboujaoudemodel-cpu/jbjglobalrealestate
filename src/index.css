@@ -30086,6 +30086,7 @@ html body:not([data-ai-tools-scope="true"]) :is(
     .jj-pill-emerald, .jj-pill-emerald *,
     .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *,
     .jj-header-premium-control, .jj-header-premium-control *
+  [style*="rgb(6, 78, 59)"], [style*="rgb(6, 78, 59)"] *, [style*="rgb(4, 44, 28)"], [style*="rgb(4, 44, 28)"] *, [style*="#064E3B" i], [style*="#064E3B" i] *, [style*="#042c1c" i], [style*="#042c1c" i] *, [class~="bg-[#064E3B]"], [class~="bg-[#064E3B]"] *, [class~="bg-[#042c1c]"], [class~="bg-[#042c1c]"] *,   /* generic emerald-pair background contract */
   )) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
