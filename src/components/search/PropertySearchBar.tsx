@@ -110,6 +110,12 @@ interface Props {
   onSubmit: (next: PropertySearch) => void;
   dark?: boolean;
   className?: string;
+  /** Animated typewriter placeholder phrases for the keyword field. */
+  typewriterPhrases?: string[];
+  /** Rendered inside the bar (hero usage: Free Consultation CTA). */
+  onConsultation?: () => void;
+  /** Called when the visitor picks the "Sell" purpose — hero redirects instantly. */
+  onSellSelected?: () => void;
 }
 
 export default function PropertySearchBar({
@@ -118,11 +124,19 @@ export default function PropertySearchBar({
   onSubmit,
   dark = false,
   className = "",
+  typewriterPhrases,
+  onConsultation,
+  onSellSelected,
 }: Props) {
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
   const [moreOpen, setMoreOpen] = useState(false);
   const [draft, setDraft] = useState<PropertySearch>(f);
+  const [qFocused, setQFocused] = useState(false);
+  const animatedPlaceholder = useTypewriter(typewriterPhrases ?? [], {
+    paused: !typewriterPhrases?.length || qFocused || !!f.q,
+  });
+
 
   useEffect(() => {
     if (value) setInternal(value);
