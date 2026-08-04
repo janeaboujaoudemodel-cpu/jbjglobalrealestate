@@ -6,7 +6,14 @@
  * with a plain URL.
  */
 
-import { COUNTRY_CURRENCY, type ListingIntent, type PropertyCategory } from "@/data/geography";
+import {
+  COUNTRY_CURRENCY,
+  getAreas,
+  getRegions,
+  type ListingIntent,
+  type PropertyCategory,
+} from "@/data/geography";
+
 
 export interface GeoSearchFilters {
   intent: ListingIntent;
