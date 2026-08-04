@@ -19,6 +19,10 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useTypewriter } from "@/hooks/useTypewriter";
+import GeoFilterBar from "@/components/search/GeoFilterBar";
+import { EMPTY_FILTERS, filtersToParams, type GeoSearchFilters } from "@/lib/searchFilters";
+import { handOffToChatSupport, resolveIntentLocally } from "@/lib/searchIntent";
+import { toast } from "sonner";
 
 const HERO_TYPEWRITER_PHRASES = [
   "Find me a property in Downtown",
@@ -39,18 +43,57 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [filters, setFilters] = useState<GeoSearchFilters>(EMPTY_FILTERS);
   // Pause typewriter whenever user is focused on the field OR has typed anything.
   // Resumes automatically once the field loses focus AND is empty again.
   const animatedPlaceholder = useTypewriter(HERO_TYPEWRITER_PHRASES, {
     paused: isFocused || draft.length > 0,
   });
 
+  /** Geo filter bar submit — carries the whole selection into /properties. */
+  const runFilterSearch = useCallback(
+    (next: GeoSearchFilters) => {
+      const params = filtersToParams({ ...next, q: draft.trim() });
+      navigate(`/properties?${params.toString()}`);
+    },
+    [draft, navigate],
+  );
+
+  /**
+   * AI intent resolution for free text: instant local rules first, then the
+   * `ai-search-intent` model, then a live chat-support handoff so a visitor
+   * whose sentence we cannot understand is never left at a dead end.
+   */
+  const resolveWithAI = useCallback(
+    async (q: string): Promise<boolean> => {
+      try {
+        const { data, error } = await supabase.functions.invoke("ai-search-intent", {
+          body: { query: q },
+        });
+        if (error) throw error;
+        const route = (data as { route?: string | null })?.route ?? null;
+        const message = (data as { message?: string })?.message ?? "";
+        if (route) {
+          if (message) toast.success(message);
+          navigate(route);
+          return true;
+        }
+      } catch (err) {
+        console.warn("[HomeHeroSearch] AI intent resolution failed", err);
+      }
+      return false;
+    },
+    [navigate],
+  );
+
+
+
 
   const runSearch = useCallback(async () => {
     if (searching) return;
     const q = draft.trim();
     if (!q) {
-      navigate("/properties");
+      runFilterSearch(filters);
       return;
     }
 
@@ -85,22 +128,42 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
       const devSlug = (devRes?.data as { slug?: string } | null)?.slug;
       const areaSlug = (areaRes?.data as { slug?: string } | null)?.slug;
 
+      // 1) Exact catalogue match always wins.
       if (projectSlug) {
         navigate(`/project/${projectSlug}`);
-      } else if (devSlug) {
-        navigate(`/developer/${devSlug}`);
-      } else if (areaSlug) {
-        navigate(`/area/${areaSlug}`);
-      } else {
-        navigate(`/properties?q=${encodeURIComponent(q)}`);
+        return;
       }
+      if (devSlug) {
+        navigate(`/developer/${devSlug}`);
+        return;
+      }
+      if (areaSlug) {
+        navigate(`/area/${areaSlug}`);
+        return;
+      }
+
+      // 2) Instant, offline intent rules ("I want to sell", "rent in Marina"…).
+      const local = resolveIntentLocally(q);
+      if (local?.route) {
+        toast.success(local.message);
+        navigate(local.route);
+        return;
+      }
+
+      // 3) AI intent resolution.
+      if (await resolveWithAI(q)) return;
+
+      // 4) Nothing understood → hand the sentence to live chat support.
+      toast.info("Let me connect you with our advisory desk.");
+      handOffToChatSupport(q, { source: "hero_search", path: window.location.pathname });
     } catch (err) {
       console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
       navigate(`/properties?q=${encodeURIComponent(q)}`);
     } finally {
       setSearching(false);
     }
-  }, [draft, navigate, searching]);
+  }, [draft, filters, navigate, resolveWithAI, runFilterSearch, searching]);
+
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,10 +183,23 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         transition={{ delay: 0.4, duration: 0.6 }}
         className="w-full max-w-4xl mx-auto"
       >
+        {/* GEO FILTER BAR — sits directly above the search pill as one connected
+            unit: Country → Emirate/City → Area cascade + intent, category,
+            beds/baths, price and more filters. The pill below is untouched. */}
+        <GeoFilterBar
+          value={filters}
+          onChange={setFilters}
+          onSearch={runFilterSearch}
+          variant="dark"
+          className="mb-2 sm:mb-2.5"
+          searchLabel="Apply"
+        />
+
         {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
             the SAME emerald/black gradient surface — NO color split between segments.
             NO gold dividers, NO gold borders. Animated emerald glow border wraps the bar. */}
         <div className="jj-emerald-pill jj-hero-search-premium relative rounded-[28px]">
+
         <div
           data-surface="dark"
           data-ink-emerald
