@@ -1613,8 +1613,9 @@ export default function PublicAccess() {
           className="scroll-mt-24 w-full overflow-hidden px-5 pt-16 pb-14 sm:px-8 lg:px-12"
           style={{
             background:
-              "linear-gradient(180deg, #FFFFFF 0%, #F7F2EA 26%, #E8D6AE 48%, #0d5a44 78%, #042c1c 100%)",
+              "linear-gradient(180deg, #FFFFFF 0%, #F4FAF7 22%, #CFE7DD 42%, #0d5a44 74%, #042c1c 100%)",
           }}
+
         >
           <div className="mx-auto max-w-6xl">
             <div className="mb-8 text-center">
@@ -1652,7 +1653,7 @@ export default function PublicAccess() {
             </div>
 
 
-            <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+            <div className="grid items-stretch gap-5 sm:grid-cols-3 sm:gap-6">
               {([
                 { key: "investor" as const, icon: TrendingUp, label: "Investors", cta: "Get quotation", blurb: "Launches, advisory and portfolio support." },
                 { key: "broker" as const, icon: Award, label: "Brokers", cta: "Get quotation", blurb: "JBJ Certified Broker Program & mentorship." },
@@ -1670,22 +1671,25 @@ export default function PublicAccess() {
                     data-emerald-ok="button"
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex flex-col items-start gap-3 rounded-xl px-5 py-6 text-left transition ${
+                    data-package-chooser-card
+
+                    className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex h-full min-h-[260px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[300px] ${
                       active ? "ring-1 ring-white/45" : "hover:-translate-y-0.5 hover:brightness-110"
                     }`}
-                    style={{ color: "#FFFFFF" }}
+                    style={{ color: "#FFFFFF", minHeight: 300 }}
                   >
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/30 bg-white/10">
-                      <Icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/30 bg-white/10">
+                      <Icon className="h-6 w-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </span>
-                    <span className="font-serif text-2xl" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    <span className="font-serif text-3xl" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                       {label}
                     </span>
-                    <span className="text-[13px] leading-relaxed" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    <span className="text-sm leading-relaxed" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                       {blurb}
                     </span>
                     <span
                       className="text-[11px] font-bold uppercase tracking-[0.2em]"
+
                       style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     >
                       {cta}
