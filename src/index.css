@@ -37378,3 +37378,13 @@ html body #root [class*="hover:bg-[#064e3b]"]:hover {
   background-color: transparent !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
 }
+
+/* =============================================================
+   PASS 214 — GEO FILTER BAR: single-line labels, no letter breaks
+   ============================================================= */
+html body #root [data-geo-filter-bar] :where(button, button *) {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
