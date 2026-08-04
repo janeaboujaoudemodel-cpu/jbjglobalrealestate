@@ -449,7 +449,7 @@ export default function WebDevDock() {
 
   return (
     <div
-      className="hidden md:flex fixed bottom-6 right-6 z-[12000] flex-col items-end gap-3 isolate pointer-events-none"
+      className="hidden md:flex fixed bottom-[104px] right-4 z-[12000] flex-col items-end gap-3 isolate pointer-events-none"
       data-owner-webdev-dock
       data-no-contrast-guard
     >
