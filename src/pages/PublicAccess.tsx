@@ -1671,6 +1671,8 @@ export default function PublicAccess() {
                     data-emerald-ok="button"
                     data-allow-dark-cta
                     data-no-contrast-guard
+                    data-package-chooser-card
+
                     className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex h-full min-h-[260px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[300px] ${
                       active ? "ring-1 ring-white/45" : "hover:-translate-y-0.5 hover:brightness-110"
                     }`}
