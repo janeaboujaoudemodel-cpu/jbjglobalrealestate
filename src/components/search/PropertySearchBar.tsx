@@ -69,7 +69,7 @@ function Seg({
         >
           <span className="flex items-center gap-2 min-w-0">
             {icon}
-            <span className="truncate" style={{ color: active ? ink : muted, whiteSpace: "nowrap" }}>
+            <span className="truncate leading-none" style={{ color: active ? ink : muted, whiteSpace: "nowrap" }}>
               {label}
             </span>
           </span>
@@ -226,8 +226,8 @@ export default function PropertySearchBar({
       </div>
 
       {/* Row 2 — segments */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2">
-        <div className="col-span-2 lg:col-span-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-2">
+        <div className="col-span-2 lg:col-span-2 min-w-0">
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
               country={f.country}
@@ -343,7 +343,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <div className="grid grid-cols-2 gap-2 col-span-2 lg:col-span-1">
+        <div className="grid grid-cols-2 gap-2 col-span-2 lg:col-span-2 min-w-0">
           <button
             type="button"
             onClick={() => {
