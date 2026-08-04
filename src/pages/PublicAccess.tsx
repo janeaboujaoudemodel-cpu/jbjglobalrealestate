@@ -1628,7 +1628,7 @@ export default function PublicAccess() {
                     <span className="flex w-full flex-col gap-2.5">
                       {points.map((p) => (
                         <span key={p} className="flex items-start gap-2.5 text-[12.5px] leading-snug" style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)" }}>
-                          <Check className="mt-[2px] h-3.5 w-3.5 shrink-0" style={{ stroke: "#FFFFFF" }} />
+                          <CheckCircle2 className="mt-[2px] h-3.5 w-3.5 shrink-0" style={{ stroke: "#FFFFFF" }} />
                           <span>{p}</span>
                         </span>
                       ))}
