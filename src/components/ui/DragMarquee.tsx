@@ -56,7 +56,10 @@ export function DragMarquee({
 
     const measure = () => {
       const cycleWidth = secondGroup.offsetLeft - firstGroup.offsetLeft;
-      if (cycleWidth <= 0 || Math.abs(cycleWidth - cycleWidthRef.current) < 0.5) return;
+      if (
+        cycleWidth <= 0 ||
+        (Math.abs(cycleWidth - cycleWidthRef.current) < 0.5 && animationRef.current)
+      ) return;
 
       const previous = animationRef.current;
       const previousProgress = previous && previous.effect?.getComputedTiming().progress;
@@ -87,6 +90,7 @@ export function DragMarquee({
       window.clearTimeout(t);
       animationRef.current?.cancel();
       animationRef.current = null;
+      cycleWidthRef.current = 0;
     };
   }, [items.length, speed]);
 
