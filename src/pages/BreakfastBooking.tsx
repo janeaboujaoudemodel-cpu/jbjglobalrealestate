@@ -20,8 +20,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 const HOST_NAME = "Jane Bou Jaoude";
-const HOST_PHONE = "+971 54 716 7107";
-const HOST_PHONE_TEL = "+971547167107";
+const HOST_PHONE = "+974 15 15 015";
+const HOST_PHONE_TEL = "+9741515015";
 const OFFICE_LOCATION = "Citi Developers Sales and Experience Center, Dubai";
 
 interface Slot {

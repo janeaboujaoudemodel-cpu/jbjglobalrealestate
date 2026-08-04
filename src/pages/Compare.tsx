@@ -587,7 +587,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
     <div class="footer">
       <p><strong>JBJ Global Real Estate</strong> — Real Estate Brokerage</p>
-      <p>Contact@JBJ.ae | +971 54 716 7107</p>
+      <p>Contact@JBJ.ae | +974 15 15 015</p>
       <p>www.JBJ.ae</p>
       <p style="margin-top:15px; font-size:12px;">Powered & Made by JBJ Global Real Estate — Real Estate Brokerage</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">
@@ -1000,7 +1000,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   <button
                     onClick={() => {
                       const projectSummary = projects.map(p => `- ${p.name} | ${p.developer?.name || 'N/A'} | ${p.location || 'Dubai'} | ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
-                      const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+971 54 716 7107 | www.JBJ.ae\n\nView: ${window.location.href}`;
+                      const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+974 15 15 015 | www.JBJ.ae\n\nView: ${window.location.href}`;
                       window.location.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                     }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
@@ -1013,7 +1013,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     onClick={() => {
                       const subject = encodeURIComponent(`JBJ Global Real Estate — Property Comparison: ${projects.map(p => p.name).join(' vs ')}`);
                       const projectLines = projects.map(p => `• ${p.name} — ${p.developer?.name || ''} — ${p.location || 'Dubai'} — ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
-                      const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+971 54 716 7107\nContact@JBJ.ae | www.JBJ.ae`);
+                      const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+974 15 15 015\nContact@JBJ.ae | www.JBJ.ae`);
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
@@ -1481,7 +1481,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   <Mail className="w-4 h-4 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   <span className="allow-white min-w-0 truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Consultation</span>
                 </button>
-                <a href="tel:+971547167107" className="w-full">
+                <a href="tel:+9741515015" className="w-full">
                   <button data-no-contrast-guard data-allow-dark-cta className="allow-white w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold rounded-xl whitespace-normal text-center leading-tight"
                     style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", border: "1px solid rgba(255,255,255,0.30)" }}>
                     <Phone className="w-4 h-4 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />

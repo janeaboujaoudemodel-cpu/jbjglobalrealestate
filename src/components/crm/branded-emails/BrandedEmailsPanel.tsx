@@ -85,9 +85,9 @@ const DELIVERY_BY_KIND: Record<BrandedAudienceKind, { fromName: string; fromEmai
   },
 };
 
-const CITI_PHONE_DISPLAY = "+971 54 716 7107";
-const CITI_PHONE_TEL = "tel:+971547167107";
-const CITI_WHATSAPP_URL = "https://wa.me/971547167107";
+const CITI_PHONE_DISPLAY = "+974 15 15 015";
+const CITI_PHONE_TEL = "tel:+9741515015";
+const CITI_WHATSAPP_URL = "https://wa.me/9741515015";
 const CITI_WEBSITE_URL = "https://citideveloper.com";
 const CITI_MAP_URL = "https://www.google.com/maps/search/?api=1&query=CITI%20Developers%20Sales%20Gallery%20Dubai";
 const CITI_OFFICE_LABEL = "CITI Developers Sales Gallery";
@@ -100,7 +100,7 @@ const DEVELOPER_REQUIREMENTS_BLOCK = `<div data-jbj-developer-requirements="true
   <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Registration desk</strong><br/>Please send your registration form, agency code, and onboarding documents to <strong>HELPDESK@JBJ.AE</strong> with <strong>infoo.jane@gmail.com</strong> copied.</p>
   <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Admin contact — Walid Halabi</strong><br/>+971 54 366 2223 &middot; +971 50 999 3839<br/><span style="color:#4a4a4a;">For urgent registration or compliance questions only. Standard correspondence can remain on this email thread.</span></p>
   <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>Project folders & escrow</strong><br/>In your marketing-material link, please include one folder per project containing project details, the project escrow account, and the corporate bank account / payment beneficiary. If a project is not yet registered, please mark it as <strong>Registration pending — documents pending from JBJ</strong> and include the reason.</p>
-  <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>WhatsApp group</strong><br/>Please create a WhatsApp group using both full company names, no emojis and no abbreviations — example: <strong>ABC PROPERTIES / JBJ GLOBAL REAL ESTATE</strong>. For your team the group name would be <strong>{{developer_name}} / JBJ GLOBAL REAL ESTATE</strong>. Kindly use your developer logo as the group icon and paste your marketing-material link in the group description.<br/><br/>Please add <strong>both</strong> of us to the group and set <strong>both as group admins</strong>:<br/>• <strong>Ms. Jane Bou Jaoude</strong> (Founder) &middot; +971 54 716 7107<br/>• <strong>Walid Halabi</strong> &middot; +971 54 366 2223 &middot; +971 50 999 3839 <span style="color:#4a4a4a;">(both numbers)</span></p>
+  <p style="margin:0;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;"><strong>WhatsApp group</strong><br/>Please create a WhatsApp group using both full company names, no emojis and no abbreviations — example: <strong>ABC PROPERTIES / JBJ GLOBAL REAL ESTATE</strong>. For your team the group name would be <strong>{{developer_name}} / JBJ GLOBAL REAL ESTATE</strong>. Kindly use your developer logo as the group icon and paste your marketing-material link in the group description.<br/><br/>Please add <strong>both</strong> of us to the group and set <strong>both as group admins</strong>:<br/>• <strong>Ms. Jane Bou Jaoude</strong> (Founder) &middot; +974 15 15 015<br/>• <strong>Walid Halabi</strong> &middot; +971 54 366 2223 &middot; +971 50 999 3839 <span style="color:#4a4a4a;">(both numbers)</span></p>
 </div>`;
 
 function injectDeveloperRequirementsBlock(html: string) {

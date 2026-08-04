@@ -288,7 +288,7 @@ export const SECURITY_SCORE_FACTORS = {
 
 // Official contact info (sanitized)
 export const APPROVED_CONTACT_INFO = {
-  phone: '+971 54 716 7107',
+  phone: '+974 15 15 015',
   email: 'CONTACT@JBJ.AE',
   privacy_email: 'PRIVACY@JBJ.AE',
   security_email: 'SECURITY@JBJ.AE',

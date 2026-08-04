@@ -706,7 +706,7 @@ STAFF.push(
 const PARTNER_PARTY_A_FIELDS: DocumentField[] = [
   { key: "partyAEstablishment", label: "Party A — Company / Entity", type: "text", placeholder: "JBJ GLOBAL REAL ESTATE L.L.C S.O.C", group: "Party A" },
   { key: "partyAAddress", label: "Party A — Address", type: "text", placeholder: "Office SM1-195, Port Saeed, Deira, Dubai, UAE", group: "Party A" },
-  { key: "partyAPhone", label: "Party A — Phone", type: "text", placeholder: "+971 54 716 7107", group: "Party A" },
+  { key: "partyAPhone", label: "Party A — Phone", type: "text", placeholder: "+974 15 15 015", group: "Party A" },
   { key: "partyAEmail", label: "Party A — Email", type: "text", placeholder: "contact@jbj.ae", group: "Party A" },
   { key: "partyALicence", label: "Party A — Licence / ORN", type: "text", placeholder: "Trade Licence 1591031 · ORN 41486", group: "Party A" },
   { key: "partyASignatory", label: "Party A — Authorised Signatory", type: "text", placeholder: "Jane Bou Jaoude", group: "Party A" },

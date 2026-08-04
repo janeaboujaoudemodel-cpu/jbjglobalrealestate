@@ -45,8 +45,8 @@ export const COMPANY_STATS_LEGACY = {
 // [LOCKED] EMAIL RULE: ALL EMAILS MUST BE FULL CAPITAL LETTERS (e.g., CONTACT@JBJ.AE)
 // This is a LOCKED rule - never use lowercase for email addresses
 export const CONTACT_INFO = {
-  phone: '+971 54 716 7107',
-  phoneRaw: '+971547167107',
+  phone: '+974 15 15 015',
+  phoneRaw: '+9741515015',
   email: 'CONTACT@JBJ.AE',
   emailCapitalized: 'CONTACT@JBJ.AE',
   privacyEmail: 'PRIVACY@JBJ.AE',
@@ -55,7 +55,7 @@ export const CONTACT_INFO = {
   partnershipsEmail: 'PARTNERSHIPS@JBJ.AE',
   securityEmail: 'SECURITY@JBJ.AE',
   happinessEmail: 'HAPPINESS@JBJ.AE',
-  whatsappNumber: '971547167107',
+  whatsappNumber: '9741515015',
   whatsappMessage: "Hi JBJ Global Real Estate, I am contacting you from the JBJ GLOBAL REAL ESTATE Digital Platform and would like support with my property enquiry.",
   address: 'Downtown Dubai, UAE',
   inquiryFormUrl: 'https://jbj.ae/property-inquiry-form/',
