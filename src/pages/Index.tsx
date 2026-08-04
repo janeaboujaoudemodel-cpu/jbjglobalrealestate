@@ -17,6 +17,7 @@ import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 import HomeHeroSearch from "@/components/home/HomeHeroSearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
+import heroVideoAsset from "@/assets/properties-hero-video.mp4.asset.json";
 import ConversionBand from "@/components/marketing/ConversionBand";
 import { CONTACT_INFO } from "@/constants/stats";
 
@@ -266,7 +267,7 @@ const Index = () => {
             fetchPriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover z-[1]"
-           loading="lazy" />
+           loading="eager" />
 
           <video
             autoPlay loop muted playsInline
@@ -283,7 +284,7 @@ const Index = () => {
             onLoadedData={() => setVideoLoaded(true)}
             onCanPlay={() => setVideoLoaded(true)}
             onError={() => setVideoLoaded(true)}
-            src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
+            src={heroVideoAsset.url}
           />
           {/* The photograph remains visible, but the painted pixels behind all
               white identity/copy stay dark enough to satisfy the surface rule. */}

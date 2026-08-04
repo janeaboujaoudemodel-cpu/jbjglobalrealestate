@@ -40,7 +40,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1.5 h-12 px-2.5 rounded-xl text-[13px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
+  "flex items-center justify-between gap-1.5 h-12 px-2.5 rounded-lg text-[13px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
 
 function Seg({
   label,
@@ -215,10 +215,11 @@ export default function PropertySearchBar({
 
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
-      {/* Row 1 — purpose + keyword (+ Free Consultation inside the bar) */}
-      <div className="flex flex-wrap items-center gap-2 mb-2">
+      {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
+      <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-2 mb-2">
         <div
-          className="flex items-center gap-1 p-1 rounded-xl"
+          className="flex h-12 items-center rounded-lg overflow-hidden"
+          data-surface={dark ? "dark" : "light"}
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#F2EBDC",
@@ -226,7 +227,7 @@ export default function PropertySearchBar({
             border: dark ? "1px solid rgba(255,255,255,0.34)" : "1px solid rgba(184,149,85,0.3)",
           }}
         >
-          {PURPOSES.map((p) => (
+          {PURPOSES.map((p, index) => (
             <button
               key={p.slug}
               type="button"
@@ -239,7 +240,7 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-              className="h-9 px-4 rounded-lg text-xs font-semibold"
+              className="relative h-full min-w-[4.25rem] px-4 text-xs font-semibold first:rounded-l-lg last:rounded-r-lg"
               style={
                 f.purpose === p.slug
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
@@ -250,12 +251,16 @@ export default function PropertySearchBar({
               }
             >
               {p.label}
+              {index < PURPOSES.length - 1 ? (
+                <span aria-hidden="true" className="absolute right-0 top-1/2 h-5 w-px -translate-y-1/2 bg-white/35" />
+              ) : null}
             </button>
           ))}
         </div>
 
         <div
-          className="relative flex items-center gap-2 h-11 px-3 rounded-xl flex-1 min-w-[200px]"
+          className="relative flex items-center gap-2 h-12 px-3 rounded-lg min-w-0"
+          data-surface={dark ? "dark" : "light"}
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#FDFBF7",
@@ -293,19 +298,19 @@ export default function PropertySearchBar({
               caretColor: dark ? "#FFFFFF" : "#1A1A1A",
             }}
           />
-          {onConsultation ? (
-            <button
-              type="button"
-              onClick={onConsultation}
-              data-no-contrast-guard
-              className="shrink-0 inline-flex items-center gap-2 h-9 px-3 sm:px-4 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap"
-              style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", border: "1px solid rgba(255,255,255,0.32)" }}
-            >
-              <CalendarCheck className="w-4 h-4 shrink-0" />
-              Free Consultation
-            </button>
-          ) : null}
         </div>
+
+        {onConsultation ? (
+          <button
+            type="button"
+            onClick={onConsultation}
+            data-surface="emerald"
+            className="jj-emerald-action inline-flex h-12 items-center justify-center gap-2 rounded-lg px-5 text-xs font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+          >
+            <CalendarCheck className="w-4 h-4 shrink-0" />
+            Free Consultation
+          </button>
+        ) : null}
 
       </div>
 
