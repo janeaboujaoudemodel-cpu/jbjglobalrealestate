@@ -177,19 +177,8 @@ export default function GeoFilterBar({
   const muted = dark ? "rgba(255,255,255,0.72)" : "rgba(26,26,26,0.62)";
   const segBorder = dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)";
 
-  const segClass =
-    "flex items-center justify-between gap-2 h-11 sm:h-12 px-3 sm:px-3.5 rounded-xl text-[13px] sm:text-sm font-medium tracking-tight transition-colors min-w-0 w-full";
-  const segStyle: React.CSSProperties = {
-    background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
-    border: `1px solid ${segBorder}`,
-    color: ink,
-  };
 
-  const panelStyle: React.CSSProperties = {
-    background: "#FFFFFF",
-    border: "1px solid rgba(184,149,85,0.35)",
-    color: "#1A1A1A",
-  };
+
 
   // NOTE: `Seg` and `Pill` are module-level components on purpose. Defining
   // them inside this function gave them a new identity on every render, which
