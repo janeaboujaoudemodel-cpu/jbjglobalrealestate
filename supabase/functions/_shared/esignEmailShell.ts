@@ -37,7 +37,7 @@ export function premiumShell(innerHtml: string, docNumber: string = ""): string 
               <div><a href="https://www.jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;letter-spacing:.04em;">WWW.JBJ.AE</a></div>
             </td>
             <td align="right" class="jbj-foot-col" style="width:26%;vertical-align:top;">
-              <div><a href="tel:+971547167107" style="color:#B89555;text-decoration:none;font-weight:600;letter-spacing:.04em;white-space:nowrap;">+971&nbsp;54&nbsp;716&nbsp;7107</a></div>
+              <div><a href="tel:+9741515015" style="color:#B89555;text-decoration:none;font-weight:600;letter-spacing:.04em;white-space:nowrap;">+971&nbsp;54&nbsp;716&nbsp;7107</a></div>
             </td>
           </tr></table>
           <div style="text-align:center;font-size:10.5px;color:#1A1A1A;opacity:.55;letter-spacing:.04em;margin-top:14px;">© ${year} JBJ GLOBAL REAL ESTATE</div>

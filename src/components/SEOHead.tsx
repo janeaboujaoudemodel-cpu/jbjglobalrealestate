@@ -223,7 +223,7 @@ export const pagesSEO = {
   },
   contact: {
     title: 'Contact JBJ Global Real Estate Dubai',
-    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Call +971 54 716 7107 or email contact@jbj.ae for expert assistance.',
+    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Call +974 15 15 015 or email contact@jbj.ae for expert assistance.',
     keywords: 'contact JBJ, JBJ phone number, Dubai real estate contact, property consultation Dubai, Jane Bou Jaoude contact, JBJ Global Real Estate email, real estate inquiry Dubai',
     canonicalPath: '/contact',
   },

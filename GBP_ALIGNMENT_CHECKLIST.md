@@ -28,8 +28,8 @@ Add each emirate listed in `COMPANY_NAP.areaServed`:
 Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain.
 
 ## 6. Phone number
-- Primary: `+971 54 716 7107`
-- E.164 in tel: links: `+971547167107`
+- Primary: `+974 15 15 015`
+- E.164 in tel: links: `+9741515015`
 - WhatsApp: same number, linked in GBP "messaging".
 
 ## 7. Website

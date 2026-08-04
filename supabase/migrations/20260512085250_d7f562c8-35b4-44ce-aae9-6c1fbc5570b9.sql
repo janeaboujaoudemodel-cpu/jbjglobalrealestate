@@ -24,8 +24,8 @@ BEGIN
     EXECUTE format(
       'UPDATE public.%I SET %I = replace(replace(replace(%I, %L, %L), %L, %L), %L, %L) WHERE %I ILIKE %L OR %I ILIKE %L',
       v_pair[1], v_pair[2],
-      v_pair[2], '+971 56 591 1000', '+971 54 716 7107',
-      '+971565911000', '+971547167107',
+      v_pair[2], '+971 56 591 1000', '+974 15 15 015',
+      '+971565911000', '+9741515015',
       '565911000', '547167107',
       v_pair[2], '%565911000%',
       v_pair[2], '%56 591 1000%'

@@ -131,7 +131,7 @@ export const COMPANY_KNOWLEDGE = {
   },
   
   contact: {
-    phone: '+971 54 716 7107',
+    phone: '+974 15 15 015',
     email: 'CONTACT@JBJ.AE',
     privacyEmail: 'PRIVACY@JBJ.AE',
     website: 'WWW.JBJ.AE',

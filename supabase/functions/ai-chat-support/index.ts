@@ -146,7 +146,7 @@ async function checkRateLimit(
 
 // Approved contact information
 const APPROVED_CONTACT_INFO = {
-  phone: '+971 54 716 7107',
+  phone: '+974 15 15 015',
   email: 'contact@jbj.ae',
   privacyEmail: 'privacy@jbj.ae',
   website: 'jbj.ae',

@@ -52,11 +52,11 @@ export const TRADE_LICENSE_ACTIVITIES = [
 ] as const;
 
 export const COMPANY_CONTACT = {
-  phone: "+971 54 716 7107",
+  phone: "+974 15 15 015",
   // Letterhead / contract chrome — official company phone ONLY.
   // The "Waleed" numbers (+971 50 999 3839 / +971 54 366 2223) belong to the
   // job applicant, NOT to JBJ. They must never appear in the company footer.
-  letterheadPhones: ["+971 54 716 7107"] as const,
+  letterheadPhones: ["+974 15 15 015"] as const,
   email: "Contact@JBJ.AE",
   website: "www.jbj.ae",
 } as const;

@@ -212,7 +212,7 @@ async function autoBlockIP(supabaseAdmin: any, clientIp: string, functionName: s
 
 // Approved contact information - single source of truth for AI responses
 const APPROVED_CONTACT_INFO = {
-  phone: '+971 54 716 7107',
+  phone: '+974 15 15 015',
   email: 'contact@jbj.ae',
   privacyEmail: 'privacy@jbj.ae',
   website: 'jbj.ae',
@@ -237,7 +237,7 @@ function sanitizeContactInfo(text: string): string {
   phonePatterns.forEach(pattern => {
     sanitized = sanitized.replace(pattern, (match) => {
       const normalized = match.replace(/[\s\-]/g, '');
-      if (normalized === '+97154716 7107' || normalized === '+971547167107' || normalized === '547167107') {
+      if (normalized === '+974 15 15 015' || normalized === '+9741515015' || normalized === '547167107') {
         return match;
       }
       return APPROVED_CONTACT_INFO.phone;
