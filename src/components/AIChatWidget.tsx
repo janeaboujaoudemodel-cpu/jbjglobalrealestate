@@ -468,7 +468,46 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     setStep('chatting');
   };
 
+  /**
+   * Live agent takeover: subscribe to this conversation so replies typed by the
+   * owner in the backend chat dashboard appear instantly for the visitor, and
+   * the AI stops auto-answering once a human has joined.
+   */
+  useEffect(() => {
+    if (!conversationId) return;
+
+    const applyRemote = (row: { owner_joined?: boolean | null; messages?: unknown }) => {
+      if (row.owner_joined) setOwnerJoined(true);
+      const remote = Array.isArray(row.messages)
+        ? (row.messages as Array<{ role: string; content: string; timestamp: string }>)
+        : [];
+      setMessages((prev) => {
+        if (remote.length <= prev.length) return prev;
+        return remote.map((m, i) => ({
+          id: `remote-${i}-${m.timestamp || ''}`,
+          role: m.role === 'user' ? 'user' : 'assistant',
+          content: m.content,
+          timestamp: m.timestamp ? new Date(m.timestamp) : new Date(),
+        })) as Message[];
+      });
+    };
+
+    const channel = supabase
+      .channel(`visitor-chat-${conversationId}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'chat_conversations', filter: `id=eq.${conversationId}` },
+        (payload) => applyRemote(payload.new as never),
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [conversationId]);
+
   // Save messages to database
+
   const saveMessagesToDb = async (newMessages: Message[]) => {
     if (!conversationId) return;
     
