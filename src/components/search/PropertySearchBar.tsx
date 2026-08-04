@@ -55,7 +55,7 @@ function Seg({
   wide?: boolean;
 }) {
   const ink = dark ? "#FFFFFF" : "#1A1A1A";
-  const muted = dark ? "rgba(255,255,255,0.72)" : "rgba(26,26,26,0.62)";
+  const muted = dark ? "rgba(255,255,255,0.92)" : "rgba(26,26,26,0.62)";
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -63,12 +63,17 @@ function Seg({
           type="button"
           aria-label={label}
           className={SEG}
+          data-no-contrast-guard
           style={{
-            background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)"}`,
+            backgroundImage: dark ? DARK_SURFACE : undefined,
+            background: dark ? undefined : "#FDFBF7",
+            backdropFilter: dark ? "blur(10px)" : undefined,
+            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
             color: ink,
+            WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
           }}
         >
+
           <span className="flex items-center gap-2 min-w-0">
             {icon}
             <span className="truncate leading-none" style={{ color: active ? ink : muted, whiteSpace: "nowrap" }}>
