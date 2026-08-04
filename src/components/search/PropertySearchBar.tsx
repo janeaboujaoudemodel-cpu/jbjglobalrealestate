@@ -35,7 +35,7 @@ import {
 const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
 
 const SEG =
-  "flex items-center justify-between gap-2 h-12 px-3.5 rounded-xl text-[13px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
+  "flex items-center justify-between gap-1.5 h-12 px-2.5 rounded-xl text-[13px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
 
 function Seg({
   label,
@@ -163,14 +163,14 @@ export default function PropertySearchBar({
   const bedLabel =
     f.beds.length || f.baths.length
       ? [f.beds.join("/"), f.baths.length ? `${f.baths.join("/")} bath` : ""].filter(Boolean).join(" · ")
-      : "Beds & Baths";
+      : "Beds";
 
   const priceLabel =
     f.priceMin != null || f.priceMax != null
       ? `${f.priceMin != null ? compactPrice(f.priceMin, cur) : "Any"} – ${
           f.priceMax != null ? compactPrice(f.priceMax, cur) : "Any"
         }`
-      : `Price (${cur})`;
+      : `Price`;
 
   const statusLabel = f.statuses.length
     ? f.statuses.map((s) => PROJECT_STATUSES.find((x) => x.slug === s)?.label ?? s).join(", ")
