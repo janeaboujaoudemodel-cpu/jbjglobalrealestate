@@ -1554,10 +1554,46 @@ export default function PublicAccess() {
 
             <div className="grid items-stretch gap-5 sm:grid-cols-3 sm:gap-6">
               {([
-                { key: "investor" as const, icon: TrendingUp, label: "Investors", cta: "Get quotation", blurb: "Launches, advisory and portfolio support." },
-                { key: "broker" as const, icon: Award, label: "Brokers", cta: "Get quotation", blurb: "JBJ Certified Broker Program & mentorship." },
-                { key: "developer" as const, icon: Building2, label: "Developers", cta: "Get quotation", blurb: "Distribution across the JBJ broker network." },
-              ]).map(({ key, icon: Icon, label, cta, blurb }) => {
+                {
+                  key: "investor" as const,
+                  icon: TrendingUp,
+                  label: "Investors",
+                  cta: "Get quotation",
+                  blurb: "Curated off-plan launches, independent advisory and full portfolio support — from your first unit to a family-office mandate.",
+                  points: [
+                    "Priority access to launches & pre-launch allocations",
+                    "Yield, payment-plan and exit analysis on every unit",
+                    "End-to-end handling: reservation, DLD, handover",
+                    "Resale, leasing and portfolio reviews after handover",
+                  ],
+                },
+                {
+                  key: "broker" as const,
+                  icon: Award,
+                  label: "Brokers",
+                  cta: "Get quotation",
+                  blurb: "The JBJ Certified Broker Program — live mentorship, certification and a partner network you can actually sell through.",
+                  points: [
+                    "Live mentorship plus one-to-one video coaching",
+                    "JBJ certification and verified broker profile",
+                    "Inventory, commissions and co-brokerage access",
+                    "AI toolkit: listings, decks and client reports",
+                  ],
+                },
+                {
+                  key: "developer" as const,
+                  icon: Building2,
+                  label: "Developers",
+                  cta: "Get quotation",
+                  blurb: "Distribution across the JBJ broker network, with a managed project presence and qualified investor demand.",
+                  points: [
+                    "Project distribution to our UAE & overseas brokers",
+                    "Managed project page, media and fact sheets",
+                    "Qualified investor leads with tracked follow-up",
+                    "Campaign, roadshow and launch-event support",
+                  ],
+                },
+              ]).map(({ key, icon: Icon, label, cta, blurb, points }) => {
                 const active = selectedAudience === key;
                 return (
                   <button
@@ -1572,10 +1608,10 @@ export default function PublicAccess() {
                     data-no-contrast-guard
                     data-package-chooser-card
 
-                    className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex h-full min-h-[260px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[300px] ${
+                    className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex h-full min-h-[420px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[460px] ${
                       active ? "ring-1 ring-white/45" : "hover:-translate-y-0.5 hover:brightness-110"
                     }`}
-                    style={{ color: "#FFFFFF", minHeight: 300 }}
+                    style={{ color: "#FFFFFF", minHeight: 440 }}
                   >
                     <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/30 bg-white/10">
                       <Icon className="h-6 w-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
@@ -1583,22 +1619,37 @@ export default function PublicAccess() {
                     <span className="font-serif text-3xl" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                       {label}
                     </span>
-                    <span className="text-sm leading-relaxed" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    <span className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
                       {blurb}
                     </span>
-                    <span
-                      className="text-[11px] font-bold uppercase tracking-[0.2em]"
 
-                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                    >
-                      {cta}
+                    <span className="h-px w-full" style={{ background: "rgba(255,255,255,0.22)" }} />
+
+                    <span className="flex w-full flex-col gap-2.5">
+                      {points.map((p) => (
+                        <span key={p} className="flex items-start gap-2.5 text-[12.5px] leading-snug" style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)" }}>
+                          <Check className="mt-[2px] h-3.5 w-3.5 shrink-0" style={{ stroke: "#FFFFFF" }} />
+                          <span>{p}</span>
+                        </span>
+                      ))}
                     </span>
+
                     <span
-                      className="mt-auto inline-flex items-center gap-2 pt-2 text-[12px] font-bold uppercase tracking-[0.18em]"
-                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                      className="mt-auto flex w-full flex-col gap-2 pt-3"
                     >
-                      {active ? "Hide packages" : "Explore more"}
-                      <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} style={{ stroke: "#FFFFFF" }} />
+                      <span
+                        className="text-[11px] font-bold uppercase tracking-[0.2em]"
+                        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                      >
+                        {cta}
+                      </span>
+                      <span
+                        className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.18em]"
+                        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                      >
+                        {active ? "Hide packages" : "Explore more"}
+                        <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} style={{ stroke: "#FFFFFF" }} />
+                      </span>
                     </span>
                   </button>
                 );
