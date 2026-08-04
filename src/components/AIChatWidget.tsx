@@ -673,7 +673,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId]);
+  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, ownerJoined]);
 
   // Submit to team - saves full transcript to owner notes + sends email notification
   const handleSubmitToTeam = useCallback(async (inquirySummary?: string) => {
