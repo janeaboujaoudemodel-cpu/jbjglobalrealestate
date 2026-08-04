@@ -1873,15 +1873,18 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
           ${mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}
         `}
       >
-        <button
-          type="button"
-          onClick={dismiss}
-          aria-label="Close welcome portal"
-          className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 origin-center scale-0 items-center justify-center rounded-full text-white transition-all duration-200 hover:bg-white/15 hover:text-white focus-visible:scale-100 group-hover:scale-100 sm:right-3 sm:top-3"
-          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-        >
-          <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
-        </button>
+        {closeReady && (
+          <button
+            type="button"
+            onClick={dismiss}
+            aria-label="Close welcome portal"
+            className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/25 text-white opacity-100 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 sm:right-3 sm:top-3"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
+          </button>
+        )}
+
         <div
           data-emerald="true"
           data-allow-dark-cta
