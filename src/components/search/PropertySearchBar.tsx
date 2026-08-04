@@ -437,11 +437,16 @@ export default function PropertySearchBar({
               setMoreOpen(true);
             }}
             className={SEG}
+            data-no-contrast-guard
             style={{
-              background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)"}`,
+              backgroundImage: dark ? DARK_SURFACE : undefined,
+              background: dark ? undefined : "#FDFBF7",
+              backdropFilter: dark ? "blur(10px)" : undefined,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
               color: dark ? "#FFFFFF" : "#1A1A1A",
+              WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
             }}
+
           >
             <span className="flex items-center gap-2 min-w-0">
               <SlidersHorizontal className="w-4 h-4 opacity-70" />
