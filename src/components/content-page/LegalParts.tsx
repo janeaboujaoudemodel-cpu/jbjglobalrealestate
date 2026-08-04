@@ -16,13 +16,11 @@ export const SectionCard = ({
   className?: string;
 }) => (
   <div
-    data-surface="champagne"
+    data-surface="light"
     data-legal-section-card
-    style={{ color: "#1A1A1A" }}
+    style={{ color: "#1A1A1A", background: "transparent" }}
     className={
-      "relative rounded-2xl bg-[#FDFBF7] border border-[#B89555]/25 " +
-      "shadow-[0_1px_0_rgba(184,149,85,0.08),0_20px_40px_-30px_rgba(6,78,59,0.25)] " +
-      "p-5 sm:p-7 md:p-8 " +
+      "relative border-0 shadow-none p-2 sm:p-3 md:p-4 " +
       className
     }
   >
@@ -39,7 +37,7 @@ export const SectionHeading = ({
   icon?: React.ComponentType<{ className?: string }>;
   children: ReactNode;
 }) => (
-  <div className="flex items-baseline gap-3 sm:gap-4 mb-4 sm:mb-5">
+    <div className="flex items-baseline gap-3 sm:gap-4 mb-5 sm:mb-6">
     <span
       data-surface="emerald"
       className="inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-[image:var(--jj-emerald-ombre)] text-white text-sm font-semibold"
