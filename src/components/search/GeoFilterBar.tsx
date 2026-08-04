@@ -282,7 +282,7 @@ export default function GeoFilterBar({
         {/* Row 2 — cascading selects */}
         <div className="grid grid-cols-2 md:flex md:items-center gap-1.5 sm:gap-2">
           {/* Country */}
-          <div className="min-w-0 md:w-[15%] md:min-w-[9.5rem]">
+          <div className="min-w-0 md:w-[15%] md:min-w-[11rem]">
             <Seg dark={dark} label={countryLabel} active={!!filters.country} icon={<MapPin className="w-4 h-4 opacity-80" />}>
               <div className="p-2">
                 {GEO_COUNTRIES.map((c) => (
@@ -337,7 +337,7 @@ export default function GeoFilterBar({
           )}
 
           {/* Areas (multi) */}
-          <div className="min-w-0 md:flex-1">
+          <div className="min-w-0 md:flex-1 md:min-w-[9rem]">
             <Seg dark={dark} label={areaLabel} active={filters.areas.length > 0}>
               <AreaPicker
                 areas={areas}
