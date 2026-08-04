@@ -47,16 +47,39 @@ export const EMPTY_FILTERS: GeoSearchFilters = {
 export const currencyFor = (country?: string | null) =>
   COUNTRY_CURRENCY[country ?? ""] ?? "AED";
 
+/**
+ * Serialises the filter model. Emits BOTH the canonical geo slugs and the
+ * display-name params (`areas`, `emirates`, `bedrooms`, `transaction`) that the
+ * existing /properties filter engine already understands, so a hero selection
+ * lands as real, applied filters instead of a bare query string.
+ */
 export function filtersToParams(f: GeoSearchFilters): URLSearchParams {
   const p = new URLSearchParams();
   if (f.q.trim()) p.set("q", f.q.trim());
-  if (f.intent) p.set("intent", f.intent);
+  if (f.intent) {
+    p.set("intent", f.intent);
+    if (f.intent === "buy" || f.intent === "rent") p.set("transaction", f.intent);
+    if (f.intent === "off-plan") p.set("saleStatus", "off-plan");
+  }
   if (f.category) p.set("category", f.category);
   if (f.country) p.set("country", f.country);
-  if (f.region) p.set("region", f.region);
-  if (f.areas.length) p.set("areas", f.areas.join(","));
-  if (f.beds.length) p.set("beds", f.beds.join(","));
+  if (f.region) {
+    p.set("region", f.region);
+    const regionName = getRegions(f.country).find((r) => r.slug === f.region)?.name;
+    if (regionName) p.set("emirates", regionName);
+  }
+  if (f.areas.length) {
+    p.set("areaSlugs", f.areas.join(","));
+    const all = getAreas(f.country, f.region);
+    const names = f.areas.map((s) => all.find((x) => x.slug === s)?.name).filter(Boolean) as string[];
+    if (names.length) p.set("areas", names.join(","));
+  }
+  if (f.beds.length) {
+    p.set("beds", f.beds.join(","));
+    p.set("bedrooms", f.beds.join(","));
+  }
   if (f.baths.length) p.set("baths", f.baths.join(","));
+
   if (f.priceMin != null) p.set("priceMin", String(f.priceMin));
   if (f.priceMax != null) p.set("priceMax", String(f.priceMax));
   if (f.sizeMin != null) p.set("sizeMin", String(f.sizeMin));
