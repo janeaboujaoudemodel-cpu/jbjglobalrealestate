@@ -37332,20 +37332,20 @@ html body #root [data-insights-page] [data-legal-content] [data-legal-section-ca
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-html body#body #root [data-insights-page] [data-premium-emerald-hero] {
+html body:not(#jj-a):not(#jj-b):not(#jj-c) #root [data-insights-page] [data-premium-emerald-hero] {
   min-height: clamp(22rem, 48svh, 34rem) !important;
   height: auto !important;
   padding-top: clamp(3rem, 7vh, 5rem) !important;
   padding-bottom: clamp(3rem, 7vh, 5rem) !important;
 }
 
-html body#body #root [data-insights-page] [data-premium-emerald-hero] > :not(.absolute):not(video) {
+html body:not(#jj-a):not(#jj-b):not(#jj-c) #root [data-insights-page] [data-premium-emerald-hero] > :not(.absolute):not(video) {
   min-height: 0 !important;
   height: auto !important;
 }
 
 @media (max-width: 1023px) {
-  html body#body #root [data-insights-page] [data-premium-emerald-hero] {
+  html body:not(#jj-a):not(#jj-b):not(#jj-c) #root [data-insights-page] [data-premium-emerald-hero] {
     min-height: clamp(20rem, 44svh, 28rem) !important;
     height: auto !important;
     padding-top: 5rem !important;
