@@ -1340,11 +1340,12 @@ export default function PublicAccess() {
               height={48}
               className="h-12 w-12 object-contain shrink-0 sm:h-11 sm:w-11"
             />
-            {/* Phone shows the short mark so the watermark never truncates. */}
-            <span className="font-serif text-[15px] leading-tight text-[#0d3a2b] sm:text-[18px] sm:whitespace-nowrap">
-              <span className="sm:hidden">JBJ Global</span>
-              <span className="hidden sm:inline">JBJ Global Real Estate</span>
+            {/* Phone stacks the full wordmark over two lines so nothing is dropped. */}
+            <span className="font-serif text-[13px] leading-[1.15] text-[#0d3a2b] sm:text-[18px] sm:whitespace-nowrap">
+              <span className="block sm:inline">JBJ Global</span>
+              <span className="block sm:inline sm:ml-1">Real Estate</span>
             </span>
+
           </a>
 
           <div className="hidden lg:flex items-center shrink-0">
