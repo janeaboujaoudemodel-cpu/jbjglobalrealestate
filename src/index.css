@@ -37337,3 +37337,14 @@ html body #root [data-package-chooser-card] {
   align-items: flex-start !important;
   justify-content: flex-start !important;
 }
+
+/* ============================================================================
+ * GLOBAL LOCK — never split words mid-word (no hyphenation / char breaking).
+ * Titles, headings and card labels must always break at word boundaries.
+ * ==========================================================================*/
+h1, h2, h3, h4, h5, h6, p, span, a, button, li, label {
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
