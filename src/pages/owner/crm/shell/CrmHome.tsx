@@ -410,7 +410,7 @@ function LeadsWidget({ rows, loading }: { rows: OwnerCrmLead[]; loading: boolean
           <button type="button" className="jc-widget__scope">
             All Leads <ChevronDown size={13} />
           </button>
-          <Link to="/owner/crm/jbj/leads/new" className="jc-widget__icon" aria-label="Add lead">
+          <Link to="/owner/crm/jbj/leads/new" className="jc-widget__icon" data-control="icon" data-control-size="sm" aria-label="Add lead">
             <Plus size={14} />
           </Link>
         </div>
@@ -483,7 +483,7 @@ function ListWidget({
           <button type="button" className="jc-widget__scope">
             {scope} <ChevronDown size={13} />
           </button>
-          <button type="button" className="jc-widget__icon" aria-label="Add">
+          <button type="button" className="jc-widget__icon" data-control="icon" data-control-size="sm" aria-label="Add">
             <Plus size={14} />
           </button>
         </div>

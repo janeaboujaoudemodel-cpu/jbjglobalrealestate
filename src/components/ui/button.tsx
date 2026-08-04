@@ -156,6 +156,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-surface={surface}
         data-emerald-action={emeraldAction}
         data-cta={cta}
+        /* Icon buttons declare their own geometry so no global button
+           painter can clip the glyph out of the box. */
+        data-control={size === "icon" ? "icon" : undefined}
+        data-control-size={size === "icon" ? "md" : undefined}
         ref={ref}
         {...props}
       />
