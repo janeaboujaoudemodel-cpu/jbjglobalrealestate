@@ -110,59 +110,12 @@ export default function GeoFilterBar({
     color: "#1A1A1A",
   };
 
-  const Seg = ({
-    label,
-    active,
-    icon,
-    children,
-    width = "w-full",
-  }: {
-    label: string;
-    active?: boolean;
-    icon?: React.ReactNode;
-    children: React.ReactNode;
-    width?: string;
-  }) => (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button type="button" className={`${segClass} ${width}`} style={segStyle} aria-label={label}>
-          <span className="flex items-center gap-2 min-w-0">
-            {icon}
-            <span className="truncate" style={{ color: active ? ink : muted }}>
-              {label}
-            </span>
-          </span>
-          <ChevronDown className="w-4 h-4 shrink-0 opacity-70" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-[min(92vw,22rem)] p-0 z-[70]" style={panelStyle}>
-        {children}
-      </PopoverContent>
-    </Popover>
-  );
+  // NOTE: `Seg` and `Pill` are module-level components on purpose. Defining
+  // them inside this function gave them a new identity on every render, which
+  // remounted (and instantly closed) every Radix popover whenever an ancestor
+  // re-rendered — e.g. the hero typewriter ticking once per frame.
 
-  const Pill = ({
-    selected,
-    onClick,
-    children,
-  }: {
-    selected?: boolean;
-    onClick: () => void;
-    children: React.ReactNode;
-  }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      className="px-3 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all"
-      style={
-        selected
-          ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", border: "1px solid #042c1c" }
-          : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }
-      }
-    >
-      {children}
-    </button>
-  );
+
 
   const toggle = (list: string[], v: string) =>
     list.includes(v) ? list.filter((x) => x !== v) : [...list, v];
