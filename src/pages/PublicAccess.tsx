@@ -1608,40 +1608,49 @@ export default function PublicAccess() {
             when the visitor picks a path (keeps the phone page short). */}
         <section
           id="packages"
-          data-surface="emerald"
-          data-emerald="true"
+          data-surface="light"
           data-no-contrast-guard
-          className="jj-newsletter-emerald scroll-mt-24 w-full overflow-hidden px-5 pt-16 pb-14 sm:px-8 lg:px-12"
+          className="scroll-mt-24 w-full overflow-hidden px-5 pt-16 pb-14 sm:px-8 lg:px-12"
+          style={{
+            background:
+              "linear-gradient(180deg, #FFFFFF 0%, #F7F2EA 26%, #E8D6AE 48%, #0d5a44 78%, #042c1c 100%)",
+          }}
         >
           <div className="mx-auto max-w-6xl">
             <div className="mb-8 text-center">
               <span
                 data-no-contrast-guard
-                className="inline-flex items-center gap-1.5 rounded-md border border-white/35 bg-white/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.22em]"
+                style={{
+                  color: "#0d3a2b",
+                  WebkitTextFillColor: "#0d3a2b",
+                  borderColor: "rgba(13,58,43,0.28)",
+                  background: "rgba(255,255,255,0.6)",
+                }}
               >
                 Packages
               </span>
               <h2
                 data-no-contrast-guard
                 className="mt-3 font-serif text-3xl sm:text-4xl"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                style={{ color: "#0d3a2b", WebkitTextFillColor: "#0d3a2b" }}
               >
                 Explore our packages
               </h2>
               <div className="mx-auto mt-3 mb-1 flex items-center justify-center gap-2">
-                <span className="jj-loop-divider h-px w-12" />
-                <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
-                <span className="jj-loop-divider h-px w-12" />
+                <span className="h-px w-12" style={{ background: "rgba(13,58,43,0.28)" }} />
+                <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#0d3a2b" }} />
+                <span className="h-px w-12" style={{ background: "rgba(13,58,43,0.28)" }} />
               </div>
               <p
                 data-no-contrast-guard
                 className="mx-auto mt-2 max-w-2xl text-sm"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                style={{ color: "#0d3a2b", WebkitTextFillColor: "#0d3a2b" }}
               >
                 One path per audience. Open the one that fits you — three tiers each.
               </p>
             </div>
+
 
             <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
               {([
