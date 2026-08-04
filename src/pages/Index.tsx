@@ -320,7 +320,7 @@ const Index = () => {
                 textShadow: "0 2px 18px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.95), 0 4px 30px rgba(0,0,0,0.55)",
               }}
             >
-              Your Gateway to Dubai's Finest Real Estate
+              Your Gateway to the Global Finest Real Estate
             </motion.h1>
 
             {/* Full company wordmark — sits directly below the headline, centred */}
@@ -335,7 +335,7 @@ const Index = () => {
                 textShadow: "0 2px 14px rgba(0,0,0,0.85)",
               }}
             >
-              <img src={jbjMonogram} alt="" aria-hidden="true" className="h-10 sm:h-12 w-auto object-contain" />
+              <img src={jbjMonogram} alt="" aria-hidden="true" className="h-14 sm:h-16 w-auto object-contain" />
               <span
                 className="allow-white font-display uppercase"
                 style={{ fontSize: "clamp(0.68rem,2.3vw,1rem)", letterSpacing: "0.24em", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
@@ -343,6 +343,15 @@ const Index = () => {
                 JBJ Global Real Estate
               </span>
             </motion.div>
+            <motion.p
+              variants={fadeInUp}
+              data-no-contrast-guard
+              data-on-dark
+              className="allow-white mt-2 max-w-2xl text-sm sm:text-base font-medium"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.9)" }}
+            >
+              Dubai-licensed expertise at our core. Global opportunities, selected for you.
+            </motion.p>
 
             {/* Hero unified search + filter bar (single surface) */}
             <motion.div variants={fadeInUp} className="w-full mt-[clamp(1.5rem,7vw,5rem)]">
