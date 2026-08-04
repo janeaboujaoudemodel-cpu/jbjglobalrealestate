@@ -991,7 +991,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
       className="relative overflow-hidden px-5 py-10 sm:px-8 lg:px-12"
       style={{ backgroundImage: "linear-gradient(135deg,#042c1c 0%,#01140d 48%,#000 100%)" }}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.08),transparent_38%),radial-gradient(ellipse_at_86%_100%,rgba(184,149,85,0.12),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.08),transparent_38%),radial-gradient(ellipse_at_86%_100%,rgba(255,255,255,0.10),transparent_42%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent" />
 
@@ -1008,7 +1008,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
               const Icon = b.icon;
               return (
                 <li key={b.title} className="grid grid-cols-[36px_1fr] items-center gap-3">
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#C9A84C]/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] [&_svg]:!text-white [&_svg]:!stroke-white">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] [&_svg]:!text-white [&_svg]:!stroke-white">
                     <Icon className="h-[18px] w-[18px]" />
                   </span>
                   <span className="text-[13px] leading-relaxed !text-white/82">
@@ -1033,8 +1033,8 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
 
         <div className="hidden md:block">
           <div aria-hidden className="relative flex h-40 w-40 items-center justify-center rounded-full border border-white/15 bg-white/[0.06]">
-            <div className="absolute inset-3 rounded-full border border-[#C9A84C]/40" />
-            <GraduationCap className="h-14 w-14 !text-[#C9A84C]" />
+            <div className="absolute inset-3 rounded-full border border-white/35" />
+            <GraduationCap className="h-14 w-14 !text-white" />
           </div>
         </div>
       </div>
