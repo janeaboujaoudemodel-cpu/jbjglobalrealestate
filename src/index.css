@@ -19103,11 +19103,8 @@ body [data-careers-job-card] :where(svg,[class*="lucide"],[data-lucide],path,cir
   filter: none !important;
 }
 
-/* Button sizing: natural width, readable height, no label clipping; segmented sq unit remains compact.
-   Controls that declare their own geometry (`data-control="icon"`) are excluded:
-   this painter used to force min-height:44px + overflow:hidden onto 32px icon
-   buttons, clipping the glyph out of the box. */
-body :where([data-jbj-button], button, a[role="button"]):not(:where([data-control="icon"], .jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [role="checkbox"], [role="radio"], [role="switch"], [data-radix-collection-item], [data-sidebar-collapse-control], [data-sidebar-bottom-cta], [data-signout-action])) {
+/* Button sizing: natural width, readable height, no label clipping; segmented sq unit remains compact. */
+body :where([data-jbj-button], button, a[role="button"]):not(:where(.jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [role="checkbox"], [role="radio"], [role="switch"], [data-radix-collection-item], [data-sidebar-collapse-control], [data-sidebar-bottom-cta], [data-signout-action])) {
   min-height: 44px !important;
   min-width: 0 !important;
   width: auto;
