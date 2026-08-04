@@ -1280,6 +1280,9 @@ function PackageStrap({
 
 export default function PublicAccess() {
   const [leadOpen, setLeadOpen] = useState(false);
+  // Popup queue: the support guide waits until the welcome portal is resolved.
+  const [welcomeDone, setWelcomeDone] = useState(false);
+
   const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
   const [selectedAudience, setSelectedAudience] = useState<"investor" | "developer" | "broker" | "agency" | null>(null);
 
