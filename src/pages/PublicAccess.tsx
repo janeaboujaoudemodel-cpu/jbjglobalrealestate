@@ -701,7 +701,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                 <span
                   data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                  className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+                  className="absolute left-3 top-3 rounded-full bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] !text-white"
                 >
                   Launch
                 </span>
