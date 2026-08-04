@@ -89,7 +89,7 @@ function splitCoverTitle(title: string) {
   let current = "";
   words.forEach((word) => {
     const next = current ? `${current} ${word}` : word;
-    if (next.length > 14 && current) {
+    if (next.length > 11 && current) {
       lines.push(current);
       current = word;
     } else {
