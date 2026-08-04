@@ -10,7 +10,9 @@
  * (#064E3B → #042c1c → #000) — never flat #064E3B alone.
  */
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, CalendarCheck, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { useTypewriter } from "@/hooks/useTypewriter";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { getRegions } from "@/data/geography";
@@ -33,6 +35,9 @@ import {
 } from "@/lib/propertySearch";
 
 const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
+/** Readable frosted emerald surface for segments placed over the hero video. */
+const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,0.90) 55%,rgba(0,0,0,0.92) 100%)";
+
 
 const SEG =
   "flex items-center justify-between gap-1.5 h-12 px-2.5 rounded-xl text-[13px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
@@ -53,7 +58,7 @@ function Seg({
   wide?: boolean;
 }) {
   const ink = dark ? "#FFFFFF" : "#1A1A1A";
-  const muted = dark ? "rgba(255,255,255,0.72)" : "rgba(26,26,26,0.62)";
+  const muted = dark ? "rgba(255,255,255,0.92)" : "rgba(26,26,26,0.62)";
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -61,15 +66,31 @@ function Seg({
           type="button"
           aria-label={label}
           className={SEG}
+          data-no-contrast-guard
           style={{
-            background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)"}`,
+            backgroundImage: dark ? DARK_SURFACE : undefined,
+            background: dark ? undefined : "#FDFBF7",
+            backdropFilter: dark ? "blur(10px)" : undefined,
+            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
             color: ink,
+            WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
           }}
         >
+
           <span className="flex items-center gap-2 min-w-0">
             {icon}
-            <span className="truncate leading-none" style={{ color: active ? ink : muted, whiteSpace: "nowrap" }}>
+            <span
+              className="truncate leading-none"
+              style={{
+                color: active ? ink : muted,
+                WebkitTextFillColor: active ? ink : muted,
+                whiteSpace: "nowrap",
+                wordBreak: "keep-all",
+                overflowWrap: "normal",
+                hyphens: "none",
+              }}
+            >
+
               {label}
             </span>
           </span>
@@ -110,6 +131,12 @@ interface Props {
   onSubmit: (next: PropertySearch) => void;
   dark?: boolean;
   className?: string;
+  /** Animated typewriter placeholder phrases for the keyword field. */
+  typewriterPhrases?: string[];
+  /** Rendered inside the bar (hero usage: Free Consultation CTA). */
+  onConsultation?: () => void;
+  /** Called when the visitor picks the "Sell" purpose — hero redirects instantly. */
+  onSellSelected?: () => void;
 }
 
 export default function PropertySearchBar({
@@ -118,11 +145,19 @@ export default function PropertySearchBar({
   onSubmit,
   dark = false,
   className = "",
+  typewriterPhrases,
+  onConsultation,
+  onSellSelected,
 }: Props) {
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
   const [moreOpen, setMoreOpen] = useState(false);
   const [draft, setDraft] = useState<PropertySearch>(f);
+  const [qFocused, setQFocused] = useState(false);
+  const animatedPlaceholder = useTypewriter(typewriterPhrases ?? [], {
+    paused: !typewriterPhrases?.length || qFocused || !!f.q,
+  });
+
 
   useEffect(() => {
     if (value) setInternal(value);
@@ -180,25 +215,38 @@ export default function PropertySearchBar({
 
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
-      {/* Row 1 — purpose + keyword */}
+      {/* Row 1 — purpose + keyword (+ Free Consultation inside the bar) */}
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <div
           className="flex items-center gap-1 p-1 rounded-xl"
           style={{
-            background: dark ? "rgba(255,255,255,0.08)" : "#F2EBDC",
-            border: dark ? "1px solid rgba(255,255,255,0.16)" : "1px solid rgba(184,149,85,0.3)",
+            backgroundImage: dark ? DARK_SURFACE : undefined,
+            background: dark ? undefined : "#F2EBDC",
+            backdropFilter: dark ? "blur(10px)" : undefined,
+            border: dark ? "1px solid rgba(255,255,255,0.34)" : "1px solid rgba(184,149,85,0.3)",
           }}
         >
           {PURPOSES.map((p) => (
             <button
               key={p.slug}
               type="button"
-              onClick={() => set({ purpose: p.slug })}
+              data-no-contrast-guard
+              onClick={() => {
+                if (p.slug === "sell") {
+                  set({ purpose: p.slug });
+                  onSellSelected?.();
+                  return;
+                }
+                set({ purpose: p.slug });
+              }}
               className="h-9 px-4 rounded-lg text-xs font-semibold"
               style={
                 f.purpose === p.slug
-                  ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF" }
-                  : { color: dark ? "#FFFFFF" : "#1A1A1A" }
+                  ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
+                  : {
+                      color: dark ? "#FFFFFF" : "#1A1A1A",
+                      WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
+                    }
               }
             >
               {p.label}
@@ -207,23 +255,60 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="flex items-center gap-2 h-11 px-3 rounded-xl flex-1 min-w-[200px]"
+          className="relative flex items-center gap-2 h-11 px-3 rounded-xl flex-1 min-w-[200px]"
           style={{
-            background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
-            border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)"}`,
+            backgroundImage: dark ? DARK_SURFACE : undefined,
+            background: dark ? undefined : "#FDFBF7",
+            backdropFilter: dark ? "blur(10px)" : undefined,
+            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
           }}
         >
-          <Search className="w-4 h-4 opacity-60" style={{ color: dark ? "#FFF" : "#1A1A1A" }} />
+          <Search className="w-4 h-4 shrink-0 opacity-80" style={{ color: dark ? "#FFF" : "#1A1A1A" }} />
+          {!f.q && !qFocused && typewriterPhrases?.length ? (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-9 top-1/2 -translate-y-1/2 text-sm whitespace-nowrap overflow-hidden"
+              style={{
+                color: dark ? "rgba(255,255,255,0.82)" : "rgba(26,26,26,0.6)",
+                WebkitTextFillColor: dark ? "rgba(255,255,255,0.82)" : undefined,
+                maxWidth: "calc(100% - 48px)",
+              }}
+            >
+              {animatedPlaceholder}
+              <span className="jj-type-caret">|</span>
+            </span>
+          ) : null}
           <input
             value={f.q}
             onChange={(e) => set({ q: e.target.value })}
+            onFocus={() => setQFocused(true)}
+            onBlur={() => setQFocused(false)}
             onKeyDown={(e) => e.key === "Enter" && onSubmit(f)}
-            placeholder="Project, developer, community or keyword"
-            className="flex-1 bg-transparent text-sm outline-none"
-            style={{ color: dark ? "#FFFFFF" : "#1A1A1A" }}
+            placeholder={typewriterPhrases?.length ? "" : "Project, developer, community or keyword"}
+            data-no-contrast-guard
+            className="flex-1 min-w-0 bg-transparent text-sm outline-none"
+            style={{
+              color: dark ? "#FFFFFF" : "#1A1A1A",
+              WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
+              caretColor: dark ? "#FFFFFF" : "#1A1A1A",
+            }}
           />
+          {onConsultation ? (
+            <button
+              type="button"
+              onClick={onConsultation}
+              data-no-contrast-guard
+              className="shrink-0 inline-flex items-center gap-2 h-9 px-3 sm:px-4 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap"
+              style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", border: "1px solid rgba(255,255,255,0.32)" }}
+            >
+              <CalendarCheck className="w-4 h-4 shrink-0" />
+              Free Consultation
+            </button>
+          ) : null}
         </div>
+
       </div>
+
 
       {/* Row 2 — segments */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-2">
@@ -351,11 +436,16 @@ export default function PropertySearchBar({
               setMoreOpen(true);
             }}
             className={SEG}
+            data-no-contrast-guard
             style={{
-              background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "rgba(184,149,85,0.30)"}`,
+              backgroundImage: dark ? DARK_SURFACE : undefined,
+              background: dark ? undefined : "#FDFBF7",
+              backdropFilter: dark ? "blur(10px)" : undefined,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
               color: dark ? "#FFFFFF" : "#1A1A1A",
+              WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
             }}
+
           >
             <span className="flex items-center gap-2 min-w-0">
               <SlidersHorizontal className="w-4 h-4 opacity-70" />
