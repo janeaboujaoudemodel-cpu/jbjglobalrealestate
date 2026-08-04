@@ -210,10 +210,10 @@ export default function GeoFilterBar({
       ? [filters.beds.length ? `${filters.beds.join("/")} bed` : null, filters.baths.length ? `${filters.baths.join("/")} bath` : null]
           .filter(Boolean)
           .join(" · ")
-      : "Beds & Baths";
+      : "Beds";
   const priceLabel =
     filters.priceMin == null && filters.priceMax == null
-      ? `Price (${currency})`
+      ? "Price"
       : `${filters.priceMin != null ? compactPrice(filters.priceMin, currency) : "Any"} – ${
           filters.priceMax != null ? compactPrice(filters.priceMax, currency) : "Any"
         }`;
