@@ -17,7 +17,6 @@ import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 import HomeHeroSearch from "@/components/home/HomeHeroSearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
-import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
 import ConversionBand from "@/components/marketing/ConversionBand";
 import { CONTACT_INFO } from "@/constants/stats";
 
@@ -335,7 +334,6 @@ const Index = () => {
                 textShadow: "0 2px 14px rgba(0,0,0,0.85)",
               }}
             >
-              <img src={jbjMonogram} alt="" aria-hidden="true" className="h-14 sm:h-16 w-auto object-contain" />
               <span
                 className="allow-white font-display uppercase"
                 style={{ fontSize: "clamp(0.68rem,2.3vw,1rem)", letterSpacing: "0.24em", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
@@ -350,7 +348,7 @@ const Index = () => {
               className="allow-white mt-2 max-w-2xl text-sm sm:text-base font-medium"
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.9)" }}
             >
-              Dubai-licensed expertise at our core. Global opportunities, selected for you.
+              Dubai-licensed, mainland-registered brokerage. Global opportunities, selected for you.
             </motion.p>
 
             {/* Hero unified search + filter bar (single surface) */}

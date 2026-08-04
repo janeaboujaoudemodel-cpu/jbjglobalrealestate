@@ -37478,3 +37478,17 @@ html body :is(
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* =============================================================
+   PASS 252 — PROPERTY SEARCH BAR: single-line labels
+   Global `white-space: normal !important` painters were breaking
+   segment labels ("Residential", "Free Consultation") onto two
+   lines inside the hero filter bar. Keep them on one line.
+   ============================================================= */
+html body #root [data-property-search-bar] [data-search-segment],
+html body #root [data-property-search-bar] [data-search-segment] span,
+html body #root [data-property-search-bar] [data-search-segment] > span > span {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}

@@ -19,6 +19,7 @@ import { getRegions } from "@/data/geography";
 import { GEO_COUNTRIES } from "@/data/geography";
 import AreaIncludeExclude from "./AreaIncludeExclude";
 import PropertyFilterScreen from "./PropertyFilterScreen";
+import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
 import {
   BATHS,
@@ -40,7 +41,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1.5 h-12 px-2.5 rounded-lg text-[13px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
+  "flex items-center justify-between gap-2 h-14 sm:h-16 px-3 rounded-lg text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
 
 function Seg({
   label,
@@ -156,6 +157,7 @@ export default function PropertySearchBar({
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
   const [moreOpen, setMoreOpen] = useState(false);
+  const [consultOpen, setConsultOpen] = useState(false);
   const [draft, setDraft] = useState<PropertySearch>(f);
   const [qFocused, setQFocused] = useState(false);
   const animatedPlaceholder = useTypewriter(typewriterPhrases ?? [], {
@@ -220,9 +222,9 @@ export default function PropertySearchBar({
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-2 mb-2">
+      <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-8 items-stretch gap-2 mb-2">
         <div
-          className="flex h-12 min-w-[13.5rem] items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="flex h-14 sm:h-16 min-w-[13.5rem] lg:col-span-2 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -245,7 +247,7 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-                className="relative h-full min-w-0 flex-1 px-6 text-xs font-semibold whitespace-nowrap first:rounded-l-lg last:rounded-r-lg"
+                className="relative h-full min-w-0 flex-1 px-6 text-sm font-semibold whitespace-nowrap first:rounded-l-lg last:rounded-r-lg"
               style={
                 f.purpose === p.slug
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
@@ -264,7 +266,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="relative flex items-center gap-2 h-12 px-3 rounded-lg min-w-0"
+          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-5"
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -278,7 +280,7 @@ export default function PropertySearchBar({
           {!f.q && !qFocused && typewriterPhrases?.length ? (
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute left-9 top-1/2 -translate-y-1/2 text-sm whitespace-nowrap overflow-hidden"
+              className="pointer-events-none absolute left-10 top-1/2 -translate-y-1/2 text-sm sm:text-base whitespace-nowrap overflow-hidden"
               style={{
                 color: dark ? "rgba(255,255,255,0.82)" : "rgba(26,26,26,0.6)",
                 WebkitTextFillColor: dark ? "rgba(255,255,255,0.82)" : undefined,
@@ -297,7 +299,7 @@ export default function PropertySearchBar({
             onKeyDown={(e) => e.key === "Enter" && onSubmit(f)}
             placeholder={typewriterPhrases?.length ? "" : "Project, developer, community or keyword"}
             data-no-contrast-guard
-            className="flex-1 min-w-0 bg-transparent text-sm outline-none"
+            className="flex-1 min-w-0 bg-transparent text-sm sm:text-base outline-none"
             style={{
               color: dark ? "#FFFFFF" : "#1A1A1A",
               WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
@@ -309,14 +311,14 @@ export default function PropertySearchBar({
         {onConsultation ? (
           <button
             type="button"
-            onClick={onConsultation}
+            onClick={() => setConsultOpen(true)}
             data-surface="emerald"
             data-search-segment
-            className="jj-emerald-action inline-flex h-12 items-center justify-center gap-2 rounded-lg px-5 text-xs font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full lg:col-span-1 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <CalendarCheck className="w-4 h-4 shrink-0" />
-            Free Consultation
+            <span className="whitespace-nowrap text-xs sm:text-[13px]"><span className="hidden xl:inline">Free </span>Consultation</span>
           </button>
         ) : null}
 
@@ -332,6 +334,7 @@ export default function PropertySearchBar({
               region={f.region}
               include={f.areasInclude}
               exclude={f.areasExclude}
+              onCountryChange={(slug) => set({ country: slug, region: null, areasInclude: [], areasExclude: [] })}
               onChange={({ include, exclude, region }) =>
                 set({
                   areasInclude: include,
@@ -476,13 +479,30 @@ export default function PropertySearchBar({
             onClick={() => onSubmit(f)}
              data-surface="emerald"
              data-search-segment
-            className="h-12 rounded-xl text-sm font-semibold text-white px-3 whitespace-nowrap"
+            className="h-14 sm:h-16 w-full rounded-lg text-sm font-semibold text-white px-2 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             {count == null ? "Search" : `Show ${count.toLocaleString()}`}
           </button>
         </div>
       </div>
+
+      {/* Free consultation — same in-page frame + styling as the "More" screen */}
+      <Dialog open={consultOpen} onOpenChange={setConsultOpen}>
+        <DialogContent
+          data-surface="light"
+          data-search-dropdown
+          className="max-w-[min(96vw,44rem)] max-h-[88vh] overflow-y-auto p-0 gap-0 z-[80]"
+          style={{ background: "#FFFFFF", border: "1px solid rgba(184,149,85,0.35)", color: "#1A1A1A" }}
+        >
+          <div className="px-4 pt-4">
+            <h2 className="text-lg font-semibold">Free consultation</h2>
+          </div>
+          <div className="p-4">
+            <ConsultationRequestForm showHeader={false} formSource="hero_search_bar" />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* More filters — the SAME full filter screen as the header filter */}
       <Dialog open={moreOpen} onOpenChange={setMoreOpen}>
