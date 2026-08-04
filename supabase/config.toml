@@ -617,3 +617,9 @@ verify_jwt = false
 
 [functions.create-portal-session]
 verify_jwt = false
+
+[functions.ai-search-intent]
+verify_jwt = false
+
+[functions.chat-support-notify]
+verify_jwt = false

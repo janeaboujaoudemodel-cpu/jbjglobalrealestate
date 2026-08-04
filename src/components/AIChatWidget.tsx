@@ -34,7 +34,7 @@ import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 import ChatConversationalCollect from './chat/ChatConversationalCollect';
 import ChatConfirmDetails from './chat/ChatConfirmDetails';
 import { SUPABASE_URL } from "@/config/backend";
-import { consumeChatPrefill } from "@/lib/searchIntent";
+import { consumeChatPrefill, notifyOwnerOfHandoff } from "@/lib/searchIntent";
 
 
 interface AIChatWidgetProps {
@@ -410,9 +410,22 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         console.warn('Lead capture warning:', captureError);
       }
 
+      // Alert the owner that a live conversation just opened.
+      notifyOwnerOfHandoff(
+        `New live chat opened — ${serviceId.replace(/_/g, ' ')}`,
+        {
+          source: 'chat_widget',
+          path: pageSource,
+          visitorEmail: normalizedEmail,
+          visitorName: fullName,
+          conversationId: data.id,
+          serviceType: serviceId,
+        },
+      );
     } catch (error) {
       console.error('Error creating conversation:', error);
     }
+
 
     // Show agent joining animation
     setStep('agent_joining');
