@@ -434,8 +434,17 @@ html body #root [data-jbj-cta-white] svg * {
   stroke: #0d3a2b !important;
   fill: none !important;
 }
+html body #root [data-jbj-cta-white] {
+  border-color: rgba(13,58,43,0.30) !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
 html body #root [data-jbj-cta-white]:hover {
-  background-color: #064E3B !important;
+  /* Matches the emerald CTA (Create your account / Enroll now) exactly. */
+  background-color: transparent !important;
+  background-image: linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%) !important;
+  border-color: #0d3a2b !important;
+  box-shadow: 0 12px 26px -14px rgba(6,78,59,0.85) !important;
 }
 html body #root [data-jbj-cta-white]:hover,
 html body #root [data-jbj-cta-white]:hover * {
@@ -833,7 +842,7 @@ function ServicesSection() {
               <img src={mobileItem.image} alt={mobileItem.title} loading="eager" decoding="async" fetchPriority="high" className="h-full w-full object-cover" />
 
               <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
-              <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
+              <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/55 to-transparent" />
               <span data-surface="dark" className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-white/40 bg-black/50 px-3 font-serif text-[11px] tracking-[0.28em] !text-white backdrop-blur" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                 {String(mobileIdx + 1).padStart(2, "0")} / {String(itemsLen).padStart(2, "0")}
               </span>
@@ -842,7 +851,7 @@ function ServicesSection() {
               </span>
               <div className="absolute inset-x-6 bottom-5">
                 <h3 className="font-serif text-[22px] leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{mobileItem.title}</h3>
-                <span aria-hidden className="mt-2 block h-px w-10 bg-[#C9A84C]" />
+                <span aria-hidden className="mt-2 block h-px w-10 bg-white/70" />
               </div>
             </div>
             <div className="relative flex flex-1 flex-col gap-4 bg-[#FDFBF7] px-6 py-6">
@@ -876,7 +885,7 @@ function ServicesSection() {
                     className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.08]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
-                  <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
+                  <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/55 to-transparent" />
                   <span
                     data-surface="dark"
                     className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-white/40 bg-black/50 px-3 font-serif text-[11px] tracking-[0.28em] !text-white backdrop-blur"
@@ -894,7 +903,7 @@ function ServicesSection() {
                     <h3 className="font-serif text-[24px] leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                       {s.title}
                     </h3>
-                    <span aria-hidden className="mt-2 block h-px w-10 bg-[#C9A84C]" />
+                    <span aria-hidden className="mt-2 block h-px w-10 bg-white/70" />
                   </div>
                 </div>
                 <div className="relative flex flex-1 flex-col gap-4 bg-[#FDFBF7] px-6 py-6">
@@ -991,7 +1000,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
       className="relative overflow-hidden px-5 py-10 sm:px-8 lg:px-12"
       style={{ backgroundImage: "linear-gradient(135deg,#042c1c 0%,#01140d 48%,#000 100%)" }}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.08),transparent_38%),radial-gradient(ellipse_at_86%_100%,rgba(184,149,85,0.12),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.08),transparent_38%),radial-gradient(ellipse_at_86%_100%,rgba(255,255,255,0.10),transparent_42%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent" />
 
@@ -1008,7 +1017,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
               const Icon = b.icon;
               return (
                 <li key={b.title} className="grid grid-cols-[36px_1fr] items-center gap-3">
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#C9A84C]/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] [&_svg]:!text-white [&_svg]:!stroke-white">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] [&_svg]:!text-white [&_svg]:!stroke-white">
                     <Icon className="h-[18px] w-[18px]" />
                   </span>
                   <span className="text-[13px] leading-relaxed !text-white/82">
@@ -1033,8 +1042,8 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
 
         <div className="hidden md:block">
           <div aria-hidden className="relative flex h-40 w-40 items-center justify-center rounded-full border border-white/15 bg-white/[0.06]">
-            <div className="absolute inset-3 rounded-full border border-[#C9A84C]/40" />
-            <GraduationCap className="h-14 w-14 !text-[#C9A84C]" />
+            <div className="absolute inset-3 rounded-full border border-white/35" />
+            <GraduationCap className="h-14 w-14 !text-white" />
           </div>
         </div>
       </div>
@@ -1050,8 +1059,8 @@ function CertificateBand() {
       style={{ backgroundImage: "linear-gradient(180deg,#01140d 0%,#042c1c 55%,#01140d 100%)" }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.14),transparent_60%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/40 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
       <div className="relative mx-auto max-w-6xl">
         <div className="mb-8 text-center">
@@ -1434,15 +1443,15 @@ export default function PublicAccess() {
             <div
               data-surface="dark"
               data-no-contrast-guard
-              className="relative overflow-hidden rounded-[22px] border border-[#C9A84C]/35 p-px shadow-[0_40px_90px_-46px_rgba(6,78,59,0.75)]"
-              style={{ background: "linear-gradient(140deg, rgba(201,168,76,0.55) 0%, rgba(201,168,76,0.08) 45%, rgba(201,168,76,0.4) 100%)" }}
+              className="relative overflow-hidden rounded-[22px] border border-white/30 p-px shadow-[0_40px_90px_-46px_rgba(6,78,59,0.75)]"
+              style={{ background: "linear-gradient(140deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.35) 100%)" }}
             >
               <div
                 className="rounded-[21px] px-6 py-7 sm:px-8 sm:py-9"
                 style={{ background: "linear-gradient(150deg, #064E3B 0%, #042c1c 58%, #010806 100%)" }}
               >
                 <div className="flex items-center gap-3">
-                  <span aria-hidden className="h-px w-8 bg-[#C9A84C]" />
+                  <span aria-hidden className="h-px w-8 bg-white/70" />
                   <p className="text-[10px] font-bold uppercase tracking-[0.32em] !text-[#EBD79A]">
                     The JBJ standard
                   </p>
@@ -1458,7 +1467,7 @@ export default function PublicAccess() {
                     <div key={l} className="min-w-0">
                       <Icon className="h-4 w-4 !text-[#C9A84C]" strokeWidth={1.6} />
                       <p className="mt-3 font-serif text-[34px] leading-none !text-white sm:text-[40px]">{v}</p>
-                      <span aria-hidden className="mt-3 block h-px w-9 bg-[#C9A84C]/70" />
+                      <span aria-hidden className="mt-3 block h-px w-9 bg-white/60" />
                       <p className="mt-3 text-[10.5px] font-semibold uppercase leading-snug tracking-[0.2em] !text-white/62">
                         {l}
                       </p>
@@ -1535,7 +1544,7 @@ export default function PublicAccess() {
           className="scroll-mt-24 w-full overflow-hidden px-5 pt-16 pb-14 sm:px-8 lg:px-12"
           style={{
             background:
-              "linear-gradient(180deg, #FFFFFF 0%, #F4FAF7 22%, #CFE7DD 42%, #0d5a44 74%, #042c1c 100%)",
+              "linear-gradient(180deg, #FFFFFF 0%, #FCFEFD 30%, #F1F8F5 52%, #D9EAE3 64%, #0a4433 86%, #021b11 100%)",
           }}
 
         >
