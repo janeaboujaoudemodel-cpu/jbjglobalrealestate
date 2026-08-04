@@ -37348,3 +37348,33 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, li, label {
   word-break: normal;
   overflow-wrap: break-word;
 }
+
+/* ============================================================================
+ * PASS 160 — EMERALD PAIR LOCK (brand rule)
+ * #064E3B must NEVER be used alone as a flat fill. It is only valid when
+ * paired with #042c1c (and black) as the brand ombré:
+ *   linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)
+ * Any surface still painted with the single flat emerald (Tailwind arbitrary
+ * classes, inline utility fills, badges/pills/labels such as "Launch") is
+ * repainted here to the paired gradient, so the lone green can never appear.
+ * Text colour (text-[#064E3B]) is unaffected — this is a FILL rule only.
+ * ==========================================================================*/
+html body #root [class*="bg-[#064E3B]"]:not([class*="linear-gradient"]),
+html body #root [class*="bg-[#064e3b]"]:not([class*="linear-gradient"]),
+html body #root [class*="bg-emerald-900"]:not([class*="linear-gradient"]),
+html body #root [style*="background:#064E3B"],
+html body #root [style*="background: #064E3B"],
+html body #root [style*="background-color:#064E3B"],
+html body #root [style*="background-color: #064E3B"],
+html body #root [style*="background:#064e3b"],
+html body #root [style*="background: #064e3b"],
+html body #root [style*="background-color:#064e3b"],
+html body #root [style*="background-color: #064e3b"] {
+  background-color: transparent !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+}
+html body #root [class*="hover:bg-[#064E3B]"]:hover,
+html body #root [class*="hover:bg-[#064e3b]"]:hover {
+  background-color: transparent !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+}
