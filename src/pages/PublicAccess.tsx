@@ -1674,7 +1674,7 @@ export default function PublicAccess() {
                     className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex h-full min-h-[260px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[300px] ${
                       active ? "ring-1 ring-white/45" : "hover:-translate-y-0.5 hover:brightness-110"
                     }`}
-                    style={{ color: "#FFFFFF" }}
+                    style={{ color: "#FFFFFF", minHeight: 300 }}
                   >
                     <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/30 bg-white/10">
                       <Icon className="h-6 w-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
