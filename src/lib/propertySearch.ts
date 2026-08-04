@@ -270,12 +270,13 @@ export function searchToParams(f: PropertySearch): URLSearchParams {
     if (regionName) p.set("emirates", regionName);
   }
   if (f.areasInclude.length) {
-    p.set("areas", f.areasInclude.join(","));
+    p.set("areaSlugs", f.areasInclude.join(","));
     const all = getAreas(f.country, f.region);
     const names = f.areasInclude
       .map((s) => all.find((x) => x.slug === s)?.name)
       .filter(Boolean) as string[];
-    if (names.length) p.set("areaNames", names.join(","));
+    // legacy engines read display names from ?areas=
+    if (names.length) p.set("areas", names.join(","));
   }
   if (f.areasExclude.length) p.set("excludeAreas", f.areasExclude.join(","));
 
