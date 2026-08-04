@@ -19,8 +19,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useTypewriter } from "@/hooks/useTypewriter";
-import GeoFilterBar from "@/components/search/GeoFilterBar";
-import { EMPTY_FILTERS, filtersToParams, type GeoSearchFilters } from "@/lib/searchFilters";
+import PropertySearchBar from "@/components/search/PropertySearchBar";
+import { EMPTY_SEARCH, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { handOffToChatSupport, resolveIntentLocally } from "@/lib/searchIntent";
 import { toast } from "sonner";
 
@@ -43,7 +43,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [filters, setFilters] = useState<GeoSearchFilters>(EMPTY_FILTERS);
+  const [filters, setFilters] = useState<PropertySearch>(EMPTY_SEARCH);
   // Pause typewriter whenever user is focused on the field OR has typed anything.
   // Resumes automatically once the field loses focus AND is empty again.
   const animatedPlaceholder = useTypewriter(HERO_TYPEWRITER_PHRASES, {
@@ -52,8 +52,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
 
   /** Geo filter bar submit — carries the whole selection into /properties. */
   const runFilterSearch = useCallback(
-    (next: GeoSearchFilters) => {
-      const params = filtersToParams({ ...next, q: draft.trim() });
+    (next: PropertySearch) => {
+      const params = searchToParams({ ...next, q: next.q || draft.trim() });
       navigate(`/properties?${params.toString()}`);
     },
     [draft, navigate],
@@ -181,18 +181,17 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6 }}
-        className="w-full max-w-4xl mx-auto"
+        className="w-full max-w-6xl mx-auto"
       >
         {/* GEO FILTER BAR — sits directly above the search pill as one connected
             unit: Country → Emirate/City → Area cascade + intent, category,
             beds/baths, price and more filters. The pill below is untouched. */}
-        <GeoFilterBar
+        <PropertySearchBar
           value={filters}
           onChange={setFilters}
-          onSearch={runFilterSearch}
-          variant="dark"
-          className="mb-2 sm:mb-2.5"
-          searchLabel="Apply"
+          onSubmit={runFilterSearch}
+          dark
+          className="mb-3"
         />
 
         {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
