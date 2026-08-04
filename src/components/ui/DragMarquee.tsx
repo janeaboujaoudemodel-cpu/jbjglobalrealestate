@@ -13,7 +13,7 @@ import React from "react";
  */
 export function DragMarquee({
   children,
-  speed = 34,
+  speed = 110,
   className,
   itemClassName,
   gapClassName = "gap-6",
@@ -32,37 +32,47 @@ export function DragMarquee({
   const trackRef = React.useRef<HTMLDivElement | null>(null);
   const firstGroupRef = React.useRef<HTMLDivElement | null>(null);
   const secondGroupRef = React.useRef<HTMLDivElement | null>(null);
-  const offsetRef = React.useRef(0);
+  const animationRef = React.useRef<Animation | null>(null);
+  const cycleWidthRef = React.useRef(0);
   const stateRef = React.useRef({
-    paused: false,
     dragging: false,
     startX: 0,
-    startOffset: 0,
-    resumeAt: 0,
+    startTime: 0,
     moved: 0,
   });
   const [grabbing, setGrabbing] = React.useState(false);
 
   const items = React.Children.toArray(children);
-  const cycleWidthRef = React.useRef(0);
-
-  // Measure the wrap point once per layout change instead of reading
-  // `scrollWidth` inside the animation frame (that forced a synchronous
-  // layout every frame and is what made the rails feel stuck on phones).
+  // Use a compositor-owned Web Animation rather than advancing the rail from
+  // requestAnimationFrame. The /access page has substantially more React work
+  // than the homepage; a JS-driven transform therefore slowed or stopped when
+  // the main thread was busy even though both rails requested the same speed.
   React.useEffect(() => {
     const track = trackRef.current;
     const firstGroup = firstGroupRef.current;
     const secondGroup = secondGroupRef.current;
     if (!track || !firstGroup || !secondGroup) return;
+    if (items.length < 2 || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+
     const measure = () => {
-      // The distance between the two identical groups is the exact visual
-      // cycle, including the inter-group gap. Using half of scrollWidth was
-      // subtly wrong because a flex row with 2N items has 2N-1 gaps. That
-      // mismatch caused a hitch every time the rail wrapped.
-      cycleWidthRef.current = secondGroup.offsetLeft - firstGroup.offsetLeft;
-      if (cycleWidthRef.current > 0 && offsetRef.current >= cycleWidthRef.current) {
-        offsetRef.current %= cycleWidthRef.current;
+      const cycleWidth = secondGroup.offsetLeft - firstGroup.offsetLeft;
+      if (cycleWidth <= 0 || Math.abs(cycleWidth - cycleWidthRef.current) < 0.5) return;
+
+      const previous = animationRef.current;
+      const previousProgress = previous && previous.effect?.getComputedTiming().progress;
+      previous?.cancel();
+      cycleWidthRef.current = cycleWidth;
+      const animation = track.animate(
+        [
+          { transform: "translate3d(0, 0, 0)" },
+          { transform: `translate3d(${-cycleWidth}px, 0, 0)` },
+        ],
+        { duration: (cycleWidth / speed) * 1000, iterations: Infinity, easing: "linear" },
+      );
+      if (typeof previousProgress === "number") {
+        animation.currentTime = previousProgress * ((cycleWidth / speed) * 1000);
       }
+      animationRef.current = animation;
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -75,49 +85,18 @@ export function DragMarquee({
       ro.disconnect();
       window.removeEventListener("resize", measure);
       window.clearTimeout(t);
+      animationRef.current?.cancel();
+      animationRef.current = null;
     };
-  }, [items.length]);
-
-  React.useEffect(() => {
-    const track = trackRef.current;
-    if (!track || items.length < 2) return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-
-    let raf = 0;
-    let last = performance.now();
-
-    const step = (now: number) => {
-      raf = requestAnimationFrame(step);
-      const dt = Math.min(48, now - last);
-      last = now;
-      const s = stateRef.current;
-      const cycleWidth = cycleWidthRef.current;
-      if (!s.paused && !s.dragging && now >= s.resumeAt && cycleWidth > 0) {
-        offsetRef.current += (speed * dt) / 1000;
-        if (offsetRef.current >= cycleWidth) offsetRef.current %= cycleWidth;
-        track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`;
-      } else if (s.dragging) {
-        track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`;
-      }
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
   }, [items.length, speed]);
-
-  const wrap = (value: number) => {
-    const cycleWidth = cycleWidthRef.current;
-    if (cycleWidth <= 0) return value;
-    let next = value % cycleWidth;
-    if (next < 0) next += cycleWidth;
-    return next;
-  };
 
   const onPointerDown = (e: React.PointerEvent) => {
     const s = stateRef.current;
     s.dragging = true;
     s.startX = e.clientX;
-    s.startOffset = offsetRef.current;
+    s.startTime = Number(animationRef.current?.currentTime ?? 0);
     s.moved = 0;
+    animationRef.current?.pause();
     try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch { /* noop */ }
     setGrabbing(true);
   };
@@ -129,16 +108,19 @@ export function DragMarquee({
     s.moved = Math.abs(dx);
     // Only take over the gesture once it is clearly horizontal, so vertical
     // page scrolling on phones is never hijacked.
-    if (s.moved > 6) offsetRef.current = wrap(s.startOffset - dx);
+    if (s.moved > 6 && animationRef.current) {
+      const duration = (cycleWidthRef.current / speed) * 1000;
+      let nextTime = (s.startTime - (dx / speed) * 1000) % duration;
+      if (nextTime < 0) nextTime += duration;
+      animationRef.current.currentTime = nextTime;
+    }
   };
 
   const endDrag = () => {
     const s = stateRef.current;
     if (!s.dragging) return;
     s.dragging = false;
-    // Resume on the very next animation frame. A delayed restart reads as a
-    // broken/stalling rail, especially after ordinary taps on touch devices.
-    s.resumeAt = 0;
+    animationRef.current?.play();
     setGrabbing(false);
   };
 
@@ -148,11 +130,11 @@ export function DragMarquee({
       aria-label={ariaLabel}
       onMouseEnter={() => {
         if (pauseOnHover && window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) {
-          stateRef.current.paused = true;
+          animationRef.current?.pause();
         }
       }}
       onMouseLeave={() => {
-        stateRef.current.paused = false;
+        animationRef.current?.play();
         endDrag();
       }}
       onPointerDown={onPointerDown}
@@ -172,7 +154,7 @@ export function DragMarquee({
       <div
         ref={trackRef}
         className={`flex w-max items-stretch ${gapClassName}`}
-        style={{ willChange: "transform", transform: "translate3d(0,0,0)", backfaceVisibility: "hidden" }}
+        style={{ willChange: "transform", backfaceVisibility: "hidden" }}
       >
         <div ref={firstGroupRef} className={`flex shrink-0 items-stretch ${gapClassName}`}>
           {items.map((child, i) => (

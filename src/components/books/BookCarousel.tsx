@@ -26,7 +26,7 @@ interface BookCarouselProps {
 export function BookCarousel({
   books,
   size = "sm",
-  speed = 76,
+  speed = 110,
   className,
   onBookClick,
   compact = false,
