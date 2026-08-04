@@ -37388,3 +37388,20 @@ html body #root [data-geo-filter-bar] :where(button, button *) {
   overflow-wrap: normal !important;
   hyphens: none !important;
 }
+
+/* ------------------------------------------------------------------ *
+ * Listing labels (Distress / Hot / Trending / Featured / Signature)
+ * Distress uses an animated premium purple sheen.
+ * ------------------------------------------------------------------ */
+@keyframes jjLabelShimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.jj-label-shimmer {
+  background-size: 200% 100% !important;
+  animation: jjLabelShimmer 2.8s linear infinite;
+  box-shadow: 0 4px 14px -4px rgba(109, 40, 217, 0.55);
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-label-shimmer { animation: none; }
+}
