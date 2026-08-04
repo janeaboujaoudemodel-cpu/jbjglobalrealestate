@@ -11,6 +11,8 @@
  */
 
 import { GEO_COUNTRIES } from "@/data/geography";
+import { supabase } from "@/integrations/supabase/client";
+
 
 export type SearchIntentKind =
   | "sell"
@@ -180,7 +182,35 @@ export function handOffToChatSupport(message: string, context?: Record<string, u
     /* storage blocked — the widget still opens, just without the prefill */
   }
   window.dispatchEvent(new CustomEvent("jbj:open-chat-support", { detail: { message } }));
+  notifyOwnerOfHandoff(message, context);
 }
+
+/**
+ * Fire-and-forget owner alert: email + in-app notification so Jane can join
+ * the conversation while the AI keeps the visitor engaged.
+ */
+export function notifyOwnerOfHandoff(message: string, context?: Record<string, unknown>) {
+  const ctx = (context ?? {}) as Record<string, unknown>;
+  void supabase.functions
+    .invoke("chat-support-notify", {
+      body: {
+        message,
+        source: typeof ctx.source === "string" ? ctx.source : "hero_search",
+        pageSource:
+          typeof ctx.path === "string"
+            ? ctx.path
+            : typeof window !== "undefined"
+              ? window.location.pathname
+              : undefined,
+        visitorEmail: typeof ctx.visitorEmail === "string" ? ctx.visitorEmail : undefined,
+        visitorName: typeof ctx.visitorName === "string" ? ctx.visitorName : undefined,
+        conversationId: typeof ctx.conversationId === "string" ? ctx.conversationId : undefined,
+        serviceType: typeof ctx.serviceType === "string" ? ctx.serviceType : undefined,
+      },
+    })
+    .catch((e) => console.warn("[searchIntent] owner alert failed", e));
+}
+
 
 /** Reads and clears a pending chat prefill. */
 export function consumeChatPrefill(): string | null {

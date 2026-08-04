@@ -77,10 +77,14 @@ function Seg({
         >
           <span className="flex items-center gap-2 min-w-0">
             {icon}
-            <span className="truncate" style={{ color: active ? ink : muted }}>
+            <span
+              className="truncate"
+              style={{ color: active ? ink : muted, whiteSpace: "nowrap", wordBreak: "normal" }}
+            >
               {label}
             </span>
           </span>
+
           <ChevronDown className="w-4 h-4 shrink-0 opacity-70" />
         </button>
       </PopoverTrigger>
@@ -215,8 +219,9 @@ export default function GeoFilterBar({
         }`;
 
   return (
-    <div className={`w-full ${className}`}>
+    <div className={`w-full ${className}`} data-geo-filter-bar={variant}>
       <div className="rounded-2xl p-2 sm:p-2.5" style={shell}>
+
         {/* Row 1 — intent + category segmented switches */}
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 px-0.5 pb-2">
           <div
@@ -277,7 +282,7 @@ export default function GeoFilterBar({
         {/* Row 2 — cascading selects */}
         <div className="grid grid-cols-2 md:flex md:items-center gap-1.5 sm:gap-2">
           {/* Country */}
-          <div className="min-w-0 md:w-[15%] md:min-w-[9.5rem]">
+          <div className="min-w-0 md:w-[15%] md:min-w-[11rem]">
             <Seg dark={dark} label={countryLabel} active={!!filters.country} icon={<MapPin className="w-4 h-4 opacity-80" />}>
               <div className="p-2">
                 {GEO_COUNTRIES.map((c) => (
@@ -332,7 +337,7 @@ export default function GeoFilterBar({
           )}
 
           {/* Areas (multi) */}
-          <div className="min-w-0 md:flex-1">
+          <div className="min-w-0 md:flex-1 md:min-w-[9rem]">
             <Seg dark={dark} label={areaLabel} active={filters.areas.length > 0}>
               <AreaPicker
                 areas={areas}
@@ -493,11 +498,11 @@ export default function GeoFilterBar({
 
           {/* Search */}
           {showSearchButton && (
-            <div className="col-span-2 md:col-auto md:w-auto">
+            <div className="col-span-2 md:col-auto md:w-auto shrink-0">
               <button
                 type="button"
                 onClick={() => onSearch?.(filters)}
-                className="w-full md:w-auto inline-flex items-center justify-center gap-2 h-11 sm:h-12 px-5 rounded-xl text-sm font-semibold tracking-tight transition-transform hover:-translate-y-0.5"
+                className="w-full md:w-auto shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-2 h-11 sm:h-12 px-5 rounded-xl text-sm font-semibold tracking-tight transition-transform hover:-translate-y-0.5"
                 style={{
                   backgroundImage: EMERALD_PAIR,
                   color: "#FFFFFF",
