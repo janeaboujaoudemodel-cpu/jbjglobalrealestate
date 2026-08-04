@@ -1499,30 +1499,6 @@ export default function PublicAccess() {
             <h1 className="mt-6 font-serif text-3xl leading-[1.05] !text-white sm:text-6xl lg:text-[76px]">
               JBJ Global Real Estate
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed !text-white/85 sm:text-base lg:text-lg">
-              A private property ecosystem for Dubai's discerning investors, developers & brokers.
-            </p>
-            <p className="mx-auto mt-3 max-w-xl text-[11px] font-semibold uppercase tracking-[0.28em] !text-white/70 sm:text-xs">
-              This is the members-only entrance · Sign in or create an account to access the platform
-            </p>
-            <div className="mt-7 flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto">
-              <button
-                onClick={openSignup}
-                data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                style={emeraldInkStyle}
-                className={`${BTN_EMERALD_SOLID} h-12 flex-1 sm:flex-none uppercase tracking-[0.14em] min-w-[160px]`}
-              >
-                Create account <ArrowRight className="h-4 w-4" />
-              </button>
-              <button
-                onClick={openLogin}
-                data-no-contrast-guard
-                style={emeraldInkStyle}
-                className={`${BTN_DARK_OUTLINE} h-12 flex-1 sm:flex-none min-w-[160px]`}
-              >
-                Log in <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
           </div>
 
           {/* Scroll cue */}
