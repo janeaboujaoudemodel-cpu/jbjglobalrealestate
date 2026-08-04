@@ -1499,30 +1499,6 @@ export default function PublicAccess() {
             <h1 className="mt-6 font-serif text-3xl leading-[1.05] !text-white sm:text-6xl lg:text-[76px]">
               JBJ Global Real Estate
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed !text-white/85 sm:text-base lg:text-lg">
-              A private property ecosystem for Dubai's discerning investors, developers & brokers.
-            </p>
-            <p className="mx-auto mt-3 max-w-xl text-[11px] font-semibold uppercase tracking-[0.28em] !text-white/70 sm:text-xs">
-              This is the members-only entrance · Sign in or create an account to access the platform
-            </p>
-            <div className="mt-7 flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto">
-              <button
-                onClick={openSignup}
-                data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                style={emeraldInkStyle}
-                className={`${BTN_EMERALD_SOLID} h-12 flex-1 sm:flex-none uppercase tracking-[0.14em] min-w-[160px]`}
-              >
-                Create account <ArrowRight className="h-4 w-4" />
-              </button>
-              <button
-                onClick={openLogin}
-                data-no-contrast-guard
-                style={emeraldInkStyle}
-                className={`${BTN_DARK_OUTLINE} h-12 flex-1 sm:flex-none min-w-[160px]`}
-              >
-                Log in <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
           </div>
 
           {/* Scroll cue */}
@@ -1630,22 +1606,49 @@ export default function PublicAccess() {
 
         {/* PACKAGES — one chooser row; the full tier grid only opens in place
             when the visitor picks a path (keeps the phone page short). */}
-        <section id="packages" className="scroll-mt-24 bg-[#F7F2EA] px-5 pt-16 pb-10 sm:px-8 lg:px-12">
+        <section
+          id="packages"
+          data-surface="emerald"
+          data-emerald="true"
+          data-no-contrast-guard
+          className="jj-newsletter-emerald scroll-mt-24 w-full overflow-hidden px-5 pt-16 pb-14 sm:px-8 lg:px-12"
+        >
           <div className="mx-auto max-w-6xl">
             <div className="mb-8 text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">Packages</span>
-              <h2 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">Explore our packages</h2>
-              <p className="mx-auto mt-2 max-w-2xl text-sm text-[#1A1A1A]/70">
+              <span
+                data-no-contrast-guard
+                className="inline-flex items-center gap-1.5 rounded-md border border-white/35 bg-white/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.22em]"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >
+                Packages
+              </span>
+              <h2
+                data-no-contrast-guard
+                className="mt-3 font-serif text-3xl sm:text-4xl"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >
+                Explore our packages
+              </h2>
+              <div className="mx-auto mt-3 mb-1 flex items-center justify-center gap-2">
+                <span className="jj-loop-divider h-px w-12" />
+                <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
+                <span className="jj-loop-divider h-px w-12" />
+              </div>
+              <p
+                data-no-contrast-guard
+                className="mx-auto mt-2 max-w-2xl text-sm"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >
                 One path per audience. Open the one that fits you — three tiers each.
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
               {([
-                { key: "investor" as const, icon: TrendingUp, label: "Investors", from: investorTiers[0], blurb: "Launches, advisory and portfolio support." },
-                { key: "broker" as const, icon: Award, label: "Brokers", from: brokerTiers[0], blurb: "JBJ Certified Broker Program & mentorship." },
-                { key: "developer" as const, icon: Building2, label: "Developers", from: developerTiers[0], blurb: "Distribution across the JBJ broker network." },
-              ]).map(({ key, icon: Icon, label, from, blurb }) => {
+                { key: "investor" as const, icon: TrendingUp, label: "Investors", cta: "Get quotation", blurb: "Launches, advisory and portfolio support." },
+                { key: "broker" as const, icon: Award, label: "Brokers", cta: "Get quotation", blurb: "JBJ Certified Broker Program & mentorship." },
+                { key: "developer" as const, icon: Building2, label: "Developers", cta: "Get quotation", blurb: "Distribution across the JBJ broker network." },
+              ]).map(({ key, icon: Icon, label, cta, blurb }) => {
                 const active = selectedAudience === key;
                 return (
                   <button
@@ -1653,23 +1656,37 @@ export default function PublicAccess() {
                     type="button"
                     onClick={() => setSelectedAudience(active ? null : key)}
                     aria-expanded={active}
-                    className={`flex flex-col items-start gap-3 rounded-md border bg-white p-5 text-left transition hover:-translate-y-0.5 ${
-                      active
-                        ? "border-[#064E3B] shadow-[0_20px_44px_-30px_rgba(6,78,59,0.6)]"
-                        : "border-[#0d3a2b]/12 shadow-[0_14px_32px_-26px_rgba(6,78,59,0.4)] hover:border-[#064E3B]/45"
+                    data-surface="emerald"
+                    data-emerald="true"
+                    data-emerald-ok="button"
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex flex-col items-start gap-3 rounded-xl px-5 py-6 text-left transition ${
+                      active ? "ring-1 ring-white/45" : "hover:-translate-y-0.5 hover:brightness-110"
                     }`}
+                    style={{ color: "#FFFFFF" }}
                   >
-                    <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-11 w-11 rounded-lg`}>
-                      <Icon className="h-5 w-5" />
+                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/30 bg-white/10">
+                      <Icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </span>
-                    <span className="font-serif text-2xl text-[#0d3a2b]">{label}</span>
-                    <span className="text-[13px] leading-relaxed text-[#1A1A1A]/70">{blurb}</span>
-                    <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#064E3B]">
-                      From {from.price} {from.cadence}
+                    <span className="font-serif text-2xl" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                      {label}
                     </span>
-                    <span className="mt-auto inline-flex items-center gap-2 pt-2 text-[12px] font-bold uppercase tracking-[0.18em] text-[#0d3a2b]">
+                    <span className="text-[13px] leading-relaxed" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                      {blurb}
+                    </span>
+                    <span
+                      className="text-[11px] font-bold uppercase tracking-[0.2em]"
+                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                    >
+                      {cta}
+                    </span>
+                    <span
+                      className="mt-auto inline-flex items-center gap-2 pt-2 text-[12px] font-bold uppercase tracking-[0.18em]"
+                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                    >
                       {active ? "Hide packages" : "Explore more"}
-                      <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} />
+                      <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} style={{ stroke: "#FFFFFF" }} />
                     </span>
                   </button>
                 );
@@ -1677,6 +1694,7 @@ export default function PublicAccess() {
             </div>
           </div>
         </section>
+
 
         {selectedAudience === "investor" && (
           <PackageStrap
@@ -1786,6 +1804,8 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // The X only appears after ~2.5s so the visitor has actually read the portal.
+  const [closeReady, setCloseReady] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -1796,17 +1816,20 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
     try {
       const dismissed = localStorage.getItem(WELCOME_PORTAL_KEY);
       if (!dismissed) {
-        const t = window.setTimeout(() => {
+        const timers: number[] = [];
+        timers.push(window.setTimeout(() => {
           setOpen(true);
           // small fade-in staging
-          window.setTimeout(() => setMounted(true), 30);
-        }, 900);
-        return () => window.clearTimeout(t);
+          timers.push(window.setTimeout(() => setMounted(true), 30));
+          timers.push(window.setTimeout(() => setCloseReady(true), 2500));
+        }, 900));
+        return () => timers.forEach((t) => window.clearTimeout(t));
       }
     } catch {
       // silent fail
     }
   }, [user]);
+
 
   const dismiss = () => {
     try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
@@ -1850,15 +1873,18 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
           ${mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}
         `}
       >
-        <button
-          type="button"
-          onClick={dismiss}
-          aria-label="Close welcome portal"
-          className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 origin-center scale-0 items-center justify-center rounded-full text-white transition-all duration-200 hover:bg-white/15 hover:text-white focus-visible:scale-100 group-hover:scale-100 sm:right-3 sm:top-3"
-          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-        >
-          <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
-        </button>
+        {closeReady && (
+          <button
+            type="button"
+            onClick={dismiss}
+            aria-label="Close welcome portal"
+            className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/25 text-white opacity-100 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 sm:right-3 sm:top-3"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
+          </button>
+        )}
+
         <div
           data-emerald="true"
           data-allow-dark-cta
