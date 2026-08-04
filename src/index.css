@@ -37268,7 +37268,7 @@ html body #root :is([data-surface="light"], [data-surface="champagne"], [data-le
 }
 
 html body #root :is([data-surface="light"], [data-surface="champagne"], [data-legal-section-card])
-  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,label,button,input,textarea,select,div):not([data-surface="emerald"]):not([data-surface="emerald"] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-pill-emerald):not(.jj-pill-emerald *) {
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,label,button,input,textarea,select,div):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-emerald="true"]):not([data-emerald="true"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
