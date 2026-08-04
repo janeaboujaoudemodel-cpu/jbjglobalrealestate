@@ -37113,7 +37113,7 @@ html body #root :where(
   .jj-surface-emerald, .jj-emerald-action, .jj-emerald-metallic,
   .jj-emerald-ombre, .jj-cta-emerald, .jj-cta-primary, .jj-pill-emerald,
   .jj-pill-emerald-metallic, .jbj-form-option
-) :where(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,small,li,dt,dd,th,td,svg,[class*="lucide"]) {
+) :where(h1,h2,h3,h4,h5,h6,p,strong,em,small,li,dt,dd,th,td) {
   color: inherit !important;
   -webkit-text-fill-color: currentColor !important;
 }
