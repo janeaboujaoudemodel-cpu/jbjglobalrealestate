@@ -272,9 +272,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
+    const MAX_RECOVERY_ATTEMPTS = 8;
+
+    /**
+     * Resilient session recovery.
+     *
+     * A single failed refresh (sleeping phone, offline tab, browser throttling)
+     * must NEVER log the user out. While a refresh token still exists in
+     * storage we keep retrying with backoff — and we explicitly ask Supabase to
+     * refresh. Auth is only cleared when the stored token is genuinely gone
+     * (i.e. the refresh token was rejected and Supabase wiped storage).
+     */
     const scheduleSessionRecovery = (delayMs = 100) => {
       clearNullSessionRecoveryTimer();
       nullSessionRecoveryTimer = window.setTimeout(() => {
+        const retryOrGiveUp = () => {
+          if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < MAX_RECOVERY_ATTEMPTS) {
+            nullSessionRecoveryAttempts += 1;
+            // 0.3s, 0.6s, 1.2s … capped at 15s
+            const backoff = Math.min(300 * 2 ** (nullSessionRecoveryAttempts - 1), 15_000);
+            scheduleSessionRecovery(backoff);
+            return;
+          }
+          // No refresh token left in storage → the session is truly over.
+          if (!hasPersistedAuthSession()) void applySession(null);
+        };
+
         supabase.auth.getSession()
           .then(({ data: { session: recoveredSession } }) => {
             if (recoveredSession) {
@@ -282,25 +305,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               void applySession(recoveredSession);
               return;
             }
-
-            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 2) {
-              nullSessionRecoveryAttempts += 1;
-              scheduleSessionRecovery(150 * nullSessionRecoveryAttempts);
-              return;
-            }
-
-            void applySession(null);
+            // Force an explicit refresh before considering the session lost.
+            return supabase.auth.refreshSession().then(({ data }) => {
+              if (data?.session) {
+                nullSessionRecoveryAttempts = 0;
+                void applySession(data.session);
+                return;
+              }
+              retryOrGiveUp();
+            });
           })
-          .catch(() => {
-            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 2) {
-              nullSessionRecoveryAttempts += 1;
-              scheduleSessionRecovery(150 * nullSessionRecoveryAttempts);
-              return;
-            }
-            void applySession(null);
-          });
+          .catch(retryOrGiveUp);
       }, delayMs);
     };
+
 
     const applySession = async (nextSession: Session | null) => {
       if (!mounted) return;
@@ -407,12 +425,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return applySession(null);
       });
 
+
+    /**
+     * Re-validate on tab focus / reconnect. Mobile browsers freeze timers on
+     * background tabs, so the auto-refresh can miss its window; when the user
+     * comes back we restore the session instead of appearing logged out.
+     */
+    const revalidate = () => {
+      if (document.visibilityState === "hidden") return;
+      if (!hasPersistedAuthSession()) return;
+      supabase.auth.getSession().then(({ data: { session: s } }) => {
+        if (s) {
+          nullSessionRecoveryAttempts = 0;
+          void applySession(s);
+        } else {
+          nullSessionRecoveryAttempts = 0;
+          scheduleSessionRecovery(0);
+        }
+      }).catch(() => {
+        nullSessionRecoveryAttempts = 0;
+        scheduleSessionRecovery(0);
+      });
+    };
+
+    document.addEventListener("visibilitychange", revalidate);
+    window.addEventListener("focus", revalidate);
+    window.addEventListener("online", revalidate);
+
     return () => {
       mounted = false;
       clearNullSessionRecoveryTimer();
+      document.removeEventListener("visibilitychange", revalidate);
+      window.removeEventListener("focus", revalidate);
+      window.removeEventListener("online", revalidate);
       subscription.unsubscribe();
     };
   }, [verifyOwner]);
+
 
   // Helper to record login event (fire-and-forget)
   const recordLoginEvent = async (

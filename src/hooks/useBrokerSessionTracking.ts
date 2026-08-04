@@ -94,9 +94,14 @@ export function useBrokerSessionTracking(enabled: boolean) {
           return;
         }
 
-        // 403 → blocked / revoked / not a broker. Require repeated evidence
-        // before clearing auth so one stale heartbeat cannot kick the user out.
-        if (status === 403 || data?.force_signout || /blocked|revoked|not a broker/i.test(String(errMsg ?? ""))) {
+        // Only an EXPLICIT revocation may end the session. A device
+        // fingerprint mismatch, a plain 403, or an unknown error must never
+        // sign the user out — that was the cause of the random logouts.
+        const explicitRevocation =
+          data?.force_signout === true ||
+          /account blocked|device blocked|revoked|session revoked/i.test(String(errMsg ?? ""));
+
+        if (explicitRevocation) {
           forceSignoutFailuresRef.current += 1;
           if (forceSignoutFailuresRef.current < FORCE_SIGNOUT_FAILURES_REQUIRED) {
             console.warn("[broker-session-track] delayed sign-out evidence", forceSignoutFailuresRef.current);
@@ -108,7 +113,13 @@ export function useBrokerSessionTracking(enabled: boolean) {
           return;
         }
 
+        if (status === 403) {
+          console.warn("[broker-session-track] ignored 403 (no explicit revocation)");
+          return;
+        }
+
         forceSignoutFailuresRef.current = 0;
+
 
         if (data?.session_token && data.session_token !== existing) {
           localStorage.setItem(LS_TOKEN_KEY, data.session_token);
