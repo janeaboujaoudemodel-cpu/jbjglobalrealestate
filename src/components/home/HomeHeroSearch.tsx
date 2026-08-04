@@ -1,27 +1,24 @@
 /**
- * HomeHeroSearch — single-line premium crystal pill containing:
- *   [ search input ][ Search ][ Book a Free Consultation ][ Concierge ]
+ * HomeHeroSearch — the ONE hero search surface.
  *
- * The Search button performs a real top-match lookup against projects /
- * developers / areas and redirects to that detail page, or falls back to
- * `/properties?q=<query>` for free-text searches. It does NOT open the
- * header's `GlobalSearchModal` dropdown — that remains exclusive to the
- * header search icon.
+ * The duplicated emerald pill was removed: the unified `PropertySearchBar`
+ * now carries the animated typewriter keyword field and the inline
+ * "Free Consultation" CTA.
  *
- * HOVER RULE (project standard):
- *   Hover states MUST keep the title visible. Use gold (#B89555) or ink
- *   (#1A1A1A) to elevate the label — never fade or hide it.
+ * Submit behaviour:
+ *  - free text  → catalogue match → local intent → AI intent → chat handoff
+ *  - filters only → /properties with the full selection in the URL
+ *  - purpose "Sell" → instant redirect to the sell flow
  */
 
-import { useState, useCallback } from "react";
-import { CalendarCheck, Loader2, Search as SearchIcon } from "lucide-react";
+import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useTypewriter } from "@/hooks/useTypewriter";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import { EMPTY_SEARCH, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { handOffToChatSupport, resolveIntentLocally } from "@/lib/searchIntent";
+import { saveRecentSearch } from "@/lib/searchHistory";
 import { toast } from "sonner";
 
 const HERO_TYPEWRITER_PHRASES = [
@@ -32,7 +29,6 @@ const HERO_TYPEWRITER_PHRASES = [
   "How much is rent in Marina?",
   "I'm looking for Golden Visa or mortgage",
 ];
-import { saveRecentSearch } from "@/lib/searchHistory";
 
 interface HomeHeroSearchProps {
   onBookConsultation?: () => void;
@@ -40,30 +36,9 @@ interface HomeHeroSearchProps {
 
 export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchProps) {
   const navigate = useNavigate();
-  const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
   const [filters, setFilters] = useState<PropertySearch>(EMPTY_SEARCH);
-  // Pause typewriter whenever user is focused on the field OR has typed anything.
-  // Resumes automatically once the field loses focus AND is empty again.
-  const animatedPlaceholder = useTypewriter(HERO_TYPEWRITER_PHRASES, {
-    paused: isFocused || draft.length > 0,
-  });
 
-  /** Geo filter bar submit — carries the whole selection into /properties. */
-  const runFilterSearch = useCallback(
-    (next: PropertySearch) => {
-      const params = searchToParams({ ...next, q: next.q || draft.trim() });
-      navigate(`/properties?${params.toString()}`);
-    },
-    [draft, navigate],
-  );
-
-  /**
-   * AI intent resolution for free text: instant local rules first, then the
-   * `ai-search-intent` model, then a live chat-support handoff so a visitor
-   * whose sentence we cannot understand is never left at a dead end.
-   */
   const resolveWithAI = useCallback(
     async (q: string): Promise<boolean> => {
       try {
@@ -86,89 +61,76 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
     [navigate],
   );
 
+  const runSearch = useCallback(
+    async (next: PropertySearch) => {
+      if (searching) return;
 
-
-
-  const runSearch = useCallback(async () => {
-    if (searching) return;
-    const q = draft.trim();
-    if (!q) {
-      runFilterSearch(filters);
-      return;
-    }
-
-    setSearching(true);
-    try {
-      saveRecentSearch(q);
-
-      const [projectRes, devRes, areaRes] = await Promise.all([
-        supabase
-          .from("projects")
-          .select("slug,name")
-          .ilike("name", q)
-          .eq("status", "active")
-          .limit(1)
-          .maybeSingle(),
-        supabase
-          .from("developers" as any)
-          .select("slug,name")
-          .ilike("name", q)
-          .limit(1)
-          .maybeSingle(),
-        supabase
-          .from("areas")
-          .select("slug,name")
-          .ilike("name", q)
-          .eq("is_active", true)
-          .limit(1)
-          .maybeSingle(),
-      ]);
-
-      const projectSlug = (projectRes?.data as { slug?: string } | null)?.slug;
-      const devSlug = (devRes?.data as { slug?: string } | null)?.slug;
-      const areaSlug = (areaRes?.data as { slug?: string } | null)?.slug;
-
-      // 1) Exact catalogue match always wins.
-      if (projectSlug) {
-        navigate(`/project/${projectSlug}`);
-        return;
-      }
-      if (devSlug) {
-        navigate(`/developer/${devSlug}`);
-        return;
-      }
-      if (areaSlug) {
-        navigate(`/area/${areaSlug}`);
+      if (next.purpose === "sell") {
+        navigate("/sell");
         return;
       }
 
-      // 2) Instant, offline intent rules ("I want to sell", "rent in Marina"…).
-      const local = resolveIntentLocally(q);
-      if (local?.route) {
-        toast.success(local.message);
-        navigate(local.route);
+      const q = (next.q ?? "").trim();
+      if (!q) {
+        navigate(`/properties?${searchToParams(next).toString()}`);
         return;
       }
 
-      // 3) AI intent resolution.
-      if (await resolveWithAI(q)) return;
+      setSearching(true);
+      try {
+        saveRecentSearch(q);
 
-      // 4) Nothing understood → hand the sentence to live chat support.
-      toast.info("Let me connect you with our advisory desk.");
-      handOffToChatSupport(q, { source: "hero_search", path: window.location.pathname });
-    } catch (err) {
-      console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
-      navigate(`/properties?q=${encodeURIComponent(q)}`);
-    } finally {
-      setSearching(false);
-    }
-  }, [draft, filters, navigate, resolveWithAI, runFilterSearch, searching]);
+        const [projectRes, devRes, areaRes] = await Promise.all([
+          supabase
+            .from("projects")
+            .select("slug,name")
+            .ilike("name", q)
+            .eq("status", "active")
+            .limit(1)
+            .maybeSingle(),
+          supabase
+            .from("developers" as any)
+            .select("slug,name")
+            .ilike("name", q)
+            .limit(1)
+            .maybeSingle(),
+          supabase
+            .from("areas")
+            .select("slug,name")
+            .ilike("name", q)
+            .eq("is_active", true)
+            .limit(1)
+            .maybeSingle(),
+        ]);
 
+        const projectSlug = (projectRes?.data as { slug?: string } | null)?.slug;
+        const devSlug = (devRes?.data as { slug?: string } | null)?.slug;
+        const areaSlug = (areaRes?.data as { slug?: string } | null)?.slug;
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    void runSearch();
-  };
+        if (projectSlug) return void navigate(`/project/${projectSlug}`);
+        if (devSlug) return void navigate(`/developer/${devSlug}`);
+        if (areaSlug) return void navigate(`/area/${areaSlug}`);
+
+        const local = resolveIntentLocally(q);
+        if (local?.route) {
+          toast.success(local.message);
+          navigate(local.route);
+          return;
+        }
+
+        if (await resolveWithAI(q)) return;
+
+        toast.info("Let me connect you with our advisory desk.");
+        handOffToChatSupport(q, { source: "hero_search", path: window.location.pathname });
+      } catch (err) {
+        console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
+        navigate(`/properties?q=${encodeURIComponent(q)}`);
+      } finally {
+        setSearching(false);
+      }
+    },
+    [navigate, resolveWithAI, searching],
+  );
 
   const openBooking = () => {
     if (onBookConsultation) onBookConsultation();
@@ -176,175 +138,21 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   };
 
   return (
-    <>
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.6 }}
-        className="w-full max-w-6xl mx-auto"
-      >
-        {/* GEO FILTER BAR — sits directly above the search pill as one connected
-            unit: Country → Emirate/City → Area cascade + intent, category,
-            beds/baths, price and more filters. The pill below is untouched. */}
-        <PropertySearchBar
-          value={filters}
-          onChange={setFilters}
-          onSubmit={runFilterSearch}
-          dark
-          className="mb-3"
-        />
-
-        {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
-            the SAME emerald/black gradient surface — NO color split between segments.
-            NO gold dividers, NO gold borders. Animated emerald glow border wraps the bar. */}
-        <div className="jj-emerald-pill jj-hero-search-premium relative rounded-[28px]">
-
-        <div
-          data-surface="dark"
-          data-ink-emerald
-          data-no-contrast-guard
-          className="allow-white jj-hero-search-bar group relative flex items-stretch h-16 sm:h-[68px] lg:h-[76px] rounded-[28px] overflow-hidden pl-1 pr-1.5 sm:pr-2 gap-1.5 sm:gap-2"
-          style={{
-            backgroundImage: "var(--jj-emerald-ombre)",
-            border: "0",
-            outline: "none",
-            boxShadow: "0 18px 40px rgba(0,0,0,0.36)",
-          }}
-        >
-          {/* INPUT segment — transparent on emerald, white text + animated placeholder */}
-          <div role="search" className="relative flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 cursor-text">
-            <SearchIcon
-              aria-hidden="true"
-              className="hidden sm:block absolute left-5 sm:left-5 lg:left-6 top-1/2 -translate-y-1/2 w-[18px] h-[18px] opacity-80 pointer-events-none"
-              style={{ color: "#FFFFFF" }}
-              strokeWidth={2.2}
-            />
-            {!draft && !isFocused && (
-              <span
-                aria-hidden="true"
-                className="allow-white pointer-events-none absolute left-5 sm:left-[52px] lg:left-[58px] top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden z-[1]"
-                style={{
-                  color: "rgba(255,255,255,0.78)",
-                  WebkitTextFillColor: "rgba(255,255,255,0.78)",
-                  maxWidth: "calc(100% - 16px)",
-                }}
-              >
-                {animatedPlaceholder}
-                <span className="jj-type-caret" aria-hidden="true">|</span>
-              </span>
-            )}
-            <input
-              type="text"
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  onSubmit(e as unknown as React.FormEvent);
-                }
-              }}
-              aria-label="Search the JBJ website"
-              data-no-contrast-guard
-              tabIndex={0}
-              className="allow-white jj-hero-search-input relative z-10 flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal cursor-text sm:pl-[34px] lg:pl-[40px]"
-              style={{
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                caretColor: "#FFFFFF",
-                border: "none",
-                outline: "none",
-                boxShadow: "none",
-                background: "transparent",
-                pointerEvents: "auto",
-              }}
-            />
-          </div>
-
-          {/* SEARCH button — PRIMARY raised metallic emerald pill, white text + icon. */}
-          <button
-            type="button"
-            onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
-            aria-label="Search properties now"
-            data-variant="primary"
-            disabled={searching}
-            data-no-contrast-guard
-            className="allow-white jj-hero-search-action group/sb relative self-center flex items-center justify-center gap-2 h-[44px] py-0 leading-none rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98]"
-            style={{
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              border: 0,
-              backgroundImage:
-                "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
-              boxShadow:
-                "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-            }}
-          >
-            {searching ? (
-              <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
-            ) : (
-              <SearchIcon className="w-4 h-4" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
-            )}
-            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-              {searching ? "Searching…" : "Search"}
-            </span>
-          </button>
-
-          {/* FREE CONSULTATION — matches header AED pill (emerald ombre + white text/icon). */}
-          <button
-            type="button"
-            onClick={openBooking}
-            aria-label="Book your free consultation now"
-            data-no-contrast-guard
-            className="allow-white jj-hero-search-action hidden sm:flex relative self-center items-center justify-center gap-2 h-[44px] py-0 leading-none rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98]"
-            style={{
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              border: 0,
-              backgroundImage:
-                "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
-              boxShadow:
-                "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-            }}
-          >
-            <CalendarCheck className="w-4 h-4" strokeWidth={2.4} style={{ color: "#FFFFFF" }} />
-            <span className="whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-              Free Consultation
-            </span>
-          </button>
-
-
-        </div>
-        </div>
-
-        {/* SECOND-ROW Free Consultation — compact phones only (<640px).
-            Full-width emerald pill matching the bar surface for visual cohesion. */}
-        <button
-          type="button"
-          onClick={openBooking}
-          aria-label="Book your free consultation now"
-          data-no-contrast-guard
-          data-surface="dark"
-          className="allow-white sm:hidden mt-3 w-full flex items-center justify-center gap-2 h-12 rounded-2xl text-[14px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
-          style={{
-            color: "#FFFFFF",
-            WebkitTextFillColor: "#FFFFFF",
-            backgroundImage: "var(--jj-emerald-ombre)",
-            boxShadow:
-              "0 10px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.10)",
-          }}
-        >
-          <CalendarCheck className="w-4 h-4" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />
-          <span className="whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-            Book a Free Consultation
-          </span>
-        </button>
-
-
-
-
-      </motion.div>
-    </>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.6 }}
+      className="w-full max-w-6xl mx-auto"
+    >
+      <PropertySearchBar
+        value={filters}
+        onChange={setFilters}
+        onSubmit={runSearch}
+        dark
+        typewriterPhrases={HERO_TYPEWRITER_PHRASES}
+        onConsultation={openBooking}
+        onSellSelected={() => navigate("/sell")}
+      />
+    </motion.div>
   );
 }
