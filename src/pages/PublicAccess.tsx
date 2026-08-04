@@ -725,7 +725,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                   </div>
                   <span
                     data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#064E3B] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] !text-white"
                   >
                     View <ArrowRight className="h-3.5 w-3.5" />
                   </span>
