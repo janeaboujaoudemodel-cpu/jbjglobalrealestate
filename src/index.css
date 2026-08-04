@@ -459,6 +459,14 @@ html body #root :is([data-surface="dark"], [data-surface="ink"], [data-surface="
   stroke: currentColor;
 }
 
+/* The photo-copy lock is deliberately declared after the legacy cascade.
+   It protects every future image/video overlay from inherited light-surface ink. */
+html body #root [data-photo-copy-lock],
+html body #root [data-photo-copy-lock] :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,small,svg,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
 /* PASS 216 — Amra project/search contrast and checkbox tick repair. */
 html body #root [data-global-search-modal] :is(button, a, p, span, div, h1, h2, h3, h4, h5, h6):not([data-surface="emerald"]):not([data-surface="emerald"] *) {
   color: #1A1A1A !important;
