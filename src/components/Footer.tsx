@@ -5,6 +5,7 @@
  */
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { useAdaptiveHairline } from "@/hooks/useAdaptiveHairline";
 import { AdaptiveHairline } from "@/components/ui/AdaptiveHairline";
 import { HAIRLINE_TOKENS } from "@/styles/hairlineTokens";
 import { MapPin, Phone, Mail, MessageCircle, Globe, ChevronDown } from "lucide-react";
@@ -172,8 +173,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const location = useLocation();
   const footerRef = useRef<HTMLElement>(null);
-  // Static token pair — no runtime DOM measurement / recoloring.
-  const hairline = { luminance: 0.003, ...HAIRLINE_TOKENS.baseline };
+  const hairline = useAdaptiveHairline(footerRef);
 
   const isBackOfficeContext =
     location.pathname.startsWith("/listing-admin") || location.pathname.startsWith("/admin");
