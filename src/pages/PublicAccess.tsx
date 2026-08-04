@@ -1613,8 +1613,9 @@ export default function PublicAccess() {
           className="scroll-mt-24 w-full overflow-hidden px-5 pt-16 pb-14 sm:px-8 lg:px-12"
           style={{
             background:
-              "linear-gradient(180deg, #FFFFFF 0%, #F7F2EA 26%, #E8D6AE 48%, #0d5a44 78%, #042c1c 100%)",
+              "linear-gradient(180deg, #FFFFFF 0%, #F4FAF7 22%, #CFE7DD 42%, #0d5a44 74%, #042c1c 100%)",
           }}
+
         >
           <div className="mx-auto max-w-6xl">
             <div className="mb-8 text-center">
