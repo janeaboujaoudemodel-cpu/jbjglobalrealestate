@@ -16,6 +16,19 @@ Deno.serve(async (req) => {
     const u = createClient(SUPABASE_URL, ANON, { global: { headers: { Authorization: auth } } });
     const { data: claims } = await u.auth.getClaims(auth.replace("Bearer ", ""));
     if (!claims?.claims?.sub) return j({ error: "Unauthorized" }, 401);
+    const userId = claims.claims.sub as string;
+
+    const svc = createClient(SUPABASE_URL, SERVICE);
+
+    // Authorization: only CRM staff / active brokers / owner-admins may send
+    // mail from the verified company domain. A valid JWT alone is NOT enough.
+    if (!(await isAuthorisedSender(svc, userId))) {
+      return j({ error: "Forbidden: sending requires an active broker or CRM staff account" }, 403);
+    }
+
+    // Per-user rate limit on outbound sends.
+    const rate = await checkSendRate(svc, userId);
+    if (!rate.ok) return j({ error: "Rate limit exceeded. Try again later." }, 429);
 
     const { accountId, to, subject, body, cc, bcc, entityId, portalKind: rawPortalKind = "individual_broker" } = await req.json();
     if (!to || !subject || !body) return j({ error: "to, subject, body required" }, 400);
@@ -23,7 +36,11 @@ Deno.serve(async (req) => {
     if (!allowedPortals.has(String(rawPortalKind))) return j({ error: "Invalid portalKind" }, 400);
     const portalKind = String(rawPortalKind) as JbjPortalKind;
 
-    const svc = createClient(SUPABASE_URL, SERVICE);
+    const recipientCount = arr(to).length + arr(cc).length + arr(bcc).length;
+    if (recipientCount === 0) return j({ error: "At least one recipient required" }, 400);
+    if (recipientCount > 25) return j({ error: "Too many recipients in a single send (max 25)" }, 400);
+
+
     let replyTo = "helpdesk@jbj.ae";
     if (accountId) {
       const { data: acc } = await svc.from("broker_email_accounts").select("email_address")
