@@ -34,6 +34,8 @@ import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 import ChatConversationalCollect from './chat/ChatConversationalCollect';
 import ChatConfirmDetails from './chat/ChatConfirmDetails';
 import { SUPABASE_URL } from "@/config/backend";
+import { consumeChatPrefill } from "@/lib/searchIntent";
+
 
 interface AIChatWidgetProps {
   isCollapsed: boolean;
@@ -69,6 +71,19 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [selectedShortcut, setSelectedShortcut] = useState<ShortcutType | null>(null);
   const [detectedFullName, setDetectedFullName] = useState<string | null>(null);
+
+  /**
+   * Hero-search handoff: when the AI search router cannot understand a
+   * visitor's sentence it stores it and opens this widget, so the visitor sees
+   * their own words already typed and simply presses send.
+   */
+  useEffect(() => {
+    if (isCollapsed) return;
+    const prefill = consumeChatPrefill();
+    if (prefill) setInput(prefill);
+  }, [isCollapsed]);
+
+
 
   // Fetch logged-in user's display name
   useEffect(() => {

@@ -9,6 +9,10 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import GeoFilterBar from "@/components/search/GeoFilterBar";
+import { EMPTY_FILTERS, filtersToParams, type GeoSearchFilters } from "@/lib/searchFilters";
+import { getAreas, getCountry, getRegions } from "@/data/geography";
+
 import { useDevelopers, useProjects } from "@/hooks/useProjects";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
@@ -76,7 +80,10 @@ const Developers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  // Multi-country geography cascade (Country → Emirate/City → Area)
+  const [geoFilters, setGeoFilters] = useState<GeoSearchFilters>(EMPTY_FILTERS);
   const ITEMS_PER_PAGE = 24;
+
 
   // Developer names list for dropdown
   const developerNames = useMemo(() => {
@@ -125,11 +132,40 @@ const Developers = () => {
     if (!developers) return [];
     
     let filtered = [...developers];
-    
+
+    // Geography cascade filter (Country → Emirate/City → Area).
+    // Matches against whatever location signal a developer record carries.
+    const geoTerms: string[] = [];
+    if (geoFilters.areas.length) {
+      geoTerms.push(
+        ...getAreas(geoFilters.country, geoFilters.region)
+          .filter((a) => geoFilters.areas.includes(a.slug))
+          .map((a) => a.name.toLowerCase()),
+      );
+    } else if (geoFilters.region) {
+      const r = getRegions(geoFilters.country).find((x) => x.slug === geoFilters.region);
+      if (r) geoTerms.push(r.name.toLowerCase());
+    } else if (geoFilters.country && geoFilters.country !== "uae") {
+      const c = getCountry(geoFilters.country);
+      if (c) geoTerms.push(c.name.toLowerCase());
+    }
+    if (geoTerms.length) {
+      filtered = filtered.filter((dev) => {
+        const rec = dev as unknown as Record<string, unknown>;
+        const blob = [rec.city, rec.country, rec.headquarters, rec.location, rec.description, dev.name]
+
+          .filter((v): v is string => typeof v === "string")
+          .join(" ")
+          .toLowerCase();
+        return geoTerms.some((term) => blob.includes(term));
+      });
+    }
+
     // Developer dropdown filter (local)
     if (selectedDeveloper) {
       filtered = filtered.filter(dev => dev.name === selectedDeveloper);
     }
+
 
     // Advanced filter: developer name filter from shared AdvancedFilterPanel
     if (shortcutFilters.developers && shortcutFilters.developers.length > 0) {
@@ -185,12 +221,13 @@ const Developers = () => {
     }
     
     return filtered;
-  }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts, shortcutFilters.developers, shortcutFilters.searchQuery]);
+  }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts, shortcutFilters.developers, shortcutFilters.searchQuery, geoFilters]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, tierFilter, selectedDeveloper, sortBy, shortcutFilters]);
+  }, [searchQuery, tierFilter, selectedDeveloper, sortBy, shortcutFilters, geoFilters]);
+
 
   const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
   const paginatedDevelopers = filteredDevelopers.slice(
