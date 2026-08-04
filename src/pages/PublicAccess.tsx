@@ -1742,11 +1742,15 @@ export default function PublicAccess() {
       </footer>
 
       {/* Welcome portal pop-up — explains this is the access gate, not the full site. */}
-      <WelcomePortalOverlay onCreateAccount={openSignup} onLogin={openLogin} />
+      <WelcomePortalOverlay
+        onCreateAccount={openSignup}
+        onLogin={openLogin}
+        onResolved={() => setWelcomeDone(true)}
+      />
 
       {/* Unified Contact widget lives globally (SupportLauncher). This page just
           listens so the "Speak to an advisor" channel opens our LeadFormDialog. */}
-      <SupportGuideOverlay />
+      <SupportGuideOverlay enabled={welcomeDone} />
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
       <PaymentRequestDialog
@@ -1770,7 +1774,7 @@ export default function PublicAccess() {
  * ==========================================================================*/
 const WELCOME_PORTAL_KEY = "jbj_welcome_portal_dismissed";
 
-function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: () => void; onLogin: () => void }) {
+function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCreateAccount: () => void; onLogin: () => void; onResolved: () => void }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -1781,10 +1785,14 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
     if (user) {
       try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
       setOpen(false);
+      onResolved();
       return;
     }
     try {
       const dismissed = localStorage.getItem(WELCOME_PORTAL_KEY);
+      if (dismissed) {
+        onResolved();
+      }
       if (!dismissed) {
         const timers: number[] = [];
         timers.push(window.setTimeout(() => {
@@ -1804,8 +1812,11 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
   const dismiss = () => {
     try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
     setMounted(false);
-    const t = window.setTimeout(() => setOpen(false), 220);
-    return () => window.clearTimeout(t);
+    window.setTimeout(() => {
+      setOpen(false);
+      // Only now may the next (support guide) pop-up appear — never two at once.
+      onResolved();
+    }, 220);
   };
 
   const handleCreateAccount = () => {
@@ -1927,7 +1938,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
 const SUPPORT_GUIDE_KEY = "jbj_support_guide_dismissed_at";
 const SUPPORT_GUIDE_TTL_MS = 24 * 60 * 60 * 1000;
 
-function SupportGuideOverlay() {
+function SupportGuideOverlay({ enabled = true }: { enabled?: boolean }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   // The single dismissal control appears only after 4s, so we can be confident
@@ -1941,6 +1952,8 @@ function SupportGuideOverlay() {
   }, [open]);
 
   useEffect(() => {
+    // Queue behaviour: wait until the welcome portal has been resolved.
+    if (!enabled) { setOpen(false); return; }
     // Signed-in users: never show, and clear any stale flag.
     if (user) {
       try { localStorage.removeItem(SUPPORT_GUIDE_KEY); } catch {}
@@ -1962,7 +1975,7 @@ function SupportGuideOverlay() {
     } catch {
       // Silent fail — never block UX
     }
-  }, [user]);
+  }, [user, enabled]);
 
   const handleOkay = () => {
     try { localStorage.setItem(SUPPORT_GUIDE_KEY, String(Date.now())); } catch {}
