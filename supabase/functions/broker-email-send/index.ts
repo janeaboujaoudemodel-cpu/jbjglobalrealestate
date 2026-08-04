@@ -98,6 +98,51 @@ Deno.serve(async (req) => {
 
 function arr(v: any): string[] { return !v ? [] : Array.isArray(v) ? v : [v]; }
 
+/**
+ * Only CRM staff, active brokers, or platform owners/admins may send mail from
+ * the verified company sending domain.
+ */
+async function isAuthorisedSender(svc: any, userId: string): Promise<boolean> {
+  const { data: staff } = await svc
+    .from("crm_users_profile")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("is_active", true)
+    .maybeSingle();
+  if (staff?.id) return true;
+
+  const { data: broker } = await svc
+    .from("broker_profiles")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("is_active", true)
+    .maybeSingle();
+  if (broker?.id) return true;
+
+  const { data: roles } = await svc
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .in("role", ["owner", "admin"]);
+  return Array.isArray(roles) && roles.length > 0;
+}
+
+/** Per-user send throttle: 60 sends per 60 minutes. Fails closed on error. */
+async function checkSendRate(svc: any, userId: string): Promise<{ ok: boolean }> {
+  const { data, error } = await svc.rpc("check_rate_limit", {
+    p_identifier: userId,
+    p_action_type: "broker_email_send",
+    p_max_requests: 60,
+    p_window_minutes: 60,
+  });
+  if (error) {
+    console.error("broker-email-send rate limit check failed", error.message);
+    return { ok: false };
+  }
+  return { ok: data !== false };
+}
+
+
 function j(b: unknown, s = 200) {
   return new Response(JSON.stringify(b), { status: s, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 }
