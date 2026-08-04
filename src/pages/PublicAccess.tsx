@@ -434,8 +434,17 @@ html body #root [data-jbj-cta-white] svg * {
   stroke: #0d3a2b !important;
   fill: none !important;
 }
+html body #root [data-jbj-cta-white] {
+  border-color: rgba(13,58,43,0.30) !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
 html body #root [data-jbj-cta-white]:hover {
-  background-color: #064E3B !important;
+  /* Matches the emerald CTA (Create your account / Enroll now) exactly. */
+  background-color: transparent !important;
+  background-image: linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%) !important;
+  border-color: #0d3a2b !important;
+  box-shadow: 0 12px 26px -14px rgba(6,78,59,0.85) !important;
 }
 html body #root [data-jbj-cta-white]:hover,
 html body #root [data-jbj-cta-white]:hover * {
