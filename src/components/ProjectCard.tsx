@@ -18,6 +18,7 @@ import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
+import ListingLabels from "@/components/property/ListingLabels";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 import { formatBedroomRange } from "@/utils/formatBedroomRange";
 
@@ -268,6 +269,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           className="mt-[110px]"
         />
       </div>
+
+      {/* Owner-controlled listing labels (Distress / Hot / Trending / Featured /
+          Signature / VIP). Anchored bottom-RIGHT of the photo so the locked
+          developer plate (bottom-left seam) is never disturbed. */}
+      {Array.isArray((project as any).labels) && (project as any).labels.length > 0 && (
+        <div className="absolute inset-x-0 top-0 aspect-[16/10] pointer-events-none z-30">
+          <div className="absolute right-3 bottom-3 flex flex-wrap justify-end gap-1.5">
+            <ListingLabels labels={(project as any).labels as string[]} />
+          </div>
+        </div>
+      )}
 
       {/* LOCKED: card top-left is developer identity only — never property-type labels.
           Reelly-style position: the plate straddles the photo/content seam (half on
