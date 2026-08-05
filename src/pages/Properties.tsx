@@ -707,8 +707,14 @@ const Properties = () => {
               }));
             }}
           />
-          {/* Compact action row: [Intent | Sort By] unified pill + [Search icon] + [Filters] */}
+          {/* Container header — title left, advanced Filters trigger right */}
+          <div className="jjpf-head">
+            <div>
+              <h2 className="jjpf-head-title">Search Properties</h2>
+              <p className="jjpf-head-sub">Investment-grade listings across the UAE and beyond</p>
+            </div>
           {(() => {
+
             const tx = appliedFilters.transactionType;
             const cs = appliedFilters.completionStatus;
             const intentValue =
