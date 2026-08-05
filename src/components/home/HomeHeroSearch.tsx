@@ -39,6 +39,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const navigate = useNavigate();
   const [searching, setSearching] = useState(false);
   const [filters, setFilters] = useState<PropertySearch>(EMPTY_SEARCH);
+  const [fallbackOpen, setFallbackOpen] = useState(false);
+  const [fallbackQuery, setFallbackQuery] = useState("");
 
   const resolveWithAI = useCallback(
     async (q: string): Promise<boolean> => {
