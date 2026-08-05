@@ -348,7 +348,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="flex h-14 sm:h-16 min-w-0 items-center justify-center rounded-lg px-1 jj-sspan-3"
+          className="flex h-14 sm:h-16 min-w-0 items-center overflow-hidden rounded-lg jj-sspan-3"
           data-search-utility-controls
           data-surface={dark ? "dark" : "light"}
           style={{
@@ -358,13 +358,13 @@ export default function PropertySearchBar({
             border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
           }}
         >
-          <CurrencySwitcher variant="flag" />
+          <InlineCurrencySelect dark={dark} />
         </div>
 
         {/* sq ft / sq m sits above "More" and Consultation above "Show N" — same widths */}
         <div className="grid grid-cols-2 gap-2 sm:col-span-2 jj-sspan-6 min-w-0">
           <div
-            className="flex h-14 sm:h-16 min-w-0 items-center justify-center gap-1 rounded-lg px-2"
+            className="flex h-14 sm:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-2"
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
@@ -374,22 +374,35 @@ export default function PropertySearchBar({
               border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
             }}
           >
-            <div
-              className="flex h-11 min-w-0 flex-1 overflow-hidden rounded-full border"
-              style={{ borderColor: dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.35)" }}
+            <span
+              className="text-[9px] uppercase tracking-[0.14em] whitespace-nowrap"
+              style={{ color: dark ? "rgba(255,255,255,0.68)" : "rgba(26,26,26,0.62)" }}
             >
+              Area unit
+            </span>
+            <div className="flex min-w-0 items-center gap-3">
               {(["sqft", "sqm"] as const).map((unit) => (
                 <button
                   key={unit}
                   type="button"
                   onClick={() => setAreaUnit(unit)}
                   aria-pressed={areaUnit === unit}
-                  data-surface={areaUnit === unit ? "emerald" : undefined}
-                  className="min-w-0 flex-1 px-2 text-[11px] font-semibold whitespace-nowrap"
+                  data-no-contrast-guard
+                  className="min-w-0 bg-transparent p-0 text-[13px] font-semibold whitespace-nowrap"
                   style={{
-                    backgroundImage: areaUnit === unit ? EMERALD_PAIR : undefined,
-                    color: areaUnit === unit ? "#FFFFFF" : dark ? "#FFFFFF" : "#1A1A1A",
                     borderRadius: 0,
+                    color:
+                      areaUnit === unit
+                        ? dark
+                          ? "#FFFFFF"
+                          : "#042C1C"
+                        : dark
+                          ? "rgba(255,255,255,0.55)"
+                          : "rgba(26,26,26,0.50)",
+                    borderBottom:
+                      areaUnit === unit
+                        ? `2px solid ${dark ? "#FFFFFF" : "#042C1C"}`
+                        : "2px solid transparent",
                   }}
                 >
                   {unit === "sqft" ? "sq ft" : "sq m"}
@@ -397,6 +410,7 @@ export default function PropertySearchBar({
               ))}
             </div>
           </div>
+
 
           {onConsultation ? (
             <button
