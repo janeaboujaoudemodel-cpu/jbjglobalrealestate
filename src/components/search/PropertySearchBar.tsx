@@ -21,6 +21,7 @@ import AreaIncludeExclude from "./AreaIncludeExclude";
 import PropertyFilterScreen from "./PropertyFilterScreen";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
 import { useAreaUnit, setAreaUnitGlobal, type AreaUnit } from "@/hooks/useAreaUnit";
 import {
