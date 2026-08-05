@@ -75,6 +75,7 @@ import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
+import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
 import { paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
