@@ -178,22 +178,23 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuContent
         data-account-menu-content
         data-jbj-fast-dropdown="true"
-        data-surface="champagne"
+        data-surface="emerald"
+        data-no-contrast-guard
         align="end"
         sideOffset={22}
-        className="z-[10100] w-[280px] p-2 rounded-xl border border-[#B89555]/40 shadow-2xl text-[#1A1A1A]"
+        className="z-[10100] w-[280px] p-2 rounded-xl border border-white/30 shadow-2xl"
         style={{
-          backgroundImage: "linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%)",
-          color: "#1A1A1A",
-          WebkitTextFillColor: "#1A1A1A",
+          backgroundImage: "linear-gradient(180deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
+          color: "#FFFFFF",
+          WebkitTextFillColor: "#FFFFFF",
         }}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-2 py-2.5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+        <div className="flex items-center gap-3 px-2 py-2.5" data-no-contrast-guard style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
           <JbjAvatar initials={initials} size="sm" />
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold truncate" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{displayName}</div>
-            <div className="text-[11px] truncate" style={{ color: "rgba(26,26,26,0.72)", WebkitTextFillColor: "rgba(26,26,26,0.72)" }}>JBJ account</div>
+            <div className="text-sm font-semibold truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{displayName}</div>
+            <div className="text-[11px] truncate" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>JBJ account</div>
             {roleLabel && (
               <span
                 data-account-role-label
@@ -210,7 +211,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             )}
           </div>
         </div>
-        <DropdownMenuSeparator className="bg-[#B89555]/25 my-1" />
+        <DropdownMenuSeparator className="bg-white/20 my-1" />
 
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
