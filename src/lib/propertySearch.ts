@@ -206,7 +206,7 @@ export const EMPTY_SEARCH: PropertySearch = {
   developer: null,
   labels: [],
   sort: "recommended",
-  view: "list",
+  view: "grid",
   q: "",
 };
 
@@ -284,7 +284,7 @@ export function searchToParams(f: PropertySearch): URLSearchParams {
   if (f.developer) p.set("developer", f.developer);
   if (f.labels.length) p.set("labels", f.labels.join(","));
   if (f.sort !== "recommended") p.set("sort", f.sort);
-  if (f.view !== "list") p.set("view", f.view);
+  if (f.view !== "grid") p.set("view", f.view);
   return p;
 }
 
@@ -335,7 +335,7 @@ export function paramsToSearch(p: URLSearchParams): PropertySearch {
     sort: (SORT_OPTIONS.some((o) => o.slug === p.get("sort")) ? p.get("sort") : "recommended") as SortOption,
     view: (VIEW_MODES as readonly string[]).includes(p.get("view") ?? "")
       ? (p.get("view") as ViewMode)
-      : "list",
+      : "grid",
   };
 }
 

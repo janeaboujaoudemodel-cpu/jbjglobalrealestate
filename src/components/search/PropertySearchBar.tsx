@@ -270,6 +270,8 @@ export default function PropertySearchBar({
   const activeChips = useMemo(() => {
     const chips: { key: string; label: string; clear: Partial<PropertySearch> }[] = [];
     if (f.q.trim()) chips.push({ key: "q", label: `“${f.q.trim()}”`, clear: { q: "" } });
+    if (f.category === "commercial")
+      chips.push({ key: "category", label: "Commercial", clear: { category: "residential", types: [] } });
     if (f.areasInclude.length || f.areasExclude.length || f.region)
       chips.push({ key: "loc", label: locationLabel, clear: { areasInclude: [], areasExclude: [], region: null } });
     for (const t of f.types) chips.push({ key: `type-${t}`, label: t, clear: { types: f.types.filter((x) => x !== t) } });
@@ -695,7 +697,7 @@ export default function PropertySearchBar({
           <button
             type="button"
             onClick={() => {
-              const next = { ...EMPTY_SEARCH, purpose: f.purpose, country: f.country, sort: f.sort };
+              const next = { ...EMPTY_SEARCH, purpose: f.purpose, country: f.country, sort: f.sort, view: f.view };
               setInternal(next);
               onChange?.(next);
               onSubmit(next);

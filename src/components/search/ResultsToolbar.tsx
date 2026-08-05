@@ -106,7 +106,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
       onClick={() => set({ view: mode })}
       aria-label={label}
       data-surface={f.view === mode ? "emerald" : undefined}
-      className="allow-white h-9 px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5" data-no-contrast-guard
+      className="allow-white relative h-10 px-3 rounded-none text-xs font-semibold flex items-center gap-1.5" data-no-contrast-guard
       style={f.view === mode ? { backgroundImage: EMERALD_PAIR, color: "#FFF" } : { color: ink }}
     >
       {icon}
@@ -162,14 +162,17 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
           </Popover>
 
           <div
-            className="flex items-center gap-1 p-1 rounded-xl"
+            className="flex items-center overflow-hidden rounded-lg"
+            data-view-switcher
             style={{
               background: dark ? "rgba(255,255,255,0.06)" : "#F2EBDC",
               border: "1px solid rgba(184,149,85,0.3)",
             }}
           >
             {viewBtn("list", <List className="w-3.5 h-3.5" />, "List")}
+            <span aria-hidden="true" className="h-5 w-px bg-white/55" />
             {viewBtn("grid", <LayoutGrid className="w-3.5 h-3.5" />, "Grid")}
+            <span aria-hidden="true" className="h-5 w-px bg-white/55" />
             {viewBtn("map", <MapPin className="w-3.5 h-3.5" />, "Map")}
           </div>
 

@@ -361,7 +361,10 @@ const Properties = () => {
       handoverTo: searchParams.get('handoverTo')
         ? { quarter: searchParams.get('handoverTo')!.split('-')[0] || 'Q4', year: searchParams.get('handoverTo')!.split('-')[1] || '2035' }
         : defaultShortcutFilters.handoverTo,
-      propertyCategory: (searchParams.get('category') as 'residential' | 'commercial') || null,
+      // Residential is the catalogue default, not an active narrowing filter.
+      // The shared homepage search serialises it for taxonomy consistency, so
+      // only commercial should activate the legacy shortcut filter engine.
+      propertyCategory: searchParams.get('category') === 'commercial' ? 'commercial' : null,
     };
 
     const hasDeveloperParam = !!developerParam;
@@ -572,9 +575,17 @@ const Properties = () => {
   };
 
   const clearFilters = () => {
+    const resetSearch: PropertySearch = {
+      ...EMPTY_SEARCH,
+      purpose: search.purpose,
+      country: search.country,
+      view: search.view,
+    };
     setFilters(defaultExtendedFilters);
     setAppliedFilters(defaultExtendedFilters);
+    setShortcutFilters(defaultShortcutFilters);
     setSortBy("newest");
+    submitSearch(resetSearch);
   };
 
   // Format price with currency
