@@ -126,6 +126,7 @@ export function useSaveDocument() {
       client_name?: string | null;
       client_email?: string | null;
       client_phone?: string | null;
+      applicant_id?: string | null;
       candidate_folder?: string | null;
       candidate_display_name?: string | null;
       silent?: boolean;
@@ -145,6 +146,7 @@ export function useSaveDocument() {
             client_name: vars.client_name ?? null,
             client_email: vars.client_email ?? null,
             client_phone: vars.client_phone ?? null,
+            applicant_id: vars.applicant_id ?? null,
             candidate_folder: vars.candidate_folder ?? null,
             candidate_display_name: vars.candidate_display_name ?? null,
           })
@@ -162,6 +164,7 @@ export function useSaveDocument() {
           client_name: vars.client_name ?? null,
           client_email: vars.client_email ?? null,
           client_phone: vars.client_phone ?? null,
+          applicant_id: vars.applicant_id ?? null,
           candidate_folder: vars.candidate_folder ?? null,
           candidate_display_name: vars.candidate_display_name ?? null,
         })

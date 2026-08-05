@@ -9691,6 +9691,7 @@ export type Database = {
       }
       crm_documents: {
         Row: {
+          applicant_id: string | null
           candidate_display_name: string | null
           candidate_folder: string | null
           client_email: string | null
@@ -9721,6 +9722,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          applicant_id?: string | null
           candidate_display_name?: string | null
           candidate_folder?: string | null
           client_email?: string | null
@@ -9751,6 +9753,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          applicant_id?: string | null
           candidate_display_name?: string | null
           candidate_folder?: string | null
           client_email?: string | null
