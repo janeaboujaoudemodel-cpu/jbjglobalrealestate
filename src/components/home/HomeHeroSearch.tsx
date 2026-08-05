@@ -16,8 +16,9 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
+import SearchFallbackContact from "@/components/search/SearchFallbackContact";
 import { EMPTY_SEARCH, searchToParams, type PropertySearch } from "@/lib/propertySearch";
-import { handOffToChatSupport, resolveIntentLocally } from "@/lib/searchIntent";
+import { resolveIntentLocally } from "@/lib/searchIntent";
 import { saveRecentSearch } from "@/lib/searchHistory";
 import { toast } from "sonner";
 
@@ -38,6 +39,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const navigate = useNavigate();
   const [searching, setSearching] = useState(false);
   const [filters, setFilters] = useState<PropertySearch>(EMPTY_SEARCH);
+  const [fallbackOpen, setFallbackOpen] = useState(false);
+  const [fallbackQuery, setFallbackQuery] = useState("");
 
   const resolveWithAI = useCallback(
     async (q: string): Promise<boolean> => {
@@ -120,8 +123,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
 
         if (await resolveWithAI(q)) return;
 
-        toast.info("Let me connect you with our advisory desk.");
-        handOffToChatSupport(q, { source: "hero_search", path: window.location.pathname });
+        toast.info("Nothing matched — our advisory desk will answer this for you.");
+        setFallbackQuery(q);
+        setFallbackOpen(true);
       } catch (err) {
         console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
         navigate(`/properties?q=${encodeURIComponent(q)}`);
@@ -153,6 +157,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         onConsultation={openBooking}
         onSellSelected={() => navigate("/sell")}
       />
+      <SearchFallbackContact open={fallbackOpen} onOpenChange={setFallbackOpen} query={fallbackQuery} />
     </motion.div>
   );
 }
