@@ -283,7 +283,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-5"
+          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-7"
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
