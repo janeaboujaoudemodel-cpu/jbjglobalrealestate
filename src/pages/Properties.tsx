@@ -1144,11 +1144,13 @@ const Properties = () => {
               </div>
             );
           })()}
+          </div>
 
           {/* Unified property search bar — the ONE filter for this page.
               Its "Show N" mirrors the grid total exactly, and its active-chip
               row is the single place a visitor resets filters. */}
-          <div className="mt-3">
+          <div>
+
             <PropertySearchBar
               value={search}
               onChange={setSearch}
