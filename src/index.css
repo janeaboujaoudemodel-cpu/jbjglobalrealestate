@@ -37596,3 +37596,24 @@ html body #root [data-search-utility-controls] * {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+/* =========================================================================
+   PASS 262 — LIST YOUR PROPERTY SURFACE HIERARCHY
+   The page now uses a 3-tier emerald surface system (page → body → card).
+   Inactive purpose/mode pills must read as *lifted glass* on the lighter
+   card, not as black holes, so they override the generic
+   [data-tool-emerald] black pill fill. Text/icons stay pure white.
+   ========================================================================= */
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"] {
+  background: rgba(255, 255, 255, 0.07) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: none !important;
+}
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:hover {
+  background: rgba(255, 255, 255, 0.13) !important;
+}
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="active"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+}
