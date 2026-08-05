@@ -157,6 +157,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         onConsultation={openBooking}
         onSellSelected={() => navigate("/sell")}
       />
+      <SearchFallbackContact open={fallbackOpen} onOpenChange={setFallbackOpen} query={fallbackQuery} />
     </motion.div>
   );
 }
