@@ -726,9 +726,8 @@ const Properties = () => {
           />
           {/* The shared PropertySearchBar below is the only filter interface.
               Its More control opens the same in-place panel on every route. */}
-          {false && <div>
-                        {/* Search */}
-                        <div>
+          {false ? (
+            <div aria-hidden="true">
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Search</label>
                           <div className="flex items-center h-12 px-3 bg-[#F7F2EA] border border-[#064E3B]/30 rounded-lg">
                             <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60" strokeWidth={2} />
@@ -1059,29 +1058,8 @@ const Properties = () => {
 
                         </div>
                       </div>
-                    </ScrollArea>
-                    <div className="p-6 border-t border-[#064E3B]/20 flex justify-between bg-gradient-to-r from-[#F7F2EA] to-[#FBF8F3]">
-                      <Button
-                        variant="ghost"
-                        onClick={clearFilters}
-                        className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
-                      >
-                        Clear All
-                      </Button>
-                      <Button
-                        onClick={() => setIsAdvancedOpen(false)}
-                        variant="primary"
-                        className="px-8"
-                      >
-                        Apply Filters
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            );
-          })()}
-          </div>
+            </div>
+          ) : null}
 
           {/* Unified property search bar — the ONE filter for this page.
               Its "Show N" mirrors the grid total exactly, and its active-chip
