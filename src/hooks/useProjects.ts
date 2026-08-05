@@ -566,8 +566,7 @@ export function useProjectsListing() {
           deleted_at,
         developer_id,
         developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url, logo_bg_color),
-        community:communities(id, name, slug),
-        images:project_images(id, image_url, alt_text, display_order)
+        community:communities(id, name, slug)
       `;
 
       const baseQuery = () =>
@@ -594,7 +593,9 @@ export function useProjectsListing() {
       }
 
       return sortPublicProjectsForListing(
-        dedupePublicProjects(all as unknown as UnifiedProject[]),
+        dedupePublicProjects(
+          (all as unknown as UnifiedProject[]).map((project) => ({ ...project, images: [] })),
+        ),
       );
     },
   });

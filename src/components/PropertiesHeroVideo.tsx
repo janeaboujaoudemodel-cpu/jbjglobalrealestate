@@ -19,7 +19,7 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
     <section
       data-hero-dark
       data-surface="dark"
-      className="relative flex min-h-[280px] sm:min-h-[340px] items-end justify-start overflow-hidden px-4 pb-10 pt-24 md:px-8 lg:px-12"
+      className="relative flex min-h-[100svh] items-end justify-start overflow-hidden px-4 pb-16 pt-24 md:px-8 lg:px-12"
       style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 52%,#010806 100%)" }}
     >
       {/* Video background with poster fallback — compact so listings are visible immediately */}
