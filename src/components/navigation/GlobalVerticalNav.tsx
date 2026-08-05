@@ -1063,7 +1063,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
       {/* ━━━ LOGO HEADER — compact and aligned with the horizontal utility bar ━━━ */}
       <div className="h-[56px] shrink-0 flex flex-row items-center px-2 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-2 before:bottom-2 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)] after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-0.5">
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain shrink-0"  loading="lazy" decoding="async" />
+          <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain shrink-0"  loading="lazy" decoding="async" />
           <div className="min-w-0 mt-1">
             <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap" style={{ color: "#0A0A0A", WebkitTextFillColor: "#0A0A0A" }}>JBJ GLOBAL REAL ESTATE</span>
           </div>
