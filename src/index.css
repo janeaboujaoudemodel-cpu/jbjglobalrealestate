@@ -33133,13 +33133,15 @@ html body #root .surface-champagne [data-surface="ink"] video {
   margin: -4px 0 0 -6px !important;
 }
 
-/* PASS 208 — final visible closure for the repeated pending regressions. */
+/* PASS 208 — final visible closure for the repeated pending regressions.
+   PASS 253: narrowed — the old wildcard (`.jj-home-hero *`) stripped the top border
+   from EVERY inner box (search segments, currency/area-unit box). Only the hero
+   shells themselves may hide their own top edge. */
 html body #root .jj-home-hero,
-html body #root .jj-home-hero *,
-html body #root .jj-hero-search-premium,
-html body #root .jj-hero-search-premium * {
+html body #root .jj-hero-search-premium {
   border-top-color: transparent !important;
 }
+
 html body #root .jj-home-hero {
   margin-top: -1px !important;
   box-shadow: none !important;
