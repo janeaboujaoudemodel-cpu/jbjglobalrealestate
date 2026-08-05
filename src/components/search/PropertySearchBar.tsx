@@ -112,23 +112,39 @@ function Seg({
   );
 }
 
-function Chip({ on, onClick, children }: { on?: boolean; onClick: () => void; children: React.ReactNode }) {
+function Chip({
+  on,
+  onClick,
+  circle,
+  children,
+}: {
+  on?: boolean;
+  onClick: () => void;
+  /** Perfect circle — one single shape for every numeric option site-wide. */
+  circle?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
       data-surface={on ? "emerald" : "light"}
-      className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
+      className={
+        circle
+          ? "h-10 w-10 min-w-10 min-h-10 shrink-0 grow-0 basis-10 aspect-square rounded-full p-0 leading-none text-xs font-semibold inline-flex items-center justify-center"
+          : "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
+      }
       style={
         on
-          ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", border: "1px solid #042c1c" }
-          : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }
+          ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", border: "1px solid #042c1c", borderRadius: circle ? "9999px" : undefined }
+          : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)", borderRadius: circle ? "9999px" : undefined }
       }
     >
       {children}
     </button>
   );
 }
+
 
 interface Props {
   value?: PropertySearch;
