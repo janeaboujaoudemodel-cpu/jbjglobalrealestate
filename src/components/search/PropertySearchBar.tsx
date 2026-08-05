@@ -10,7 +10,7 @@
  * (#064E3B → #042c1c → #000) — never flat #064E3B alone.
  */
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, ChevronDown, CalendarCheck, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -19,8 +19,6 @@ import { getRegions } from "@/data/geography";
 import { GEO_COUNTRIES } from "@/data/geography";
 import AreaIncludeExclude from "./AreaIncludeExclude";
 import PropertyFilterScreen from "./PropertyFilterScreen";
-import ConsultationRequestForm from "@/components/ConsultationRequestForm";
-import CurrencySwitcher from "@/components/CurrencySwitcher";
 import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
 import { useAreaUnit, setAreaUnitGlobal, type AreaUnit } from "@/hooks/useAreaUnit";
@@ -187,7 +185,6 @@ export default function PropertySearchBar({
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
   const [moreOpen, setMoreOpen] = useState(false);
-  const [consultOpen, setConsultOpen] = useState(false);
   const [draft, setDraft] = useState<PropertySearch>(f);
   const [qFocused, setQFocused] = useState(false);
   const animatedPlaceholder = useTypewriter(typewriterPhrases ?? [], {
@@ -257,11 +254,11 @@ export default function PropertySearchBar({
   const numInput = "h-10 w-full rounded-lg px-3 text-sm bg-[#FDFBF7] border border-[#B89555]/35 outline-none";
 
   return (
-    <div data-property-search-bar className={`w-full ${className}`}>
+    <div data-property-search-bar className={`grid grid-cols-2 gap-1.5 lg:block ${className}`}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
-      <div className={`grid grid-cols-3 lg:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] items-stretch gap-1.5 lg:gap-2 mb-1.5 lg:mb-2`} data-search-grid={GRID_KEY}>
+      <div className={`contents lg:grid lg:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] lg:items-stretch lg:gap-2 lg:mb-2`} data-search-grid={GRID_KEY}>
         <div
-          className="flex h-11 lg:h-16 min-w-0 col-span-3 lg:col-span-1 jj-sspan-6 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="order-1 col-span-2 flex h-10 lg:h-16 min-w-0 lg:col-span-1 jj-sspan-6 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
 
           data-surface={dark ? "dark" : "light"}
           data-search-segment
@@ -306,7 +303,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className={`relative flex items-center gap-2 h-11 lg:h-16 px-2.5 lg:px-3.5 rounded-lg min-w-0 col-span-3 lg:col-span-1 ${KEYWORD_SPAN}`}
+          className={`order-10 relative flex items-center gap-2 h-12 lg:h-16 px-3 lg:px-3.5 rounded-lg min-w-0 col-span-2 lg:order-none lg:col-span-1 ${KEYWORD_SPAN}`}
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -349,7 +346,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="flex h-11 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
+          className="order-2 flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
           data-search-utility-controls
           data-surface={dark ? "dark" : "light"}
           style={{
@@ -362,13 +359,13 @@ export default function PropertySearchBar({
           <InlineCurrencySelect dark={dark} />
         </div>
 
-        {/* sq ft / sq m sits above "More" and Consultation above "Show N" — same widths */}
+        {/* Mobile/tablet: area unit sits beside currency. Desktop keeps the aligned utility pair. */}
         <div
-          className="grid gap-1.5 lg:gap-2 col-span-2 lg:col-span-2 jj-sspan-6 min-w-0"
+          className="contents lg:grid lg:gap-2 lg:col-span-2 jj-sspan-6 min-w-0"
           style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
         >
           <div
-            className="flex h-11 lg:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-2.5 lg:px-3.5 py-1.5 lg:py-2"
+            className="order-3 flex h-10 lg:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-2.5 lg:px-3.5 py-1 lg:py-2"
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
@@ -385,12 +382,7 @@ export default function PropertySearchBar({
               Area unit
             </span>
             <div
-              className="mt-1 lg:mt-1.5 flex min-w-0 items-center overflow-hidden rounded-full"
-              style={{
-                background: dark ? "rgba(255,255,255,0.08)" : "rgba(4,44,28,0.05)",
-                border: `1px solid ${dark ? "rgba(255,255,255,0.20)" : "rgba(4,44,28,0.12)"}`,
-                padding: 2,
-              }}
+              className="mt-1 lg:mt-1.5 flex min-w-0 items-center overflow-hidden"
             >
               {(["sqft", "sqm"] as const).map((unit) => {
                 const on = areaUnit === unit;
@@ -402,7 +394,7 @@ export default function PropertySearchBar({
                     aria-pressed={on}
                     data-no-contrast-guard
                     data-surface={on ? "emerald" : undefined}
-                    className="min-w-0 flex-1 rounded-full px-1 lg:px-2 py-[3px] text-[10px] lg:text-[11px] font-semibold leading-none tracking-[0.04em] whitespace-nowrap transition-colors duration-200"
+                    className="min-w-0 flex-1 px-1 lg:px-2 py-[3px] text-[10px] lg:text-[11px] font-semibold leading-none tracking-[0.04em] whitespace-nowrap transition-colors duration-200 first:border-r first:border-white/25"
                     style={{
                       backgroundImage: on ? EMERALD_PAIR : undefined,
                       background: on ? undefined : "transparent",
@@ -425,14 +417,14 @@ export default function PropertySearchBar({
           {onConsultation ? (
             <button
               type="button"
-              onClick={() => setConsultOpen(true)}
+              onClick={onConsultation}
               data-surface="emerald"
               data-search-segment
-              className="jj-emerald-action jj-shine-cta relative overflow-hidden inline-flex h-11 lg:h-16 w-full items-center justify-center gap-1 rounded-lg px-1 lg:px-1.5 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+              data-desktop-consultation
+              className="jj-emerald-action jj-shine-cta relative hidden lg:inline-flex h-16 w-full items-center justify-center gap-1 overflow-hidden rounded-lg px-1.5 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
               style={{ backgroundImage: EMERALD_PAIR }}
             >
-              <CalendarCheck className="w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0" />
-              <span className="text-[10px] lg:text-[11px] leading-tight tracking-tight text-center whitespace-nowrap">Consultation</span>
+              <span className="text-[11px] leading-tight tracking-tight text-center whitespace-nowrap">Consultation</span>
             </button>
           ) : null}
         </div>
@@ -441,8 +433,8 @@ export default function PropertySearchBar({
 
 
       {/* Row 2 — segments */}
-      <div className={`grid grid-cols-2 md:grid-cols-3 gap-1.5 sm:gap-2`} data-search-grid={GRID_KEY}>
-        <div className="col-span-2 jj-sspan-6 min-w-0">
+      <div className={`contents lg:grid lg:gap-2`} data-search-grid={GRID_KEY}>
+        <div className="order-4 col-span-1 jj-sspan-6 min-w-0">
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
               country={f.country}
@@ -461,7 +453,7 @@ export default function PropertySearchBar({
           </Seg>
         </div>
 
-        <Seg label={typeLabel} active={f.types.length > 0} dark={dark} spanClass="jj-sspan-3">
+        <Seg label={typeLabel} active={f.types.length > 0} dark={dark} spanClass="order-5 jj-sspan-3">
           <div className="p-3">
             <div className="grid grid-cols-2 gap-1 p-1 rounded-xl mb-2" style={{ background: "#F2EBDC" }}>
               {(Object.keys(CATEGORY_TYPES) as SearchCategory[]).map((c) => (
@@ -503,7 +495,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={bedLabel} active={f.beds.length > 0 || f.baths.length > 0} dark={dark} spanClass="jj-sspan-3">
+        <Seg label={bedLabel} active={f.beds.length > 0 || f.baths.length > 0} dark={dark} spanClass="order-6 jj-sspan-3">
           <div className="p-3 space-y-3">
             <div>
               <p className="text-[11px] uppercase tracking-wider opacity-60 mb-1.5">Bedrooms</p>
@@ -529,7 +521,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={priceLabel} active={f.priceMin != null || f.priceMax != null} dark={dark} spanClass="jj-sspan-3">
+        <Seg label={priceLabel} active={f.priceMin != null || f.priceMax != null} dark={dark} spanClass="order-7 jj-sspan-3">
           <div className="p-3 grid grid-cols-2 gap-2">
             <input
               className={numInput}
@@ -548,7 +540,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark} spanClass="jj-sspan-3">
+        <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark} spanClass="order-8 jj-sspan-3">
           <div className="p-3 flex flex-wrap gap-1.5">
             {PROJECT_STATUSES.map((s) => (
               <Chip
@@ -593,7 +585,7 @@ export default function PropertySearchBar({
 
 
         <div
-          className="grid gap-1.5 sm:gap-2 col-span-3 sm:col-span-2 jj-sspan-6 min-w-0"
+          className="contents lg:grid lg:gap-2 lg:col-span-2 jj-sspan-6 min-w-0"
           style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
         >
           <button
@@ -602,7 +594,7 @@ export default function PropertySearchBar({
               setDraft(f);
               setMoreOpen(true);
             }}
-            className={SEG}
+            className={`${SEG} order-9`}
             data-no-contrast-guard
             data-search-segment
             style={{
@@ -628,30 +620,13 @@ export default function PropertySearchBar({
             onClick={() => onSubmit(f)}
              data-surface="emerald"
              data-search-segment
-            className="h-11 sm:h-16 w-full rounded-lg text-[12.5px] sm:text-sm font-semibold text-white px-2 whitespace-nowrap"
+            className="order-11 col-span-2 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold text-white px-2 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             {count == null ? "Search" : `Show ${count.toLocaleString()}`}
           </button>
         </div>
       </div>
-
-      {/* Free consultation — same in-page frame + styling as the "More" screen */}
-      <Dialog open={consultOpen} onOpenChange={setConsultOpen}>
-        <DialogContent
-          data-surface="light"
-          data-search-dropdown
-          className="max-w-[min(96vw,44rem)] max-h-[88vh] overflow-y-auto p-0 gap-0 z-[80]"
-          style={{ background: "#FFFFFF", border: "1px solid rgba(184,149,85,0.35)", color: "#1A1A1A" }}
-        >
-          <div className="px-4 pt-4">
-            <h2 className="text-lg font-semibold">Free consultation</h2>
-          </div>
-          <div className="p-4">
-            <ConsultationRequestForm showHeader={false} formSource="hero_search_bar" />
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* More filters — the SAME full filter screen as the header filter */}
       <Dialog open={moreOpen} onOpenChange={setMoreOpen}>

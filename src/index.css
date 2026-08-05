@@ -949,11 +949,11 @@ body {
     backdrop-filter: none !important;
     box-shadow: none !important;
   }
-  /* Exempt the mobile header divider from the transparent-background reset
-     so the gold hairline stays visible even over the dark hero. */
+  /* Phone/tablet portrait: quiet white hairline over the dark hero. */
   body[data-home-hero-state="atrest"] [data-chrome="header"] > header > div.jj-header-mobile-divider {
-    background: #B89555 !important;
-    opacity: 0.55 !important;
+    background: rgba(255, 255, 255, 0.48) !important;
+    height: 1px !important;
+    opacity: 1 !important;
   }
   body[data-home-hero-state="scrolled"] [data-chrome="header"] > header {
     background: #FDFBF7 !important;
@@ -37571,29 +37571,21 @@ html body #root [data-search-utility-controls] * {
   hyphens: none !important;
 }
 
-/* ============================================================
-   PASS 257 — MOBILE COMPACT HERO SEARCH GRID
-   Phones get a 3-column row-1 grid so currency / area unit /
-   consultation sit side by side instead of stacking tall.
-   ============================================================ */
-@media (max-width: 639px) {
-  html body #root [data-property-search-bar] [data-search-grid] {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+/* PASS 257 — phone/tablet preference filter: compact two-column flow. */
+@media (max-width: 1023px) {
+  html body #root [data-property-search-bar] [data-desktop-consultation] {
+    display: none !important;
   }
-  html body #root [data-property-search-bar] [data-search-grid] > .col-span-3 {
-    grid-column: span 3 / span 3 !important;
-  }
-  html body #root [data-property-search-bar] [data-search-grid] > .col-span-2 {
-    grid-column: span 2 / span 2 !important;
-  }
-}
-
-/* PASS 257b — phone: compact currency + area-unit content inside their boxes. */
-@media (max-width: 639px) {
   html body #root [data-property-search-bar] [data-search-utility-controls] button {
     padding-inline: 8px !important;
   }
   html body #root [data-property-search-bar] [data-search-utility-controls] button[aria-pressed] {
     padding-inline: 4px !important;
+  }
+  html body #root [data-property-search-bar] [data-search-segment] {
+    min-height: 40px !important;
+  }
+  html body #root [data-property-search-bar] > [data-search-grid] {
+    display: contents !important;
   }
 }
