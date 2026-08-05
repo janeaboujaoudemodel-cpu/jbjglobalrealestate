@@ -7,7 +7,8 @@
  * Selection is shown ONLY by the emerald tick on each row — no duplicate chips.
  */
 import { useMemo, useState } from "react";
-import { Check, Minus, Plus, Search } from "lucide-react";
+import { Check, Minus, Plus } from "lucide-react";
+import HoverScrollRow from "@/components/ui/HoverScrollRow";
 import { getAreas, getRegions, hasRegionStep, GEO_COUNTRIES } from "@/data/geography";
 
 const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
@@ -33,7 +34,7 @@ export default function AreaIncludeExclude({
   onCountryChange,
 }: Props) {
   const [mode, setMode] = useState<"include" | "exclude">("include");
-  const [query, setQuery] = useState("");
+  const query = "";
 
   const regions = getRegions(country);
   const areas = useMemo(() => getAreas(country, region), [country, region]);
@@ -62,7 +63,7 @@ export default function AreaIncludeExclude({
         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: "rgba(26,26,26,0.55)" }}>
           Country
         </p>
-        <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <HoverScrollRow>
           {GEO_COUNTRIES.map((c) => {
             const on = country === c.slug;
             return (
@@ -82,7 +83,7 @@ export default function AreaIncludeExclude({
               </button>
             );
           })}
-        </div>
+        </HoverScrollRow>
 
         {/* Emirate / region step — nested under the chosen country */}
         {hasRegionStep(country) && (
@@ -93,7 +94,7 @@ export default function AreaIncludeExclude({
             >
               Emirate
             </p>
-            <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <HoverScrollRow>
               <button
                 type="button"
                 onClick={() => onChange({ include: [], exclude: [], region: null })}
@@ -119,7 +120,7 @@ export default function AreaIncludeExclude({
                   {r.name}
                 </button>
               ))}
-            </div>
+            </HoverScrollRow>
           </>
         )}
       </div>
@@ -165,20 +166,6 @@ export default function AreaIncludeExclude({
             {m}
           </button>
         ))}
-      </div>
-
-      {/* Search */}
-      <div
-        className="flex items-center gap-2 h-11 px-3 rounded-lg mb-2"
-        style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.35)" }}
-      >
-        <Search className="w-4 h-4 opacity-60" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={`Search areas to ${mode}`}
-          className="flex-1 bg-transparent text-sm outline-none"
-        />
       </div>
 
       {/* Area list — the tick is the ONLY selected-state indicator */}
