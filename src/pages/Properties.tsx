@@ -636,6 +636,19 @@ const Properties = () => {
   // hardcoded headline figure — the toolbar, the pager and the search bar must
   // agree with what the visitor can actually open.
   const displayedResultCount = finalProjects.length;
+  const legacyIntentValue = appliedFilters.transactionType === "rent"
+    ? "rent"
+    : appliedFilters.completionStatus === "ready"
+      ? "buy-ready"
+      : appliedFilters.completionStatus === "off-plan"
+        ? "buy-offplan"
+        : "buy";
+  const setLegacyIntent = (value: string) => {
+    const transactionType = value === "rent" ? "rent" : "buy";
+    const completionStatus = value === "buy-ready" ? "ready" : value === "buy-offplan" ? "off-plan" : null;
+    setFilters((previous) => ({ ...previous, transactionType, completionStatus }));
+    setAppliedFilters((previous) => ({ ...previous, transactionType, completionStatus }));
+  };
 
   // Dynamic SEO based on transaction type per Master Blueprint
   const dynamicSEO = appliedFilters.transactionType === 'rent'
@@ -728,6 +741,7 @@ const Properties = () => {
               Its More control opens the same in-place panel on every route. */}
           {false ? (
             <div aria-hidden="true">
+                        <div>
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Search</label>
                           <div className="flex items-center h-12 px-3 bg-[#F7F2EA] border border-[#064E3B]/30 rounded-lg">
                             <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60" strokeWidth={2} />
@@ -750,7 +764,7 @@ const Properties = () => {
                         {/* Intent (Buy / Buy Ready / Buy Off-Plan / Rent) */}
                         <div>
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Intent</label>
-                          <Select value={intentValue} onValueChange={setIntent}>
+                          <Select value={legacyIntentValue} onValueChange={setLegacyIntent}>
                               <SelectTrigger className="w-full h-auto min-h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                               <SelectValue />
                             </SelectTrigger>
