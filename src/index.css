@@ -37658,3 +37658,31 @@ a.jj-gold-link:hover {
 @media (prefers-reduced-motion: reduce) {
   a.jj-gold-link { animation: none; }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 264 — EMERALD FILL WHITE-INK FINAL WORD
+   Any element painted with the brand emerald pair gradient renders
+   its own label + icons in pure white, no matter how light the
+   surrounding band is. Appended last so it wins every earlier pass.
+   ───────────────────────────────────────────────────────────── */
+html body [style*="rgb(6, 78, 59)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+html body [style*="rgb(4, 44, 28)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+html body [style*="#064E3B" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [style*="rgb(6, 78, 59)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
+html body [style*="rgb(4, 44, 28)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
+html body [style*="#064E3B" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
+html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [style*="rgb(6, 78, 59)"] :is(svg, [class*="lucide"]),
+html body [style*="rgb(4, 44, 28)"] :is(svg, [class*="lucide"]),
+html body [style*="#064E3B" i] :is(svg, [class*="lucide"]),
+html body [style*="#042c1c" i] :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
