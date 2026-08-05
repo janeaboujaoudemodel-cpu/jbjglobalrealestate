@@ -69,6 +69,7 @@ export default function InlineCurrencySelect({ dark }: Props) {
             Currency
           </span>
           <span className="flex w-full min-w-0 items-center gap-1.5">
+            {active.symbol && active.symbol !== active.code ? (
             <span
               className="leading-none"
               style={{
@@ -80,11 +81,21 @@ export default function InlineCurrencySelect({ dark }: Props) {
             >
               {active.symbol}
             </span>
+            ) : null}
+            {active.symbol && active.symbol !== active.code ? (
             <span
               aria-hidden
               className="h-3 w-px shrink-0"
               style={{ background: dark ? "rgba(255,255,255,0.28)" : "rgba(4,44,28,0.18)" }}
             />
+            ) : null}
+            <span
+              aria-hidden
+              className="text-[11px] leading-none"
+              style={{ color: dark ? "rgba(255,255,255,0.55)" : "rgba(4,44,28,0.5)" }}
+            >
+              {active.flag}
+            </span>
             <span
               className="text-[12.5px] font-semibold leading-none"
               style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap" }}
