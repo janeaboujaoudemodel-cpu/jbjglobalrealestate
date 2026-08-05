@@ -411,10 +411,8 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                     key={image.id}
                     onClick={() => {
                       if (isOverflowTile) {
-                        // Open the full gallery from the very first photo so the
-                        // user immediately sees the complete filmstrip of ALL
-                        // photos (not just the hidden remainder).
-                        openFullscreen(0);
+                         // Continue at the first photo hidden behind the +N tile.
+                         openFullscreen(6);
                       } else {
                         setPageIndex(index);
                       }

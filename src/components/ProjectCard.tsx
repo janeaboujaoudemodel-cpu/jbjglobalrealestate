@@ -123,7 +123,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         seen.add(key);
         return true;
       });
-  }, [images, priority, project]);
+  }, [images, priority, project.id, project.cover_image_url]);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
   useEffect(() => {
     setPrimaryImageIndex(0);
@@ -323,7 +323,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             placeholderLabel=""
             priority={priority}
             onError={() => {
-              setPrimaryImageIndex((current) => Math.min(current + 1, primaryImageCandidates.length));
+              setPrimaryImageIndex((current) => Math.min(current + 1, Math.max(0, primaryImageCandidates.length - 1)));
             }}
             loggerComponent="ProjectCard"
             loggerContext={{
@@ -344,7 +344,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i - 1 + primaryImageCandidates.length) % primaryImageCandidates.length);
                 }}
-                className="absolute left-2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
+                className="absolute left-2 z-20 flex items-center justify-center opacity-100 pointer-events-auto bg-transparent border-0 p-0"
                 style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
               >
                 <ChevronLeft className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
@@ -359,7 +359,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i + 1) % primaryImageCandidates.length);
                 }}
-                className="absolute right-2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
+                className="absolute right-2 z-20 flex items-center justify-center opacity-100 pointer-events-auto bg-transparent border-0 p-0"
                 style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
               >
                 <ChevronRight className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
