@@ -1228,27 +1228,25 @@ const Properties = () => {
             );
           })()}
 
-          {/* Unified property search bar — identical surface site-wide */}
+          {/* Unified property search bar — the ONE filter for this page.
+              Its "Show N" mirrors the grid total exactly, and its active-chip
+              row is the single place a visitor resets filters. */}
           <div className="mt-3">
-            <PropertySearchBar value={search} onChange={setSearch} onSubmit={submitSearch} dark showSort />
+            <PropertySearchBar
+              value={search}
+              onChange={setSearch}
+              onSubmit={submitSearch}
+              dark
+              countOverride={showSkeletons ? null : displayedResultCount}
+              showActiveSummary
+            />
           </div>
 
-          {/* Results toolbar — sort, view mode, alerts, quick status chips */}
+          {/* Results toolbar — sort, view mode, alerts (sort lives here only) */}
           <div className="mt-4">
             <ResultsToolbar value={search} onChange={submitSearch} total={finalProjects.length} dark />
           </div>
 
-          {/* Premium shortcut chip bar (same as header) */}
-          <div className="mt-3">
-            <FilterShortcutBar
-              variant="dark"
-              filters={shortcutFilters}
-              onFilterChange={setShortcutFilters}
-              isMapMode={isMapMode}
-              onMapToggle={setIsMapMode}
-              hideSort
-            />
-          </div>
 
           </div>
         </div>
