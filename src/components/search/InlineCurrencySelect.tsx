@@ -55,59 +55,38 @@ export default function InlineCurrencySelect({ dark }: Props) {
         <button
           type="button"
           data-no-contrast-guard
-          className="group flex h-full w-full min-w-0 flex-col justify-center gap-[3px] bg-transparent px-2.5 text-left"
+          className="group flex h-full w-full min-w-0 items-center gap-2.5 bg-transparent px-3.5 text-left"
           style={{ color: fg, borderRadius: 0 }}
           aria-label="Select currency"
         >
           <span
-            className="block text-[8.5px] uppercase leading-none tracking-[0.18em]"
-            style={{
-              color: dark ? "rgba(255,255,255,0.62)" : "rgba(26,26,26,0.55)",
-              whiteSpace: "nowrap",
-            }}
+            aria-hidden
+            className="shrink-0 text-[17px] leading-none"
+            style={{ filter: "saturate(1.05)" }}
           >
-            Currency
+            {active.flag}
           </span>
-          <span className="flex w-full min-w-0 items-center gap-1.5">
-            {active.symbol && active.symbol !== active.code ? (
+          <span className="flex min-w-0 flex-col gap-[3px]">
             <span
-              className="leading-none"
+              className="block text-[8.5px] uppercase leading-none tracking-[0.18em]"
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: (active.symbol || "").length > 1 ? 12 : 16,
-                color: dark ? "rgba(255,255,255,0.85)" : "rgba(4,44,28,0.85)",
+                color: dark ? "rgba(255,255,255,0.62)" : "rgba(26,26,26,0.55)",
                 whiteSpace: "nowrap",
               }}
             >
-              {active.symbol}
-            </span>
-            ) : null}
-            {active.symbol && active.symbol !== active.code ? (
-            <span
-              aria-hidden
-              className="h-3 w-px shrink-0"
-              style={{ background: dark ? "rgba(255,255,255,0.28)" : "rgba(4,44,28,0.18)" }}
-            />
-            ) : null}
-            <span
-              aria-hidden
-              className="text-[11px] leading-none"
-              style={{ color: dark ? "rgba(255,255,255,0.55)" : "rgba(4,44,28,0.5)" }}
-            >
-              {active.flag}
+              Currency
             </span>
             <span
-              className="text-[12.5px] font-semibold leading-none"
+              className="block text-[13px] font-semibold leading-none"
               style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap" }}
             >
               {active.code}
             </span>
-            <ChevronDown
-              className="ml-auto h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
-              style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
-            />
           </span>
-
+          <ChevronDown
+            className="ml-auto h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
+            style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
+          />
         </button>
       </DropdownMenuTrigger>
 
