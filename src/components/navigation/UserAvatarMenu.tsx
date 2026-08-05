@@ -137,8 +137,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         asChild={!!to}
         unstyled
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-[#1A1A1A]"
-        style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0"
+        data-no-contrast-guard
+        style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
       >
         {to ? (
           <Link
