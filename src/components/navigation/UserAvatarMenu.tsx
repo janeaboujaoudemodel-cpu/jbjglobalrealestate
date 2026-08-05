@@ -224,26 +224,27 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
-        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites" icon={Heart} label="Favorites" />
-        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
-        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
 
 
-        <DropdownMenuSeparator className="bg-[#B89555]/25 my-1" />
+        <DropdownMenuSeparator className="bg-white/20 my-1" />
         <DropdownMenuItem
           onSelect={handleSignOut}
           data-account-signout-row="true"
           data-account-menu-row="true"
           unstyled
-          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-[#1A1A1A]"
-          style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
+          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5"
+          data-no-contrast-guard
+          style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          <span className="flex items-center gap-2.5 w-full" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
-            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#064E3B", stroke: "#064E3B" }} />
-            <span className="text-sm font-medium" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Sign out</span>
+          <span className="flex items-center gap-2.5 w-full" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign out</span>
           </span>
         </DropdownMenuItem>
       </DropdownMenuContent>
