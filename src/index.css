@@ -18591,6 +18591,30 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
   padding-inline: var(--jbj-control-x);
   padding-block: 0.55rem;
 }
+
+/* Numeric filter options are one immutable 40 × 40 circle. This wins over the
+   platform-wide 44px button minimum without changing any other control. */
+html body button[data-numeric-chip="true"] {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  flex: 0 0 40px !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+}
+
+html body [data-search-utility-controls] button {
+  padding-inline: 8px !important;
+  white-space: nowrap !important;
+}
+
+html body [data-search-utility-controls] button[aria-pressed] {
+  padding-inline: 4px !important;
+}
 :where(button, a, [role="button"]) :where(svg, [class*="lucide"], [data-lucide]) {
   width: var(--jbj-icon-size);
   height: var(--jbj-icon-size);

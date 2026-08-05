@@ -20,7 +20,9 @@ import { GEO_COUNTRIES } from "@/data/geography";
 import AreaIncludeExclude from "./AreaIncludeExclude";
 import PropertyFilterScreen from "./PropertyFilterScreen";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
+import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
+import { useAreaUnit, type AreaUnit } from "@/hooks/useAreaUnit";
 import {
   BATHS,
   BEDS,
@@ -130,6 +132,7 @@ function Chip({
       type="button"
       onClick={onClick}
       data-surface={on ? "emerald" : "light"}
+      data-numeric-chip={circle ? "true" : undefined}
       className={
         circle
           ? "h-10 w-10 min-w-10 min-h-10 shrink-0 grow-0 basis-10 aspect-square rounded-full p-0 leading-none text-xs font-semibold inline-flex items-center justify-center"
@@ -203,8 +206,14 @@ export default function PropertySearchBar({
     arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
 
   const { count } = usePropertyCount(f);
+  const { areaUnit } = useAreaUnit();
   const cur = currencyFor(f.country);
   const extras = countExtraFilters(f);
+
+  const setAreaUnit = (unit: AreaUnit) => {
+    localStorage.setItem("jj_area_unit", unit);
+    window.dispatchEvent(new CustomEvent("areaUnitChange", { detail: unit }));
+  };
 
   const locationLabel = useMemo(() => {
     if (f.areasInclude.length)
@@ -293,7 +302,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-7"
+          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-4"
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -335,6 +344,42 @@ export default function PropertySearchBar({
           />
         </div>
 
+        <div
+          className="flex h-14 sm:h-16 min-w-0 items-center justify-center gap-2 rounded-lg px-2 lg:col-span-3"
+          data-search-utility-controls
+          data-surface={dark ? "dark" : "light"}
+          style={{
+            backgroundImage: dark ? DARK_SURFACE : undefined,
+            background: dark ? undefined : "#FDFBF7",
+            backdropFilter: dark ? "blur(10px)" : undefined,
+            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
+          }}
+        >
+          <CurrencySwitcher variant="flag" />
+          <div
+            className="flex h-11 min-w-0 flex-1 overflow-hidden rounded-full border"
+            style={{ borderColor: dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.35)" }}
+          >
+            {(["sqft", "sqm"] as const).map((unit) => (
+              <button
+                key={unit}
+                type="button"
+                onClick={() => setAreaUnit(unit)}
+                aria-pressed={areaUnit === unit}
+                data-surface={areaUnit === unit ? "emerald" : undefined}
+                className="min-w-0 flex-1 px-2 text-[11px] font-semibold whitespace-nowrap"
+                style={{
+                  backgroundImage: areaUnit === unit ? EMERALD_PAIR : undefined,
+                  color: areaUnit === unit ? "#FFFFFF" : dark ? "#FFFFFF" : "#1A1A1A",
+                  borderRadius: 0,
+                }}
+              >
+                {unit === "sqft" ? "sq ft" : "sq m"}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {onConsultation ? (
           <button
             type="button"
@@ -345,7 +390,7 @@ export default function PropertySearchBar({
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <CalendarCheck className="w-4 h-4 shrink-0" />
-            <span className="text-xs sm:text-[13px] leading-tight text-center"><span className="hidden xl:inline">Free </span>Consultation</span>
+            <span className="text-xs sm:text-[13px] leading-tight text-center">Consultation</span>
 
           </button>
         ) : null}
@@ -354,7 +399,7 @@ export default function PropertySearchBar({
 
 
       {/* Row 2 — segments */}
-      <div className={`grid grid-cols-2 md:grid-cols-3 ${showSort ? "lg:grid-cols-9" : "lg:grid-cols-8"} gap-2`}>
+      <div className={`grid grid-cols-2 md:grid-cols-3 ${showSort ? "lg:grid-cols-10" : "lg:grid-cols-9"} gap-2`}>
         <div className="col-span-2 lg:col-span-2 min-w-0">
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
@@ -504,7 +549,7 @@ export default function PropertySearchBar({
 
 
 
-        <div className="grid grid-cols-2 gap-2 col-span-2 lg:col-span-2 min-w-0">
+        <div className="grid grid-cols-2 gap-2 col-span-2 lg:col-span-3 min-w-0">
           <button
             type="button"
             onClick={() => {
