@@ -16,8 +16,9 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
+import SearchFallbackContact from "@/components/search/SearchFallbackContact";
 import { EMPTY_SEARCH, searchToParams, type PropertySearch } from "@/lib/propertySearch";
-import { handOffToChatSupport, resolveIntentLocally } from "@/lib/searchIntent";
+import { resolveIntentLocally } from "@/lib/searchIntent";
 import { saveRecentSearch } from "@/lib/searchHistory";
 import { toast } from "sonner";
 
