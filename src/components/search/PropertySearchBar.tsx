@@ -632,6 +632,66 @@ export default function PropertySearchBar({
         </div>
       </div>
 
+      {/* Active filter summary — tells the visitor exactly what is filtering
+          the results, and gives one clear reset. */}
+      {showActiveSummary && activeChips.length > 0 ? (
+        <div
+          className="order-12 col-span-2 lg:col-span-none mt-2 flex flex-wrap items-center gap-1.5"
+          data-active-filter-summary
+        >
+          <span
+            className="text-[11px] font-semibold uppercase tracking-[0.14em]"
+            style={{ color: dark ? "rgba(255,255,255,0.72)" : "rgba(26,26,26,0.6)" }}
+          >
+            Active
+          </span>
+          {activeChips.map((chip) => (
+            <button
+              key={chip.key}
+              type="button"
+              onClick={() => {
+                const next = { ...f, ...chip.clear };
+                setInternal(next);
+                onChange?.(next);
+                onSubmit(next);
+              }}
+              data-no-contrast-guard
+              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11.5px] font-semibold"
+              style={{
+                backgroundImage: EMERALD_PAIR,
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                border: "1px solid rgba(255,255,255,0.32)",
+              }}
+            >
+              {chip.label}
+              <span aria-hidden="true" style={{ opacity: 0.8 }}>×</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              const next = { ...EMPTY_SEARCH, purpose: f.purpose, country: f.country, sort: f.sort };
+              setInternal(next);
+              onChange?.(next);
+              onSubmit(next);
+            }}
+            data-no-contrast-guard
+            className="inline-flex items-center h-7 px-2.5 rounded-full text-[11.5px] font-semibold"
+            style={{
+              background: dark ? "rgba(255,255,255,0.10)" : "#FDFBF7",
+              color: dark ? "#FFFFFF" : "#1A1A1A",
+              WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.42)" : "rgba(184,149,85,0.45)"}`,
+            }}
+          >
+            Reset all filters
+          </button>
+        </div>
+      ) : null}
+
+
+
       {/* More filters — the SAME full filter screen as the header filter */}
       <Dialog open={moreOpen} onOpenChange={setMoreOpen}>
         <DialogContent
