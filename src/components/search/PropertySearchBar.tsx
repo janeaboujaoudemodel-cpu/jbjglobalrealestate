@@ -53,6 +53,7 @@ function Seg({
   dark,
   children,
   wide,
+  spanClass,
 }: {
   label: string;
   active?: boolean;
@@ -60,6 +61,7 @@ function Seg({
   dark: boolean;
   children: React.ReactNode;
   wide?: boolean;
+  spanClass?: string;
 }) {
   const ink = dark ? "#FFFFFF" : "#1A1A1A";
   const muted = dark ? "rgba(255,255,255,0.92)" : "rgba(26,26,26,0.62)";
@@ -70,7 +72,7 @@ function Seg({
           type="button"
           aria-label={label}
           data-search-segment
-          className={SEG}
+          className={`${SEG} ${spanClass ?? ""}`}
           data-no-contrast-guard
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
@@ -209,6 +211,9 @@ export default function PropertySearchBar({
   const { areaUnit } = useAreaUnit();
   const cur = currencyFor(f.country);
   const extras = countExtraFilters(f);
+  /* Both rows share the same lg column count so every card edge lines up. */
+  const GRID_KEY = showSort ? "27" : "24";
+  const KEYWORD_SPAN = showSort ? "jj-sspan-12" : "jj-sspan-9";
 
   const setAreaUnit = (unit: AreaUnit) => setAreaUnitGlobal(unit);
 
@@ -230,7 +235,7 @@ export default function PropertySearchBar({
       : `${f.category === "commercial" ? "Commercial" : "Residential"} · ${f.types.length}`
     : f.category === "commercial"
       ? "Commercial"
-      : "Residential";
+      : "Type";
 
   const bedLabel =
     f.beds.length || f.baths.length
@@ -253,9 +258,9 @@ export default function PropertySearchBar({
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] lg:grid-cols-12 items-stretch gap-2 mb-2">
+      <div className={`grid grid-cols-1 sm:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] items-stretch gap-2 mb-2`} data-search-grid={GRID_KEY}>
         <div
-          className="flex h-14 sm:h-16 min-w-0 lg:col-span-3 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="flex h-14 sm:h-16 min-w-0 jj-sspan-6 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
 
           data-surface={dark ? "dark" : "light"}
           data-search-segment
@@ -300,7 +305,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-4"
+          className={`relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 ${KEYWORD_SPAN}`}
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -343,7 +348,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="flex h-14 sm:h-16 min-w-0 items-center justify-center gap-2 rounded-lg px-2 lg:col-span-3"
+          className="flex h-14 sm:h-16 min-w-0 items-center justify-center rounded-lg px-1 jj-sspan-3"
           data-search-utility-controls
           data-surface={dark ? "dark" : "light"}
           style={{
@@ -354,51 +359,66 @@ export default function PropertySearchBar({
           }}
         >
           <CurrencySwitcher variant="flag" />
-          <div
-            className="flex h-11 min-w-0 flex-1 overflow-hidden rounded-full border"
-            style={{ borderColor: dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.35)" }}
-          >
-            {(["sqft", "sqm"] as const).map((unit) => (
-              <button
-                key={unit}
-                type="button"
-                onClick={() => setAreaUnit(unit)}
-                aria-pressed={areaUnit === unit}
-                data-surface={areaUnit === unit ? "emerald" : undefined}
-                className="min-w-0 flex-1 px-2 text-[11px] font-semibold whitespace-nowrap"
-                style={{
-                  backgroundImage: areaUnit === unit ? EMERALD_PAIR : undefined,
-                  color: areaUnit === unit ? "#FFFFFF" : dark ? "#FFFFFF" : "#1A1A1A",
-                  borderRadius: 0,
-                }}
-              >
-                {unit === "sqft" ? "sq ft" : "sq m"}
-              </button>
-            ))}
-          </div>
         </div>
 
-        {onConsultation ? (
-          <button
-            type="button"
-            onClick={() => setConsultOpen(true)}
-            data-surface="emerald"
-            data-search-segment
-            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full sm:col-span-2 lg:col-span-2 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
-            style={{ backgroundImage: EMERALD_PAIR }}
+        {/* sq ft / sq m sits above "More" and Consultation above "Show N" — same widths */}
+        <div className="grid grid-cols-2 gap-2 sm:col-span-2 jj-sspan-6 min-w-0">
+          <div
+            className="flex h-14 sm:h-16 min-w-0 items-center justify-center gap-1 rounded-lg px-2"
+            data-search-utility-controls
+            data-surface={dark ? "dark" : "light"}
+            style={{
+              backgroundImage: dark ? DARK_SURFACE : undefined,
+              background: dark ? undefined : "#FDFBF7",
+              backdropFilter: dark ? "blur(10px)" : undefined,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
+            }}
           >
-            <CalendarCheck className="w-4 h-4 shrink-0" />
-            <span className="text-xs sm:text-[13px] leading-tight text-center">Consultation</span>
+            <div
+              className="flex h-11 min-w-0 flex-1 overflow-hidden rounded-full border"
+              style={{ borderColor: dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.35)" }}
+            >
+              {(["sqft", "sqm"] as const).map((unit) => (
+                <button
+                  key={unit}
+                  type="button"
+                  onClick={() => setAreaUnit(unit)}
+                  aria-pressed={areaUnit === unit}
+                  data-surface={areaUnit === unit ? "emerald" : undefined}
+                  className="min-w-0 flex-1 px-2 text-[11px] font-semibold whitespace-nowrap"
+                  style={{
+                    backgroundImage: areaUnit === unit ? EMERALD_PAIR : undefined,
+                    color: areaUnit === unit ? "#FFFFFF" : dark ? "#FFFFFF" : "#1A1A1A",
+                    borderRadius: 0,
+                  }}
+                >
+                  {unit === "sqft" ? "sq ft" : "sq m"}
+                </button>
+              ))}
+            </div>
+          </div>
 
-          </button>
-        ) : null}
+          {onConsultation ? (
+            <button
+              type="button"
+              onClick={() => setConsultOpen(true)}
+              data-surface="emerald"
+              data-search-segment
+              className="jj-emerald-action jj-shine-cta relative overflow-hidden inline-flex h-14 sm:h-16 w-full items-center justify-center gap-1 rounded-lg px-1.5 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+              style={{ backgroundImage: EMERALD_PAIR }}
+            >
+              <CalendarCheck className="w-4 h-4 shrink-0" />
+              <span className="text-[11px] sm:text-xs leading-tight text-center whitespace-nowrap">Consultation</span>
+            </button>
+          ) : null}
+        </div>
 
       </div>
 
 
       {/* Row 2 — segments */}
-      <div className={`grid grid-cols-2 md:grid-cols-3 ${showSort ? "lg:grid-cols-10" : "lg:grid-cols-9"} gap-2`}>
-        <div className="col-span-2 lg:col-span-2 min-w-0">
+      <div className={`grid grid-cols-2 md:grid-cols-3 gap-2`} data-search-grid={GRID_KEY}>
+        <div className="col-span-2 jj-sspan-6 min-w-0">
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
               country={f.country}
@@ -417,7 +437,7 @@ export default function PropertySearchBar({
           </Seg>
         </div>
 
-        <Seg label={typeLabel} active={f.types.length > 0} dark={dark}>
+        <Seg label={typeLabel} active={f.types.length > 0} dark={dark} spanClass="jj-sspan-3">
           <div className="p-3">
             <div className="grid grid-cols-2 gap-1 p-1 rounded-xl mb-2" style={{ background: "#F2EBDC" }}>
               {(Object.keys(CATEGORY_TYPES) as SearchCategory[]).map((c) => (
@@ -459,7 +479,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={bedLabel} active={f.beds.length > 0 || f.baths.length > 0} dark={dark}>
+        <Seg label={bedLabel} active={f.beds.length > 0 || f.baths.length > 0} dark={dark} spanClass="jj-sspan-3">
           <div className="p-3 space-y-3">
             <div>
               <p className="text-[11px] uppercase tracking-wider opacity-60 mb-1.5">Bedrooms</p>
@@ -485,7 +505,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={priceLabel} active={f.priceMin != null || f.priceMax != null} dark={dark}>
+        <Seg label={priceLabel} active={f.priceMin != null || f.priceMax != null} dark={dark} spanClass="jj-sspan-3">
           <div className="p-3 grid grid-cols-2 gap-2">
             <input
               className={numInput}
@@ -504,7 +524,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark}>
+        <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark} spanClass="jj-sspan-3">
           <div className="p-3 flex flex-wrap gap-1.5">
             {PROJECT_STATUSES.map((s) => (
               <Chip
@@ -523,6 +543,7 @@ export default function PropertySearchBar({
             label={sortOptions.find((s) => s.slug === f.sort)?.label ?? "Sort"}
             active
             dark={dark}
+            spanClass="jj-sspan-3"
             icon={<ArrowUpDown className="w-4 h-4 opacity-70" />}
           >
             <div className="p-1.5">
@@ -547,7 +568,7 @@ export default function PropertySearchBar({
 
 
 
-        <div className="grid grid-cols-2 gap-2 col-span-2 lg:col-span-3 min-w-0">
+        <div className="grid grid-cols-2 gap-2 col-span-2 jj-sspan-6 min-w-0">
           <button
             type="button"
             onClick={() => {
