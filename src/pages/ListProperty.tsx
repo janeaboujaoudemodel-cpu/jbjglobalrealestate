@@ -637,20 +637,20 @@ function PickerCard({
           className="inline-flex items-center gap-1.5 text-sm font-bold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
           data-no-contrast-guard
           style={{
-            background: "linear-gradient(180deg, #FFFFFF 0%, #F1F5F3 100%)",
-            color: EMERALD_DEEP,
-            WebkitTextFillColor: EMERALD_DEEP,
-            border: `1px solid rgba(255,255,255,0.9)`,
-            boxShadow: `0 10px 22px -12px rgba(0,0,0,0.7)`,
+            background: EMERALD_GRADIENT,
+            color: WHITE,
+            WebkitTextFillColor: WHITE,
+            border: `1px solid rgba(255,255,255,0.65)`,
+            boxShadow: `0 10px 22px -12px rgba(0,0,0,0.75)`,
           }}
         >
 
-
-          <span style={{ color: EMERALD_DEEP, WebkitTextFillColor: EMERALD_DEEP, fontWeight: 800 }}>Start</span>
-          <span className="jj-arrow-anim inline-flex" style={{ color: EMERALD_DEEP }}>
-            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: EMERALD_DEEP }} />
+          <span style={{ color: WHITE, WebkitTextFillColor: WHITE, fontWeight: 800 }}>Start</span>
+          <span className="jj-arrow-anim inline-flex" style={{ color: WHITE }}>
+            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: WHITE }} />
           </span>
         </span>
+
 
       </div>
     </button>
