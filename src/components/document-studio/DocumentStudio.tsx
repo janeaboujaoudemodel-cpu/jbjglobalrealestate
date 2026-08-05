@@ -52,6 +52,16 @@ import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
 import { exportPdf, exportDocx, exportPng, printDocument, preloadExportLibraries, DocumentMarks } from "./export/exporters";
+import { useApplicant, getActiveApplicant } from "@/contexts/ApplicantContext";
+import {
+  applicantFromFields,
+  applyApplicantToFields,
+  hasApplicantIdentity,
+} from "@/lib/documents/applicantFieldMap";
+import { buildDocumentTitle } from "@/lib/documents/documentTitle";
+import { useDocumentAutosave } from "@/hooks/useDocumentAutosave";
+import { AutosaveStatusChip } from "./AutosaveStatusChip";
+
 import {
   compose as composeDocument,
   DEFAULT_BROKER_COMMISSIONS,
@@ -693,6 +703,19 @@ function StudioShell({
   const [templateId, setTemplateId] = useState<string>(snap?.templateId || initialId);
   const template = useMemo(() => getTemplateById(templateId), [templateId]);
 
+  // The hub no longer remounts the studio when the owner picks a different
+  // template (that reset all in-memory work). React to the prop instead.
+  const presetRef = useRef(presetTemplateId);
+  useEffect(() => {
+    if (!presetTemplateId || presetTemplateId === presetRef.current) return;
+    presetRef.current = presetTemplateId;
+    if (!isValidCatalogTemplate(presetTemplateId)) return;
+    setTemplateId(presetTemplateId);
+    setStep(2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [presetTemplateId]);
+
+
 
   // Custom departments (persisted locally so users can add/rename/delete their own).
   const DEPT_STORAGE_KEY = "jbj:doc-studio:custom-departments";
@@ -723,6 +746,10 @@ function StudioShell({
       return j && typeof j === "object" ? j : {};
     } catch { return {}; }
   };
+  const { applicant, update: updateApplicant } = useApplicant();
+  const applicantRef = useRef(applicant);
+  applicantRef.current = applicant;
+
   const [fields, setFields] = useState<Record<string, string>>(() => {
     const baseTemplateId = snap?.templateId || initialId;
     const base = getTemplateDefaultFields(baseTemplateId);
@@ -734,23 +761,54 @@ function StudioShell({
       return snapDocumentDatesToToday({ ...base });
     }
     const merged = snapDocumentDatesToToday({ ...base, ...shared, ...(snap?.fields || {}) });
-    return baseTemplateId === "job_offer" ? snapDocumentDatesToToday(normalizeJobOfferIdentityFields(snap?.fields || {}, shared)) : merged;
+    const seeded = baseTemplateId === "job_offer"
+      ? snapDocumentDatesToToday(normalizeJobOfferIdentityFields(snap?.fields || {}, shared))
+      : merged;
+    // Centralized applicant record wins for the canonical identity fields.
+    return applyApplicantToFields(seeded, getActiveApplicant());
   });
 
-  // Mirror identity fields to the shared store whenever they change.
+  // Mirror identity fields to the shared store + the centralized applicant
+  // record whenever they change (debounced so it never runs per keystroke).
+  const identityMirrorTimer = useRef<number | null>(null);
   useEffect(() => {
-    try {
-      const out: Record<string, string> = {};
-      for (const k of IDENTITY_FIELD_KEYS) {
-        const v = (fields[k] || "").toString().trim();
-        if (v && !/^\[[^\]]+\]$/.test(v)) out[k] = v;
-      }
-      if (Object.keys(out).length) {
-        const merged = { ...readSharedIdentity(), ...out };
-        localStorage.setItem(SHARED_IDENTITY_KEY, JSON.stringify(merged));
-      }
-    } catch {}
+    if (identityMirrorTimer.current) window.clearTimeout(identityMirrorTimer.current);
+    identityMirrorTimer.current = window.setTimeout(() => {
+      try {
+        const out: Record<string, string> = {};
+        for (const k of IDENTITY_FIELD_KEYS) {
+          const v = (fields[k] || "").toString().trim();
+          if (v && !/^\[[^\]]+\]$/.test(v)) out[k] = v;
+        }
+        if (Object.keys(out).length) {
+          const merged = { ...readSharedIdentity(), ...out };
+          localStorage.setItem(SHARED_IDENTITY_KEY, JSON.stringify(merged));
+        }
+      } catch {}
+      // Push canonical values (name, position, email, phone, address, ref)
+      // into the one shared applicant record so every other surface sees them.
+      try {
+        updateApplicant(applicantFromFields(fields));
+      } catch {}
+    }, 600);
+    return () => {
+      if (identityMirrorTimer.current) window.clearTimeout(identityMirrorTimer.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fields]);
+
+  // Applicant selected elsewhere (sidebar, profile drawer, position page) →
+  // populate every applicable placeholder here without clobbering manual edits.
+  useEffect(() => {
+    if (!hasApplicantIdentity(applicant)) return;
+    setFields((cur) => {
+      const next = applyApplicantToFields(cur, applicant);
+      const changed = Object.keys(next).some((k) => next[k] !== cur[k]);
+      return changed ? next : cur;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [applicant.id, applicant.full_name, applicant.position, applicant.email, applicant.phone, applicant.address, applicant.applicant_ref]);
+
   const [bodyHtml, setBodyHtml] = useState<string>(() => {
     const staleStructuredDraft =
       !!snap?.templateId &&
@@ -1238,31 +1296,44 @@ function StudioShell({
     };
   };
 
+  // A booking id is minted ONCE per editor session. Previously every autosave
+  // hit next_booking_id(), which burned ids and made each save slower.
+  const bookingIdRef = useRef<string>("");
+  const ensureBookingId = async (): Promise<string> => {
+    const existing = (fields.booking_id || fields.bookingRef || bookingIdRef.current || "").trim();
+    if (existing) { bookingIdRef.current = existing; return existing; }
+    const prefix =
+      template?.id === "holiday_home_agreement" ? "JBJ-HH" :
+      template?.id === "commission_agreement"   ? "JBJ-CA" :
+      template?.id === "property_advertising_agreement" ? "JBJ-PAA" :
+      "JBJ-DOC";
+    let booking_id = "";
+    try {
+      const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
+      if (!error && data) booking_id = String(data);
+    } catch { /* fall back to client gen below */ }
+    if (!booking_id) booking_id = `JBJ-DOC-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    bookingIdRef.current = booking_id;
+    return booking_id;
+  };
+
   const handleSaveDocument = async (opts?: { silent?: boolean }) => {
     if (!template) { if (!opts?.silent) toast.error("Pick a template first"); return undefined; }
-    // Derive booking id (chained, server-side) if not already in field_values.
-    let booking_id = (fields.booking_id || fields.bookingRef || "").trim();
-    if (!booking_id) {
-      const prefix =
-        template.id === "holiday_home_agreement" ? "JBJ-HH" :
-        template.id === "commission_agreement"   ? "JBJ-CA" :
-        template.id === "property_advertising_agreement" ? "JBJ-PAA" :
-        "JBJ-DOC";
-      try {
-        const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
-        if (!error && data) booking_id = String(data);
-      } catch { /* fall back to client gen below */ }
-      if (!booking_id) booking_id = `${"JBJ-DOC"}-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-    }
+    const booking_id = await ensureBookingId();
     const profile = getProfileValues(fields);
     const nextFields = snapDocumentDatesToToday({ ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName });
     if (userEditedRef.current || liveEditedBodyHtmlRef.current) setFields(nextFields);
     else setSyncedFields(nextFields);
     const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     const candidateMeta = deriveCandidateFolder(nextFields);
-    const title =
-      (candidateMeta.displayName || profile.clientName || "Untitled") +
-      ` — ${template.label} (${booking_id})`;
+    // Canonical naming: "[Applicant Name] — Offer Letter". Never "Applicant
+    // Name"/"Untitled" when a real value exists anywhere in the pipeline.
+    const resolvedName =
+      candidateMeta.displayName ||
+      applicantRef.current?.full_name ||
+      profile.clientName ||
+      "";
+    const title = buildDocumentTitle(resolvedName, template.id, template.label);
     try {
       const saved = await saveDocMutation.mutateAsync({
         id: currentDocId,
@@ -1270,7 +1341,8 @@ function StudioShell({
         title,
         field_values: nextFields,
         rendered_html: currentBody || null,
-        client_name: candidateMeta.displayName || profile.clientName || null,
+        applicant_id: applicantRef.current?.id || null,
+        client_name: resolvedName || null,
         client_email: profile.clientEmail || null,
         client_phone: profile.clientPhone || null,
         candidate_folder: candidateMeta.folder,
@@ -1302,9 +1374,10 @@ function StudioShell({
             });
             await saveDocMutation.mutateAsync({
               template_id: "nda",
-              title: `${candidateMeta.displayName} — NDA (${booking_id})`,
+              title: buildDocumentTitle(candidateMeta.displayName, "nda", "NDA"),
               field_values: nextFields,
               rendered_html: ndaHtml,
+              applicant_id: applicantRef.current?.id || null,
               client_name: candidateMeta.displayName,
               client_email: profile.clientEmail || null,
               client_phone: profile.clientPhone || null,
@@ -1322,26 +1395,30 @@ function StudioShell({
       }
       return saved;
     } catch (e: any) {
+      if (opts?.silent) throw e; // surface to the autosave status chip
       return undefined;
     }
   };
+  const saveDocumentRef = useRef(handleSaveDocument);
+  saveDocumentRef.current = handleSaveDocument;
 
-  // ── Auto-save (silent) every 8s when there's a candidate name & changes ──
-  const autoSaveTimerRef = useRef<number | null>(null);
-  useEffect(() => {
-    if (!template) return;
-    const candidateName = pickCandidateDisplayName(fields);
-    if (!candidateName) return;
-    if (!bodyHtml) return;
-    if (autoSaveTimerRef.current) window.clearTimeout(autoSaveTimerRef.current);
-    autoSaveTimerRef.current = window.setTimeout(() => {
-      handleSaveDocument({ silent: true });
-    }, 8000);
-    return () => {
-      if (autoSaveTimerRef.current) window.clearTimeout(autoSaveTimerRef.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bodyHtml, JSON.stringify(fields), template?.id]);
+  // ── Reliable autosave: debounced, serialised, status-reporting ─────────────
+  const autosaveSignature = useMemo(
+    () => `${template?.id || ""}|${JSON.stringify(fields)}|${bodyHtml?.length || 0}|${bodyHtml?.slice(0, 4000) || ""}`,
+    [template?.id, fields, bodyHtml],
+  );
+  const autosave = useDocumentAutosave<true>({
+    enabled: !!template,
+    debounceMs: 1500,
+    signature: autosaveSignature,
+    initialId: currentDocId,
+    getPayload: () => (template ? true : null),
+    save: async () => {
+      const saved = await saveDocumentRef.current({ silent: true });
+      return saved?.id;
+    },
+  });
+
 
   // ── Cmd/Ctrl+S keyboard shortcut → manual save (toast) ──
   useEffect(() => {
@@ -1994,7 +2071,11 @@ function StudioShell({
     printDocument(currentBody, marks);
   };
 
+  const exportingRef = useRef<string | null>(null);
   const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
+    // Repeated clicks used to fire parallel renders (slow + duplicate files).
+    if (exportingRef.current) { toast.message("A download is already in progress…"); return; }
+    exportingRef.current = kind;
     let currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) { toast.error("Nothing to export yet"); return; }
     const syncedBodyNow = cleanDocumentFieldRows(buildSyncedBodyHtmlNow());
@@ -2024,7 +2105,10 @@ function StudioShell({
     try {
       const src = pageRef.current;
       const candidateNameForFile =
-        pickCandidateDisplayName(fields) || deriveCandidateFolder(fields).displayName || null;
+        pickCandidateDisplayName(fields)
+        || deriveCandidateFolder(fields).displayName
+        || applicantRef.current?.full_name
+        || null;
       let pdfBlob: Blob | null = null;
       if (kind === "pdf") pdfBlob = await exportPdf(currentBody, marks, template, src, onProgress, candidateNameForFile);
       else if (kind === "docx") await exportDocx(currentBody, marks, template, candidateNameForFile);
@@ -2040,6 +2124,7 @@ function StudioShell({
         // and archive the generated PDF in the profile folder in the background.
         // This removes the perceived post-download delay without changing the
         // exported pixels or the save/archive behavior.
+        exportingRef.current = null;
         setExporting(null);
         const pdfBlobForArchive = pdfBlob;
         void (async () => {
@@ -2074,9 +2159,12 @@ function StudioShell({
       }
     } catch (e: any) {
       console.error("[DocumentStudio] export failed", kind, e);
-      if (progressId != null) toast.error(e?.message || `${kind.toUpperCase()} export failed`, { id: progressId });
-      else toast.error(e?.message || `${kind.toUpperCase()} export failed`);
+      const message = e?.message || `${kind.toUpperCase()} export failed`;
+      const retry = { label: "Retry", onClick: () => { void handleExport(kind); } };
+      if (progressId != null) toast.error(message, { id: progressId, action: retry });
+      else toast.error(message, { action: retry });
     } finally {
+      exportingRef.current = null;
       setExporting(null);
     }
   };
@@ -2434,12 +2522,21 @@ function StudioShell({
               <span>Stamp</span>
             </Button>
             {template && (
+              <AutosaveStatusChip
+                status={autosave.status}
+                dirty={autosave.dirty}
+                lastSavedAt={autosave.lastSavedAt}
+                error={autosave.error}
+                onRetry={() => { void autosave.saveNow(); }}
+              />
+            )}
+            {template && (
               <Button
                 variant="primary"
                 size="sm"
                 onClick={() => handleSaveDocument()}
                 disabled={saveDocMutation.isPending}
-                title="Save this document (⌘/Ctrl+S). Also auto-saves every 8s."
+                title="Save this document (⌘/Ctrl+S). Drafts also auto-save as you type."
                 className="h-10"
               >
                 {saveDocMutation.isPending
@@ -2448,6 +2545,7 @@ function StudioShell({
                 <span>{currentDocId ? "Update" : "Save"}</span>
               </Button>
             )}
+
             {template && (
               <Button
                 variant="primary"

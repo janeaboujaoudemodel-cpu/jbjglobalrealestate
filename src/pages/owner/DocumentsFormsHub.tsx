@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, lazy, Suspense } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -191,23 +191,23 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   })();
   const [tab, setTab] = useState<Bucket>(initialTab);
   const [cat, setCat] = useState<Cat>("all");
-  // Keep ?tab= in sync with the active tab so legacy /e-signature?tab=... links land correctly.
-  useEffect(() => {
-    const current = searchParams.get("tab");
-    if (current !== tab) {
-      const next = new URLSearchParams(searchParams);
-      if (tab === "templates") next.delete("tab"); else next.set("tab", tab);
-      setSearchParams(next, { replace: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab]);
-  // URL → tab sync so client-side navigation (e.g. the Folders shortcut in
-  // Document Studio) switches the active tab without a page reload.
+  // Tab ⇄ URL sync is ONE-directional: the URL is the source of truth. Writing
+  // the URL from state and state from the URL at the same time re-rendered the
+  // hub (and remounted the editor) on every tab touch.
   useEffect(() => {
     const next = normalizeTabKey(searchParams.get("tab"));
-    if (next !== tab) setTab(next);
+    setTab((cur) => (cur === next ? cur : next));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+  const selectTab = useCallback((next: Bucket) => {
+    setTab(next);
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (next === "templates") params.delete("tab"); else params.set("tab", next);
+      return params;
+    }, { replace: true });
+  }, [setSearchParams]);
+
   const { data: templates = [], isLoading: tplLoading } = useEsignTemplates(cat);
   const studioTemplates = useMemo(() => {
     const all = getCatalogByAudience("all");
@@ -408,7 +408,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const showCategory = (key: TemplateCategoryKey) => {
     setActiveTemplateCategory(key);
     setCat(key === "leasing" || key === "selling" ? key : "all");
-    setTab("templates");
+    selectTab("templates");
     requestAnimationFrame(() => document.getElementById("jj-template-library")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
@@ -709,7 +709,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           </Button>
         </header>
 
-        <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
+        <Tabs value={tab} onValueChange={(v) => { selectTab(v as Bucket); setSelected(new Set()); }}>
           <TabsList className="w-full min-w-0 bg-[#F7F2EA] border border-[#B89555]/30 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,148px),1fr))] h-auto gap-1 p-1 overflow-visible">
             <TabsTrigger value="templates">Templates</TabsTrigger>
             <TabsTrigger value="documents">Live Editor</TabsTrigger>
@@ -851,7 +851,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                   </p>
                   <div className="flex gap-2 mt-4 flex-wrap">
                     <Button variant="gold" onClick={() => navigate("/owner/documents/editor")}>Open Document Editor</Button>
-                    <Button variant="outline" onClick={() => setTab("templates")}>Browse Standard Templates</Button>
+                    <Button variant="outline" onClick={() => selectTab("templates")}>Browse Standard Templates</Button>
                   </div>
                 </div>
               </div>
@@ -882,10 +882,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               })}
             </div>
             <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <Button variant="outline" onClick={() => setTab("sent")}>Pending Signature ({buckets.sent.length})</Button>
-              <Button variant="outline" onClick={() => setTab("submitted")}>Submitted — Review ({buckets.submitted.length})</Button>
-              <Button variant="outline" onClick={() => setTab("signed")}>Signed ({buckets.signed.length})</Button>
-              <Button variant="outline" onClick={() => setTab("assets")}>Stamps & Signatures</Button>
+              <Button variant="outline" onClick={() => selectTab("sent")}>Pending Signature ({buckets.sent.length})</Button>
+              <Button variant="outline" onClick={() => selectTab("submitted")}>Submitted — Review ({buckets.submitted.length})</Button>
+              <Button variant="outline" onClick={() => selectTab("signed")}>Signed ({buckets.signed.length})</Button>
+              <Button variant="outline" onClick={() => selectTab("assets")}>Stamps & Signatures</Button>
             </div>
           </TabsContent>
 
@@ -1102,8 +1102,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
       {/* Singleton Document Studio — prevents the slow/reloading page caused by mounting every editor at once. */}
       {selectedStudioTemplate && (
         <Suspense fallback={<div className="fixed inset-0 z-[2147483000] bg-[#FDFBF7] pointer-events-none" aria-label="Opening Document Studio" />}>
+          {/* No remount `key` here: switching template must not destroy the
+              editor session. The studio reacts to presetTemplateId changes. */}
           <DocumentStudio
-            key={`${selectedStudioTemplate.audience}:${selectedStudioTemplate.id}`}
+
             catalog={selectedStudioTemplate.audience}
             presetTemplateId={selectedStudioTemplate.id}
             trigger={null}
@@ -1164,7 +1166,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
       {/* Phase F — Docked AI command panel for bulk document actions */}
       <AICommandPanel
         buckets={buckets as any}
-        setTab={(t) => { setTab(t); setSelected(new Set()); }}
+        setTab={(t) => { selectTab(t); setSelected(new Set()); }}
         setSelected={setSelected}
         runBulkResendReminder={bulkResendReminder}
         runBulkExportPdfs={bulkExportPdfs}
