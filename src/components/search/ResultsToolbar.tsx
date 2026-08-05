@@ -105,7 +105,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
       type="button"
       onClick={() => set({ view: mode })}
       aria-label={label}
-      className="h-9 px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5"
+      className="allow-white h-9 px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5" data-no-contrast-guard
       style={f.view === mode ? { backgroundImage: EMERALD_PAIR, color: "#FFF" } : { color: ink }}
     >
       {icon}
@@ -175,7 +175,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
           <button
             type="button"
             onClick={() => setAlertOpen(true)}
-            className="h-9 px-3 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5"
+            className="allow-white h-9 px-3 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5" data-no-contrast-guard
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <Bell className="w-3.5 h-3.5" />

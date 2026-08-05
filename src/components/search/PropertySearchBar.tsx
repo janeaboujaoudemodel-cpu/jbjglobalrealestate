@@ -318,7 +318,7 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-                className="relative h-full min-w-0 flex-1 px-2 lg:px-4 text-[12.5px] lg:text-sm font-semibold whitespace-nowrap rounded-none"
+                className="allow-white relative h-full min-w-0 flex-1 px-2 lg:px-4 text-[12.5px] lg:text-sm font-semibold whitespace-nowrap rounded-none"
               style={
                 f.purpose === p.slug
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", whiteSpace: "nowrap", borderRadius: 0 }
