@@ -37587,3 +37587,13 @@ html body #root [data-search-utility-controls] * {
     grid-column: span 2 / span 2 !important;
   }
 }
+
+/* PASS 257b — phone: compact currency + area-unit content inside their boxes. */
+@media (max-width: 639px) {
+  html body #root [data-property-search-bar] [data-search-utility-controls] button {
+    padding-inline: 8px !important;
+  }
+  html body #root [data-property-search-bar] [data-search-utility-controls] button[aria-pressed] {
+    padding-inline: 4px !important;
+  }
+}
