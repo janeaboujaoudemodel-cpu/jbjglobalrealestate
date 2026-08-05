@@ -773,8 +773,7 @@ const Properties = () => {
             return (
               <div data-no-contrast-guard className="flex items-center gap-2">
 
-                {/* Save filter — stores the current search for one-click reuse */}
-                <SavedFilterMenu search={search} />
+                {/* Save filter lives once, in the results toolbar. Never duplicated here. */}
 
                 {/* Filters — opens the unified filter modal (contains Intent + Search + everything) */}
                 <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
