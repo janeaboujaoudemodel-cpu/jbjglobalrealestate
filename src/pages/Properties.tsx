@@ -77,7 +77,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
-import SavedFilterMenu from "@/components/search/SavedFilterMenu";
+
 import { EMPTY_SEARCH, paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
@@ -641,7 +641,10 @@ const Properties = () => {
     filters.saleStatus !== null,
   ].filter(Boolean).length;
   const hasAnyActiveFilter = activeFilterCount > 0 || hasShortcutFilters;
-  const displayedResultCount = hasAnyActiveFilter ? finalProjects.length : 905;
+  // Always report the real number of listings rendered by the grid. Never a
+  // hardcoded headline figure — the toolbar, the pager and the search bar must
+  // agree with what the visitor can actually open.
+  const displayedResultCount = finalProjects.length;
 
   // Dynamic SEO based on transaction type per Master Blueprint
   const dynamicSEO = appliedFilters.transactionType === 'rent'
@@ -770,8 +773,7 @@ const Properties = () => {
             return (
               <div data-no-contrast-guard className="flex items-center gap-2">
 
-                {/* Save filter — stores the current search for one-click reuse */}
-                <SavedFilterMenu search={search} />
+                {/* Save filter lives once, in the results toolbar. Never duplicated here. */}
 
                 {/* Filters — opens the unified filter modal (contains Intent + Search + everything) */}
                 <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>

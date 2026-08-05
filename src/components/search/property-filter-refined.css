@@ -22,22 +22,18 @@
   .jjpf-shell { padding: 16px !important; }
 }
 
-/* ── Container header ──────────────────────────────────────── */
-.jjpf-head { display: none; }
-.jjpf-head-title {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: #0F1D18;
-  margin: 0;
-  line-height: 1.2;
+/* ── Container header ──────────────────────────────────────────
+   The duplicate title/subtitle is suppressed (the page already has an H1),
+   but the header row itself stays so Save filter + Filters remain reachable. */
+.jjpf-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
 }
-.jjpf-head-sub {
-  margin: 3px 0 0;
-  font-size: 11.5px;
-  letter-spacing: 0.02em;
-  color: rgba(26, 26, 26, 0.62);
-}
+.jjpf-head-title,
+.jjpf-head-sub { display: none; }
 
 /* ── Shared field standard ─────────────────────────────────── */
 .jjpf-shell [data-search-segment],

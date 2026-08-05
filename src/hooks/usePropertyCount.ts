@@ -28,35 +28,14 @@ export function usePropertyCount(filters: PropertySearch, debounceMs = 350) {
           return;
         }
 
-        // Preserve the verified published catalogue total for the untouched
-        // default Buy search. Anonymous row visibility must not make this
-        // headline number fluctuate between visits.
-        const isDefaultBuySearch =
-          filters.purpose === "buy" &&
-          filters.country === "uae" &&
-          !filters.region &&
-          filters.areasInclude.length === 0 &&
-          filters.areasExclude.length === 0 &&
-          filters.types.length === 0 &&
-          filters.beds.length === 0 &&
-          filters.baths.length === 0 &&
-          filters.statuses.length === 0 &&
-          filters.labels.length === 0 &&
-          filters.priceMin == null &&
-          filters.priceMax == null &&
-          filters.sizeMin == null &&
-          filters.sizeMax == null &&
-          !filters.developer &&
-          !filters.q.trim();
-        if (isDefaultBuySearch) {
-          if (reqRef.current === id) setCount(905);
-          return;
-        }
-
+        // Count exactly what the listing grid can render for this visitor:
+        // published, not soft-deleted, and not a leasing record.
         let q = supabase
           .from("projects")
           .select("id", { count: "exact", head: true })
-          .eq("is_published", true);
+          .eq("is_published", true)
+          .is("deleted_at", null)
+          .or("listing_kind.is.null,listing_kind.neq.leasing");
 
         const regionName = filters.region
           ? getRegions(filters.country).find((r) => r.slug === filters.region)?.name

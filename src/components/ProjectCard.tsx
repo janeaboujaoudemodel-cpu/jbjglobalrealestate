@@ -341,7 +341,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               name: project.name,
             }}
           />
-          {primaryImageCandidates.length > 1 && (
+          {/* Arrows are MOUNTED only while the photo is hovered. Opacity alone is
+              not enough here: several global `opacity: 1 !important` guards win
+              over inline styles, which made the arrows permanently visible. */}
+          {primaryImageCandidates.length > 1 && isPhotoHovered && (
             <>
               <button
                 type="button"
