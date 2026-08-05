@@ -108,8 +108,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     onClick?: () => void;
   }) => {
     const active = isRowActive(to);
-    const inkStyle = { color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" };
-    const iconStyle = { color: "#064E3B", stroke: "#064E3B" };
+    const inkStyle = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" };
+    const iconStyle = { color: "#FFFFFF", stroke: "#FFFFFF" };
 
     const inner = (
       <span className="flex items-center gap-2.5 w-full" style={inkStyle}>
@@ -137,8 +137,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         asChild={!!to}
         unstyled
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-[#1A1A1A]"
-        style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0"
+        data-no-contrast-guard
+        style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
       >
         {to ? (
           <Link
@@ -177,22 +178,23 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuContent
         data-account-menu-content
         data-jbj-fast-dropdown="true"
-        data-surface="champagne"
+        data-surface="emerald"
+        data-no-contrast-guard
         align="end"
         sideOffset={22}
-        className="z-[10100] w-[280px] p-2 rounded-xl border border-[#B89555]/40 shadow-2xl text-[#1A1A1A]"
+        className="z-[10100] w-[280px] p-2 rounded-xl border border-white/30 shadow-2xl"
         style={{
-          backgroundImage: "linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%)",
-          color: "#1A1A1A",
-          WebkitTextFillColor: "#1A1A1A",
+          backgroundImage: "linear-gradient(180deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
+          color: "#FFFFFF",
+          WebkitTextFillColor: "#FFFFFF",
         }}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-2 py-2.5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+        <div className="flex items-center gap-3 px-2 py-2.5" data-no-contrast-guard style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
           <JbjAvatar initials={initials} size="sm" />
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold truncate" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{displayName}</div>
-            <div className="text-[11px] truncate" style={{ color: "rgba(26,26,26,0.72)", WebkitTextFillColor: "rgba(26,26,26,0.72)" }}>JBJ account</div>
+            <div className="text-sm font-semibold truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{displayName}</div>
+            <div className="text-[11px] truncate" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>JBJ account</div>
             {roleLabel && (
               <span
                 data-account-role-label
@@ -209,7 +211,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             )}
           </div>
         </div>
-        <DropdownMenuSeparator className="bg-[#B89555]/25 my-1" />
+        <DropdownMenuSeparator className="bg-white/20 my-1" />
 
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
@@ -222,26 +224,27 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
-        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites" icon={Heart} label="Favorites" />
-        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
-        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
 
 
-        <DropdownMenuSeparator className="bg-[#B89555]/25 my-1" />
+        <DropdownMenuSeparator className="bg-white/20 my-1" />
         <DropdownMenuItem
           onSelect={handleSignOut}
           data-account-signout-row="true"
           data-account-menu-row="true"
           unstyled
-          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-[#1A1A1A]"
-          style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
+          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5"
+          data-no-contrast-guard
+          style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          <span className="flex items-center gap-2.5 w-full" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
-            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#064E3B", stroke: "#064E3B" }} />
-            <span className="text-sm font-medium" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Sign out</span>
+          <span className="flex items-center gap-2.5 w-full" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign out</span>
           </span>
         </DropdownMenuItem>
       </DropdownMenuContent>

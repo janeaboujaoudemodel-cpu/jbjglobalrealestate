@@ -50,11 +50,17 @@ export function FormDraftBar({
 }: FormDraftBarProps) {
   const t = themeMap[theme];
 
+  const onDark = theme === 'dark';
+
   return (
     <div className={`flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 mb-6 ${t.bar}`}>
       <div className="flex items-center gap-2 flex-1 min-w-0">
         <Clock className={`w-4 h-4 flex-shrink-0 ${t.icon}`} />
-        <span className="text-sm font-medium truncate">
+        <span
+          className="text-sm font-medium truncate"
+          data-no-contrast-guard={onDark ? true : undefined}
+          style={onDark ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
+        >
           {hasDraft ? 'Draft saved — continue where you left off' : `New ${label}`}
         </span>
       </div>
@@ -70,21 +76,42 @@ export function FormDraftBar({
         >
           <Save className="w-3.5 h-3.5" style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF' } : undefined} /> <span style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}>Save Draft</span>
         </button>
-        <button
-          type="button"
-          onClick={onReset}
-          data-no-contrast-guard
-          data-allow-ink
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors"
-          style={{
-            backgroundImage: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)",
-            border: "1px solid rgba(184,149,85,0.55)",
-            color: "#1A1A1A",
-            WebkitTextFillColor: "#1A1A1A",
-          }}
-        >
-          <RotateCcw className="w-3.5 h-3.5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} /> <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Reset</span>
-        </button>
+        {onDark ? (
+          <button
+            type="button"
+            onClick={onReset}
+            data-no-contrast-guard
+            data-on-dark
+            data-allow-dark-cta
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all hover:brightness-110"
+            style={{
+              backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
+              border: "1px solid rgba(255,255,255,0.55)",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              opacity: 1,
+            }}
+          >
+            <RotateCcw className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Reset</span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onReset}
+            data-no-contrast-guard
+            data-allow-ink
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors"
+            style={{
+              backgroundImage: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)",
+              border: "1px solid rgba(184,149,85,0.55)",
+              color: "#1A1A1A",
+              WebkitTextFillColor: "#1A1A1A",
+              opacity: 1,
+            }}
+          >
+            <RotateCcw className="w-3.5 h-3.5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} /> <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Reset</span>
+          </button>
+        )}
         {onNew && (
           <button
             type="button"
