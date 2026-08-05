@@ -46,14 +46,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -247,7 +239,6 @@ const Properties = () => {
   const [filters, setFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
   const [appliedFilters, setAppliedFilters] = useState<ExtendedFilterState>(defaultExtendedFilters);
   const [sortBy, setSortBy] = useState<string>("newest");
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
   // displayMode state removed — toggle no longer rendered on Properties page
   const [isFilterFixed, setIsFilterFixed] = useState(false);
@@ -733,91 +724,9 @@ const Properties = () => {
               }));
             }}
           />
-          {/* Container header — title left, advanced Filters trigger right */}
-          <div className="jjpf-head">
-            <div>
-              <h2 className="jjpf-head-title">Search Properties</h2>
-              <p className="jjpf-head-sub">Investment-grade listings across the UAE and beyond</p>
-            </div>
-          {(() => {
-
-            const tx = appliedFilters.transactionType;
-            const cs = appliedFilters.completionStatus;
-            const intentValue =
-              tx === 'rent'
-                ? 'rent'
-                : cs === 'ready'
-                ? 'buy-ready'
-                : cs === 'off-plan'
-                ? 'buy-offplan'
-                : 'buy';
-            const setIntent = (val: string) => {
-              if (val === 'rent') {
-                updateFilter('transactionType', 'rent');
-                updateFilter('completionStatus', null);
-                setAppliedFilters((p) => ({ ...p, transactionType: 'rent', completionStatus: null }));
-              } else if (val === 'buy-ready') {
-                updateFilter('transactionType', 'buy');
-                updateFilter('completionStatus', 'ready');
-                setAppliedFilters((p) => ({ ...p, transactionType: 'buy', completionStatus: 'ready' }));
-              } else if (val === 'buy-offplan') {
-                updateFilter('transactionType', 'buy');
-                updateFilter('completionStatus', 'off-plan');
-                setAppliedFilters((p) => ({ ...p, transactionType: 'buy', completionStatus: 'off-plan' }));
-              } else {
-                updateFilter('transactionType', 'buy');
-                updateFilter('completionStatus', null);
-                setAppliedFilters((p) => ({ ...p, transactionType: 'buy', completionStatus: null }));
-              }
-            };
-            return (
-              <div data-no-contrast-guard className="flex items-center gap-2">
-
-                {/* Save filter lives once, in the results toolbar. Never duplicated here. */}
-
-                {/* Filters — opens the unified filter modal (contains Intent + Search + everything) */}
-                <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
-                  <DialogTrigger asChild>
-                    <button
-                      type="button"
-                      data-no-contrast-guard
-                      aria-label="Open all filters"
-                      className={isMapMode ? "jj-map-details-button inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white" : "inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl jj-pill-emerald-metallic text-white text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white shadow-[0_10px_24px_rgba(0,0,0,0.28)]"}
-                      style={{ color: '#FFFFFF' }}
-                    >
-                      <SlidersHorizontal
-                        className="w-4 h-4 allow-white"
-                        style={{ color: '#FFFFFF' }}
-                        data-no-contrast-guard
-                        strokeWidth={2.2}
-                      />
-                      <span
-                        className="allow-white"
-                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                      >
-                        Filters
-                      </span>
-                      {activeFilterCount > 0 && (
-                        <span
-                          className="allow-white inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold bg-[#0A0A0A] text-white ring-1 ring-white/25"
-                          style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                          data-no-contrast-guard
-                        >
-                          {activeFilterCount}
-                        </span>
-                      )}
-
-                    </button>
-                  </DialogTrigger>
-
-                  <DialogContent data-filter-clean="true" data-map-shell={isMapMode ? true : undefined} className={isMapMode ? "max-w-2xl jj-map-command-bar p-0" : "max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 text-[#1A1A1A] p-0"}>
-                    <DialogHeader className={isMapMode ? "p-6 border-b border-white/14" : "p-6 border-b border-[#064E3B]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"}>
-                      <DialogTitle className="text-xl font-semibold text-[#1A1A1A]">
-                        Filters
-                      </DialogTitle>
-                    </DialogHeader>
-                    <ScrollArea className="max-h-[70vh]">
-                      <div className={isMapMode ? "p-6 space-y-6" : "p-6 space-y-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"}>
+          {/* The shared PropertySearchBar below is the only filter interface.
+              Its More control opens the same in-place panel on every route. */}
+          {false && <div>
                         {/* Search */}
                         <div>
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Search</label>
