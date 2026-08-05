@@ -22,7 +22,7 @@ import PropertyFilterScreen from "./PropertyFilterScreen";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
-import { useAreaUnit, type AreaUnit } from "@/hooks/useAreaUnit";
+import { useAreaUnit, setAreaUnitGlobal, type AreaUnit } from "@/hooks/useAreaUnit";
 import {
   BATHS,
   BEDS,
