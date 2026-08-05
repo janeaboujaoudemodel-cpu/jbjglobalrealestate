@@ -56,14 +56,14 @@
   border-radius: 12px !important;
   background: #FFFDF9 !important;
   background-image: none !important;
-  border: 1px solid rgba(184, 149, 85, 0.42) !important;
-  box-shadow: none !important;
+  border: 1px solid rgba(15, 29, 24, 0.20) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 2px rgba(15, 29, 24, 0.05) !important;
   backdrop-filter: none !important;
   transition: border-color 0.18s ease, background 0.18s ease;
 }
 .jjpf-shell [data-search-segment]:hover,
 .jjpf-shell [data-search-utility-controls]:hover {
-  border-color: rgba(6, 78, 59, 0.42) !important;
+  border-color: rgba(6, 78, 59, 0.55) !important;
   background: #FFFFFF !important;
 }
 .jjpf-shell [data-search-segment]:focus-visible,

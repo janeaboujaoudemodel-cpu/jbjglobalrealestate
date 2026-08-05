@@ -77,6 +77,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
+import SavedFilterMenu from "@/components/search/SavedFilterMenu";
 import { paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
@@ -262,9 +263,19 @@ const Properties = () => {
     window.addEventListener('globalFilterChange', handler);
     return () => window.removeEventListener('globalFilterChange', handler);
   }, []);
-  const [isMapMode, setIsMapMode] = useState(false);
+  const [isMapMode, setIsMapMode] = useState(search.view === "map");
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const cardListRef = useRef<HTMLDivElement>(null);
+
+  /** List / Grid / Map toolbar controls drive the real layout. */
+  useEffect(() => {
+    setIsMapMode(search.view === "map");
+  }, [search.view]);
+  const resultsGridClass =
+    search.view === "list"
+      ? "grid grid-cols-1 gap-4 sm:gap-5 py-6 sm:py-8"
+      : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 py-6 sm:py-8";
+
 
   useEffect(() => {
     const applyGlobalCurrency = (code: string | null) => {
@@ -747,6 +758,9 @@ const Properties = () => {
             };
             return (
               <div data-no-contrast-guard className="flex items-center gap-2">
+
+                {/* Save filter — stores the current search for one-click reuse */}
+                <SavedFilterMenu search={search} />
 
                 {/* Filters — opens the unified filter modal (contains Intent + Search + everything) */}
                 <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
@@ -1258,12 +1272,14 @@ const Properties = () => {
           <div className="container mx-auto px-3 sm:px-4">
             <div className="flex">
               {/* Vertical nav handled globally by MainLayout */}
-            {/* OUTER LAYER - clean emerald contour */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 rounded-2xl p-4 sm:p-5 flex-1 min-w-0">
+            {/* Content sits directly on the mother-of-pearl page background —
+                no nested beige wrapper, listings stretch full container width. */}
+            <div className="flex-1 min-w-0">
+
               
               {/* Header Section - Off-plan properties message */}
               {appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus !== 'ready' && (
-                <div className="px-4 pt-4 pb-2">
+                <div className="pt-2 pb-2">
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                     Off-plan properties for sale in Dubai
                   </h2>
@@ -1280,16 +1296,15 @@ const Properties = () => {
                   </p>
                 </div>
               )}
-              
-              {/* Results Count - Inside active layer (hidden while initial fetch in flight) */}
-              <div className="mb-6 flex items-center justify-between px-4 pt-4 min-h-[28px]">
+
+              {/* Results Count — single authoritative line, no duplicated intent wording */}
+              <div className="mb-6 flex items-center justify-between pt-2 min-h-[28px]">
                 {!showSkeletons && (
                   <p className="text-[#1A1A1A]/70">
                     Showing <span className="text-[#1A1A1A] font-medium">{displayedResultCount}</span> {hasAnyActiveFilter ? 'matching ' : ''}properties
-                    {appliedFilters.transactionType === 'rent' && ' for rent'}
-                    {appliedFilters.transactionType === 'buy' && ' for sale'}
                   </p>
                 )}
+
                 {!showSkeletons && activeFilterCount > 0 && (
                   <Button
                     variant="ghost"
@@ -1304,13 +1319,13 @@ const Properties = () => {
 
               {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
               {showSkeletons ? (
-                <div data-projects-shell data-page-gutter className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 py-6 sm:py-8">
+                <div data-projects-shell data-page-gutter className={resultsGridClass}>
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border border-[#064E3B]/30" />
                   ))}
                 </div>
               ) : finalProjects.length > 0 ? (
-                <div data-projects-shell data-page-gutter className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 py-6 sm:py-8">
+                <div data-projects-shell data-page-gutter className={resultsGridClass}>
                   {visibleProjects.flatMap((project, index) => {
                     const adAfterIndex = [5, 11, 17];
                     const adIndex = adAfterIndex.indexOf(index);

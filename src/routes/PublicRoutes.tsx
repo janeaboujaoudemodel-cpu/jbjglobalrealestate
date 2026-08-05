@@ -149,6 +149,7 @@ const IntellectualProperty = lazy(() => import("@/pages/IntellectualProperty"));
 // ── User / Account ──
 const MortgageCalculator = lazy(() => import("@/pages/MortgageCalculator"));
 const Favorites = lazy(() => import("@/pages/Favorites"));
+const SavedSearches = lazy(() => import("@/pages/SavedSearches"));
 const Compare = lazy(() => import("@/pages/Compare"));
 const CompareManual = lazy(() => import("@/pages/CompareManual"));
 const Quiz = lazy(() => import("@/pages/Quiz"));
@@ -430,6 +431,7 @@ export const PublicRoutes = () => (
     <Route path="/mortgage" element={<Navigate to="/mortgage-calculator" replace />} />
     <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
     <Route path="/favorites" element={<AuthRequiredRoute><Favorites /></AuthRequiredRoute>} />
+    <Route path="/saved-searches" element={<AuthRequiredRoute><SavedSearches /></AuthRequiredRoute>} />
     <Route
       path="/compare"
       element={
