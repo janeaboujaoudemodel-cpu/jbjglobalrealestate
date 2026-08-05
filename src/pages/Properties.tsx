@@ -77,7 +77,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
-import SavedFilterMenu from "@/components/search/SavedFilterMenu";
+
 import { EMPTY_SEARCH, paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
