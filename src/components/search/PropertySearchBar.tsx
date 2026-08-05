@@ -158,6 +158,10 @@ interface Props {
   onConsultation?: () => void;
   /** Called when the visitor picks the "Sell" purpose — hero redirects instantly. */
   onSellSelected?: () => void;
+  /** Adds the unified "Sort" segment (listing pages: properties, projects, areas, developers…). */
+  showSort?: boolean;
+  /** Optional custom sort options for non-property listings. */
+  sortOptions?: readonly { slug: string; label: string }[];
 }
 
 export default function PropertySearchBar({
@@ -169,7 +173,10 @@ export default function PropertySearchBar({
   typewriterPhrases,
   onConsultation,
   onSellSelected,
+  showSort = false,
+  sortOptions = SORT_OPTIONS,
 }: Props) {
+
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
   const [moreOpen, setMoreOpen] = useState(false);
