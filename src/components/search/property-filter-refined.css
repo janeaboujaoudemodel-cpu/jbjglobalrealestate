@@ -1,0 +1,183 @@
+/**
+ * property-filter-refined.css — scoped styling for the /properties filter only.
+ *
+ * Everything here is namespaced under `.jjpf-shell`, the single premium
+ * container that wraps the property filter on /properties. No global tokens,
+ * no page-wide selectors: nothing outside that container can be affected.
+ *
+ * Standard enforced here:
+ *   field height 48px · radius 12px · warm-white surface · 1px champagne border
+ *   ink text on light · pure white text + icons on emerald · 12–16px gaps
+ */
+
+/* ── Container ─────────────────────────────────────────────── */
+.jjpf-shell {
+  background: linear-gradient(180deg, #FFFDF9 0%, #FDFBF7 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.38) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 18px 44px -22px rgba(6, 78, 59, 0.24), 0 1px 0 rgba(255, 255, 255, 0.7) inset !important;
+  padding: 18px !important;
+}
+@media (min-width: 1024px) {
+  .jjpf-shell { padding: 26px !important; }
+}
+
+/* ── Container header ──────────────────────────────────────── */
+.jjpf-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(184, 149, 85, 0.28);
+}
+.jjpf-head-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #0F1D18;
+  margin: 0;
+  line-height: 1.2;
+}
+.jjpf-head-sub {
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: rgba(26, 26, 26, 0.62);
+}
+
+/* ── Shared field standard ─────────────────────────────────── */
+.jjpf-shell [data-search-segment],
+.jjpf-shell [data-search-utility-controls] {
+  height: 48px !important;
+  min-height: 48px !important;
+  border-radius: 12px !important;
+  background: #FFFDF9 !important;
+  background-image: none !important;
+  border: 1px solid rgba(184, 149, 85, 0.42) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.jjpf-shell [data-search-segment]:hover,
+.jjpf-shell [data-search-utility-controls]:hover {
+  border-color: rgba(6, 78, 59, 0.42) !important;
+  background: #FFFFFF !important;
+}
+.jjpf-shell [data-search-segment]:focus-visible,
+.jjpf-shell [data-search-segment] :focus-visible {
+  outline: 2px solid rgba(6, 78, 59, 0.55);
+  outline-offset: 2px;
+}
+
+/* Inner padding for triggers so text never touches the edges */
+.jjpf-shell [data-search-segment] > span,
+.jjpf-shell [data-search-segment] > button {
+  padding-left: 0;
+}
+.jjpf-shell button[data-search-segment] {
+  padding-left: 15px !important;
+  padding-right: 13px !important;
+}
+
+/* Row rhythm */
+.jjpf-shell [data-search-grid] { gap: 12px !important; }
+.jjpf-shell [data-search-grid]:first-of-type { margin-bottom: 14px !important; }
+
+/* ── Segmented control (Buy / Rent / Sell) ────────────────── */
+.jjpf-shell [data-search-segment] > button {
+  border-radius: 10px !important;
+  margin: 4px 0;
+}
+.jjpf-shell [data-search-segment] > button:not([style*="rgb(6, 78, 59)"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background: transparent !important;
+}
+
+/* ── Emerald surfaces: white ink, always ──────────────────── */
+.jjpf-shell [data-surface="emerald"],
+.jjpf-shell [style*="rgb(6, 78, 59)"],
+.jjpf-shell [style*="#064E3B"],
+.jjpf-shell .jj-pill-emerald-metallic,
+.jjpf-shell .jj-emerald-action {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jjpf-shell [data-surface="emerald"] *,
+.jjpf-shell [style*="rgb(6, 78, 59)"] *,
+.jjpf-shell [style*="#064E3B"] *,
+.jjpf-shell .jj-pill-emerald-metallic *,
+.jjpf-shell .jj-emerald-action * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jjpf-shell [data-surface="emerald"] :is(svg, [class*="lucide"]),
+.jjpf-shell [style*="rgb(6, 78, 59)"] :is(svg, [class*="lucide"]),
+.jjpf-shell .jj-pill-emerald-metallic :is(svg, [class*="lucide"]),
+.jjpf-shell .jj-emerald-action :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* ── Primary CTA: Show N ──────────────────────────────────── */
+.jjpf-shell [data-surface="emerald"][data-search-segment] {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 12px 26px -12px rgba(6, 78, 59, 0.65) !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+}
+.jjpf-shell [data-surface="emerald"][data-search-segment]:hover {
+  filter: brightness(1.08);
+}
+
+/* ── Ink text on all light fields ─────────────────────────── */
+.jjpf-shell [data-search-segment]:not([data-surface="emerald"]) :is(span, input, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+.jjpf-shell [data-search-segment] input::placeholder {
+  color: rgba(26, 26, 26, 0.55) !important;
+  -webkit-text-fill-color: rgba(26, 26, 26, 0.55) !important;
+}
+
+/* ── Secondary row: sort / view / alerts ──────────────────── */
+.jjpf-sub {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(184, 149, 85, 0.26);
+}
+.jjpf-sub h1 { font-size: 17px !important; }
+.jjpf-sub [data-results-toolbar] button:not([style*="rgb(6, 78, 59)"]) {
+  height: 40px !important;
+  border-radius: 10px !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+.jjpf-sub [data-results-toolbar] button[style*="rgb(6, 78, 59)"],
+.jjpf-sub [data-results-toolbar] button[style*="rgb(6, 78, 59)"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+.jjpf-sub [data-results-toolbar] button[style*="rgb(6, 78, 59)"] {
+  height: 40px !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+/* ── Mobile: stacked, full-width, no overflow ─────────────── */
+@media (max-width: 1023px) {
+  .jjpf-shell [data-search-segment],
+  .jjpf-shell [data-search-utility-controls] {
+    height: 46px !important;
+    min-height: 46px !important;
+  }
+  .jjpf-shell [data-search-grid] { gap: 10px !important; }
+  .jjpf-head { padding-bottom: 12px; margin-bottom: 12px; }
+}
