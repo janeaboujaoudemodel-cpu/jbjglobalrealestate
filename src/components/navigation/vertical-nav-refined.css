@@ -12,14 +12,14 @@
    :not([style*="jj-emerald-ombre"]) guard.
    ───────────────────────────────────────────────────────────── */
 
-[data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald]
+html body #root [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald]
   :is(a, button):not([style*="jj-emerald-ombre"]):not([data-keep-surface]) {
   background-color: transparent !important;
   box-shadow: none !important;
 }
 
 /* Inactive rows: hairline only on hover, never a filled block */
-[data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald]
+html body #root [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald]
   :is(a, button):not([style*="jj-emerald-ombre"]):not([data-keep-surface]):hover {
   background-color: rgba(26, 26, 26, 0.05) !important;
 }
