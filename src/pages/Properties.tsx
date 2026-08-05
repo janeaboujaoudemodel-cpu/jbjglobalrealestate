@@ -677,15 +677,12 @@ const Properties = () => {
         }}
       >
         <div className="container mx-auto px-3 sm:px-4">
-          {/* Light premium shell — emerald fields read as engraved cards on it */}
+          {/* ONE premium container for the whole filter system (jjpf-shell) */}
             <div
-              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "rounded-2xl p-4 sm:p-5 shadow-[0_10px_28px_rgba(6,78,59,0.10)]"}
-              style={{
-                overflow: 'visible',
-                background: isMapMode ? undefined : '#FFFFFF',
-                border: isMapMode ? undefined : '1px solid rgba(184,149,85,0.30)',
-              }}
+              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "jjpf-shell"}
+              style={{ overflow: 'visible' }}
             >
+
 
           {/* Active deep-link filter chips (status / category) */}
           <ActiveFilterIndicator
