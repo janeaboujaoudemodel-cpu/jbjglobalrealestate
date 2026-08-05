@@ -266,6 +266,29 @@ export default function PropertySearchBar({
 
   const numInput = "h-10 w-full rounded-lg px-3 text-sm bg-[#FDFBF7] border border-[#B89555]/35 outline-none";
 
+  /** Every filter currently narrowing the results, each individually clearable. */
+  const activeChips = useMemo(() => {
+    const chips: { key: string; label: string; clear: Partial<PropertySearch> }[] = [];
+    if (f.q.trim()) chips.push({ key: "q", label: `“${f.q.trim()}”`, clear: { q: "" } });
+    if (f.areasInclude.length || f.areasExclude.length || f.region)
+      chips.push({ key: "loc", label: locationLabel, clear: { areasInclude: [], areasExclude: [], region: null } });
+    for (const t of f.types) chips.push({ key: `type-${t}`, label: t, clear: { types: f.types.filter((x) => x !== t) } });
+    for (const b of f.beds) chips.push({ key: `bed-${b}`, label: `${b} bed`, clear: { beds: f.beds.filter((x) => x !== b) } });
+    for (const b of f.baths) chips.push({ key: `bath-${b}`, label: `${b} bath`, clear: { baths: f.baths.filter((x) => x !== b) } });
+    if (f.priceMin != null || f.priceMax != null) chips.push({ key: "price", label: priceLabel, clear: { priceMin: null, priceMax: null } });
+    for (const s of f.statuses)
+      chips.push({
+        key: `status-${s}`,
+        label: PROJECT_STATUSES.find((x) => x.slug === s)?.label ?? s,
+        clear: { statuses: f.statuses.filter((x) => x !== s) },
+      });
+    for (const l of f.labels) chips.push({ key: `label-${l}`, label: l, clear: { labels: f.labels.filter((x) => x !== l) } });
+    if (f.developer) chips.push({ key: "dev", label: f.developer, clear: { developer: null } });
+    if (f.sizeMin != null || f.sizeMax != null) chips.push({ key: "size", label: "Size", clear: { sizeMin: null, sizeMax: null } });
+    return chips;
+  }, [f, locationLabel, priceLabel]);
+
+
   return (
     <div data-property-search-bar className={`grid gap-1.5 lg:block ${className}`} style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
