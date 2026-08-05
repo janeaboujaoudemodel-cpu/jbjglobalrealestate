@@ -21,6 +21,7 @@ import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
 import ListingLabels from "@/components/property/ListingLabels";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 import { formatBedroomRange } from "@/utils/formatBedroomRange";
+import { isGalleryPhoto } from "@/lib/media/classifyProjectImage";
 
 const VERIFIED_CARD_MEDIA: Record<string, string> = {
   "a0d78087-ad89-4532-b237-8795aaa9524f": "https://api.reelly.io/vault/ZZLvFZFt/2vU167fSNHhf_s4DDM9mNt6fU68/04w3Yw../5.jpg",
@@ -103,7 +104,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const { isOwner } = useUserRole();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  // Single static cover — carousel arrows are banned on cards (gallery only).
+  // Card carousel only includes assets classified as genuine project photography.
   const images = project.images || [];
   const primaryImageCandidates = useMemo(() => {
     const seen = new Set<string>();
@@ -112,7 +113,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       (project as any).card_image_url,
       (project as any).gallery_start_image_url,
       (project as any).hero_image_url,
-      ...images.map((image: any) => image?.image_url),
+      ...images
+        .filter((image: any) => isGalleryPhoto({ url: image?.image_url, alt: image?.alt_text }))
+        .map((image: any) => image?.image_url),
       project.cover_image_url,
     ]
       .filter(isValidImageUrl)
@@ -123,8 +126,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         seen.add(key);
         return true;
       });
-  }, [images, priority, project]);
+  }, [images, priority, project.id, project.cover_image_url]);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
+  const [isPhotoHovered, setIsPhotoHovered] = useState(false);
   useEffect(() => {
     setPrimaryImageIndex(0);
   }, [project.id, primaryImageCandidates.join("|")]);
@@ -308,9 +312,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       )}
 
 
-      <Link to={projectHref} className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col">
         {/* Image — with subtle gold hover arrows for previewing photos in-place. */}
-          <div className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611] group/photo" data-surface="ink">
+          <div
+            className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611] group/photo"
+            data-surface="ink"
+            onMouseEnter={() => setIsPhotoHovered(true)}
+            onMouseLeave={() => setIsPhotoHovered(false)}
+          >
           <VerifiedMedia
             src={primaryImageUrl}
             alt={
@@ -323,7 +332,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             placeholderLabel=""
             priority={priority}
             onError={() => {
-              setPrimaryImageIndex((current) => Math.min(current + 1, primaryImageCandidates.length));
+              setPrimaryImageIndex((current) => Math.min(current + 1, Math.max(0, primaryImageCandidates.length - 1)));
             }}
             loggerComponent="ProjectCard"
             loggerContext={{
@@ -344,8 +353,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i - 1 + primaryImageCandidates.length) % primaryImageCandidates.length);
                 }}
-                className="absolute left-2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
-                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
+                className="absolute left-2 z-20 flex items-center justify-center transition-opacity bg-transparent border-0 p-0"
+                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))", opacity: isPhotoHovered ? 1 : 0, pointerEvents: isPhotoHovered ? "auto" : "none" }}
               >
                 <ChevronLeft className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>
@@ -359,8 +368,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i + 1) % primaryImageCandidates.length);
                 }}
-                className="absolute right-2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
-                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
+                className="absolute right-2 z-20 flex items-center justify-center transition-opacity bg-transparent border-0 p-0"
+                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))", opacity: isPhotoHovered ? 1 : 0, pointerEvents: isPhotoHovered ? "auto" : "none" }}
               >
                 <ChevronRight className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>
@@ -529,7 +538,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
         </div>
-      </Link>
+      </div>
 
       {/* CTA Buttons — Email, Call, WhatsApp. Premium rectangular emerald tiles. */}
       <div className="px-4 pb-4">

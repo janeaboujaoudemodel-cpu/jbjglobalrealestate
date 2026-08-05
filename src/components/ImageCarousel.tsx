@@ -411,10 +411,8 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                     key={image.id}
                     onClick={() => {
                       if (isOverflowTile) {
-                        // Open the full gallery from the very first photo so the
-                        // user immediately sees the complete filmstrip of ALL
-                        // photos (not just the hidden remainder).
-                        openFullscreen(0);
+                         // Continue at the first photo hidden behind the +N tile.
+                         openFullscreen(6);
                       } else {
                         setPageIndex(index);
                       }
@@ -436,7 +434,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                       onError={() => markImageFailed(image.image_url)}
                     />
                     {isOverflowTile && (
-                      <div className="absolute inset-0 bg-[#1A1A1A]/70 backdrop-blur-sm flex items-center justify-center">
+                      <div className="absolute inset-0 bg-[#1A1A1A]/45 backdrop-blur-[1px] flex items-center justify-center">
                         <span className="text-white font-semibold text-lg">+{total - 6}</span>
                       </div>
                     )}

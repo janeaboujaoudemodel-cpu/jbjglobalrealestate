@@ -45,7 +45,7 @@ export default function SavedFilterMenu({ search }: Props) {
           type="button"
           data-no-contrast-guard
           aria-label="Save this filter"
-          className="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-xl text-[13px] sm:text-sm font-semibold"
+          className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-[13px] sm:text-sm font-semibold"
           style={{
             background: "#FFFDF9",
             border: "1px solid rgba(15,29,24,0.20)",

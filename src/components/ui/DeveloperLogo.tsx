@@ -93,7 +93,6 @@ export function DeveloperLogo({
         className={cn(
           "block w-full h-full object-contain",
           scale === "compact" ? "rounded-sm" : "rounded-md",
-          !override.invert && !override.darkPlate && "[mix-blend-mode:multiply]",
         )}
         style={{
           filter: override.imageFilter ?? (override.invert

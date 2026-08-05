@@ -103,7 +103,8 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   <img
                     src={displayLogoUrl as string}
                     alt={`${developer.name} logo`}
-                    className="w-full h-full object-contain p-3"
+                    className="w-full h-full object-contain p-3 opacity-100"
+                    style={{ filter: "brightness(0) contrast(1.15)" }}
                    loading="lazy" decoding="async" />
                 ) : (
                   <span className="text-[#3a2a08] font-bold text-base text-center px-2">

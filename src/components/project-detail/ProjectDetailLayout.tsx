@@ -2462,25 +2462,7 @@ function ProjectDetailLayoutInner({
                 />
               </div>
             </div>
-            ) : (
-              <div ref={mortgageRef} className="mb-14 scroll-mt-32">
-                <div className="jj-card-inner p-6 text-sm text-[#1A1A1A]/80 bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl">
-                  <div className="flex items-start gap-3">
-                     <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
-                     <div>
-                       <p className="font-semibold text-[#1A1A1A] mb-1">Only the post-completion portion is mortgage-eligible</p>
-                       <p className="mb-2">
-                         {mortgageBlockedReason || "Mortgage availability will be confirmed closer to handover."}
-                       </p>
-                       <p>
-                         For this project, the <strong>30% post-handover balance</strong> is the portion that can be mortgage-financed through a UAE bank after handover, subject to bank approval. The pre-handover 70% follows the developer payment schedule.
-                       </p>
-                     </div>
-                  </div>
-                </div>
-              </div>
-
-            )}
+            ) : null}
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
            <div ref={aiRef} id="ai" className="mb-10 md:mb-12 scroll-mt-40">

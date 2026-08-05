@@ -533,11 +533,9 @@ export default function PaymentPlanVisualization({
             </div>
           )}
 
-          {handoverDate && (
+          {handoverDate && !isPostHandover && (
             <p className="mt-6 text-sm text-[#1A1A1A]/70 italic text-center">
-              {isPostHandover && postHandoverEndDate
-                ? `Project handover: ${formattedHandoverDate || handoverDate}. The ${handoverPct || 30}% post-handover balance is mortgage-financeable after handover, subject to bank approval, and is fully settled by ${formattedPostHandoverEndDate || postHandoverEndDate}.`
-                : `Benefit from extended payment terms until ${handoverDate} handover`}
+              Payment terms continue until the stated handover date: {formattedHandoverDate || handoverDate}.
             </p>
           )}
 
