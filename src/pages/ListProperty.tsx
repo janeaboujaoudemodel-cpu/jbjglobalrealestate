@@ -56,13 +56,24 @@ const EMERALD_DEEP = "#042C1C";
 const EMERALD_BLACK = "#000000";
 const EMERALD_GRADIENT = "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))";
 const EMERALD_GRADIENT_HOVER = "var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #042c1c 100%))";
-const GOLD = "rgba(1,8,6,0.72)";
+const GOLD = "rgba(255,255,255,0.30)";
 /* PASS 152 — no champagne inside AI tool shells. Constants below map to emerald ombré. */
 const CHAMPAGNE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
 const CHAMPAGNE_SURFACE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
 const CHAMPAGNE_RAISED = "linear-gradient(135deg, #075e46 0%, #052c1c 55%, #000000 100%)";
 const INK = "#1A1A1A";
 const WHITE = "#FFFFFF";
+
+/* ── Surface hierarchy — 3 readable tiers so the page reads as layers
+      instead of one flat emerald wash (page → body → card → raised). ── */
+const SURFACE_PAGE = "linear-gradient(180deg, #04211A 0%, #02120C 48%, #000000 100%)";
+const SURFACE_BODY = "linear-gradient(180deg, #031913 0%, #010A07 100%)";
+const SURFACE_CARD = "linear-gradient(135deg, #0A3B2C 0%, #062A20 55%, #03150F 100%)";
+const SURFACE_RAISED = "linear-gradient(135deg, #0D4733 0%, #083326 58%, #051B13 100%)";
+const HAIRLINE = "rgba(255,255,255,0.16)";
+const HAIRLINE_STRONG = "rgba(255,255,255,0.30)";
+const LABEL_MUTED = "rgba(255,255,255,0.62)";
+
 
 /* per-mode accent system: every listing mode uses the locked emerald palette. */
 type ModeTheme = {
@@ -83,7 +94,7 @@ const THEME_EMERALD: ModeTheme = {
   badgeBorder: GOLD,
   badgeBg: "rgba(255,255,255,0.10)",
   heroGradient: EMERALD_GRADIENT,
-  sectionGradient: `linear-gradient(180deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_SURFACE} 100%)`,
+  sectionGradient: `linear-gradient(180deg, #031913 0%, #010A07 100%)`,
   ctaText: WHITE,
   iconAccent: WHITE,
 };
@@ -93,9 +104,8 @@ const themeForMode = (_m: Mode): ModeTheme => THEME_BRAND;
 /* Soft mode-tinted ombre used for "white" surfaces (Purpose card, empty
    states, "Open full dashboard" pill) so they match the page's accent
    instead of reading as harsh pure white. */
-const ombreSoft = (t: ModeTheme): string => {
-  return `linear-gradient(135deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_SURFACE} 55%, ${CHAMPAGNE_RAISED} 100%)`;
-};
+const ombreSoft = (_t: ModeTheme): string => SURFACE_BODY;
+
 
 const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -146,7 +156,7 @@ const ListProperty = () => {
     <ToolAnimatedFrame theme={toolThemes.emerald}>
     <div
       className="min-h-screen"
-      style={{ color: WHITE, background: "linear-gradient(180deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}
+      style={{ color: WHITE, background: SURFACE_PAGE }}
       data-listing-mode={theme.name}
       data-list-property-page
       data-surface="dark"
@@ -167,7 +177,7 @@ const ListProperty = () => {
       />
 
       {/* Full-bleed: no outer chrome — every <section> below renders edge-to-edge */}
-      <div className="w-full" style={{ background: "linear-gradient(180deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}>
+      <div className="w-full" style={{ background: SURFACE_BODY }}>
 
 
 
@@ -178,11 +188,16 @@ const ListProperty = () => {
         data-surface="dark"
         data-allow-dark-cta
         data-no-contrast-guard
-        style={{ background: theme.heroGradient }}
+        style={{
+          background: theme.heroGradient,
+          borderBottom: `1px solid ${HAIRLINE}`,
+          boxShadow: "inset 0 -40px 60px -40px rgba(0,0,0,0.55)",
+        }}
       >
         {/* Hero is intentionally clean emerald — no gold hairline, no radial glow */}
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-10 md:pt-14 pb-9 md:pb-12">
+
           <motion.div
             key={purpose}
             initial={{ opacity: 0, y: 12 }}
@@ -196,7 +211,7 @@ const ListProperty = () => {
                 backgroundColor: theme.badgeBg,
                 color: WHITE,
                 WebkitTextFillColor: WHITE,
-                border: `1px solid ${GOLD}`,
+                border: `1px solid rgba(255,255,255,0.45)`,
               }}
               data-no-contrast-guard
             >
@@ -232,26 +247,28 @@ const ListProperty = () => {
 
       {/* ───────────────── Purpose + Mode selector (mode-aware accent) ───────────────── */}
       <section
-        className="px-4 sm:px-6 md:px-10 pt-8 md:pt-10 pb-8 md:pb-10 relative z-10"
+        className="px-4 sm:px-6 md:px-10 pt-7 md:pt-9 pb-7 md:pb-9 relative z-10"
         style={{ background: ombreSoft(theme) }}
       >
 
         <div className="max-w-5xl mx-auto">
           <div
-            className="rounded-2xl p-5 sm:p-6 md:p-7 shadow-xl"
+            className="rounded-2xl p-5 sm:p-6 md:p-7"
             style={{
-              background: CHAMPAGNE,
-              border: `1px solid ${GOLD}`,
-              boxShadow: `0 18px 40px -22px rgba(6,78,59,0.32)`,
+              background: SURFACE_CARD,
+              border: `1px solid ${HAIRLINE}`,
+              boxShadow: `0 24px 60px -30px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.08)`,
             }}
           >
+
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-start">
               {/* Purpose */}
               <div className="xl:col-span-4">
                 <div
                   className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-3"
-                  style={{ color: theme.primary }}
+                  style={{ color: LABEL_MUTED, WebkitTextFillColor: LABEL_MUTED }}
                 >
+
                   Purpose
                 </div>
                 <div
@@ -281,7 +298,7 @@ const ListProperty = () => {
               <div className="xl:col-span-8">
                 <div
                   className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-3"
-                  style={{ color: theme.primary }}
+                  style={{ color: LABEL_MUTED, WebkitTextFillColor: LABEL_MUTED }}
                 >
                   How would you like to list?
                 </div>
@@ -321,19 +338,19 @@ const ListProperty = () => {
             {/* Submissions link — separated, right-aligned */}
             <div
               className="mt-5 pt-4 flex justify-end"
-              style={{ borderTop: `1px solid ${theme.primary}26` }}
+              style={{ borderTop: `1px solid rgba(255,255,255,0.12)` }}
             >
               <a
                 href="#my-submissions"
                 data-no-contrast-guard
-                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-sm font-semibold transition-all hover:brightness-105"
+                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-sm font-semibold transition-all hover:brightness-110"
                 style={{
-                  background: "linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%)",
+                  background: "rgba(255,255,255,0.07)",
                   color: WHITE,
                   WebkitTextFillColor: WHITE,
-                  border: "1px solid rgba(255,255,255,0.42)",
-                  boxShadow: `0 6px 16px -10px ${theme.primary}66`,
+                  border: `1px solid ${HAIRLINE_STRONG}`,
                 }}
+
               >
                 View my submissions →
               </a>
@@ -407,18 +424,19 @@ function SegmentedPill({
               color: WHITE,
               WebkitTextFillColor: WHITE,
               ["--jj-pill-fg" as any]: WHITE,
-              border: `1px solid ${theme.primaryDeep}`,
-              boxShadow: `0 10px 24px -12px ${theme.primary}99`,
+              border: `1px solid rgba(255,255,255,0.55)`,
+              boxShadow: `0 0 0 1px rgba(255,255,255,0.10), 0 12px 26px -14px rgba(0,0,0,0.9)`,
             }
           : {
-              background: "linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%)",
-              color: WHITE,
-              WebkitTextFillColor: WHITE,
-              ["--jj-pill-fg" as any]: WHITE,
-              border: "1px solid rgba(255,255,255,0.42)",
-              boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05)",
+              background: "rgba(255,255,255,0.06)",
+              color: "rgba(255,255,255,0.88)",
+              WebkitTextFillColor: "rgba(255,255,255,0.88)",
+              ["--jj-pill-fg" as any]: "rgba(255,255,255,0.88)",
+              border: "1px solid rgba(255,255,255,0.22)",
+              boxShadow: "none",
             }
       }
+
     >
       <span className="jj-listing-pill-ico inline-flex">{icon}</span>
       <span className="jj-listing-pill-lbl">{children}</span>
@@ -455,11 +473,10 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
         <span
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
           style={{
-            background: cardGradient,
-            color: WHITE,
-            WebkitTextFillColor: WHITE,
-            border: `1px solid ${accentGlow}`,
-            boxShadow: `0 10px 24px -12px ${accent}99`,
+            background: "rgba(255,255,255,0.07)",
+            color: "rgba(255,255,255,0.92)",
+            WebkitTextFillColor: "rgba(255,255,255,0.92)",
+            border: `1px solid ${HAIRLINE_STRONG}`,
           }}
           data-no-contrast-guard
           data-allow-dark-cta
@@ -469,18 +486,19 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
         </span>
         <h2
           className="mt-4 text-2xl md:text-3xl font-bold tracking-tight"
-          style={{ color: accent, WebkitTextFillColor: accent }}
+          style={{ color: WHITE, WebkitTextFillColor: WHITE }}
           data-no-contrast-guard
         >
           How would you like to add your {isRent ? "rental" : "property"}?
         </h2>
         <p
           className="mt-2 text-sm md:text-base max-w-2xl mx-auto leading-relaxed"
-          style={{ color: INK + "B3" }}
+          style={{ color: "rgba(255,255,255,0.72)", WebkitTextFillColor: "rgba(255,255,255,0.72)" }}
         >
           Both options stay inside JBJ — your draft is auto-saved and you can come
           back to it at any time.
         </p>
+
       </div>
 
       <div
@@ -512,7 +530,7 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
           type="button"
           onClick={() => onPick("browse")}
           className="text-sm font-medium underline-offset-4 hover:underline"
-          style={{ color: accent }}
+          style={{ color: "rgba(255,255,255,0.80)", WebkitTextFillColor: "rgba(255,255,255,0.80)" }}
         >
           Or browse existing listings →
         </button>
@@ -538,7 +556,6 @@ function PickerCard({
   tag: string;
   accent?: boolean;
 }) {
-  const cardGradient = EMERALD_GRADIENT;
   return (
     <button
       type="button"
@@ -546,15 +563,16 @@ function PickerCard({
       data-no-contrast-guard
       data-allow-dark-cta
       data-listing-choice-card
-      className="group relative flex w-full min-w-0 min-h-[306px] flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:brightness-110 whitespace-normal overflow-hidden"
+      className="group relative flex w-full min-w-0 min-h-[306px] flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:-translate-y-0.5 whitespace-normal overflow-hidden"
       style={{
-        background: cardGradient,
-        border: `1px solid rgba(255,255,255,0.10)`,
-        boxShadow: `0 18px 40px -18px rgba(6,78,59,0.68)`,
+        background: accent ? SURFACE_RAISED : SURFACE_CARD,
+        border: `1px solid ${accent ? HAIRLINE_STRONG : HAIRLINE}`,
+        boxShadow: `0 26px 60px -30px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.08)`,
         color: WHITE,
         WebkitTextFillColor: WHITE,
       }}
     >
+
       <div className="relative flex w-full min-w-0 items-start justify-between gap-4">
         <div
           className="w-12 h-12 rounded-xl grid place-items-center"
@@ -609,27 +627,30 @@ function PickerCard({
             backgroundColor: "rgba(255,255,255,0.10)",
             color: "rgba(255,255,255,0.88)",
             WebkitTextFillColor: "rgba(255,255,255,0.88)",
-            border: `1px solid rgba(1,8,6,0.72)`,
+            border: `1px solid rgba(255,255,255,0.16)`,
           }}
         >
           {tag}
         </span>
         <span
+          data-listing-start-cta
           className="inline-flex items-center gap-1.5 text-sm font-bold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
           data-no-contrast-guard
           style={{
-            background: CHAMPAGNE,
-            color: EMERALD_DEEP,
-            WebkitTextFillColor: EMERALD_DEEP,
-            border: `1px solid rgba(255,255,255,0.14)`,
-            boxShadow: `0 6px 18px -8px rgba(0,0,0,0.55)`,
+            background: EMERALD_GRADIENT,
+            color: WHITE,
+            WebkitTextFillColor: WHITE,
+            border: `1px solid rgba(255,255,255,0.65)`,
+            boxShadow: `0 10px 22px -12px rgba(0,0,0,0.75)`,
           }}
         >
-          <span style={{ color: EMERALD_DEEP, WebkitTextFillColor: EMERALD_DEEP, fontWeight: 800 }}>Start</span>
-          <span className="jj-arrow-anim inline-flex" style={{ color: EMERALD_DEEP }}>
-            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: EMERALD_DEEP }} />
+
+          <span style={{ color: WHITE, WebkitTextFillColor: WHITE, fontWeight: 800 }}>Start</span>
+          <span className="jj-arrow-anim inline-flex" style={{ color: WHITE }}>
+            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: WHITE }} />
           </span>
         </span>
+
 
       </div>
     </button>
@@ -689,7 +710,8 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
                 background: EMERALD_GRADIENT,
                 color: WHITE,
                 WebkitTextFillColor: WHITE,
-                border: `1px solid ${GOLD}`,
+                border: `1px solid rgba(255,255,255,0.55)`,
+
                 boxShadow: `0 10px 24px -10px ${theme.primaryDeep}`,
               }}
             >
@@ -709,8 +731,9 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             data-no-contrast-guard
             data-allow-dark-cta
             style={{
-              background: EMERALD_GRADIENT,
-              border: `1.5px solid rgba(255,255,255,0.26)`,
+              background: SURFACE_CARD,
+              border: `1px solid ${HAIRLINE}`,
+
               boxShadow: `0 24px 54px -24px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.18)`,
             }}
           >
@@ -785,8 +808,9 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             data-no-contrast-guard
             data-allow-dark-cta
             style={{
-              background: EMERALD_GRADIENT,
-              border: `1.5px solid rgba(255,255,255,0.26)`,
+              background: SURFACE_CARD,
+              border: `1px solid ${HAIRLINE}`,
+
               boxShadow: `0 24px 54px -24px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.18)`,
             }}
           >
@@ -852,33 +876,36 @@ function SubmissionCard({ listing }: { listing: any }) {
       className="rounded-2xl overflow-hidden flex flex-col transition-all hover:shadow-lg"
       data-no-contrast-guard
       style={{
-        backgroundColor: CHAMPAGNE,
-        border: `1px solid ${GOLD}`,
+        background: SURFACE_CARD,
+        border: `1px solid ${HAIRLINE}`,
+        boxShadow: `0 20px 46px -26px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.07)`,
       }}
     >
       <div
         className="h-32 w-full flex items-center justify-center relative"
         style={{
-          backgroundColor: CHAMPAGNE_RAISED,
+          background: cover ? undefined : SURFACE_RAISED,
           backgroundImage: cover ? `url(${cover})` : undefined,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          borderBottom: `1px solid rgba(255,255,255,0.10)`,
         }}
       >
-        {!cover && <Building2 className="w-10 h-10" style={{ color: INK + "55" }} />}
+        {!cover && <Building2 className="w-10 h-10" style={{ color: "rgba(255,255,255,0.35)" }} />}
         <Badge
           className="absolute top-2 right-2 text-[10px] font-bold border-0"
           style={{ backgroundColor: meta.bg, color: meta.fg }}
         >
+
           <meta.Icon className="w-3 h-3 mr-1" />
           {meta.label}
         </Badge>
       </div>
       <div className="p-4 flex flex-col gap-2 flex-1">
-        <h4 className="font-bold text-sm leading-snug line-clamp-2" style={{ color: INK }}>
+        <h4 className="font-bold text-sm leading-snug line-clamp-2" style={{ color: WHITE, WebkitTextFillColor: WHITE }}>
           {listing.property_location || "Untitled property"}
         </h4>
-        <div className="flex items-center gap-2 text-[11px]" style={{ color: INK + "99" }}>
+        <div className="flex items-center gap-2 text-[11px]" style={{ color: "rgba(255,255,255,0.70)", WebkitTextFillColor: "rgba(255,255,255,0.70)" }}>
           {listing.property_type && (
             <span className="capitalize">{listing.property_type}</span>
           )}
@@ -890,11 +917,12 @@ function SubmissionCard({ listing }: { listing: any }) {
           )}
         </div>
         {listing.target_selling_price && (
-          <div className="text-sm font-bold" style={{ color: INK }}>
+          <div className="text-sm font-bold" style={{ color: WHITE, WebkitTextFillColor: WHITE }}>
             AED {Number(listing.target_selling_price).toLocaleString()}
           </div>
         )}
-        <div className="text-[11px] mt-1" style={{ color: INK + "80" }}>
+        <div className="text-[11px] mt-1" style={{ color: "rgba(255,255,255,0.58)", WebkitTextFillColor: "rgba(255,255,255,0.58)" }}>
+
           Submitted {listing.submitted_at ? formatDate(listing.submitted_at) : formatDate(listing.created_at)}
         </div>
         <div className="mt-auto pt-3 flex items-center justify-between gap-2">
@@ -904,7 +932,7 @@ function SubmissionCard({ listing }: { listing: any }) {
             data-allow-dark-cta
             data-no-contrast-guard
             className="font-semibold border-0 h-8 px-3 text-xs flex-1"
-            style={{ background: EMERALD_GRADIENT, color: WHITE, WebkitTextFillColor: WHITE, border: `1px solid ${GOLD}` }}
+            style={{ background: EMERALD_GRADIENT, color: WHITE, WebkitTextFillColor: WHITE, border: `1px solid rgba(255,255,255,0.45)` }}
           >
             <Link to={`/dashboard/my-listings?id=${listing.id}`}>
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View details</span>
