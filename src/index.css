@@ -37557,3 +37557,16 @@ html body #root .jj-shine-cta:hover::after { animation-duration: 1.4s; }
   html body #root .jj-sspan-10 { grid-column: span 10 / span 10 !important; }
   html body #root .jj-sspan-13 { grid-column: span 13 / span 13 !important; }
 }
+
+/* ============================================================
+   PASS 256 — SEARCH UTILITY CONTROLS: NO LETTER STACKING
+   The global `white-space: normal !important` reset was breaking
+   compact labels (Currency / AED / sq ft) one letter per line.
+   ============================================================ */
+html body #root [data-search-utility-controls],
+html body #root [data-search-utility-controls] * {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}

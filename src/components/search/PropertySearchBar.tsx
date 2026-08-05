@@ -376,40 +376,46 @@ export default function PropertySearchBar({
             }}
           >
             <span
-              className="text-[9px] uppercase tracking-[0.14em] whitespace-nowrap"
-              style={{ color: dark ? "rgba(255,255,255,0.68)" : "rgba(26,26,26,0.62)" }}
+              className="text-[8.5px] uppercase leading-none tracking-[0.2em] whitespace-nowrap"
+              style={{ color: dark ? "rgba(255,255,255,0.62)" : "rgba(26,26,26,0.55)" }}
             >
               Area unit
             </span>
-            <div className="flex min-w-0 items-center gap-3">
-              {(["sqft", "sqm"] as const).map((unit) => (
-                <button
-                  key={unit}
-                  type="button"
-                  onClick={() => setAreaUnit(unit)}
-                  aria-pressed={areaUnit === unit}
-                  data-no-contrast-guard
-                  className="min-w-0 bg-transparent p-0 text-[13px] font-semibold whitespace-nowrap"
-                  style={{
-                    borderRadius: 0,
-                    color:
-                      areaUnit === unit
-                        ? dark
-                          ? "#FFFFFF"
-                          : "#042C1C"
+            <div
+              className="mt-1.5 flex min-w-0 items-center overflow-hidden rounded-full"
+              style={{
+                background: dark ? "rgba(255,255,255,0.08)" : "rgba(4,44,28,0.05)",
+                border: `1px solid ${dark ? "rgba(255,255,255,0.20)" : "rgba(4,44,28,0.12)"}`,
+                padding: 2,
+              }}
+            >
+              {(["sqft", "sqm"] as const).map((unit) => {
+                const on = areaUnit === unit;
+                return (
+                  <button
+                    key={unit}
+                    type="button"
+                    onClick={() => setAreaUnit(unit)}
+                    aria-pressed={on}
+                    data-no-contrast-guard
+                    data-surface={on ? "emerald" : undefined}
+                    className="min-w-0 flex-1 rounded-full px-2 py-[3px] text-[11px] font-semibold leading-none tracking-[0.06em] whitespace-nowrap transition-colors duration-200"
+                    style={{
+                      backgroundImage: on ? EMERALD_PAIR : undefined,
+                      background: on ? undefined : "transparent",
+                      color: on
+                        ? "#FFFFFF"
                         : dark
-                          ? "rgba(255,255,255,0.55)"
-                          : "rgba(26,26,26,0.50)",
-                    borderBottom:
-                      areaUnit === unit
-                        ? `2px solid ${dark ? "#FFFFFF" : "#042C1C"}`
-                        : "2px solid transparent",
-                  }}
-                >
-                  {unit === "sqft" ? "sq ft" : "sq m"}
-                </button>
-              ))}
+                          ? "rgba(255,255,255,0.62)"
+                          : "rgba(26,26,26,0.55)",
+                    }}
+                  >
+                    {unit === "sqft" ? "sq ft" : "sq m"}
+                  </button>
+                );
+              })}
             </div>
+
           </div>
 
 
