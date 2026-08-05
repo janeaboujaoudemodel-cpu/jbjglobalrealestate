@@ -223,6 +223,8 @@ export default function AreaIncludeExclude({
         })}
         {!filtered.length && <p className="text-sm opacity-60 px-2 py-3">No areas match “{query}”.</p>}
       </div>
+      </div>
     </div>
   );
 }
+
