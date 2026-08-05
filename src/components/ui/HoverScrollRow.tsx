@@ -17,9 +17,11 @@ interface Props {
   className?: string;
   /** Extra classes for the inner scrolling track. */
   trackClassName?: string;
+  /** Surface colour used for the fade behind the arrows. */
+  fade?: string;
 }
 
-export default function HoverScrollRow({ children, className = "", trackClassName = "" }: Props) {
+export default function HoverScrollRow({ children, className = "", trackClassName = "", fade = "#F7F2EA" }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const raf = useRef<number | null>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -81,8 +83,11 @@ export default function HoverScrollRow({ children, className = "", trackClassNam
         onBlur={stop}
         onClick={() => ref.current?.scrollBy({ left: dir * 200, behavior: "smooth" })}
         data-no-contrast-guard
-        className={`absolute top-0 bottom-0 ${dir === 1 ? "right-0 pl-6 pr-0.5" : "left-0 pr-6 pl-0.5"} z-10 flex items-center bg-transparent border-0 shadow-none outline-none`}
-        style={{ color: GOLD }}
+        className={`absolute top-0 bottom-0 ${dir === 1 ? "right-0 pl-8 pr-1 justify-end" : "left-0 pr-8 pl-1 justify-start"} z-10 flex items-center border-0 shadow-none outline-none`}
+        style={{
+          color: GOLD,
+          background: `linear-gradient(to ${dir === 1 ? "left" : "right"}, ${fade} 42%, ${fade}00 100%)`,
+        }}
       >
         <Icon className="w-5 h-5" strokeWidth={2.25} style={{ color: GOLD, stroke: GOLD }} />
       </button>
