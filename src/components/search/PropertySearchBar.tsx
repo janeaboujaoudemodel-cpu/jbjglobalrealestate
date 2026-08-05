@@ -352,7 +352,7 @@ export default function PropertySearchBar({
 
 
       {/* Row 2 — segments */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-2">
+      <div className={`grid grid-cols-2 md:grid-cols-3 ${showSort ? "lg:grid-cols-9" : "lg:grid-cols-8"} gap-2`}>
         <div className="col-span-2 lg:col-span-2 min-w-0">
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
