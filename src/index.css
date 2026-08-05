@@ -37570,3 +37570,20 @@ html body #root [data-search-utility-controls] * {
   overflow-wrap: normal !important;
   hyphens: none !important;
 }
+
+/* ============================================================
+   PASS 257 — MOBILE COMPACT HERO SEARCH GRID
+   Phones get a 3-column row-1 grid so currency / area unit /
+   consultation sit side by side instead of stacking tall.
+   ============================================================ */
+@media (max-width: 639px) {
+  html body #root [data-property-search-bar] [data-search-grid] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  html body #root [data-property-search-bar] [data-search-grid] > .col-span-3 {
+    grid-column: span 3 / span 3 !important;
+  }
+  html body #root [data-property-search-bar] [data-search-grid] > .col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
+}
