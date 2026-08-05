@@ -408,9 +408,9 @@ export default function PropertySearchBar({
           <div className="p-3 space-y-3">
             <div>
               <p className="text-[11px] uppercase tracking-wider opacity-60 mb-1.5">Bedrooms</p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 {BEDS.map((b) => (
-                  <Chip key={b} on={f.beds.includes(b)} onClick={() => set({ beds: toggleIn(f.beds, b) })}>
+                  <Chip key={b} circle={b.length <= 2} on={f.beds.includes(b)} onClick={() => set({ beds: toggleIn(f.beds, b) })}>
                     {b}
                   </Chip>
                 ))}
@@ -418,13 +418,14 @@ export default function PropertySearchBar({
             </div>
             <div>
               <p className="text-[11px] uppercase tracking-wider opacity-60 mb-1.5">Bathrooms</p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 {BATHS.map((b) => (
-                  <Chip key={b} on={f.baths.includes(b)} onClick={() => set({ baths: toggleIn(f.baths, b) })}>
+                  <Chip key={b} circle={b.length <= 2} on={f.baths.includes(b)} onClick={() => set({ baths: toggleIn(f.baths, b) })}>
                     {b}
                   </Chip>
                 ))}
               </div>
+
             </div>
           </div>
         </Seg>
