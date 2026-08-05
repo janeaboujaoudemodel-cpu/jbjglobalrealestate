@@ -210,10 +210,8 @@ export default function PropertySearchBar({
   const cur = currencyFor(f.country);
   const extras = countExtraFilters(f);
 
-  const setAreaUnit = (unit: AreaUnit) => {
-    localStorage.setItem("jj_area_unit", unit);
-    window.dispatchEvent(new CustomEvent("areaUnitChange", { detail: unit }));
-  };
+  const setAreaUnit = (unit: AreaUnit) => setAreaUnitGlobal(unit);
+
 
   const locationLabel = useMemo(() => {
     if (f.areasInclude.length)
