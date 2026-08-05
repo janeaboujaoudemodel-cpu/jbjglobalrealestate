@@ -1150,16 +1150,23 @@ const Properties = () => {
               value={search}
               onChange={setSearch}
               onSubmit={submitSearch}
-              dark
               countOverride={showSkeletons ? null : displayedResultCount}
               showActiveSummary
             />
           </div>
 
-          {/* Results toolbar — sort, view mode, alerts (sort lives here only) */}
+          {/* Results toolbar — sort, view mode, alerts only.
+              Status quick-chips live in the search bar, so they are hidden here
+              (no duplicated filter on one screen). */}
           <div className="mt-4">
-            <ResultsToolbar value={search} onChange={submitSearch} total={finalProjects.length} dark />
+            <ResultsToolbar
+              value={search}
+              onChange={submitSearch}
+              total={showSkeletons ? finalProjects.length : displayedResultCount}
+              hideQuickChips
+            />
           </div>
+
 
 
           </div>
