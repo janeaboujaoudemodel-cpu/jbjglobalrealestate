@@ -167,6 +167,14 @@ interface Props {
   showSort?: boolean;
   /** Optional custom sort options for non-property listings. */
   sortOptions?: readonly { slug: string; label: string }[];
+  /**
+   * Authoritative result count from the page that owns the listing grid.
+   * When provided, the "Show N" button mirrors the page result total exactly
+   * so the bar and the grid can never disagree.
+   */
+  countOverride?: number | null;
+  /** Shows the active-filter chip row + Reset control under the bar. */
+  showActiveSummary?: boolean;
 }
 
 export default function PropertySearchBar({
@@ -180,7 +188,10 @@ export default function PropertySearchBar({
   onSellSelected,
   showSort = false,
   sortOptions = SORT_OPTIONS,
+  countOverride,
+  showActiveSummary = false,
 }: Props) {
+
 
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
