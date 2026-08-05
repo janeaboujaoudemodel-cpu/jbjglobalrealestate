@@ -56,60 +56,92 @@ export default function AreaIncludeExclude({
   const idleStyle = { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" };
 
   return (
-    <div className="p-3.5">
-      {/* Country step — UAE live, the rest coming soon */}
-      <div className="flex flex-wrap gap-2 mb-3">
-        {GEO_COUNTRIES.map((c) => {
-          const on = country === c.slug;
-          return (
-            <button
-              key={c.slug}
-              type="button"
-              disabled={!c.live}
-              onClick={() => c.live && onCountryChange?.(c.slug)}
-              data-surface={on ? "emerald" : "light"}
-              data-emerald={on ? "true" : undefined}
-              data-on-dark={on ? "true" : undefined}
-              className={`${PILL} ${c.live ? "" : "opacity-60 cursor-not-allowed"}`}
-              style={on ? activeStyle : idleStyle}
+    <div className="p-0">
+      {/* ── COUNTRY ─────────────────────────────────────────────── */}
+      <div className="px-3.5 pt-3.5 pb-3" style={{ background: "#F7F2EA" }}>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: "rgba(26,26,26,0.55)" }}>
+          Country
+        </p>
+        <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {GEO_COUNTRIES.map((c) => {
+            const on = country === c.slug;
+            return (
+              <button
+                key={c.slug}
+                type="button"
+                disabled={!c.live}
+                onClick={() => c.live && onCountryChange?.(c.slug)}
+                data-surface={on ? "emerald" : "light"}
+                data-emerald={on ? "true" : undefined}
+                data-on-dark={on ? "true" : undefined}
+                className={`${PILL} shrink-0 ${c.live ? "" : "opacity-55 cursor-not-allowed"}`}
+                style={on ? activeStyle : idleStyle}
+              >
+                {c.slug === "uae" ? "UAE" : c.name}
+                {!c.live ? <span className="ml-1.5 text-[10px] font-medium opacity-70">Soon</span> : null}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Emirate / region step — nested under the chosen country */}
+        {hasRegionStep(country) && (
+          <>
+            <p
+              className="text-[10px] font-semibold uppercase tracking-[0.14em] mt-3 mb-2"
+              style={{ color: "rgba(26,26,26,0.55)" }}
             >
-              {c.slug === "uae" ? "UAE" : c.name}
-              {!c.live ? <span className="ml-1.5 text-[10px] font-medium opacity-70">Coming soon</span> : null}
-            </button>
-          );
-        })}
+              Emirate
+            </p>
+            <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <button
+                type="button"
+                onClick={() => onChange({ include: [], exclude: [], region: null })}
+                data-surface={!region ? "emerald" : "light"}
+                data-emerald={!region ? "true" : undefined}
+                data-on-dark={!region ? "true" : undefined}
+                className={`${PILL} shrink-0`}
+                style={!region ? activeStyle : idleStyle}
+              >
+                All
+              </button>
+              {regions.map((r) => (
+                <button
+                  key={r.slug}
+                  type="button"
+                  onClick={() => onChange({ include: [], exclude: [], region: r.slug })}
+                  data-surface={region === r.slug ? "emerald" : "light"}
+                  data-emerald={region === r.slug ? "true" : undefined}
+                  data-on-dark={region === r.slug ? "true" : undefined}
+                  className={`${PILL} shrink-0`}
+                  style={region === r.slug ? activeStyle : idleStyle}
+                >
+                  {r.name}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Emirate / region step */}
-      {hasRegionStep(country) && (
-        <div className="flex flex-wrap gap-2 mb-3">
-          <button
-            type="button"
-            onClick={() => onChange({ include: [], exclude: [], region: null })}
-            data-surface={!region ? "emerald" : "light"}
-            data-emerald={!region ? "true" : undefined}
-            data-on-dark={!region ? "true" : undefined}
-            className={PILL}
-            style={!region ? activeStyle : idleStyle}
-          >
-            All
-          </button>
-          {regions.map((r) => (
+      {/* ── AREAS ───────────────────────────────────────────────── */}
+      <div className="px-3.5 pt-3 pb-3.5" style={{ borderTop: "1px solid rgba(184,149,85,0.28)" }}>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(26,26,26,0.55)" }}>
+            Areas
+          </p>
+          {include.length || exclude.length ? (
             <button
-              key={r.slug}
               type="button"
-              onClick={() => onChange({ include: [], exclude: [], region: r.slug })}
-              data-surface={region === r.slug ? "emerald" : "light"}
-              data-emerald={region === r.slug ? "true" : undefined}
-              data-on-dark={region === r.slug ? "true" : undefined}
-              className={PILL}
-              style={region === r.slug ? activeStyle : idleStyle}
+              onClick={() => onChange({ include: [], exclude: [] })}
+              className="text-[11px] font-semibold underline"
+              style={{ color: "rgba(26,26,26,0.6)" }}
             >
-              {r.name}
+              Clear
             </button>
-          ))}
+          ) : null}
         </div>
-      )}
+
 
       {/* Include / Exclude tabs */}
       <div className="grid grid-cols-2 gap-1 p-1 rounded-xl mb-2.5" style={{ background: "#F2EBDC" }}>
