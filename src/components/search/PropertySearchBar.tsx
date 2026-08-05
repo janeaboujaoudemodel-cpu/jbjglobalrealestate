@@ -45,7 +45,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-2 h-14 sm:h-16 px-3 rounded-lg text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
+  "flex items-center justify-between gap-1.5 h-11 sm:h-16 px-2.5 sm:px-3 rounded-lg text-[12.5px] sm:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
 
 function Seg({
   label,
@@ -259,9 +259,9 @@ export default function PropertySearchBar({
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
-      <div className={`grid grid-cols-1 sm:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] items-stretch gap-2 mb-2`} data-search-grid={GRID_KEY}>
+      <div className={`grid grid-cols-3 sm:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] items-stretch gap-1.5 sm:gap-2 mb-1.5 sm:mb-2`} data-search-grid={GRID_KEY}>
         <div
-          className="flex h-14 sm:h-16 min-w-0 jj-sspan-6 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="flex h-11 sm:h-16 min-w-0 col-span-3 sm:col-span-1 jj-sspan-6 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
 
           data-surface={dark ? "dark" : "light"}
           data-search-segment
@@ -285,7 +285,7 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-                className="relative h-full min-w-0 flex-1 px-3 sm:px-4 text-sm font-semibold whitespace-nowrap rounded-none"
+                className="relative h-full min-w-0 flex-1 px-2 sm:px-4 text-[12.5px] sm:text-sm font-semibold whitespace-nowrap rounded-none"
               style={
                 f.purpose === p.slug
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", whiteSpace: "nowrap", borderRadius: 0 }
@@ -306,7 +306,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className={`relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 ${KEYWORD_SPAN}`}
+          className={`relative flex items-center gap-2 h-11 sm:h-16 px-2.5 sm:px-3.5 rounded-lg min-w-0 col-span-3 sm:col-span-1 ${KEYWORD_SPAN}`}
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -320,7 +320,7 @@ export default function PropertySearchBar({
           {!f.q && !qFocused && typewriterPhrases?.length ? (
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute left-10 top-1/2 -translate-y-1/2 text-sm sm:text-base whitespace-nowrap overflow-hidden"
+              className="pointer-events-none absolute left-8 sm:left-10 top-1/2 -translate-y-1/2 text-[12.5px] sm:text-base whitespace-nowrap overflow-hidden"
               style={{
                 color: dark ? "rgba(255,255,255,0.82)" : "rgba(26,26,26,0.6)",
                 WebkitTextFillColor: dark ? "rgba(255,255,255,0.82)" : undefined,
@@ -339,7 +339,7 @@ export default function PropertySearchBar({
             onKeyDown={(e) => e.key === "Enter" && onSubmit(f)}
             placeholder={typewriterPhrases?.length ? "" : "Project, developer, community or keyword"}
             data-no-contrast-guard
-            className="flex-1 min-w-0 bg-transparent text-sm sm:text-base outline-none"
+            className="flex-1 min-w-0 bg-transparent text-[12.5px] sm:text-base outline-none"
             style={{
               color: dark ? "#FFFFFF" : "#1A1A1A",
               WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
@@ -349,7 +349,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="flex h-14 sm:h-16 min-w-0 items-center overflow-hidden rounded-lg jj-sspan-3"
+          className="flex h-11 sm:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
           data-search-utility-controls
           data-surface={dark ? "dark" : "light"}
           style={{
@@ -363,9 +363,12 @@ export default function PropertySearchBar({
         </div>
 
         {/* sq ft / sq m sits above "More" and Consultation above "Show N" — same widths */}
-        <div className="grid grid-cols-2 gap-2 sm:col-span-2 jj-sspan-6 min-w-0">
+        <div
+          className="grid gap-1.5 sm:gap-2 col-span-2 sm:col-span-2 jj-sspan-6 min-w-0"
+          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+        >
           <div
-            className="flex h-14 sm:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-3.5"
+            className="flex h-11 sm:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-2 sm:px-3.5"
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
@@ -382,7 +385,7 @@ export default function PropertySearchBar({
               Area unit
             </span>
             <div
-              className="mt-1.5 flex min-w-0 items-center overflow-hidden rounded-full"
+              className="mt-1 sm:mt-1.5 flex min-w-0 items-center overflow-hidden rounded-full"
               style={{
                 background: dark ? "rgba(255,255,255,0.08)" : "rgba(4,44,28,0.05)",
                 border: `1px solid ${dark ? "rgba(255,255,255,0.20)" : "rgba(4,44,28,0.12)"}`,
@@ -399,7 +402,7 @@ export default function PropertySearchBar({
                     aria-pressed={on}
                     data-no-contrast-guard
                     data-surface={on ? "emerald" : undefined}
-                    className="min-w-0 flex-1 rounded-full px-2 py-[3px] text-[11px] font-semibold leading-none tracking-[0.06em] whitespace-nowrap transition-colors duration-200"
+                    className="min-w-0 flex-1 rounded-full px-1 sm:px-2 py-[3px] text-[10px] sm:text-[11px] font-semibold leading-none tracking-[0.04em] whitespace-nowrap transition-colors duration-200"
                     style={{
                       backgroundImage: on ? EMERALD_PAIR : undefined,
                       background: on ? undefined : "transparent",
@@ -425,11 +428,11 @@ export default function PropertySearchBar({
               onClick={() => setConsultOpen(true)}
               data-surface="emerald"
               data-search-segment
-              className="jj-emerald-action jj-shine-cta relative overflow-hidden inline-flex h-14 sm:h-16 w-full items-center justify-center gap-1 rounded-lg px-1.5 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+              className="jj-emerald-action jj-shine-cta relative overflow-hidden inline-flex h-11 sm:h-16 w-full items-center justify-center gap-1 rounded-lg px-1 sm:px-1.5 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
               style={{ backgroundImage: EMERALD_PAIR }}
             >
-              <CalendarCheck className="w-4 h-4 shrink-0" />
-              <span className="text-[11px] leading-tight tracking-tight text-center whitespace-nowrap">Consultation</span>
+              <CalendarCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span className="text-[10px] sm:text-[11px] leading-tight tracking-tight text-center whitespace-nowrap">Consultation</span>
             </button>
           ) : null}
         </div>
@@ -438,7 +441,7 @@ export default function PropertySearchBar({
 
 
       {/* Row 2 — segments */}
-      <div className={`grid grid-cols-2 md:grid-cols-3 gap-2`} data-search-grid={GRID_KEY}>
+      <div className={`grid grid-cols-2 md:grid-cols-3 gap-1.5 sm:gap-2`} data-search-grid={GRID_KEY}>
         <div className="col-span-2 jj-sspan-6 min-w-0">
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
@@ -589,7 +592,10 @@ export default function PropertySearchBar({
 
 
 
-        <div className="grid grid-cols-2 gap-2 col-span-2 jj-sspan-6 min-w-0">
+        <div
+          className="grid gap-1.5 sm:gap-2 col-span-3 sm:col-span-2 jj-sspan-6 min-w-0"
+          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+        >
           <button
             type="button"
             onClick={() => {
@@ -622,7 +628,7 @@ export default function PropertySearchBar({
             onClick={() => onSubmit(f)}
              data-surface="emerald"
              data-search-segment
-            className="h-14 sm:h-16 w-full rounded-lg text-sm font-semibold text-white px-2 whitespace-nowrap"
+            className="h-11 sm:h-16 w-full rounded-lg text-[12.5px] sm:text-sm font-semibold text-white px-2 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             {count == null ? "Search" : `Show ${count.toLocaleString()}`}
