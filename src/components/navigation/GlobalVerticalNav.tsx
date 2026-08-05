@@ -1426,7 +1426,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           {/* Logo header — matches horizontal utility bar gradient exactly */}
           <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain"  loading="lazy" decoding="async" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain"  loading="lazy" decoding="async" />
             </Link>
           </div>
 
