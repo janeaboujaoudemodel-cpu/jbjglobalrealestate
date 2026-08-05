@@ -121,8 +121,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
 
         if (await resolveWithAI(q)) return;
 
-        toast.info("Let me connect you with our advisory desk.");
-        handOffToChatSupport(q, { source: "hero_search", path: window.location.pathname });
+        toast.info("Nothing matched — our advisory desk will answer this for you.");
+        setFallbackQuery(q);
+        setFallbackOpen(true);
       } catch (err) {
         console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
         navigate(`/properties?q=${encodeURIComponent(q)}`);
