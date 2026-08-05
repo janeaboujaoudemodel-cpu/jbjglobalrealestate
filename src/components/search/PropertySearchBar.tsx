@@ -365,7 +365,7 @@ export default function PropertySearchBar({
         {/* sq ft / sq m sits above "More" and Consultation above "Show N" — same widths */}
         <div className="grid grid-cols-2 gap-2 sm:col-span-2 jj-sspan-6 min-w-0">
           <div
-            className="flex h-14 sm:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-2"
+            className="flex h-14 sm:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-3.5"
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
