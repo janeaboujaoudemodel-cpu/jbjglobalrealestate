@@ -55,38 +55,40 @@ export default function InlineCurrencySelect({ dark }: Props) {
         <button
           type="button"
           data-no-contrast-guard
-          className="group flex h-full w-full min-w-0 items-center gap-2.5 bg-transparent px-3.5 text-left"
+          className="group flex h-full w-full min-w-0 flex-col justify-center gap-[3px] bg-transparent px-3 py-1.5 text-left lg:px-3.5"
           style={{ color: fg, borderRadius: 0 }}
           aria-label="Select currency"
         >
-          <span
-            aria-hidden
-            className="shrink-0 text-[17px] leading-none"
-            style={{ filter: "saturate(1.05)" }}
-          >
-            {active.flag}
-          </span>
-          <span className="flex min-w-0 flex-col gap-[3px]">
+          {/* Line 1 — flag + label + chevron, all on the same baseline */}
+          <span className="flex w-full min-w-0 items-center gap-1.5">
             <span
-              className="block text-[8.5px] uppercase leading-none tracking-[0.18em]"
+              aria-hidden
+              className="shrink-0 text-[13px] leading-none"
+              style={{ filter: "saturate(1.05)" }}
+            >
+              {active.flag}
+            </span>
+            <span
+              className="min-w-0 truncate text-[8.5px] uppercase leading-none tracking-[0.18em]"
               style={{
                 color: dark ? "rgba(255,255,255,0.62)" : "rgba(26,26,26,0.55)",
-                whiteSpace: "nowrap",
               }}
             >
               Currency
             </span>
-            <span
-              className="block text-[13px] font-semibold leading-none"
-              style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap" }}
-            >
-              {active.code}
-            </span>
+            <ChevronDown
+              className="ml-auto h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
+              style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
+            />
           </span>
-          <ChevronDown
-            className="ml-auto h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
-            style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
-          />
+
+          {/* Line 2 — the code */}
+          <span
+            className="block w-full text-left text-[13px] font-semibold leading-none"
+            style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap", textAlign: "left" }}
+          >
+            {active.code}
+          </span>
         </button>
       </DropdownMenuTrigger>
 
