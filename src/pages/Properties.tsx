@@ -1163,7 +1163,7 @@ const Properties = () => {
           {/* Results toolbar — sort, view mode, alerts only.
               Status quick-chips live in the search bar, so they are hidden here
               (no duplicated filter on one screen). */}
-          <div className="mt-4">
+          <div className="jjpf-sub">
             <ResultsToolbar
               value={search}
               onChange={submitSearch}
