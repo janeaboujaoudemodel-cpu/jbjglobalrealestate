@@ -216,7 +216,9 @@ export default function PropertySearchBar({
   const toggleIn = <T extends string>(arr: T[], v: T): T[] =>
     arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
 
-  const { count } = usePropertyCount(f);
+  const { count: liveCount } = usePropertyCount(f);
+  const count = countOverride !== undefined ? countOverride : liveCount;
+
   const { areaUnit } = useAreaUnit();
   const cur = currencyFor(f.country);
   const extras = countExtraFilters(f);
