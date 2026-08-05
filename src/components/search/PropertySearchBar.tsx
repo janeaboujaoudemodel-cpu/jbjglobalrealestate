@@ -167,6 +167,14 @@ interface Props {
   showSort?: boolean;
   /** Optional custom sort options for non-property listings. */
   sortOptions?: readonly { slug: string; label: string }[];
+  /**
+   * Authoritative result count from the page that owns the listing grid.
+   * When provided, the "Show N" button mirrors the page result total exactly
+   * so the bar and the grid can never disagree.
+   */
+  countOverride?: number | null;
+  /** Shows the active-filter chip row + Reset control under the bar. */
+  showActiveSummary?: boolean;
 }
 
 export default function PropertySearchBar({
@@ -180,7 +188,10 @@ export default function PropertySearchBar({
   onSellSelected,
   showSort = false,
   sortOptions = SORT_OPTIONS,
+  countOverride,
+  showActiveSummary = false,
 }: Props) {
+
 
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
@@ -205,7 +216,9 @@ export default function PropertySearchBar({
   const toggleIn = <T extends string>(arr: T[], v: T): T[] =>
     arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
 
-  const { count } = usePropertyCount(f);
+  const { count: liveCount } = usePropertyCount(f);
+  const count = countOverride !== undefined ? countOverride : liveCount;
+
   const { areaUnit } = useAreaUnit();
   const cur = currencyFor(f.country);
   const extras = countExtraFilters(f);
@@ -253,6 +266,29 @@ export default function PropertySearchBar({
 
   const numInput = "h-10 w-full rounded-lg px-3 text-sm bg-[#FDFBF7] border border-[#B89555]/35 outline-none";
 
+  /** Every filter currently narrowing the results, each individually clearable. */
+  const activeChips = useMemo(() => {
+    const chips: { key: string; label: string; clear: Partial<PropertySearch> }[] = [];
+    if (f.q.trim()) chips.push({ key: "q", label: `“${f.q.trim()}”`, clear: { q: "" } });
+    if (f.areasInclude.length || f.areasExclude.length || f.region)
+      chips.push({ key: "loc", label: locationLabel, clear: { areasInclude: [], areasExclude: [], region: null } });
+    for (const t of f.types) chips.push({ key: `type-${t}`, label: t, clear: { types: f.types.filter((x) => x !== t) } });
+    for (const b of f.beds) chips.push({ key: `bed-${b}`, label: `${b} bed`, clear: { beds: f.beds.filter((x) => x !== b) } });
+    for (const b of f.baths) chips.push({ key: `bath-${b}`, label: `${b} bath`, clear: { baths: f.baths.filter((x) => x !== b) } });
+    if (f.priceMin != null || f.priceMax != null) chips.push({ key: "price", label: priceLabel, clear: { priceMin: null, priceMax: null } });
+    for (const s of f.statuses)
+      chips.push({
+        key: `status-${s}`,
+        label: PROJECT_STATUSES.find((x) => x.slug === s)?.label ?? s,
+        clear: { statuses: f.statuses.filter((x) => x !== s) },
+      });
+    for (const l of f.labels) chips.push({ key: `label-${l}`, label: l, clear: { labels: f.labels.filter((x) => x !== l) } });
+    if (f.developer) chips.push({ key: "dev", label: f.developer, clear: { developer: null } });
+    if (f.sizeMin != null || f.sizeMax != null) chips.push({ key: "size", label: "Size", clear: { sizeMin: null, sizeMax: null } });
+    return chips;
+  }, [f, locationLabel, priceLabel]);
+
+
   return (
     <div data-property-search-bar className={`grid gap-1.5 lg:block ${className}`} style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
@@ -282,7 +318,7 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-                className="relative h-full min-w-0 flex-1 px-2 lg:px-4 text-[12.5px] lg:text-sm font-semibold whitespace-nowrap rounded-none"
+                className="allow-white relative h-full min-w-0 flex-1 px-2 lg:px-4 text-[12.5px] lg:text-sm font-semibold whitespace-nowrap rounded-none"
               style={
                 f.purpose === p.slug
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", whiteSpace: "nowrap", borderRadius: 0 }
@@ -618,6 +654,66 @@ export default function PropertySearchBar({
           </button>
         </div>
       </div>
+
+      {/* Active filter summary — tells the visitor exactly what is filtering
+          the results, and gives one clear reset. */}
+      {showActiveSummary && activeChips.length > 0 ? (
+        <div
+          className="order-12 col-span-2 lg:col-span-none mt-2 flex flex-wrap items-center gap-1.5"
+          data-active-filter-summary
+        >
+          <span
+            className="text-[11px] font-semibold uppercase tracking-[0.14em]"
+            style={{ color: dark ? "rgba(255,255,255,0.72)" : "rgba(26,26,26,0.6)" }}
+          >
+            Active
+          </span>
+          {activeChips.map((chip) => (
+            <button
+              key={chip.key}
+              type="button"
+              onClick={() => {
+                const next = { ...f, ...chip.clear };
+                setInternal(next);
+                onChange?.(next);
+                onSubmit(next);
+              }}
+              data-no-contrast-guard
+              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11.5px] font-semibold"
+              style={{
+                backgroundImage: EMERALD_PAIR,
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                border: "1px solid rgba(255,255,255,0.32)",
+              }}
+            >
+              {chip.label}
+              <span aria-hidden="true" style={{ opacity: 0.8 }}>×</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              const next = { ...EMPTY_SEARCH, purpose: f.purpose, country: f.country, sort: f.sort };
+              setInternal(next);
+              onChange?.(next);
+              onSubmit(next);
+            }}
+            data-no-contrast-guard
+            className="inline-flex items-center h-7 px-2.5 rounded-full text-[11.5px] font-semibold"
+            style={{
+              background: dark ? "rgba(255,255,255,0.10)" : "#FDFBF7",
+              color: dark ? "#FFFFFF" : "#1A1A1A",
+              WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.42)" : "rgba(184,149,85,0.45)"}`,
+            }}
+          >
+            Reset all filters
+          </button>
+        </div>
+      ) : null}
+
+
 
       {/* More filters — the SAME full filter screen as the header filter */}
       <Dialog open={moreOpen} onOpenChange={setMoreOpen}>

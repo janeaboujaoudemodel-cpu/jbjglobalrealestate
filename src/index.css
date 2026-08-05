@@ -37627,3 +37627,62 @@ html body #root [data-list-property-page] [data-listing-start-cta] :is(span, svg
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 263 — GOLD ANIMATED BRAND LINK
+   Used for inline "JBJ Global Real Estate" mentions inside SEO
+   copy so the visitor has a visible, clickable route to contact.
+   ───────────────────────────────────────────────────────────── */
+a.jj-gold-link,
+a.jj-gold-link:visited {
+  background-image: linear-gradient(90deg, #B89555 0%, #F4E3A8 28%, #B89555 55%, #F4E3A8 82%, #B89555 100%) !important;
+  background-size: 260% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  text-decoration: none !important;
+  font-weight: 700;
+  animation: jj-gold-link-sheen 4.5s ease-in-out infinite;
+  border-bottom: 1px solid rgba(184, 149, 85, 0.55);
+  padding-bottom: 1px;
+}
+a.jj-gold-link:hover {
+  border-bottom-color: rgba(184, 149, 85, 0.95);
+}
+@keyframes jj-gold-link-sheen {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  a.jj-gold-link { animation: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 264 — EMERALD FILL WHITE-INK FINAL WORD
+   Any element painted with the brand emerald pair gradient renders
+   its own label + icons in pure white, no matter how light the
+   surrounding band is. Appended last so it wins every earlier pass.
+   ───────────────────────────────────────────────────────────── */
+html body [style*="rgb(6, 78, 59)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+html body [style*="rgb(4, 44, 28)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+html body [style*="#064E3B" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [style*="rgb(6, 78, 59)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
+html body [style*="rgb(4, 44, 28)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
+html body [style*="#064E3B" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
+html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [style*="rgb(6, 78, 59)"] :is(svg, [class*="lucide"]),
+html body [style*="rgb(4, 44, 28)"] :is(svg, [class*="lucide"]),
+html body [style*="#064E3B" i] :is(svg, [class*="lucide"]),
+html body [style*="#042c1c" i] :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}

@@ -668,19 +668,25 @@ const Properties = () => {
       {/* Filters Section - sticks below the 88px header on scroll */}
       <section
         data-filter-clean="true"
+        data-filter-band-light={isMapMode ? undefined : "true"}
         data-map-shell={isMapMode ? true : undefined}
-        className={`sticky top-[88px] z-40 py-3 md:py-4 ${isMapMode ? "jj-properties-map-filter" : "border-b border-white/12"}`}
+        className={`sticky top-[88px] z-40 py-3 md:py-4 ${isMapMode ? "jj-properties-map-filter" : "border-b border-[#B89555]/28"}`}
         style={{
           WebkitOverflowScrolling: 'touch',
-          background: isMapMode ? undefined : "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)",
+          background: isMapMode ? undefined : "linear-gradient(180deg,#FFFFFF 0%,#FDFBF7 58%,#F7F2EA 100%)",
         }}
       >
         <div className="container mx-auto px-3 sm:px-4">
-          {/* Active Champagne Layer with thin black contour visible at edges */}
+          {/* Light premium shell — emerald fields read as engraved cards on it */}
             <div
-              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "bg-transparent border border-white/18 rounded-2xl p-4 sm:p-5 shadow-lg"}
-              style={{ overflow: 'visible', borderColor: 'rgba(255,255,255,0.18)' }}
+              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "rounded-2xl p-4 sm:p-5 shadow-[0_10px_28px_rgba(6,78,59,0.10)]"}
+              style={{
+                overflow: 'visible',
+                background: isMapMode ? undefined : '#FFFFFF',
+                border: isMapMode ? undefined : '1px solid rgba(184,149,85,0.30)',
+              }}
             >
+
           {/* Active deep-link filter chips (status / category) */}
           <ActiveFilterIndicator
             transactionType={appliedFilters.transactionType}
@@ -737,98 +743,6 @@ const Properties = () => {
             };
             return (
               <div data-no-contrast-guard className="flex items-center gap-2">
-                {/* Unified pill: Intent (left half) | Sort By (right half) */}
-                  <div
-                    className={isMapMode ? "allow-white jj-map-segmented-control flex items-stretch h-11 rounded-xl overflow-hidden flex-shrink-0" : "allow-white flex items-stretch h-11 rounded-xl border border-white/18 bg-[#04241C] overflow-hidden flex-shrink-0"}
-                    style={{ borderColor: 'rgba(255,255,255,0.18)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                  data-no-contrast-guard
-                >
-                  <div className="flex-1 min-w-[110px]">
-                    <Select value={intentValue} onValueChange={setIntent}>
-                      <SelectTrigger
-                        className={isMapMode ? "allow-white jj-map-segment h-full w-full px-3 border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-white [&>svg]:text-white" : "allow-white h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-white hover:bg-white/10 [&>svg]:text-white"}
-                        aria-label="Transaction intent"
-                        data-surface={isMapMode ? "emerald" : undefined}
-                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                      >
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="buy">Buy</SelectItem>
-                        <SelectItem value="buy-ready">Buy Ready</SelectItem>
-                        <SelectItem value="buy-offplan">Buy Off-Plan</SelectItem>
-                        <SelectItem value="rent">Rent</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="w-px bg-white/18 flex-shrink-0" />
-                  <div className="flex-1 min-w-[110px] [&_*]:!ring-0 [&_*]:!ring-offset-0 [&_button]:!outline-none">
-                    <SortBySelect
-                      value={sortBy}
-                      onChange={setSortBy}
-                      iconOnly
-                      borderless
-                      size="default"
-                      className="h-full w-full rounded-none border-0 shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
-                    />
-                  </div>
-
-                </div>
-
-
-                {/* Search — icon only; opens a popover with the search input */}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      type="button"
-                      data-no-contrast-guard
-                      aria-label="Search properties"
-                      className="allow-white inline-flex items-center justify-center h-11 w-11 rounded-xl jj-pill-emerald-metallic text-white transition-colors flex-shrink-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)]"
-                      style={{ color: '#FFFFFF' }}
-                    >
-                      <Search className="w-4 h-4 allow-white" style={{ color: '#FFFFFF' }} strokeWidth={2.2} />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    data-filter-dropdown="true"
-                    align="start"
-                    sideOffset={8}
-                    data-map-shell={isMapMode ? true : undefined}
-                    className={isMapMode ? "allow-white w-[320px] sm:w-[380px] p-3 jj-map-command-bar" : "allow-white w-[320px] sm:w-[380px] p-3 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 text-white"}
-                  >
-                    <form
-                      onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
-                      role="search"
-                      className="flex items-center gap-2"
-                    >
-                      <div className={isMapMode ? "flex flex-1 items-center px-3 h-10 rounded-lg jj-map-search-input" : "allow-white flex flex-1 items-center px-3 h-10 rounded-lg border border-white/28 bg-[#021611]/82"}>
-                        <Search className="w-4 h-4 mr-2 text-white" strokeWidth={2} />
-                        <input
-                          type="text"
-                          autoFocus
-                          placeholder="Search by project name, developer, location…"
-                          value={filters.search}
-                          onChange={(e) => {
-                            const next = e.target.value;
-                            updateFilter("search", next);
-                            setAppliedFilters((prev) => ({ ...prev, search: next }));
-                          }}
-                          data-no-contrast-guard
-                          className="allow-white flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[14px] tracking-[-0.005em] font-normal text-white placeholder:text-white"
-                          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        data-no-contrast-guard
-                        className={isMapMode ? "jj-map-details-button h-10 px-4 rounded-lg text-[13px] font-semibold flex-shrink-0 allow-white" : "h-10 px-4 rounded-lg jj-pill-emerald-metallic text-white text-[13px] font-semibold flex-shrink-0 allow-white"}
-                        style={{ color: '#FFFFFF' }}
-                      >
-                        Search
-                      </button>
-                    </form>
-                  </PopoverContent>
-                </Popover>
 
                 {/* Filters — opens the unified filter modal (contains Intent + Search + everything) */}
                 <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
@@ -1228,27 +1142,32 @@ const Properties = () => {
             );
           })()}
 
-          {/* Unified property search bar — identical surface site-wide */}
+          {/* Unified property search bar — the ONE filter for this page.
+              Its "Show N" mirrors the grid total exactly, and its active-chip
+              row is the single place a visitor resets filters. */}
           <div className="mt-3">
-            <PropertySearchBar value={search} onChange={setSearch} onSubmit={submitSearch} dark showSort />
-          </div>
-
-          {/* Results toolbar — sort, view mode, alerts, quick status chips */}
-          <div className="mt-4">
-            <ResultsToolbar value={search} onChange={submitSearch} total={finalProjects.length} dark />
-          </div>
-
-          {/* Premium shortcut chip bar (same as header) */}
-          <div className="mt-3">
-            <FilterShortcutBar
-              variant="dark"
-              filters={shortcutFilters}
-              onFilterChange={setShortcutFilters}
-              isMapMode={isMapMode}
-              onMapToggle={setIsMapMode}
-              hideSort
+            <PropertySearchBar
+              value={search}
+              onChange={setSearch}
+              onSubmit={submitSearch}
+              countOverride={showSkeletons ? null : displayedResultCount}
+              showActiveSummary
             />
           </div>
+
+          {/* Results toolbar — sort, view mode, alerts only.
+              Status quick-chips live in the search bar, so they are hidden here
+              (no duplicated filter on one screen). */}
+          <div className="mt-4">
+            <ResultsToolbar
+              value={search}
+              onChange={submitSearch}
+              total={showSkeletons ? finalProjects.length : displayedResultCount}
+              hideQuickChips
+            />
+          </div>
+
+
 
           </div>
         </div>
@@ -1345,7 +1264,12 @@ const Properties = () => {
                   <p className="text-[#1A1A1A] text-sm md:text-base flex items-start gap-2 font-medium">
                     <span className="allow-white jj-pill-emerald-metallic inline-flex items-center justify-center w-5 h-5 rounded-full text-white text-xs flex-shrink-0 mt-0.5 font-bold">i</span>
                     <span>
-                      Looking for off-plan properties for sale in Dubai? Contact <span className="font-bold text-[#064E3B]">JBJ Global Real Estate</span> in Dubai to find the right property for you.
+                      Looking for off-plan properties for sale in Dubai? Contact{" "}
+                      <Link to="/contact" className="jj-gold-link font-bold" data-no-contrast-guard>
+                        JBJ Global Real Estate
+                      </Link>{" "}
+                      in Dubai to find the right property for you.
+
                     </span>
                   </p>
                 </div>

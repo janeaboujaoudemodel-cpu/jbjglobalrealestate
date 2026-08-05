@@ -29,9 +29,16 @@ interface Props {
   onChange: (next: PropertySearch) => void;
   total: number;
   dark?: boolean;
+  /**
+   * Hides the status/furnishing quick-chip row. Pages that already expose the
+   * unified PropertySearchBar (with its own status + active-filter chips) pass
+   * this so the same filter never appears twice on one screen.
+   */
+  hideQuickChips?: boolean;
 }
 
-export default function ResultsToolbar({ value: f, onChange, total, dark = false }: Props) {
+export default function ResultsToolbar({ value: f, onChange, total, dark = false, hideQuickChips = false }: Props) {
+
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertName, setAlertName] = useState("");
   const [frequency, setFrequency] = useState("daily");
@@ -98,7 +105,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
       type="button"
       onClick={() => set({ view: mode })}
       aria-label={label}
-      className="h-9 px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5"
+      className="allow-white h-9 px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5" data-no-contrast-guard
       style={f.view === mode ? { backgroundImage: EMERALD_PAIR, color: "#FFF" } : { color: ink }}
     >
       {icon}
@@ -168,7 +175,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
           <button
             type="button"
             onClick={() => setAlertOpen(true)}
-            className="h-9 px-3 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5"
+            className="allow-white h-9 px-3 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5" data-no-contrast-guard
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <Bell className="w-3.5 h-3.5" />
@@ -177,6 +184,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
         </div>
       </div>
 
+      {!hideQuickChips && (
       <div className="flex flex-wrap items-center gap-1.5 mt-3">
         {quickChips.map((c) => (
           <button
@@ -205,6 +213,8 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
           Shareable link
         </a>
       </div>
+      )}
+
 
       <Dialog open={alertOpen} onOpenChange={setAlertOpen}>
         <DialogContent
