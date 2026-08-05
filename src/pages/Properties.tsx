@@ -1345,7 +1345,12 @@ const Properties = () => {
                   <p className="text-[#1A1A1A] text-sm md:text-base flex items-start gap-2 font-medium">
                     <span className="allow-white jj-pill-emerald-metallic inline-flex items-center justify-center w-5 h-5 rounded-full text-white text-xs flex-shrink-0 mt-0.5 font-bold">i</span>
                     <span>
-                      Looking for off-plan properties for sale in Dubai? Contact <span className="font-bold text-[#064E3B]">JBJ Global Real Estate</span> in Dubai to find the right property for you.
+                      Looking for off-plan properties for sale in Dubai? Contact{" "}
+                      <Link to="/contact" className="jj-gold-link font-bold" data-no-contrast-guard>
+                        JBJ Global Real Estate
+                      </Link>{" "}
+                      in Dubai to find the right property for you.
+
                     </span>
                   </p>
                 </div>
