@@ -563,8 +563,14 @@ Requirements:
       
       <main data-manual-listing-shell className="min-h-screen pt-6 pb-12 md:pb-16" style={{ background: "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}>
         {/* Layer 2: Emerald ombre hero */}
-        <div style={{ background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)" }}>
-          <div className="container mx-auto px-4 py-12">
+        <div
+          data-seller-tool-band
+          style={{
+            background:
+              "linear-gradient(180deg, #FFFFFF 0%, #F1F6F3 1.6%, #0B6B52 8.5%, #064E3B 30%, #042C1C 68%, #000000 100%)",
+          }}
+        >
+          <div className="container mx-auto px-4 pt-16 pb-12">
             <div className="max-w-4xl mx-auto text-center">
               <span
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
