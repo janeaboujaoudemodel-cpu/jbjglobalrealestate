@@ -1,0 +1,34 @@
+/* ─────────────────────────────────────────────────────────────
+   Vertical sidebar — visual hierarchy cleanup (scoped)
+
+   Structure, labels, icons, links and collapse logic are untouched.
+   This only calms the surface noise: inactive rows lose their filled
+   champagne rectangles and sit directly on the sidebar background, so
+   the single active row is the only strong highlight on screen.
+
+   The repeated attribute selectors raise specificity above the
+   site-wide surface rules without touching any global stylesheet.
+   Inline emerald rows (the active item) are excluded via the
+   :not([style*="jj-emerald-ombre"]) guard.
+   ───────────────────────────────────────────────────────────── */
+
+[data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald]
+  :is(a, button):not([style*="jj-emerald-ombre"]):not([data-keep-surface]) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Inactive rows: hairline only on hover, never a filled block */
+[data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald]
+  :is(a, button):not([style*="jj-emerald-ombre"]):not([data-keep-surface]):hover {
+  background-color: rgba(26, 26, 26, 0.05) !important;
+}
+
+/* Active row keeps its emerald ombré and a contained lift */
+[data-sidebar-emerald] :is(a, button)[style*="jj-emerald-ombre"] {
+  box-shadow: 0 6px 16px -8px rgba(6, 78, 59, 0.55) !important;
+}
+
+/* Consistent rhythm: ~9px between major rows, tighter inside submenus */
+[data-sidebar-emerald] nav > div > div { row-gap: 9px; }
+[data-sidebar-emerald] nav [class*="ml-5"] > * + * { margin-top: 2px; }
