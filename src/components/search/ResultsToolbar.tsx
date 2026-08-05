@@ -184,6 +184,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
         </div>
       </div>
 
+      {!hideQuickChips && (
       <div className="flex flex-wrap items-center gap-1.5 mt-3">
         {quickChips.map((c) => (
           <button
@@ -212,6 +213,8 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
           Shareable link
         </a>
       </div>
+      )}
+
 
       <Dialog open={alertOpen} onOpenChange={setAlertOpen}>
         <DialogContent
