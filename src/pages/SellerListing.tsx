@@ -565,11 +565,15 @@ Requirements:
         {/* Layer 2: Emerald ombre hero */}
         <div
           data-seller-tool-band
+          className="relative"
           style={{
             background:
               "linear-gradient(180deg, #FFFFFF 0%, #F1F6F3 1.6%, #0B6B52 8.5%, #064E3B 30%, #042C1C 68%, #000000 100%)",
+            borderTop: "1px solid rgba(255,255,255,0.12)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 14px 28px -18px rgba(255,255,255,0.35)",
           }}
         >
+
           <div className="container mx-auto px-4 pt-16 pb-12">
             <div className="max-w-4xl mx-auto text-center">
               <span
