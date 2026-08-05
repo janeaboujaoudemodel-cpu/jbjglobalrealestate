@@ -238,9 +238,10 @@ export default function PropertySearchBar({
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-8 items-stretch gap-2 mb-2">
+      <div className="grid grid-cols-1 sm:grid-cols-[minmax(12rem,auto)_minmax(0,1fr)] lg:grid-cols-12 items-stretch gap-2 mb-2">
         <div
-          className="flex h-14 sm:h-16 min-w-[13.5rem] lg:col-span-2 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="flex h-14 sm:h-16 min-w-0 lg:col-span-3 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
