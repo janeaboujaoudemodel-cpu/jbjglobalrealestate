@@ -739,8 +739,6 @@ const Properties = () => {
           />
           {/* The shared PropertySearchBar below is the only filter interface.
               Its More control opens the same in-place panel on every route. */}
-          {false ? <div aria-hidden="true" /> : null}
-
           {/* Unified property search bar — the ONE filter for this page.
               Its "Show N" mirrors the grid total exactly, and its active-chip
               row is the single place a visitor resets filters. */}

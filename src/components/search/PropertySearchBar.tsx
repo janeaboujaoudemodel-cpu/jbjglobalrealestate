@@ -736,7 +736,7 @@ export default function PropertySearchBar({
               setInternal(applied);
               onChange?.(applied);
               setMoreOpen(false);
-              onSubmit(applied);
+              requestAnimationFrame(() => onSubmit(applied));
             }}
           />
         </DialogContent>
