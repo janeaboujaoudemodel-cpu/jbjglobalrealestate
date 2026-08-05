@@ -668,19 +668,25 @@ const Properties = () => {
       {/* Filters Section - sticks below the 88px header on scroll */}
       <section
         data-filter-clean="true"
+        data-filter-band-light={isMapMode ? undefined : "true"}
         data-map-shell={isMapMode ? true : undefined}
-        className={`sticky top-[88px] z-40 py-3 md:py-4 ${isMapMode ? "jj-properties-map-filter" : "border-b border-white/12"}`}
+        className={`sticky top-[88px] z-40 py-3 md:py-4 ${isMapMode ? "jj-properties-map-filter" : "border-b border-[#B89555]/28"}`}
         style={{
           WebkitOverflowScrolling: 'touch',
-          background: isMapMode ? undefined : "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)",
+          background: isMapMode ? undefined : "linear-gradient(180deg,#FFFFFF 0%,#FDFBF7 58%,#F7F2EA 100%)",
         }}
       >
         <div className="container mx-auto px-3 sm:px-4">
-          {/* Active Champagne Layer with thin black contour visible at edges */}
+          {/* Light premium shell — emerald fields read as engraved cards on it */}
             <div
-              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "bg-transparent border border-white/18 rounded-2xl p-4 sm:p-5 shadow-lg"}
-              style={{ overflow: 'visible', borderColor: 'rgba(255,255,255,0.18)' }}
+              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "rounded-2xl p-4 sm:p-5 shadow-[0_10px_28px_rgba(6,78,59,0.10)]"}
+              style={{
+                overflow: 'visible',
+                background: isMapMode ? undefined : '#FFFFFF',
+                border: isMapMode ? undefined : '1px solid rgba(184,149,85,0.30)',
+              }}
             >
+
           {/* Active deep-link filter chips (status / category) */}
           <ActiveFilterIndicator
             transactionType={appliedFilters.transactionType}
