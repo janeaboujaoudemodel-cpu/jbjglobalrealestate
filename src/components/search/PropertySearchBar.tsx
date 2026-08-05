@@ -592,7 +592,10 @@ export default function PropertySearchBar({
 
 
 
-        <div className="grid grid-cols-2 gap-2 col-span-2 jj-sspan-6 min-w-0">
+        <div
+          className="grid gap-1.5 sm:gap-2 col-span-3 sm:col-span-2 jj-sspan-6 min-w-0"
+          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+        >
           <button
             type="button"
             onClick={() => {
