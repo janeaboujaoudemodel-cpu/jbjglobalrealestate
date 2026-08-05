@@ -1316,16 +1316,6 @@ export default function PublicAccess() {
     });
   };
 
-  // Global event bridge: the unified Contact Us widget (SupportLauncher) fires
-  // "jbj:open-advisor" when the visitor picks the "Speak to an advisor" or
-  // "Request a callback" channel.
-  React.useEffect(() => {
-    const onOpen = () => setLeadOpen(true);
-    window.addEventListener("jbj:open-advisor", onOpen as EventListener);
-    return () => window.removeEventListener("jbj:open-advisor", onOpen as EventListener);
-  }, []);
-
-
   return (
     <div className="min-h-screen bg-[#F7F2EA] text-[#1A1A1A]">
       <style>{ACCESS_CTA_STYLE}</style>
@@ -1774,8 +1764,7 @@ export default function PublicAccess() {
         onResolved={() => setWelcomeDone(true)}
       />
 
-      {/* Unified Contact widget lives globally (SupportLauncher). This page just
-          listens so the "Speak to an advisor" channel opens our LeadFormDialog. */}
+      {/* Unified Contact widget and its advisor form are mounted globally. */}
       <SupportGuideOverlay enabled={welcomeDone} />
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
