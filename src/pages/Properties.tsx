@@ -75,6 +75,7 @@ import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
+import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
 import { paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
@@ -677,15 +678,12 @@ const Properties = () => {
         }}
       >
         <div className="container mx-auto px-3 sm:px-4">
-          {/* Light premium shell — emerald fields read as engraved cards on it */}
+          {/* ONE premium container for the whole filter system (jjpf-shell) */}
             <div
-              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "rounded-2xl p-4 sm:p-5 shadow-[0_10px_28px_rgba(6,78,59,0.10)]"}
-              style={{
-                overflow: 'visible',
-                background: isMapMode ? undefined : '#FFFFFF',
-                border: isMapMode ? undefined : '1px solid rgba(184,149,85,0.30)',
-              }}
+              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "jjpf-shell"}
+              style={{ overflow: 'visible' }}
             >
+
 
           {/* Active deep-link filter chips (status / category) */}
           <ActiveFilterIndicator
@@ -710,8 +708,14 @@ const Properties = () => {
               }));
             }}
           />
-          {/* Compact action row: [Intent | Sort By] unified pill + [Search icon] + [Filters] */}
+          {/* Container header — title left, advanced Filters trigger right */}
+          <div className="jjpf-head">
+            <div>
+              <h2 className="jjpf-head-title">Search Properties</h2>
+              <p className="jjpf-head-sub">Investment-grade listings across the UAE and beyond</p>
+            </div>
           {(() => {
+
             const tx = appliedFilters.transactionType;
             const cs = appliedFilters.completionStatus;
             const intentValue =
@@ -1141,11 +1145,13 @@ const Properties = () => {
               </div>
             );
           })()}
+          </div>
 
           {/* Unified property search bar — the ONE filter for this page.
               Its "Show N" mirrors the grid total exactly, and its active-chip
               row is the single place a visitor resets filters. */}
-          <div className="mt-3">
+          <div>
+
             <PropertySearchBar
               value={search}
               onChange={setSearch}
@@ -1158,7 +1164,7 @@ const Properties = () => {
           {/* Results toolbar — sort, view mode, alerts only.
               Status quick-chips live in the search bar, so they are hidden here
               (no duplicated filter on one screen). */}
-          <div className="mt-4">
+          <div className="jjpf-sub">
             <ResultsToolbar
               value={search}
               onChange={submitSearch}

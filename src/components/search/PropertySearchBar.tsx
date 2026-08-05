@@ -310,6 +310,7 @@ export default function PropertySearchBar({
               key={p.slug}
               type="button"
               data-no-contrast-guard
+              data-surface={f.purpose === p.slug ? "emerald" : undefined}
               onClick={() => {
                 if (p.slug === "sell") {
                   set({ purpose: p.slug });
