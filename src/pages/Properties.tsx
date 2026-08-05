@@ -641,7 +641,10 @@ const Properties = () => {
     filters.saleStatus !== null,
   ].filter(Boolean).length;
   const hasAnyActiveFilter = activeFilterCount > 0 || hasShortcutFilters;
-  const displayedResultCount = hasAnyActiveFilter ? finalProjects.length : 905;
+  // Always report the real number of listings rendered by the grid. Never a
+  // hardcoded headline figure — the toolbar, the pager and the search bar must
+  // agree with what the visitor can actually open.
+  const displayedResultCount = finalProjects.length;
 
   // Dynamic SEO based on transaction type per Master Blueprint
   const dynamicSEO = appliedFilters.transactionType === 'rent'
