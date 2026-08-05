@@ -473,6 +473,35 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
+        {showSort ? (
+          <Seg
+            label={sortOptions.find((s) => s.slug === f.sort)?.label ?? "Sort"}
+            active
+            dark={dark}
+            icon={<ArrowUpDown className="w-4 h-4 opacity-70" />}
+          >
+            <div className="p-1.5">
+              {sortOptions.map((s) => {
+                const on = f.sort === s.slug;
+                return (
+                  <button
+                    key={s.slug}
+                    type="button"
+                    onClick={() => set({ sort: s.slug as PropertySearch["sort"] })}
+                    data-surface={on ? "emerald" : "light"}
+                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold hover:bg-[#F7F2EA]"
+                    style={on ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF" } : { color: "#1A1A1A" }}
+                  >
+                    {s.label}
+                  </button>
+                );
+              })}
+            </div>
+          </Seg>
+        ) : null}
+
+
+
         <div className="grid grid-cols-2 gap-2 col-span-2 lg:col-span-2 min-w-0">
           <button
             type="button"
