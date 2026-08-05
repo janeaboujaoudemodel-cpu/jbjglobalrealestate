@@ -34403,7 +34403,30 @@ html body #root .jj-developer-logo-metallic[data-developer-logo-plate="true"] im
   z-index: 3 !important;
   background: transparent !important;
   mix-blend-mode: normal !important;
-  filter: none !important;
+  filter: brightness(0) contrast(1.15) !important;
+  opacity: 1 !important;
+}
+
+/* Project sticky controls: active emerald surfaces use the same 8px geometry
+   and pure-white ink as the Search Properties CTA. */
+html body #root [data-project-sticky-nav="true"] [data-surface="emerald"] {
+  border-radius: 8px !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-project-sticky-nav="true"] [data-surface="emerald"] *,
+html body #root [data-project-sticky-nav="true"] [data-surface="emerald"] svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Payment-plan emerald labels must never inherit ink from light-card rules. */
+html body #root [data-payment-progress-bar] [data-emerald="true"],
+html body #root [data-payment-progress-bar] [data-emerald="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 
 @keyframes jj-dev-logo-border-sweep {

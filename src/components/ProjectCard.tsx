@@ -308,7 +308,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       )}
 
 
-      <Link to={projectHref} className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col">
         {/* Image — with subtle gold hover arrows for previewing photos in-place. */}
           <div className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611] group/photo" data-surface="ink">
           <VerifiedMedia
@@ -529,7 +529,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
         </div>
-      </Link>
+      </div>
 
       {/* CTA Buttons — Email, Call, WhatsApp. Premium rectangular emerald tiles. */}
       <div className="px-4 pb-4">

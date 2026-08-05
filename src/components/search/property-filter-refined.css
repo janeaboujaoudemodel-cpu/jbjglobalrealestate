@@ -5,9 +5,9 @@
  * container that wraps the property filter on /properties. No global tokens,
  * no page-wide selectors: nothing outside that container can be affected.
  *
- * Standard enforced here:
- *   field height 48px · radius 12px · warm-white surface · 1px champagne border
- *   ink text on light · pure white text + icons on emerald · 12–16px gaps
+ * The shared PropertySearchBar owns every field style. This file only provides
+ * the white institutional shell and the secondary results-row rhythm, so the
+ * /properties controls remain byte-for-byte consistent with the homepage.
  */
 
 /* ── Container ─────────────────────────────────────────────── */
@@ -23,16 +23,7 @@
 }
 
 /* ── Container header ──────────────────────────────────────── */
-.jjpf-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding-bottom: 14px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid rgba(15, 29, 24, 0.16);
-}
+.jjpf-head { display: none; }
 .jjpf-head-title {
   font-size: 15px;
   font-weight: 700;
@@ -51,21 +42,10 @@
 /* ── Shared field standard ─────────────────────────────────── */
 .jjpf-shell [data-search-segment],
 .jjpf-shell [data-search-utility-controls] {
-  height: 56px !important;
-  min-height: 56px !important;
   border-radius: 8px !important;
-  background: #FFFFFF !important;
-  background-image: none !important;
-  border: 1px solid rgba(15, 29, 24, 0.28) !important;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 2px rgba(15, 29, 24, 0.05) !important;
-  backdrop-filter: none !important;
-  transition: border-color 0.18s ease, background 0.18s ease;
 }
 .jjpf-shell [data-search-segment]:hover,
-.jjpf-shell [data-search-utility-controls]:hover {
-  border-color: rgba(6, 78, 59, 0.55) !important;
-  background: #FFFFFF !important;
-}
+.jjpf-shell [data-search-utility-controls]:hover { border-color: rgba(6, 78, 59, 0.55) !important; }
 .jjpf-shell [data-search-segment]:focus-visible,
 .jjpf-shell [data-search-segment] :focus-visible {
   outline: 2px solid rgba(6, 78, 59, 0.55);
@@ -83,19 +63,15 @@
 }
 
 /* Row rhythm */
-.jjpf-shell [data-search-grid] { gap: 12px !important; }
-.jjpf-shell [data-search-grid]:first-of-type { margin-bottom: 14px !important; }
+.jjpf-shell [data-search-grid] { gap: 8px !important; }
+.jjpf-shell [data-search-grid]:first-of-type { margin-bottom: 8px !important; }
 
 /* ── Segmented control (Buy / Rent / Sell) ────────────────── */
 .jjpf-shell [data-search-segment] > button {
   border-radius: 0 !important;
   margin: 0;
 }
-.jjpf-shell [data-search-segment] > button:not([style*="rgb(6, 78, 59)"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  background: transparent !important;
-}
+.jjpf-shell [data-search-segment] > button:not([data-surface="emerald"]) { background: transparent !important; }
 
 /* ── Emerald surfaces: white ink, always ──────────────────── */
 .jjpf-shell [data-surface="emerald"],
@@ -127,8 +103,6 @@
   background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.22) !important;
   box-shadow: 0 12px 26px -12px rgba(6, 78, 59, 0.65) !important;
-  padding-left: 20px !important;
-  padding-right: 20px !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em;
 }
@@ -153,9 +127,9 @@
   border-top: 1px solid rgba(15, 29, 24, 0.16);
 }
 .jjpf-sub h1 { font-size: 17px !important; }
-.jjpf-sub [data-results-toolbar] button:not([style*="rgb(6, 78, 59)"]) {
+.jjpf-sub [data-results-toolbar] button:not([data-surface="emerald"]) {
   height: 40px !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -165,9 +139,9 @@
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-.jjpf-sub [data-results-toolbar] button[style*="rgb(6, 78, 59)"] {
+.jjpf-sub [data-results-toolbar] button[data-surface="emerald"] {
   height: 40px !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
   box-shadow: none !important;
 }
 .jjpf-sub [data-view-switcher] > span {
@@ -181,13 +155,7 @@
 
 /* ── Mobile: stacked, full-width, no overflow ─────────────── */
 @media (max-width: 1023px) {
-  .jjpf-shell [data-search-segment],
-  .jjpf-shell [data-search-utility-controls] {
-    height: 46px !important;
-    min-height: 46px !important;
-  }
-  .jjpf-shell [data-search-grid] { gap: 10px !important; }
-  .jjpf-head { padding-bottom: 12px; margin-bottom: 12px; }
+  .jjpf-shell [data-search-grid] { gap: 6px !important; }
 }
 
 /* ── Specificity escalation (scoped) ──────────────────────────

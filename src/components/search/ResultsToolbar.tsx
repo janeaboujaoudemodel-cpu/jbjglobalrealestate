@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getRegions } from "@/data/geography";
+import SavedFilterMenu from "@/components/search/SavedFilterMenu";
 import {
   PROJECT_STATUSES,
   SORT_OPTIONS,
@@ -128,11 +129,12 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          <SavedFilterMenu search={f} />
           <Popover>
             <PopoverTrigger asChild>
               <button
                 type="button"
-                className="h-9 px-3 rounded-xl text-xs font-semibold"
+                className="h-10 px-3 rounded-lg text-xs font-semibold"
                 style={{
                   background: dark ? "rgba(255,255,255,0.06)" : "#FDFBF7",
                   border: "1px solid rgba(184,149,85,0.35)",
@@ -180,7 +182,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
             type="button"
             onClick={() => setAlertOpen(true)}
       data-surface="emerald"
-            className="allow-white h-9 px-3 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5" data-no-contrast-guard
+            className="allow-white h-10 px-3 rounded-lg text-xs font-semibold text-white flex items-center gap-1.5" data-no-contrast-guard
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <Bell className="w-3.5 h-3.5" />

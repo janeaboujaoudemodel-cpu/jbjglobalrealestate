@@ -130,7 +130,7 @@ const PremiumBrochureCard = ({
       >
         {/* Stacked Pages Effect - visible underneath the main cover */}
         <div 
-          className="absolute w-[340px] h-[220px] rounded-lg"
+          className="absolute w-[min(400px,82vw)] h-[260px] rounded-lg"
           style={{
             transform: "translateZ(-8px) translateX(6px) translateY(6px)",
             background: "linear-gradient(135deg, #ECE2D2 0%, #D8C7A6 100%)",
@@ -138,7 +138,7 @@ const PremiumBrochureCard = ({
           }}
         />
         <div 
-          className="absolute w-[340px] h-[220px] rounded-lg"
+          className="absolute w-[min(400px,82vw)] h-[260px] rounded-lg"
           style={{
             transform: "translateZ(-4px) translateX(3px) translateY(3px)",
             background: "linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 100%)",
@@ -148,7 +148,7 @@ const PremiumBrochureCard = ({
 
         {/* Main Card Container - Larger brochure with project image */}
         <div 
-          className="relative w-[340px] h-[220px] rounded-lg overflow-hidden"
+          className="relative w-[min(400px,82vw)] h-[260px] rounded-lg overflow-hidden"
           style={{
             transformStyle: "preserve-3d",
             boxShadow: `
@@ -192,7 +192,7 @@ const PremiumBrochureCard = ({
               <img
                 src={jbjMonogram}
                 alt="JBJ"
-                className="h-16 w-16 object-contain shrink-0"
+                className="h-[72px] w-[72px] object-contain shrink-0"
                 style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9))" }}
                 loading="eager"
                 {...({ fetchpriority: "high" } as any)}
@@ -200,7 +200,7 @@ const PremiumBrochureCard = ({
               />
               <span
                 data-no-contrast-guard
-                className="text-[13px] uppercase tracking-[0.32em] font-bold allow-white"
+                className="text-[14px] uppercase tracking-[0.24em] font-bold allow-white"
                 style={{
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
