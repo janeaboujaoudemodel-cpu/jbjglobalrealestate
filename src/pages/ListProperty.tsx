@@ -663,16 +663,17 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
           <div>
             <h2
               className="text-2xl md:text-3xl font-bold tracking-tight"
-              style={{ color: INK, WebkitTextFillColor: INK }}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               data-no-contrast-guard
             >
               My Listing Submissions
             </h2>
             <p
               className="mt-1 text-sm"
-              style={{ color: INK + "B3", WebkitTextFillColor: INK + "B3" }}
+              style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}
               data-no-contrast-guard
             >
+
               Track the status of every property you've listed with JBJ. You'll
               receive an email update on every status change.
             </p>
