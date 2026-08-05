@@ -331,11 +331,12 @@ export default function PropertySearchBar({
             onClick={() => setConsultOpen(true)}
             data-surface="emerald"
             data-search-segment
-            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full lg:col-span-1 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full sm:col-span-2 lg:col-span-2 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <CalendarCheck className="w-4 h-4 shrink-0" />
-            <span className="whitespace-nowrap text-xs sm:text-[13px]"><span className="hidden xl:inline">Free </span>Consultation</span>
+            <span className="text-xs sm:text-[13px] leading-tight text-center"><span className="hidden xl:inline">Free </span>Consultation</span>
+
           </button>
         ) : null}
 
