@@ -675,7 +675,7 @@ Requirements:
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
-            style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.22) 0%, transparent 55%)" }}
+            style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.12) 0%, transparent 55%)" }}
           />
           <div className="container mx-auto px-4 relative">
           {/* Progress Steps - on solid emerald, white glyphs */}
