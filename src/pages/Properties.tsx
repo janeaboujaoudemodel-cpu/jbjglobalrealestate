@@ -1230,7 +1230,7 @@ const Properties = () => {
 
           {/* Unified property search bar — identical surface site-wide */}
           <div className="mt-3">
-            <PropertySearchBar value={search} onChange={setSearch} onSubmit={submitSearch} dark />
+            <PropertySearchBar value={search} onChange={setSearch} onSubmit={submitSearch} dark showSort />
           </div>
 
           {/* Results toolbar — sort, view mode, alerts, quick status chips */}

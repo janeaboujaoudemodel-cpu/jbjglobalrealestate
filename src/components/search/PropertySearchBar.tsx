@@ -10,7 +10,7 @@
  * (#064E3B → #042c1c → #000) — never flat #064E3B alone.
  */
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, CalendarCheck, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, CalendarCheck, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -28,6 +28,7 @@ import {
   EMPTY_SEARCH,
   PROJECT_STATUSES,
   PURPOSES,
+  SORT_OPTIONS,
   compactPrice,
   countExtraFilters,
   currencyFor,
@@ -112,23 +113,39 @@ function Seg({
   );
 }
 
-function Chip({ on, onClick, children }: { on?: boolean; onClick: () => void; children: React.ReactNode }) {
+function Chip({
+  on,
+  onClick,
+  circle,
+  children,
+}: {
+  on?: boolean;
+  onClick: () => void;
+  /** Perfect circle — one single shape for every numeric option site-wide. */
+  circle?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
       data-surface={on ? "emerald" : "light"}
-      className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
+      className={
+        circle
+          ? "h-10 w-10 min-w-10 min-h-10 shrink-0 grow-0 basis-10 aspect-square rounded-full p-0 leading-none text-xs font-semibold inline-flex items-center justify-center"
+          : "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
+      }
       style={
         on
-          ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", border: "1px solid #042c1c" }
-          : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }
+          ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", border: "1px solid #042c1c", borderRadius: circle ? "9999px" : undefined }
+          : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)", borderRadius: circle ? "9999px" : undefined }
       }
     >
       {children}
     </button>
   );
 }
+
 
 interface Props {
   value?: PropertySearch;
@@ -142,6 +159,10 @@ interface Props {
   onConsultation?: () => void;
   /** Called when the visitor picks the "Sell" purpose — hero redirects instantly. */
   onSellSelected?: () => void;
+  /** Adds the unified "Sort" segment (listing pages: properties, projects, areas, developers…). */
+  showSort?: boolean;
+  /** Optional custom sort options for non-property listings. */
+  sortOptions?: readonly { slug: string; label: string }[];
 }
 
 export default function PropertySearchBar({
@@ -153,7 +174,10 @@ export default function PropertySearchBar({
   typewriterPhrases,
   onConsultation,
   onSellSelected,
+  showSort = false,
+  sortOptions = SORT_OPTIONS,
 }: Props) {
+
   const [internal, setInternal] = useState<PropertySearch>(value ?? EMPTY_SEARCH);
   const f = value ?? internal;
   const [moreOpen, setMoreOpen] = useState(false);
@@ -222,9 +246,10 @@ export default function PropertySearchBar({
   return (
     <div data-property-search-bar className={`w-full ${className}`}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-8 items-stretch gap-2 mb-2">
+      <div className="grid grid-cols-1 sm:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] lg:grid-cols-12 items-stretch gap-2 mb-2">
         <div
-          className="flex h-14 sm:h-16 min-w-[13.5rem] lg:col-span-2 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="flex h-14 sm:h-16 min-w-0 lg:col-span-3 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -247,13 +272,15 @@ export default function PropertySearchBar({
                 }
                 set({ purpose: p.slug });
               }}
-                className="relative h-full min-w-0 flex-1 px-6 text-sm font-semibold whitespace-nowrap first:rounded-l-lg last:rounded-r-lg"
+                className="relative h-full min-w-0 flex-1 px-3 sm:px-4 text-sm font-semibold whitespace-nowrap rounded-none"
               style={
                 f.purpose === p.slug
-                  ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
+                  ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", whiteSpace: "nowrap", borderRadius: 0 }
                   : {
                       color: dark ? "#FFFFFF" : "#1A1A1A",
                       WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
+                      whiteSpace: "nowrap",
+                      borderRadius: 0,
                     }
               }
             >
@@ -266,7 +293,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-5"
+          className="relative flex items-center gap-2 h-14 sm:h-16 px-3.5 rounded-lg min-w-0 lg:col-span-7"
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -314,11 +341,12 @@ export default function PropertySearchBar({
             onClick={() => setConsultOpen(true)}
             data-surface="emerald"
             data-search-segment
-            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full lg:col-span-1 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-semibold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
+            className="jj-emerald-action inline-flex h-14 sm:h-16 w-full sm:col-span-2 lg:col-span-2 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-semibold shadow-[0_8px_24px_rgba(0,0,0,0.24)]"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
             <CalendarCheck className="w-4 h-4 shrink-0" />
-            <span className="whitespace-nowrap text-xs sm:text-[13px]"><span className="hidden xl:inline">Free </span>Consultation</span>
+            <span className="text-xs sm:text-[13px] leading-tight text-center"><span className="hidden xl:inline">Free </span>Consultation</span>
+
           </button>
         ) : null}
 
@@ -326,7 +354,7 @@ export default function PropertySearchBar({
 
 
       {/* Row 2 — segments */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-2">
+      <div className={`grid grid-cols-2 md:grid-cols-3 ${showSort ? "lg:grid-cols-9" : "lg:grid-cols-8"} gap-2`}>
         <div className="col-span-2 lg:col-span-2 min-w-0">
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
@@ -392,9 +420,9 @@ export default function PropertySearchBar({
           <div className="p-3 space-y-3">
             <div>
               <p className="text-[11px] uppercase tracking-wider opacity-60 mb-1.5">Bedrooms</p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 {BEDS.map((b) => (
-                  <Chip key={b} on={f.beds.includes(b)} onClick={() => set({ beds: toggleIn(f.beds, b) })}>
+                  <Chip key={b} circle={b.length <= 2} on={f.beds.includes(b)} onClick={() => set({ beds: toggleIn(f.beds, b) })}>
                     {b}
                   </Chip>
                 ))}
@@ -402,13 +430,14 @@ export default function PropertySearchBar({
             </div>
             <div>
               <p className="text-[11px] uppercase tracking-wider opacity-60 mb-1.5">Bathrooms</p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 {BATHS.map((b) => (
-                  <Chip key={b} on={f.baths.includes(b)} onClick={() => set({ baths: toggleIn(f.baths, b) })}>
+                  <Chip key={b} circle={b.length <= 2} on={f.baths.includes(b)} onClick={() => set({ baths: toggleIn(f.baths, b) })}>
                     {b}
                   </Chip>
                 ))}
               </div>
+
             </div>
           </div>
         </Seg>
@@ -445,6 +474,35 @@ export default function PropertySearchBar({
             ))}
           </div>
         </Seg>
+
+        {showSort ? (
+          <Seg
+            label={sortOptions.find((s) => s.slug === f.sort)?.label ?? "Sort"}
+            active
+            dark={dark}
+            icon={<ArrowUpDown className="w-4 h-4 opacity-70" />}
+          >
+            <div className="p-1.5">
+              {sortOptions.map((s) => {
+                const on = f.sort === s.slug;
+                return (
+                  <button
+                    key={s.slug}
+                    type="button"
+                    onClick={() => set({ sort: s.slug as PropertySearch["sort"] })}
+                    data-surface={on ? "emerald" : "light"}
+                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold hover:bg-[#F7F2EA]"
+                    style={on ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF" } : { color: "#1A1A1A" }}
+                  >
+                    {s.label}
+                  </button>
+                );
+              })}
+            </div>
+          </Seg>
+        ) : null}
+
+
 
         <div className="grid grid-cols-2 gap-2 col-span-2 lg:col-span-2 min-w-0">
           <button
