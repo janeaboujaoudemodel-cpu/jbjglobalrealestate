@@ -22,7 +22,7 @@ import PropertyFilterScreen from "./PropertyFilterScreen";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
-import { useAreaUnit, type AreaUnit } from "@/hooks/useAreaUnit";
+import { useAreaUnit, setAreaUnitGlobal, type AreaUnit } from "@/hooks/useAreaUnit";
 import {
   BATHS,
   BEDS,
@@ -210,10 +210,8 @@ export default function PropertySearchBar({
   const cur = currencyFor(f.country);
   const extras = countExtraFilters(f);
 
-  const setAreaUnit = (unit: AreaUnit) => {
-    localStorage.setItem("jj_area_unit", unit);
-    window.dispatchEvent(new CustomEvent("areaUnitChange", { detail: unit }));
-  };
+  const setAreaUnit = (unit: AreaUnit) => setAreaUnitGlobal(unit);
+
 
   const locationLabel = useMemo(() => {
     if (f.areasInclude.length)

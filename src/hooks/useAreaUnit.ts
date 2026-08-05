@@ -24,8 +24,17 @@ export function useAreaUnit() {
         setAreaUnit(unit);
       }
     };
+    const storageHandler = (e: StorageEvent) => {
+      if (e.key === AREA_UNIT_KEY && (e.newValue === 'sqft' || e.newValue === 'sqm')) {
+        setAreaUnit(e.newValue);
+      }
+    };
     window.addEventListener('areaUnitChange', handler);
-    return () => window.removeEventListener('areaUnitChange', handler);
+    window.addEventListener('storage', storageHandler);
+    return () => {
+      window.removeEventListener('areaUnitChange', handler);
+      window.removeEventListener('storage', storageHandler);
+    };
   }, []);
 
   /** Convert a sqft value to the active unit and return formatted string with label */
@@ -47,5 +56,11 @@ export function useAreaUnit() {
   /** Return the current unit label */
   const unitLabel = areaUnit === 'sqm' ? 'sqm' : 'sqft';
 
-  return { areaUnit, formatSize, convertSize, unitLabel };
+  return { areaUnit, setAreaUnit: setAreaUnitGlobal, formatSize, convertSize, unitLabel };
+}
+
+/** Global setter: persists and broadcasts so every mounted component follows. */
+export function setAreaUnitGlobal(unit: AreaUnit) {
+  localStorage.setItem(AREA_UNIT_KEY, unit);
+  window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: unit }));
 }
