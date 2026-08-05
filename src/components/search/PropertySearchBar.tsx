@@ -408,7 +408,7 @@ export default function PropertySearchBar({
               style={{ backgroundImage: EMERALD_PAIR }}
             >
               <CalendarCheck className="w-4 h-4 shrink-0" />
-              <span className="text-[11px] sm:text-xs leading-tight text-center whitespace-nowrap">Consultation</span>
+              <span className="text-[11px] leading-tight tracking-tight text-center whitespace-nowrap">Consultation</span>
             </button>
           ) : null}
         </div>
