@@ -183,23 +183,15 @@
 }
 
 /* ── Specificity escalation (scoped) ──────────────────────────
-   The site-wide contrast selectors use very long :not(...) chains,
-   which carry high specificity. These repeated-class selectors stay
-   scoped to this container but outrank them, so emerald controls
-   inside the filter always render white labels and white icons.
+   Site-wide contrast selectors use very long :not(...) chains that
+   carry high specificity. These repeated-class selectors stay scoped
+   to this filter container but outrank them, so emerald controls
+   always render white labels and white icons.
    ─────────────────────────────────────────────────────────── */
-.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell
-  :is([data-surface="emerald"], [style*="rgb(6, 78, 59)"], [style*="#064E3B"], .jj-pill-emerald-metallic, .jj-emerald-action),
-.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell
-  :is([data-surface="emerald"], [style*="rgb(6, 78, 59)"], [style*="#064E3B"], .jj-pill-emerald-metallic, .jj-emerald-action) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: currentColor !important;
-}
-.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub
-  :is([style*="rgb(6, 78, 59)"], [data-surface="emerald"]),
-.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub
-  :is([style*="rgb(6, 78, 59)"], [data-surface="emerald"]) * {
+.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell :is([data-surface="emerald"], [style*="rgb(6, 78, 59)"], [style*="#064E3B"], .jj-pill-emerald-metallic, .jj-emerald-action),
+.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell.jjpf-shell :is([data-surface="emerald"], [style*="rgb(6, 78, 59)"], [style*="#064E3B"], .jj-pill-emerald-metallic, .jj-emerald-action) *,
+.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub :is([data-surface="emerald"], [style*="rgb(6, 78, 59)"], [style*="#064E3B"], .jj-pill-emerald-metallic, .jj-emerald-action),
+.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub.jjpf-sub :is([data-surface="emerald"], [style*="rgb(6, 78, 59)"], [style*="#064E3B"], .jj-pill-emerald-metallic, .jj-emerald-action) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
