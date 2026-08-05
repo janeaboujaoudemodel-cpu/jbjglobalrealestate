@@ -37518,3 +37518,42 @@ html body #root [data-property-search-bar] [data-search-segment] > span > span {
   word-break: keep-all !important;
   overflow-wrap: normal !important;
 }
+
+/* PASS 254 — Consultation CTA shine sweep (makes it stand out from "Show N"). */
+@keyframes jjShineSweep {
+  0%   { transform: translateX(-160%) skewX(-18deg); opacity: 0; }
+  12%  { opacity: 1; }
+  60%  { transform: translateX(160%) skewX(-18deg); opacity: 1; }
+  100% { transform: translateX(160%) skewX(-18deg); opacity: 0; }
+}
+html body #root .jj-shine-cta { position: relative; overflow: hidden; isolation: isolate; }
+html body #root .jj-shine-cta::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 38%;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.42) 50%, rgba(255,255,255,0) 100%);
+  animation: jjShineSweep 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+html body #root .jj-shine-cta:hover::after { animation-duration: 1.4s; }
+@media (prefers-reduced-motion: reduce) {
+  html body #root .jj-shine-cta::after { animation: none; opacity: 0; }
+}
+
+/* PASS 255 — unified search-bar column grid (row 1 edges align with row 2 cards). */
+@media (min-width: 1024px) {
+  html body #root [data-search-grid="24"] { grid-template-columns: repeat(24, minmax(0, 1fr)) !important; }
+  html body #root [data-search-grid="27"] { grid-template-columns: repeat(27, minmax(0, 1fr)) !important; }
+  html body #root .jj-sspan-3 { grid-column: span 3 / span 3 !important; }
+  html body #root .jj-sspan-4 { grid-column: span 4 / span 4 !important; }
+  html body #root .jj-sspan-5 { grid-column: span 5 / span 5 !important; }
+  html body #root .jj-sspan-6 { grid-column: span 6 / span 6 !important; }
+  html body #root .jj-sspan-9 { grid-column: span 9 / span 9 !important; }
+  html body #root .jj-sspan-12 { grid-column: span 12 / span 12 !important; }
+  html body #root .jj-sspan-10 { grid-column: span 10 / span 10 !important; }
+  html body #root .jj-sspan-13 { grid-column: span 13 / span 13 !important; }
+}
