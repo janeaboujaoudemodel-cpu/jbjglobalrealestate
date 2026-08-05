@@ -29,9 +29,16 @@ interface Props {
   onChange: (next: PropertySearch) => void;
   total: number;
   dark?: boolean;
+  /**
+   * Hides the status/furnishing quick-chip row. Pages that already expose the
+   * unified PropertySearchBar (with its own status + active-filter chips) pass
+   * this so the same filter never appears twice on one screen.
+   */
+  hideQuickChips?: boolean;
 }
 
-export default function ResultsToolbar({ value: f, onChange, total, dark = false }: Props) {
+export default function ResultsToolbar({ value: f, onChange, total, dark = false, hideQuickChips = false }: Props) {
+
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertName, setAlertName] = useState("");
   const [frequency, setFrequency] = useState("daily");
