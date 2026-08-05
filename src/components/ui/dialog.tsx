@@ -12,20 +12,34 @@ import { cn } from "@/lib/utils";
  * close and clear the inline style if no other dialog is still open.
  */
 const Dialog: typeof DialogPrimitive.Root = ({ open, onOpenChange, ...props }) => {
+  const previousOpen = React.useRef(open);
+
+  const releaseBodyLock = React.useCallback(() => {
+    if (typeof document === "undefined") return;
+    window.setTimeout(() => {
+      const stillOpen = document.querySelector('[role="dialog"][data-state="open"]');
+      if (stillOpen) return;
+      document.body.style.pointerEvents = "";
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+      document.documentElement.style.overflow = "";
+    }, 0);
+  }, []);
+
+  React.useEffect(() => {
+    if (previousOpen.current && open === false) releaseBodyLock();
+    previousOpen.current = open;
+    return () => {
+      if (open) releaseBodyLock();
+    };
+  }, [open, releaseBodyLock]);
+
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
       onOpenChange?.(next);
-      if (!next && typeof document !== "undefined") {
-        window.setTimeout(() => {
-          // Only unlock when there are no Radix dialog overlays still mounted.
-          const stillOpen = document.querySelector('[role="dialog"][data-state="open"]');
-          if (!stillOpen && document.body.style.pointerEvents === "none") {
-            document.body.style.pointerEvents = "";
-          }
-        }, 0);
-      }
+      if (!next) releaseBodyLock();
     },
-    [onOpenChange],
+    [onOpenChange, releaseBodyLock],
   );
   return <DialogPrimitive.Root open={open} onOpenChange={handleOpenChange} {...props} />;
 };
