@@ -363,7 +363,10 @@ export default function PropertySearchBar({
         </div>
 
         {/* sq ft / sq m sits above "More" and Consultation above "Show N" — same widths */}
-        <div className="grid grid-cols-2 gap-1.5 sm:gap-2 col-span-2 sm:col-span-2 jj-sspan-6 min-w-0">
+        <div
+          className="grid gap-1.5 sm:gap-2 col-span-2 sm:col-span-2 jj-sspan-6 min-w-0"
+          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+        >
           <div
             className="flex h-11 sm:h-16 min-w-0 flex-col justify-center overflow-hidden rounded-lg px-2 sm:px-3.5"
             data-search-utility-controls
