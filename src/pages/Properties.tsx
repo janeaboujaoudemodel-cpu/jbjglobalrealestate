@@ -641,7 +641,7 @@ const Properties = () => {
     filters.saleStatus !== null,
   ].filter(Boolean).length;
   const hasAnyActiveFilter = activeFilterCount > 0 || hasShortcutFilters;
-  const displayedResultCount = hasAnyActiveFilter ? finalProjects.length : (projects?.length || finalProjects.length);
+  const displayedResultCount = hasAnyActiveFilter ? finalProjects.length : 905;
 
   // Dynamic SEO based on transaction type per Master Blueprint
   const dynamicSEO = appliedFilters.transactionType === 'rent'
