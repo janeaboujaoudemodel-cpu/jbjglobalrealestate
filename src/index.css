@@ -18608,12 +18608,12 @@ html body button[data-numeric-chip="true"] {
 }
 
 html body [data-search-utility-controls] button {
-  padding-inline: 8px !important;
+  padding-inline: 14px !important;
   white-space: nowrap !important;
 }
 
 html body [data-search-utility-controls] button[aria-pressed] {
-  padding-inline: 4px !important;
+  padding-inline: 6px !important;
 }
 :where(button, a, [role="button"]) :where(svg, [class*="lucide"], [data-lucide]) {
   width: var(--jbj-icon-size);
