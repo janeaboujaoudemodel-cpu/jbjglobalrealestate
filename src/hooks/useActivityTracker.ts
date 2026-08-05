@@ -10,12 +10,14 @@ import { SUPABASE_URL } from "@/config/backend";
 export function useActivityTracker() {
   const { user } = useAuth();
   const sessionIdRef = useRef<string | null>(null);
+  const sessionStartedAtRef = useRef(Date.now());
   const actionsRef = useRef(0);
   const pagesRef = useRef(0);
 
   // Start session
   useEffect(() => {
     if (!user?.id) return;
+    sessionStartedAtRef.current = Date.now();
 
     const startSession = async () => {
       try {
@@ -51,7 +53,7 @@ export function useActivityTracker() {
             session_end: new Date().toISOString(),
             pages_visited: pagesRef.current,
             actions_performed: actionsRef.current,
-            duration_minutes: Math.floor((Date.now() - Date.parse(new Date().toISOString())) / 60000) || 1,
+            duration_minutes: Math.max(1, Math.floor((Date.now() - sessionStartedAtRef.current) / 60000)),
           })
           .eq('id', sessionIdRef.current);
       } catch {}

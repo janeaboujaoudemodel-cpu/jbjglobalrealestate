@@ -27,7 +27,6 @@ import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
-import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { useAntiCapture } from "@/hooks/useAntiCapture";
 import { useAuditorTracking } from "@/hooks/useAuditorTracking";
 
@@ -73,7 +72,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const { trackPageVisit } = useActivityTracker();
-  useVisitorTracking();
   useAntiCapture();
   useAuditorTracking();
 

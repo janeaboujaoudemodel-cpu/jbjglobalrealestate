@@ -461,17 +461,6 @@ const Properties = () => {
 
   const filteredProjects = useFilteredProjects(projects, standardFilters);
 
-  // Show ALL developers sorted by rank (top to lowest)
-  const allDevelopersSorted = useMemo(() => {
-    if (!developers) return [];
-    return [...developers].sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
-  }, [developers]);
-
-  // Get all communities/areas sorted alphabetically
-  const allAreasSorted = useMemo(() => {
-    if (!communities) return [];
-    return [...communities].sort((a, b) => a.name.localeCompare(b.name));
-  }, [communities]);
   // Sort projects
   const sortedProjects = useMemo(() => {
     let sorted = [...filteredProjects];
@@ -636,20 +625,6 @@ const Properties = () => {
   // hardcoded headline figure — the toolbar, the pager and the search bar must
   // agree with what the visitor can actually open.
   const displayedResultCount = finalProjects.length;
-  const legacyIntentValue = appliedFilters.transactionType === "rent"
-    ? "rent"
-    : appliedFilters.completionStatus === "ready"
-      ? "buy-ready"
-      : appliedFilters.completionStatus === "off-plan"
-        ? "buy-offplan"
-        : "buy";
-  const setLegacyIntent = (value: string) => {
-    const transactionType = value === "rent" ? "rent" : "buy";
-    const completionStatus = value === "buy-ready" ? "ready" : value === "buy-offplan" ? "off-plan" : null;
-    setFilters((previous) => ({ ...previous, transactionType, completionStatus }));
-    setAppliedFilters((previous) => ({ ...previous, transactionType, completionStatus }));
-  };
-
   // Dynamic SEO based on transaction type per Master Blueprint
   const dynamicSEO = appliedFilters.transactionType === 'rent'
     ? blueprintPagesSEO.rentListings
