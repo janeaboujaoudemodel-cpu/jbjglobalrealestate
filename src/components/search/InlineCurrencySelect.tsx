@@ -55,12 +55,12 @@ export default function InlineCurrencySelect({ dark }: Props) {
         <button
           type="button"
           data-no-contrast-guard
-          className="group flex h-full w-full min-w-0 flex-col justify-center gap-[3px] bg-transparent px-3 py-1.5 text-left lg:px-3.5"
+          className="group flex h-full w-full min-w-0 flex-col items-center justify-center gap-[4px] bg-transparent px-2.5 py-1.5 text-center lg:px-3"
           style={{ color: fg, borderRadius: 0 }}
           aria-label="Select currency"
         >
           {/* Line 1 — flag + label + chevron, all on the same baseline */}
-          <span className="flex w-full min-w-0 items-center gap-1.5">
+          <span className="flex w-full min-w-0 items-center justify-center gap-1.5">
             <span
               aria-hidden
               className="shrink-0 text-[13px] leading-none"
@@ -77,15 +77,15 @@ export default function InlineCurrencySelect({ dark }: Props) {
               Currency
             </span>
             <ChevronDown
-              className="ml-auto h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
+              className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
               style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
             />
           </span>
 
           {/* Line 2 — the code */}
           <span
-            className="block w-full text-left text-[13px] font-semibold leading-none"
-            style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap", textAlign: "left" }}
+            className="block w-full text-center text-[13px] lg:text-sm font-semibold leading-none"
+            style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap", textAlign: "center" }}
           >
             {active.code}
           </span>
