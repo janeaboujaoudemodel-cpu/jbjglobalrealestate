@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { Mail, MapPin, Phone, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Mail, MapPin, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -337,38 +337,33 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <button
                 type="button"
                 aria-label="Previous photo"
+                onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i - 1 + primaryImageCandidates.length) % primaryImageCandidates.length);
                 }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
-                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
+                className="absolute left-2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
+                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
               >
                 <ChevronLeft className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>
               <button
                 type="button"
                 aria-label="Next photo"
+                onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onPointerDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i + 1) % primaryImageCandidates.length);
                 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
-                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
+                className="absolute right-2 z-20 flex items-center justify-center opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus:opacity-100 focus:pointer-events-auto transition-opacity bg-transparent border-0 p-0"
+                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))" }}
               >
                 <ChevronRight className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-1 opacity-0 group-hover/photo:opacity-100 transition-opacity">
-                {primaryImageCandidates.slice(0, 6).map((_, idx) => (
-                  <span
-                    key={idx}
-                    className="h-1 w-1.5 rounded-full"
-                    style={{ background: idx === primaryImageIndex % primaryImageCandidates.length ? '#D4AF6A' : 'rgba(255,255,255,0.55)' }}
-                  />
-                ))}
-              </div>
             </>
           )}
 
@@ -569,8 +564,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             data-emerald-ok="button"
             className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Chat</span>
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 flex-shrink-0 allow-white" fill="#FFFFFF" aria-hidden="true">
+              <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.29L2 22l4.99-1.66a9.8 9.8 0 0 0 5.05 1.4c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2Zm5.7 13.9c-.24.68-1.4 1.32-1.94 1.36-.53.05-1.02.24-3.45-.72-2.93-1.16-4.76-4.2-4.9-4.4-.14-.2-1.15-1.53-1.15-2.92 0-1.39.73-2.07 1-2.36.26-.29.57-.36.76-.36h.54c.18 0 .41-.03.63.48.24.58.82 2 .89 2.15.07.14.12.3.02.5-.1.19-.34.53-.55.75-.15.16-.32.33-.14.64.19.32.83 1.36 1.78 2.2 1.22 1.09 2.25 1.43 2.57 1.59.31.15.5.13.68-.08.19-.22.79-.92 1-1.24.2-.31.41-.26.68-.16.27.1 1.7.8 1.99.95.29.14.48.22.55.34.07.12.07.72-.17 1.4Z" />
+            </svg>
+            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>WhatsApp</span>
 
           </a>
         </div>

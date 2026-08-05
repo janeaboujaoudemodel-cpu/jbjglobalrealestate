@@ -98,6 +98,24 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     navigate("/");
   };
 
+  /**
+   * Emerald account dropdown is reserved for AI tool surfaces only.
+   * Everywhere else (homepage, properties, portals, …) it stays champagne-gold.
+   */
+  const isAiToolSurface =
+    /^\/ai(-|\/|$)/.test(location.pathname) ||
+    location.pathname.startsWith("/toolkit");
+
+  const MENU_INK = isAiToolSurface ? "#FFFFFF" : "#1A1A1A";
+  const MENU_ICON = isAiToolSurface ? "#FFFFFF" : "#042C1C";
+  const MENU_SUB_INK = isAiToolSurface ? "rgba(255,255,255,0.82)" : "rgba(26,26,26,0.62)";
+  const MENU_BG = isAiToolSurface
+    ? "linear-gradient(180deg, #064E3B 0%, #042C1C 58%, #000000 100%)"
+    : "linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%)";
+  const MENU_BORDER = isAiToolSurface ? "rgba(255,255,255,0.30)" : "rgba(184,149,85,0.55)";
+  const MENU_DIVIDER = isAiToolSurface ? "rgba(255,255,255,0.20)" : "rgba(184,149,85,0.32)";
+  const MENU_ROW_HOVER = isAiToolSurface ? "rgba(255,255,255,0.10)" : "rgba(184,149,85,0.14)";
+
   const Row = ({
     to, icon: Icon, label, badge, onClick,
   }: {
@@ -108,8 +126,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     onClick?: () => void;
   }) => {
     const active = isRowActive(to);
-    const inkStyle = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" };
-    const iconStyle = { color: "#FFFFFF", stroke: "#FFFFFF" };
+    const inkStyle = { color: MENU_INK, WebkitTextFillColor: MENU_INK };
+    const iconStyle = { color: MENU_ICON, stroke: MENU_ICON };
 
     const inner = (
       <span className="flex items-center gap-2.5 w-full" style={inkStyle}>
@@ -139,8 +157,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         onSelect={onClick ? () => onClick() : undefined}
         className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0"
         data-no-contrast-guard
-        style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = MENU_ROW_HOVER; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+        style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: MENU_INK, WebkitTextFillColor: MENU_INK }}
       >
+
         {to ? (
           <Link
             to={to}
@@ -178,23 +199,24 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuContent
         data-account-menu-content
         data-jbj-fast-dropdown="true"
-        data-surface="emerald"
+        {...(isAiToolSurface ? { "data-surface": "emerald" } : { "data-no-gold-trigger": "true" })}
         data-no-contrast-guard
         align="end"
         sideOffset={22}
-        className="z-[10100] w-[280px] p-2 rounded-xl border border-white/30 shadow-2xl"
+        className="z-[10100] w-[280px] p-2 rounded-xl shadow-2xl"
         style={{
-          backgroundImage: "linear-gradient(180deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
-          color: "#FFFFFF",
-          WebkitTextFillColor: "#FFFFFF",
+          backgroundImage: MENU_BG,
+          border: `1px solid ${MENU_BORDER}`,
+          color: MENU_INK,
+          WebkitTextFillColor: MENU_INK,
         }}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-2 py-2.5" data-no-contrast-guard style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+        <div className="flex items-center gap-3 px-2 py-2.5" data-no-contrast-guard style={{ color: MENU_INK, WebkitTextFillColor: MENU_INK }}>
           <JbjAvatar initials={initials} size="sm" />
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{displayName}</div>
-            <div className="text-[11px] truncate" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>JBJ account</div>
+            <div className="text-sm font-semibold truncate" style={{ color: MENU_INK, WebkitTextFillColor: MENU_INK }}>{displayName}</div>
+            <div className="text-[11px] truncate" style={{ color: MENU_SUB_INK, WebkitTextFillColor: MENU_SUB_INK }}>JBJ account</div>
             {roleLabel && (
               <span
                 data-account-role-label
@@ -211,7 +233,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             )}
           </div>
         </div>
-        <DropdownMenuSeparator className="bg-white/20 my-1" />
+        <div className="h-px mx-2 my-1" aria-hidden="true" style={{ background: MENU_DIVIDER }} />
 
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
@@ -224,15 +246,13 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
-        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
+        <div className="h-px mx-2 my-1" aria-hidden="true" style={{ background: MENU_DIVIDER }} />
         <Row to="/favorites" icon={Heart} label="Favorites" />
-        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
-        <div className="h-px mx-2 my-1 bg-white/20" aria-hidden="true" />
         <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
+        <Row to="/saved-searches" icon={SlidersHorizontal} label="Saved Filters" />
 
-
-        <DropdownMenuSeparator className="bg-white/20 my-1" />
+        <div className="h-px mx-2 my-1" aria-hidden="true" style={{ background: MENU_DIVIDER }} />
         <DropdownMenuItem
           onSelect={handleSignOut}
           data-account-signout-row="true"
@@ -240,13 +260,14 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           unstyled
           className="cursor-pointer rounded-md px-2.5 py-2 my-0.5"
           data-no-contrast-guard
-          style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none", color: MENU_INK, WebkitTextFillColor: MENU_INK }}
         >
-          <span className="flex items-center gap-2.5 w-full" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-            <span className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign out</span>
+          <span className="flex items-center gap-2.5 w-full" style={{ color: MENU_INK, WebkitTextFillColor: MENU_INK }}>
+            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: MENU_ICON, stroke: MENU_ICON }} />
+            <span className="text-sm font-medium" style={{ color: MENU_INK, WebkitTextFillColor: MENU_INK }}>Sign out</span>
           </span>
         </DropdownMenuItem>
+
       </DropdownMenuContent>
     </DropdownMenu>
   );
