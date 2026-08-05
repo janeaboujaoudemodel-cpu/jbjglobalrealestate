@@ -84,8 +84,8 @@ export default function InlineCurrencySelect({ dark }: Props) {
 
           {/* Line 2 — the code */}
           <span
-            className="block text-[13px] font-semibold leading-none"
-            style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap" }}
+            className="block w-full text-left text-[13px] font-semibold leading-none"
+            style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap", textAlign: "left" }}
           >
             {active.code}
           </span>
