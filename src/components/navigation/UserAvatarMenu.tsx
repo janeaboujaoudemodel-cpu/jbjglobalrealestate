@@ -108,8 +108,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     onClick?: () => void;
   }) => {
     const active = isRowActive(to);
-    const inkStyle = { color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" };
-    const iconStyle = { color: "#064E3B", stroke: "#064E3B" };
+    const inkStyle = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" };
+    const iconStyle = { color: "#FFFFFF", stroke: "#FFFFFF" };
 
     const inner = (
       <span className="flex items-center gap-2.5 w-full" style={inkStyle}>
