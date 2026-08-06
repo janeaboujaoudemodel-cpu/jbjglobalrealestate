@@ -403,6 +403,7 @@ export function useProjectsCount() {
         .from("projects")
         .select("id", { count: "exact", head: true })
         .eq("is_published", true)
+        .is("deleted_at", null)
         .or("listing_kind.is.null,listing_kind.neq.leasing");
       if (error) throw error;
       return count ?? 0;
@@ -592,10 +593,12 @@ export function useProjectsListing() {
         if (rows.length < PAGE_SIZE) break;
       }
 
+      // The database eligibility predicate is the catalogue contract. Do not
+      // silently remove eligible rows because an image is missing or because
+      // two project names look similar: both behaviours made the grid total
+      // disagree with the exact count shown in the shared search bar.
       return sortPublicProjectsForListing(
-        dedupePublicProjects(
-          (all as unknown as UnifiedProject[]).map((project) => ({ ...project, images: [] })),
-        ),
+        (all as unknown as UnifiedProject[]).map((project) => ({ ...project, images: [] })),
       );
     },
   });
