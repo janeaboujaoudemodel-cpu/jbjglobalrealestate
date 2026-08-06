@@ -37821,3 +37821,87 @@ html body #root button[aria-label="View payment plan breakdown"]:hover {
   background: rgba(6, 78, 59, 0.06) !important;
   box-shadow: 0 0 0 1px rgba(6, 78, 59, 0.35) !important;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 267 — PAYMENT-PLAN EYE ICON: ZERO BACKGROUND, TRUE CIRCLE
+   Owner rule: only the eye icon and its own circle. Never a filled
+   emerald/beige plate, never a vertical oval, not even on hover.
+   Appended last so the emerald-pair-lock repaint cannot win.
+   ───────────────────────────────────────────────────────────── */
+html body #root button[aria-label="View payment plan breakdown"],
+html body #root button[aria-label="View payment plan breakdown"]:hover,
+html body #root button[aria-label="View payment plan breakdown"]:focus,
+html body #root button[aria-label="View payment plan breakdown"]:focus-visible,
+html body #root button[aria-label="View payment plan breakdown"][data-state="open"] {
+  background: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  outline: none !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  width: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  border-radius: 9999px !important;
+  align-self: center !important;
+  flex: 0 0 auto !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+html body #root button[aria-label="View payment plan breakdown"] svg {
+  height: 15px !important;
+  width: 15px !important;
+  stroke: #064E3B !important;
+  color: #064E3B !important;
+  opacity: 0.8;
+  transition: opacity 180ms ease;
+}
+html body #root button[aria-label="View payment plan breakdown"]:hover svg {
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 268 — DEVELOPER NAME: GOLD ANIMATED, EVERYWHERE
+   "by <Developer>" on every card/surface renders in the animated
+   champagne→gold sheen, identical to .jj-gold-link.
+   ───────────────────────────────────────────────────────────── */
+html body #root [data-developer-gold],
+html body #root [data-developer-gold]:visited,
+html body #root [data-developer-gold] *,
+html body #root a[data-developer-gold],
+html body #root [data-area-detail-page="true"] [data-developer-gold],
+html body #root [data-card-body] [data-developer-gold] {
+  background-image: linear-gradient(90deg, #B89555 0%, #F4E3A8 28%, #B89555 55%, #F4E3A8 82%, #B89555 100%) !important;
+  background-size: 260% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  text-decoration: none !important;
+  font-weight: 700 !important;
+  animation: jj-gold-link-sheen 4.5s ease-in-out infinite;
+  border-bottom: 1px solid rgba(184, 149, 85, 0.55);
+  padding-bottom: 1px;
+}
+html body #root [data-developer-gold]:hover {
+  border-bottom-color: rgba(184, 149, 85, 0.95);
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root [data-developer-gold] { animation: none; }
+}
+
+/* PASS 268b — developer gold final word (max specificity) */
+html:root body #root [data-developer-gold][data-developer-name-shine].developer-name-gold,
+html:root body #root [data-developer-gold][data-developer-name-shine].developer-name-gold * {
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  background-image: linear-gradient(90deg, #B89555 0%, #F4E3A8 28%, #B89555 55%, #F4E3A8 82%, #B89555 100%) !important;
+  background-size: 260% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
