@@ -583,7 +583,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </div>
 
-      </div>
 
     </div>
   );
