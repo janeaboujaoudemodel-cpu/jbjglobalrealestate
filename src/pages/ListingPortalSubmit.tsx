@@ -637,8 +637,13 @@ const ListingPortalSubmit = () => {
                 boxShadow: '0 8px 20px -14px rgba(0,0,0,0.55)',
               }}
             >
-              <span data-back-to-portal-arrow className="inline-flex mr-2" style={{ color: '#0A0A0A', opacity: 1 }}>
-                <ArrowLeft data-back-to-portal-arrow className="w-4 h-4" style={{ color: '#0A0A0A', stroke: '#0A0A0A' }} />
+              <span
+                aria-hidden="true"
+                data-back-to-portal-arrow
+                className="inline-flex mr-2 text-lg font-bold leading-none"
+                style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A', opacity: 1 }}
+              >
+                ←
               </span>
               <span style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Back to Portal</span>
             </Button>
