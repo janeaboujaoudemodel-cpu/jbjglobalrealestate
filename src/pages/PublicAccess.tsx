@@ -1051,146 +1051,9 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
   );
 }
 
-function CertificateBand() {
-  return (
-    <section
-      id="broker-certificate"
-      className="relative overflow-hidden px-5 py-16 sm:px-8 lg:px-12"
-      style={{ backgroundImage: "linear-gradient(180deg,#01140d 0%,#042c1c 55%,#01140d 100%)" }}
-    >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.14),transparent_60%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+/* Certificate preview lives only inside the JBJ Broker Academy program now. */
 
-      <div className="relative mx-auto max-w-6xl">
-        <div className="mb-8 text-center">
-          <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-[#C9A84C]">Certificate preview</span>
-          <h2 className="mt-3 font-serif text-3xl leading-tight !text-white sm:text-4xl">Issued in your name.</h2>
-        </div>
-        <CertificatePreview />
-      </div>
-    </section>
-  );
-}
 
-function CertificatePreview() {
-  const today = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", year: "numeric" }).format(new Date());
-
-  return (
-    <div className="relative">
-      <div
-        data-broker-certificate-frame
-        className="certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] min-h-[380px] sm:min-h-0 sm:[aspect-ratio:1.72/1]"
-        style={{ maxWidth: "1040px" }}
-      >
-        {/* Ornate double border */}
-        <div className="pointer-events-none absolute inset-2 border-[1.5px] border-[#8B6F3A]/60" />
-        <div className="pointer-events-none absolute inset-[10px] border border-[#8B6F3A]/25" />
-        {/* Corner flourishes */}
-        <div className="pointer-events-none absolute left-4 top-4 h-4 w-4 border-l-[1.5px] border-t-[1.5px] border-[#8B6F3A]" />
-        <div className="pointer-events-none absolute right-4 top-4 h-4 w-4 border-r-[1.5px] border-t-[1.5px] border-[#8B6F3A]" />
-        <div className="pointer-events-none absolute left-4 bottom-4 h-4 w-4 border-l-[1.5px] border-b-[1.5px] border-[#8B6F3A]" />
-        <div className="pointer-events-none absolute right-4 bottom-4 h-4 w-4 border-r-[1.5px] border-b-[1.5px] border-[#8B6F3A]" />
-
-        <div className="relative flex h-full flex-col px-4 py-4 text-center sm:px-14 sm:py-7">
-          {/* Header */}
-          <div className="flex items-center justify-between text-left">
-            <img
-              data-no-fallback
-              src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
-              alt="JBJ Global Real Estate"
-              className="h-16 w-16 object-contain drop-shadow-[0_2px_4px_rgba(139,111,58,0.35)] sm:h-24 sm:w-24"
-              style={{ filter: "drop-shadow(0 1px 0 rgba(255,255,255,0.6)) drop-shadow(0 3px 6px rgba(0,0,0,0.18))" }}
-            />
-            <div className="text-right">
-              <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A] sm:text-[10px]">JBJ Global Real Estate</p>
-              <p className="mt-0.5 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/50 sm:text-[9px]">Dubai · United Arab Emirates</p>
-            </div>
-          </div>
-
-          {/* Title block */}
-          <div className="mt-2 flex flex-1 flex-col items-center justify-center">
-            <h3 className="font-serif text-2xl leading-none text-[#0d3a2b] sm:text-[32px]">Certificate of Completion</h3>
-            <div className="mt-2 flex items-center gap-2">
-              <span className="h-px w-14 bg-[#8B6F3A]/60" />
-              <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
-              <span className="h-px w-14 bg-[#8B6F3A]/60" />
-            </div>
-            <p className="mt-2 text-[9px] uppercase tracking-[0.28em] text-[#1A1A1A]/55 sm:text-[10px]">This is presented to</p>
-            <p className="username-shimmer mt-1.5 inline-flex min-w-[200px] justify-center border-b border-[#8B6F3A]/50 pb-1 font-serif text-xl italic text-[#0d3a2b] sm:min-w-[320px] sm:text-[30px]">
-              Your Name Here
-            </p>
-            <p className="mx-auto mt-2 max-w-xl text-[10px] leading-relaxed text-[#1A1A1A]/68 sm:text-[11px]">
-              for successfully completing the JBJ Global Broker Academy professional pathway.
-            </p>
-          </div>
-
-          {/* Footer row */}
-          <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-end gap-2 text-left sm:mt-0 sm:gap-4">
-            <div>
-              <div className="h-5 sm:h-6" />
-              <div className="mt-1 h-px w-20 bg-[#1A1A1A]/60 sm:w-40" />
-              <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Founder &amp; CEO</p>
-            </div>
-
-            <div aria-hidden className="seal-outline relative flex h-16 w-16 items-center justify-center rounded-full sm:h-[120px] sm:w-[120px]">
-              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_14px_24px_rgba(184,149,85,0.5)]">
-                <defs>
-                  <linearGradient id="sealGold" x1="12" y1="8" x2="108" y2="112" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#FBEAB4" />
-                    <stop offset="0.35" stopColor="#E8C877" />
-                    <stop offset="0.7" stopColor="#C9A84C" />
-                    <stop offset="1" stopColor="#8B6F3A" />
-                  </linearGradient>
-                  <linearGradient id="sealGoldSoft" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#E8C877" />
-                    <stop offset="1" stopColor="#C9A84C" />
-                  </linearGradient>
-                  <radialGradient id="sealDisc" cx="42%" cy="38%" r="70%">
-                    <stop offset="0%" stopColor="#FBEAB4" />
-                    <stop offset="45%" stopColor="#E8C877" />
-                    <stop offset="80%" stopColor="#C9A84C" />
-                    <stop offset="100%" stopColor="#8B6F3A" />
-                  </radialGradient>
-                  <path id="sealTextPath" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
-                </defs>
-                {/* filled metallic disc for engraved look */}
-                <circle cx="60" cy="60" r="56" fill="url(#sealDisc)" opacity="0.98" />
-                {/* rings */}
-                <circle cx="60" cy="60" r="56" fill="none" stroke="url(#sealGold)" strokeWidth="2" />
-                <circle cx="60" cy="60" r="52" fill="none" stroke="#8B6F3A" strokeWidth="0.6" opacity="0.7" />
-                <circle cx="60" cy="60" r="47" fill="none" stroke="url(#sealGoldSoft)" strokeWidth="0.8" opacity="0.9" />
-                <circle cx="60" cy="60" r="39" fill="none" stroke="#8B6F3A" strokeWidth="1" strokeDasharray="2.4 3.2" opacity="0.85" />
-                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="#5C4620">
-                  <textPath href="#sealTextPath" startOffset="0%">JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·</textPath>
-                </text>
-              </svg>
-              <img
-                data-no-fallback
-                src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
-                alt=""
-                className="relative h-8 w-8 object-contain sm:h-16 sm:w-16"
-                style={{
-                  filter: "brightness(0) saturate(100%) invert(28%) sepia(45%) saturate(720%) hue-rotate(5deg) brightness(78%) contrast(96%) drop-shadow(0 1px 0 rgba(255,240,200,0.55)) drop-shadow(0 -1px 0 rgba(80,55,20,0.35))",
-                  opacity: 0.96,
-                }}
-              />
-            </div>
-
-            <div className="text-right">
-              <div className="ml-auto flex h-5 items-end justify-end font-serif text-xs leading-none text-[#0d3a2b] sm:h-6 sm:text-base">
-                {today}
-              </div>
-              <div className="ml-auto mt-1 h-px w-20 bg-[#1A1A1A]/60 sm:w-40" />
-              <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Date of issue</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div aria-hidden className="absolute -inset-8 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.28),transparent_70%)] blur-2xl" />
-    </div>
-  );
-}
 
 // ── Tier grid (reusable per audience) ───────────────────────────────────────
 function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) => void }) {
@@ -1526,6 +1389,10 @@ export default function PublicAccess() {
         {/* SERVICES — lifted above all packages */}
         <ServicesSection />
 
+        {/* BROKER ACADEMY — sits above the packages block */}
+        <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
+
+
         {/* PACKAGES — one chooser row; the full tier grid only opens in place
             when the visitor picks a path (keeps the phone page short). */}
         <section
@@ -1731,10 +1598,6 @@ export default function PublicAccess() {
           />
         )}
 
-        <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
-
-
-        <CertificateBand />
 
         {/* Closing CTA — same animation/pattern as homepage "Ready to Get Started" */}
         <div className="bg-[#F7F2EA]">
