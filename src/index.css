@@ -7303,6 +7303,10 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
   stroke: #0A0A0A !important;
   -webkit-text-fill-color: #0A0A0A !important;
 }
+[data-ai-listing-shell] [data-back-to-portal] [data-back-to-portal-arrow] :where(path, line, polyline) {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}
 
 /* Lock highlighted Seller/Landlord Assistant magic icon white at rest + hover. */
 [data-seller-assistant-cta] [data-assistant-magic-icon],
@@ -37694,8 +37698,24 @@ html body #root button[data-listings-tab="active"]:is(:hover, :focus-visible) {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   border-color: rgba(255,255,255,0.28) !important;
 }
+html body #root button[data-listings-tab="inactive"],
+html body #root button[data-listings-tab="inactive"]:is(:hover, :focus-visible) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 72%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  opacity: 0.82 !important;
+}
 html body #root button[data-listings-tab],
 html body #root button[data-listings-tab] :where(*) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Radix menus are portaled under body (outside #root), so the emerald account
+   identity requires a portal-level white-ink lock. */
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity],
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity] :where(*) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
