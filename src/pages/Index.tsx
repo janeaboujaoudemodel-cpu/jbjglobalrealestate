@@ -268,9 +268,10 @@ const Index = () => {
             className="absolute inset-0 w-full h-full object-cover z-[1]"
            loading="eager" />
 
+          {heroVideoAllowed && (
           <video
             autoPlay loop muted playsInline
-            preload="auto"
+            preload="metadata"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -285,6 +286,7 @@ const Index = () => {
             onError={() => setVideoLoaded(true)}
             src="/hero-video.webm"
           />
+          )}
           {/* The photograph remains visible, but the painted pixels behind all
               white identity/copy stay dark enough to satisfy the surface rule. */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60 z-[3] pointer-events-none" />

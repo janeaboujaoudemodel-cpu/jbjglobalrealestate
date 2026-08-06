@@ -7,6 +7,7 @@
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useDeferredMedia } from "@/hooks/useDeferredMedia";
 
 interface VideoBackgroundProps {
   /** Video source URL or imported asset */
@@ -23,7 +24,10 @@ interface VideoBackgroundProps {
 
 const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = true }: VideoBackgroundProps) => {
   const [videoReady, setVideoReady] = useState(false);
-  const [isVisible, setIsVisible] = useState(eager);
+  const [inView, setInView] = useState(eager);
+  // Heavy background videos never compete with first paint (see useDeferredMedia).
+  const mediaAllowed = useDeferredMedia();
+  const isVisible = inView && mediaAllowed;
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -36,7 +40,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          setInView(true);
           observer.disconnect();
         }
       },
@@ -82,7 +86,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
           loop
           playsInline
           autoPlay
-          preload="auto"
+          preload="metadata"
           onLoadedData={handleCanPlay}
           onCanPlay={handleCanPlay}
           className="absolute inset-0 w-full h-full object-cover"
