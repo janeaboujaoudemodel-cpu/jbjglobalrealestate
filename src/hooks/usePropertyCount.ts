@@ -12,6 +12,7 @@ import type { PropertySearch } from "@/lib/propertySearch";
 export function usePropertyCount(filters: PropertySearch, debounceMs = 350) {
   const [count, setCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [inventoryRevision, setInventoryRevision] = useState(0);
   const reqRef = useRef(0);
 
   const key = JSON.stringify(filters);
@@ -82,7 +83,8 @@ export function usePropertyCount(filters: PropertySearch, debounceMs = 350) {
         if (filters.developer) q = q.ilike("developer_name", `%${filters.developer}%`);
         if (filters.q.trim()) q = q.ilike("name", `%${filters.q.trim()}%`);
 
-        const { count: c } = await q;
+        const { count: c, error } = await q;
+        if (error) throw error;
         if (reqRef.current === id) setCount(c ?? 0);
       } catch {
         if (reqRef.current === id) setCount(null);
@@ -93,7 +95,28 @@ export function usePropertyCount(filters: PropertySearch, debounceMs = 350) {
 
     return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, debounceMs]);
+  }, [key, debounceMs, inventoryRevision]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel(`public-property-count-${Math.random().toString(36).slice(2)}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "projects" },
+        () => setInventoryRevision((revision) => revision + 1),
+      )
+      .subscribe();
+
+    const reconcile = window.setInterval(
+      () => setInventoryRevision((revision) => revision + 1),
+      60_000,
+    );
+
+    return () => {
+      window.clearInterval(reconcile);
+      void supabase.removeChannel(channel);
+    };
+  }, []);
 
   return { count, loading };
 }

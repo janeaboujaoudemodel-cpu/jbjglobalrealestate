@@ -1,4 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -396,8 +397,10 @@ export function useTrendingAreas() {
 export function useProjectsCount() {
   return useQuery({
     queryKey: ["projects-count"],
-    staleTime: 5 * 60 * 1000,
+    staleTime: 30 * 1000,
     gcTime: 15 * 60 * 1000,
+    refetchInterval: 60 * 1000,
+    refetchOnWindowFocus: true,
     queryFn: async () => {
       const { count, error } = await supabase
         .from("projects")
@@ -547,10 +550,32 @@ export function useProjects() {
  * the background pass failed, so filters/search silently missed projects.
  */
 export function useProjectsListing() {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel(`public-project-listing-${Math.random().toString(36).slice(2)}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "projects" },
+        () => {
+          void queryClient.invalidateQueries({ queryKey: ["projects-listing"] });
+          void queryClient.invalidateQueries({ queryKey: ["projects-count"] });
+        },
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
   return useQuery({
     queryKey: ["projects-listing"],
-    staleTime: 10 * 60 * 1000,
+    staleTime: 30 * 1000,
     gcTime: 30 * 60 * 1000,
+    refetchInterval: 60 * 1000,
+    refetchOnWindowFocus: true,
     queryFn: async () => {
       const LISTING_COLUMNS = `
         id, name, slug, description, location, price_from, price_to,
