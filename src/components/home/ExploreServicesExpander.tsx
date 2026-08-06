@@ -141,27 +141,34 @@ const ExploreServicesExpander = () => {
               key={s.id}
               data-tab-id={s.id}
               role="tab"
+              data-tab-white-active={isActive ? "true" : undefined}
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
-              style={{
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                ...(isActive
+              style={
+                isActive
                   ? {
-                      backgroundImage:
-                        "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+                      color: "#0A0A0A",
+                      WebkitTextFillColor: "#0A0A0A",
+                      backgroundImage: "none",
+                      backgroundColor: "#FFFFFF",
                       boxShadow:
-                        "inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -2px 0 rgba(52,211,153,0.55), 0 0 22px rgba(52,211,153,0.18)",
+                        "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -2px 0 rgba(10,10,10,0.18)",
                     }
-                  : {}),
-              }}
+                  : { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
+              }
               data-no-contrast-guard
-              className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-4 md:py-5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-colors duration-200 ${
-                isActive ? "jj-tab-active-metallic" : "hover:bg-white/10"
+              className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-4 md:py-5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-colors duration-200 ${
+                isActive ? "" : "allow-white hover:bg-white/10"
               } ${s.available === false ? "opacity-80" : ""}`}
             >
-              <Icon className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{s.title}</span>
+              <Icon
+                className={`w-4 h-4 ${isActive ? "" : "allow-white"}`}
+                style={isActive ? { color: "#0A0A0A", stroke: "#0A0A0A" } : { color: "#FFFFFF", stroke: "#FFFFFF" }}
+              />
+              <span
+                className={isActive ? "" : "allow-white"}
+                style={isActive ? { color: "#0A0A0A", WebkitTextFillColor: "#0A0A0A" } : { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >{s.title}</span>
             </button>
           );
         })}

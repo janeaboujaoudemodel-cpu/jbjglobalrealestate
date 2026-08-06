@@ -37923,3 +37923,29 @@ html body #root a [data-cta-label] {
   max-width: 100%;
 }
 html body #root [data-cta-label].truncate { text-overflow: clip !important; }
+
+/* ============================================================
+   PASS 269 — White active tab (Explore Our Services / JBJ Tools)
+   The active segment is a pure white plate with ink-black text
+   and icon. Highest-specificity terminal rule so no legacy
+   emerald tab sweep can override it.
+   ============================================================ */
+html body #root [role="tab"][data-tab-white-active="true"],
+html body #root [role="tab"][data-tab-white-active="true"]:hover,
+html body #root [role="tab"][data-tab-white-active="true"]:focus-visible {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+html body #root [role="tab"][data-tab-white-active="true"] *,
+html body #root [role="tab"][data-tab-white-active="true"] span,
+html body #root [role="tab"][data-tab-white-active="true"]:hover * {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+html body #root [role="tab"][data-tab-white-active="true"] svg,
+html body #root [role="tab"][data-tab-white-active="true"] svg * {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}
