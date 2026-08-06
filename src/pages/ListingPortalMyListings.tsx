@@ -304,11 +304,10 @@ const ListingPortalMyListings = () => {
                 size="sm"
                 onClick={() => setActiveTab('active')}
                 data-no-contrast-guard
-                style={
-                  activeTab === 'active'
-                    ? { background: '#FFFFFF', color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A', border: '1px solid rgba(26,26,26,0.14)' }
-                    : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
-                }
+                data-listings-tab={activeTab === 'active' ? 'active' : 'inactive'}
+                style={activeTab === 'active'
+                  ? { background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
+                  : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }}
               >
                 Active ({listings.length})
               </Button>
@@ -317,19 +316,14 @@ const ListingPortalMyListings = () => {
                 size="sm"
                 onClick={() => setActiveTab('deleted')}
                 data-no-contrast-guard
-                style={
-                  activeTab === 'deleted'
-                    ? { background: '#FFFFFF', color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A', border: '1px solid rgba(26,26,26,0.14)' }
-                    : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
-                }
+                data-listings-tab={activeTab === 'deleted' ? 'active' : 'inactive'}
+                style={activeTab === 'deleted'
+                  ? { background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
+                  : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }}
               >
                 <Trash2
                   className="w-3.5 h-3.5 mr-1"
-                  style={
-                    activeTab === 'deleted'
-                      ? { color: '#0A0A0A', stroke: '#0A0A0A' }
-                      : { color: '#FFFFFF', stroke: '#FFFFFF' }
-                  }
+                  style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                 />
                 Recently Deleted ({deletedListings.length})
               </Button>

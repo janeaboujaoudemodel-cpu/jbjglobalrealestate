@@ -7297,11 +7297,15 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
 .jj-purple-ghost:hover svg,
 .jj-purple-ghost:focus-visible svg { color: #FFFFFF !important; }
 
-/* Lock Back-to-Portal arrow white on the dark AI shell */
-[data-ai-listing-shell] button[class*="hover:bg-white"] svg,
-[data-ai-listing-shell] [data-back-to-portal] svg {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+/* Back-to-Portal is a white control: its directional arrow is always ink-black. */
+[data-ai-listing-shell] [data-back-to-portal] [data-back-to-portal-arrow] {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+[data-ai-listing-shell] [data-back-to-portal] [data-back-to-portal-arrow] :where(path, line, polyline) {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
 }
 
 /* Lock highlighted Seller/Landlord Assistant magic icon white at rest + hover. */
@@ -37643,12 +37647,89 @@ html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="in
   border: 1px solid rgba(255, 255, 255, 0.24) !important;
   box-shadow: none !important;
 }
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"] :where(*) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
 html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:hover {
   background: rgba(255, 255, 255, 0.13) !important;
 }
 html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="active"] {
   background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.55) !important;
+}
+
+/* Listing portal contrast contract: dark/emerald examples are pure white. */
+html body #root [data-ai-listing-shell] [data-source-examples],
+html body #root [data-ai-listing-shell] [data-source-examples] :where(*) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Draft action contract: three controls share one size; Reset has no outline. */
+html body #root [data-form-draft-bar] [data-form-draft-actions] > button {
+  height: 36px !important;
+  min-width: 104px !important;
+}
+html body #root [data-form-draft-bar] [data-form-draft-actions] > button:nth-child(2) {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Account contrast contract: emerald avatars/badges always carry pure-white ink. */
+html body #root :is([data-jbj-avatar], [data-jbj-notification-badge]),
+html body #root :is([data-jbj-avatar], [data-jbj-notification-badge]) :where(*) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body #root [data-account-menu-content][data-surface="emerald"] :where(h1,h2,h3,h4,p,span,a,button,div,small,strong,svg,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Authenticated listings tabs: the selected state is emerald ombré and all
+   tab labels/icons remain white, independent of older light-page button rules. */
+html body #root button[data-listings-tab="active"],
+html body #root button[data-listings-tab="active"]:is(:hover, :focus-visible) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.28) !important;
+}
+html body #root button[data-listings-tab="inactive"],
+html body #root button[data-listings-tab="inactive"]:is(:hover, :focus-visible) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 72%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  opacity: 0.82 !important;
+}
+html body #root button[data-listings-tab],
+html body #root button[data-listings-tab] :where(*) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Radix menus are portaled under body (outside #root), so the emerald account
+   identity requires a portal-level white-ink lock. */
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity],
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity] :where(*) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Final component-level arrow lock. This intentionally lives after all legacy
+   contrast passes so a white control can never receive a white arrow. */
+html body #root main[data-ai-listing-shell] button[data-back-to-portal] [data-back-to-portal-arrow],
+html body #root main[data-ai-listing-shell] button[data-back-to-portal] [data-back-to-portal-arrow] :where(svg, path, line, polyline) {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  opacity: 1 !important;
 }
 
 /* Start CTA on the choice cards is a WHITE pill — text/icons must stay emerald
