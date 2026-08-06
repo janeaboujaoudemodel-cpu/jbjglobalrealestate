@@ -26,7 +26,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
   const [videoReady, setVideoReady] = useState(false);
   const [inView, setInView] = useState(eager);
   // Heavy background videos never compete with first paint (see useDeferredMedia).
-  const mediaAllowed = useDeferredMedia();
+  const mediaAllowed = useDeferredMedia(eager ? 350 : 800);
   const isVisible = inView && mediaAllowed;
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -54,6 +54,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
   // Play video when visible
   useEffect(() => {
     if (isVisible && videoRef.current) {
+      videoRef.current.muted = true;
       videoRef.current.play().catch(() => {
         // Autoplay blocked — poster stays visible
       });
@@ -86,7 +87,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
           loop
           playsInline
           autoPlay
-          preload="metadata"
+          preload={eager ? "auto" : "metadata"}
           onLoadedData={handleCanPlay}
           onCanPlay={handleCanPlay}
           className="absolute inset-0 w-full h-full object-cover"
@@ -95,7 +96,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
             transition: "opacity 0.5s ease-in-out",
           }}
         >
-          <source src={src} type="video/mp4" />
+          <source src={src} type={src.toLowerCase().includes(".webm") ? "video/webm" : "video/mp4"} />
         </video>
 
       )}

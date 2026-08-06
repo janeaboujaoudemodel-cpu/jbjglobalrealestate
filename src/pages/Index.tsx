@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, memo, useEffect, forwardRef, useCallback } from "react";
+import { useState, lazy, Suspense, memo, useEffect, forwardRef, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -130,7 +130,7 @@ const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: stri
 
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
   // Hero video (4.6 MB) starts only after first paint / idle, never on slow links.
   const heroVideoAllowed = useDeferredMedia();
   const { t } = useLanguage();
@@ -151,6 +151,26 @@ const Index = () => {
       document.body.removeAttribute("data-homepage");
     };
   }, []);
+
+  // Autoplay is occasionally deferred by Safari/Chromium when the element is
+  // inserted after mount. Retry as soon as it can play and when the tab returns.
+  useEffect(() => {
+    if (!heroVideoAllowed) return;
+    const play = () => {
+      const video = heroVideoRef.current;
+      if (!video) return;
+      video.muted = true;
+      void video.play().catch(() => undefined);
+    };
+    const timer = window.setTimeout(play, 0);
+    document.addEventListener("visibilitychange", play);
+    window.addEventListener("focus", play);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", play);
+      window.removeEventListener("focus", play);
+    };
+  }, [heroVideoAllowed]);
 
 
 
@@ -273,8 +293,9 @@ const Index = () => {
 
           {heroVideoAllowed && (
           <video
+            ref={heroVideoRef}
             autoPlay loop muted playsInline
-            preload="metadata"
+            preload="auto"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -284,9 +305,8 @@ const Index = () => {
               backfaceVisibility: 'hidden',
               opacity: 1,
             }}
-            onLoadedData={() => setVideoLoaded(true)}
-            onCanPlay={() => setVideoLoaded(true)}
-            onError={() => setVideoLoaded(true)}
+            onLoadedData={() => void heroVideoRef.current?.play().catch(() => undefined)}
+            onCanPlay={() => void heroVideoRef.current?.play().catch(() => undefined)}
             src="/hero-video.webm"
           />
           )}

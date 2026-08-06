@@ -4,7 +4,7 @@ import menuCorporateOffice from '@/assets/menu-corporate-office.jpg';
 import dubaiLandmarksVideoAsset from '@/assets/videos/dubai-landmarks-hero.mp4.asset.json';
 const dubaiLandmarksVideo = dubaiLandmarksVideoAsset.url;
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
-import { useDevelopers } from '@/hooks/useProjects';
+import { useFeaturedDevelopers } from '@/hooks/useProjects';
 
 const FEATURED_DEVELOPER_SLUGS = [
   'emaar', 'damac', 'nakheel', 'meraas', 'sobha', 'aldar',
@@ -17,7 +17,7 @@ interface MegaMenuDevelopersProps {
 }
 
 const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersProps>(({ onClose }, ref) => {
-  const { data: developers } = useDevelopers(false);
+  const { data: developers } = useFeaturedDevelopers(FEATURED_DEVELOPER_SLUGS);
 
   const displayDevelopers = React.useMemo(() => {
     if (!developers || developers.length === 0) return [];
