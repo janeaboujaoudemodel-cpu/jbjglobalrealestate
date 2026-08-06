@@ -15,7 +15,7 @@ import {
   Lightbulb, Target, Calendar, Shield, Palette, Cpu, Wrench, Layers, LayoutDashboard, Calculator, Key, Headphones, CalendarClock, Stamp, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState, lazy, Suspense } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,8 +34,9 @@ import { UserAvatarPremium } from "@/components/account/UserAvatarPremium";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import ModeSwitcher from "@/components/ModeSwitcher";
-import GlobalSearchModal from "@/components/GlobalSearchModal";
-import MobileMenuWalkthrough, { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
+const GlobalSearchModal = lazy(() => import("@/components/GlobalSearchModal"));
+import { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
+const MobileMenuWalkthrough = lazy(() => import("@/components/MobileMenuWalkthrough"));
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { useIsTouchLayout } from "@/hooks/use-touch-layout";
@@ -48,18 +49,18 @@ import { useUserAlerts } from "@/hooks/useUserAlerts";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 
 // Mega Menu Components
-import MegaMenuBuy from "@/components/header/MegaMenuBuy";
-import MegaMenuSell from "@/components/header/MegaMenuSell";
-import MegaMenuRent from "@/components/header/MegaMenuRent";
-import MegaMenuProjects from "@/components/header/MegaMenuProjects";
-import MegaMenuDevelopers from "@/components/header/MegaMenuDevelopers";
-import MegaMenuAreas from "@/components/header/MegaMenuAreas";
-import MegaMenuInsights from "@/components/header/MegaMenuInsights";
-import MegaMenuMore from "@/components/header/MegaMenuMore";
+const MegaMenuBuy = lazy(() => import("@/components/header/MegaMenuBuy"));
+const MegaMenuSell = lazy(() => import("@/components/header/MegaMenuSell"));
+const MegaMenuRent = lazy(() => import("@/components/header/MegaMenuRent"));
+const MegaMenuProjects = lazy(() => import("@/components/header/MegaMenuProjects"));
+const MegaMenuDevelopers = lazy(() => import("@/components/header/MegaMenuDevelopers"));
+const MegaMenuAreas = lazy(() => import("@/components/header/MegaMenuAreas"));
+const MegaMenuInsights = lazy(() => import("@/components/header/MegaMenuInsights"));
+const MegaMenuMore = lazy(() => import("@/components/header/MegaMenuMore"));
 // Utility Mega Menus
 // MegaMenuSearch removed — search opens GlobalSearchModal directly
-import MegaMenuLanguage from "@/components/header/MegaMenuLanguage";
-import MegaMenuAccount from "@/components/header/MegaMenuAccount";
+const MegaMenuLanguage = lazy(() => import("@/components/header/MegaMenuLanguage"));
+const MegaMenuAccount = lazy(() => import("@/components/header/MegaMenuAccount"));
 
 interface GlobalHeaderProps {
   forceSolid?: boolean;
