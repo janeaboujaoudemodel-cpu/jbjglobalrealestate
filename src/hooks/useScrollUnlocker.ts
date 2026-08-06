@@ -78,17 +78,12 @@ export function useScrollUnlocker(): void {
     obs.observe(body, { attributes: true, attributeFilter: ["style", "class"] });
     obs.observe(html, { attributes: true, attributeFilter: ["style", "class"] });
 
-    // Safety belt — re-check every 2s in case a vendor lib locks scroll via
-    // a path we don't observe (eg. shadow DOM event handlers).
-    const interval = window.setInterval(release, 2000);
-
     return () => {
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("pointerdown", onPointer);
       window.removeEventListener("popstate", onPop);
       obs.disconnect();
-      window.clearInterval(interval);
     };
   }, []);
 }

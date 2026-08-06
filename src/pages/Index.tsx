@@ -1,10 +1,9 @@
-import { useState, lazy, Suspense, memo, useEffect, forwardRef, useCallback } from "react";
+import { useState, lazy, Suspense, memo, useEffect, forwardRef, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useDeferredMedia } from "@/hooks/useDeferredMedia";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning, Search, BarChart3, Newspaper, LayoutDashboard, GraduationCap, Upload, Tag } from "lucide-react";
 import { useMemo } from "react";
@@ -130,9 +129,7 @@ const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: stri
 
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  // Hero video (4.6 MB) starts only after first paint / idle, never on slow links.
-  const heroVideoAllowed = useDeferredMedia();
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
   const { t } = useLanguage();
   const { isBroker } = useUserRole();
   const { mode, hasMadeInitialSelection } = useUserModeContext();
@@ -149,6 +146,25 @@ const Index = () => {
     document.body.setAttribute("data-homepage", "true");
     return () => {
       document.body.removeAttribute("data-homepage");
+    };
+  }, []);
+
+  // Autoplay is occasionally deferred by Safari/Chromium when the element is
+  // inserted after mount. Retry as soon as it can play and when the tab returns.
+  useEffect(() => {
+    const play = () => {
+      const video = heroVideoRef.current;
+      if (!video) return;
+      video.muted = true;
+      void video.play().catch(() => undefined);
+    };
+    const timer = window.setTimeout(play, 0);
+    document.addEventListener("visibilitychange", play);
+    window.addEventListener("focus", play);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", play);
+      window.removeEventListener("focus", play);
     };
   }, []);
 
@@ -271,10 +287,10 @@ const Index = () => {
             className="absolute inset-0 w-full h-full object-cover z-[1]"
            loading="eager" />
 
-          {heroVideoAllowed && (
           <video
+            ref={heroVideoRef}
             autoPlay loop muted playsInline
-            preload="metadata"
+            preload="auto"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -284,12 +300,10 @@ const Index = () => {
               backfaceVisibility: 'hidden',
               opacity: 1,
             }}
-            onLoadedData={() => setVideoLoaded(true)}
-            onCanPlay={() => setVideoLoaded(true)}
-            onError={() => setVideoLoaded(true)}
+            onLoadedData={() => void heroVideoRef.current?.play().catch(() => undefined)}
+            onCanPlay={() => void heroVideoRef.current?.play().catch(() => undefined)}
             src="/hero-video.webm"
           />
-          )}
           {/* The photograph remains visible, but the painted pixels behind all
               white identity/copy stay dark enough to satisfy the surface rule. */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60 z-[3] pointer-events-none" />

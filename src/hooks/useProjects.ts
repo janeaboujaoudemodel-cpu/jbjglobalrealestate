@@ -372,6 +372,24 @@ export function useDevelopers(includeHidden = false) {
   });
 }
 
+/** Tiny query for navigation surfaces that only show a curated slug list. */
+export function useFeaturedDevelopers(slugs: readonly string[]) {
+  const stableSlugs = [...slugs].sort();
+  return useQuery({
+    queryKey: ["featured-developers", stableSlugs.join(",")],
+    staleTime: 60 * 60 * 1000,
+    gcTime: 2 * 60 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developers")
+        .select("id,name,slug")
+        .in("slug", stableSlugs);
+      if (error) throw error;
+      return (data ?? []) as Pick<Developer, "id" | "name" | "slug">[];
+    },
+  });
+}
+
 export function useTrendingAreas() {
   return useQuery({
     queryKey: ["trending-areas"],

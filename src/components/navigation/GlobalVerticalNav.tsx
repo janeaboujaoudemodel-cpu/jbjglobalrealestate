@@ -26,7 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
-import { useDevelopers } from "@/hooks/useProjects";
+import { useFeaturedDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
@@ -597,7 +597,7 @@ export default function GlobalVerticalNav() {
   const [openSection, setOpenSection] = useState<SectionKey | null>(null);
 
   // Data hooks for rich flyouts
-  const { data: developers } = useDevelopers(false);
+  const { data: developers } = useFeaturedDevelopers(FEATURED_DEVELOPER_SLUGS);
   const { data: areas } = useAreas();
 
   // Curated developers for flyout

@@ -12,50 +12,34 @@ import { useEffect, useState } from "react";
  * slow connection or prefers reduced motion. The poster image always renders,
  * so there is no visual regression — only a later, cheaper video start.
  */
-export function useDeferredMedia(delayMs = 1200): boolean {
+export function useDeferredMedia(delayMs = 350): boolean {
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Never pull megabytes on metered or slow connections.
+    // Honour an explicit data-saving choice. Do not permanently suppress the
+    // video based on effectiveType: browsers often keep reporting "3g" after
+    // the connection has recovered, which left the hero stuck on its poster.
     const conn = (navigator as any)?.connection;
     if (conn?.saveData) return;
-    const type = String(conn?.effectiveType || "");
-    if (/(^|-)(slow-)?2g$/.test(type) || type === "3g") return;
 
     // Respect reduced-motion: poster only.
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
 
     let cancelled = false;
-    let idleId: number | undefined;
     let timeoutId: number | undefined;
 
-    const arm = () => {
-      if (cancelled) return;
-      const w = window as Window & {
-        requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
-      };
-      if (typeof w.requestIdleCallback === "function") {
-        idleId = w.requestIdleCallback(() => !cancelled && setAllowed(true), { timeout: 2500 });
-      } else {
-        timeoutId = window.setTimeout(() => !cancelled && setAllowed(true), 300);
-      }
-    };
-
-    // Wait for load (all critical images/fonts done) then idle, then start.
-    const start = () => {
-      timeoutId = window.setTimeout(arm, delayMs);
-    };
-
-    if (document.readyState === "complete") start();
-    else window.addEventListener("load", start, { once: true });
+    // Bounded delay after React mounts. Waiting for window.load or an idle
+    // callback can deadlock on image-heavy pages because those events may be
+    // held up by the very media work this guard is meant to sequence.
+    timeoutId = window.setTimeout(() => {
+      if (!cancelled) setAllowed(true);
+    }, Math.max(0, delayMs));
 
     return () => {
       cancelled = true;
-      window.removeEventListener("load", start);
       if (timeoutId) window.clearTimeout(timeoutId);
-      if (idleId && (window as any).cancelIdleCallback) (window as any).cancelIdleCallback(idleId);
     };
   }, [delayMs]);
 
