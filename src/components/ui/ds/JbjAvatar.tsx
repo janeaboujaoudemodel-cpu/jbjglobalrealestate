@@ -1,6 +1,24 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+/** Forces pure white ink at runtime with !important priority (beats any stylesheet). */
+function useForceWhiteInk() {
+  const ref = React.useRef<HTMLSpanElement>(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const paint = () => {
+      el.style.setProperty("color", "#FFFFFF", "important");
+      el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+    };
+    paint();
+    const id = window.setTimeout(paint, 60);
+    return () => window.clearTimeout(id);
+  });
+  return ref;
+}
+
+
 export interface JbjAvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
   initials?: string;
   size?: "sm" | "md";
