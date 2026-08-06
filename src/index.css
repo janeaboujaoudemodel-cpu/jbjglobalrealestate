@@ -37722,6 +37722,16 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-a
   opacity: 1 !important;
 }
 
+/* Final component-level arrow lock. This intentionally lives after all legacy
+   contrast passes so a white control can never receive a white arrow. */
+html body #root main[data-ai-listing-shell] button[data-back-to-portal] [data-back-to-portal-arrow],
+html body #root main[data-ai-listing-shell] button[data-back-to-portal] [data-back-to-portal-arrow] :where(svg, path, line, polyline) {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  opacity: 1 !important;
+}
+
 /* Start CTA on the choice cards is a WHITE pill — text/icons must stay emerald
    ink, never inherit the page-wide white text lock (white-on-white). */
 html body #root [data-list-property-page] [data-listing-start-cta],

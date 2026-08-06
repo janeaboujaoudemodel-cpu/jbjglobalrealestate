@@ -104,7 +104,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
    */
   const isAiToolSurface =
     /^\/ai(-|\/|$)/.test(location.pathname) ||
-    location.pathname.startsWith("/toolkit");
+    location.pathname.startsWith("/toolkit") ||
+    location.pathname.startsWith("/listing-portal/submit") ||
+    (location.pathname === "/list-property" && new URLSearchParams(location.search).get("mode") === "ai");
 
   const MENU_INK = isAiToolSurface ? "#FFFFFF" : "#1A1A1A";
   const MENU_ICON = isAiToolSurface ? "#FFFFFF" : "#042C1C";
