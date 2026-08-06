@@ -60,22 +60,38 @@ export const FeaturedProjectAd = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/20" />
             
             {/* Content overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-              <p className="text-white text-sm md:text-base font-semibold tracking-[0.15em] mb-2 uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+            <div
+              className="absolute bottom-0 left-0 right-0 p-6 md:p-8 allow-white [&_*]:!text-white"
+              data-on-dark
+              data-no-contrast-guard
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
+              <p
+                data-no-contrast-guard
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                className="text-sm md:text-base font-semibold tracking-[0.15em] mb-2 uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+              >
                 {subtitle}
               </p>
-              
+
               {/* Title */}
               <h3
-                className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
+                data-no-contrast-guard
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
               >
                 {title}
               </h3>
 
               {/* Description */}
-              <p className="text-white/90 text-sm md:text-base max-w-2xl mb-5 line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+              <p
+                data-no-contrast-guard
+                style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)" }}
+                className="text-sm md:text-base max-w-2xl mb-5 line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]"
+              >
                 {description}
               </p>
+
               
               {/* CTA Button */}
               <Button
@@ -114,14 +130,17 @@ export const FEATURED_ADS = [
     ctaText: 'View Project Details'
   },
   {
-    id: 'expo-city',
-    title: 'Expo City Dubai Luxury Homes',
+    // Replaces the old "Expo City Dubai" entry: that slug had no live project
+    // and its CDN image returned 403 (banner rendered with no photo).
+    id: 'expo-valley-views',
+    title: 'Expo Valley Views',
     subtitle: 'Legacy of World Expo 2020',
-    description: 'Discover exclusive residences in the heart of innovation at Expo City Dubai, where the future meets luxury living.',
-    imageUrl: 'https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Expo_2020_f00f1e0c8d.webp',
-    projectSlug: 'expo-city-dubai',
+    description: 'Exclusive residences inside Expo City Dubai, where landscaped valleys and innovation districts meet luxury living.',
+    imageUrl: 'https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Feature_2105b67f29.jpg',
+    projectSlug: 'expo-valley-views-expo-city',
     ctaText: 'Explore Now'
   }
+
 ];
 
 export default FeaturedProjectAd;
