@@ -16,7 +16,7 @@ import {
   Database, Cog, HardHat, UserPlus, Presentation,
   QrCode, FileSignature, MailOpen, MessagesSquare,
   Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
-  Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox, LifeBuoy,
+  Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox, LifeBuoy, Headset,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
