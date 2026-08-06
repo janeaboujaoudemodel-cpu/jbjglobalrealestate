@@ -62,6 +62,12 @@ const MegaMenuMore = lazy(() => import("@/components/header/MegaMenuMore"));
 const MegaMenuLanguage = lazy(() => import("@/components/header/MegaMenuLanguage"));
 const MegaMenuAccount = lazy(() => import("@/components/header/MegaMenuAccount"));
 
+
+/** Suspense wrapper so on-demand menu chunks never blank the header. */
+const L = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={null}>{children}</Suspense>
+);
+
 interface GlobalHeaderProps {
   forceSolid?: boolean;
 }
@@ -1450,13 +1456,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     onPointerEnter={handleMegaMenuPanelEnter}
                     onPointerLeave={handleMegaMenuLeave}
                   >
-                    {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
-                    {activeMegaMenu === 'sell' && <MegaMenuSell onClose={closeMegaMenu} />}
-                    {activeMegaMenu === 'rent' && <MegaMenuRent onClose={closeMegaMenu} />}
-                    {activeMegaMenu === 'projects' && <MegaMenuProjects onClose={closeMegaMenu} />}
-                    {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
-                    {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
-                    {activeMegaMenu === 'insights' && <MegaMenuInsights onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'buy'  && <L><MegaMenuBuy onClose={closeMegaMenu} /></L>}
+                    {activeMegaMenu === 'sell'  && <L><MegaMenuSell onClose={closeMegaMenu} /></L>}
+                    {activeMegaMenu === 'rent'  && <L><MegaMenuRent onClose={closeMegaMenu} /></L>}
+                    {activeMegaMenu === 'projects'  && <L><MegaMenuProjects onClose={closeMegaMenu} /></L>}
+                    {activeMegaMenu === 'areas'  && <L><MegaMenuAreas onClose={closeMegaMenu} /></L>}
+                    {activeMegaMenu === 'developers'  && <L><MegaMenuDevelopers onClose={closeMegaMenu} /></L>}
+                    {activeMegaMenu === 'insights'  && <L><MegaMenuInsights onClose={closeMegaMenu} /></L>}
                   </div>
                 </>
               )}
@@ -1574,20 +1580,20 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   >
                     <div className="absolute inset-0 rounded-xl border border-[#064E3B]/40 pointer-events-none z-10" />
                     <div className="p-4">
-                      <GlobalSearchModal
+                      <L><GlobalSearchModal
                         isOpen={true}
                         initialQuery=""
                         onClose={closeMegaMenu}
                         embedded
-                      />
+                      /></L>
                     </div>
                     <div className="h-[1px] bg-[#064E3B]/40" />
                   </div>
                 )}
 
-                {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
+                {activeMegaMenu === 'language'  && <L><MegaMenuLanguage onClose={closeMegaMenu} /></L>}
                 {activeMegaMenu === 'notifications' && <ListingNotificationBell panelMode onClose={closeMegaMenu} />}
-                {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
+                {activeMegaMenu === 'account'  && <L><MegaMenuAccount onClose={closeMegaMenu} /></L>}
               </div>
             </>
           )}
@@ -1595,14 +1601,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
       {/* Global Search Modal - for mobile only now */}
       {shouldUseMobileHeader && (
-        <GlobalSearchModal
+        <L><GlobalSearchModal
           isOpen={searchOpen}
           initialQuery={searchInitialQuery}
           onClose={() => {
             setSearchOpen(false);
             setSearchInitialQuery("");
           }}
-        />
+        /></L>
       )}
     </header>
   );
