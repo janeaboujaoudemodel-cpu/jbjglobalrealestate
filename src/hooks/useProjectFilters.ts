@@ -60,24 +60,12 @@ export function useFilteredProjects(
     if (!projects) return [];
 
     let filtered = projects.filter((project) => {
-      // Transaction type filter (buy vs rent)
-      // For now, we use handover_date to determine if it's for sale (off-plan/ready)
-      // "rent" properties would typically be marked differently
-      // Until we have a transaction_type column, we'll filter based on naming conventions
-      if (filters.transactionType && filters.transactionType !== 'all') {
-        const projectName = project.name.toLowerCase();
-        const projectDesc = (project.description || '').toLowerCase();
-        const isRentalProperty = projectName.includes('rent') || 
-                                  projectDesc.includes('for rent') ||
-                                  projectDesc.includes('rental');
-        
-        if (filters.transactionType === 'rent' && !isRentalProperty) {
-          return false;
-        }
-        if (filters.transactionType === 'buy' && isRentalProperty) {
-          return false;
-        }
-      }
+      // The catalogue query is sale-only and already excludes records whose
+      // listing_kind is "leasing". Never infer transaction type from marketing
+      // copy: sale projects frequently mention rental yield, which previously
+      // removed valid inventory from the Buy view. Until a rental catalogue is
+      // connected, Rent intentionally returns no projects.
+      if (filters.transactionType === 'rent') return false;
 
       // Search filter
       if (filters.search) {
