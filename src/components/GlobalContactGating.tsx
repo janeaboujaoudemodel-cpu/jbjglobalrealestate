@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from "react";
 import { useContactGating } from '@/hooks/useContactGating';
 const ContactGatingModal = lazy(() => import('@/components/ContactGatingModal'));
 
@@ -22,7 +22,7 @@ const GlobalContactGating = ({ children }: GlobalContactGatingProps) => {
         onClose={closeGatingModal}
         onComplete={handleGatingComplete}
         triggerSource={triggerSource}
-      />
+      /></Suspense>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, Heart } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
@@ -236,7 +236,7 @@ export default function HorizontalUtilityBar() {
         filters={filterState}
         onFilterChange={handleFilterChange}
         anchorRect={filterAnchor}
-      />
+      /></Suspense>
     </>
   );
 }

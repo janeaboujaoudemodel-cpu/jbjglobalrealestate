@@ -2,7 +2,7 @@
  * GlobalSupportMount — mounts the always-visible SupportLauncher and a global
  * AIConcierge drawer that any component can open via `window.dispatchEvent(new CustomEvent("jbj:open-concierge"))`.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import SupportLauncher from "./SupportLauncher";
 const AIConcierge = lazy(() => import("@/components/home/AIConcierge"));
 const LeadFormDialog = lazy(() => import("@/components/gate/LeadFormDialog"));

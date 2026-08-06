@@ -21,7 +21,6 @@ import SecurityShield from "@/components/SecurityShield";
 import GlobalVerticalNav from "@/components/navigation/GlobalVerticalNav";
 import HorizontalUtilityBar from "@/components/navigation/HorizontalUtilityBar";
 // GlobalFilterBar is now embedded inside HorizontalUtilityBar
-const CombinedContactNewsletter = lazy(() => import("@/components/CombinedContactNewsletter"));
 import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -340,7 +339,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </Suspense>
       )}
       {/* Page navigation arrows — visible only when chat is closed */}
-      {!usesStandalonePortalChrome && <Suspense fallback={null}><PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />}
+      {!usesStandalonePortalChrome && <Suspense fallback={null}><PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} /></Suspense>}
       {!usesStandalonePortalChrome && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget
