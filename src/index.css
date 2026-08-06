@@ -37949,3 +37949,37 @@ html body #root [role="tab"][data-tab-white-active="true"] svg * {
   color: #0A0A0A !important;
   stroke: #0A0A0A !important;
 }
+
+/* ==========================================================================
+   PASS 270 — CANONICAL CARD RAIL (LOCKED)
+   Every card grid (projects, properties, news, areas, communities, developers,
+   guides, insights…) must span exactly the same rail as the "Explore Our
+   Services" / "JBJ Tools" / "Mortgage Calculator" section cards.
+   Root cause of the old mismatch: .jj-card-grid re-applied the page gutter
+   while already sitting inside an already-padded .jj-content-track, so grids
+   rendered ~2× inset (940px vs 1020px). Fix once, globally:
+     1. a card grid nested in a padded track owns no horizontal padding;
+     2. the track hosting a card grid uses the same 32px section rail.
+   ========================================================================== */
+html body :is(.jj-content-track, .jj-page-gutter, .jj-project-shell, .jj-track, [data-page-gutter]) .jj-card-grid,
+html body :is(.jj-content-track, .jj-page-gutter, .jj-project-shell, .jj-track, [data-page-gutter]) [data-card-rail-grid] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+@media (min-width: 768px) {
+  html body :is(.jj-content-track, .jj-page-gutter, [data-page-gutter]):has(.jj-card-grid),
+  html body :is(.jj-content-track, .jj-page-gutter, [data-page-gutter]):has([data-card-rail-grid]) {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+}
+
+/* PASS 270b — the section wrapper never adds a second gutter on top of the
+   .jj-content-track that already owns the rail (this was pushing card grids
+   40px inside the section-card rail). */
+html body :is(section, div):has(> .jj-content-track .jj-card-grid),
+html body :is(section, div):has(> .jj-content-track > .jj-card-grid) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
