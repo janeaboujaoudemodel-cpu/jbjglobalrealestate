@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useDeferredMedia } from "@/hooks/useDeferredMedia";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning, Search, BarChart3, Newspaper, LayoutDashboard, GraduationCap, Upload, Tag } from "lucide-react";
 import { useMemo } from "react";
@@ -130,6 +131,8 @@ const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: stri
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  // Hero video (4.6 MB) starts only after first paint / idle, never on slow links.
+  const heroVideoAllowed = useDeferredMedia();
   const { t } = useLanguage();
   const { isBroker } = useUserRole();
   const { mode, hasMadeInitialSelection } = useUserModeContext();
