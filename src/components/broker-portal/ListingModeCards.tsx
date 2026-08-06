@@ -4,12 +4,16 @@
  *   - /broker/listings (My Listings) inline section + empty state
  *
  * Keep this component as the single source of truth so both surfaces stay in sync.
+ *
+ * Surface: JBJ emerald ombré (#064E3B → #042c1c → #000) with pure-white ink and
+ * white translucent hairlines. Never gold borders on emerald.
  */
 import { Link } from "react-router-dom";
 import { ClipboardCheck, Wand2, Sparkles, ArrowRight } from "lucide-react";
 
-const GOLD = "#B89555";
-const INK = "#1A1A1A";
+const WHITE = "#FFFFFF";
+const EMERALD_OMBRE =
+  "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)";
 
 export function ListingModeCards({
   manualTo = "/broker/listings/new/manual",
@@ -22,7 +26,7 @@ export function ListingModeCards({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <ListingModeCard
         to={manualTo}
-        icon={<ClipboardCheck className="w-6 h-6" style={{ color: INK }} />}
+        icon={<ClipboardCheck className="w-6 h-6" style={{ color: WHITE, stroke: WHITE }} />}
         eyebrow="Full Control"
         title="List Manually"
         description="Fill in every field yourself — price, location, photos, amenities and contact preferences. Best when you already have the full property details ready."
@@ -30,7 +34,7 @@ export function ListingModeCards({
       />
       <ListingModeCard
         to={aiTo}
-        icon={<Wand2 className="w-6 h-6" style={{ color: GOLD }} />}
+        icon={<Wand2 className="w-6 h-6" style={{ color: WHITE, stroke: WHITE }} />}
         eyebrow="AI-Assisted"
         title="List with AI"
         description="Paste any portal link, brochure or short description. Our AI auto-fills the listing in seconds — you only review and confirm before submitting."
@@ -61,45 +65,84 @@ function ListingModeCard({
   return (
     <Link
       to={to}
-      data-surface="champagne"
-      className="surface-champagne group relative flex flex-col rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/55 hover:border-[#B89555] p-6 md:p-7 transition-all hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)]"
+      data-surface="dark"
+      data-ink-emerald
+      data-no-contrast-guard
+      className="group relative flex flex-col rounded-2xl p-6 md:p-7 transition-all hover:-translate-y-0.5"
+      style={{
+        backgroundImage: EMERALD_OMBRE,
+        border: "1px solid rgba(255,255,255,0.22)",
+        boxShadow:
+          "0 18px 40px -26px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.14)",
+        color: WHITE,
+        WebkitTextFillColor: WHITE,
+      }}
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[#FDFBF7] border border-[#B89555]/60 grid place-items-center shadow-[0_4px_10px_rgba(184,149,85,0.18)]">
+        <div
+          className="w-12 h-12 rounded-xl grid place-items-center shrink-0"
+          style={{
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.28)",
+          }}
+        >
           {icon}
         </div>
         {accent && (
           <span
-            className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full bg-[#FDFBF7] border"
-            style={{ color: GOLD, borderColor: GOLD }}
+            className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
+            style={{
+              color: WHITE,
+              WebkitTextFillColor: WHITE,
+              background: "rgba(255,255,255,0.10)",
+              border: "1px solid rgba(255,255,255,0.34)",
+            }}
           >
-            <Sparkles className="w-3 h-3" /> Recommended
+            <Sparkles className="w-3 h-3" style={{ color: WHITE, stroke: WHITE }} /> Recommended
           </span>
         )}
       </div>
 
       <div className="mt-5">
-        <div className="text-xs uppercase tracking-[0.18em] font-semibold text-muted-foreground">
+        <div
+          className="text-xs uppercase tracking-[0.18em] font-semibold"
+          style={{ color: "rgba(255,255,255,0.72)", WebkitTextFillColor: "rgba(255,255,255,0.72)" }}
+        >
           {eyebrow}
         </div>
-        <h2 className="mt-1 text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">
+        <h2
+          className="mt-1 text-xl md:text-2xl font-bold leading-tight"
+          style={{ color: WHITE, WebkitTextFillColor: WHITE }}
+        >
           {title}
         </h2>
-        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+        <p
+          className="mt-2 text-sm leading-relaxed"
+          style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}
+        >
           {description}
         </p>
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
-        <span className="text-xs font-semibold text-muted-foreground bg-[#FDFBF7] border border-[#B89555]/40 rounded-md px-2 py-1">
+      <div className="mt-6 flex items-center justify-between gap-3">
+        <span
+          className="text-xs font-semibold rounded-md px-2 py-1"
+          style={{
+            color: WHITE,
+            WebkitTextFillColor: WHITE,
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.24)",
+          }}
+        >
           {tag}
         </span>
         <span
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#1A1A1A] group-hover:gap-2 transition-all"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-2 transition-all"
           data-no-contrast-guard
+          style={{ color: WHITE, WebkitTextFillColor: WHITE }}
         >
           Start
-          <ArrowRight className="w-4 h-4" style={{ color: INK }} />
+          <ArrowRight className="w-4 h-4" style={{ color: WHITE, stroke: WHITE }} />
         </span>
       </div>
     </Link>

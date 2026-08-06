@@ -23790,10 +23790,18 @@ html body [data-tool-emerald] :is(.jbj-form-field, [data-radix-select-trigger]) 
   stroke: #FFFFFF !important;
 }
 html body [data-tool-emerald] .jj-listing-pill,
-html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="inactive"],
-html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="inactive"] :is(span, svg, [class*="lucide"]) {
-  background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%) !important;
-  border-color: rgba(255,255,255,0.42) !important;
+html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="inactive"] {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.32) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+/* Inner label/icon spans must never carry their own dark fill — the pill owns the surface. */
+html body [data-tool-emerald] .jj-listing-pill :is(span, svg, [class*="lucide"]) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -23801,6 +23809,8 @@ html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="inactive"] :is
 html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="active"] {
   background: linear-gradient(135deg, #065F46 0%, #064E3B 55%, #04231A 100%) !important;
   border-color: rgba(255,255,255,0.52) !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 html body [data-tool-emerald] :is(button, a)[style*="#C8A87A"],
 html body [data-tool-emerald] :is(button, a)[style*="#B89555"],
