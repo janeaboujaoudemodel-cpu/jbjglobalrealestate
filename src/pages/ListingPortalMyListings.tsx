@@ -304,6 +304,7 @@ const ListingPortalMyListings = () => {
                 size="sm"
                 onClick={() => setActiveTab('active')}
                 data-no-contrast-guard
+                data-listings-tab={activeTab === 'active' ? 'active' : 'inactive'}
                 style={activeTab === 'active'
                   ? { background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
                   : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }}
@@ -315,6 +316,7 @@ const ListingPortalMyListings = () => {
                 size="sm"
                 onClick={() => setActiveTab('deleted')}
                 data-no-contrast-guard
+                data-listings-tab={activeTab === 'deleted' ? 'active' : 'inactive'}
                 style={activeTab === 'deleted'
                   ? { background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
                   : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }}

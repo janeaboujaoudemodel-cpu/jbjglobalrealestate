@@ -37687,6 +37687,21 @@ html body #root [data-account-menu-content][data-surface="emerald"] :where(h1,h2
   stroke: #FFFFFF !important;
 }
 
+/* Authenticated listings tabs: the selected state is emerald ombré and all
+   tab labels/icons remain white, independent of older light-page button rules. */
+html body #root button[data-listings-tab="active"],
+html body #root button[data-listings-tab="active"]:is(:hover, :focus-visible) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.28) !important;
+}
+html body #root button[data-listings-tab],
+html body #root button[data-listings-tab] :where(*) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 /* Start CTA on the choice cards is a WHITE pill — text/icons must stay emerald
    ink, never inherit the page-wide white text lock (white-on-white). */
 html body #root [data-list-property-page] [data-listing-start-cta],
