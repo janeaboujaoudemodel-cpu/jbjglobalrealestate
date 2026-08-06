@@ -189,12 +189,10 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
                     // never stretch it into a vertical oval.
                     "inline-flex self-center shrink-0 grow-0 basis-auto aspect-square h-[22px] max-h-[22px] min-h-[22px] w-[22px] p-0 leading-none",
                     "items-center justify-center rounded-full",
-                    "text-[#064E3B]/75 hover:text-[#064E3B]",
-                    // Elegant hover: no beige blob — a hairline emerald ring
-                    // with a whisper-soft tint.
-                    "bg-transparent ring-0 hover:bg-[#064E3B]/[0.06] hover:ring-1 hover:ring-[#064E3B]/35",
-                    "transition-[color,background-color,box-shadow] duration-200",
-                    "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#064E3B]/60",
+                    // No background, no ring, ever — icon + its own circle only.
+                    "bg-transparent border-0 shadow-none ring-0 outline-none",
+                    "transition-opacity duration-200",
+                    "focus:outline-none",
                   )}
 
                   data-no-contrast-guard
