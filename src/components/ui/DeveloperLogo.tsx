@@ -86,10 +86,21 @@ export function DeveloperLogo({
         alt={alt}
         loading={loading}
         data-no-fallback
+        onLoad={(e) => {
+          // Some CDN logos resolve to an empty/zero-size or 1px response, which
+          // rendered as a blank white plate on the card. Treat those as a
+          // failure so the branded nameplate fallback takes over.
+          const img = e.currentTarget;
+          if (img.naturalWidth < 4 || img.naturalHeight < 4) {
+            setError(true);
+            onError?.();
+          }
+        }}
         onError={() => {
           setError(true);
           onError?.();
         }}
+
         className={cn(
           "block w-full h-full object-contain",
           scale === "compact" ? "rounded-sm" : "rounded-md",
