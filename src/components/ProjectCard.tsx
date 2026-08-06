@@ -544,44 +544,45 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </div>
 
-      {/* CTA Buttons — Email, Call, WhatsApp. Premium rectangular emerald tiles. */}
+      {/* CTA Buttons — icon-only emerald tiles (no text labels, balanced within the field). */}
       <div className="px-4 pb-4">
         <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/70 pt-3">
           <a
             href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Email about ${project.name}`}
+            title="Email"
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 min-h-9 py-1.5 px-1.5 flex flex-col items-center justify-center gap-0.5 rounded-lg text-center"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 h-10 flex items-center justify-center rounded-lg"
           >
-            <Mail className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
-            <span data-cta-label className="text-[11px] font-semibold leading-tight text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Email</span>
+            <Mail className="w-[18px] h-[18px] flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
           </a>
           <a
             href={callHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Call about ${project.name}`}
+            title="Call"
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 min-h-9 py-1.5 px-1.5 flex flex-col items-center justify-center gap-0.5 rounded-lg text-center"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 h-10 flex items-center justify-center rounded-lg"
           >
-            <Phone className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
-            <span data-cta-label className="text-[11px] font-semibold leading-tight text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Call</span>
+            <Phone className="w-[18px] h-[18px] flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
           </a>
           <a
             href={whatsappHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`WhatsApp about ${project.name}`}
+            title="WhatsApp"
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 min-h-9 py-1.5 px-1.5 flex flex-col items-center justify-center gap-0.5 rounded-lg text-center"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 h-10 flex items-center justify-center rounded-lg"
           >
-            <WhatsAppOutlineIcon className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" strokeWidth={2} />
-            <span data-cta-label className="text-[11px] font-semibold leading-tight text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>WhatsApp</span>
+            <WhatsAppOutlineIcon className="w-[18px] h-[18px] flex-shrink-0 text-white allow-white" strokeWidth={2} />
           </a>
         </div>
       </div>
+
 
     </div>
   );
