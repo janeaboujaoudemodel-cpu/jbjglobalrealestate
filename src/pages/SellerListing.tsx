@@ -568,9 +568,9 @@ Requirements:
           className="relative"
           style={{
             background:
-              "linear-gradient(180deg, #FFFFFF 0%, #F1F6F3 1.6%, #0B6B52 8.5%, #064E3B 30%, #042C1C 68%, #000000 100%)",
-            borderTop: "1px solid rgba(255,255,255,0.12)",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 14px 28px -18px rgba(255,255,255,0.35)",
+              "linear-gradient(180deg, #000000 0%, #031B12 14%, #064E3B 46%, #042C1C 74%, #000000 100%)",
+            borderTop: "1px solid rgba(255,255,255,0.14)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.16)",
           }}
         >
 

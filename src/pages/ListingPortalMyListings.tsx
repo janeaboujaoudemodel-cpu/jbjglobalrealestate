@@ -300,23 +300,41 @@ const ListingPortalMyListings = () => {
             {/* Tabs: Active / Recently Deleted */}
             <div className="flex gap-2 mb-6">
               <Button
-                variant={activeTab === 'active' ? 'default' : 'outline'}
+                variant="ghost"
                 size="sm"
                 onClick={() => setActiveTab('active')}
-                className={activeTab === 'active' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90' : 'border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10'}
+                data-no-contrast-guard
+                style={
+                  activeTab === 'active'
+                    ? { background: '#FFFFFF', color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A', border: '1px solid rgba(26,26,26,0.14)' }
+                    : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
+                }
               >
                 Active ({listings.length})
               </Button>
               <Button
-                variant={activeTab === 'deleted' ? 'default' : 'outline'}
+                variant="ghost"
                 size="sm"
                 onClick={() => setActiveTab('deleted')}
-                className={activeTab === 'deleted' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90' : 'border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10'}
+                data-no-contrast-guard
+                style={
+                  activeTab === 'deleted'
+                    ? { background: '#FFFFFF', color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A', border: '1px solid rgba(26,26,26,0.14)' }
+                    : { background: 'rgba(255,255,255,0.07)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '1px solid rgba(255,255,255,0.28)' }
+                }
               >
-                <Trash2 className="w-3.5 h-3.5 mr-1" />
+                <Trash2
+                  className="w-3.5 h-3.5 mr-1"
+                  style={
+                    activeTab === 'deleted'
+                      ? { color: '#0A0A0A', stroke: '#0A0A0A' }
+                      : { color: '#FFFFFF', stroke: '#FFFFFF' }
+                  }
+                />
                 Recently Deleted ({deletedListings.length})
               </Button>
             </div>
+
 
             {/* Listings */}
             {loading ? (

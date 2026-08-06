@@ -628,15 +628,21 @@ const ListingPortalSubmit = () => {
               onClick={() => navigate('/listing-portal')}
               data-no-contrast-guard
               data-back-to-portal
-              data-allow-dark-cta
-              className="mb-4 hover:bg-white/10"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+              className="mb-4"
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid rgba(26,26,26,0.14)',
+                color: '#0A0A0A',
+                WebkitTextFillColor: '#0A0A0A',
+                boxShadow: '0 8px 20px -14px rgba(0,0,0,0.55)',
+              }}
             >
-              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#FFFFFF' }}>
-                <ArrowLeft className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#0A0A0A' }}>
+                <ArrowLeft className="w-4 h-4" style={{ color: '#0A0A0A', stroke: '#0A0A0A' }} />
               </span>
-              <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
+              <span style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Back to Portal</span>
             </Button>
+
 
             <div className="text-center">
               <span

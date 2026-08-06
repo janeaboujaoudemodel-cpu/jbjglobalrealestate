@@ -208,10 +208,12 @@ const ListProperty = () => {
             <span
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
               style={{
-                backgroundColor: theme.badgeBg,
+                backgroundImage:
+                  "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
                 color: WHITE,
                 WebkitTextFillColor: WHITE,
-                border: `1px solid rgba(255,255,255,0.45)`,
+                border: `1px solid rgba(255,255,255,0.42)`,
+                boxShadow: "0 8px 20px -14px rgba(0,0,0,0.6)",
               }}
               data-no-contrast-guard
             >
