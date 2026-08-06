@@ -46,6 +46,10 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 2000,
       target: 'es2020',
       minify: 'esbuild',
+      // The global stylesheet is very large (many high-specificity contrast
+      // locks). lightningcss compresses/merges it far better than esbuild,
+      // which shrinks the render-blocking CSS on every page.
+      cssMinify: 'lightningcss',
       rollupOptions: {
         output: {
           entryFileNames: "assets/app.js",
