@@ -15,6 +15,6 @@
   <rect width="512" height="512" rx="96" fill="url(#emerald)"/>
   <!-- JBJ monogram, optically centered, filling the plate -->
   <g font-family="Georgia,'Times New Roman',serif" font-weight="700" text-anchor="middle">
-    <text x="256" y="360" font-size="300" fill="#FFFFFF" letter-spacing="-6">J<tspan fill="url(#gold)">B</tspan>J</text>
+    <text x="256" y="348" font-size="248" fill="#FFFFFF" letter-spacing="-2">J<tspan fill="url(#gold)">B</tspan>J</text>
   </g>
 </svg>
