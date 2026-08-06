@@ -74,6 +74,7 @@ export interface NotificationBadgeProps extends React.HTMLAttributes<HTMLSpanEle
 
 /** Single notification badge used in header + dropdown. */
 export function NotificationBadge({ count, floating = false, className, ...props }: NotificationBadgeProps) {
+  const inkRef = useForceWhiteInk();
   if (!count || count <= 0) return null;
   return (
     <span
@@ -90,7 +91,7 @@ export function NotificationBadge({ count, floating = false, className, ...props
       {...props}
       style={{ ...props.style, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
     >
-      <span data-emerald-ok className="text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
+      <span ref={inkRef} data-emerald-ok data-no-contrast-guard className="text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
         {count > 9 ? "9+" : count}
       </span>
     </span>
