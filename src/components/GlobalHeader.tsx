@@ -36,7 +36,6 @@ import CurrencySwitcher from "@/components/CurrencySwitcher";
 import ModeSwitcher from "@/components/ModeSwitcher";
 const GlobalSearchModal = lazy(() => import("@/components/GlobalSearchModal"));
 import { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
-const MobileMenuWalkthrough = lazy(() => import("@/components/MobileMenuWalkthrough"));
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { useIsTouchLayout } from "@/hooks/use-touch-layout";
@@ -56,7 +55,6 @@ const MegaMenuProjects = lazy(() => import("@/components/header/MegaMenuProjects
 const MegaMenuDevelopers = lazy(() => import("@/components/header/MegaMenuDevelopers"));
 const MegaMenuAreas = lazy(() => import("@/components/header/MegaMenuAreas"));
 const MegaMenuInsights = lazy(() => import("@/components/header/MegaMenuInsights"));
-const MegaMenuMore = lazy(() => import("@/components/header/MegaMenuMore"));
 // Utility Mega Menus
 // MegaMenuSearch removed — search opens GlobalSearchModal directly
 const MegaMenuLanguage = lazy(() => import("@/components/header/MegaMenuLanguage"));
