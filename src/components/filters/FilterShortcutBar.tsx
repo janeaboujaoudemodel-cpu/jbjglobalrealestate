@@ -3,7 +3,7 @@
  * Row 1: Search + Map + Saved + Currency + Filter + Mode Investor (connected bar)
  * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
-import { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo, lazy, Suspense } from "react";
 
 import { ChevronDown, X, Bookmark, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +35,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SaveFilterModal from "./SaveFilterModal";
 import { CONSTRUCTION_STATUS_OPTIONS } from "@/constants/constructionStatus";
 import { VIEWS_OPTIONS } from "@/constants/filterConfig";
-import AdvancedFilterPanel from "./AdvancedFilterPanel";
+const AdvancedFilterPanel = lazy(() => import("./AdvancedFilterPanel"));
 
 export interface ShortcutFilterState {
   priceMode: 'unit' | 'sqft' | 'sqm';
@@ -961,12 +961,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         onSave={handleSaveFilter}
       />
 
-      <AdvancedFilterPanel
+      <Suspense fallback={null}><AdvancedFilterPanel
         open={advancedOpen}
         onOpenChange={setAdvancedOpen}
         filters={filters}
         onFilterChange={onFilterChange}
-      />
+      /></Suspense>
     </>
   );
 };
