@@ -35,7 +35,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SaveFilterModal from "./SaveFilterModal";
 import { CONSTRUCTION_STATUS_OPTIONS } from "@/constants/constructionStatus";
 import { VIEWS_OPTIONS } from "@/constants/filterConfig";
-import AdvancedFilterPanel from "./AdvancedFilterPanel";
+const AdvancedFilterPanel = lazy(() => import("./AdvancedFilterPanel"));
 
 export interface ShortcutFilterState {
   priceMode: 'unit' | 'sqft' | 'sqm';
@@ -961,7 +961,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         onSave={handleSaveFilter}
       />
 
-      <AdvancedFilterPanel
+      <Suspense fallback={null}><AdvancedFilterPanel
         open={advancedOpen}
         onOpenChange={setAdvancedOpen}
         filters={filters}

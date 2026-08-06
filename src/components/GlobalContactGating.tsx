@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useContactGating } from '@/hooks/useContactGating';
-import ContactGatingModal from '@/components/ContactGatingModal';
+const ContactGatingModal = lazy(() => import('@/components/ContactGatingModal'));
 
 interface GlobalContactGatingProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ const GlobalContactGating = ({ children }: GlobalContactGatingProps) => {
   return (
     <>
       {children}
-      <ContactGatingModal
+      <Suspense fallback={null}><ContactGatingModal
         isOpen={showGatingModal}
         onClose={closeGatingModal}
         onComplete={handleGatingComplete}

@@ -21,7 +21,7 @@ import SecurityShield from "@/components/SecurityShield";
 import GlobalVerticalNav from "@/components/navigation/GlobalVerticalNav";
 import HorizontalUtilityBar from "@/components/navigation/HorizontalUtilityBar";
 // GlobalFilterBar is now embedded inside HorizontalUtilityBar
-import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
+const CombinedContactNewsletter = lazy(() => import("@/components/CombinedContactNewsletter"));
 import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -35,7 +35,7 @@ const AuditorFeedbackButton = lazy(() => import("@/components/auditor/AuditorFee
 // Lazy-load non-critical components to reduce initial bundle
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
-import PageNavigation from "@/components/PageNavigation";
+const PageNavigation = lazy(() => import("@/components/PageNavigation"));
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
 const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-root"));
@@ -340,7 +340,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </Suspense>
       )}
       {/* Page navigation arrows — visible only when chat is closed */}
-      {!usesStandalonePortalChrome && <PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />}
+      {!usesStandalonePortalChrome && <Suspense fallback={null}><PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />}
       {!usesStandalonePortalChrome && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget

@@ -8,7 +8,7 @@ import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
-import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
+const AdvancedFilterPanel = lazy(() => import("@/components/filters/AdvancedFilterPanel"));
 import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
 import { HeaderControl, HeaderSegmented } from "@/components/ui/ds/HeaderControl";
 
@@ -230,7 +230,7 @@ export default function HorizontalUtilityBar() {
 
       <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} anchorRect={searchAnchor} />
 
-      <AdvancedFilterPanel
+      <Suspense fallback={null}><AdvancedFilterPanel
         open={filterOpen}
         onOpenChange={setFilterOpen}
         filters={filterState}

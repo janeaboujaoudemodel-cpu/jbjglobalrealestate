@@ -4,8 +4,8 @@
  */
 import { useEffect, useState } from "react";
 import SupportLauncher from "./SupportLauncher";
-import AIConcierge from "@/components/home/AIConcierge";
-import LeadFormDialog from "@/components/gate/LeadFormDialog";
+const AIConcierge = lazy(() => import("@/components/home/AIConcierge"));
+const LeadFormDialog = lazy(() => import("@/components/gate/LeadFormDialog"));
 
 export default function GlobalSupportMount() {
   const [conciergeOpen, setConciergeOpen] = useState(false);
