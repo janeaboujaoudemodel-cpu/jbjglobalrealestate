@@ -30,6 +30,31 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   onClick,
 }, ref) => {
   const navigate = useNavigate();
+  const goldRef = React.useRef<HTMLSpanElement | null>(null);
+
+  /**
+   * LOCKED (PASS 269): the animated champagne→gold fill is applied at runtime
+   * with `!important` priority. Some legacy global ink locks in index.css win
+   * the cascade against stylesheet rules, which used to leave developer names
+   * black. Setting the properties imperatively is the only way to guarantee the
+   * gold gradient text on every surface.
+   */
+  React.useEffect(() => {
+    const el = goldRef.current;
+    if (!el) return;
+    const apply = () => {
+      el.style.setProperty('background-image', 'linear-gradient(90deg, #B89555 0%, #F4E3A8 28%, #B89555 55%, #F4E3A8 82%, #B89555 100%)', 'important');
+      el.style.setProperty('background-size', '260% 100%', 'important');
+      el.style.setProperty('-webkit-background-clip', 'text', 'important');
+      el.style.setProperty('background-clip', 'text', 'important');
+      el.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
+      el.style.setProperty('color', 'transparent', 'important');
+      el.style.setProperty('animation', 'jj-gold-link-sheen 4.5s ease-in-out infinite', 'important');
+    };
+    apply();
+    const t = window.setTimeout(apply, 400);
+    return () => window.clearTimeout(t);
+  }, [name]);
   const href = slug ? `/developer/${slug}` : `/developers?search=${encodeURIComponent(name)}`;
 
   const go = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -43,6 +68,7 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
     <span ref={ref} className={cn("inline-flex items-baseline gap-1 leading-none", className)} style={{ color: '#1A1A1A' }}>
       {showPrefix && <span data-no-contrast-guard className="leading-none align-baseline" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>by </span>}
       <span
+        ref={goldRef}
         role="link"
         tabIndex={0}
         data-href={href}

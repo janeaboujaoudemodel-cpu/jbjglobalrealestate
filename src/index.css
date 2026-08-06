@@ -37905,3 +37905,21 @@ html:root body #root [data-developer-gold][data-developer-name-shine].developer-
   -webkit-background-clip: text !important;
   background-clip: text !important;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 269 — NO CROPPED WORDS, NO ELLIPSIS ON LABELS (LOCKED)
+   No button/label/badge on the platform may clip a word or fall
+   back to a "…" ellipsis. Labels wrap and shrink to the available
+   width instead of being cut off.
+   ───────────────────────────────────────────────────────────── */
+html body #root [data-cta-label],
+html body #root button [data-cta-label],
+html body #root a [data-cta-label] {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere;
+  word-break: normal !important;
+  max-width: 100%;
+}
+html body #root [data-cta-label].truncate { text-overflow: clip !important; }

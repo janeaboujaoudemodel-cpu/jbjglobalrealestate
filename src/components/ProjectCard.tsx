@@ -553,10 +553,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`Email about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-                className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 min-h-9 py-1.5 px-1.5 flex flex-col items-center justify-center gap-0.5 rounded-lg text-center"
           >
             <Mail className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Email</span>
+            <span data-cta-label className="text-[11px] font-semibold leading-tight text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Email</span>
           </a>
           <a
             href={callHref}
@@ -564,10 +564,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`Call about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 min-h-9 py-1.5 px-1.5 flex flex-col items-center justify-center gap-0.5 rounded-lg text-center"
           >
             <Phone className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Call</span>
+            <span data-cta-label className="text-[11px] font-semibold leading-tight text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Call</span>
           </a>
           <a
             href={whatsappHref}
@@ -575,15 +575,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`WhatsApp about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 min-h-9 py-1.5 px-1.5 flex flex-col items-center justify-center gap-0.5 rounded-lg text-center"
           >
             <WhatsAppOutlineIcon className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" strokeWidth={2} />
-
-            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>WhatsApp</span>
-
+            <span data-cta-label className="text-[11px] font-semibold leading-tight text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>WhatsApp</span>
           </a>
         </div>
       </div>
+
     </div>
   );
 };
