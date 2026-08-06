@@ -198,6 +198,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         data-account-menu-content
+        data-account-menu-tone={isAiToolSurface ? "emerald" : "champagne"}
         data-jbj-fast-dropdown="true"
         {...(isAiToolSurface ? { "data-surface": "emerald" } : { "data-no-gold-trigger": "true" })}
         data-no-contrast-guard
@@ -212,7 +213,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         }}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-2 py-2.5" data-no-contrast-guard style={{ color: MENU_INK, WebkitTextFillColor: MENU_INK }}>
+        <div className="flex items-center gap-3 px-2 py-2.5" data-account-menu-identity data-no-contrast-guard style={{ color: MENU_INK, WebkitTextFillColor: MENU_INK }}>
           <JbjAvatar initials={initials} size="sm" />
           <div className="min-w-0 flex-1">
             <div className="text-sm font-semibold truncate" style={{ color: MENU_INK, WebkitTextFillColor: MENU_INK }}>{displayName}</div>

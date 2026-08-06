@@ -53,7 +53,7 @@ export function FormDraftBar({
   const onDark = theme === 'dark';
 
   return (
-    <div className={`flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 mb-6 ${t.bar}`}>
+    <div data-form-draft-bar className={`flex flex-col sm:flex-row sm:items-center gap-3 px-6 md:px-10 py-3 mb-6 ${t.bar}`}>
       <div className="flex items-center gap-2 flex-1 min-w-0">
         <Clock className={`w-4 h-4 flex-shrink-0 ${t.icon}`} />
         <span
@@ -64,15 +64,15 @@ export function FormDraftBar({
           {hasDraft ? 'Draft saved — continue where you left off' : `New ${label}`}
         </span>
       </div>
-      <div className="flex items-center gap-2 flex-shrink-0">
+      <div className="flex items-center gap-2 flex-shrink-0" data-form-draft-actions>
         <button
           type="button"
           onClick={onSaveDraft}
           data-no-contrast-guard
           data-on-dark
           data-allow-dark-cta
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors ${t.save}`}
-          style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
+          className={`flex h-9 min-w-[104px] items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors ${t.save}`}
+          style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', border: '0' } : undefined}
         >
           <Save className="w-3.5 h-3.5" style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF' } : undefined} /> <span style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}>Save Draft</span>
         </button>
@@ -83,10 +83,10 @@ export function FormDraftBar({
             data-no-contrast-guard
             data-on-dark
             data-allow-dark-cta
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all hover:brightness-110"
+            className="flex h-9 min-w-[104px] items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all hover:brightness-110"
             style={{
               backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
-              border: "1px solid rgba(255,255,255,0.55)",
+              border: "0",
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
               opacity: 1,
@@ -100,7 +100,7 @@ export function FormDraftBar({
             onClick={onReset}
             data-no-contrast-guard
             data-allow-ink
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors"
+            className="flex h-9 min-w-[104px] items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors"
             style={{
               backgroundImage: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)",
               border: "1px solid rgba(184,149,85,0.55)",
@@ -119,8 +119,8 @@ export function FormDraftBar({
             data-no-contrast-guard
             data-on-dark
             data-allow-dark-cta
-            className="allow-white flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#064E3B] text-white hover:bg-[#042C1C] transition-colors rounded-md"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            className="allow-white flex h-9 min-w-[104px] items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#064E3B] text-white hover:bg-[#042C1C] transition-colors rounded-md"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", border: "0" }}
           >
             <FilePlus className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} /> <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>New</span>
           </button>

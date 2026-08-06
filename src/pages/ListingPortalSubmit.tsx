@@ -637,8 +637,8 @@ const ListingPortalSubmit = () => {
                 boxShadow: '0 8px 20px -14px rgba(0,0,0,0.55)',
               }}
             >
-              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#0A0A0A' }}>
-                <ArrowLeft className="w-4 h-4" style={{ color: '#0A0A0A', stroke: '#0A0A0A' }} />
+              <span data-back-to-portal-arrow className="jj-arrow-anim inline-flex mr-2" style={{ color: '#0A0A0A' }}>
+                <ArrowLeft data-back-to-portal-arrow className="w-4 h-4" style={{ color: '#0A0A0A', stroke: '#0A0A0A' }} />
               </span>
               <span style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Back to Portal</span>
             </Button>
@@ -895,9 +895,9 @@ const ListingPortalSubmit = () => {
                           placeholder="https://drive.google.com/... or any property listing URL"
                           className={EMERALD_FIELD}
                         />
-                        <div className="flex flex-wrap gap-1.5 mt-2">
+                        <div data-source-examples className="flex flex-wrap gap-1.5 mt-2">
                           {['Google Drive', 'Property Finder', 'Bayut', 'Dubizzle', 'Developer Sites', 'Any URL'].map(tag => (
-                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-white/10 text-white border border-white/30 rounded-full">{tag}</span>
+                            <span key={tag} data-no-contrast-guard className="text-[10px] px-2 py-0.5 bg-white/10 text-white border border-white/30 rounded-full" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{tag}</span>
                           ))}
                         </div>
                       </div>
