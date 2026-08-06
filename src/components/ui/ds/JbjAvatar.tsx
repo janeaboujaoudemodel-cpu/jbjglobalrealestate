@@ -34,31 +34,35 @@ const sizeClass = {
  * Used by both the header trigger and account dropdown — do not fork.
  */
 export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
-  ({ initials = "JB", size = "md", className, ...props }, ref) => (
-    <span
-      ref={ref}
-      data-jbj-avatar
-      data-surface="emerald"
-      data-no-contrast-guard
-      className={cn(
-        "jj-avatar-metallic allow-white relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
-        sizeClass[size],
-        className,
-      )}
-      {...props}
-    >
-      <span aria-hidden="true" className="jj-avatar-spinner absolute inset-0 rounded-full pointer-events-none" />
-      <span aria-hidden="true" className="jj-avatar-core absolute inset-0 rounded-full overflow-hidden" />
+  ({ initials = "JB", size = "md", className, ...props }, ref) => {
+    const inkRef = useForceWhiteInk();
+    return (
       <span
+        ref={ref}
+        data-jbj-avatar
+        data-surface="emerald"
         data-no-contrast-guard
-        data-emerald-ok
-        className="allow-white relative z-[3] font-extrabold leading-none tracking-[0.01em] !text-white"
-        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        className={cn(
+          "jj-avatar-metallic allow-white relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
+          sizeClass[size],
+          className,
+        )}
+        {...props}
       >
-        {initials}
+        <span aria-hidden="true" className="jj-avatar-spinner absolute inset-0 rounded-full pointer-events-none" />
+        <span aria-hidden="true" className="jj-avatar-core absolute inset-0 rounded-full overflow-hidden" />
+        <span
+          ref={inkRef}
+          data-no-contrast-guard
+          data-emerald-ok
+          className="allow-white relative z-[3] font-extrabold leading-none tracking-[0.01em] !text-white"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
+          {initials}
+        </span>
       </span>
-    </span>
-  ),
+    );
+  },
 );
 JbjAvatar.displayName = "JbjAvatar";
 export const HeaderAvatar = JbjAvatar;
