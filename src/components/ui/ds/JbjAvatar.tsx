@@ -1,6 +1,24 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+/** Forces pure white ink at runtime with !important priority (beats any stylesheet). */
+function useForceWhiteInk() {
+  const ref = React.useRef<HTMLSpanElement>(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const paint = () => {
+      el.style.setProperty("color", "#FFFFFF", "important");
+      el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+    };
+    paint();
+    const id = window.setTimeout(paint, 60);
+    return () => window.clearTimeout(id);
+  });
+  return ref;
+}
+
+
 export interface JbjAvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
   initials?: string;
   size?: "sm" | "md";
@@ -16,31 +34,35 @@ const sizeClass = {
  * Used by both the header trigger and account dropdown — do not fork.
  */
 export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
-  ({ initials = "JB", size = "md", className, ...props }, ref) => (
-    <span
-      ref={ref}
-      data-jbj-avatar
-      data-surface="emerald"
-      data-no-contrast-guard
-      className={cn(
-        "jj-avatar-metallic allow-white relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
-        sizeClass[size],
-        className,
-      )}
-      {...props}
-    >
-      <span aria-hidden="true" className="jj-avatar-spinner absolute inset-0 rounded-full pointer-events-none" />
-      <span aria-hidden="true" className="jj-avatar-core absolute inset-0 rounded-full overflow-hidden" />
+  ({ initials = "JB", size = "md", className, ...props }, ref) => {
+    const inkRef = useForceWhiteInk();
+    return (
       <span
+        ref={ref}
+        data-jbj-avatar
+        data-surface="emerald"
         data-no-contrast-guard
-        data-emerald-ok
-        className="allow-white relative z-[3] font-extrabold leading-none tracking-[0.01em] !text-white"
-        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        className={cn(
+          "jj-avatar-metallic allow-white relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
+          sizeClass[size],
+          className,
+        )}
+        {...props}
       >
-        {initials}
+        <span aria-hidden="true" className="jj-avatar-spinner absolute inset-0 rounded-full pointer-events-none" />
+        <span aria-hidden="true" className="jj-avatar-core absolute inset-0 rounded-full overflow-hidden" />
+        <span
+          ref={inkRef}
+          data-no-contrast-guard
+          data-emerald-ok
+          className="allow-white relative z-[3] font-extrabold leading-none tracking-[0.01em] !text-white"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
+          {initials}
+        </span>
       </span>
-    </span>
-  ),
+    );
+  },
 );
 JbjAvatar.displayName = "JbjAvatar";
 export const HeaderAvatar = JbjAvatar;
@@ -52,6 +74,7 @@ export interface NotificationBadgeProps extends React.HTMLAttributes<HTMLSpanEle
 
 /** Single notification badge used in header + dropdown. */
 export function NotificationBadge({ count, floating = false, className, ...props }: NotificationBadgeProps) {
+  const inkRef = useForceWhiteInk();
   if (!count || count <= 0) return null;
   return (
     <span
@@ -68,7 +91,7 @@ export function NotificationBadge({ count, floating = false, className, ...props
       {...props}
       style={{ ...props.style, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
     >
-      <span data-emerald-ok className="text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
+      <span ref={inkRef} data-emerald-ok data-no-contrast-guard className="text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
         {count > 9 ? "9+" : count}
       </span>
     </span>
