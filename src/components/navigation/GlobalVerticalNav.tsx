@@ -528,7 +528,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "INVESTOR": TrendingUp,
   "COMPANY": Users,
   "LEGAL": Scale,
-  "HELP & SUPPORT": LifeBuoy,
+  "HELP & SUPPORT": Headset,
   "MY ACCOUNT": User,
   "ADMIN & OWNER": Crown,
 };
