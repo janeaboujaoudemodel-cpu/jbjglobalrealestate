@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useDeferredMedia } from "@/hooks/useDeferredMedia";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning, Search, BarChart3, Newspaper, LayoutDashboard, GraduationCap, Upload, Tag } from "lucide-react";
 import { useMemo } from "react";
@@ -131,8 +130,6 @@ const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: stri
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
-  // Hero video (4.6 MB) starts only after first paint / idle, never on slow links.
-  const heroVideoAllowed = useDeferredMedia();
   const { t } = useLanguage();
   const { isBroker } = useUserRole();
   const { mode, hasMadeInitialSelection } = useUserModeContext();
@@ -155,7 +152,6 @@ const Index = () => {
   // Autoplay is occasionally deferred by Safari/Chromium when the element is
   // inserted after mount. Retry as soon as it can play and when the tab returns.
   useEffect(() => {
-    if (!heroVideoAllowed) return;
     const play = () => {
       const video = heroVideoRef.current;
       if (!video) return;
@@ -170,7 +166,7 @@ const Index = () => {
       document.removeEventListener("visibilitychange", play);
       window.removeEventListener("focus", play);
     };
-  }, [heroVideoAllowed]);
+  }, []);
 
 
 
@@ -291,7 +287,6 @@ const Index = () => {
             className="absolute inset-0 w-full h-full object-cover z-[1]"
            loading="eager" />
 
-          {heroVideoAllowed && (
           <video
             ref={heroVideoRef}
             autoPlay loop muted playsInline
@@ -309,7 +304,6 @@ const Index = () => {
             onCanPlay={() => void heroVideoRef.current?.play().catch(() => undefined)}
             src="/hero-video.webm"
           />
-          )}
           {/* The photograph remains visible, but the painted pixels behind all
               white identity/copy stay dark enough to satisfy the surface rule. */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60 z-[3] pointer-events-none" />
