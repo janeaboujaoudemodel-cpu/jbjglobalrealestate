@@ -110,18 +110,18 @@ const AreasWeCover = () => {
 
 
               <div className="jj-home-area-caption absolute bottom-0 left-0 right-0 px-4 py-3">
-                <div className="flex items-end justify-between gap-3">
+                <div className="flex flex-col gap-2">
                   <div className="min-w-0">
-                    <h3 data-no-contrast-guard className="text-[#1A1A1A] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
+                    <h3 data-no-contrast-guard className="text-[#1A1A1A] font-extrabold text-base md:text-lg leading-tight tracking-tight">
                       {area.name}
                     </h3>
-                    <p data-no-contrast-guard className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1A1A1A]">
-                      {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"} available
+                    <p data-no-contrast-guard className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#1A1A1A] whitespace-nowrap">
+                      {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"}
                     </p>
                   </div>
 
                   <span
-                    className="jj-area-explore-pill shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
+                    className="jj-area-explore-pill self-start shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] whitespace-nowrap transition-all group-hover:translate-y-[-1px]"
                     data-on-dark
                     data-no-contrast-guard
                   >
@@ -130,6 +130,7 @@ const AreasWeCover = () => {
                   </span>
                 </div>
               </div>
+
 
             </Link>
           ))}
