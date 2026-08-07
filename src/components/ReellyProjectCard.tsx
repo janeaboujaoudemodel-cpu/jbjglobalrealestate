@@ -117,6 +117,26 @@ const ReellyProjectCard = ({
                 className="object-cover w-full h-full"
                 placeholderLabel=""
               />
+
+            {/* Hover Arrows for Carousel */}
+            {images.length > 1 && (
+              <div className="absolute inset-0 z-10 flex items-center justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                <button
+                  onClick={handlePrevImage}
+                  className="w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#1A1A1A] hover:bg-white pointer-events-auto transition-all"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  className="w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#1A1A1A] hover:bg-white pointer-events-auto transition-all"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            )}
             
            
              {/* Top-Left: Sale Status Badge */}

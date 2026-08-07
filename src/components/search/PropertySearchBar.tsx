@@ -9,8 +9,9 @@
  * Colour contract: emerald is ALWAYS the pair gradient
  * (#064E3B → #042c1c → #000) — never flat #064E3B alone.
  */
+import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, ChevronDown, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Crown, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -174,6 +175,7 @@ interface Props {
    */
   countOverride?: number | null;
   /** Shows the active-filter chip row + Reset control under the bar. */
+  showTiers?: boolean;
   showActiveSummary?: boolean;
 }
 
@@ -188,6 +190,7 @@ export default function PropertySearchBar({
   onSellSelected,
   showSort = false,
   sortOptions = SORT_OPTIONS,
+  showTiers = false,
   countOverride,
   showActiveSummary = false,
 }: Props) {
@@ -284,6 +287,7 @@ export default function PropertySearchBar({
         label: PROJECT_STATUSES.find((x) => x.slug === s)?.label ?? s,
         clear: { statuses: f.statuses.filter((x) => x !== s) },
       });
+    if (f.developerTier) chips.push({ key: "tier", label: TIER_LABELS[f.developerTier as DeveloperTier] || "Tier", clear: { developerTier: null } });
     for (const l of f.labels) chips.push({ key: `label-${l}`, label: l, clear: { labels: f.labels.filter((x) => x !== l) } });
     if (f.developer) chips.push({ key: "dev", label: f.developer, clear: { developer: null } });
     if (f.sizeMin != null || f.sizeMax != null) chips.push({ key: "size", label: "Size", clear: { sizeMin: null, sizeMax: null } });
@@ -384,6 +388,37 @@ export default function PropertySearchBar({
           />
         </div>
 
+        {showTiers && (
+          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3">
+            <Seg
+              label={f.developerTier ? (TIER_LABELS[f.developerTier as DeveloperTier] || "Tier") : "All Tiers"}
+              active={!!f.developerTier}
+              icon={<Crown className="w-4 h-4" />}
+              dark={dark}
+              spanClass="w-full border-0 rounded-none h-full"
+            >
+              <div className="p-2 grid grid-cols-1 gap-1">
+                <button
+                  onClick={() => set({ developerTier: null })}
+                  className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-[#F2EBDC] transition-colors"
+                  style={{ background: !f.developerTier ? "#F2EBDC" : "transparent" }}
+                >
+                  All Tiers
+                </button>
+                {Object.entries(TIER_LABELS).map(([value, label]) => (
+                  <button
+                    key={value}
+                    onClick={() => set({ developerTier: value })}
+                    className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-[#F2EBDC] transition-colors"
+                    style={{ background: f.developerTier === value ? "#F2EBDC" : "transparent" }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </Seg>
+          </div>
+        )}
         <div
           className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
           data-search-utility-controls

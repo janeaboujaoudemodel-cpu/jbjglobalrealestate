@@ -1,105 +1,32 @@
 import { useState, useMemo, useEffect } from "react";
 import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
-import {
-  Search,
-  Building2,
-  Crown,
-  X,
-  SlidersHorizontal,
-} from "lucide-react";
-import { SearchableSelect } from "@/components/ui/searchable-select";
-import GeoFilterBar from "@/components/search/GeoFilterBar";
-import { EMPTY_FILTERS, filtersToParams, type GeoSearchFilters } from "@/lib/searchFilters";
-import { getAreas, getCountry, getRegions } from "@/data/geography";
-
+import { Building2 } from "lucide-react";
 import { useDevelopers, useDeveloperProjectStats } from "@/hooks/useProjects";
+import PropertySearchBar from "@/components/search/PropertySearchBar";
+import { EMPTY_SEARCH, type PropertySearch } from "@/lib/propertySearch";
+import { getDeveloperTier, ELITE_PRIORITY_ORDER } from "@/utils/developerTier";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import ContinueSearching from "@/components/ContinueSearching";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
-import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const developersHeroVideo = developersHeroVideoAsset.url;
-
-// Developer tier classification for filtering
-const TIER_FILTERS = [
-  { value: "all", label: "All Tiers" },
-  { value: "elite", label: "Elite" },
-  { value: "premium", label: "Premium" },
-  { value: "top-tier", label: "Top Tier" },
-  { value: "established", label: "Established" },
-];
-
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "aldar", "omniyat", "dubai-properties", "dubai properties", "dubai-holding", "dubai holding"];
-const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select-group", "select group", "deyaar", "majid-al-futtaim", "majid al futtaim", "arada", "nshama", "wasl"];
-const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
-const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
-
-// Exact order for elite developers at the top of the directory
-const ELITE_PRIORITY_ORDER = [
-  'emaar', 'omniyat', 'nakheel', 'sobha', 'aldar', 
-  'ellington', 'damac', 'meraas', 'dubai-properties'
-];
-
-function getDeveloperTierKey(slug: string, name = "", rank?: number | null): string {
-  const normalized = `${slug} ${name}`.toLowerCase();
-  if (ELITE_DEVELOPERS.some(d => normalized.includes(d))) return "elite";
-  if (PREMIUM_DEVELOPERS.some(d => normalized.includes(d))) return "premium";
-  if (TOP_TIER_DEVELOPERS.some(d => normalized.includes(d))) return "top-tier";
-  if (ESTABLISHED_DEVELOPERS.some(d => normalized.includes(d))) return "established";
-  if (rank && rank > 0) {
-    if (rank <= 10) return "elite";
-    if (rank <= 30) return "premium";
-    if (rank <= 80) return "top-tier";
-  }
-  return "other";
-}
 
 const Developers = () => {
   const { data: developers, isLoading, refetch: refetchDevelopers } = useDevelopers();
   const { data: projectStats } = useDeveloperProjectStats();
   
   // Filter states
-  const [searchQuery, setSearchQuery] = useState("");
-  const [tierFilter, setTierFilter] = useState("all");
-  const [selectedDeveloper, setSelectedDeveloper] = useState("");
-  const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
+  const [search, setSearch] = useState<PropertySearch>(EMPTY_SEARCH);
+  
   const [currentPage, setCurrentPage] = useState(1);
-  const [advancedOpen, setAdvancedOpen] = useState(false);
-  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   // Multi-country geography cascade (Country → Emirate/City → Area)
-  const [geoFilters, setGeoFilters] = useState<GeoSearchFilters>(EMPTY_FILTERS);
   const ITEMS_PER_PAGE = 24;
 
-
-  // Developer names list for dropdown
-  const developerNames = useMemo(() => {
-    if (!developers) return [];
-    const sorted = [...developers].sort((a, b) => {
-      const aSlug = a.slug?.toLowerCase() || '';
-      const bSlug = b.slug?.toLowerCase() || '';
-      const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
-      const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
-      if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
-      if (aIdx >= 0) return -1;
-      if (bIdx >= 0) return 1;
-      return a.name.localeCompare(b.name);
-    });
-    return sorted.map(d => d.name);
-  }, [developers]);
 
   // Count projects per developer (precomputed by the lightweight stats query)
   const projectCounts = useMemo(() => projectStats?.counts ?? {}, [projectStats]);
@@ -112,85 +39,55 @@ const Developers = () => {
 
 
   // Apply filters to developers
+  
   const filteredDevelopers = useMemo(() => {
     if (!developers) return [];
     
     let filtered = [...developers];
 
-    // Geography cascade filter (Country → Emirate/City → Area).
-    // Matches against whatever location signal a developer record carries.
-    const geoTerms: string[] = [];
-    if (geoFilters.areas.length) {
-      geoTerms.push(
-        ...getAreas(geoFilters.country, geoFilters.region)
-          .filter((a) => geoFilters.areas.includes(a.slug))
-          .map((a) => a.name.toLowerCase()),
-      );
-    } else if (geoFilters.region) {
-      const r = getRegions(geoFilters.country).find((x) => x.slug === geoFilters.region);
-      if (r) geoTerms.push(r.name.toLowerCase());
-    } else if (geoFilters.country && geoFilters.country !== "uae") {
-      const c = getCountry(geoFilters.country);
-      if (c) geoTerms.push(c.name.toLowerCase());
+    // Search filter (name only for accuracy)
+    const q = (search.q || "").trim().toLowerCase();
+    if (q) {
+      filtered = filtered.filter(dev => dev.name.toLowerCase().includes(q));
     }
+
+    // Tier filter
+    if (search.developerTier) {
+      filtered = filtered.filter(dev => 
+        getDeveloperTier(dev.slug || "", dev.name || "", dev.rank) === search.developerTier
+      );
+    }
+
+    // Geography cascade filter
+    const geoTerms: string[] = [];
+    if (search.areasInclude.length) {
+      // Note: we might need to map slugs to names here if the dev record uses names
+      // but for now we follow the existing pattern.
+      geoTerms.push(...search.areasInclude.map(s => s.toLowerCase()));
+    } else if (search.region) {
+      geoTerms.push(search.region.toLowerCase());
+    }
+    
     if (geoTerms.length) {
       filtered = filtered.filter((dev) => {
         const rec = dev as unknown as Record<string, unknown>;
         const blob = [rec.city, rec.country, rec.headquarters, rec.location, rec.description, dev.name]
-
           .filter((v): v is string => typeof v === "string")
           .join(" ")
           .toLowerCase();
         return geoTerms.some((term) => blob.includes(term));
       });
     }
-
-    // Developer dropdown filter (local)
-    if (selectedDeveloper) {
-      filtered = filtered.filter(dev => dev.name === selectedDeveloper);
-    }
-
-
-    // Advanced filter: developer name filter from shared AdvancedFilterPanel
-    if (shortcutFilters.developers && shortcutFilters.developers.length > 0) {
-      filtered = filtered.filter(dev =>
-        shortcutFilters.developers.some(d => dev.name.toLowerCase().includes(d.toLowerCase()))
-      );
-    }
-    
-    // Search filter (local + advanced) - match name only for accuracy
-    const qLocal = searchQuery.trim().toLowerCase();
-    const qAdvanced = (shortcutFilters.searchQuery || '').trim().toLowerCase();
-    const q = qAdvanced || qLocal;
-    if (q) {
-      filtered = filtered.filter(dev => dev.name.toLowerCase().includes(q));
-      // Sort: name-starts-with first, then name-includes
-      filtered.sort((a, b) => {
-        const aName = a.name.toLowerCase();
-        const bName = b.name.toLowerCase();
-        const aStarts = aName.startsWith(q) ? 0 : 1;
-        const bStarts = bName.startsWith(q) ? 0 : 1;
-        if (aStarts !== bStarts) return aStarts - bStarts;
-        return aName.localeCompare(bName);
-      });
-    }
-    
-    // Tier filter
-    if (tierFilter !== "all") {
-      filtered = filtered.filter(dev => 
-        getDeveloperTierKey(dev.slug || "", dev.name || "", dev.rank) === tierFilter
-      );
-    }
     
     // Sort
-    if (sortBy === "alpha") {
+    if ((search.sort as string) === "alpha") {
       filtered.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === "most_projects") {
+    } else if ((search.sort as string) === "most_projects") {
       filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
     } else {
       filtered.sort((a, b) => {
-        const aSlug = a.slug?.toLowerCase() || '';
-        const bSlug = b.slug?.toLowerCase() || '';
+        const aSlug = a.slug?.toLowerCase() || "";
+        const bSlug = b.slug?.toLowerCase() || "";
         const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
         const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
         if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
@@ -205,12 +102,13 @@ const Developers = () => {
     }
     
     return filtered;
-  }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts, shortcutFilters.developers, shortcutFilters.searchQuery, geoFilters]);
+  }, [developers, search, search.sort, projectCounts]);
+
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, tierFilter, selectedDeveloper, sortBy, shortcutFilters, geoFilters]);
+  }, [search, search.sort]);
 
 
   const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
@@ -219,19 +117,10 @@ const Developers = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const activeFilterCount = [
-    searchQuery.trim(),
-    tierFilter !== "all",
-    selectedDeveloper,
-    shortcutFilters.developers.length > 0,
-    (shortcutFilters.searchQuery || '').trim(),
-  ].filter(Boolean).length;
+  const activeFilterCount = [search.q.trim(), search.developerTier, search.region, search.areasInclude.length].filter(Boolean).length;
 
   const clearFilters = () => {
-    setSearchQuery("");
-    setTierFilter("all");
-    setSelectedDeveloper("");
-    setShortcutFilters(defaultShortcutFilters);
+    setSearch(EMPTY_SEARCH);
   };
 
   return (
@@ -292,86 +181,36 @@ const Developers = () => {
           </motion.div>
         </section>
 
-        {/* Filters Section — sticky emerald rail (single instance, no portal duplication) */}
+        
+        {/* Unified Search Filter — sticky emerald rail */}
         <section
-          className="sticky top-[88px] z-40 pt-4 pb-4 border-y border-white/12 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.5)]"
+          className="sticky top-[88px] z-40 py-4 border-y border-white/12 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.5)]"
           style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
         >
-          <div className="w-full px-3 sm:px-4">
-            <div className="p-0">
-              {/* Multi-country geography cascade — Country → Emirate/City → Area */}
-              <GeoFilterBar
-                value={geoFilters}
-                onChange={setGeoFilters}
-                onSearch={(f) => {
-                  window.location.assign(`/properties?${filtersToParams(f).toString()}`);
-                }}
-                variant="dark"
-                className="mb-3"
-                searchLabel="View inventory"
-              />
-
-              <FilterShortcutBar
-                variant="dark"
-                filters={shortcutFilters}
-                onFilterChange={(f) => {
-                  setShortcutFilters(f);
-                  setSearchQuery(f.searchQuery || '');
-                  if (f.sortBy === 'alpha') setSortBy('alpha');
-                  else if (f.sortBy === 'most_projects') setSortBy('most_projects');
-                  else if (f.sortBy) setSortBy('default');
-                }}
-                priorityFilter="developers"
-                resultsCount={filteredDevelopers.length}
-                resultsLabel="Developers"
-              />
-
-              {/* Tier filter row */}
-              <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
-                <Select value={tierFilter} onValueChange={setTierFilter}>
-                  <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md hover:shadow-lg transition-none duration-0 [&>svg]:text-white">
-                    <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
-                    <span className="truncate text-left flex-1 text-white font-semibold">
-                      {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
-                    </span>
-                  </SelectTrigger>
-                  <SelectContent className="duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none">
-                    {TIER_FILTERS.map((tier) => (
-                      <SelectItem key={tier.value} value={tier.value}>
-                        {tier.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <div className="allow-white flex-1 text-white text-sm font-semibold" style={{ color: '#FFFFFF' }}>
-                  {filteredDevelopers.length.toLocaleString()} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
-                  {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
-                </div>
-
-                {activeFilterCount > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="allow-white h-9 px-3 bg-[#04241C] border-0 text-white hover:bg-[#064E3B] rounded-full flex items-center gap-1.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] [&_svg]:text-white"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                    Clear ({activeFilterCount})
-                  </Button>
-                )}
-              </div>
-            </div>
+          <div className="container mx-auto px-4">
+            <PropertySearchBar 
+              value={search}
+              onChange={setSearch}
+              onSubmit={setSearch}
+              dark={true}
+              showTiers={true}
+              showSort={true}
+              sortOptions={[
+                { slug: "default", label: "Recommended" },
+                { slug: "alpha", label: "Alphabetical" },
+                { slug: "most_projects", label: "Most Projects" },
+              ]}
+              countOverride={filteredDevelopers.length}
+              typewriterPhrases={[
+                "Search by developer name...",
+                "Emaar, Nakheel, DAMAC...",
+                "Elite UAE developers...",
+              ]}
+            />
           </div>
         </section>
 
-        {/* Advanced Filter Panel */}
-        <AdvancedFilterPanel
-          open={advancedOpen}
-          onOpenChange={setAdvancedOpen}
-          filters={shortcutFilters}
-          onFilterChange={setShortcutFilters}
-        />
+        
 
 
 

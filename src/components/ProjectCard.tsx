@@ -129,7 +129,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       });
   }, [images, priority, project.id, project.cover_image_url]);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
-  const [isPhotoHovered, setIsPhotoHovered] = useState(false);
   useEffect(() => {
     setPrimaryImageIndex(0);
   }, [project.id, primaryImageCandidates.join("|")]);
@@ -318,8 +317,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <div
             className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611] group/photo"
             data-surface="ink"
-            onMouseEnter={() => setIsPhotoHovered(true)}
-            onMouseLeave={() => setIsPhotoHovered(false)}
           >
           <VerifiedMedia
             src={primaryImageUrl}
@@ -345,7 +342,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Arrows are MOUNTED only while the photo is hovered. Opacity alone is
               not enough here: several global `opacity: 1 !important` guards win
               over inline styles, which made the arrows permanently visible. */}
-          {primaryImageCandidates.length > 1 && isPhotoHovered && (
+          {primaryImageCandidates.length > 1 && (
             <>
               <button
                 type="button"
@@ -357,8 +354,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i - 1 + primaryImageCandidates.length) % primaryImageCandidates.length);
                 }}
-                className="absolute left-2 z-20 flex items-center justify-center transition-opacity bg-transparent border-0 p-0"
-                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))", opacity: isPhotoHovered ? 1 : 0, pointerEvents: isPhotoHovered ? "auto" : "none" }}
+                className="absolute left-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center bg-transparent border-0 p-0 opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.72))" }}
               >
                 <ChevronLeft className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>
@@ -372,8 +369,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   e.stopPropagation();
                   setPrimaryImageIndex((i) => (i + 1) % primaryImageCandidates.length);
                 }}
-                className="absolute right-2 z-20 flex items-center justify-center transition-opacity bg-transparent border-0 p-0"
-                style={{ top: "50%", transform: "translateY(-50%)", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.55))", opacity: isPhotoHovered ? 1 : 0, pointerEvents: isPhotoHovered ? "auto" : "none" }}
+                className="absolute right-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center bg-transparent border-0 p-0 opacity-0 pointer-events-none group-hover/photo:opacity-100 group-hover/photo:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.72))" }}
               >
                 <ChevronRight className="w-7 h-7" style={{ color: '#D4AF6A', stroke: '#D4AF6A' }} strokeWidth={2.6} />
               </button>

@@ -178,6 +178,7 @@ export interface PropertySearch {
   areasExclude: string[];
   furnishing: "any" | "furnished" | "unfurnished";
   developer: string | null;
+  developerTier: string | null;
   labels: string[];
   sort: SortOption;
   view: ViewMode;
@@ -206,6 +207,7 @@ export const EMPTY_SEARCH: PropertySearch = {
   developer: null,
   labels: [],
   sort: "recommended",
+  developerTier: null,
   view: "grid",
   q: "",
 };
@@ -283,6 +285,7 @@ export function searchToParams(f: PropertySearch): URLSearchParams {
   if (f.furnishing !== "any") p.set("furnishing", f.furnishing);
   if (f.developer) p.set("developer", f.developer);
   if (f.labels.length) p.set("labels", f.labels.join(","));
+  if (f.developerTier) p.set("tier", f.developerTier);
   if (f.sort !== "recommended") p.set("sort", f.sort);
   if (f.view !== "grid") p.set("view", f.view);
   return p;
@@ -327,6 +330,7 @@ export function paramsToSearch(p: URLSearchParams): PropertySearch {
     country: p.get("country") ?? EMPTY_SEARCH.country,
     region: p.get("region"),
     areasInclude: list(p.get("areaSlugs")),
+    developerTier: p.get("tier"),
     areasExclude: list(p.get("excludeAreas")),
     furnishing:
       furnishRaw === "furnished" || furnishRaw === "unfurnished" ? furnishRaw : "any",
@@ -342,6 +346,7 @@ export function paramsToSearch(p: URLSearchParams): PropertySearch {
 /** Count of "extra" filters — drives the `More filters (n)` badge. */
 export function countExtraFilters(f: PropertySearch): number {
   let n = 0;
+  if (f.developerTier) n += 1;
   if (f.sizeMin != null || f.sizeMax != null) n += 1;
   if (f.completionTo) n += 1;
   if (f.payment !== "any") n += 1;
