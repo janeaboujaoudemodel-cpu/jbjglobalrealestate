@@ -1185,18 +1185,19 @@ export default function PublicAccess() {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-[#0d3a2b]/10 bg-[#FDFBF7]/95 backdrop-blur-md">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-          <a href="/access" className="flex items-center gap-2.5 min-w-0" aria-label="JBJ Global Real Estate">
+          <a href="/access" className="flex items-center gap-3 min-w-0" aria-label="JBJ Global Real Estate">
             <img
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt=""
-              width={48}
-              height={48}
-              className="h-12 w-12 object-contain shrink-0 sm:h-11 sm:w-11"
+              width={72}
+              height={72}
+              className="h-[58px] w-[58px] object-contain shrink-0 sm:h-[64px] sm:w-[64px]"
             />
             {/* Single premium line on every device; scales down instead of wrapping. */}
-            <span className="font-serif whitespace-nowrap text-[clamp(12px,3.6vw,18px)] leading-none tracking-[0.01em] text-[#0d3a2b]">
+            <span className="font-serif whitespace-nowrap text-[clamp(15px,4.4vw,24px)] leading-none tracking-[0.01em] text-[#0d3a2b]">
               JBJ Global Real Estate
             </span>
+
 
 
           </a>
@@ -1612,10 +1613,11 @@ export default function PublicAccess() {
 
       <footer className="border-t border-[#0d3a2b]/15 bg-[#F7F2EA] px-5 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-[#1A1A1A]/65 sm:flex-row">
-          <div className="flex items-center gap-3">
-            <JJLogoImage size="xs" showText={false} className="!items-start" />
-            <span className="font-serif text-base text-[#0d3a2b]">JBJ Global Real Estate</span>
+          <div className="flex items-center gap-4">
+            <JJLogoImage size="lg" showText={false} className="!items-start" />
+            <span className="font-serif text-2xl leading-tight text-[#0d3a2b] sm:text-3xl">JBJ Global Real Estate</span>
           </div>
+
           <p>© {new Date().getFullYear()} JBJ Global Real Estate. Dubai · UAE.</p>
         </div>
       </footer>
