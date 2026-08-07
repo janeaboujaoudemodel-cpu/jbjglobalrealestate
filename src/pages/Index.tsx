@@ -62,6 +62,7 @@ const MarketReportCTA = lazy(chunkImports.MarketReportCTA);
 const MortgageCalculator = lazy(chunkImports.MortgageCalculator);
 const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
+const InnovationLabSection = lazy(() => import("@/components/home/InnovationLabSection"));
 const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 const ModePortalBanner = lazy(() => import("@/components/home/ModePortalBanner"));
 const CTABand = lazy(() => import("@/components/home/CTABand"));
@@ -396,6 +397,16 @@ const Index = () => {
           </Suspense>
         </LazyVisible>
       </PremiumSectionCard>
+
+      {/* HOW WE BUILD — scroll-driven 3D assembly of the JBJ method */}
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto">
+        <LazyVisible minHeight={600}>
+          <Suspense fallback={<SectionLoader />}>
+            <InnovationLabSection />
+          </Suspense>
+        </LazyVisible>
+      </PremiumSectionCard>
+
 
       {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block. */}
       <div className="jj-fullbleed-band pt-6 md:pt-8" data-fullbleed-band>

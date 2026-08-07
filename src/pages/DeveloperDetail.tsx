@@ -25,6 +25,7 @@ import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
 import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
+import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
 import { buildPublicDeveloperFacts, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
@@ -650,6 +651,15 @@ const DeveloperDetail = () => {
                 )}
               </div>
             )}
+
+            {/* Plain-language explainer: who this developer is + portfolio link */}
+            <DeveloperAboutPanel
+              developer={developer as any}
+              projectCount={projects?.length || undefined}
+              className="mt-6 max-w-5xl"
+            />
+
+
 
             {/* Stats — icons + labels + values all on the same baseline
                 across every card (identical structure = perfect alignment). */}

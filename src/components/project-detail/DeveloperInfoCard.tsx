@@ -7,6 +7,7 @@ import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUti
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import DeveloperLogoUploader from "@/components/project-detail/owner/DeveloperLogoUploader";
+import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
 import { DeveloperLink } from "@/components/ui/developer-link";
 
 type PublicFieldKey =
@@ -279,19 +280,14 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               )}
 
 
-              {/* View Developer Button — compact balanced 2-line emerald pill */}
-              {developer.slug && (
-                <Link
-                  to={`/developer/${developer.slug}`}
-                  data-emerald-action="true"
-                  className="jj-emerald-action inline-flex max-w-[280px] items-center justify-center gap-2.5 rounded-xl text-[12px] font-semibold tracking-[0.02em] leading-[1.35] text-center px-5 py-4 min-h-[58px] transition-colors shadow-sm active:scale-[0.97] active:translate-y-[1px]"
-                >
-                  <span className="block whitespace-normal break-words [text-wrap:balance]">
-                    View All Projects<br />by {developer.name}
-                  </span>
-                  <ExternalLink strokeWidth={2.2} className="w-3.5 h-3.5 shrink-0" />
-                </Link>
-              )}
+              {/* Who is this developer + portfolio link */}
+              <DeveloperAboutPanel
+                developer={developer}
+                projectName={projectName}
+                projectCount={computedOffplanProjects ?? undefined}
+                className="max-w-4xl"
+              />
+
 
             </div>
           </div>
