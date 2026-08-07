@@ -278,8 +278,8 @@ export default function InnovationLabSection() {
                     animate={
                       assembled
                         ? {
-                            x: -165 + (i - 2) * 30,
-                            y: -85 + (i - 2) * -92 + (on ? -16 : 0),
+                            x: -168 + (i - 2) * 26,
+                            y: -80 + (i - 2) * -82 + (on ? -14 : 0),
                             scale: on ? 1.04 : 1,
                             opacity: on ? 1 : 0.85,
                           }
