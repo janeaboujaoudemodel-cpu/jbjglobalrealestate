@@ -1562,11 +1562,7 @@ export default function PublicAccess() {
                     <span className="relative z-[2] mt-auto flex w-full flex-col gap-2.5 pt-5">
                       <span
                         data-no-contrast-guard
-                        className={`inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[11.5px] font-bold uppercase tracking-[0.18em] transition ${
-                          light
-                            ? "[color:#FFFFFF!important] [-webkit-text-fill-color:#FFFFFF!important]"
-                            : "[color:#042c1c!important] [-webkit-text-fill-color:#042c1c!important]"
-                        }`}
+                        className="jj-pkg-cta jj-pkg-cta-primary inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[11.5px] font-bold uppercase tracking-[0.18em] transition"
                         style={
                           light
                             ? {
