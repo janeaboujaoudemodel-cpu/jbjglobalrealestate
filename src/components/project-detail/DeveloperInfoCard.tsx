@@ -7,6 +7,7 @@ import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUti
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import DeveloperLogoUploader from "@/components/project-detail/owner/DeveloperLogoUploader";
+import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
 import { DeveloperLink } from "@/components/ui/developer-link";
 
 type PublicFieldKey =
