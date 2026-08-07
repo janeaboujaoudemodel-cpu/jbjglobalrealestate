@@ -152,10 +152,14 @@ async function contrastAudit(page) {
 async function waitForPaintedPage(page) {
   await page.waitForFunction(() => {
     const root = document.querySelector('#root');
-    if (!root || !root.children.length || document.body.innerText.trim().length < 80) return false;
+    const main = document.querySelector('main');
+    if (!root || !root.children.length || !main || main.innerText.trim().length < 80) return false;
     const style = getComputedStyle(root);
-    const rect = root.getBoundingClientRect();
-    return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0' && rect.width > 300 && rect.height > 300;
+    const rootRect = root.getBoundingClientRect();
+    const mainRect = main.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0'
+      && rootRect.width > 300 && rootRect.height > 300
+      && mainRect.width > 300 && mainRect.height > 300;
   }, { timeout: 15000 });
 
   await page.evaluate(async () => {
@@ -183,9 +187,13 @@ async function captureNonBlank(page, outputPath) {
     const buffer = await page.screenshot({ path: outputPath, fullPage: false });
     const painted = await page.evaluate(() => {
       const root = document.querySelector('#root');
-      if (!root) return false;
-      const rect = root.getBoundingClientRect();
-      return rect.width > 300 && rect.height > 300 && document.body.innerText.trim().length >= 80;
+      const main = document.querySelector('main');
+      if (!root || !main) return false;
+      const rootRect = root.getBoundingClientRect();
+      const mainRect = main.getBoundingClientRect();
+      return rootRect.width > 300 && rootRect.height > 300
+        && mainRect.width > 300 && mainRect.height > 300
+        && main.innerText.trim().length >= 80;
     });
     if (painted && buffer.byteLength > 25_000) return;
     await sleep(750);
