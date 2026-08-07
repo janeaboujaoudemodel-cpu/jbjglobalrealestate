@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+
 import { Database, ShieldCheck, Brain, Handshake, KeyRound } from "lucide-react";
 
 type Layer = {
