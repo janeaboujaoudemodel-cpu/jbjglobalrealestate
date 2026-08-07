@@ -32,7 +32,7 @@ const AreasWeCover = () => {
       if (diff !== 0) return diff;
       return (b.property_count ?? 0) - (a.property_count ?? 0);
     })
-    .slice(0, 3)
+    .slice(0, 4)
     .map((a) => ({
       slug: a.slug,
       name: a.name,
@@ -63,7 +63,7 @@ const AreasWeCover = () => {
 
 
 
-          <CardGrid columns={3} className="relative">
+          <CardGrid columns={4} className="relative">
 
           {displayAreas.map((area) => (
             <Link

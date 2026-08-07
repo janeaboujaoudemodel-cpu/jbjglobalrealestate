@@ -38014,3 +38014,14 @@ html body :is(section, div):has(> .jj-content-track > .jj-card-grid) {
   z-index: 0;
 }
 .jj-light-metallic > * { position: relative; z-index: 1; }
+
+/* PASS 272 — Canonical card grid column count wins over the legacy
+   auto-fill fallback in @layer components (4-up areas rail). */
+@media (min-width: 1024px) {
+  html body .jj-card-grid.jj-card-grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  html body .jj-card-grid.jj-card-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
