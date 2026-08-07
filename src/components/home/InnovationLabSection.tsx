@@ -46,24 +46,24 @@ const LAYERS = [
 export default function InnovationLabSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const inView = useInView(sectionRef, { amount: 0.35 });
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.35 });
+  // Auto-assemble while the section is on screen; steps are also clickable.
+  useEffect(() => {
+    if (!inView) return;
+    const id = window.setInterval(() => {
+      setActive((prev) => (prev + 1) % LAYERS.length);
+    }, 3400);
+    return () => window.clearInterval(id);
+  }, [inView]);
 
-  useMotionValueEvent(progress, "change", (v) => {
-    const idx = Math.min(LAYERS.length - 1, Math.max(0, Math.floor(v * LAYERS.length + 0.0001)));
-    setActive(idx);
-  });
-
-  const stageRotate = useTransform(progress, [0, 1], [26, 12]);
-  const stageSpin = useTransform(progress, [0, 1], [-24, 14]);
+  const stageRotate = 22 - active * 2;
+  const stageSpin = -20 + active * 7;
 
   return (
-    <div ref={sectionRef} className="relative" style={{ height: `${LAYERS.length * 78}vh` }}>
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+    <div ref={sectionRef} className="relative py-14 md:py-20">
+      <div className="flex items-center">
+
         <div className="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] gap-8 lg:gap-12 items-center px-5 md:px-8">
           {/* Narrative */}
           <div className="order-2 lg:order-1 min-w-0">
