@@ -127,6 +127,7 @@ const LibraryHub = lazy(() => import("@/pages/Library"));
 const SuccessStories = lazy(() => import("@/pages/SuccessStories"));
 const Membership = lazy(() => import("@/pages/Membership"));
 const Academy = lazy(() => import("@/pages/Academy"));
+const __CertCheck = lazy(() => import("@/pages/__CertCheck"));
 const Agencies = lazy(() => import("@/pages/Agencies"));
 const CheckoutReturn = lazy(() => import("@/pages/CheckoutReturn"));
 
@@ -306,6 +307,7 @@ export const PublicRoutes = () => (
     <Route path="/library" element={<InsightsPageScope><LibraryHub /></InsightsPageScope>} />
     <Route path="/success-stories" element={<InsightsPageScope><SuccessStories /></InsightsPageScope>} />
     <Route path="/membership" element={<InsightsPageScope><Membership /></InsightsPageScope>} />
+    <Route path="/__certcheck" element={<__CertCheck />} />
     <Route path="/academy" element={<InsightsPageScope><Academy /></InsightsPageScope>} />
     <Route path="/agencies" element={<InsightsPageScope><Agencies /></InsightsPageScope>} />
     <Route path="/checkout/return" element={<CheckoutReturn />} />
