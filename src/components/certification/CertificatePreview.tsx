@@ -162,8 +162,9 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
             )}
             style={{
                 background:
-                  "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 42%, #EFE6D6 100%)",
+                  "linear-gradient(135deg, #FFFFFF 0%, #FFFDF8 55%, #FFFBF2 100%)",
             }}
+
           >
             {/* Subtle champagne fleck texture */}
             <div
