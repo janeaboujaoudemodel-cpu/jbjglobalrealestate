@@ -39,7 +39,7 @@ const TIER_FILTERS = [
   
   // Filter states
   const [search, setSearch] = useState<PropertySearch>(EMPTY_SEARCH);
-  const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
+  
   const [currentPage, setCurrentPage] = useState(1);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   // Multi-country geography cascade (Country → Emirate/City → Area)
@@ -114,9 +114,9 @@ const TIER_FILTERS = [
     }
     
     // Sort
-    if (sortBy === "alpha") {
+    if (search.sort === "alpha") {
       filtered.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === "most_projects") {
+    } else if (search.sort === "most_projects") {
       filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
     } else {
       filtered.sort((a, b) => {
@@ -136,13 +136,13 @@ const TIER_FILTERS = [
     }
     
     return filtered;
-  }, [developers, search, sortBy, projectCounts]);
+  }, [developers, search, search.sort, projectCounts]);
 
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, sortBy]);
+  }, [search, search.sort]);
 
 
   const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
@@ -224,80 +224,35 @@ const TIER_FILTERS = [
           </motion.div>
         </section>
 
-        {/* Filters Section — sticky emerald rail (single instance, no portal duplication) */}
+        
+        {/* Unified Search Filter — sticky emerald rail */}
         <section
-          className="sticky top-[88px] z-40 pt-4 pb-4 border-y border-white/12 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.5)]"
+          className="sticky top-[88px] z-40 py-4 border-y border-white/12 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.5)]"
           style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
         >
-          <div className="w-full px-3 sm:px-4">
-            <div className="p-0">
-              {/* Multi-country geography cascade — Country → Emirate/City → Area */}
-              <GeoFilterBar
-                value={geoFilters}
-                onChange={setGeoFilters}
-                onSearch={(f) => {
-                  window.location.assign(`/properties?${filtersToParams(f).toString()}`);
-                }}
-                variant="dark"
-                className="mb-3"
-                searchLabel="View inventory"
-              />
-
-              <FilterShortcutBar
-                variant="dark"
-                filters={shortcutFilters}
-                onFilterChange={(f) => {
-                  setShortcutFilters(f);
-                  setSearchQuery(f.searchQuery || '');
-                  if (f.sortBy === 'alpha') setSortBy('alpha');
-                  else if (f.sortBy === 'most_projects') setSortBy('most_projects');
-                  else if (f.sortBy) setSortBy('default');
-                }}
-                priorityFilter="developers"
-                resultsCount={filteredDevelopers.length}
-                resultsLabel="Developers"
-              />
-
-              {/* Tier filter row */}
-              <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
-                <Select value={tierFilter} onValueChange={setTierFilter}>
-                  <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md hover:shadow-lg transition-none duration-0 [&>svg]:text-white">
-                    <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
-                    <span className="truncate text-left flex-1 text-white font-semibold">
-                      {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
-                    </span>
-                  </SelectTrigger>
-                  <SelectContent className="duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none">
-                    {TIER_FILTERS.map((tier) => (
-                      <SelectItem key={tier.value} value={tier.value}>
-                        {tier.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <div className="allow-white flex-1 text-white text-sm font-semibold" style={{ color: '#FFFFFF' }}>
-                  {filteredDevelopers.length.toLocaleString()} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
-                  {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
-                </div>
-
-                {activeFilterCount > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="allow-white h-9 px-3 bg-[#04241C] border-0 text-white hover:bg-[#064E3B] rounded-full flex items-center gap-1.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] [&_svg]:text-white"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                    Clear ({activeFilterCount})
-                  </Button>
-                )}
-              </div>
-            </div>
+          <div className="container mx-auto px-4">
+            <PropertySearchBar 
+              value={search}
+              onChange={setSearch}
+              onSubmit={setSearch}
+              dark={true}
+              showTiers={true}
+              showSort={true}
+              sortOptions={[
+                { slug: "default", label: "Recommended" },
+                { slug: "alpha", label: "Alphabetical" },
+                { slug: "most_projects", label: "Most Projects" },
+              ]}
+              countOverride={filteredDevelopers.length}
+              typewriterPhrases={[
+                "Search by developer name...",
+                "Emaar, Nakheel, DAMAC...",
+                "Elite UAE developers...",
+              ]}
+            />
           </div>
         </section>
 
-        {/* Advanced Filter Panel */}
         <AdvancedFilterPanel
           open={advancedOpen}
           onOpenChange={setAdvancedOpen}

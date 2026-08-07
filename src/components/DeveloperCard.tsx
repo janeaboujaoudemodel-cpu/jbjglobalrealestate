@@ -6,6 +6,7 @@ import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
+import { getDeveloperTier, TIER_LABELS, DeveloperTier } from "@/utils/developerTier";
 import type { Developer } from "@/hooks/useProjects";
 import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan.jpg";
 
@@ -20,18 +21,6 @@ interface DeveloperCardProps {
 
 // Developer tier — every card gets a unified emerald metallic pill with pure
 // white text. No black-on-emerald, no missing badges, one readable style.
-const TIER_PILL = "jj-pill-emerald-metallic allow-white text-white border-0";
-const TIER_CONFIG: Record<string, { label: string; color: string }> = {
-  ELITE:       { label: "ELITE",       color: TIER_PILL },
-  PREMIUM:     { label: "PREMIUM",     color: TIER_PILL },
-  TOP_TIER:    { label: "TOP TIER",    color: TIER_PILL },
-  ESTABLISHED: { label: "ESTABLISHED", color: TIER_PILL },
-};
-
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat", "aldar", "dubai-properties", "dubai properties", "dubai-holding", "dubai holding"];
-const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select-group", "select group", "deyaar", "majid-al-futtaim", "majid al futtaim", "arada", "nshama", "wasl"];
-const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
-const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
 
 // Curated signature-project / master-plan photography per developer.
 // Every major UAE developer has a distinct, real, aerial-or-signature
@@ -84,20 +73,6 @@ function getDeveloperTier(slug: string, name = "", rank?: number | null): { labe
     if (rank <= 30) return TIER_CONFIG.PREMIUM;
     if (rank <= 80) return TIER_CONFIG.TOP_TIER;
   }
-  // No generic "PARTNER" label — leave badgeless rather than mislabel.
-  return null;
-}
-
-
-/**
- * Reelly-style developer card.
- *
- * LOCKED layout (see mem://features/ui/developer-logo-standard-v8-locked):
- *  - Uniform-size rounded card with emerald-black content footer.
- *  - Top half = white logo plate, full-fit `object-contain`, no cropping,
- *    no project / feature photos. Logo IS the hero of the card.
- *  - Bottom half = developer name + 1-line description + stats row.
- *  - Hover = subtle lift + soft glow only. No color flips.
  */
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }: DeveloperCardProps) => {
   const tier = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
