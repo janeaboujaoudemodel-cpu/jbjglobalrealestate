@@ -80,9 +80,9 @@ const Developers = () => {
     }
     
     // Sort
-    if (search.sort === "alpha") {
+    if ((search.sort as string) === "alpha") {
       filtered.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (search.sort === "most_projects") {
+    } else if ((search.sort as string) === "most_projects") {
       filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
     } else {
       filtered.sort((a, b) => {

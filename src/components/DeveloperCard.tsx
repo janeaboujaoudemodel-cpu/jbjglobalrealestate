@@ -66,28 +66,16 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
                 />
               </div>
             </>
-          ) : override.forceNameplate ? (
-            <span className="text-[#1A1A1A] font-bold text-2xl md:text-3xl tracking-tight text-center px-2">
-              {developer.name}
-            </span>
-          ) : logoValid ? (
-            <img
-              src={developer.logo_url}
-              alt={`${developer.name} logo`}
-              loading={isEager ? "eager" : "lazy"}
-              referrerPolicy="no-referrer"
-              decoding="async"
-              className="block max-h-[70%] max-w-[80%] w-auto h-auto object-contain"
-              style={{
-                filter: override.invert ? "invert(1) brightness(1)" : "contrast(1.08) saturate(1.1)",
-              }}
-            />
           ) : (
-            <div className="flex items-center justify-center px-4">
-              <span className="text-[#1A1A1A] text-xl font-serif font-bold tracking-normal text-center line-clamp-2 max-w-[260px]">
-                {developer.name}
-              </span>
-            </div>
+            <DeveloperLogo
+              variant="card"
+              src={logoValid ? developer.logo_url : null}
+              name={developer.name}
+              alt={`${developer.name} logo`}
+              websiteUrl={developer.website_url}
+              loading={isEager ? "eager" : "lazy"}
+              className="!rounded-none !border-0 !shadow-none"
+            />
           )}
 
           {/* Tier Badge — unified emerald metallic pill, white text, always present */}

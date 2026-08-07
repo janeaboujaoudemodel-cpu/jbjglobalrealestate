@@ -156,7 +156,6 @@ export const labelDef = (slug: string) => LISTING_LABELS.find((l) => l.slug === 
 
 /* -------------------------------------------------------------------- model */
 
-  developerTier: string | null;
 export interface PropertySearch {
   purpose: Purpose;
   statuses: ProjectStatus[];
@@ -179,6 +178,7 @@ export interface PropertySearch {
   areasExclude: string[];
   furnishing: "any" | "furnished" | "unfurnished";
   developer: string | null;
+  developerTier: string | null;
   labels: string[];
   sort: SortOption;
   view: ViewMode;
