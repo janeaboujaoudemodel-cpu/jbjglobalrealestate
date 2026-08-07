@@ -158,7 +158,9 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
   useEffect(() => {
     if (total < 2) return;
     const toPreload = new Set<number>();
-    for (let offset = -2; offset <= 2; offset++) {
+    // One neighbour in each direction is enough for instant navigation and
+    // avoids downloading four full-resolution photographs per click.
+    for (let offset = -1; offset <= 1; offset++) {
       if (offset === 0) continue;
       toPreload.add((pageIndex + offset + total) % total);
     }
