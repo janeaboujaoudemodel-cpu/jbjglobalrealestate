@@ -69,7 +69,8 @@ const makeFilename = (filename?: string) => {
 const findLivePreviewRoot = () => null as HTMLElement | null;
 
 const addCanvasPageToPdf = (
-  pdf: jsPDF,
+  pdf: import("jspdf").jsPDF,
+
   sourceCanvas: HTMLCanvasElement,
   sourceY: number,
   pageIndex: number
