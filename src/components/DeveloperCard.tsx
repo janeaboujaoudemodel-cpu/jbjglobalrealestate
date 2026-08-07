@@ -73,7 +73,24 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                   project photo is used as the card hero. It always rides on the
                   photo as a plate, with automatic light/dark plate contrast. */}
             </>
-          ) : null}
+          ) : (
+            /* No verified project photograph available: never leave the hero
+               blank. Fill it with the brand emerald ombre and the developer's
+               own logo/wordmark so the card always reads as branded. */
+            <div className="absolute inset-0 flex items-center justify-center bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] px-6">
+              <DeveloperLogo
+                variant="bare"
+                src={developer.logo_url}
+                name={developer.name}
+                alt={`${developer.name} logo`}
+                websiteUrl={(developer as { website_url?: string | null }).website_url}
+                loading={isEager ? "eager" : "lazy"}
+                embedded
+                className="!h-16 !w-auto !max-w-[70%] !border-0 !bg-transparent !shadow-none !p-0"
+              />
+            </div>
+          )}
+
 
           {/* Tier Badge — unified emerald metallic pill, white text, always present */}
           {tierKey !== "other" && (
@@ -107,7 +124,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         </div>
 
         {/* Content section — white surface with black text & icons */}
-        <div className="flex-1 px-4 pb-4 pt-10 bg-white flex flex-col">
+        <div className={`flex-1 px-4 pb-4 bg-white flex flex-col ${hasHero ? "pt-10" : "pt-4"}`}>
           <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 line-clamp-1">
             {developer.name}
           </h3>
