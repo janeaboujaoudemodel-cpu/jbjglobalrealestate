@@ -69,10 +69,8 @@ export default function DeveloperAboutPanel({
         boxShadow: "0 10px 32px rgba(184,149,85,0.16), inset 0 1px 2px rgba(255,255,255,0.42)",
       }}
     >
-      <h3 className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#064E3B]">
-        Who is this developer?
-      </h3>
-      <p className="mt-2 text-[#1A1A1A]/80 text-sm md:text-base leading-relaxed max-w-4xl">
+      <p className="text-[#1A1A1A]/80 text-sm md:text-base leading-relaxed max-w-4xl">
+
         {explainer}
       </p>
 
