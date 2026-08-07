@@ -37988,30 +37988,30 @@ html body :is(section, div):has(> .jj-content-track > .jj-card-grid) {
    PASS 271 — Package chooser CTA pills (Get quotation / Explore more)
    Equal 44px pills across all three cards, ink locked per surface.
    ========================================================================== */
-html body [data-package-chooser-card] .jj-pkg-cta,
-html body [data-package-chooser-card] .jj-pkg-cta * {
+html body #root [data-package-chooser-card][data-package-chooser-card] .jj-pkg-cta,
+html body #root [data-package-chooser-card][data-package-chooser-card] .jj-pkg-cta * {
   -webkit-text-fill-color: currentColor !important;
 }
-html body [data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-primary,
-html body [data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-primary * {
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-primary,
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-primary * {
   color: #042c1c !important;
   -webkit-text-fill-color: #042c1c !important;
   stroke: #042c1c !important;
 }
-html body [data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-secondary,
-html body [data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-secondary * {
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-secondary,
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="emerald"] .jj-pkg-cta-secondary * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-html body [data-package-chooser-card][data-surface="light"] .jj-pkg-cta-primary,
-html body [data-package-chooser-card][data-surface="light"] .jj-pkg-cta-primary * {
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="light"] .jj-pkg-cta-primary,
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="light"] .jj-pkg-cta-primary * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-html body [data-package-chooser-card][data-surface="light"] .jj-pkg-cta-secondary,
-html body [data-package-chooser-card][data-surface="light"] .jj-pkg-cta-secondary * {
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="light"] .jj-pkg-cta-secondary,
+html body #root [data-package-chooser-card][data-package-chooser-card][data-surface="light"] .jj-pkg-cta-secondary * {
   color: #0d2a20 !important;
   -webkit-text-fill-color: #0d2a20 !important;
   stroke: #0d2a20 !important;
