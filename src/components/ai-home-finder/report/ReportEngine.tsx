@@ -18,11 +18,6 @@ import type { ReportBranding } from "../ReportPreviewModal";
 const ReportModeContext = React.createContext<"preview" | "pdf">("preview");
 
 
-const APP_ASSET_URLS = import.meta.glob("../../../assets/**/*.{png,jpg,jpeg,webp,avif,gif,svg}", {
-  eager: true,
-  import: "default",
-}) as Record<string, string>;
-
 export interface ReportProject {
   id: string;
   slug?: string;
@@ -120,12 +115,10 @@ function resolveReportAsset(src?: string | null): string | undefined {
   const resolved = unwrapNextImageProxy(src.trim());
   if (!resolved) return undefined;
   if (resolved.startsWith("/src/assets/")) {
-    const key = "../../../assets" + resolved.slice("/src/assets".length);
-    return APP_ASSET_URLS[key] ?? resolved;
+    return resolved;
   }
   if (resolved.startsWith("src/assets/")) {
-    const key = "../../../assets" + resolved.slice("src/assets".length);
-    return APP_ASSET_URLS[key] ?? resolved;
+    return `/${resolved}`;
   }
   if (/^https?:\/\//i.test(resolved)) {
     const proxied = proxyAnyDownloadUrl(resolved, { disposition: "inline" });

@@ -9,11 +9,6 @@ type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   loggerContext?: Record<string, unknown>;
 };
 
-const APP_ASSET_URLS = import.meta.glob(
-  "../assets/**/*.{png,jpg,jpeg,webp,avif,gif,svg}",
-  { eager: true, import: "default" }
-) as Record<string, string>;
-
 /** Unwrap /_next/image proxy URLs to extract the original image URL */
 function unwrapNextImageProxy(src: string): string {
   if (src.includes("/_next/image")) {
@@ -36,16 +31,14 @@ function resolveAppAssetUrl(src?: string): string | undefined {
   // Unwrap /_next/image proxy URLs
   let resolved = unwrapNextImageProxy(src);
 
-  // Database currently stores some images as "/src/assets/..." which is not a public URL.
-  // Convert those paths into bundled asset URLs via Vite's import.meta.glob.
+  // Keep legacy source paths intact. A global eager asset glob made every page
+  // enumerate and bundle the entire media library before its route could paint.
   if (resolved.startsWith("/src/assets/")) {
-    const key = "../assets" + resolved.slice("/src/assets".length);
-    return APP_ASSET_URLS[key] ?? resolved;
+    return resolved;
   }
 
   if (resolved.startsWith("src/assets/")) {
-    const key = "../assets" + resolved.slice("src/assets".length);
-    return APP_ASSET_URLS[key] ?? resolved;
+    return `/${resolved}`;
   }
 
   return resolved;

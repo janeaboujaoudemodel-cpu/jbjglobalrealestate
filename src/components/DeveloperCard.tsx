@@ -71,7 +71,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               {/* LOCKED: the developer logo is never dropped when a signature
                   project photo is used as the card hero. It always rides on the
                   photo as a plate, with automatic light/dark plate contrast. */}
-              <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 rounded-xl p-1.5 jj-cta-gold-metallic jj-developer-logo-metallic">
+              <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 rounded-xl border border-[#B89555] bg-white p-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.18)]">
                 <DeveloperLogo
                   variant="bare"
                   src={developer.logo_url}
@@ -79,7 +79,6 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                   alt={`${developer.name} logo`}
                   websiteUrl={(developer as { website_url?: string | null }).website_url}
                   loading={isEager ? "eager" : "lazy"}
-                  data-keep-gold
                   className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1"
                 />
               </div>

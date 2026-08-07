@@ -194,8 +194,8 @@ export default function RecommendedDevelopers({
                     <RecommendedDeveloperPhoto urls={cardImages} name={dev.name} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                     {dev.logo_url ? (
-                      <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 jj-cta-gold-metallic jj-developer-logo-metallic rounded-xl p-1.5">
-                        <DeveloperLogo src={dev.logo_url} name={dev.name} alt={`${dev.name} logo`} variant="bare" data-keep-gold className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1" />
+                      <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 rounded-xl border border-[#B89555] bg-white p-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.18)]">
+                        <DeveloperLogo src={dev.logo_url} name={dev.name} alt={`${dev.name} logo`} variant="bare" className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1" />
                       </div>
                     ) : null}
                   </div>
