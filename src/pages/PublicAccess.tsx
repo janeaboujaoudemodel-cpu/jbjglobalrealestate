@@ -1508,7 +1508,7 @@ export default function PublicAccess() {
                     data-no-contrast-guard
                     data-package-chooser-card
 
-                    className={`${light ? "" : "jj-emerald-metallic jj-ready-cta-metallic allow-white"} flex h-full min-h-[420px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[460px] ${
+                    className={`${light ? "jj-light-metallic" : "jj-emerald-metallic jj-ready-cta-metallic allow-white"} flex h-full min-h-[420px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[460px] ${
                       active
                         ? light
                           ? "ring-1 ring-[#0d3a2b]/35"
