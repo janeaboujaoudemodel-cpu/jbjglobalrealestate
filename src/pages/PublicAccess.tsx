@@ -1561,34 +1561,26 @@ export default function PublicAccess() {
 
                     <span className="relative z-[2] mt-auto flex w-full flex-col gap-2.5 pt-5">
                       <span
-                        data-no-contrast-guard
                         className="jj-pkg-cta jj-pkg-cta-primary inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[11.5px] font-bold uppercase tracking-[0.18em] transition"
-                        style={
-                          light
-                            ? {
-                                background: "linear-gradient(180deg,#0d3a2b 0%,#042c1c 60%,#000000 100%)",
-                                border: "1px solid rgba(13,58,43,0.35)",
-                              }
-                            : {
-                                background: "#FFFFFF",
-                                border: "1px solid rgba(255,255,255,0.9)",
-                              }
-                        }
+                        style={{
+                          background: light ? "rgba(13,58,43,0.10)" : "rgba(255,255,255,0.18)",
+                          border: light ? "1.5px solid rgba(13,58,43,0.55)" : "1.5px solid rgba(255,255,255,0.85)",
+                        }}
                       >
                         {cta}
                       </span>
                       <span
-                        data-no-contrast-guard
                         className="jj-pkg-cta jj-pkg-cta-secondary inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[11.5px] font-bold uppercase tracking-[0.18em] transition"
                         style={{
-                          border: light ? "1px solid rgba(13,58,43,0.3)" : "1px solid rgba(255,255,255,0.5)",
-                          background: light ? "rgba(13,58,43,0.04)" : "rgba(255,255,255,0.10)",
+                          background: "transparent",
+                          border: light ? "1px solid rgba(13,58,43,0.28)" : "1px solid rgba(255,255,255,0.4)",
                         }}
                       >
                         {active ? "Hide packages" : "Explore more"}
                         <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} style={{ stroke: ink }} />
                       </span>
                     </span>
+
 
 
                   </button>
