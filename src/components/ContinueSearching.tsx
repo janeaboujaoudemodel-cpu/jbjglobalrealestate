@@ -141,6 +141,30 @@ const ContinueSearching = ({
   const hasUserHistory = uniqueItems.length > 0;
   const displayItems = hasUserHistory ? uniqueItems.slice(0, limit) : popularProjects;
 
+  useEffect(() => {
+    const slugs = displayItems.filter((item) => item.type === "property").map((item) => item.slug);
+    if (!slugs.length) return;
+    let cancelled = false;
+    supabase
+      .from("projects")
+      .select("slug, cover_image_url, card_image_url, gallery_start_image_url, developer_name, developer:developers(name, logo_url)")
+      .in("slug", slugs)
+      .then(({ data }) => {
+        if (cancelled) return;
+        for (const project of data ?? []) {
+          const current = displayItems.find((item) => item.type === "property" && item.slug === project.slug);
+          if (!current) continue;
+          const developer = Array.isArray(project.developer) ? project.developer[0] : project.developer;
+          patchItem(current.id, "property", {
+            imageUrl: project.card_image_url || project.gallery_start_image_url || project.cover_image_url || current.imageUrl,
+            subtitle: developer?.name || project.developer_name || current.subtitle,
+            developerLogo: developer?.logo_url || current.developerLogo,
+          });
+        }
+      });
+    return () => { cancelled = true; };
+  }, [displayItems.map((item) => `${item.type}:${item.slug}`).join("|"), patchItem]);
+
   const sectionTitle = hasUserHistory
     ? (title || (type === "area" ? "Recently Viewed Areas & Communities" : t("home.continueSearching", "Continue Searching for Your Dream Property")))
     : "Trending Projects in Dubai";
@@ -463,17 +487,19 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
         {/* Image / fallback */}
         {hasValidImage ? (
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-            style={{ backgroundImage: `url(${item.imageUrl})` }}
-          >
-            <img 
-              src={item.imageUrl} 
-              className="sr-only" 
-              alt="" 
-              onError={() => setImgBroken(true)} 
-            />
-          </div>
+          <img
+            src={item.imageUrl}
+            alt={item.name}
+            loading={index < 6 ? "eager" : "lazy"}
+            decoding="async"
+            data-no-fallback
+            className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.035]"
+            onError={() => {
+              setImgBroken(true);
+              fetchAttempted.current = false;
+              fetchCoverImage();
+            }}
+          />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
             <Icon className="w-12 h-12 text-white" />
@@ -504,6 +530,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
               className=""
               onError={() => setLogoError(true)}
             />
+          </div>
         ) : (
           item.type === "property" && item.subtitle && !item.subtitle.includes(",") && (
             <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>

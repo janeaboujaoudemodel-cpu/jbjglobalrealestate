@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
+
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
@@ -155,8 +155,8 @@ const TIER_FILTERS = [
     searchQuery.trim(),
     tierFilter !== "all",
     selectedDeveloper,
-    shortcutFilters.developers.length > 0,
-    (shortcutFilters.searchQuery || '').trim(),
+    search.developers.length > 0,
+    (search.searchQuery || '').trim(),
   ].filter(Boolean).length;
 
   const clearFilters = () => {
@@ -253,12 +253,7 @@ const TIER_FILTERS = [
           </div>
         </section>
 
-        <AdvancedFilterPanel
-          open={advancedOpen}
-          onOpenChange={setAdvancedOpen}
-          filters={shortcutFilters}
-          onFilterChange={setShortcutFilters}
-        />
+        
 
 
 

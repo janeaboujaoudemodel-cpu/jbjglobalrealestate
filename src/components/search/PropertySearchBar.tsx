@@ -9,9 +9,9 @@
  * Colour contract: emerald is ALWAYS the pair gradient
  * (#064E3B → #042c1c → #000) — never flat #064E3B alone.
  */
-import { getDeveloperTier, TIER_LABELS, DeveloperTier } from "@/utils/developerTier";
+import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, ChevronDown, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Crown, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -388,8 +388,6 @@ export default function PropertySearchBar({
           />
         </div>
 
-        <div
-          className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
         {showTiers && (
           <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3">
             <Seg
@@ -421,6 +419,8 @@ export default function PropertySearchBar({
             </Seg>
           </div>
         )}
+        <div
+          className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
           data-search-utility-controls
           data-surface={dark ? "dark" : "light"}
           style={{
@@ -440,37 +440,6 @@ export default function PropertySearchBar({
         >
           <div
             className="order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg"
-        {showTiers && (
-          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3">
-            <Seg
-              label={f.developerTier ? (TIER_LABELS[f.developerTier as DeveloperTier] || "Tier") : "All Tiers"}
-              active={!!f.developerTier}
-              icon={<Crown className="w-4 h-4" />}
-              dark={dark}
-              spanClass="w-full border-0 rounded-none h-full"
-            >
-              <div className="p-2 grid grid-cols-1 gap-1">
-                <button
-                  onClick={() => set({ developerTier: null })}
-                  className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-[#F2EBDC] transition-colors"
-                  style={{ background: !f.developerTier ? "#F2EBDC" : "transparent" }}
-                >
-                  All Tiers
-                </button>
-                {Object.entries(TIER_LABELS).map(([value, label]) => (
-                  <button
-                    key={value}
-                    onClick={() => set({ developerTier: value })}
-                    className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-[#F2EBDC] transition-colors"
-                    style={{ background: f.developerTier === value ? "#F2EBDC" : "transparent" }}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </Seg>
-          </div>
-        )}
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
