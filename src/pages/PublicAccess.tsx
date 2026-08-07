@@ -1185,18 +1185,19 @@ export default function PublicAccess() {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-[#0d3a2b]/10 bg-[#FDFBF7]/95 backdrop-blur-md">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-          <a href="/access" className="flex items-center gap-2.5 min-w-0" aria-label="JBJ Global Real Estate">
+          <a href="/access" className="flex items-center gap-3 min-w-0" aria-label="JBJ Global Real Estate">
             <img
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt=""
-              width={48}
-              height={48}
-              className="h-12 w-12 object-contain shrink-0 sm:h-11 sm:w-11"
+              width={72}
+              height={72}
+              className="h-[58px] w-[58px] object-contain shrink-0 sm:h-[64px] sm:w-[64px]"
             />
             {/* Single premium line on every device; scales down instead of wrapping. */}
-            <span className="font-serif whitespace-nowrap text-[clamp(12px,3.6vw,18px)] leading-none tracking-[0.01em] text-[#0d3a2b]">
+            <span className="font-serif whitespace-nowrap text-[clamp(15px,4.4vw,24px)] leading-none tracking-[0.01em] text-[#0d3a2b]">
               JBJ Global Real Estate
             </span>
+
 
 
           </a>
@@ -1485,40 +1486,71 @@ export default function PublicAccess() {
                 },
               ]).map(({ key, icon: Icon, label, cta, blurb, points }) => {
                 const active = selectedAudience === key;
+                /* The middle (Brokers) card is a white → pale-emerald ombré with
+                   black ink, so it reads as the centrepiece against the two
+                   emerald cards without breaking contrast. */
+                const light = key === "broker";
+                const ink = light ? "#0d2a20" : "#FFFFFF";
+                const inkSoft = light ? "rgba(13,42,32,0.82)" : "rgba(255,255,255,0.9)";
                 return (
                   <button
                     key={key}
                     type="button"
                     onClick={() => setSelectedAudience(active ? null : key)}
                     aria-expanded={active}
-                    data-surface="emerald"
-                    data-emerald="true"
-                    data-emerald-ok="button"
+                    data-surface={light ? "light" : "emerald"}
+                    data-emerald={light ? undefined : "true"}
+                    data-emerald-ok={light ? undefined : "button"}
                     data-allow-dark-cta
                     data-no-contrast-guard
                     data-package-chooser-card
 
-                    className={`jj-emerald-metallic jj-ready-cta-metallic allow-white flex h-full min-h-[420px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[460px] ${
-                      active ? "ring-1 ring-white/45" : "hover:-translate-y-0.5 hover:brightness-110"
+                    className={`${light ? "" : "jj-emerald-metallic jj-ready-cta-metallic allow-white"} flex h-full min-h-[420px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[460px] ${
+                      active
+                        ? light
+                          ? "ring-1 ring-[#0d3a2b]/35"
+                          : "ring-1 ring-white/45"
+                        : "hover:-translate-y-0.5 hover:brightness-[1.03]"
                     }`}
-                    style={{ color: "#FFFFFF", minHeight: 440 }}
+                    style={{
+                      color: ink,
+                      minHeight: 440,
+                      ...(light
+                        ? {
+                            backgroundImage:
+                              "linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 46%, #F4FAF7 72%, #E3F1EB 100%)",
+                            border: "1px solid rgba(13,58,43,0.16)",
+                            boxShadow: "0 18px 44px -30px rgba(6,78,59,0.45)",
+                          }
+                        : {}),
+                    }}
                   >
-                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/30 bg-white/10">
-                      <Icon className="h-6 w-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span
+                      className="inline-flex h-14 w-14 items-center justify-center rounded-xl"
+                      style={
+                        light
+                          ? { border: "1px solid rgba(13,58,43,0.22)", background: "rgba(13,58,43,0.06)" }
+                          : { border: "1px solid rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.1)" }
+                      }
+                    >
+                      <Icon className="h-6 w-6" style={{ color: ink, stroke: ink }} />
                     </span>
-                    <span className="font-serif text-3xl" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    <span className="font-serif text-3xl" style={{ color: ink, WebkitTextFillColor: ink }}>
                       {label}
                     </span>
-                    <span className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
+                    <span className="text-sm leading-relaxed" style={{ color: inkSoft, WebkitTextFillColor: inkSoft }}>
                       {blurb}
                     </span>
 
-                    <span className="h-px w-full" style={{ background: "rgba(255,255,255,0.22)" }} />
+                    <span
+                      className="h-px w-full"
+                      style={{ background: light ? "rgba(13,58,43,0.18)" : "rgba(255,255,255,0.22)" }}
+                    />
 
                     <span className="flex w-full flex-col gap-2.5">
                       {points.map((p) => (
-                        <span key={p} className="flex items-start gap-2.5 text-[12.5px] leading-snug" style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)" }}>
-                          <CheckCircle2 className="mt-[2px] h-3.5 w-3.5 shrink-0" style={{ stroke: "#FFFFFF" }} />
+                        <span key={p} className="flex items-start gap-2.5 text-[12.5px] leading-snug" style={{ color: inkSoft, WebkitTextFillColor: inkSoft }}>
+                          <CheckCircle2 className="mt-[2px] h-3.5 w-3.5 shrink-0" style={{ stroke: ink }} />
                           <span>{p}</span>
                         </span>
                       ))}
@@ -1529,20 +1561,21 @@ export default function PublicAccess() {
                     >
                       <span
                         className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                        style={{ color: ink, WebkitTextFillColor: ink }}
                       >
                         {cta}
                       </span>
                       <span
                         className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.18em]"
-                        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                        style={{ color: ink, WebkitTextFillColor: ink }}
                       >
                         {active ? "Hide packages" : "Explore more"}
-                        <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} style={{ stroke: "#FFFFFF" }} />
+                        <ArrowRight className={`h-3.5 w-3.5 transition ${active ? "rotate-90" : ""}`} style={{ stroke: ink }} />
                       </span>
                     </span>
                   </button>
                 );
+
               })}
             </div>
           </div>
@@ -1612,10 +1645,11 @@ export default function PublicAccess() {
 
       <footer className="border-t border-[#0d3a2b]/15 bg-[#F7F2EA] px-5 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-[#1A1A1A]/65 sm:flex-row">
-          <div className="flex items-center gap-3">
-            <JJLogoImage size="xs" showText={false} className="!items-start" />
-            <span className="font-serif text-base text-[#0d3a2b]">JBJ Global Real Estate</span>
+          <div className="flex items-center gap-4">
+            <JJLogoImage size="lg" showText={false} className="!items-start" />
+            <span className="font-serif text-2xl leading-tight text-[#0d3a2b] sm:text-3xl">JBJ Global Real Estate</span>
           </div>
+
           <p>© {new Date().getFullYear()} JBJ Global Real Estate. Dubai · UAE.</p>
         </div>
       </footer>
