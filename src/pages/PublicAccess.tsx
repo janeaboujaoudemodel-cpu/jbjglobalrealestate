@@ -1579,11 +1579,7 @@ export default function PublicAccess() {
                       </span>
                       <span
                         data-no-contrast-guard
-                        className={`inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[11.5px] font-bold uppercase tracking-[0.18em] transition ${
-                          light
-                            ? "[color:#0d2a20!important] [-webkit-text-fill-color:#0d2a20!important]"
-                            : "[color:#FFFFFF!important] [-webkit-text-fill-color:#FFFFFF!important]"
-                        }`}
+                        className="jj-pkg-cta jj-pkg-cta-secondary inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[11.5px] font-bold uppercase tracking-[0.18em] transition"
                         style={{
                           border: light ? "1px solid rgba(13,58,43,0.3)" : "1px solid rgba(255,255,255,0.5)",
                           background: light ? "rgba(13,58,43,0.04)" : "rgba(255,255,255,0.10)",
