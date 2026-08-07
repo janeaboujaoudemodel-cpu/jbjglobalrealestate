@@ -21,6 +21,7 @@ interface DeveloperCardProps {
 const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
   omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6528eba69ec9911fdda1b151_omniyat-share-image.webp",
   nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
+  "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
 };
 
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
