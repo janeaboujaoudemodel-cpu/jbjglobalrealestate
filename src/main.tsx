@@ -1,20 +1,6 @@
 import { StrictMode } from"react";
 import { createRoot } from"react-dom/client";
 import App from"./App";
-// REFPROBE
-import * as ReactNS from "react";
-{
-  const R:any = ReactNS as any;
-  const orig = R.createElement;
-  R.createElement = function(type:any, props:any, ...kids:any[]) {
-    try {
-      if (props && props.ref != null && typeof type === "function" && !type.prototype?.isReactComponent) {
-        console.warn("REFPROBE offender:", type.displayName || type.name || String(type));
-      }
-    } catch {}
-    return orig(type, props, ...kids);
-  };
-}
 
 import"./styles/theme-tokens.css";
 import"./index.css";
