@@ -1,5 +1,7 @@
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+// html2canvas + jsPDF are imported lazily inside the export helpers so they
+// never enter the first-paint module graph of pages that merely render the
+// export bar (they added seconds to initial load).
+
 
 export type ExportFormat = "pdf" | "png" | "jpg" | "pptx";
 export type ExportTheme = "white" | "emerald";
