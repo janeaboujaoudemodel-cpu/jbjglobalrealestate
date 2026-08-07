@@ -256,7 +256,7 @@ export default function InnovationLabSection() {
                 <motion.article
                   key={stage.index}
                   data-ink-emerald="true"
-                  className="absolute left-1/2 top-1/2 flex flex-col justify-between overflow-hidden rounded-2xl border p-6 md:p-8"
+                  className="absolute left-1/2 top-1/2 flex flex-col justify-between overflow-hidden rounded-2xl border p-6 [&_h3]:!text-white [&_p]:!text-white [&_span]:!text-white md:p-8"
                   style={{
                     height: "78%",
                     width: "92%",
@@ -287,7 +287,7 @@ export default function InnovationLabSection() {
 
                   <header className="relative flex items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#D4B87A]">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.28em]" style={{ color: "#D4B87A" }}>
                         Stage {stage.index} — {stage.kicker}
                       </p>
                       <h3 className="mt-2 font-serif text-2xl leading-tight text-white md:text-[32px]">
@@ -302,7 +302,7 @@ export default function InnovationLabSection() {
                     </span>
                   </header>
 
-                  <p className="relative mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-[15px]">
+                  <p className="relative mt-4 max-w-xl text-sm leading-relaxed opacity-90 md:text-[15px]">
                     {stage.body}
                   </p>
 
@@ -316,10 +316,10 @@ export default function InnovationLabSection() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.18 + i * 0.08, duration: 0.35 }}
                       >
-                        <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-white/60">
+                        <span className="block text-[9px] font-bold uppercase tracking-[0.18em] opacity-70">
                           {m.label}
                         </span>
-                        <span className="mt-1 block text-sm font-semibold text-white md:text-base">{m.value}</span>
+                        <span className="mt-1 block text-sm font-semibold md:text-base">{m.value}</span>
                       </motion.div>
                     ))}
                   </div>
