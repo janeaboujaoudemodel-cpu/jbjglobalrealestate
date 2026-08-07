@@ -75,7 +75,8 @@ function getDeveloperTier(slug: string, name = "", rank?: number | null): { labe
   }
  */
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }: DeveloperCardProps) => {
-  const tier = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
+  const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
+  const tierLabel = TIER_LABELS[tierKey];
   const isEager = index < 8;
   const override = getDeveloperLogoOverride(developer.name);
   // Prefer curated developer-specific photo, then fall back to the
@@ -156,14 +157,14 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
           )}
 
           {/* Tier Badge — unified emerald metallic pill, white text, always present */}
-          {tier && (
+          {tierKey !== "other" && (
             <div className="absolute top-3 right-3 z-10">
               <Badge
-                className={`${tier.color} px-3 py-1 text-[10px] font-bold tracking-[0.14em] shadow-[0_6px_16px_rgba(4,31,24,0.35)] rounded-full`}
+                className="jj-pill-emerald-metallic allow-white text-white border-0 px-3 py-1 text-[10px] font-bold tracking-[0.14em] shadow-[0_6px_16px_rgba(4,31,24,0.35)] rounded-full"
                 data-no-contrast-guard
                 data-allow-white
               >
-                <span className="text-white">{tier.label}</span>
+                <span className="text-white">{tierLabel}</span>
               </Badge>
             </div>
           )}
