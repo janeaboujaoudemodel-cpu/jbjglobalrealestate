@@ -1,122 +1,251 @@
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+
 import { Database, ShieldCheck, Brain, Handshake, KeyRound } from "lucide-react";
 
-/**
- * "How We Build" — scroll-driven 3D assembly of the JBJ operating system.
- * A sticky isometric stage where five layers snap into place as the reader
- * scrolls, paired with the narrative for each layer. No 3D engine: pure CSS
- * perspective + transforms so it stays fast on mobile.
- */
+type Layer = {
+  icon: typeof Database;
+  index: string;
+  title: string;
+  body: string;
+  plateLabel: string;
+  tone: "champagne" | "emerald" | "ink";
+};
 
-const LAYERS = [
+const LAYERS: Layer[] = [
   {
     icon: Database,
-    kicker: "Layer 01",
-    title: "We ingest the whole market",
-    body: "Every launch, price list, payment plan and floor plan across the UAE, Cyprus, Greece, Georgia and Lebanon lands in one structured database — not a folder of PDFs.",
+    index: "01",
+    title: "Ingest the whole market",
+    body: "Every launch, price list, payment plan and floor plan across the UAE, Cyprus, Greece, Georgia and Lebanon lands in one structured record.",
+    plateLabel: "Layer 01 / Raw market data",
+    tone: "ink",
   },
   {
     icon: ShieldCheck,
-    kicker: "Layer 02",
-    title: "Then we verify it, line by line",
-    body: "Each figure is checked against the developer's own release before it is allowed on the platform, and stamped with the date it was confirmed.",
+    index: "02",
+    title: "Verify it line by line",
+    body: "Each figure is cross-checked against the developer's own release before it is allowed on the platform.",
+    plateLabel: "Layer 02 / Verification",
+    tone: "emerald",
   },
   {
     icon: Brain,
-    kicker: "Layer 03",
-    title: "Our AI reads it the way an analyst would",
-    body: "Yield, handover risk, payment structure and comparable pricing are computed for every unit — so a shortlist is reasoned, never guessed.",
+    index: "03",
+    title: "AI reads it like an analyst",
+    body: "Yield, handover risk, payment structure and comparable pricing are computed for every unit.",
+    plateLabel: "Layer 03 / AI engine",
+    tone: "emerald",
   },
   {
     icon: Handshake,
-    kicker: "Layer 04",
-    title: "A human advisor takes it from there",
-    body: "The machine narrows 900+ projects to a handful. A licensed JBJ advisor negotiates, structures the payment plan and handles the paperwork.",
+    index: "04",
+    title: "A human advisor takes over",
+    body: "A licensed JBJ advisor negotiates, structures the payment plan and handles the paperwork.",
+    plateLabel: "Layer 04 / Advisory",
+    tone: "champagne",
   },
   {
     icon: KeyRound,
-    kicker: "Layer 05",
-    title: "And we stay after handover",
-    body: "Snagging, furnishing, leasing, resale and reporting all run on the same record — one continuous file for the life of the asset.",
+    index: "05",
+    title: "We stay after handover",
+    body: "Snagging, furnishing, leasing, resale and reporting all run on the same record.",
+    plateLabel: "Layer 05 / Lifecycle",
+    tone: "champagne",
   },
 ];
+
+const PLATE_BG: Record<Layer["tone"], string> = {
+  ink: "linear-gradient(135deg, #042c1c 0%, #021a12 55%, #000000 100%)",
+  emerald: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
+  champagne: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 60%, #EFE6D6 100%)",
+};
+
+/** Content that actually lives on each isometric plate — no empty slabs. */
+function PlateContent({ layer, active }: { layer: Layer; active: boolean }) {
+  const dark = layer.tone !== "champagne";
+  const ink = dark ? "text-white" : "text-[#042c1c]";
+  const soft = dark ? "text-white/55" : "text-[#042c1c]/55";
+  const line = dark ? "bg-white/20" : "bg-[#B89555]/30";
+  const Icon = layer.icon;
+
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-xl p-5">
+      {dark && (
+        <div
+          className="absolute inset-0 opacity-[0.14]"
+          style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "11px 11px" }}
+          aria-hidden
+        />
+      )}
+      <div className="relative flex h-full flex-col justify-between">
+        <div className="flex items-start justify-between gap-3">
+          <span className={`text-[9px] font-bold uppercase tracking-[0.22em] ${soft}`}>{layer.plateLabel}</span>
+          <span
+            className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border ${
+              dark ? "border-white/25 bg-white/10" : "border-[#B89555]/35 bg-white"
+            }`}
+          >
+            <Icon className={`h-3.5 w-3.5 ${dark ? "text-white" : "text-[#064E3B]"}`} strokeWidth={2} aria-hidden />
+          </span>
+        </div>
+
+        {/* Per-layer technical content */}
+        {layer.index === "01" && (
+          <div className="grid grid-cols-8 gap-1.5">
+            {Array.from({ length: 24 }).map((_, i) => (
+              <span
+                key={i}
+                className={`h-1.5 w-1.5 rounded-full ${dark ? "bg-white" : "bg-[#064E3B]"}`}
+                style={{ opacity: 0.14 + ((i * 7) % 5) * 0.12 }}
+              />
+            ))}
+          </div>
+        )}
+
+        {layer.index === "02" && (
+          <div className="space-y-1.5">
+            {[100, 74, 88, 60].map((w, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className={`h-1.5 w-1.5 rounded-full ${dark ? "bg-[#B89555]" : "bg-[#064E3B]"}`} />
+                <span className={`h-px ${line}`} style={{ width: `${w}%` }} />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {layer.index === "03" && (
+          <div className="space-y-2">
+            <div className="flex items-end gap-1">
+              {[34, 58, 42, 76, 50, 66, 30].map((h, i) => (
+                <span
+                  key={i}
+                  className={`w-1.5 rounded-sm ${dark ? "bg-[#B89555]" : "bg-[#064E3B]"}`}
+                  style={{ height: h * 0.4, opacity: active ? 0.9 : 0.5 }}
+                />
+              ))}
+            </div>
+            <span className={`block font-mono text-[9px] ${soft}`}>YIELD · RISK · COMPARABLES</span>
+          </div>
+        )}
+
+        {layer.index === "04" && (
+          <div className="grid grid-cols-2 gap-2">
+            {["Negotiation", "Payment plan"].map((t) => (
+              <div key={t} className="rounded-md border border-[#B89555]/25 bg-white/70 px-2 py-1.5">
+                <span className="block text-[9px] font-semibold uppercase tracking-wider text-[#042c1c]">{t}</span>
+                <span className="mt-1 block h-1 w-full rounded-full bg-[#B89555]/25">
+                  <span className="block h-1 w-2/3 rounded-full bg-[#B89555]" />
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {layer.index === "05" && (
+          <div className="space-y-1.5">
+            <span className="block text-[10px] font-semibold uppercase tracking-wider text-[#042c1c]">
+              Snagging · Leasing · Resale
+            </span>
+            <span className="block h-1 w-full overflow-hidden rounded-full bg-[#B89555]/20">
+              <span className="block h-full w-[85%] bg-[#B89555]" />
+            </span>
+          </div>
+        )}
+
+        <span className={`text-[11px] font-semibold leading-snug ${ink}`}>{layer.title}</span>
+      </div>
+    </div>
+  );
+}
 
 export default function InnovationLabSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const inView = useInView(sectionRef, { amount: 0.35 });
+  const [assembled, setAssembled] = useState(false);
+  const [paused, setPaused] = useState(false);
 
-  // Auto-assemble while the section is on screen; steps are also clickable.
   useEffect(() => {
-    if (!inView) return;
-    const id = window.setInterval(() => {
-      setActive((prev) => (prev + 1) % LAYERS.length);
-    }, 3400);
-    return () => window.clearInterval(id);
-  }, [inView]);
+    const node = sectionRef.current;
+    if (!node) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setAssembled(true)),
+      { threshold: 0.25 },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
 
-  const stageRotate = 22 - active * 2;
-  const stageSpin = -20 + active * 7;
+  useEffect(() => {
+    if (!assembled || paused) return;
+    const t = window.setInterval(() => setActive((p) => (p + 1) % LAYERS.length), 3200);
+    return () => window.clearInterval(t);
+  }, [assembled, paused]);
+
+  const tilt = 50;
+  const spin = -24;
 
   return (
-    <div ref={sectionRef} className="relative py-14 md:py-20">
-      <div className="flex items-center">
+    <div
+      ref={sectionRef}
+      data-jbj-method="true"
+      className="relative"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="flex min-h-[640px] items-center overflow-hidden py-16 md:py-20">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-5 md:px-8 lg:grid-cols-2 lg:gap-16">
 
-        <div className="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] gap-8 lg:gap-12 items-center px-5 md:px-8">
-          {/* Narrative */}
-          <div className="order-2 lg:order-1 min-w-0">
-            <span className="text-[10px] uppercase tracking-[0.24em] font-bold text-[#064E3B]">
-              The JBJ method
-            </span>
-            <h2 className="mt-3 text-3xl md:text-5xl font-bold leading-[1.05] text-[#1A1A1A]">
-              How we build
-              <span className="block text-[#064E3B]">a property decision</span>
-            </h2>
-            <p className="mt-3 max-w-xl text-sm md:text-base text-[#1A1A1A]/70 leading-relaxed">
-              Most agencies forward you a brochure. We assemble a real estate operating
-              system — layer by layer — and hand you the conclusion.
-            </p>
+          {/* Narrative rail */}
+          <div className="order-2 space-y-8 lg:order-1">
+            <div className="space-y-3">
+              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#B89555]">The JBJ method</p>
+              <h2 className="font-serif text-3xl leading-[1.08] text-[#042c1c] md:text-5xl">
+                How we build
+                <br />a property decision
+              </h2>
+              <p className="max-w-md text-sm leading-relaxed text-[#042c1c]/70 md:text-base">
+                Most agencies forward you a brochure. We assemble a real estate operating system — layer by layer — and
+                hand you the conclusion.
+              </p>
+            </div>
 
-            <ol className="mt-7 space-y-2.5">
+            <ol className="relative space-y-4">
+              <span className="absolute left-4 top-3 bottom-3 w-px bg-[#B89555]/30" aria-hidden />
               {LAYERS.map((layer, i) => {
-                const isActive = i === active;
+                const on = i === active;
                 return (
-                  <li key={layer.title}>
-                    <button type="button" onClick={() => setActive(i)} className="w-full text-left">
-                    <motion.div
-                      animate={{ opacity: isActive ? 1 : 0.42 }}
-                      transition={{ duration: 0.35 }}
-                      className={`rounded-xl border px-4 py-3 md:py-3.5 flex gap-3 items-start ${
-                        isActive
-                          ? "border-[#B89555]/60 bg-[#FDFBF7] shadow-[0_10px_28px_rgba(184,149,85,0.18)]"
-                          : "border-[#B89555]/25 bg-transparent"
-                      }`}
+                  <li key={layer.index}>
+                    <button
+                      type="button"
+                      onClick={() => setActive(i)}
+                      className="flex w-full items-start gap-5 text-left"
                     >
                       <span
-                        data-emerald-action="true"
-                        className="jj-emerald-action w-8 h-8 shrink-0 rounded-lg flex items-center justify-center"
+                        className={`relative z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-colors ${
+                          on ? "bg-[#B89555] text-white" : "border border-[#B89555]/40 bg-[#FDFBF7] text-[#B89555]"
+                        }`}
                       >
-                        <layer.icon className="w-4 h-4" aria-hidden />
+                        {layer.index}
                       </span>
-                      <span className="min-w-0">
-                        <span className="block text-[9px] uppercase tracking-[0.2em] font-bold text-[#064E3B]">
-                          {layer.kicker}
-                        </span>
-                        <span className="block text-sm md:text-base font-semibold text-[#1A1A1A] leading-snug">
+                      <span className="min-w-0 text-left">
+                        <span
+                          className={`block text-left text-[12px] font-semibold uppercase tracking-[0.12em] transition-opacity md:text-sm ${
+                            on ? "text-[#042c1c] opacity-100" : "text-[#042c1c] opacity-55"
+                          }`}
+                        >
                           {layer.title}
                         </span>
-                        {isActive && (
-                          <motion.span
-                            initial={{ opacity: 0, y: -4 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-1 block text-xs md:text-sm text-[#1A1A1A]/70 leading-relaxed"
-                          >
-                            {layer.body}
-                          </motion.span>
-                        )}
+                        <motion.span
+                          initial={false}
+                          animate={{ opacity: on ? 1 : 0, height: on ? "auto" : 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="block overflow-hidden text-left text-xs leading-relaxed text-[#042c1c]/65 md:text-sm"
+                        >
+                          {layer.body}
+                        </motion.span>
                       </span>
-                    </motion.div>
+
                     </button>
                   </li>
                 );
@@ -124,62 +253,46 @@ export default function InnovationLabSection() {
             </ol>
           </div>
 
-          {/* 3D stage */}
-          <div className="order-1 lg:order-2 flex items-center justify-center">
-            <motion.div
-              aria-hidden
-              className="relative w-full max-w-[440px] aspect-square"
-              style={{
-                perspective: 1200,
-                transformStyle: "preserve-3d",
-                rotateX: stageRotate,
-                rotateZ: stageSpin,
-              }}
-            >
+          {/* Isometric plate stack */}
+          <div className="order-1 flex h-[380px] items-center justify-center lg:order-2 lg:h-[560px]">
+            <div className="relative h-full w-full" style={{ perspective: 1500 }}>
               {LAYERS.map((layer, i) => {
-                const isBuilt = i <= active;
+                const on = i === active;
+                // 05 sits on top; 01 at the base.
                 return (
                   <motion.div
-                    key={layer.title}
-                    className="absolute left-1/2 top-1/2 w-[74%] h-[74%] rounded-[26px] border"
+                    key={layer.index}
+                    onClick={() => setActive(i)}
+                    className="absolute left-1/2 top-1/2 h-[170px] w-[270px] cursor-pointer rounded-xl border lg:h-[220px] lg:w-[330px]"
                     style={{
-                      transformStyle: "preserve-3d",
-                      borderColor: i === active ? "rgba(184,149,85,0.85)" : "rgba(184,149,85,0.35)",
-                      background:
-                        i === active
-                          ? "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)"
-                          : "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 60%, #EFE6D6 100%)",
-                      boxShadow:
-                        i === active
-                          ? "0 26px 60px -18px rgba(4,44,28,0.65)"
-                          : "0 16px 40px -22px rgba(184,149,85,0.5)",
+                      background: PLATE_BG[layer.tone],
+                      borderColor: layer.tone === "champagne" ? "rgba(184,149,85,0.4)" : "rgba(255,255,255,0.14)",
+                      rotateX: tilt,
+                      rotateZ: spin,
+                      zIndex: 10 + i * 10,
+                      boxShadow: on
+                        ? "0 34px 70px -18px rgba(4,44,28,0.5)"
+                        : "0 18px 44px -22px rgba(4,44,28,0.35)",
                     }}
-                    animate={{
-                      x: "-50%",
-                      y: "-50%",
-                      z: isBuilt ? (i - active) * 58 : 240,
-                      opacity: isBuilt ? 1 : 0,
-                      scale: isBuilt ? 1 - Math.abs(i - active) * 0.045 : 0.82,
-                    }}
-                    transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                    initial={{ x: -150, y: -85, opacity: 0 }}
+                    animate={
+                      assembled
+                        ? {
+                            x: -168 + (i - 2) * 26,
+                            y: -80 + (i - 2) * -82 + (on ? -14 : 0),
+                            scale: on ? 1.04 : 1,
+                            opacity: on ? 1 : 0.85,
+                          }
+                        : { x: -150, y: -85, opacity: 0 }
+                    }
+                    transition={{ type: "spring", stiffness: 110, damping: 20, delay: assembled ? i * 0.09 : 0 }}
+
                   >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <layer.icon
-                        className="w-10 h-10"
-                        style={{ color: i === active ? "#FFFFFF" : "#064E3B", opacity: i === active ? 1 : 0.5 }}
-                        aria-hidden
-                      />
-                    </div>
-                    <span
-                      className="absolute left-5 top-4 text-[9px] uppercase tracking-[0.22em] font-bold"
-                      style={{ color: i === active ? "#FFFFFF" : "#064E3B" }}
-                    >
-                      {layer.kicker}
-                    </span>
+                    <PlateContent layer={layer} active={on} />
                   </motion.div>
                 );
               })}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
