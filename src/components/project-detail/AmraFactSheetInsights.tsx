@@ -1,12 +1,13 @@
 import { Building2, Leaf, Route, Sparkles, Handshake, Check } from "lucide-react";
-// Visuals mirrored 1:1 from the developer brochure — same photograph used on
-// each corresponding slide of the AMRA English Factsheet.
-import brochureEmiratesRoad from "@/assets/amra-brochure/brochure-emirates-road.jpg";      // Slide: UAE Road Infrastructure
-import brochureInvestorPath from "@/assets/amra-brochure/brochure-investor-path.jpg";      // Slide: Investor Proposition
-import brochureCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";                // Slide: Citi Developers App / AMRA BNB
-import brochureDesignArches from "@/assets/amra-brochure/brochure-design-ethos-arches.jpg";// Slide: Design Ethos & Partners
-import brochureYacht from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";        // Slide: Brand Partnerships
-import brochureSustainabilityLeaf from "@/assets/amra-brochure/brochure-sustainability-leaf.jpg"; // Slide: Sustainability & Regenerative
+// Official factsheet visuals are public files so this section does not pull
+// the full brochure image library into the JavaScript module graph.
+const brochureAsset = (name: string) => `/amra-brochure/${name}.jpg`;
+const brochureEmiratesRoad = brochureAsset("brochure-emirates-road");
+const brochureInvestorPath = brochureAsset("brochure-investor-path");
+const brochureCitiApp = brochureAsset("brochure-citi-app");
+const brochureDesignArches = brochureAsset("brochure-design-ethos-arches");
+const brochureYacht = brochureAsset("brochure-yacht-partnerships");
+const brochureSustainabilityLeaf = brochureAsset("brochure-sustainability-leaf");
 
 /**
  * Amra-only fact panel — content is quoted verbatim from the AMRA English Factsheet

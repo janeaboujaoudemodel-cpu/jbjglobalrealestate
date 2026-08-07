@@ -50,9 +50,6 @@ interface DeveloperInfoCardProps {
 const DESCRIPTION_PREVIEW_LENGTH = 500;
 
 const getDisplayLogoUrl = (developerName: string, logoUrl?: string | null) => {
-  if (/^citi\s+developers$/i.test(developerName.trim()) && isValidDeveloperLogoUrl(logoUrl)) {
-    return "/citi-developers-logo-transparent.png";
-  }
   return logoUrl || null;
 };
 
@@ -105,7 +102,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     src={displayLogoUrl as string}
                     alt={`${developer.name} logo`}
                     className="w-full h-full object-contain p-3 opacity-100"
-                    style={{ filter: "brightness(0) contrast(1.15)" }}
+                    style={{ filter: "none" }}
                    loading="lazy" decoding="async" />
                 ) : (
                   <span className="text-[#3a2a08] font-bold text-base text-center px-2">

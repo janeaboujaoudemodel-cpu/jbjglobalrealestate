@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Sparkles, ChevronRight, CreditCard } from "lucide-react";
-import { useProjectsListing } from "@/hooks/useProjects";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { UnifiedProject } from "@/types/unifiedProject";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
@@ -24,7 +26,31 @@ export default function RecommendedProjects({
   currentLocation,
   currentEmirate,
 }: RecommendedProjectsProps) {
-  const { data: projects } = useProjectsListing();
+  // Project detail pages must never download or poll the full catalogue just
+  // to render three cards. Fetch a small, cacheable candidate set instead.
+  const { data: projects } = useQuery({
+    queryKey: ["project-recommendations", currentProjectId, currentLocation, currentEmirate],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select(`
+          id, name, slug, description, location, area_name, emirate,
+          price_from, handover_date, sale_status, payment_breakdown,
+          cover_image_url, developer_name, developer_id, is_published,
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url)
+        `)
+        .eq("is_published", true)
+        .is("deleted_at", null)
+        .neq("id", currentProjectId)
+        .order("updated_at", { ascending: false })
+        .limit(48);
+      if (error) throw error;
+      return (data || []).map((project) => ({ ...project, images: [] })) as unknown as UnifiedProject[];
+    },
+  });
   const { formatPrice } = useCurrency();
   const browsingContext = useUserBrowsingContext();
 
