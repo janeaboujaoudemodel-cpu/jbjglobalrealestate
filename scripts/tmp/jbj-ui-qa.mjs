@@ -149,6 +149,50 @@ async function contrastAudit(page) {
   });
 }
 
+async function waitForPaintedPage(page) {
+  await page.waitForFunction(() => {
+    const root = document.querySelector('#root');
+    if (!root || !root.children.length || document.body.innerText.trim().length < 80) return false;
+    const style = getComputedStyle(root);
+    const rect = root.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0' && rect.width > 300 && rect.height > 300;
+  }, { timeout: 15000 });
+
+  await page.evaluate(async () => {
+    if (document.fonts?.ready) await document.fonts.ready;
+    const visibleImages = [...document.images].filter((img) => {
+      const rect = img.getBoundingClientRect();
+      return rect.width > 20 && rect.height > 20 && rect.bottom > 0 && rect.top < innerHeight;
+    });
+    await Promise.all(visibleImages.slice(0, 20).map((img) => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        const done = () => resolve();
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+        setTimeout(done, 5000);
+      });
+    }));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+}
+
+async function captureNonBlank(page, outputPath) {
+  await waitForPaintedPage(page);
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const buffer = await page.screenshot({ path: outputPath, fullPage: false });
+    const painted = await page.evaluate(() => {
+      const root = document.querySelector('#root');
+      if (!root) return false;
+      const rect = root.getBoundingClientRect();
+      return rect.width > 300 && rect.height > 300 && document.body.innerText.trim().length >= 80;
+    });
+    if (painted && buffer.byteLength > 25_000) return;
+    await sleep(750);
+  }
+  throw new Error(`Refusing to save blank visual proof: ${outputPath}`);
+}
+
 const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', args: ['--no-sandbox'] });
 const manifest = [];
 for (const [vpName, viewport] of viewports) {
@@ -164,13 +208,13 @@ for (const [vpName, viewport] of viewports) {
       await page.goto(url, { waitUntil: 'load', timeout: 25000 }).catch(() => {});
     });
     await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-    await sleep(800);
+    await waitForPaintedPage(page);
     await dismiss(page);
     const initial = path.join(outDir, `${slug}-01-loaded.png`);
-    await page.screenshot({ path: initial, fullPage: false });
+    await captureNonBlank(page, initial);
     const notes = await interactions(page, label);
     const after = path.join(outDir, `${slug}-02-interactions.png`);
-    await page.screenshot({ path: after, fullPage: false });
+    await captureNonBlank(page, after);
     const contrast = await contrastAudit(page).catch(e => [{ error: e.message }]);
     manifest.push({ label, route, viewport: vpName, initial, after, notes, contrastIssues: contrast, pageErrors: errors.slice(0,5) });
   }

@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 /**
- * useAntiCapture — Prevents screenshots, copy, print, and recording for auditors.
+ * useAntiCapture — Limits copying for auditors without ever blanking the UI.
+ *
+ * Browser-side screenshot prevention is not reliable and the old print rule
+ * hid the entire document, which could produce blank visual-validation output.
+ * Keep the read-only interaction restrictions, but never alter rendered pixels.
  * Activated only when isAuditor && !isOwner.
  */
 export function useAntiCapture() {
@@ -23,24 +27,22 @@ export function useAntiCapture() {
         user-select: none !important;
         -webkit-touch-callout: none !important;
       }
-      @media print {
-        body { display: none !important; }
-      }
     `;
     document.head.appendChild(style);
 
     // Block keyboard shortcuts
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Block Ctrl+C, Ctrl+P, Ctrl+S, PrintScreen
+      // Block content-copy/save shortcuts. Printing and screenshots must remain
+      // available so visual validation can never capture an intentionally blank UI.
       if (
         (e.ctrlKey || e.metaKey) &&
-        ["c", "p", "s", "a"].includes(e.key.toLowerCase())
+        ["c", "s", "a"].includes(e.key.toLowerCase())
       ) {
         e.preventDefault();
         e.stopPropagation();
         return;
       }
-      if (e.key === "PrintScreen" || e.key === "F12") {
+      if (e.key === "F12") {
         e.preventDefault();
         e.stopPropagation();
       }
