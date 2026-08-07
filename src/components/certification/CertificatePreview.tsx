@@ -266,19 +266,16 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                     )}
                   </div>
                   <div className="h-px w-full bg-[#B89555]/70 mt-1" />
-                  <div className="text-[13px] text-[#1A1A1A] mt-2 font-semibold">
-                    Jeyhun Babayev
+                  <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-[0.18em] mt-2">
+                    Authorised Signatory
                   </div>
-                  <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-[0.18em] mt-0.5">
-                    Founder &amp; CEO
-                  </div>
-                  <div className="text-[10px] text-[#B89555] tracking-wide mt-0.5">
-                    Broker Academy
+                  <div className="text-[10px] text-[#1A1A1A]/70 tracking-wide mt-0.5">
+                    JBJ Global Real Estate
                   </div>
                 </div>
               </div>
 
-              {/* Bottom strip — date + certificate ID */}
+              {/* Bottom strip — date + certificate number, no label chips */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-[#B89555]/35">
                 <div className="text-left">
                   <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
@@ -288,19 +285,15 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                     {currentDate}
                   </div>
                 </div>
-                <div
-                  data-no-contrast-guard
-                  data-surface="light"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/50 px-3 py-1"
-                  style={{ background: "#EFE6D6" }}
-                >
-                  <span className="text-[9px] uppercase tracking-[0.22em]" style={{ color: "rgba(26,26,26,0.7)", WebkitTextFillColor: "rgba(26,26,26,0.7)" }}>
-                    Certificate ID
-                  </span>
-                  <span className="text-[11px] font-mono" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+                <div className="text-right">
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                    Certificate No.
+                  </div>
+                  <div className="text-[12px] font-mono mt-0.5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
                     {certId}
-                  </span>
+                  </div>
                 </div>
+
 
               </div>
             </div>
