@@ -56,7 +56,7 @@ export function DeveloperLogo({
   // plate. Detect it and flip the plate to the emerald pair gradient so every
   // developer logo stays visible. Explicit overrides always win.
   const tone = useLogoTone(valid ? (resolvedSrc as string) : null);
-  const needsDarkPlate = override.darkPlate || (!override.invert && tone === "light");
+  const needsDarkPlate = !dataKeepGold && (override.darkPlate || (!override.invert && tone === "light"));
 
   const renderNameplate = (containerClass: string) => {
     const label = (name || alt || "Developer").trim();
@@ -116,6 +116,7 @@ export function DeveloperLogo({
           filter: override.imageFilter ?? (override.invert
             ? "invert(1) brightness(1)"
             : "contrast(1.08) saturate(1.1)"),
+          mixBlendMode: (override as { imageBlendMode?: React.CSSProperties["mixBlendMode"] }).imageBlendMode,
         }}
       />
     </div>

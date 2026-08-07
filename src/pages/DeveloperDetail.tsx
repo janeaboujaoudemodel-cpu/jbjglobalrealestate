@@ -469,6 +469,10 @@ const DeveloperDetail = () => {
   const excelUaeProjects = getNumberLike(developerCustomFields.projects_uae);
   const excelOutsideProjects = getNumberLike(developerCustomFields.projects_outside_uae);
   const activeProjectCount = Math.max(projects?.length || 0, Number(developer.offplan_projects || 0), excelUaeProjects);
+  const globalProjectCount = Math.max(
+    activeProjectCount + excelOutsideProjects,
+    Number(developer.completed_projects || 0) + Number(developer.offplan_projects || 0),
+  );
   const publishedUnits = (projects || []).reduce((sum, p) => sum + Number(p.total_units || 0), 0);
 
   const stats = [
@@ -484,8 +488,8 @@ const DeveloperDetail = () => {
     },
     {
       icon: TrendingUp,
-      label: "International",
-      value: excelOutsideProjects ? `${excelOutsideProjects.toLocaleString()}+` : null,
+      label: "Global Portfolio",
+      value: globalProjectCount ? `${globalProjectCount.toLocaleString()}+` : null,
     },
     ...(developer.ceo_name ? [{ icon: UserRound, label: "Leadership", value: developer.ceo_name }] : []),
     // Headquarters intentionally removed — never display developer office locations.
@@ -494,7 +498,11 @@ const DeveloperDetail = () => {
 
   const heroImageUrl = isEmaarDeveloper(developer.name, developer.slug)
     ? emaarCreekHarbourMasterplan
-    : developer.feature_image_url;
+    : developer.feature_image_url || (projects || []).find((project) =>
+        project.card_image_url || project.gallery_start_image_url || project.cover_image_url
+      )?.card_image_url || (projects || []).find((project) =>
+        project.gallery_start_image_url || project.cover_image_url
+      )?.gallery_start_image_url || (projects || []).find((project) => project.cover_image_url)?.cover_image_url;
 
 
   const competitorDevelopers = (allDevelopers || [])
@@ -606,7 +614,7 @@ const DeveloperDetail = () => {
             renderFallback
             loading="eager"
             data-keep-gold
-            className="!w-36 !h-36 !rounded-2xl !p-3 jj-cta-gold-metallic jj-developer-logo-metallic flex-shrink-0"
+            className="!w-36 !h-36 !rounded-2xl !p-4 !bg-transparent !border-0 !shadow-none jj-cta-gold-metallic jj-developer-logo-metallic flex-shrink-0"
           />
 
           {/* Text */}
