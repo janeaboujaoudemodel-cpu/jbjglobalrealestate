@@ -139,8 +139,12 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
       transition={{ duration: 0.5 }}
       className="relative"
     >
-      <Card className="bg-[#F7F2EA] border-[#B89555]/35 overflow-hidden">
-        <CardContent className="p-6 sm:p-8">
+      <Card
+        className="border-[#B89555]/35 overflow-hidden"
+        style={{ background: "#EBE1D0" }}
+      >
+
+        <CardContent className="p-6 sm:p-8" style={{ background: "#EBE1D0" }}>
           {/* Header */}
           <div className="text-center mb-6 flex flex-col items-center">
             <CertificateMedallion size={64} />
@@ -162,8 +166,9 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
             )}
             style={{
                 background:
-                  "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 42%, #EFE6D6 100%)",
+                  "linear-gradient(135deg, #FFFFFF 0%, #FFFDF8 55%, #FFFBF2 100%)",
             }}
+
           >
             {/* Subtle champagne fleck texture */}
             <div
@@ -190,18 +195,15 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
 
             {/* Content */}
             <div className="relative z-10 px-8 sm:px-14 py-10 sm:py-14 text-center">
-              {/* Clean academy crest — no wordmark underline on the plate */}
+              {/* Institution line — no label chip, engraved wordmark only */}
               <div
                 data-no-contrast-guard
-                data-surface="light"
-                className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-[#B89555]/55 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] shadow-[0_10px_28px_-24px_rgba(26,26,26,.55)]"
-                style={{ background: "#FDFBF7", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                className="mb-5 text-[13px] sm:text-sm font-semibold uppercase tracking-[0.34em]"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
               >
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-[image:var(--jj-emerald-ombre)]" data-surface="emerald">
-                  <GraduationCap className="h-3.5 w-3.5 text-white" strokeWidth={2.6} />
-                </span>
-                <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Broker Academy</span>
+                JBJ Global Broker Academy
               </div>
+
 
 
               {/* Eyebrow */}
@@ -268,19 +270,16 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                     )}
                   </div>
                   <div className="h-px w-full bg-[#B89555]/70 mt-1" />
-                  <div className="text-[13px] text-[#1A1A1A] mt-2 font-semibold">
-                    Jeyhun Babayev
+                  <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-[0.18em] mt-2">
+                    Authorised Signatory
                   </div>
-                  <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-[0.18em] mt-0.5">
-                    Founder &amp; CEO
-                  </div>
-                  <div className="text-[10px] text-[#B89555] tracking-wide mt-0.5">
-                    Broker Academy
+                  <div className="text-[10px] text-[#1A1A1A]/70 tracking-wide mt-0.5">
+                    JBJ Global Real Estate
                   </div>
                 </div>
               </div>
 
-              {/* Bottom strip — date + certificate ID */}
+              {/* Bottom strip — date + certificate number, no label chips */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-[#B89555]/35">
                 <div className="text-left">
                   <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
@@ -290,19 +289,15 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                     {currentDate}
                   </div>
                 </div>
-                <div
-                  data-no-contrast-guard
-                  data-surface="light"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/50 px-3 py-1"
-                  style={{ background: "#EFE6D6" }}
-                >
-                  <span className="text-[9px] uppercase tracking-[0.22em]" style={{ color: "rgba(26,26,26,0.7)", WebkitTextFillColor: "rgba(26,26,26,0.7)" }}>
-                    Certificate ID
-                  </span>
-                  <span className="text-[11px] font-mono" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+                <div className="text-right">
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                    Certificate No.
+                  </div>
+                  <div className="text-[12px] font-mono mt-0.5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
                     {certId}
-                  </span>
+                  </div>
                 </div>
+
 
               </div>
             </div>
