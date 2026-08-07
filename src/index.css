@@ -38171,3 +38171,17 @@ html body #root .jj-filter-rail > div[class][class].jj-filter-search-pill {
   min-height: 36px !important;
   border-radius: 8px !important;
 }
+
+/* ── PASS 276 — JBJ method isometric plates: white ink lock on emerald plates ──
+   The champagne page ink guard was repainting plate text to #1A1A1A on the
+   emerald/ink plates. These plates are emerald-filled, so ink must be white. */
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"],
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"] *,
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"] span[class][class],
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"] svg[class][class] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"] svg {
+  stroke: #FFFFFF !important;
+}
