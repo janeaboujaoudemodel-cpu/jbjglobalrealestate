@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 import { Database, ShieldCheck, Brain, Handshake, KeyRound } from "lucide-react";
+import jbjMonogramWatermark from "@/assets/jbj-monogram-transparent.png";
+
 
 type Layer = {
   icon: typeof Database;
@@ -70,11 +72,16 @@ function PlateContent({ layer, active }: { layer: Layer; active: boolean }) {
   const Icon = layer.icon;
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl p-5">
+    <div
+      className={`relative h-full w-full overflow-hidden rounded-xl p-5 ${
+        dark ? "[&_*]:!text-white" : ""
+      }`}
+      {...(dark ? { "data-ink-emerald": "true" } : {})}
+    >
       {dark && (
         <div
-          className="absolute inset-0 opacity-[0.14]"
-          style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "11px 11px" }}
+          className="absolute inset-0 opacity-[0.05]"
+          style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "26px 26px" }}
           aria-hidden
         />
       )}
@@ -92,16 +99,17 @@ function PlateContent({ layer, active }: { layer: Layer; active: boolean }) {
 
         {/* Per-layer technical content */}
         {layer.index === "01" && (
-          <div className="grid grid-cols-8 gap-1.5">
-            {Array.from({ length: 24 }).map((_, i) => (
+          <div className="grid grid-cols-4 gap-2">
+            {Array.from({ length: 8 }).map((_, i) => (
               <span
                 key={i}
                 className={`h-1.5 w-1.5 rounded-full ${dark ? "bg-white" : "bg-[#064E3B]"}`}
-                style={{ opacity: 0.14 + ((i * 7) % 5) * 0.12 }}
+                style={{ opacity: 0.3 + ((i * 3) % 3) * 0.2 }}
               />
             ))}
           </div>
         )}
+
 
         {layer.index === "02" && (
           <div className="space-y-1.5">
@@ -182,8 +190,9 @@ export default function InnovationLabSection() {
     return () => window.clearInterval(t);
   }, [assembled, paused]);
 
-  const tilt = 50;
-  const spin = -24;
+  const tilt = 44;
+  const spin = -22;
+
 
   return (
     <div
@@ -193,8 +202,19 @@ export default function InnovationLabSection() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="flex min-h-[640px] items-center overflow-hidden py-16 md:py-20">
+      {/* Premium brand watermark */}
+      <img
+        data-no-fallback
+        src={jbjMonogramWatermark}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 w-[560px] max-w-[90%] -translate-x-1/2 -translate-y-1/2 select-none object-contain opacity-[0.045] md:w-[760px]"
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="relative flex min-h-[640px] items-center overflow-hidden py-16 md:py-20">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-5 md:px-8 lg:grid-cols-2 lg:gap-16">
+
 
           {/* Narrative rail */}
           <div className="order-2 space-y-8 lg:order-1">
@@ -267,29 +287,43 @@ export default function InnovationLabSection() {
                     style={{
                       background: PLATE_BG[layer.tone],
                       borderColor: layer.tone === "champagne" ? "rgba(184,149,85,0.4)" : "rgba(255,255,255,0.14)",
-                      rotateX: tilt,
-                      rotateZ: spin,
                       zIndex: 10 + i * 10,
+                      transformStyle: "preserve-3d",
                       boxShadow: on
                         ? "0 34px 70px -18px rgba(4,44,28,0.5)"
                         : "0 18px 44px -22px rgba(4,44,28,0.35)",
                     }}
-                    initial={{ x: -150, y: -85, opacity: 0 }}
+                    initial={{ x: -150, y: -85, opacity: 0, rotateX: tilt, rotateZ: spin }}
                     animate={
                       assembled
                         ? {
-                            x: -168 + (i - 2) * 26,
-                            y: -80 + (i - 2) * -82 + (on ? -14 : 0),
-                            scale: on ? 1.04 : 1,
-                            opacity: on ? 1 : 0.85,
+                            x: -178 + (i - 2) * 24 + (on ? 40 : 0),
+                            y: -80 + (i - 2) * -104 + (on ? -26 : 0),
+                            scale: on ? 1.08 : 0.98,
+                            opacity: on ? 1 : 0.72,
+                            rotateX: on ? 24 : tilt,
+                            rotateZ: on ? -10 : spin,
+                            rotateY: on ? 3 : 0,
                           }
-                        : { x: -150, y: -85, opacity: 0 }
+                        : { x: -150, y: -85, opacity: 0, rotateX: tilt, rotateZ: spin }
                     }
-                    transition={{ type: "spring", stiffness: 110, damping: 20, delay: assembled ? i * 0.09 : 0 }}
+                    whileHover={{
+                      rotateX: 14,
+                      rotateZ: -6,
+                      rotateY: 0,
+                      scale: 1.12,
+                      x: -178 + (i - 2) * 24 + 56,
+                      y: -80 + (i - 2) * -104 - 34,
+                      opacity: 1,
+                      transition: { type: "spring", stiffness: 180, damping: 18 },
+                    }}
+                    whileTap={{ scale: 1.03 }}
 
+                    transition={{ type: "spring", stiffness: 110, damping: 20, delay: assembled ? i * 0.09 : 0 }}
                   >
                     <PlateContent layer={layer} active={on} />
                   </motion.div>
+
                 );
               })}
             </div>
