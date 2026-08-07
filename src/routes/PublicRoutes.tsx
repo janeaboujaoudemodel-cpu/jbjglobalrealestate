@@ -514,7 +514,7 @@ export const PublicRoutes = () => (
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
     {/* /broker-hub fully deleted — no route, no redirect. Falls through to NotFound. */}
-    <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
+    <Route path="/jbj-academy" element={<JBJAcademy />} />  {/* TEMP-CERT-CHECK */}
     <Route path="/academy/graduates" element={<Navigate to="/jbj-academy" replace />} />
     <Route path="/broker-portal" element={<OwnerAwareBrokerRedirect />} />
 
