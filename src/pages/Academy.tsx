@@ -2,6 +2,7 @@ import { PageMeta } from "@/components/seo/PageMeta";
 import { PricingGrid } from "@/components/payments/PricingGrid";
 import { ACADEMY_BUNDLES } from "@/content/pricing";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
+import { CertificatePreview } from "@/components/certification"; // TEMP-CERT-CHECK
 
 export default function Academy() {
   return (
@@ -10,6 +11,8 @@ export default function Academy() {
         title="Broker Academy | JBJ Global Real Estate"
         description="Live 90-minute sessions with senior JBJ brokers. Dubai market, RERA/DLD, off-plan, sales, AI. Certificate of Completion & JBJ interview funnel."
       />
+      {/* TEMP-CERT-CHECK */}
+      <div className="mx-auto max-w-3xl p-8"><CertificatePreview isLocked /></div>
       <PricingGrid
         eyebrow="Broker Academy"
         title="Become a Dubai real estate professional"
