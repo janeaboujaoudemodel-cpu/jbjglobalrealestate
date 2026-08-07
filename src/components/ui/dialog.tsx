@@ -11,8 +11,12 @@ import { cn } from "@/lib/utils";
  * on <body>, which freezes the whole UI. We re-check shortly after each
  * close and clear the inline style if no other dialog is still open.
  */
-const Dialog: typeof DialogPrimitive.Root = ({ open, onOpenChange, ...props }) => {
+const Dialog = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>
+>(({ open, onOpenChange, ...props }, ref) => {
   const previousOpen = React.useRef(open);
+
 
   const releaseBodyLock = React.useCallback(() => {
     if (typeof document === "undefined") return;
@@ -42,7 +46,9 @@ const Dialog: typeof DialogPrimitive.Root = ({ open, onOpenChange, ...props }) =
     [onOpenChange, releaseBodyLock],
   );
   return <DialogPrimitive.Root open={open} onOpenChange={handleOpenChange} {...props} />;
-};
+});
+Dialog.displayName = "Dialog";
+
 
 
 const DialogTrigger = DialogPrimitive.Trigger;
