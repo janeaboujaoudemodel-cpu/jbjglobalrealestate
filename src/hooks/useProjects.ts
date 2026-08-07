@@ -710,9 +710,12 @@ export function useProjectsListing() {
       // silently remove eligible rows because an image is missing or because
       // two project names look similar: both behaviours made the grid total
       // disagree with the exact count shown in the shared search bar.
-      return sortPublicProjectsForListing(
+      // Sort first so canonical duplicates retain the most complete owner-
+      // maintained record, then enforce the same identity contract used by
+      // community, developer and map views.
+      return dedupePublicProjects(sortPublicProjectsForListing(
         (all as unknown as UnifiedProject[]).map((project) => ({ ...project, images: [] })),
-      );
+      ));
     },
   });
 }
@@ -820,7 +823,8 @@ export function useProject(projectSlug: string) {
           developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, upcoming_units, total_units_delivered, description, headquarters, ceo_name, website_url, specialization, parent_company, license_number, linkedin_url, instagram_url, portfolio_worth),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
+          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path),
+          videos:project_videos(id, url, title, display_order, is_visible)
         `;
 
       const { data, error } = await supabase
@@ -849,14 +853,10 @@ export function useProject(projectSlug: string) {
         resolved = alias ?? null;
       }
       if (!resolved) return null;
-      const { data: videos } = await supabase
-        .from("project_videos")
-        .select("id, url, title, display_order, is_visible")
-        .eq("project_id", resolved.id)
-        .or("is_visible.is.null,is_visible.eq.true")
-        .order("display_order", { ascending: true });
-
-      return { ...(resolved as unknown as UnifiedProject), videos: (videos as any[]) || [] };
+      const visibleVideos = ((resolved as any).videos || [])
+        .filter((video: any) => video.is_visible ?? true)
+        .sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0));
+      return { ...(resolved as unknown as UnifiedProject), videos: visibleVideos };
 
     },
     enabled: !!projectSlug,

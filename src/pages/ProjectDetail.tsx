@@ -151,7 +151,9 @@ const asUnitTypes = (
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
-  const { data: reellyProject, isFetching: reellyLoading } = useReellyProjectBySlug(slug, !project && !isLoading);
+  // Start the external fallback in parallel. Waiting for the local lookup to
+  // fail created a strict network waterfall for aliases and older links.
+  const { data: reellyProject, isFetching: reellyLoading } = useReellyProjectBySlug(slug, !!slug);
   const [showReportModal, setShowReportModal] = useState(false);
   const { trackView } = useRecentSearches();
 

@@ -119,71 +119,13 @@ import citiBuddyRobotRealAsset from "@/assets/citi-buddy-robot-real.png.asset.js
 const citiBuddyRobotLocal = citiBuddyRobotRealAsset.url;
 import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
 import AmraFactSheetInsights from "@/components/project-detail/AmraFactSheetInsights";
-// Amra brochure-cropped imagery (extracted from the official AMRA Factsheet PDF).
-// Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
-import amraPoolCabanas from "@/assets/amra-brochure/pool-cabanas-marina.jpg";
-import amraAerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
-import amraGrandLobby from "@/assets/amra-brochure/grand-lobby.jpg";
-import amraHallwayPassage from "@/assets/amra-brochure/hallway-passage.jpg";
-import amraSideLobby from "@/assets/amra-brochure/side-lobby.jpg";
-import amraRedLight from "@/assets/amra-brochure/red-light-therapy.jpg";
-import amraSpaPool from "@/assets/amra-brochure/spa-pool.jpg";
-import amraFemaleSpaTreatment from "@/assets/amra-brochure/female-spa-treatment.jpg";
-import amraReikiRoom from "@/assets/amra-brochure/reiki-room.jpg";
-import amraSoundHealing from "@/assets/amra-brochure/sound-healing-dome.jpg";
-import amraNapReset from "@/assets/amra-brochure/nap-reset-room.jpg";
-import amraStudio from "@/assets/amra-brochure/studio.jpg";
-import amraSmartBoots from "@/assets/amra-brochure/smart-recovery-boots.jpg";
-import amraFemaleChanging from "@/assets/amra-brochure/female-changing-room.jpg";
-import amraFloatingPods from "@/assets/amra-brochure/floating-sleep-pods.jpg";
-import amraSpaReception from "@/assets/amra-brochure/spa-reception.jpg";
-import amraDigitalDetox from "@/assets/amra-brochure/digital-detox-cabins.jpg";
-import amraSpaHydro from "@/assets/amra-brochure/spa-hydrotherapy.jpg";
-import amraSpaLounge from "@/assets/amra-brochure/spa-lounge.jpg";
-import amraSaltRoom from "@/assets/amra-brochure/salt-room.jpg";
-import amraSpaTreatment from "@/assets/amra-brochure/spa-treatment-room.jpg";
-import amraBeautySalon from "@/assets/amra-brochure/beauty-salon.jpg";
-import amraShowerRoom from "@/assets/amra-brochure/shower-room.jpg";
-import amraTrampoline from "@/assets/amra-brochure/trampoline-studio.jpg";
-import amraRowing from "@/assets/amra-brochure/rowing-studio.jpg";
-import amraKidsPlay from "@/assets/amra-brochure/kids-soft-play.jpg";
-import amraKidsClimb from "@/assets/amra-brochure/kids-climbing.jpg";
-import amraVirtualFitness from "@/assets/amra-brochure/virtual-fitness.jpg";
-import amraParkour from "@/assets/amra-brochure/parkour.jpg";
-import amraCycling from "@/assets/amra-brochure/cycling.jpg";
-import amraPanoramicGym from "@/assets/amra-brochure/panoramic-gym.jpg";
-import amraSeaViewGym from "@/assets/amra-brochure/sea-view-gym.jpg";
-import amraSeaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";
-import amraIndoorPoolCols from "@/assets/amra-brochure/indoor-pool-columns.jpg";
-import amraChandelierLounge from "@/assets/amra-brochure/chandelier-lounge.jpg";
-import amraMinimalPool from "@/assets/amra-brochure/minimal-pool.jpg";
-import amraCryoChamber from "@/assets/amra-brochure/cryo-chamber.jpg";
-import amraHyperbaric from "@/assets/amra-brochure/hyperbaric-room.jpg";
-import amraSaunaSteam from "@/assets/amra-brochure/sauna-steam.jpg";
-import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
+// Official factsheet crops are served as public files instead of 60 static
+// module imports. This keeps the 25 MB amenity library out of the project page
+// module graph while preserving the approved source imagery.
+const amraAsset = (name: string) => `/amra-brochure/${name}.jpg`;
+const amraPoolCabanas = amraAsset("pool-cabanas-marina"), amraAerialResort = amraAsset("aerial-resort"), amraGrandLobby = amraAsset("grand-lobby"), amraHallwayPassage = amraAsset("hallway-passage"), amraSideLobby = amraAsset("side-lobby"), amraRedLight = amraAsset("red-light-therapy"), amraSpaPool = amraAsset("spa-pool"), amraFemaleSpaTreatment = amraAsset("female-spa-treatment"), amraReikiRoom = amraAsset("reiki-room"), amraSoundHealing = amraAsset("sound-healing-dome"), amraNapReset = amraAsset("nap-reset-room"), amraStudio = amraAsset("studio"), amraSmartBoots = amraAsset("smart-recovery-boots"), amraFemaleChanging = amraAsset("female-changing-room"), amraFloatingPods = amraAsset("floating-sleep-pods"), amraSpaReception = amraAsset("spa-reception"), amraDigitalDetox = amraAsset("digital-detox-cabins"), amraSpaHydro = amraAsset("spa-hydrotherapy"), amraSpaLounge = amraAsset("spa-lounge"), amraSaltRoom = amraAsset("salt-room"), amraSpaTreatment = amraAsset("spa-treatment-room"), amraBeautySalon = amraAsset("beauty-salon"), amraShowerRoom = amraAsset("shower-room"), amraTrampoline = amraAsset("trampoline-studio"), amraRowing = amraAsset("rowing-studio"), amraKidsPlay = amraAsset("kids-soft-play"), amraKidsClimb = amraAsset("kids-climbing"), amraVirtualFitness = amraAsset("virtual-fitness"), amraParkour = amraAsset("parkour"), amraCycling = amraAsset("cycling"), amraPanoramicGym = amraAsset("panoramic-gym"), amraSeaViewGym = amraAsset("sea-view-gym"), amraSeaTurtles = amraAsset("sea-turtles"), amraIndoorPoolCols = amraAsset("indoor-pool-columns"), amraChandelierLounge = amraAsset("chandelier-lounge"), amraMinimalPool = amraAsset("minimal-pool"), amraCryoChamber = amraAsset("cryo-chamber"), amraHyperbaric = amraAsset("hyperbaric-room"), amraSaunaSteam = amraAsset("sauna-steam"), amraInRoomDining = amraAsset("in-room-dining");
 import amraSmegKitchen from "@/assets/amra-smeg-kitchen.jpg";
-import amraCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";
-import amraYachtPartnerships from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";
-// Brochure-verbatim generated assets (see brochure-verbatim-amenity-standard memory rule)
-import amraSnowShower from "@/assets/amra-brochure/snow-shower.jpg";
-import amraSmartRecoveryHub from "@/assets/amra-brochure/smart-recovery-hub.jpg";
-import amraIsabellaCucina from "@/assets/amra-brochure/isabella-cucina-italiana.jpg";
-import amraHunterBarrel from "@/assets/amra-brochure/hunter-and-barrel.jpg";
-import amraAllDayDining from "@/assets/amra-brochure/all-day-dining.jpg";
-import amraArtGallery from "@/assets/amra-brochure/art-gallery.jpg";
-import amraPharmacy from "@/assets/amra-brochure/pharmacy.jpg";
-import amraBowlingLanes from "@/assets/amra-brochure/bowling-lanes.jpg";
-import amraVrGameZone from "@/assets/amra-brochure/vr-game-zone.jpg";
-import amraGolfSimulator from "@/assets/amra-brochure/golf-simulator.jpg";
-import amraArcadePoolDarts from "@/assets/amra-brochure/arcade-pool-darts.jpg";
-import amraBookLoungeLibrary from "@/assets/amra-brochure/book-lounge-library.jpg";
-import amraRooftopSportsDeck from "@/assets/amra-brochure/rooftop-sports-deck.jpg";
-import amraBusinessZone from "@/assets/amra-brochure/business-zone.jpg";
-import amraParentChildStudio from "@/assets/amra-brochure/parent-child-studio.jpg";
-import amraJuiceBar from "@/assets/amra-brochure/juice-bar-refreshments.jpg";
-import amraEntranceLobbyFeaturedSculpture from "@/assets/amra-brochure/entrance-lobby-featured-sculpture.jpg";
-import amraHelipadAirTaxi from "@/assets/amra-brochure/helipad-air-taxi.jpg";
-import amraSpinneysSupermarket from "@/assets/amra-brochure/spinneys-supermarket.jpg";
+const amraCitiApp = amraAsset("brochure-citi-app"), amraYachtPartnerships = amraAsset("brochure-yacht-partnerships"), amraSnowShower = amraAsset("snow-shower"), amraSmartRecoveryHub = amraAsset("smart-recovery-hub"), amraIsabellaCucina = amraAsset("isabella-cucina-italiana"), amraHunterBarrel = amraAsset("hunter-and-barrel"), amraAllDayDining = amraAsset("all-day-dining"), amraArtGallery = amraAsset("art-gallery"), amraPharmacy = amraAsset("pharmacy"), amraBowlingLanes = amraAsset("bowling-lanes"), amraVrGameZone = amraAsset("vr-game-zone"), amraGolfSimulator = amraAsset("golf-simulator"), amraArcadePoolDarts = amraAsset("arcade-pool-darts"), amraBookLoungeLibrary = amraAsset("book-lounge-library"), amraRooftopSportsDeck = amraAsset("rooftop-sports-deck"), amraBusinessZone = amraAsset("business-zone"), amraParentChildStudio = amraAsset("parent-child-studio"), amraJuiceBar = amraAsset("juice-bar-refreshments"), amraEntranceLobbyFeaturedSculpture = amraAsset("entrance-lobby-featured-sculpture"), amraHelipadAirTaxi = amraAsset("helipad-air-taxi"), amraSpinneysSupermarket = amraAsset("spinneys-supermarket");
 import { useQuery } from "@tanstack/react-query";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
@@ -521,11 +463,19 @@ function ProjectDetailLayoutInner({
   // flags and logos can never render as project photos.
   const images = useMemo(() => {
     const raw = project.images?.filter((i) => i.url) || [];
-    return filterGalleryAssets(filterValidImages(raw)).map((img) => ({
+    const valid = filterGalleryAssets(filterValidImages(raw)).map((img) => ({
       ...img,
       url: getHighResImageUrl(img.url!),
     }));
-  }, [project.images]);
+    if (valid.length || !/amra/i.test(project.name)) return valid;
+    // The legacy Amra storage bucket was removed. Until those owner records
+    // are migrated, use only imagery extracted from the official factsheet —
+    // never a stock/fake placeholder — so hero and gallery remain usable.
+    return [
+      "aerial-resort", "pool-cabanas-marina", "grand-lobby", "furnished-serviced-apartments",
+      "indoor-pool-columns", "panoramic-gym", "spa-pool", "helipad-air-taxi",
+    ].map((name, index) => ({ id: `amra-approved-${index}`, url: amraAsset(name), alt: `${project.name} official factsheet` }));
+  }, [project.images, project.name]);
 
   // Fallback chain: project_images → cover_image_url → placeholder
   const heroImage = useMemo(() => {
@@ -1651,7 +1601,7 @@ function ProjectDetailLayoutInner({
       >
         {/* Row 1: project search/filter pills only. */}
         <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2 transition-all duration-300">
-          <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
+          <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide [&_button]:min-h-11 [&_button]:px-4 [&_input]:min-h-11 [&_[role=combobox]]:min-h-11" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
             <FilterShortcutBar
               variant="light"
               filters={shortcutFilters}
@@ -1667,7 +1617,7 @@ function ProjectDetailLayoutInner({
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
           <div className="jj-content-track">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-              <div className="flex w-max min-w-max items-center gap-1 py-2.5">
+              <div className="flex w-max min-w-full items-center gap-1 py-2.5">
                 {stickyProjectTabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -1675,7 +1625,7 @@ function ProjectDetailLayoutInner({
                     data-filter-selected={activeTab === tab.id ? "true" : undefined}
                     data-surface={activeTab === tab.id ? "emerald" : undefined}
                     onClick={() => handleTabClick(tab.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap shrink-0 min-w-fit transition-all relative ${
+                    className={`flex min-h-10 items-center gap-1.5 px-3 py-2 rounded-md text-xs md:text-sm font-medium whitespace-nowrap shrink-0 min-w-fit transition-all relative ${
                       activeTab === tab.id
                         ? "allow-white jj-pill-emerald-metallic text-white border-0 font-bold shadow-[0_10px_24px_-12px_rgba(4,44,28,0.86)]"
                         : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent"
@@ -1697,7 +1647,7 @@ function ProjectDetailLayoutInner({
                   data-surface="emerald"
                   data-emerald-action="true"
                   data-no-contrast-guard
-                  className="allow-white flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit shrink-0 transition-all border border-black/25 hover:brightness-110"
+                  className="allow-white ml-auto flex min-h-10 items-center gap-1.5 px-4 py-2 rounded-md text-xs md:text-sm font-bold whitespace-nowrap min-w-fit shrink-0 transition-all border border-black/25 hover:brightness-110"
                   style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)', color: '#FFFFFF', boxShadow: '0 10px 24px -12px rgba(4,44,28,0.86)' }}
                 >
                   <UserPlus className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
