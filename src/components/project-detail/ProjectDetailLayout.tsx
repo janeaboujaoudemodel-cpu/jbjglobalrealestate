@@ -463,11 +463,19 @@ function ProjectDetailLayoutInner({
   // flags and logos can never render as project photos.
   const images = useMemo(() => {
     const raw = project.images?.filter((i) => i.url) || [];
-    return filterGalleryAssets(filterValidImages(raw)).map((img) => ({
+    const valid = filterGalleryAssets(filterValidImages(raw)).map((img) => ({
       ...img,
       url: getHighResImageUrl(img.url!),
     }));
-  }, [project.images]);
+    if (valid.length || !/amra/i.test(project.name)) return valid;
+    // The legacy Amra storage bucket was removed. Until those owner records
+    // are migrated, use only imagery extracted from the official factsheet —
+    // never a stock/fake placeholder — so hero and gallery remain usable.
+    return [
+      "aerial-resort", "pool-cabanas-marina", "grand-lobby", "furnished-serviced-apartment",
+      "indoor-pool-columns", "panoramic-gym", "spa-pool", "helipad-air-taxi",
+    ].map((name, index) => ({ id: `amra-approved-${index}`, url: amraAsset(name), alt: `${project.name} official factsheet` }));
+  }, [project.images, project.name]);
 
   // Fallback chain: project_images → cover_image_url → placeholder
   const heroImage = useMemo(() => {

@@ -113,6 +113,11 @@ function isTrustedImageSource(url: string): boolean {
 export function isValidImageUrl(url: unknown): url is string {
   if (!url) return false;
   if (typeof url !== "string") return false;
+
+  // Retired storage locations return a JSON "Bucket not found" response and
+  // must never be mounted as images. Keep their database records untouched so
+  // an owner can repair/migrate them, but exclude them from public rendering.
+  if (/\/storage\/v1\/(?:object|render\/image)\/public\/(?:rel-media|project-documents\/sarah-uploads)\//i.test(url)) return false;
   
   // Must start with http(s)
   if (!url.startsWith("http://") && !url.startsWith("https://")) return false;
