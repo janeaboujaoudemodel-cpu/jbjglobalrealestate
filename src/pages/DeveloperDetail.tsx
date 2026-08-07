@@ -651,6 +651,15 @@ const DeveloperDetail = () => {
               </div>
             )}
 
+            {/* Plain-language explainer: who this developer is + portfolio link */}
+            <DeveloperAboutPanel
+              developer={developer as any}
+              projectCount={projects?.length || undefined}
+              className="mt-6 max-w-5xl"
+            />
+
+
+
             {/* Stats — icons + labels + values all on the same baseline
                 across every card (identical structure = perfect alignment). */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 items-stretch">
