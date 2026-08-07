@@ -73,74 +73,44 @@ const TIER_FILTERS = [
 
 
   // Apply filters to developers
+  
   const filteredDevelopers = useMemo(() => {
     if (!developers) return [];
     
     let filtered = [...developers];
 
-    // Geography cascade filter (Country → Emirate/City → Area).
-    // Matches against whatever location signal a developer record carries.
-    const geoTerms: string[] = [];
-    if (geoFilters.areas.length) {
-      geoTerms.push(
-        ...getAreas(geoFilters.country, geoFilters.region)
-          .filter((a) => geoFilters.areas.includes(a.slug))
-          .map((a) => a.name.toLowerCase()),
-      );
-    } else if (geoFilters.region) {
-      const r = getRegions(geoFilters.country).find((x) => x.slug === geoFilters.region);
-      if (r) geoTerms.push(r.name.toLowerCase());
-    } else if (geoFilters.country && geoFilters.country !== "uae") {
-      const c = getCountry(geoFilters.country);
-      if (c) geoTerms.push(c.name.toLowerCase());
+    // Search filter (name only for accuracy)
+    const q = (search.q || "").trim().toLowerCase();
+    if (q) {
+      filtered = filtered.filter(dev => dev.name.toLowerCase().includes(q));
     }
+
+    // Tier filter
+    if (search.developerTier) {
+      filtered = filtered.filter(dev => 
+        getDeveloperTier(dev.slug || "", dev.name || "", dev.rank) === search.developerTier
+      );
+    }
+
+    // Geography cascade filter
+    const geoTerms: string[] = [];
+    if (search.areasInclude.length) {
+      // Note: we might need to map slugs to names here if the dev record uses names
+      // but for now we follow the existing pattern.
+      geoTerms.push(...search.areasInclude.map(s => s.toLowerCase()));
+    } else if (search.region) {
+      geoTerms.push(search.region.toLowerCase());
+    }
+    
     if (geoTerms.length) {
       filtered = filtered.filter((dev) => {
         const rec = dev as unknown as Record<string, unknown>;
         const blob = [rec.city, rec.country, rec.headquarters, rec.location, rec.description, dev.name]
-
           .filter((v): v is string => typeof v === "string")
           .join(" ")
           .toLowerCase();
         return geoTerms.some((term) => blob.includes(term));
       });
-    }
-
-    // Developer dropdown filter (local)
-    if (selectedDeveloper) {
-      filtered = filtered.filter(dev => dev.name === selectedDeveloper);
-    }
-
-
-    // Advanced filter: developer name filter from shared AdvancedFilterPanel
-    if (shortcutFilters.developers && shortcutFilters.developers.length > 0) {
-      filtered = filtered.filter(dev =>
-        shortcutFilters.developers.some(d => dev.name.toLowerCase().includes(d.toLowerCase()))
-      );
-    }
-    
-    // Search filter (local + advanced) - match name only for accuracy
-    const qLocal = searchQuery.trim().toLowerCase();
-    const qAdvanced = (shortcutFilters.searchQuery || '').trim().toLowerCase();
-    const q = qAdvanced || qLocal;
-    if (q) {
-      filtered = filtered.filter(dev => dev.name.toLowerCase().includes(q));
-      // Sort: name-starts-with first, then name-includes
-      filtered.sort((a, b) => {
-        const aName = a.name.toLowerCase();
-        const bName = b.name.toLowerCase();
-        const aStarts = aName.startsWith(q) ? 0 : 1;
-        const bStarts = bName.startsWith(q) ? 0 : 1;
-        if (aStarts !== bStarts) return aStarts - bStarts;
-        return aName.localeCompare(bName);
-      });
-    }
-    
-    // Tier filter
-    if (tierFilter !== "all") {
-      filtered = filtered.filter(dev => 
-        getDeveloperTierKey(dev.slug || "", dev.name || "", dev.rank) === tierFilter
-      );
     }
     
     // Sort
@@ -150,8 +120,8 @@ const TIER_FILTERS = [
       filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
     } else {
       filtered.sort((a, b) => {
-        const aSlug = a.slug?.toLowerCase() || '';
-        const bSlug = b.slug?.toLowerCase() || '';
+        const aSlug = a.slug?.toLowerCase() || "";
+        const bSlug = b.slug?.toLowerCase() || "";
         const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
         const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
         if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
@@ -166,7 +136,8 @@ const TIER_FILTERS = [
     }
     
     return filtered;
-  }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts, shortcutFilters.developers, shortcutFilters.searchQuery, geoFilters]);
+  }, [developers, search, sortBy, projectCounts]);
+
 
   // Reset to page 1 when filters change
   useEffect(() => {
