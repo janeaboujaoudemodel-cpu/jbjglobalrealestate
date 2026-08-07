@@ -2,7 +2,6 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
-import { useLogoTone } from "@/hooks/useLogoTone";
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 
 interface DeveloperLogoProps {
@@ -61,10 +60,6 @@ export function DeveloperLogo({
   const resolvedSrc = isLaraix ? laraixTransparent.url : (isValidDeveloperLogoUrl(src) ? src : fallbackLogo);
   const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error && !override.forceNameplate;
 
-  // CONTRAST LOCK: white / near-white logo artwork is invisible on the white
-  // plate. Detect it and flip the plate to the emerald pair gradient so every
-  // developer logo stays visible. Explicit overrides always win.
-  const tone = useLogoTone(valid ? (resolvedSrc as string) : null);
   const needsDarkPlate = !dataKeepGold;
 
   const renderNameplate = (containerClass: string) => {
