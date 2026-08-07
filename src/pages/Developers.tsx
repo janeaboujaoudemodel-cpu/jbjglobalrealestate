@@ -30,6 +30,8 @@ const Developers = () => {
 
   // Count projects per developer (precomputed by the lightweight stats query)
   const projectCounts = useMemo(() => projectStats?.counts ?? {}, [projectStats]);
+  const normalizeDeveloperName = (value?: string | null) =>
+    (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
 
   // Top project cover image per developer (used as the card hero photo)
   const topProjectImageByDev = useMemo(
@@ -255,8 +257,8 @@ const Developers = () => {
                     <DeveloperCard 
                       key={developer.id} 
                       developer={developer} 
-                      projectCount={projectCounts[developer.id] || 0}
-                      heroImageUrl={developer.feature_image_url || topProjectImageByDev[developer.id]}
+                      projectCount={projectCounts[developer.id] || projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0}
+                      heroImageUrl={developer.feature_image_url || topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
                       index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
                     />
                   ))}
