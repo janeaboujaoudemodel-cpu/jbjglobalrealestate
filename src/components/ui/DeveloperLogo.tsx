@@ -2,7 +2,6 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
-import { useLogoTone } from "@/hooks/useLogoTone";
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 
 interface DeveloperLogoProps {
@@ -15,6 +14,7 @@ interface DeveloperLogoProps {
   name?: string | null;
   websiteUrl?: string | null;
   variant?: "tile" | "bare" | "card" | "nameplate";
+  embedded?: boolean;
   "data-keep-gold"?: boolean | string;
 }
 
@@ -49,6 +49,7 @@ export function DeveloperLogo({
   name,
   websiteUrl,
   variant = "tile",
+  embedded = false,
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
@@ -59,10 +60,6 @@ export function DeveloperLogo({
   const resolvedSrc = isLaraix ? laraixTransparent.url : (isValidDeveloperLogoUrl(src) ? src : fallbackLogo);
   const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error && !override.forceNameplate;
 
-  // CONTRAST LOCK: white / near-white logo artwork is invisible on the white
-  // plate. Detect it and flip the plate to the emerald pair gradient so every
-  // developer logo stays visible. Explicit overrides always win.
-  const tone = useLogoTone(valid ? (resolvedSrc as string) : null);
   const needsDarkPlate = !dataKeepGold;
 
   const renderNameplate = (containerClass: string) => {
@@ -77,7 +74,8 @@ export function DeveloperLogo({
         className={cn(containerClass, !containerClass.includes("bg-") && !dataKeepGold && EMERALD_PLATE_SURFACE)}
         data-keep-gold={dataKeepGold}
         data-no-contrast-guard="true"
-        data-developer-logo="nameplate"
+        data-developer-logo={embedded ? undefined : "nameplate"}
+        data-developer-logo-content={embedded ? "true" : undefined}
         aria-label={`${label} logo pending`}
         title={label}
       >
@@ -94,7 +92,12 @@ export function DeveloperLogo({
   };
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
-    <div className={containerClass} data-keep-gold={dataKeepGold} data-developer-logo="database">
+    <div
+      className={containerClass}
+      data-keep-gold={dataKeepGold}
+      data-developer-logo={embedded ? undefined : "database"}
+      data-developer-logo-content={embedded ? "true" : undefined}
+    >
       <img
         src={url}
         alt={alt}
@@ -146,13 +149,13 @@ export function DeveloperLogo({
     if (!valid) {
       return renderNameplate(cn(
         "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
-        logoPlateSurface(false),
+        embedded ? "bg-transparent border-0 shadow-none" : logoPlateSurface(false),
         className,
       ));
     }
     return renderImage(resolvedSrc as string, cn(
       "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
-      logoPlateSurface(needsDarkPlate),
+      embedded ? "bg-transparent border-0 shadow-none" : logoPlateSurface(needsDarkPlate),
       className,
     ));
   }

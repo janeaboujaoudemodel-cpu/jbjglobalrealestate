@@ -38048,3 +38048,28 @@ html body #root [data-developer-logo="nameplate"]:not([data-keep-gold]) span[ari
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* PASS 274 — a card owns exactly one emerald logo surface. The embedded
+   wordmark is transparent, so no second rectangle/highlight can appear. */
+html body #root [data-developer-logo-content="true"] {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Main developer identity: animate the complete metallic plate continuously,
+   not only the narrow shine overlay. */
+html body #root [data-keep-gold].jj-developer-logo-metallic {
+  background-size: 240% 240% !important;
+  animation: jj-developer-identity-plate 5.2s ease-in-out infinite !important;
+}
+@keyframes jj-developer-identity-plate {
+  0%, 100% { background-position: 0% 50%; transform: translateZ(0) scale(1); }
+  50% { background-position: 100% 50%; transform: translateZ(0) scale(1.018); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root [data-keep-gold].jj-developer-logo-metallic {
+    animation: none !important;
+  }
+}
