@@ -1,6 +1,5 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
 import { Database, ShieldCheck, Brain, Handshake, KeyRound } from "lucide-react";
 
 /**
@@ -84,6 +83,7 @@ export default function InnovationLabSection() {
                 const isActive = i === active;
                 return (
                   <li key={layer.title}>
+                    <button type="button" onClick={() => setActive(i)} className="w-full text-left">
                     <motion.div
                       animate={{ opacity: isActive ? 1 : 0.42 }}
                       transition={{ duration: 0.35 }}
@@ -117,6 +117,7 @@ export default function InnovationLabSection() {
                         )}
                       </span>
                     </motion.div>
+                    </button>
                   </li>
                 );
               })}
