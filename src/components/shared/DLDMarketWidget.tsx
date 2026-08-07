@@ -92,7 +92,7 @@ const DownloadReportDialog = ({
 
   const preset = (a: Date, b: Date) => { setFrom(isoDate(a)); setTo(isoDate(b)); };
 
-  const handleDownload = () => {
+  const handleDownload = () => { void (async () => {
     generateDldReportPdf({
       ytd, topAreas, topNationalities, areaNationalities,
       rangeFrom: new Date(from),
