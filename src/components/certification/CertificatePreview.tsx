@@ -290,14 +290,20 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                     {currentDate}
                   </div>
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 px-3 py-1">
-                  <span className="text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                <div
+                  data-no-contrast-guard
+                  data-surface="light"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/50 px-3 py-1"
+                  style={{ background: "#EFE6D6" }}
+                >
+                  <span className="text-[9px] uppercase tracking-[0.22em]" style={{ color: "rgba(26,26,26,0.7)", WebkitTextFillColor: "rgba(26,26,26,0.7)" }}>
                     Certificate ID
                   </span>
-                  <span className="text-[11px] text-[#1A1A1A] font-mono">
+                  <span className="text-[11px] font-mono" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
                     {certId}
                   </span>
                 </div>
+
               </div>
             </div>
           </div>
