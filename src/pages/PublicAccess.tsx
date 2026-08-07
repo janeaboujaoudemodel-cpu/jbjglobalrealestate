@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { CertificatePreview as TempCertPreview } from "@/components/certification"; // TEMPCERT
 import { X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { JJLogoImage } from "@/components/JJLogoImage";
@@ -1644,8 +1643,6 @@ export default function PublicAccess() {
 
       </main>
 
-      {/* TEMPCERT */}
-      <div className="mx-auto max-w-3xl p-8"><TempCertPreview isLocked /></div>
       <footer className="border-t border-[#0d3a2b]/15 bg-[#F7F2EA] px-5 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-[#1A1A1A]/65 sm:flex-row">
           <div className="flex items-center gap-4">
