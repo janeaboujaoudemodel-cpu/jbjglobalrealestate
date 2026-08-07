@@ -92,15 +92,18 @@ const DownloadReportDialog = ({
 
   const preset = (a: Date, b: Date) => { setFrom(isoDate(a)); setTo(isoDate(b)); };
 
-  const handleDownload = () => { void (async () => {
-    generateDldReportPdf({
-      ytd, topAreas, topNationalities, areaNationalities,
-      rangeFrom: new Date(from),
-      rangeTo: new Date(to),
-      lastUpdated,
-    });
-    setOpen(false);
+  const handleDownload = () => {
+    void (async () => {
+      await generateDldReportPdf({
+        ytd, topAreas, topNationalities, areaNationalities,
+        rangeFrom: new Date(from),
+        rangeTo: new Date(to),
+        lastUpdated,
+      });
+      setOpen(false);
+    })();
   };
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
