@@ -139,7 +139,11 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
       transition={{ duration: 0.5 }}
       className="relative"
     >
-      <Card className="bg-[#EBE1D0] border-[#B89555]/35 overflow-hidden">
+      <Card
+        className="border-[#B89555]/35 overflow-hidden"
+        style={{ background: "#EBE1D0" }}
+      >
+
         <CardContent className="p-6 sm:p-8">
           {/* Header */}
           <div className="text-center mb-6 flex flex-col items-center">
