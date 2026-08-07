@@ -290,33 +290,47 @@ export function useDeveloperProjectStats() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("developer_id, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units")
+        .select("developer_id, developer_name, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units")
         .eq("is_published", true);
       if (error) throw error;
 
       const counts: Record<string, number> = {};
       const images: Record<string, string> = {};
       const imageScores: Record<string, number> = {};
+      const countsByName: Record<string, number> = {};
+      const imagesByName: Record<string, string> = {};
+      const imageScoresByName: Record<string, number> = {};
+      const normalizeDeveloperName = (value?: string | null) =>
+        (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
       for (const row of (data ?? []) as Array<{
         developer_id: string | null;
+        developer_name: string | null;
         cover_image_url: string | null;
         card_image_url: string | null;
         gallery_start_image_url: string | null;
         is_featured: boolean | null;
         total_units: number | null;
       }>) {
+        const image = row.card_image_url || row.gallery_start_image_url || row.cover_image_url;
+        const score = (row.is_featured ? 1_000_000 : 0) + Math.max(0, row.total_units ?? 0);
+        const normalizedName = normalizeDeveloperName(row.developer_name);
+        if (normalizedName) {
+          countsByName[normalizedName] = (countsByName[normalizedName] ?? 0) + 1;
+          if (image && score >= (imageScoresByName[normalizedName] ?? -1)) {
+            imageScoresByName[normalizedName] = score;
+            imagesByName[normalizedName] = image;
+          }
+        }
         if (!row.developer_id) continue;
         counts[row.developer_id] = (counts[row.developer_id] ?? 0) + 1;
-        const image = row.card_image_url || row.gallery_start_image_url || row.cover_image_url;
         if (image) {
-          const score = (row.is_featured ? 1_000_000 : 0) + Math.max(0, row.total_units ?? 0);
           if (score >= (imageScores[row.developer_id] ?? -1)) {
             imageScores[row.developer_id] = score;
             images[row.developer_id] = image;
           }
         }
       }
-      return { counts, images };
+      return { counts, images, countsByName, imagesByName };
     },
   });
 }
