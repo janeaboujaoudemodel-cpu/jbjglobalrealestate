@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Building2, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import type { Developer } from "@/hooks/useProjects";
@@ -141,6 +142,19 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+              {/* LOCKED: the developer logo is never dropped when a signature
+                  project photo is used as the card hero. It always rides on the
+                  photo as a plate, with automatic light/dark plate contrast. */}
+              <div className="absolute bottom-2 left-2 z-10">
+                <DeveloperLogo
+                  variant="nameplate"
+                  src={developer.logo_url}
+                  name={developer.name}
+                  alt={`${developer.name} logo`}
+                  websiteUrl={(developer as { website_url?: string | null }).website_url}
+                  loading={isEager ? "eager" : "lazy"}
+                />
+              </div>
             </>
           ) : override.forceNameplate ? (
             <span className="text-[#1A1A1A] font-bold text-2xl md:text-3xl tracking-tight text-center px-2">
