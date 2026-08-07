@@ -1654,7 +1654,7 @@ export default function PublicAccess() {
       </main>
 
       <footer className="border-t border-[#0d3a2b]/15 bg-[#F7F2EA] px-5 py-3 sm:px-8 lg:px-12">
-        <div className="mx-auto flex min-h-[84px] max-w-7xl flex-col items-center justify-between gap-2 text-[13px] text-[#1A1A1A]/65 sm:flex-row sm:gap-4">
+        <div className="mx-auto flex min-h-[64px] max-w-7xl flex-col items-center justify-between gap-2 text-[13px] text-[#1A1A1A]/65 sm:flex-row sm:gap-4">
           <div className="flex items-center gap-3">
             <JJLogoImage size="md" showText={false} />
             <span className="font-serif text-xl leading-tight text-[#0d3a2b] sm:text-2xl">JBJ Global Real Estate</span>
