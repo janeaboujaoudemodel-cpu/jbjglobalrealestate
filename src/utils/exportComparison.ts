@@ -1,5 +1,7 @@
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+// html2canvas + jsPDF are imported lazily inside the export helpers so they
+// never enter the first-paint module graph of pages that merely render the
+// export bar (they added seconds to initial load).
+
 
 export type ExportFormat = "pdf" | "png" | "jpg" | "pptx";
 export type ExportTheme = "white" | "emerald";
@@ -9,6 +11,7 @@ const EMERALD_DEEP = "#042C1C";
 const CHAMPAGNE = "#B89555";
 
 const captureNode = async (node: HTMLElement, theme: ExportTheme): Promise<HTMLCanvasElement> => {
+  const { default: html2canvas } = await import("html2canvas");
   return await html2canvas(node, {
     backgroundColor: theme === "emerald" ? EMERALD_DEEP : "#FFFFFF",
     scale: 2,
@@ -81,6 +84,7 @@ export async function exportComparison(
     }
     if (format === "pdf") {
       const imgData = canvas.toDataURL("image/png");
+      const { default: jsPDF } = await import("jspdf");
       const pdf = new jsPDF({
         orientation: canvas.width > canvas.height ? "landscape" : "portrait",
         unit: "px",

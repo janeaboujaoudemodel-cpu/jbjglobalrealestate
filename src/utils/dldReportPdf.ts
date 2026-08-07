@@ -2,8 +2,8 @@
  * Branded Dubai Market Intelligence PDF report (JBJ GLOBAL REAL ESTATE).
  * Date-range customizable. Pulls live data from the same source the dashboard renders.
  */
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+// jsPDF + autoTable load on demand only — a static import pulled ~500KB of
+// PDF code into the first-paint graph of every page hosting the DLD widget.
 
 const GOLD: [number, number, number] = [184, 149, 85];
 const INK: [number, number, number] = [26, 26, 26];
@@ -27,7 +27,11 @@ const fmtDate = (d: Date) =>
 // Strip emoji / non-Latin glyphs (jsPDF default font cannot render them).
 const sanitize = (s: string) => s.replace(/[^\x00-\x7F]/g, "").trim();
 
-export function generateDldReportPdf(input: DldReportInput) {
+export async function generateDldReportPdf(input: DldReportInput) {
+  const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable"),
+  ]);
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const W = doc.internal.pageSize.getWidth();
   const H = doc.internal.pageSize.getHeight();
