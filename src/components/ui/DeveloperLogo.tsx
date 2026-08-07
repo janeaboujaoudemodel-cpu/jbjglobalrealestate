@@ -23,15 +23,20 @@ interface DeveloperLogoProps {
 // backgrounds baked into raster logos are visually knocked out with
 // mix-blend-mode: multiply against the plate's white surface, so PNG/JPG
 // logos look transparent without any server-side background removal.
+// LOCKED STANDARD (PASS 273): every developer logo plate is the emerald pair
+// gradient (#064E3B -> #042C1C -> black) with the wordmark knocked out to pure
+// white for guaranteed contrast. The animated gold plate survives ONLY on the
+// main developer identity card (developer page / project page hero), which
+// opts in with data-keep-gold + .jj-developer-logo-metallic.
+const EMERALD_PLATE_SURFACE =
+  "bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] " +
+  "border border-white/35 shadow-[0_6px_18px_rgba(0,0,0,0.30)]";
+
 const UNIFIED_PLATE =
   "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
-  "rounded-lg bg-white border border-[#B89555]/80 " +
-  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5";
+  "rounded-lg p-1.5 " + EMERALD_PLATE_SURFACE;
 
-const logoPlateSurface = (darkPlate?: boolean) =>
-  darkPlate
-    ? "bg-[#064E3B] border border-white/30 shadow-[0_4px_14px_rgba(0,0,0,0.24)]"
-    : "bg-white border border-[#B89555]/80 shadow-[0_3px_10px_rgba(0,0,0,0.16)]";
+const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
 
 
 
@@ -58,7 +63,7 @@ export function DeveloperLogo({
   // plate. Detect it and flip the plate to the emerald pair gradient so every
   // developer logo stays visible. Explicit overrides always win.
   const tone = useLogoTone(valid ? (resolvedSrc as string) : null);
-  const needsDarkPlate = !dataKeepGold && (override.darkPlate || (!override.invert && tone === "light"));
+  const needsDarkPlate = !dataKeepGold;
 
   const renderNameplate = (containerClass: string) => {
     const label = (name || alt || "Developer").trim();
@@ -69,7 +74,7 @@ export function DeveloperLogo({
 
     return (
       <div
-        className={cn(containerClass, !containerClass.includes("bg-") && "bg-white")}
+        className={cn(containerClass, !containerClass.includes("bg-") && !dataKeepGold && EMERALD_PLATE_SURFACE)}
         data-keep-gold={dataKeepGold}
         data-no-contrast-guard="true"
         data-developer-logo="nameplate"
@@ -80,7 +85,7 @@ export function DeveloperLogo({
         <span
           aria-hidden="true"
           className="font-serif font-bold leading-tight text-center tracking-normal px-0.5"
-          style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B", fontSize: display.length > 14 ? "0.48rem" : display.length > 9 ? "0.56rem" : "0.68rem" }}
+          style={{ color: dataKeepGold ? "#3a2a08" : "#FFFFFF", WebkitTextFillColor: dataKeepGold ? "#3a2a08" : "#FFFFFF", fontSize: display.length > 14 ? "0.48rem" : display.length > 9 ? "0.56rem" : "0.68rem" }}
         >
           {display}
         </span>
@@ -115,10 +120,14 @@ export function DeveloperLogo({
           scale === "compact" ? "rounded-sm" : "rounded-md",
         )}
         style={{
-          filter: override.imageFilter ?? (override.invert
-            ? "invert(1) brightness(1)"
-            : "contrast(1.08) saturate(1.1)"),
-          mixBlendMode: (override as { imageBlendMode?: React.CSSProperties["mixBlendMode"] }).imageBlendMode,
+          // Emerald plates: knock the artwork out to pure white so every
+          // wordmark reads at full contrast. Gold hero plate keeps dark ink.
+          filter: dataKeepGold
+            ? (override.imageFilter ?? "brightness(0) contrast(1.15)")
+            : "brightness(0) invert(1)",
+          mixBlendMode: dataKeepGold
+            ? (override as { imageBlendMode?: React.CSSProperties["mixBlendMode"] }).imageBlendMode
+            : "normal",
         }}
       />
     </div>
@@ -129,7 +138,7 @@ export function DeveloperLogo({
     if (!valid) return renderNameplate(cn(UNIFIED_PLATE, className));
     return renderImage(
       resolvedSrc as string,
-      cn(UNIFIED_PLATE, needsDarkPlate && "!bg-[#042C1C] !border-white/35", className),
+      cn(UNIFIED_PLATE, className),
     );
   }
 

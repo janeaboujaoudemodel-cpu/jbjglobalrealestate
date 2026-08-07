@@ -38025,3 +38025,26 @@ html body :is(section, div):has(> .jj-content-track > .jj-card-grid) {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PASS 273 — DEVELOPER LOGO PLATE STANDARD (LOCKED)
+   Every developer logo plate across the site (cards, similar developers,
+   recommended / handpicked for you, directories, chips) is the emerald pair
+   gradient with the wordmark knocked out to pure white. The animated gold
+   plate survives ONLY on the main developer identity card (developer page /
+   project page hero) via [data-keep-gold].jj-developer-logo-metallic.
+   ══════════════════════════════════════════════════════════════════════════ */
+html body #root [data-developer-logo]:not([data-keep-gold]) {
+  background-color: #042C1C !important;
+  background-image: linear-gradient(155deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+html body #root [data-developer-logo]:not([data-keep-gold]) img {
+  filter: brightness(0) invert(1) !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}
+html body #root [data-developer-logo="nameplate"]:not([data-keep-gold]) span[aria-hidden="true"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}

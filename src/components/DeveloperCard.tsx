@@ -47,7 +47,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         whileHover={{ y: -8, scale: 1.015, boxShadow: "0 26px 54px -14px rgba(0,0,0,0.36), 0 14px 28px -12px rgba(6,78,59,0.34)" }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
         data-developer-card
-        className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
+        className="group relative rounded-2xl cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
         style={{
           boxShadow: "0 6px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)",
         }}
@@ -55,7 +55,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
 
         {/* Hero — verified project photo only. Never replace real estate media
             with initials, wordmarks, or generated artwork. */}
-        <div className="relative aspect-[5/3] bg-[#F5F0E6] flex items-center justify-center overflow-hidden">
+        <div className="relative">
+        <div className="relative aspect-[5/3] bg-[#F5F0E6] flex items-center justify-center overflow-hidden rounded-t-2xl">
           {hasHero ? (
             <>
               <img
@@ -71,17 +72,6 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               {/* LOCKED: the developer logo is never dropped when a signature
                   project photo is used as the card hero. It always rides on the
                   photo as a plate, with automatic light/dark plate contrast. */}
-              <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 rounded-xl border border-[#B89555] bg-white p-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.18)]">
-                <DeveloperLogo
-                  variant="bare"
-                  src={developer.logo_url}
-                  name={developer.name}
-                  alt={`${developer.name} logo`}
-                  websiteUrl={(developer as { website_url?: string | null }).website_url}
-                  loading={isEager ? "eager" : "lazy"}
-                  className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1"
-                />
-              </div>
             </>
           ) : null}
 
@@ -97,6 +87,22 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               </Badge>
             </div>
           )}
+        </div>
+        {/* LOCKED (PASS 273): the logo plate always straddles the photo seam and
+            sits ABOVE the card — never clipped, never hidden under it. */}
+        {hasHero ? (
+          <div className="absolute bottom-0 left-4 z-20 h-16 w-16 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
+            <DeveloperLogo
+              variant="bare"
+              src={developer.logo_url}
+              name={developer.name}
+              alt={`${developer.name} logo`}
+              websiteUrl={(developer as { website_url?: string | null }).website_url}
+              loading={isEager ? "eager" : "lazy"}
+              className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
+            />
+          </div>
+        ) : null}
         </div>
 
         {/* Content section — white surface with black text & icons */}
