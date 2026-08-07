@@ -106,6 +106,11 @@ const captureReportRootToPdf = async (
   pages: HTMLElement[],
   filename: string
 ): Promise<{ blob: Blob; filename: string }> => {
+  const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+    import("html2canvas"),
+    import("jspdf"),
+  ]);
+
   const pdf = new jsPDF({
     unit: "px",
     format: [REPORT_PAGE_PX.width, REPORT_PAGE_PX.height],
@@ -118,10 +123,7 @@ const captureReportRootToPdf = async (
   // minute-long exports. This keeps PDF output identical to the preview while
   // reducing work to a single render pass.
   const totalHeight = REPORT_PAGE_PX.height * pages.length;
-  const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-    import("html2canvas"),
-    import("jspdf"),
-  ]);
+
   const canvas = await html2canvas(reportRoot, {
     scale: EXPORT_SCALE,
     useCORS: true,
