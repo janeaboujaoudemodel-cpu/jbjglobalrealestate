@@ -1004,7 +1004,10 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent" />
 
-      <div className="relative mx-auto grid max-w-5xl items-center gap-8 rounded-2xl border border-white/12 bg-white/[0.045] p-6 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8 md:grid-cols-[1fr_auto]">
+      <div
+        className="relative mx-auto grid max-w-5xl items-center gap-8 rounded-2xl bg-white/[0.045] p-6 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8 md:grid-cols-[1fr_auto]"
+        style={{ border: "1px solid rgba(255,255,255,0.28)", borderColor: "rgba(255,255,255,0.28)" }}
+      >
         <div>
           <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/62">For Brokers</span>
           <h2 className="mt-2 font-serif text-3xl leading-tight !text-white sm:text-[34px]">Become a JBJ Certified Broker.</h2>
