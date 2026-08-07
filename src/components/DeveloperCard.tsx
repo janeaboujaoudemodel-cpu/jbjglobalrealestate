@@ -124,7 +124,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         </div>
 
         {/* Content section — white surface with black text & icons */}
-        <div className="flex-1 px-4 pb-4 pt-10 bg-white flex flex-col">
+        <div className={`flex-1 px-4 pb-4 bg-white flex flex-col ${hasHero ? "pt-10" : "pt-4"}`}>
           <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 line-clamp-1">
             {developer.name}
           </h3>
