@@ -161,22 +161,40 @@ function PlateContent({ layer, active }: { layer: Layer; active: boolean }) {
 export default function InnovationLabSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [assembled, setAssembled] = useState(false);
+  const [paused, setPaused] = useState(false);
 
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.35 });
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setAssembled(true)),
+      { threshold: 0.25 },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
 
-  useMotionValueEvent(progress, "change", (v) => {
-    const next = Math.min(LAYERS.length - 1, Math.max(0, Math.floor(v * LAYERS.length + 0.0001)));
-    setActive((prev) => (prev === next ? prev : next));
-  });
+  useEffect(() => {
+    if (!assembled || paused) return;
+    const t = window.setInterval(() => setActive((p) => (p + 1) % LAYERS.length), 3200);
+    return () => window.clearInterval(t);
+  }, [assembled, paused]);
 
-  const tilt = useTransform(progress, [0, 1], [52, 46]);
-  const spin = useTransform(progress, [0, 1], [-28, -20]);
+  const tilt = 50;
+  const spin = -24;
 
   return (
-    <div ref={sectionRef} data-jbj-method="true" className="relative" style={{ height: `${LAYERS.length * 74}vh` }}>
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+    <div
+      ref={sectionRef}
+      data-jbj-method="true"
+      className="relative"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="flex min-h-[640px] items-center overflow-hidden py-16 md:py-20">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-5 md:px-8 lg:grid-cols-2 lg:gap-16">
+
           {/* Narrative rail */}
           <div className="order-2 space-y-8 lg:order-1">
             <div className="space-y-3">
