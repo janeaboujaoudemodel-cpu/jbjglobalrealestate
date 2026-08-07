@@ -13,7 +13,7 @@ import GeoFilterBar from "@/components/search/GeoFilterBar";
 import { EMPTY_FILTERS, filtersToParams, type GeoSearchFilters } from "@/lib/searchFilters";
 import { getAreas, getCountry, getRegions } from "@/data/geography";
 
-import { useDevelopers, useProjects } from "@/hooks/useProjects";
+import { useDevelopers, useDeveloperProjectStats } from "@/hooks/useProjects";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
@@ -70,7 +70,7 @@ function getDeveloperTierKey(slug: string, name = "", rank?: number | null): str
 
 const Developers = () => {
   const { data: developers, isLoading, refetch: refetchDevelopers } = useDevelopers();
-  const { data: projects } = useProjects();
+  const { data: projectStats } = useDeveloperProjectStats();
   
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -101,30 +101,14 @@ const Developers = () => {
     return sorted.map(d => d.name);
   }, [developers]);
 
-  // Count projects per developer
-  const projectCounts = useMemo(() => {
-    if (!projects) return {};
-    return projects.reduce<Record<string, number>>((acc, project) => {
-      if (project.developer?.id) {
-        acc[project.developer.id] = (acc[project.developer.id] || 0) + 1;
-      }
-      return acc;
-    }, {});
-  }, [projects]);
+  // Count projects per developer (precomputed by the lightweight stats query)
+  const projectCounts = useMemo(() => projectStats?.counts ?? {}, [projectStats]);
 
   // Top project cover image per developer (used as the card hero photo)
-  const topProjectImageByDev = useMemo(() => {
-    if (!projects) return {} as Record<string, string>;
-    const map: Record<string, string> = {};
-    for (const p of projects) {
-      const devId = p.developer?.id;
-      if (!devId) continue;
-      if (map[devId]) continue;
-      const img = (p as any).cover_image_url || (p as any).images?.find?.((i: any) => i?.image_url)?.image_url;
-      if (img) map[devId] = img;
-    }
-    return map;
-  }, [projects]);
+  const topProjectImageByDev = useMemo(
+    () => projectStats?.images ?? ({} as Record<string, string>),
+    [projectStats],
+  );
 
 
   // Apply filters to developers

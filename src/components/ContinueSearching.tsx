@@ -293,6 +293,41 @@ function isUrlValid(url: string | undefined): boolean {
   return false;
 }
 
+// PERF + STABILITY: developer-logo lookups are shared across every card in the
+// strip. Without this cache each card fired its own `developers` query (N+1) on
+// every render pass, which is what made the section load partially and made
+// logos flicker in and out. One request per developer name, cached for the
+// session, with the resolved URL kept stable.
+const developerLogoCache = new Map<string, string | null>();
+const developerLogoInflight = new Map<string, Promise<string | null>>();
+
+function resolveDeveloperLogoByName(name: string): Promise<string | null> {
+  const key = name.trim().toLowerCase();
+  if (developerLogoCache.has(key)) {
+    return Promise.resolve(developerLogoCache.get(key) ?? null);
+  }
+  const existing = developerLogoInflight.get(key);
+  if (existing) return existing;
+
+  const task = Promise.resolve(
+    supabase
+      .from("developers")
+      .select("logo_url")
+      .ilike("name", `%${name}%`)
+      .not("logo_url", "is", null)
+      .limit(1)
+      .maybeSingle(),
+  ).then(({ data }) => {
+    const url = data?.logo_url ?? null;
+    developerLogoCache.set(key, url);
+    developerLogoInflight.delete(key);
+    return url;
+  });
+
+  developerLogoInflight.set(key, task);
+  return task;
+}
+
 function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: number; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   const config = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.property;
   const Icon = config.icon;
@@ -307,20 +342,16 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   // non-null logo_url (some developers like Emaar exist as multiple slugs,
   // not all of which carry the logo).
   useEffect(() => {
-    if (item.type === "property" && !item.developerLogo && item.subtitle) {
-      supabase
-        .from("developers")
-        .select("logo_url")
-        .ilike("name", `%${item.subtitle}%`)
-        .not("logo_url", "is", null)
-        .limit(1)
-        .maybeSingle()
-        .then(({ data }) => {
-          if (data?.logo_url) {
-            patchItem(item.id, item.type, { developerLogo: data.logo_url });
-          }
-        });
-    }
+    if (item.type !== "property" || item.developerLogo || !item.subtitle) return;
+    let alive = true;
+    resolveDeveloperLogoByName(item.subtitle).then((logoUrl) => {
+      if (alive && logoUrl) {
+        patchItem(item.id, item.type, { developerLogo: logoUrl });
+      }
+    });
+    return () => {
+      alive = false;
+    };
   }, [item.id, item.type, item.developerLogo, item.subtitle, patchItem]);
 
   // Helper: fetch cover image from DB (once per mount)
@@ -386,20 +417,16 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
     }
   }, [item.id, item.type, item.imageUrl, item.slug, fetchCoverImage]);
 
-  // Detect broken image URLs and self-heal (only for valid-looking URLs)
+  // Detect broken image URLs and self-heal. PERF: no eager `new Image()` probe
+  // per card — that fired a parallel network request for every strip item and
+  // stalled first paint. Only invalid-looking URLs trigger a DB self-heal.
   useEffect(() => {
     if (!urlValid) {
       setImgBroken(true);
       fetchCoverImage();
       return;
     }
-    const img = new Image();
-    img.onload = () => setImgBroken(false);
-    img.onerror = () => {
-      setImgBroken(true);
-      fetchCoverImage();
-    };
-    img.src = item.imageUrl!;
+    setImgBroken(false);
   }, [item.imageUrl, urlValid, fetchCoverImage]);
 
   const hasValidImage = item.imageUrl && !imgBroken;

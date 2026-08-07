@@ -275,6 +275,39 @@ export function useCommunities() {
  * sensitive columns (office_phone, admin_email, notes, …) are not granted
  * to the anon role — so we must enumerate the public columns explicitly.
  */
+/**
+ * PERF: the developer directory only needs a project count and one cover image
+ * per developer. It used to call useProjects() which pulled every project row
+ * with `select(*)` plus image/document joins — several MB before the page could
+ * paint, which is why the directory rendered blank for 10+ seconds. This hook
+ * fetches two columns instead.
+ */
+export function useDeveloperProjectStats() {
+  return useQuery({
+    queryKey: ["developer-project-stats"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("developer_id, cover_image_url")
+        .eq("is_published", true);
+      if (error) throw error;
+
+      const counts: Record<string, number> = {};
+      const images: Record<string, string> = {};
+      for (const row of (data ?? []) as Array<{ developer_id: string | null; cover_image_url: string | null }>) {
+        if (!row.developer_id) continue;
+        counts[row.developer_id] = (counts[row.developer_id] ?? 0) + 1;
+        if (!images[row.developer_id] && row.cover_image_url) {
+          images[row.developer_id] = row.cover_image_url;
+        }
+      }
+      return { counts, images };
+    },
+  });
+}
+
 const DEVELOPERS_PUBLIC_SELECT = [
   "id", "name", "slug", "logo_url", "logo_url_processed", "logo_url_dark", "logo_bg_color",
   "logo_verified", "logo_locked", "logo_source", "logo_status", "logo_candidates",

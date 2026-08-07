@@ -2,6 +2,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
+import { useLogoTone } from "@/hooks/useLogoTone";
 
 interface DeveloperLogoProps {
   src?: string | null;
@@ -50,6 +51,12 @@ export function DeveloperLogo({
   const fallbackLogo = getWebsiteLogoFallbackUrl(websiteUrl);
   const resolvedSrc = isValidDeveloperLogoUrl(src) ? src : fallbackLogo;
   const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error && !override.forceNameplate;
+
+  // CONTRAST LOCK: white / near-white logo artwork is invisible on the white
+  // plate. Detect it and flip the plate to the emerald pair gradient so every
+  // developer logo stays visible. Explicit overrides always win.
+  const tone = useLogoTone(valid ? (resolvedSrc as string) : null);
+  const needsDarkPlate = override.darkPlate || (!override.invert && tone === "light");
 
   const renderNameplate = (containerClass: string) => {
     const label = (name || alt || "Developer").trim();
@@ -117,7 +124,10 @@ export function DeveloperLogo({
   // ── Nameplate variant — if no valid logo exists, show the approved icon fallback ──
   if (variant === "nameplate") {
     if (!valid) return renderNameplate(cn(UNIFIED_PLATE, className));
-    return renderImage(resolvedSrc as string, cn(UNIFIED_PLATE, className));
+    return renderImage(
+      resolvedSrc as string,
+      cn(UNIFIED_PLATE, needsDarkPlate && "!bg-[#042C1C] !border-white/35", className),
+    );
   }
 
   if (variant === "bare") {
@@ -130,7 +140,7 @@ export function DeveloperLogo({
     }
     return renderImage(resolvedSrc as string, cn(
       "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
-      logoPlateSurface(override.darkPlate),
+      logoPlateSurface(needsDarkPlate),
       className,
     ));
   }
@@ -140,7 +150,7 @@ export function DeveloperLogo({
   if (variant === "card") {
     const cardContainer = cn(
       "w-full h-full rounded-2xl inline-flex items-center justify-center p-3 overflow-hidden",
-      logoPlateSurface(override.darkPlate),
+      logoPlateSurface(needsDarkPlate),
       className,
     );
 
@@ -153,7 +163,7 @@ export function DeveloperLogo({
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
   const tileContainer = cn(
     "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center p-1.5 overflow-hidden",
-    logoPlateSurface(override.darkPlate),
+    logoPlateSurface(needsDarkPlate),
     className,
   );
 
