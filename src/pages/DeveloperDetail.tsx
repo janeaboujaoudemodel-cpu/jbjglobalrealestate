@@ -533,11 +533,12 @@ const DeveloperDetail = () => {
 
       {isFilterFixed && !bottomReached && (
         <div data-scoped-sticky-nav="developer" className="jj-utility-shell fixed left-0 right-0 top-0 z-[9999] backdrop-blur-md transition-all duration-300">
-          <div data-filter-clean="true" data-filter-bar-gold="developer-detail" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2">
-            <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
+          <div data-filter-clean="true" data-filter-bar-gold="developer-detail" data-sticky-utility-row="true" className="h-[56px] flex items-center bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] px-3 relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-[#B89555]/70 after:via-[#B89555] after:to-[#B89555]/70">
+            <div className="max-w-full w-full overflow-x-auto overscroll-x-contain scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
               <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} priorityFilter="developers" hidePropertyType hideTrendingSort />
             </div>
           </div>
+
           <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
             <div className="jj-content-track overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' } as React.CSSProperties}>
               <div className="flex w-max min-w-max items-center gap-1 py-2.5">
@@ -775,9 +776,14 @@ const DeveloperDetail = () => {
             }}
           />
 
-          <h2 className="text-foreground text-2xl font-semibold mb-6">
-            {selectedEmirate ? `Projects in ${selectedEmirate}` : "All Projects"}
-          </h2>
+          <div className="mb-4">
+            <h2 className="text-foreground text-2xl font-semibold leading-tight">
+              {selectedEmirate ? `Projects in ${selectedEmirate}` : "All Projects"}
+            </h2>
+            <p className="text-foreground/65 text-sm mt-1">
+              Every development by {developer.name} currently tracked by JBJ.
+            </p>
+          </div>
 
           {/* Sentinel for IntersectionObserver */}
           <div ref={filterSentinelRef} className="h-0" />
@@ -785,8 +791,6 @@ const DeveloperDetail = () => {
           {/* Duplicated inline filter bar removed — global filter bar handles this */}
 
 
-          {/* Spacer when filter is fixed to prevent content hiding under it */}
-          {isFilterFixed && <div className="h-[100px]" />}
 
           {/* Fixed portal filter bar removed — handled globally by GlobalFilterBar */}
 

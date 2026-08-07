@@ -58,8 +58,12 @@ export default function DriveLinkAttach({
         .update({ google_drive_url: clean || null })
         .eq("id", entityId);
       if (error) throw error;
-      toast.success(clean ? "Drive link saved" : "Drive link cleared");
+      toast.success(clean ? "Drive link saved — enriching in the background" : "Drive link cleared");
       onSaved?.(clean);
+      // Auto-enrichment: any saved link immediately runs the backend
+      // extraction so developer / area / project records and photos are
+      // enriched from the link's contents without a second click.
+      if (clean) void extract();
     } catch (e: any) {
       toast.error(e?.message || "Failed to save link");
     } finally {
