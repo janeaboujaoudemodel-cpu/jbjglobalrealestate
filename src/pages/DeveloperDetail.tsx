@@ -782,21 +782,8 @@ const DeveloperDetail = () => {
           {/* Sentinel for IntersectionObserver */}
           <div ref={filterSentinelRef} className="h-0" />
 
-          {/* Inline filter bar — gold champagne surface, white pill text/icons via scoped override */}
-          <div
-            data-filter-clean="true"
-            data-filter-bar-gold=""
-            className="jj-shimmer-champagne-live rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide"
-          >
-              <FilterShortcutBar
-              variant="dark"
-              filters={shortcutFilters}
-              onFilterChange={setShortcutFilters}
-              priorityFilter="developers"
-                hidePropertyType
-                hideTrendingSort
-            />
-          </div>
+          {/* Duplicated inline filter bar removed — global filter bar handles this */}
+
 
           {/* Spacer when filter is fixed to prevent content hiding under it */}
           {isFilterFixed && <div className="h-[100px]" />}
