@@ -18,8 +18,9 @@ interface DeveloperCardProps {
 }
 
 
+// Verified project photography only. Never list social "share images" here —
+// those are wordmarks on flat backgrounds and read as a broken/blank hero.
 const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
-  omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6528eba69ec9911fdda1b151_omniyat-share-image.webp",
   nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
   "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
 };
@@ -39,7 +40,16 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const cardHeroImageUrl = candidates[heroIndex];
 
   const hasHero = !!cardHeroImageUrl;
-  const safeDescription = getSafeDeveloperDescription(developer);
+  // LOCKED (no cropped text): never render an ellipsis. The blurb is trimmed on
+  // a word boundary so the two-line slot always holds a complete phrase.
+  const safeDescription = useMemo(() => {
+    const raw = (getSafeDeveloperDescription(developer) || "").trim();
+    if (raw.length <= 92) return raw;
+    const cut = raw.slice(0, 92);
+    const lastStop = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf(", "));
+    if (lastStop > 48) return cut.slice(0, lastStop + 1).replace(/,$/, "");
+    return cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:]$/, "");
+  }, [developer]);
 
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
@@ -125,13 +135,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
 
         {/* Content section — white surface with black text & icons */}
         <div className={`flex-1 px-4 pb-4 bg-white flex flex-col ${hasHero ? "pt-10" : "pt-4"}`}>
-          <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 line-clamp-1">
+          <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 break-words">
             {developer.name}
           </h3>
 
           <div className="flex-1 min-h-[36px]">
             {safeDescription ? (
-              <p className="text-[#0A0A0A]/75 text-xs line-clamp-2 leading-relaxed">
+              <p className="text-[#0A0A0A]/75 text-xs leading-relaxed">
                 {safeDescription}
               </p>
             ) : (
