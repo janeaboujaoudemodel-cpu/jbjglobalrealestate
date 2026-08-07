@@ -7,8 +7,8 @@
  */
 import { createRoot, type Root } from "react-dom/client";
 import { createElement } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+// html2canvas + jsPDF are imported on demand inside the render function so
+// they stay out of the first-paint module graph.
 import {
   ReportEngine,
   type ReportEngineProps,
@@ -117,6 +117,10 @@ const captureReportRootToPdf = async (
   // minute-long exports. This keeps PDF output identical to the preview while
   // reducing work to a single render pass.
   const totalHeight = REPORT_PAGE_PX.height * pages.length;
+  const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+    import("html2canvas"),
+    import("jspdf"),
+  ]);
   const canvas = await html2canvas(reportRoot, {
     scale: EXPORT_SCALE,
     useCORS: true,
