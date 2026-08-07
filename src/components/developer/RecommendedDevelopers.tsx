@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -7,10 +7,25 @@ import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { supabase } from "@/integrations/supabase/client";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface RecommendedDevelopersProps {
   currentDeveloperSlug: string;
   currentDeveloperEmirate?: string | null;
+}
+
+const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
+  omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6528eba69ec9911fdda1b151_omniyat-share-image.webp",
+  nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
+  dubaisouthproperties: "https://dubaisouthproperties.ae/wp-content/uploads/2026/05/SG01-VIEW4.webp",
+};
+
+function RecommendedDeveloperPhoto({ urls, name }: { urls: string[]; name: string }) {
+  const [index, setIndex] = useState(0);
+  useEffect(() => setIndex(0), [name, urls.join("|")]);
+  const url = urls[index];
+  if (!url) return null;
+  return <img src={getHighResImageUrl(url)} alt={`${name} featured development`} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]" decoding="async" onError={() => setIndex((current) => Math.min(current + 1, urls.length))} />;
 }
 
 export default function RecommendedDevelopers({
@@ -77,20 +92,34 @@ export default function RecommendedDevelopers({
     enabled: recommendedIds.length > 0,
     staleTime: 10 * 60 * 1000,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("developer_id, cover_image_url, created_at")
-        .in("developer_id", recommendedIds)
-        .eq("is_published", true)
-        .not("cover_image_url", "is", null)
-        .neq("cover_image_url", "")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      const map: Record<string, string> = {};
-      (data || []).forEach((row: any) => {
-        if (row.developer_id && row.cover_image_url && !map[row.developer_id]) {
-          map[row.developer_id] = row.cover_image_url;
-        }
+      const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+      const searches = recommended.map(async (developer: any) => {
+        const nameStem = developer.name.replace(/\b(properties|developers?|developments?|real estate|llc|group)\b/gi, "").trim();
+        const { data, error } = await supabase
+          .from("projects")
+          .select("developer_id, developer_name, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units, created_at")
+          .or(`developer_id.eq.${developer.id},developer_name.ilike.%${nameStem}%`)
+          .eq("is_published", true)
+          .not("cover_image_url", "is", null)
+          .order("is_featured", { ascending: false })
+          .order("total_units", { ascending: false, nullsFirst: false })
+          .limit(12);
+        if (error) throw error;
+        const urls = (data || [])
+          .filter((row: any) => row.developer_id === developer.id || normalize(row.developer_name || "").includes(normalize(nameStem)))
+          .flatMap((row: any) => [row.card_image_url, row.gallery_start_image_url, row.cover_image_url])
+          .filter((url): url is string => typeof url === "string" && url.length > 0);
+        const stableFirst = [...new Set(urls)].sort((a, b) => {
+          const aStable = /reelly-backend\.s3|\/storage\/v1\/object\/public\//i.test(a) ? 1 : 0;
+          const bStable = /reelly-backend\.s3|\/storage\/v1\/object\/public\//i.test(b) ? 1 : 0;
+          return bStable - aStable;
+        });
+        return [developer.id, stableFirst] as const;
+      });
+      const data = await Promise.all(searches);
+      const map: Record<string, string[]> = {};
+      data.forEach(([developerId, urls]) => {
+        if (urls.length) map[developerId] = [...urls];
       });
       return map;
     },
@@ -128,7 +157,7 @@ export default function RecommendedDevelopers({
           </div>
 
           {/* Developer Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch max-w-6xl mx-auto">
             {recommended.map((dev: any, index: number) => {
               // Prefer a real project cover image. Never use the developer
               // logo/wordmark as the card hero — that's what produced the
@@ -137,12 +166,14 @@ export default function RecommendedDevelopers({
                 if (!url) return false;
                 return /logo|nameplate|thumb|icon|placeholder|wordmark/i.test(url);
               };
-              const projectCover = projectImageByDev?.[dev.id];
-              const rawImage =
-                (projectCover && !looksLikeLogoUrl(projectCover) && projectCover) ||
-                (dev.feature_image_url && !looksLikeLogoUrl(dev.feature_image_url) && dev.feature_image_url) ||
-                null;
-              const cardImage = rawImage ? getHighResImageUrl(rawImage) : null;
+              const normalizedDeveloper = (dev.slug || dev.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+              const rawProjectImages = projectImageByDev?.[dev.id];
+              const projectImages = Array.isArray(rawProjectImages) ? rawProjectImages : rawProjectImages ? [rawProjectImages] : [];
+              const cardImages = [...new Set([
+                OFFICIAL_FLAGSHIP_MEDIA[normalizedDeveloper],
+                ...projectImages,
+                dev.feature_image_url,
+              ].filter((url): url is string => Boolean(url) && !looksLikeLogoUrl(url)))];
               return (
               <motion.div
                 key={dev.slug}
@@ -155,28 +186,21 @@ export default function RecommendedDevelopers({
               >
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="group flex flex-col h-full rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
+                  className="group flex min-h-[290px] flex-col h-full rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
                 >
                   {/* Photo only when a real project cover exists — never a guessed fallback image. */}
-                  <div className="h-32 relative overflow-hidden bg-[#F7F2EA]">
-                    {cardImage ? (
-                      <img
-                        src={cardImage}
-                        alt={`${dev.name} featured development`}
-                        loading="lazy"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center px-4 text-center">
-                        <span className="font-serif text-xl font-bold text-[#064E3B] leading-tight">{dev.name}</span>
-                      </div>
-                    )}
+                  <div className="h-44 relative overflow-hidden bg-[#F7F2EA]">
+                    <RecommendedDeveloperPhoto urls={cardImages} name={dev.name} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+                    {dev.logo_url ? (
+                      <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 jj-cta-gold-metallic jj-developer-logo-metallic rounded-xl p-1.5">
+                        <DeveloperLogo src={dev.logo_url} name={dev.name} alt={`${dev.name} logo`} variant="bare" data-keep-gold className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1" />
+                      </div>
+                    ) : null}
                   </div>
 
                   {/* Info */}
-                  <div className="p-3 border-t border-[#B89555]/50 flex-1 flex flex-col justify-start">
+                  <div className="px-4 pb-4 pt-10 border-t border-[#B89555]/50 flex-1 flex flex-col justify-start">
                     <h3 className="text-[#1A1A1A] font-bold text-sm leading-snug group-hover:text-[#1A1A1A] transition-colors break-words">
                       {dev.name}
                     </h3>
@@ -188,6 +212,7 @@ export default function RecommendedDevelopers({
                         <span>{Number(dev.offplan_projects).toLocaleString()} Off-Plan</span>
                       )}
                     </div>
+                    <span className="mt-auto pt-4 text-xs font-bold text-[#064E3B]">View developer portfolio</span>
                   </div>
                 </Link>
               </motion.div>

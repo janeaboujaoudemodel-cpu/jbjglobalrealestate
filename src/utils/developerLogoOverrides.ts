@@ -14,6 +14,7 @@ export type DeveloperLogoOverride = {
   forceNameplate?: boolean;
   darkPlate?: boolean;
   imageFilter?: string;
+  imageBlendMode?: "normal" | "multiply" | "screen";
 };
 
 const normalize = (s: string) =>
@@ -62,6 +63,11 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   zoya: { darkPlate: true, imageFilter: "contrast(1.28) saturate(1.14) brightness(1.08)" },
   zoyadevelopment: { darkPlate: true, imageFilter: "contrast(1.28) saturate(1.14) brightness(1.08)" },
   zoyadevelopments: { darkPlate: true, imageFilter: "contrast(1.28) saturate(1.14) brightness(1.08)" },
+  // The supplied Laraix raster has a black plate baked into the image. Screen
+  // blend removes that plate against the animated gold frame while preserving
+  // the official red/white artwork.
+  laraix: { imageBlendMode: "screen", imageFilter: "contrast(1.2) saturate(1.2)" },
+  laraixdevelopers: { imageBlendMode: "screen", imageFilter: "contrast(1.2) saturate(1.2)" },
 };
 
 

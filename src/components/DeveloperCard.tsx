@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Building2, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
@@ -14,17 +14,30 @@ interface DeveloperCardProps {
   projectCount?: number;
   index?: number;
   heroImageUrl?: string;
+  heroImageUrls?: string[];
 }
 
 
-const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }: DeveloperCardProps) => {
+const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
+  omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6528eba69ec9911fdda1b151_omniyat-share-image.webp",
+  nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
+};
+
+const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
   const isEager = index < 8;
-  const cardHeroImageUrl = developer.feature_image_url || heroImageUrl || undefined;
+  const candidates = useMemo(() => [...new Set([
+    OFFICIAL_FLAGSHIP_MEDIA[(developer.slug || developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "")],
+    ...heroImageUrls,
+    developer.feature_image_url,
+    heroImageUrl,
+  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, developer.name, developer.slug, heroImageUrl, heroImageUrls]);
+  const [heroIndex, setHeroIndex] = useState(0);
+  useEffect(() => setHeroIndex(0), [developer.id]);
+  const cardHeroImageUrl = candidates[heroIndex];
 
   const hasHero = !!cardHeroImageUrl;
-  const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
   const safeDescription = getSafeDeveloperDescription(developer);
 
   return (
@@ -39,7 +52,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
         }}
       >
 
-        {/* Hero — project photo (preferred) with logo/name fallback */}
+        {/* Hero — verified project photo only. Never replace real estate media
+            with initials, wordmarks, or generated artwork. */}
         <div className="relative aspect-[5/3] bg-[#F5F0E6] flex items-center justify-center overflow-hidden">
           {hasHero ? (
             <>
@@ -49,34 +63,27 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
                 loading={isEager ? "eager" : "lazy"}
                 referrerPolicy="no-referrer"
                 decoding="async"
+                onError={() => setHeroIndex((current) => Math.min(current + 1, candidates.length))}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
               {/* LOCKED: the developer logo is never dropped when a signature
                   project photo is used as the card hero. It always rides on the
                   photo as a plate, with automatic light/dark plate contrast. */}
-              <div className="absolute bottom-2 left-2 z-10">
+              <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 rounded-xl p-1.5 jj-cta-gold-metallic jj-developer-logo-metallic">
                 <DeveloperLogo
-                  variant="nameplate"
+                  variant="bare"
                   src={developer.logo_url}
                   name={developer.name}
                   alt={`${developer.name} logo`}
                   websiteUrl={(developer as { website_url?: string | null }).website_url}
                   loading={isEager ? "eager" : "lazy"}
+                  data-keep-gold
+                  className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1"
                 />
               </div>
             </>
-          ) : (
-            <DeveloperLogo
-              variant="card"
-              src={logoValid ? developer.logo_url : null}
-              name={developer.name}
-              alt={`${developer.name} logo`}
-              websiteUrl={developer.website_url}
-              loading={isEager ? "eager" : "lazy"}
-              className="!rounded-none !border-0 !shadow-none"
-            />
-          )}
+          ) : null}
 
           {/* Tier Badge — unified emerald metallic pill, white text, always present */}
           {tierKey !== "other" && (
@@ -93,7 +100,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
         </div>
 
         {/* Content section — white surface with black text & icons */}
-        <div className="flex-1 p-4 bg-white flex flex-col">
+        <div className="flex-1 px-4 pb-4 pt-10 bg-white flex flex-col">
           <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 line-clamp-1">
             {developer.name}
           </h3>

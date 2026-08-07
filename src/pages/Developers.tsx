@@ -254,11 +254,15 @@ const Developers = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
                   {paginatedDevelopers.map((developer, idx) => (
-                    <DeveloperCard 
+                    <DeveloperCard
                       key={developer.id} 
                       developer={developer} 
                       projectCount={projectCounts[developer.id] || projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0}
                       heroImageUrl={developer.feature_image_url || topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
+                      heroImageUrls={[
+                        ...(projectStats?.imageCandidates?.[developer.id] || []),
+                        ...(projectStats?.imageCandidatesByName?.[normalizeDeveloperName(developer.name)] || []),
+                      ]}
                       index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
                     />
                   ))}

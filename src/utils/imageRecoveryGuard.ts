@@ -7,7 +7,6 @@
  *
  * Opt out per-image with `data-no-fallback`.
  */
-import { buildChampagneInitialsDataUri } from "./champagneInitialsFallback";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 
 const RECOVERED = "data-img-recovered";
@@ -24,17 +23,6 @@ const THUMB_HINTS = [
 
 function looksLikeThumb(src: string): boolean {
   return THUMB_HINTS.some((re) => re.test(src));
-}
-
-function applyInitialsFallback(img: HTMLImageElement) {
-  if (img.getAttribute(RECOVERED) === "initials") return;
-  const w = img.clientWidth || img.naturalWidth || parseInt(img.getAttribute("width") || "0", 10) || 400;
-  const h = img.clientHeight || img.naturalHeight || parseInt(img.getAttribute("height") || "0", 10) || 300;
-  const uri = buildChampagneInitialsDataUri({ alt: img.alt, width: w, height: h });
-  img.setAttribute(RECOVERED, "initials");
-  // strip srcset so the fallback wins
-  if (img.srcset) img.srcset = "";
-  img.src = uri;
 }
 
 function handle(img: HTMLImageElement, reason: "error" | "zero") {
@@ -68,7 +56,10 @@ function handle(img: HTMLImageElement, reason: "error" | "zero") {
     }
   }
 
-  applyInitialsFallback(img);
+  // Never fabricate initials/letter artwork for missing media. Components
+  // with multiple verified sources advance to their next real photograph via
+  // their own onError handler; single-source images remain marked as failed.
+  img.setAttribute(RECOVERED, "failed");
 }
 
 let installed = false;

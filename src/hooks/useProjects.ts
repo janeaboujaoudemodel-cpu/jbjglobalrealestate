@@ -300,6 +300,8 @@ export function useDeveloperProjectStats() {
       const countsByName: Record<string, number> = {};
       const imagesByName: Record<string, string> = {};
       const imageScoresByName: Record<string, number> = {};
+      const imageCandidates: Record<string, Array<{ url: string; score: number }>> = {};
+      const imageCandidatesByName: Record<string, Array<{ url: string; score: number }>> = {};
       const normalizeDeveloperName = (value?: string | null) =>
         (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
       for (const row of (data ?? []) as Array<{
@@ -320,17 +322,25 @@ export function useDeveloperProjectStats() {
             imageScoresByName[normalizedName] = score;
             imagesByName[normalizedName] = image;
           }
+          if (image) imageCandidatesByName[normalizedName] = [...(imageCandidatesByName[normalizedName] || []), { url: image, score }];
         }
         if (!row.developer_id) continue;
         counts[row.developer_id] = (counts[row.developer_id] ?? 0) + 1;
         if (image) {
+          imageCandidates[row.developer_id] = [...(imageCandidates[row.developer_id] || []), { url: image, score }];
           if (score >= (imageScores[row.developer_id] ?? -1)) {
             imageScores[row.developer_id] = score;
             images[row.developer_id] = image;
           }
         }
       }
-      return { counts, images, countsByName, imagesByName };
+      const finalize = (source: Record<string, Array<{ url: string; score: number }>>) =>
+        Object.fromEntries(Object.entries(source).map(([key, values]) => [key, [...new Map(values.sort((a, b) => {
+          const aStable = /reelly-backend\.s3|\/storage\/v1\/object\/public\//i.test(a.url) ? 1 : 0;
+          const bStable = /reelly-backend\.s3|\/storage\/v1\/object\/public\//i.test(b.url) ? 1 : 0;
+          return bStable - aStable || b.score - a.score;
+        }).map((item) => [item.url, item.url])).values()].slice(0, 8)]));
+      return { counts, images, countsByName, imagesByName, imageCandidates: finalize(imageCandidates), imageCandidatesByName: finalize(imageCandidatesByName) };
     },
   });
 }
