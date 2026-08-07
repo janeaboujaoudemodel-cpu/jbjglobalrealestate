@@ -191,18 +191,15 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
 
             {/* Content */}
             <div className="relative z-10 px-8 sm:px-14 py-10 sm:py-14 text-center">
-              {/* Clean academy crest — no wordmark underline on the plate */}
+              {/* Institution line — no label chip, engraved wordmark only */}
               <div
                 data-no-contrast-guard
-                data-surface="light"
-                className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-[#B89555]/55 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] shadow-[0_10px_28px_-24px_rgba(26,26,26,.55)]"
-                style={{ background: "#FDFBF7", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                className="mb-5 text-[13px] sm:text-sm font-semibold uppercase tracking-[0.34em]"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
               >
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-[image:var(--jj-emerald-ombre)]" data-surface="emerald">
-                  <GraduationCap className="h-3.5 w-3.5 text-white" strokeWidth={2.6} />
-                </span>
-                <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Broker Academy</span>
+                JBJ Global Broker Academy
               </div>
+
 
 
               {/* Eyebrow */}
