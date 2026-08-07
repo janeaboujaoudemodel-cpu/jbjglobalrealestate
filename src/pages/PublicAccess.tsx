@@ -1508,7 +1508,7 @@ export default function PublicAccess() {
                     data-no-contrast-guard
                     data-package-chooser-card
 
-                    className={`${light ? "" : "jj-emerald-metallic jj-ready-cta-metallic allow-white"} flex h-full min-h-[420px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[460px] ${
+                    className={`${light ? "jj-light-metallic" : "jj-emerald-metallic jj-ready-cta-metallic allow-white"} flex h-full min-h-[420px] flex-col items-start gap-4 rounded-2xl px-7 py-8 text-left transition sm:min-h-[460px] ${
                       active
                         ? light
                           ? "ring-1 ring-[#0d3a2b]/35"
@@ -1653,16 +1653,17 @@ export default function PublicAccess() {
 
       </main>
 
-      <footer className="border-t border-[#0d3a2b]/15 bg-[#F7F2EA] px-5 py-8 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-[#1A1A1A]/65 sm:flex-row">
-          <div className="flex items-center gap-4">
-            <JJLogoImage size="lg" showText={false} className="!items-start" />
-            <span className="font-serif text-2xl leading-tight text-[#0d3a2b] sm:text-3xl">JBJ Global Real Estate</span>
+      <footer className="border-t border-[#0d3a2b]/15 bg-[#F7F2EA] px-5 py-3 sm:px-8 lg:px-12">
+        <div className="mx-auto flex min-h-[64px] max-w-7xl flex-col items-center justify-between gap-2 text-[13px] text-[#1A1A1A]/65 sm:flex-row sm:gap-4">
+          <div className="flex items-center gap-3">
+            <JJLogoImage size="md" showText={false} />
+            <span className="font-serif text-xl leading-tight text-[#0d3a2b] sm:text-2xl">JBJ Global Real Estate</span>
           </div>
 
           <p>© {new Date().getFullYear()} JBJ Global Real Estate. Dubai · UAE.</p>
         </div>
       </footer>
+
 
       {/* Welcome portal pop-up — explains this is the access gate, not the full site. */}
       <WelcomePortalOverlay
