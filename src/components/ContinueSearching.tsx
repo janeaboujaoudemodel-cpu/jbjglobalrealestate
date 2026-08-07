@@ -466,7 +466,14 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
             style={{ backgroundImage: `url(${item.imageUrl})` }}
-          />
+          >
+            <img 
+              src={item.imageUrl} 
+              className="sr-only" 
+              alt="" 
+              onError={() => setImgBroken(true)} 
+            />
+          </div>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
             <Icon className="w-12 h-12 text-white" />
@@ -492,11 +499,11 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
             <DeveloperLogo
               src={item.developerLogo}
+              name={item.subtitle}
               alt={item.subtitle || item.name || "Developer"}
               className=""
               onError={() => setLogoError(true)}
             />
-          </div>
         ) : (
           item.type === "property" && item.subtitle && !item.subtitle.includes(",") && (
             <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
