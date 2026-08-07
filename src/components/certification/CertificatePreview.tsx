@@ -144,7 +144,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
         style={{ background: "#EBE1D0" }}
       >
 
-        <CardContent className="p-6 sm:p-8">
+        <CardContent className="p-6 sm:p-8" style={{ background: "#EBE1D0" }}>
           {/* Header */}
           <div className="text-center mb-6 flex flex-col items-center">
             <CertificateMedallion size={64} />
