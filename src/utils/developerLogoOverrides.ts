@@ -66,6 +66,10 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   // Laraix uses a cropped transparent brand asset; no blend-mode workaround.
   laraix: { imageFilter: "contrast(1.08) saturate(1.08)" },
   laraixdevelopers: { imageFilter: "contrast(1.08) saturate(1.08)" },
+  // The supplied Dubai South bitmap contains an opaque white square. Render
+  // the approved wordmark directly on the single emerald plate instead.
+  dubaisouth: { forceNameplate: true },
+  dubaisouthproperties: { forceNameplate: true },
 };
 
 

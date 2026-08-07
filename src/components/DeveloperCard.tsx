@@ -99,6 +99,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               alt={`${developer.name} logo`}
               websiteUrl={(developer as { website_url?: string | null }).website_url}
               loading={isEager ? "eager" : "lazy"}
+              embedded
               className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
             />
           </div>
