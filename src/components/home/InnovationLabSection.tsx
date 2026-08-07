@@ -293,31 +293,31 @@ export default function InnovationLabSection() {
                         ? "0 34px 70px -18px rgba(4,44,28,0.5)"
                         : "0 18px 44px -22px rgba(4,44,28,0.35)",
                     }}
-                    initial={{ x: -150, y: -85, opacity: 0, rotateX: tilt, rotateZ: spin }}
+                    initial={{ x: -150, y: -80, opacity: 0, rotateX: tilt, rotateZ: spin }}
                     animate={
                       assembled
                         ? {
-                            x: -178 + (i - 2) * 24 + (on ? 40 : 0),
-                            y: -80 + (i - 2) * -104 + (on ? -26 : 0),
-                            scale: on ? 1.08 : 0.98,
+                            x: -166 + (i - 2) * 16 + (on ? 14 : 0),
+                            y: -74 + (i - 2) * -92 + (on ? -18 : 0),
+                            scale: on ? 1.05 : 0.97,
                             opacity: on ? 1 : 0.72,
                             rotateX: on ? 24 : tilt,
                             rotateZ: on ? -10 : spin,
                             rotateY: on ? 3 : 0,
                           }
-                        : { x: -150, y: -85, opacity: 0, rotateX: tilt, rotateZ: spin }
+                        : { x: -150, y: -80, opacity: 0, rotateX: tilt, rotateZ: spin }
                     }
                     whileHover={{
                       rotateX: 14,
                       rotateZ: -6,
                       rotateY: 0,
-                      scale: 1.12,
-                      x: -178 + (i - 2) * 24 + 56,
-                      y: -80 + (i - 2) * -104 - 34,
+                      scale: 1.08,
+                      x: -166 + (i - 2) * 16 + 22,
+                      y: -74 + (i - 2) * -92 - 26,
                       opacity: 1,
                       transition: { type: "spring", stiffness: 180, damping: 18 },
                     }}
-                    whileTap={{ scale: 1.03 }}
+                    whileTap={{ scale: 1.02 }}
 
                     transition={{ type: "spring", stiffness: 110, damping: 20, delay: assembled ? i * 0.09 : 0 }}
                   >
