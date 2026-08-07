@@ -187,15 +187,17 @@ export default function RecommendedDevelopers({
               >
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="group flex min-h-[290px] flex-col h-full rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
+                  className="group flex min-h-[290px] flex-col h-full rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
                 >
                   {/* Photo only when a real project cover exists — never a guessed fallback image. */}
-                  <div className="h-44 relative overflow-hidden bg-[#F7F2EA]">
+                  <div className="relative">
+                  <div className="h-44 relative overflow-hidden bg-[#F7F2EA] rounded-t-xl">
                     <RecommendedDeveloperPhoto urls={cardImages} name={dev.name} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+                  </div>
                     {dev.logo_url ? (
-                      <div className="absolute bottom-0 left-4 z-10 h-16 w-16 translate-y-1/2 rounded-xl border border-[#B89555] bg-white p-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.18)]">
-                        <DeveloperLogo src={dev.logo_url} name={dev.name} alt={`${dev.name} logo`} variant="bare" className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1" />
+                      <div className="absolute bottom-0 left-4 z-20 h-16 w-16 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
+                        <DeveloperLogo src={dev.logo_url} name={dev.name} alt={`${dev.name} logo`} variant="bare" className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md" />
                       </div>
                     ) : null}
                   </div>
