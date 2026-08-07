@@ -472,7 +472,7 @@ function ProjectDetailLayoutInner({
     // are migrated, use only imagery extracted from the official factsheet —
     // never a stock/fake placeholder — so hero and gallery remain usable.
     return [
-      "aerial-resort", "pool-cabanas-marina", "grand-lobby", "furnished-serviced-apartment",
+      "aerial-resort", "pool-cabanas-marina", "grand-lobby", "furnished-serviced-apartments",
       "indoor-pool-columns", "panoramic-gym", "spa-pool", "helipad-air-taxi",
     ].map((name, index) => ({ id: `amra-approved-${index}`, url: amraAsset(name), alt: `${project.name} official factsheet` }));
   }, [project.images, project.name]);
