@@ -65,12 +65,21 @@ export const buildDeveloperSocialLinks = (developer: AnyDeveloper | null | undef
   return [];
 };
 
+/** Titles must never be shown in brackets: "Name (Chairman)" -> "Name, Chairman". */
+export const stripBracketedTitle = (value: string) =>
+  value
+    .replace(/\s*[\(\[]\s*([^)\]]+?)\s*[\)\]]/g, ", $1")
+    .replace(/\s*,\s*,/g, ",")
+    .replace(/\s{2,}/g, " ")
+    .replace(/[,\s]+$/, "")
+    .trim();
+
 export const buildPublicDeveloperFacts = (developer: AnyDeveloper | null | undefined, projectCount = 0) => {
   if (!developer) return [];
   const custom = getDeveloperCustomFields(developer);
   const globalPresence = fieldToList(custom.global_presence);
   const facts = [
-    { label: "Leadership", value: fieldToText(developer.ceo_name) },
+    { label: "Leadership", value: stripBracketedTitle(fieldToText(developer.ceo_name)) },
     { label: "Founded", value: developer.founded_year ? String(developer.founded_year) : "" },
     { label: "Projects in UAE", value: fieldToText(custom.projects_uae) || (projectCount ? String(projectCount) : "") },
     { label: "Projects outside UAE", value: fieldToText(custom.projects_outside_uae) },
@@ -82,10 +91,15 @@ export const buildPublicDeveloperFacts = (developer: AnyDeveloper | null | undef
 export const buildPublicDeveloperNarrative = (developer: AnyDeveloper | null | undefined, projectCount = 0) => {
   if (!developer) return "";
   const custom = getDeveloperCustomFields(developer);
-  const parts = [`JBJ records ${developer.name} in its developer database`];
-  if (developer.founded_year) parts.push(`founded in ${developer.founded_year}`);
+  const name = developer.name || "This developer";
+  const parts: string[] = [];
+  if (developer.founded_year) {
+    parts.push(`${name} has been developing property since ${developer.founded_year}`);
+  } else {
+    parts.push(`${name} is a property developer`);
+  }
   const uaeProjects = fieldToText(custom.projects_uae) || (projectCount ? String(projectCount) : "");
-  if (uaeProjects) parts.push(`with ${uaeProjects} UAE project${uaeProjects === "1" ? "" : "s"} listed`);
+  if (uaeProjects) parts.push(`with ${uaeProjects} UAE project${uaeProjects === "1" ? "" : "s"} currently listed`);
   const outside = fieldToText(custom.projects_outside_uae);
   if (outside) parts.push(`and ${outside} project${outside === "1" ? "" : "s"} outside the UAE`);
   const presence = fieldToList(custom.global_presence);

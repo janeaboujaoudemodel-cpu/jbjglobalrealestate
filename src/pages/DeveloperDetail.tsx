@@ -26,7 +26,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
 import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
 import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
-import { buildPublicDeveloperFacts, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
+import { buildPublicDeveloperFacts, stripBracketedTitle, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -492,7 +492,7 @@ const DeveloperDetail = () => {
       label: "Global Portfolio",
       value: globalProjectCount ? `${globalProjectCount.toLocaleString()}+` : null,
     },
-    ...(developer.ceo_name ? [{ icon: UserRound, label: "Leadership", value: developer.ceo_name }] : []),
+    ...(developer.ceo_name ? [{ icon: UserRound, label: "Leadership", value: stripBracketedTitle(developer.ceo_name) }] : []),
     // Headquarters intentionally removed — never display developer office locations.
 
   ].filter(s => s.value !== null);
