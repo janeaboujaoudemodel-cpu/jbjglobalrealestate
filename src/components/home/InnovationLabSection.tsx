@@ -254,7 +254,7 @@ export default function InnovationLabSection() {
           </div>
 
           {/* Isometric plate stack */}
-          <div className="order-1 flex h-[340px] items-center justify-center lg:order-2 lg:h-[600px]">
+          <div className="order-1 flex h-[380px] items-center justify-center lg:order-2 lg:h-[560px]">
             <div className="relative h-full w-full" style={{ perspective: 1500 }}>
               {LAYERS.map((layer, i) => {
                 const on = i === active;
@@ -263,7 +263,7 @@ export default function InnovationLabSection() {
                   <motion.div
                     key={layer.index}
                     onClick={() => setActive(i)}
-                    className="absolute left-1/2 top-1/2 h-[190px] w-[290px] cursor-pointer rounded-xl border lg:h-[230px] lg:w-[340px]"
+                    className="absolute left-1/2 top-1/2 h-[170px] w-[270px] cursor-pointer rounded-xl border lg:h-[220px] lg:w-[330px]"
                     style={{
                       background: PLATE_BG[layer.tone],
                       borderColor: layer.tone === "champagne" ? "rgba(184,149,85,0.4)" : "rgba(255,255,255,0.14)",
@@ -274,14 +274,19 @@ export default function InnovationLabSection() {
                         ? "0 34px 70px -18px rgba(4,44,28,0.5)"
                         : "0 18px 44px -22px rgba(4,44,28,0.35)",
                     }}
-                    animate={{
-                      x: -170 + (i - 2) * 34,
-                      y: -95 + (i - 2) * -118 + (on ? -18 : 0),
-                      scale: on ? 1.04 : 1,
-                      opacity: on ? 1 : 0.86,
-                    }}
+                    initial={{ x: -150, y: -85, opacity: 0 }}
+                    animate={
+                      assembled
+                        ? {
+                            x: -165 + (i - 2) * 30,
+                            y: -85 + (i - 2) * -92 + (on ? -16 : 0),
+                            scale: on ? 1.04 : 1,
+                            opacity: on ? 1 : 0.85,
+                          }
+                        : { x: -150, y: -85, opacity: 0 }
+                    }
+                    transition={{ type: "spring", stiffness: 110, damping: 20, delay: assembled ? i * 0.09 : 0 }}
 
-                    transition={{ type: "spring", stiffness: 120, damping: 20 }}
                   >
                     <PlateContent layer={layer} active={on} />
                   </motion.div>
