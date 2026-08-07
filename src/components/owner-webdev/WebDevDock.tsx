@@ -29,7 +29,6 @@ import {
   ChevronUp,
 } from "lucide-react";
 import WebDevVersionHistory from "./WebDevVersionHistory";
-import html2canvas from "html2canvas";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
@@ -195,6 +194,7 @@ export default function WebDevDock() {
       const panel = panelRef.current;
       if (panel) panel.style.visibility = "hidden";
       await new Promise((r) => setTimeout(r, 50));
+      const { default: html2canvas } = await import("html2canvas");
       const canvas = await html2canvas(document.body, {
         logging: false,
         useCORS: true,

@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import html2canvas from "html2canvas";
 
 interface AuditorFeedbackPanelProps {
   isOpen: boolean;
@@ -38,6 +37,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
       const panel = document.getElementById("auditor-feedback-panel");
       if (panel) panel.style.display = "none";
 
+      const { default: html2canvas } = await import("html2canvas");
       const canvas = await html2canvas(document.body, {
         useCORS: true,
         logging: false,
