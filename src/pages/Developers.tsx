@@ -8,12 +8,10 @@ import {
   X,
   SlidersHorizontal,
 } from "lucide-react";
-import { SearchableSelect } from "@/components/ui/searchable-select";
-import GeoFilterBar from "@/components/search/GeoFilterBar";
-import { EMPTY_FILTERS, filtersToParams, type GeoSearchFilters } from "@/lib/searchFilters";
-import { getAreas, getCountry, getRegions } from "@/data/geography";
-
 import { useDevelopers, useDeveloperProjectStats } from "@/hooks/useProjects";
+import PropertySearchBar from "@/components/search/PropertySearchBar";
+import { EMPTY_SEARCH, type PropertySearch } from "@/lib/propertySearch";
+import { getDeveloperTier, ELITE_PRIORITY_ORDER, TIER_LABELS } from "@/utils/developerTier";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
@@ -36,52 +34,15 @@ const developersHeroVideo = developersHeroVideoAsset.url;
 
 // Developer tier classification for filtering
 const TIER_FILTERS = [
-  { value: "all", label: "All Tiers" },
-  { value: "elite", label: "Elite" },
-  { value: "premium", label: "Premium" },
-  { value: "top-tier", label: "Top Tier" },
-  { value: "established", label: "Established" },
-];
-
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "aldar", "omniyat", "dubai-properties", "dubai properties", "dubai-holding", "dubai holding"];
-const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select-group", "select group", "deyaar", "majid-al-futtaim", "majid al futtaim", "arada", "nshama", "wasl"];
-const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
-const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
-
-// Exact order for elite developers at the top of the directory
-const ELITE_PRIORITY_ORDER = [
-  'emaar', 'omniyat', 'nakheel', 'sobha', 'aldar', 
-  'ellington', 'damac', 'meraas', 'dubai-properties'
-];
-
-function getDeveloperTierKey(slug: string, name = "", rank?: number | null): string {
-  const normalized = `${slug} ${name}`.toLowerCase();
-  if (ELITE_DEVELOPERS.some(d => normalized.includes(d))) return "elite";
-  if (PREMIUM_DEVELOPERS.some(d => normalized.includes(d))) return "premium";
-  if (TOP_TIER_DEVELOPERS.some(d => normalized.includes(d))) return "top-tier";
-  if (ESTABLISHED_DEVELOPERS.some(d => normalized.includes(d))) return "established";
-  if (rank && rank > 0) {
-    if (rank <= 10) return "elite";
-    if (rank <= 30) return "premium";
-    if (rank <= 80) return "top-tier";
-  }
-  return "other";
-}
-
-const Developers = () => {
   const { data: developers, isLoading, refetch: refetchDevelopers } = useDevelopers();
   const { data: projectStats } = useDeveloperProjectStats();
   
   // Filter states
-  const [searchQuery, setSearchQuery] = useState("");
-  const [tierFilter, setTierFilter] = useState("all");
-  const [selectedDeveloper, setSelectedDeveloper] = useState("");
+  const [search, setSearch] = useState<PropertySearch>(EMPTY_SEARCH);
   const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
   const [currentPage, setCurrentPage] = useState(1);
   const [advancedOpen, setAdvancedOpen] = useState(false);
-  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   // Multi-country geography cascade (Country → Emirate/City → Area)
-  const [geoFilters, setGeoFilters] = useState<GeoSearchFilters>(EMPTY_FILTERS);
   const ITEMS_PER_PAGE = 24;
 
 
@@ -210,7 +171,7 @@ const Developers = () => {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, tierFilter, selectedDeveloper, sortBy, shortcutFilters, geoFilters]);
+  }, [search, sortBy]);
 
 
   const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
