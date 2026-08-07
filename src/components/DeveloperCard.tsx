@@ -48,7 +48,11 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     const cut = raw.slice(0, 92);
     const lastStop = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf(", "));
     if (lastStop > 48) return cut.slice(0, lastStop + 1).replace(/,$/, "");
-    return cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:]$/, "");
+    return cut
+      .slice(0, cut.lastIndexOf(" "))
+      .replace(/[,;:]$/, "")
+      .replace(/\s+(and|or|with|the|a|an|of|in|to|for|by|is|are)$/i, "")
+      .trim();
   }, [developer]);
 
   return (
