@@ -1463,13 +1463,16 @@ export default function PublicAccess() {
                   icon: Award,
                   label: "Brokers",
                   cta: "Get quotation",
-                  blurb: "The JBJ Certified Broker Program — live mentorship, certification and a partner network you can actually sell through.",
+                  blurb: "The JBJ Certified Broker Program — higher commission splits, your own CRM account, the full AI toolkit and the complete study library.",
                   points: [
-                    "Live mentorship plus one-to-one video coaching",
-                    "JBJ certification and verified broker profile",
-                    "Inventory, commissions and co-brokerage access",
-                    "AI toolkit: listings, decks and client reports",
+                    "Higher commission split on every closed deal",
+                    "Your own CRM account — leads, pipeline, follow-ups",
+                    "Full access to all JBJ AI tools",
+                    "All books, study material and training library included",
+                    "Live mentorship, certification and verified broker profile",
+                    "Inventory, co-brokerage and developer allocation access",
                   ],
+
                 },
                 {
                   key: "developer" as const,
