@@ -79,7 +79,8 @@ export function DeveloperLogo({
         className={cn(containerClass, !containerClass.includes("bg-") && !dataKeepGold && EMERALD_PLATE_SURFACE)}
         data-keep-gold={dataKeepGold}
         data-no-contrast-guard="true"
-        data-developer-logo="nameplate"
+        data-developer-logo={embedded ? undefined : "nameplate"}
+        data-developer-logo-content={embedded ? "true" : undefined}
         aria-label={`${label} logo pending`}
         title={label}
       >
