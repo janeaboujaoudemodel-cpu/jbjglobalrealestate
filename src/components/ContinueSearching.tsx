@@ -10,6 +10,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { getRecentSearches, clearRecentSearches } from "@/lib/searchHistory";
 import ContentTrack from "@/components/layout/ContentTrack";
+import { getCanonicalProjectKey } from "@/utils/projectIdentity";
 
 
 interface ContinueSearchingProps {
@@ -31,10 +32,13 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
  */
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   const [paused, setPaused] = useState(false);
-  // Deduplicate items by slug+type to prevent visual duplicates.
+  // Deduplicate by canonical identity so aliases such as Agua/Agua Residences
+  // can never render as two cards, including from stale browser history.
   const seen = new Set<string>();
   const uniqueItems = items.filter(item => {
-    const key = `${item.type}-${item.slug}`;
+    const key = item.type === "property"
+      ? `${item.type}-${getCanonicalProjectKey({ ...item, developerName: item.subtitle })}`
+      : `${item.type}-${item.slug}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -119,22 +123,27 @@ const ContinueSearching = ({
           subtitle: [p.location, p.emirate].filter(Boolean).join(", "),
           viewedAt: Date.now(),
         }));
-        setPopularProjects(mapped);
+        const seenProjects = new Set<string>();
+        setPopularProjects(mapped.filter((project) => {
+          const key = getCanonicalProjectKey({ ...project, developerName: project.subtitle });
+          if (seenProjects.has(key)) return false;
+          seenProjects.add(key);
+          return true;
+        }));
       });
     return () => {
       cancelled = true;
     };
   }, [popularProjects.length, validItems.length]);
 
-  // Deduplicate properties by both slug AND id — each property appears only once
-  const seenSlugs = new Set<string>();
-  const seenIds = new Set<string>();
+  // Canonical identity dedupe covers IDs, slugs, and naming aliases.
+  const seenProjects = new Set<string>();
   const uniqueItems = validItems.filter((item) => {
-    const slugKey = `${item.type}-${item.slug}`;
-    const idKey = `${item.type}-${item.id}`;
-    if (seenSlugs.has(slugKey) || seenIds.has(idKey)) return false;
-    seenSlugs.add(slugKey);
-    seenIds.add(idKey);
+    const key = item.type === "property"
+      ? `${item.type}-${getCanonicalProjectKey({ ...item, developerName: item.subtitle })}`
+      : `${item.type}-${item.slug}`;
+    if (seenProjects.has(key)) return false;
+    seenProjects.add(key);
     return true;
   });
 
@@ -459,6 +468,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   // logo_url (via item.developerLogo), NEVER the card's background image.
   const showDevCardLogo = item.type === "developer" && item.developerLogo && !logoError;
 
+  // No fabricated visual fallback: cards without an approved working image
+  // are omitted rather than replaced by icons, flags, gradients, or stock art.
+  if (!hasValidImage) return null;
+
   return (
     <div
       ref={cardRef}
@@ -485,26 +498,19 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           }}
         />
 
-        {/* Image / fallback */}
-        {hasValidImage ? (
-          <img
-            src={item.imageUrl}
-            alt={item.name}
-            loading={index < 6 ? "eager" : "lazy"}
-            decoding="async"
-            data-no-fallback
-            className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.035]"
-            onError={() => {
-              setImgBroken(true);
-              fetchAttempted.current = false;
-              fetchCoverImage();
-            }}
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
-            <Icon className="w-12 h-12 text-white" />
-          </div>
-        )}
+        <img
+          src={item.imageUrl}
+          alt={item.name}
+          loading={index < 6 ? "eager" : "lazy"}
+          decoding="async"
+          data-no-fallback
+          className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.035]"
+          onError={() => {
+            setImgBroken(true);
+            fetchAttempted.current = false;
+            fetchCoverImage();
+          }}
+        />
 
         {/* Gradient overlay — stronger at bottom for text legibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" data-ink-emerald-opt-out />

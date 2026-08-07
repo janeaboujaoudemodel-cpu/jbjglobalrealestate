@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
+import { canonicalizeProjectIdentity, getCanonicalProjectKey } from "@/utils/projectIdentity";
 
 export type RecentItemType = "property" | "developer" | "area";
 
@@ -60,8 +61,15 @@ const normalizeItem = (raw: unknown): RecentItem | null => {
   const subtitle = asString(obj.subtitle) || undefined;
   const developerLogo = asString(obj.developerLogo) || undefined;
 
-  return { id, type, name, slug, imageUrl, subtitle, developerLogo, viewedAt };
+  const item = { id, type, name, slug, imageUrl, subtitle, developerLogo, viewedAt };
+  return type === "property"
+    ? canonicalizeProjectIdentity({ ...item, developerName: subtitle })
+    : item;
 };
+
+const recentItemKey = (item: RecentItem): string => item.type === "property"
+  ? `${item.type}-${getCanonicalProjectKey({ ...item, developerName: item.subtitle })}`
+  : `${item.type}-${item.slug}`;
 
 function loadItems(): RecentItem[] {
   try {
@@ -80,7 +88,7 @@ function loadItems(): RecentItem[] {
     // across renders (no shuffling on revisit).
     const seen = new Set<string>();
     return normalized.filter((item) => {
-      const key = `${item.type}-${item.slug}`;
+      const key = recentItemKey(item);
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
@@ -127,10 +135,8 @@ export function useRecentSearches(filterType?: RecentItemType) {
       // existing position and do NOT bump viewedAt — the 30-day TTL is
       // measured from the FIRST view so cards don't linger forever just
       // because the user revisits them.
-      const existingIndex = prev.findIndex((i) =>
-        (i.id === normalized.id && i.type === normalized.type) ||
-        (i.slug === normalized.slug && i.type === normalized.type)
-      );
+      const normalizedKey = recentItemKey(normalized);
+      const existingIndex = prev.findIndex((i) => recentItemKey(i) === normalizedKey);
       if (existingIndex !== -1) return prev;
 
       // New item — append to the end so existing cards don't shift.
