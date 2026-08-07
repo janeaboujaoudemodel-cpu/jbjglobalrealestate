@@ -1,39 +1,22 @@
 import { useState, useMemo, useEffect } from "react";
 import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
-import {
-  Search,
-  Building2,
-  Crown,
-  X,
-  SlidersHorizontal,
-} from "lucide-react";
+import { Building2 } from "lucide-react";
 import { useDevelopers, useDeveloperProjectStats } from "@/hooks/useProjects";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import { EMPTY_SEARCH, type PropertySearch } from "@/lib/propertySearch";
-import { getDeveloperTier, ELITE_PRIORITY_ORDER, TIER_LABELS } from "@/utils/developerTier";
+import { getDeveloperTier, ELITE_PRIORITY_ORDER } from "@/utils/developerTier";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import ContinueSearching from "@/components/ContinueSearching";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const developersHeroVideo = developersHeroVideoAsset.url;
 
-// Developer tier classification for filtering
-const TIER_FILTERS = [
+const Developers = () => {
   const { data: developers, isLoading, refetch: refetchDevelopers } = useDevelopers();
   const { data: projectStats } = useDeveloperProjectStats();
   
@@ -41,26 +24,9 @@ const TIER_FILTERS = [
   const [search, setSearch] = useState<PropertySearch>(EMPTY_SEARCH);
   
   const [currentPage, setCurrentPage] = useState(1);
-  const [advancedOpen, setAdvancedOpen] = useState(false);
   // Multi-country geography cascade (Country → Emirate/City → Area)
   const ITEMS_PER_PAGE = 24;
 
-
-  // Developer names list for dropdown
-  const developerNames = useMemo(() => {
-    if (!developers) return [];
-    const sorted = [...developers].sort((a, b) => {
-      const aSlug = a.slug?.toLowerCase() || '';
-      const bSlug = b.slug?.toLowerCase() || '';
-      const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
-      const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
-      if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
-      if (aIdx >= 0) return -1;
-      if (bIdx >= 0) return 1;
-      return a.name.localeCompare(b.name);
-    });
-    return sorted.map(d => d.name);
-  }, [developers]);
 
   // Count projects per developer (precomputed by the lightweight stats query)
   const projectCounts = useMemo(() => projectStats?.counts ?? {}, [projectStats]);
@@ -151,19 +117,10 @@ const TIER_FILTERS = [
     currentPage * ITEMS_PER_PAGE
   );
 
-  const activeFilterCount = [
-    searchQuery.trim(),
-    tierFilter !== "all",
-    selectedDeveloper,
-    search.developers.length > 0,
-    (search.searchQuery || '').trim(),
-  ].filter(Boolean).length;
+  const activeFilterCount = [search.q.trim(), search.developerTier, search.region, search.areasInclude.length].filter(Boolean).length;
 
   const clearFilters = () => {
-    setSearchQuery("");
-    setTierFilter("all");
-    setSelectedDeveloper("");
-    setShortcutFilters(defaultShortcutFilters);
+    setSearch(EMPTY_SEARCH);
   };
 
   return (
