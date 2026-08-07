@@ -1,168 +1,114 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { Database, ShieldCheck, Brain, Handshake, KeyRound } from "lucide-react";
 import jbjMonogramWatermark from "@/assets/jbj-monogram-transparent.png";
 
-
-type Layer = {
+type Stage = {
   icon: typeof Database;
   index: string;
+  kicker: string;
   title: string;
   body: string;
-  plateLabel: string;
-  tone: "champagne" | "emerald" | "ink";
+  metrics: { label: string; value: string }[];
 };
 
-const LAYERS: Layer[] = [
+const STAGES: Stage[] = [
   {
     icon: Database,
     index: "01",
+    kicker: "Ingestion",
     title: "Ingest the whole market",
     body: "Every launch, price list, payment plan and floor plan across the UAE, Cyprus, Greece, Georgia and Lebanon lands in one structured record.",
-    plateLabel: "Layer 01 / Raw market data",
-    tone: "ink",
+    metrics: [
+      { label: "Markets", value: "5" },
+      { label: "Live records", value: "900+" },
+      { label: "Refresh", value: "Daily" },
+    ],
   },
   {
     icon: ShieldCheck,
     index: "02",
+    kicker: "Verification",
     title: "Verify it line by line",
-    body: "Each figure is cross-checked against the developer's own release before it is allowed on the platform.",
-    plateLabel: "Layer 02 / Verification",
-    tone: "emerald",
+    body: "Each figure is cross-checked against the developer's own release before it is allowed onto the platform.",
+    metrics: [
+      { label: "Source", value: "Developer" },
+      { label: "Checks", value: "12 / unit" },
+      { label: "Unverified", value: "Blocked" },
+    ],
   },
   {
     icon: Brain,
     index: "03",
+    kicker: "AI engine",
     title: "AI reads it like an analyst",
-    body: "Yield, handover risk, payment structure and comparable pricing are computed for every unit.",
-    plateLabel: "Layer 03 / AI engine",
-    tone: "emerald",
+    body: "Yield, handover risk, payment structure and comparable pricing are computed for every unit, then explained in plain language.",
+    metrics: [
+      { label: "Yield", value: "Modelled" },
+      { label: "Risk", value: "Scored" },
+      { label: "Comps", value: "Matched" },
+    ],
   },
   {
     icon: Handshake,
     index: "04",
+    kicker: "Advisory",
     title: "A human advisor takes over",
-    body: "A licensed JBJ advisor negotiates, structures the payment plan and handles the paperwork.",
-    plateLabel: "Layer 04 / Advisory",
-    tone: "champagne",
+    body: "A licensed JBJ advisor negotiates, structures the payment plan and handles the paperwork end to end.",
+    metrics: [
+      { label: "Licensed", value: "RERA" },
+      { label: "Negotiation", value: "Included" },
+      { label: "Paperwork", value: "Handled" },
+    ],
   },
   {
     icon: KeyRound,
     index: "05",
+    kicker: "Lifecycle",
     title: "We stay after handover",
-    body: "Snagging, furnishing, leasing, resale and reporting all run on the same record.",
-    plateLabel: "Layer 05 / Lifecycle",
-    tone: "champagne",
+    body: "Snagging, furnishing, leasing, resale and reporting all run on the same record you invested from.",
+    metrics: [
+      { label: "Snagging", value: "Managed" },
+      { label: "Leasing", value: "Managed" },
+      { label: "Reporting", value: "Ongoing" },
+    ],
   },
 ];
 
-const PLATE_BG: Record<Layer["tone"], string> = {
-  ink: "linear-gradient(135deg, #042c1c 0%, #021a12 55%, #000000 100%)",
-  emerald: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
-  champagne: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 60%, #EFE6D6 100%)",
-};
+const EMERALD_INK = "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)";
 
-/** Content that actually lives on each isometric plate — no empty slabs. */
-function PlateContent({ layer, active }: { layer: Layer; active: boolean }) {
-  const dark = layer.tone !== "champagne";
-  const ink = dark ? "text-white" : "text-[#042c1c]";
-  const soft = dark ? "text-white/55" : "text-[#042c1c]/55";
-  const line = dark ? "bg-white/20" : "bg-[#B89555]/30";
-  const Icon = layer.icon;
-
+/** Ambient AI-tech field: drifting scanlines + orbiting gold nodes. */
+function TechField() {
   return (
-    <div
-      className={`relative h-full w-full overflow-hidden rounded-xl p-5 ${
-        dark ? "[&_*]:!text-white" : ""
-      }`}
-      {...(dark ? { "data-ink-emerald": "true" } : {})}
-    >
-      {dark && (
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "38px 38px" }}
-          aria-hidden
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <motion.div
+        className="absolute inset-[-40%]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(184,149,85,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(184,149,85,0.10) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          transform: "rotateX(62deg)",
+        }}
+        animate={{ backgroundPositionY: ["0px", "64px"] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+      />
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: `${18 + i * 28}%`,
+            top: `${28 + i * 16}%`,
+            height: 6,
+            width: 6,
+            background: "#B89555",
+            boxShadow: "0 0 18px 4px rgba(184,149,85,0.45)",
+          }}
+          animate={{ y: [0, -26, 0], opacity: [0.25, 0.9, 0.25] }}
+          transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.7 }}
         />
-      )}
-      <div className="relative flex h-full flex-col justify-between">
-        <div className="flex items-start justify-between gap-3">
-          <span className={`text-[9px] font-bold uppercase tracking-[0.22em] ${soft}`}>{layer.plateLabel}</span>
-          <span
-            className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border ${
-              dark ? "border-white/25 bg-white/10" : "border-[#B89555]/35 bg-white"
-            }`}
-          >
-            <Icon className={`h-3.5 w-3.5 ${dark ? "text-white" : "text-[#064E3B]"}`} strokeWidth={2} aria-hidden />
-          </span>
-        </div>
-
-        {/* Per-layer technical content */}
-        {layer.index === "01" && (
-          <div className="grid grid-cols-4 gap-2">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <span
-                key={i}
-                className={`h-1.5 w-1.5 rounded-full ${dark ? "bg-white" : "bg-[#064E3B]"}`}
-                style={{ opacity: 0.3 + ((i * 3) % 3) * 0.2 }}
-              />
-            ))}
-          </div>
-        )}
-
-
-        {layer.index === "02" && (
-          <div className="space-y-1.5">
-            {[100, 74, 88, 60].map((w, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <span className={`h-1.5 w-1.5 rounded-full ${dark ? "bg-[#B89555]" : "bg-[#064E3B]"}`} />
-                <span className={`h-px ${line}`} style={{ width: `${w}%` }} />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {layer.index === "03" && (
-          <div className="space-y-2">
-            <div className="flex items-end gap-1">
-              {[34, 58, 42, 76, 50, 66, 30].map((h, i) => (
-                <span
-                  key={i}
-                  className={`w-1.5 rounded-sm ${dark ? "bg-[#B89555]" : "bg-[#064E3B]"}`}
-                  style={{ height: h * 0.4, opacity: active ? 0.9 : 0.5 }}
-                />
-              ))}
-            </div>
-            <span className={`block font-mono text-[9px] ${soft}`}>YIELD · RISK · COMPARABLES</span>
-          </div>
-        )}
-
-        {layer.index === "04" && (
-          <div className="grid grid-cols-2 gap-2">
-            {["Negotiation", "Payment plan"].map((t) => (
-              <div key={t} className="rounded-md border border-[#B89555]/25 bg-white/70 px-2 py-1.5">
-                <span className="block text-[9px] font-semibold uppercase tracking-wider text-[#042c1c]">{t}</span>
-                <span className="mt-1 block h-1 w-full rounded-full bg-[#B89555]/25">
-                  <span className="block h-1 w-2/3 rounded-full bg-[#B89555]" />
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {layer.index === "05" && (
-          <div className="space-y-1.5">
-            <span className="block text-[10px] font-semibold uppercase tracking-wider text-[#042c1c]">
-              Snagging · Leasing · Resale
-            </span>
-            <span className="block h-1 w-full overflow-hidden rounded-full bg-[#B89555]/20">
-              <span className="block h-full w-[85%] bg-[#B89555]" />
-            </span>
-          </div>
-        )}
-
-        <span className={`text-[11px] font-semibold leading-snug ${ink}`}>{layer.title}</span>
-      </div>
+      ))}
     </div>
   );
 }
@@ -170,39 +116,31 @@ function PlateContent({ layer, active }: { layer: Layer; active: boolean }) {
 export default function InnovationLabSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const [assembled, setAssembled] = useState(false);
+  const [live, setLive] = useState(false);
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setAssembled(true)),
-      { threshold: 0.25 },
+      (entries) => entries.forEach((e) => e.isIntersecting && setLive(true)),
+      { threshold: 0.2 },
     );
     io.observe(node);
     return () => io.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!assembled || paused) return;
-    const t = window.setInterval(() => setActive((p) => (p + 1) % LAYERS.length), 3200);
+    if (!live || paused) return;
+    const t = window.setInterval(() => setActive((p) => (p + 1) % STAGES.length), 4200);
     return () => window.clearInterval(t);
-  }, [assembled, paused]);
+  }, [live, paused]);
 
-  const tilt = 44;
-  const spin = -22;
-
+  const stage = STAGES[active];
+  const ActiveIcon = stage.icon;
 
   return (
-    <div
-      ref={sectionRef}
-      data-jbj-method="true"
-      className="relative"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {/* Premium brand watermark */}
+    <div ref={sectionRef} data-jbj-method="true" className="relative">
       <img
         data-no-fallback
         src={jbjMonogramWatermark}
@@ -212,11 +150,10 @@ export default function InnovationLabSection() {
         loading="lazy"
         decoding="async"
       />
-      <div className="relative flex min-h-[640px] items-center overflow-hidden py-16 md:py-20">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-5 md:px-8 lg:grid-cols-2 lg:gap-16">
 
-
-          {/* Narrative rail */}
+      <div className="relative overflow-hidden py-16 md:py-24">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-5 md:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-14">
+          {/* ---------- Narrative rail ---------- */}
           <div className="order-2 space-y-8 lg:order-1">
             <div className="space-y-3">
               <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#B89555]">The JBJ method</p>
@@ -225,47 +162,51 @@ export default function InnovationLabSection() {
                 <br />a property decision
               </h2>
               <p className="max-w-md text-sm leading-relaxed text-[#042c1c]/70 md:text-base">
-                Most agencies forward you a brochure. We assemble a real estate operating system — layer by layer — and
+                Most agencies forward you a brochure. We run a real estate operating system — five live stages — and
                 hand you the conclusion.
               </p>
             </div>
 
-            <ol className="relative space-y-4">
-              <span className="absolute left-4 top-3 bottom-3 w-px bg-[#B89555]/30" aria-hidden />
-              {LAYERS.map((layer, i) => {
+            <ol className="relative space-y-1">
+              <span className="absolute left-4 top-4 bottom-4 w-px bg-[#B89555]/25" aria-hidden />
+              {STAGES.map((s, i) => {
                 const on = i === active;
                 return (
-                  <li key={layer.index}>
+                  <li key={s.index}>
                     <button
                       type="button"
                       onClick={() => setActive(i)}
-                      className="flex w-full items-start gap-5 text-left"
+                      onMouseEnter={() => setPaused(true)}
+                      onMouseLeave={() => setPaused(false)}
+                      className="!flex w-full !items-center !justify-start gap-4 rounded-lg px-1 py-2 text-left"
                     >
                       <span
-                        className={`relative z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-colors ${
-                          on ? "bg-[#B89555] text-white" : "border border-[#B89555]/40 bg-[#FDFBF7] text-[#B89555]"
-                        }`}
+                        className="relative z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-all"
+                        style={
+                          on
+                            ? { background: "#B89555", color: "#fff", boxShadow: "0 0 0 5px rgba(184,149,85,0.16)" }
+                            : { background: "#FDFBF7", color: "#B89555", border: "1px solid rgba(184,149,85,0.4)" }
+                        }
                       >
-                        {layer.index}
+                        {s.index}
                       </span>
-                      <span className="min-w-0 text-left">
+                      <span className="min-w-0">
                         <span
-                          className={`block text-left text-[12px] font-semibold uppercase tracking-[0.12em] transition-opacity md:text-sm ${
-                            on ? "text-[#042c1c] opacity-100" : "text-[#042c1c] opacity-55"
+                          className={`block text-[12px] font-semibold uppercase tracking-[0.12em] text-[#042c1c] transition-opacity md:text-sm ${
+                            on ? "opacity-100" : "opacity-55"
                           }`}
                         >
-                          {layer.title}
+                          {s.title}
                         </span>
-                        <motion.span
-                          initial={false}
-                          animate={{ opacity: on ? 1 : 0, height: on ? "auto" : 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="block overflow-hidden text-left text-xs leading-relaxed text-[#042c1c]/65 md:text-sm"
-                        >
-                          {layer.body}
-                        </motion.span>
+                        <span className="mt-1 block h-[2px] w-full max-w-[190px] overflow-hidden rounded-full bg-[#B89555]/15">
+                          <motion.span
+                            className="block h-full rounded-full bg-[#B89555]"
+                            initial={false}
+                            animate={{ width: on ? "100%" : "0%" }}
+                            transition={{ duration: on && !paused ? 4.2 : 0.3, ease: "linear" }}
+                          />
+                        </span>
                       </span>
-
                     </button>
                   </li>
                 );
@@ -273,59 +214,118 @@ export default function InnovationLabSection() {
             </ol>
           </div>
 
-          {/* Isometric plate stack */}
-          <div className="order-1 flex h-[380px] items-center justify-center lg:order-2 lg:h-[560px]">
-            <div className="relative h-full w-full" style={{ perspective: 1500 }}>
-              {LAYERS.map((layer, i) => {
-                const on = i === active;
-                // 05 sits on top; 01 at the base.
-                return (
-                  <motion.div
-                    key={layer.index}
-                    onClick={() => setActive(i)}
-                    className="absolute left-1/2 top-1/2 h-[170px] w-[270px] cursor-pointer rounded-xl border lg:h-[220px] lg:w-[330px]"
+          {/* ---------- 3D stage: one readable panel, deck receding behind ---------- */}
+          <div
+            className="order-1 lg:order-2"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            <div className="relative h-[400px] w-full md:h-[440px]" style={{ perspective: 1400 }}>
+              <TechField />
+
+              {/* Receding ghost plates — decorative only, never hold text */}
+              {[3, 2, 1].map((depth) => (
+                <motion.div
+                  key={depth}
+                  className="absolute left-1/2 top-1/2 rounded-2xl border"
+                  style={{
+                    height: "68%",
+                    width: "84%",
+                    marginLeft: "-42%",
+                    marginTop: "-34%",
+                    background: EMERALD_INK,
+                    borderColor: "rgba(255,255,255,0.10)",
+                    transformStyle: "preserve-3d",
+                    zIndex: 10 - depth,
+                  }}
+                  animate={{
+                    y: [-depth * 16, -depth * 16 - 6, -depth * 16],
+                    x: depth * 10,
+                    rotateX: 8,
+                    rotateY: -10,
+                    scale: 1 - depth * 0.05,
+                    opacity: 0.34 - depth * 0.07,
+                  }}
+                  transition={{ duration: 5 + depth, repeat: Infinity, ease: "easeInOut" }}
+                  aria-hidden
+                />
+              ))}
+
+              {/* Active panel */}
+              <AnimatePresence mode="wait">
+                <motion.article
+                  key={stage.index}
+                  data-ink-emerald="true"
+                  data-surface="dark"
+                  className="absolute left-1/2 top-1/2 flex flex-col justify-between overflow-hidden rounded-2xl border p-6 md:p-8"
+                  style={{
+                    height: "78%",
+                    width: "92%",
+                    marginLeft: "-46%",
+                    marginTop: "-39%",
+                    background: EMERALD_INK,
+                    borderColor: "rgba(184,149,85,0.38)",
+                    boxShadow: "0 44px 90px -30px rgba(4,44,28,0.65)",
+                    transformStyle: "preserve-3d",
+                    zIndex: 20,
+                  }}
+                  initial={{ opacity: 0, y: 34, rotateX: 16, rotateY: -14, scale: 0.94 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 5, rotateY: -6, scale: 1 }}
+                  exit={{ opacity: 0, y: -26, rotateX: -8, rotateY: 6, scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                >
+                  {/* sheen sweep */}
+                  <motion.span
+                    className="pointer-events-none absolute inset-y-0 w-1/3"
                     style={{
-                      background: PLATE_BG[layer.tone],
-                      borderColor: layer.tone === "champagne" ? "rgba(184,149,85,0.4)" : "rgba(255,255,255,0.14)",
-                      zIndex: 10 + i * 10,
-                      transformStyle: "preserve-3d",
-                      boxShadow: on
-                        ? "0 34px 70px -18px rgba(4,44,28,0.5)"
-                        : "0 18px 44px -22px rgba(4,44,28,0.35)",
+                      background:
+                        "linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.10) 45%, transparent 100%)",
                     }}
-                    initial={{ x: -150, y: -80, opacity: 0, rotateX: tilt, rotateZ: spin }}
-                    animate={
-                      assembled
-                        ? {
-                            x: -166 + (i - 2) * 16 + (on ? 14 : 0),
-                            y: -74 + (i - 2) * -92 + (on ? -18 : 0),
-                            scale: on ? 1.05 : 0.97,
-                            opacity: on ? 1 : 0.72,
-                            rotateX: on ? 24 : tilt,
-                            rotateZ: on ? -10 : spin,
-                            rotateY: on ? 3 : 0,
-                          }
-                        : { x: -150, y: -80, opacity: 0, rotateX: tilt, rotateZ: spin }
-                    }
-                    whileHover={{
-                      rotateX: 14,
-                      rotateZ: -6,
-                      rotateY: 0,
-                      scale: 1.08,
-                      x: -166 + (i - 2) * 16 + 22,
-                      y: -74 + (i - 2) * -92 - 26,
-                      opacity: 1,
-                      transition: { type: "spring", stiffness: 180, damping: 18 },
-                    }}
-                    whileTap={{ scale: 1.02 }}
+                    animate={{ x: ["-120%", "360%"] }}
+                    transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
+                    aria-hidden
+                  />
 
-                    transition={{ type: "spring", stiffness: 110, damping: 20, delay: assembled ? i * 0.09 : 0 }}
-                  >
-                    <PlateContent layer={layer} active={on} />
-                  </motion.div>
+                  <header className="relative flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#D4B87A]">
+                        Stage {stage.index} — {stage.kicker}
+                      </p>
+                      <h3 className="mt-2 font-serif text-2xl leading-tight text-white md:text-[32px]">
+                        {stage.title}
+                      </h3>
+                    </div>
+                    <span
+                      className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border"
+                      style={{ borderColor: "rgba(184,149,85,0.45)", background: "rgba(255,255,255,0.08)" }}
+                    >
+                      <ActiveIcon className="h-5 w-5 text-white" strokeWidth={1.9} aria-hidden />
+                    </span>
+                  </header>
 
-                );
-              })}
+                  <p className="relative mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-[15px]">
+                    {stage.body}
+                  </p>
+
+                  <div className="relative mt-6 grid grid-cols-3 gap-3">
+                    {stage.metrics.map((m, i) => (
+                      <motion.div
+                        key={m.label}
+                        className="rounded-xl border px-3 py-2.5"
+                        style={{ borderColor: "rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)" }}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.18 + i * 0.08, duration: 0.35 }}
+                      >
+                        <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-white/60">
+                          {m.label}
+                        </span>
+                        <span className="mt-1 block text-sm font-semibold text-white md:text-base">{m.value}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.article>
+              </AnimatePresence>
             </div>
           </div>
         </div>
