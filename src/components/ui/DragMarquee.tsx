@@ -112,9 +112,10 @@ export function DragMarquee({
     if (!s.dragging) return;
     const dx = e.clientX - s.startX;
     s.moved = Math.abs(dx);
-    // Only take over the gesture once it is clearly horizontal, so vertical
-    // page scrolling on phones is never hijacked.
-    if (s.moved > 6 && animationRef.current) {
+    // Take over as soon as the gesture reads horizontal (3px) so holding and
+    // dragging moves the rail immediately, while vertical page scrolling on
+    // phones is still never hijacked.
+    if (s.moved > 3 && animationRef.current) {
       // Pointer capture is claimed ONLY after the gesture proves to be a drag.
       // Capturing on pointerdown retargets the resulting `click` to this
       // container, which silently killed every card/book link inside the rail.
