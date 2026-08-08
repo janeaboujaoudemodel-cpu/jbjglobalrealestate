@@ -134,7 +134,7 @@ describe("DeveloperLogo rendering guard", () => {
       variant: "bare",
       size: "md",
     });
-    expect(container.firstElementChild?.className).toMatch(/h-\[72px\].*w-32/);
+    expect(container.firstElementChild?.className).toMatch(/h-\[72px\].*w-36/);
   });
 
   it.each([

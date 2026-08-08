@@ -23,6 +23,10 @@ const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
     identities: ["omniyat"],
     url: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
   },
+  {
+    identities: ["agarkredevelopment"],
+    url: "https://agproperty.ae/wp-content/uploads/2026/01/ag-residence.jpg",
+  },
 ];
 
 /**
@@ -43,6 +47,6 @@ export const getVerifiedDeveloperFlagship = (
 
 export const isUsableDeveloperCover = (value?: string | null) =>
   Boolean(value) &&
-  !/(?:logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/16x16\/|mobile[-_]?app|app[-_]?banner|iphone|phone|meeting|celebration|team[-_]|portrait)/i.test(
+  !/(?:logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/16x16\/|mobile[-_]?app|app[-_]?banner|iphone|phone|meeting|celebration|team[-_]|portrait|suspended[_-]?account|beback[-_]?soon|coming[-_]?soon|under[-_]?construction)/i.test(
     value || "",
   );

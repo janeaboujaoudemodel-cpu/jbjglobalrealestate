@@ -170,7 +170,7 @@ export function DeveloperLogo({
 
 
   const needsDarkPlate = !dataKeepGold;
-  const compactPlate = size === "sm" ? "h-10 w-20" : "h-[72px] w-32";
+  const compactPlate = size === "sm" ? "h-10 w-20" : "h-[72px] w-36";
 
   // When no official artwork is available, the plate keeps the developer
   // identity with a white wordmark (never a blank/invisible slot).
@@ -187,13 +187,15 @@ export function DeveloperLogo({
       >
         <span
           className={cn(
-            "block w-full text-center font-serif font-semibold leading-tight px-0.5",
+            "block w-full max-w-full text-center font-serif font-semibold leading-[1.05] px-1 whitespace-normal break-words",
             dataKeepGold ? "text-[#042C1C]" : "text-white",
-            nameplateLabel.length > 18
-              ? "text-[8px]"
-              : nameplateLabel.length > 10
-                ? "text-[9px]"
-                : "text-[11px]",
+            nameplateLabel.length > 30
+              ? "text-xs"
+              : nameplateLabel.length > 20
+                ? "text-[13px]"
+                : nameplateLabel.length > 12
+                  ? "text-sm"
+                  : "text-base",
           )}
         >
           {nameplateLabel}
@@ -241,7 +243,7 @@ export function DeveloperLogo({
 
         className={cn(
           "block w-full h-full object-contain",
-          scale === "compact" ? "rounded-sm p-0.5" : "rounded-md p-0.5",
+          scale === "compact" ? "rounded-sm p-0" : "rounded-md p-0",
           // ADE's official square export contains generous transparent space.
           // Enlarge the untouched artwork within the plate without cropping it.
           /^adeproperties(?:llc)?$/.test(normalizedIdentity) && "scale-[1.45]",
