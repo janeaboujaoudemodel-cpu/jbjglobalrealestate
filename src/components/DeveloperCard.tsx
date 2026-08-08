@@ -8,7 +8,6 @@ import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import type { Developer } from "@/hooks/useProjects";
-import omniyatMasterpiece from "@/assets/omniyat-masterpiece.jpg.asset.json";
 
 
 interface DeveloperCardProps {
@@ -25,7 +24,7 @@ interface DeveloperCardProps {
 const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
   nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
   "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
-  omniyat: omniyatMasterpiece.url,
+  omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
 };
 
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
