@@ -79,6 +79,25 @@ describe("DeveloperLogo rendering guard", () => {
     expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
   });
 
+  it.each([
+    ["Aldar", "/developers/logos/aldar-logo.png"],
+    ["Aldar Properties", "/developers/logos/aldar-logo.png"],
+    ["Dubai Properties", "/developers/logos/dubai-properties-logo.webp"],
+    ["Condor Developers", "/developers/logos/condor-developers-logo.png"],
+  ])("renders the official %s artwork instead of typed fallback text", (name, expectedSrc) => {
+    const { container, queryByText } = renderLogo({
+      name,
+      alt: name,
+      src: null,
+      variant: "bare",
+      loading: "eager",
+    });
+    const img = container.querySelector("img") as HTMLImageElement;
+    expect(img).toBeTruthy();
+    expect(img.getAttribute("src")).toBe(expectedSrc);
+    expect(queryByText(name)).toBeNull();
+  });
+
   it("never paints unverified database artwork before its transparency audit", () => {
     const { container, getByText } = renderLogo({
       name: "Some Unknown Developer",
