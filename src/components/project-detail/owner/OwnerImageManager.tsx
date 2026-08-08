@@ -50,6 +50,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
     qc.invalidateQueries({ queryKey: ["owner-project-images", projectId] });
     qc.invalidateQueries({ queryKey: ["project"] });
     qc.invalidateQueries({ queryKey: ["projects"] });
+    qc.invalidateQueries({ predicate: (query) => query.queryKey[0] === "handpicked-projects-v3-owner-controlled" });
   };
 
   const upload = useCallback(async (files: FileList | File[]) => {

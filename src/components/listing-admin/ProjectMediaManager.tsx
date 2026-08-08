@@ -84,6 +84,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
       });
 
       toast.success(newValue ? `${ROLE_CONFIG[role].label} image set` : `${ROLE_CONFIG[role].label} image cleared`);
+      window.dispatchEvent(new CustomEvent("jbj-project-media-updated", { detail: { projectId: project.id } }));
       onRefresh();
     } catch (err: any) {
       toast.error(err.message || "Failed to set image role");
@@ -125,6 +126,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
       });
 
       toast.success("Image deleted");
+      window.dispatchEvent(new CustomEvent("jbj-project-media-updated", { detail: { projectId: project.id } }));
       onRefresh();
     } catch (err: any) {
       toast.error(err.message || "Failed to delete image");
@@ -169,6 +171,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
 
       if (successCount > 0) {
         toast.success(`${successCount} image(s) uploaded`);
+        window.dispatchEvent(new CustomEvent("jbj-project-media-updated", { detail: { projectId: project.id } }));
         await logAdminEdit({
           entity_type: "project",
           entity_id: project.id,

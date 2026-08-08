@@ -288,26 +288,26 @@ async function tierBrowsingHistory(): Promise<Project[]> {
 }
 
 async function tierEliteFallback(mode: string | null): Promise<Project[]> {
-  // Investor: favour ready + premium areas; Developer: broad; Broker: broad.
-  const perDev = await Promise.all(
-    ELITE_DEVELOPERS.map(async (dev) => {
-      let q = supabase
-        .from("projects")
-        .select(SELECT)
-        .eq("developer_name", dev)
-        .eq("is_published", true)
-        .not("cover_image_url", "is", null)
-        .neq("cover_image_url", "")
-        .order("price_from", { ascending: false, nullsFirst: false })
-        .limit(4);
-      if (mode === "investor") {
-        q = q.or(
-          "location.ilike.%Business Bay%,location.ilike.%Marina%,location.ilike.%Downtown%,area_name.ilike.%Business Bay%,area_name.ilike.%Marina%,area_name.ilike.%Downtown%",
-        );
-      }
-      const { data } = await q;
-      return (data || []) as unknown as Project[];
-    }),
+  // One indexed request replaces the previous nine-request fan-out. This keeps
+  // the first homepage project paint from waiting on the slowest developer.
+  let query = supabase
+    .from("projects")
+    .select(SELECT)
+    .in("developer_name", ELITE_DEVELOPERS)
+    .eq("is_published", true)
+    .not("cover_image_url", "is", null)
+    .neq("cover_image_url", "")
+    .order("price_from", { ascending: false, nullsFirst: false })
+    .limit(48);
+  if (mode === "investor") {
+    query = query.or(
+      "location.ilike.%Business Bay%,location.ilike.%Marina%,location.ilike.%Downtown%,area_name.ilike.%Business Bay%,area_name.ilike.%Marina%,area_name.ilike.%Downtown%",
+    );
+  }
+  const { data } = await query;
+  const projects = (data || []) as unknown as Project[];
+  const perDev = ELITE_DEVELOPERS.map((developer) =>
+    projects.filter((project) => project.developer_name?.toLowerCase() === developer.toLowerCase()),
   );
 
   const result: Project[] = [];
@@ -357,69 +357,47 @@ export function useHandpickedProjects() {
 
   return useQuery({
     queryKey: ["handpicked-projects-v3-owner-controlled", user?.id ?? "anon", mode ?? "none"],
-    staleTime: 5 * 60 * 1000,
+    staleTime: 60 * 1000,
     queryFn: async () => {
       const out: Project[] = [];
       const seen = new Set<string>();
       let source: "interest" | "favorites" | "history" | "elite" | "mixed" = "elite";
 
-      // Owner-controlled featured projects run first, but they must not be the
-      // entire homepage section when only one manual slot exists. Keep the
-      // selected Amra/Umbra card, then fill the remaining slots with other
-      // published projects so desktop always renders the requested 2x3 grid.
-      try {
-        const featured = await tierOwnerFeatured();
-        if (featured.length > 0) {
-          dedupePush(out, seen, featured, FALLBACK_TARGET);
-          source = "mixed";
-        }
-      } catch {}
+      // Fetch independent tiers concurrently, then preserve their strict
+      // owner/personalisation priority while assembling the six cards.
+      const [featuredResult, interestResult, favoritesResult, historyResult, eliteResult, publishedResult] =
+        await Promise.allSettled([
+          tierOwnerFeatured(),
+          tierInterestForm(user?.id, user?.email ?? undefined),
+          user?.id ? tierFavorites(user.id) : Promise.resolve([]),
+          tierBrowsingHistory(),
+          tierEliteFallback(mode ?? null),
+          tierPublishedFallback(),
+        ]);
+      const value = (result: PromiseSettledResult<Project[]>) => result.status === "fulfilled" ? result.value : [];
+      const featured = value(featuredResult);
+      const interest = value(interestResult);
+      const favorites = value(favoritesResult);
+      const history = value(historyResult);
 
-
-      try {
-        const interest = await tierInterestForm(user?.id, user?.email ?? undefined);
-        if (interest.length > 0) source = "interest";
+      if (featured.length) {
+        dedupePush(out, seen, featured);
+        source = "mixed";
+      }
+      if (interest.length) {
         dedupePush(out, seen, interest);
-      } catch {}
-
-      if (out.length < FALLBACK_TARGET && user?.id) {
-        try {
-          const favs = await tierFavorites(user.id);
-          if (favs.length > 0 && source === "elite") source = "favorites";
-          else if (favs.length > 0) source = "mixed";
-          dedupePush(out, seen, favs);
-        } catch {}
+        source = "interest";
       }
-
-      if (out.length < FALLBACK_TARGET) {
-        try {
-          const history = await tierBrowsingHistory();
-          if (history.length > 0 && source === "elite") source = "history";
-          else if (history.length > 0) source = "mixed";
-          dedupePush(out, seen, history);
-        } catch {}
+      if (favorites.length) {
+        dedupePush(out, seen, favorites);
+        source = source === "elite" ? "favorites" : "mixed";
       }
-
-      if (out.length < FALLBACK_TARGET) {
-        try {
-          const elite = await tierEliteFallback(mode ?? null);
-          dedupePush(out, seen, elite);
-        } catch {}
+      if (history.length) {
+        dedupePush(out, seen, history);
+        source = source === "elite" ? "history" : "mixed";
       }
-
-      if (out.length < FALLBACK_TARGET) {
-        try {
-          const published = await tierPublishedFallback();
-          for (const p of published) {
-            if (out.length >= FALLBACK_TARGET) break;
-            if (!p?.id) continue;
-            const key = homepageDedupeKey(p);
-            if (seen.has(key)) continue;
-            seen.add(key);
-            out.push(p);
-          }
-        } catch {}
-      }
+      dedupePush(out, seen, value(eliteResult));
+      dedupePush(out, seen, value(publishedResult));
 
       return { projects: out.slice(0, FALLBACK_TARGET), source };
     },

@@ -482,6 +482,7 @@ export default function DeveloperProfilePage() {
     if (error) return toast.error(error.message);
     toast.success("Logo updated");
     qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+    qc.invalidateQueries({ predicate: (query) => query.queryKey[0] === "handpicked-projects-v3-owner-controlled" });
   };
 
   /* ---------- Media upload ---------- */
@@ -565,6 +566,7 @@ export default function DeveloperProfilePage() {
     img.onload = async () => {
       await supabase.from("developers").update({ logo_url: candidate }).eq("id", developer.id);
       qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+      qc.invalidateQueries({ predicate: (query) => query.queryKey[0] === "handpicked-projects-v3-owner-controlled" });
     };
     img.src = candidate;
   }, [developer, canEdit, qc, slug]);

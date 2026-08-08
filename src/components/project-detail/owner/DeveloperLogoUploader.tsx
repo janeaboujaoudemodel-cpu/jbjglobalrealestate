@@ -41,6 +41,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
       qc.invalidateQueries({ queryKey: ["project"] });
       qc.invalidateQueries({ queryKey: ["developer"] });
       qc.invalidateQueries({ queryKey: ["developers"] });
+      qc.invalidateQueries({ predicate: (query) => query.queryKey[0] === "handpicked-projects-v3-owner-controlled" });
     } catch (e: any) {
       toast.error(e?.message || "Logo upload failed");
     } finally {
