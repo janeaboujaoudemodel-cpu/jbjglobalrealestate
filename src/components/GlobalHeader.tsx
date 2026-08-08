@@ -814,7 +814,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             className="flex items-center gap-2 sm:gap-3 xl:gap-4 min-w-0 group transition-all duration-300"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative shrink-0 ml-0 w-[54px] h-[54px] sm:w-16 sm:h-16 lg:w-14 lg:h-14 xl:w-16 xl:h-16 overflow-visible">
+            <div className="relative shrink-0 ml-0 w-[64px] h-[64px] sm:w-[76px] sm:h-[76px] lg:w-16 lg:h-16 xl:w-[72px] xl:h-[72px] overflow-visible">
               {/* Logo glow backdrop */}
               <div 
                 className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
