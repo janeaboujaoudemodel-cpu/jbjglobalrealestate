@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
+import { useLogoArtworkGuard } from "@/hooks/useLogoArtworkGuard";
+
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
 import agPropertiesWhite from "@/assets/developer-logos/ag-properties-white.png";
@@ -149,10 +151,17 @@ export function DeveloperLogo({
   // bitmaps that paint as blank white blocks on the emerald plate).
   const hasCuratedArtwork =
     !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers || isLaraix || !!curatedLogo;
+  // White-block guard: opaque slab artwork is rejected outright (never painted
+  // as a blank rectangle on the plate).
+  const artworkVerdict = useLogoArtworkGuard(
+    hasCuratedArtwork ? null : (resolvedSrc as string | null),
+  );
   const valid =
     isValidDeveloperLogoUrl(resolvedSrc) &&
     !error &&
+    artworkVerdict !== "block" &&
     (hasCuratedArtwork || !override.forceNameplate);
+
 
   const needsDarkPlate = !dataKeepGold;
   const compactPlate = size === "sm" ? "h-10 w-20" : "h-[72px] w-32";
