@@ -43431,6 +43431,10 @@ export type Database = {
           transcript: string
         }[]
       }
+      email_belongs_to_registered_user: {
+        Args: { _email: string }
+        Returns: boolean
+      }
       email_quota_record_failure: { Args: never; Returns: undefined }
       email_quota_try_claim: { Args: never; Returns: Json }
       encrypt_bank_field: {
