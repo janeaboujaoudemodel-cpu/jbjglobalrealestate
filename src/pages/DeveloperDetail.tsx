@@ -619,7 +619,7 @@ const DeveloperDetail = () => {
             renderFallback
             loading="eager"
             data-keep-gold
-            className="!w-36 !h-36 !rounded-2xl !p-4 !bg-transparent !border-0 !shadow-none jj-cta-gold-metallic jj-developer-logo-metallic flex-shrink-0"
+            className="!w-44 !h-28 !rounded-xl !p-2 flex-shrink-0"
           />
 
           {/* Text */}

@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Search, Building2, ChevronRight, Crown, Award, Star } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface DeveloperSearchModalProps {
   isOpen: boolean;
@@ -90,16 +90,17 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     #{developer.rank || index + 1}
                   </div>
                   
-                  {/* Logo */}
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden bg-[#FDFBF7] ${
-                    isTopTier ? "border-2 border-[#B89555] shadow-[0_4px_16px_rgba(200,167,102,0.3)]" : "border-2 border-[#B89555]/40"
-                  }`}>
-                    {isValidDeveloperLogoUrl(developer.logo_url) ? (
-                      <img src={developer.logo_url as string} alt={developer.name} className="w-full h-full object-contain"  loading="lazy" decoding="async" />
-                    ) : (
-                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-[#1A1A1A]" : "text-white/90"}`} />
-                    )}
-                  </div>
+                  <DeveloperLogo
+                    src={developer.logo_url}
+                    name={developer.name}
+                    alt={`${developer.name} logo`}
+                    websiteUrl={developer.website_url}
+                    variant="bare"
+                    renderFallback
+                    loading="eager"
+                    size="sm"
+                    className="!w-20 !h-12 !rounded-md !p-1 shrink-0"
+                  />
                   
                   {/* Developer Info */}
                   <div className="flex-1 min-w-0">
