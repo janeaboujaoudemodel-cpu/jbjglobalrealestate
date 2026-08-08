@@ -11,7 +11,7 @@
  */
 import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, ChevronDown, Crown, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Crown, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -461,7 +461,7 @@ export default function PropertySearchBar({
           {/* Keeps the sq ft / sq m pair in the same column as "Show N" below. */}
           {!onConsultation ? <div aria-hidden="true" className="hidden lg:block" /> : null}
           <div
-            className={`order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg${!onConsultation ? " lg:order-first" : ""}`}
+            className={`order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg`}
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
