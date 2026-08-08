@@ -33,7 +33,17 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /\/x\/16x16\//i, // favicon-size CDN paths only; larger CDN logo plates are valid developer logos
   /habtoor_polo/i,
   /tilal_/i,
+  // Raster photo formats are never transparent brand marks — they always knock
+  // out to a solid block on the emerald plate.
+  /\.jpe?g(\?|$)/i,
+  // Audited slab artwork (opaque background -> white block) and wrong-brand
+  // files found in the catalog. Never render these as developer logos.
+  /8c882e55-602e-4200-9ff7-a42177045b1e-processed\.png/i, // "Anderson Logistics" file stored on Arada
+  /Group\+544\.png/i,
+  /Smart-Investments-Ltd\.png/i,
+  /ank-developers-logo\.png/i,
 ];
+
 
 function isAllowedLogoUrl(url: unknown): url is string {
   if (typeof url !== "string") return false;
