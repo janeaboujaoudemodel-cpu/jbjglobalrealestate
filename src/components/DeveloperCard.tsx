@@ -68,6 +68,25 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
       .trim();
   }, [developer]);
 
+  // Factual fallback built only from stored data — never marketing filler.
+  const factualDescription = useMemo(() => {
+    const parts: string[] = [];
+    if (developer.founded_year) parts.push(`Established ${developer.founded_year}`);
+    if (developer.headquarters) parts.push(`headquartered in ${developer.headquarters}`);
+    if (projectCount > 0) parts.push(`${projectCount} live ${projectCount === 1 ? "project" : "projects"} on JBJ`);
+    else if (developer.offplan_projects && developer.offplan_projects > 0)
+      parts.push(`${developer.offplan_projects} off-plan developments`);
+    if (!parts.length) return "";
+    const sentence = parts.join(", ");
+    return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
+  }, [developer, projectCount]);
+
+  const cardDescription = safeDescription || factualDescription;
+  const rawDescriptionLength = (getSafeDeveloperDescription(developer) || "").trim().length;
+  const isDescriptionTrimmed = Boolean(safeDescription) && rawDescriptionLength > safeDescription.length;
+
+
+
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
       <motion.div
