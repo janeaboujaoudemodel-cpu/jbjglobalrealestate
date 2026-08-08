@@ -44,7 +44,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1 h-11 lg:h-16 px-2 lg:px-2.5 rounded-lg text-[12.5px] lg:text-[13px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-hidden";
+  "flex items-center justify-between gap-1 h-11 lg:h-16 px-1.5 lg:px-2 rounded-lg text-[12.5px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-hidden";
 
 function Seg({
   label,
@@ -101,7 +101,7 @@ function Seg({
               {label}
             </span>
           </span>
-          <ChevronDown className="w-4 h-4 shrink-0 opacity-70" />
+          <ChevronDown className="w-3.5 h-3.5 shrink-0 opacity-70" />
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -230,12 +230,15 @@ export default function PropertySearchBar({
   const extras = countExtraFilters(f);
   /* Both rows share the same lg column count so every card edge lines up. */
   const GRID_KEY = showSort ? "27" : "24";
-  // Row 1 must always total the grid width (24 / 27). The keyword field absorbs
-  // the 3 columns taken by the optional developer-tier segment so the sq ft /
-  // sq m pair stays on the same line instead of wrapping to a second row.
+  // Row 1 must always total the grid width (24 / 27): purposes(6) + keyword +
+  // optional tiers(4) + currency(3) + utility pair(6).
   const KEYWORD_SPAN = showSort
-    ? (showTiers ? "jj-sspan-9" : "jj-sspan-12")
-    : (showTiers ? "jj-sspan-6" : "jj-sspan-9");
+    ? (showTiers ? "jj-sspan-8" : "jj-sspan-12")
+    : (showTiers ? "jj-sspan-5" : "jj-sspan-9");
+  // Row 2 must also total the grid width: area + type(3) + beds(3) + price(3)
+  // + status(3) + optional sort(3) + utility pair.
+  const AREA_SPAN = showSort ? "jj-sspan-5" : "jj-sspan-6";
+  const ROW2_UTILITY_SPAN = showSort ? "jj-sspan-7" : "jj-sspan-6";
 
   const setAreaUnit = (unit: AreaUnit) => setAreaUnitGlobal(unit);
 
@@ -414,7 +417,7 @@ export default function PropertySearchBar({
         </div>
 
         {showTiers && (
-          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3">
+          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-4">
             <Seg
               label={f.developerTier ? (TIER_LABELS[f.developerTier as DeveloperTier] || "Tier") : "All Tiers"}
               active={!!f.developerTier}
@@ -526,7 +529,7 @@ export default function PropertySearchBar({
 
       {/* Row 2 — segments */}
       <div className={`contents lg:grid lg:gap-2`} data-search-grid={GRID_KEY}>
-        <div className="order-4 lg:order-none col-span-1 jj-sspan-6 min-w-0">
+        <div className={`order-4 lg:order-none col-span-1 ${AREA_SPAN} min-w-0`}>
           <Seg label={locationLabel} active={!!(f.areasInclude.length || f.areasExclude.length || f.region)} dark={dark} wide icon={<MapPin className="w-4 h-4 opacity-70" />}>
             <AreaIncludeExclude
               country={f.country}
@@ -652,7 +655,6 @@ export default function PropertySearchBar({
             active
             dark={dark}
             spanClass="jj-sspan-3"
-            icon={<ArrowUpDown className="w-4 h-4 opacity-70" />}
           >
             <div className="p-1.5">
               {sortOptions.map((s) => {
@@ -677,8 +679,8 @@ export default function PropertySearchBar({
 
 
         <div
-          className="contents lg:grid lg:gap-2 lg:col-span-2 jj-sspan-6 min-w-0"
-          style={{ gridTemplateColumns: "minmax(0, 0.85fr) minmax(0, 1.15fr)" }}
+          className={`contents lg:grid lg:gap-2 lg:col-span-2 ${ROW2_UTILITY_SPAN} min-w-0`}
+          style={{ gridTemplateColumns: "minmax(0, 0.8fr) minmax(0, 1.2fr)" }}
         >
           <button
             type="button"
@@ -700,7 +702,7 @@ export default function PropertySearchBar({
 
           >
             <span className="flex items-center gap-2 min-w-0">
-              <SlidersHorizontal className="w-4 h-4 opacity-70" />
+              <SlidersHorizontal className="w-3.5 h-3.5 shrink-0 opacity-70" />
               <span className="truncate" style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
@@ -713,7 +715,7 @@ export default function PropertySearchBar({
              data-surface="emerald"
              data-search-segment
              data-no-contrast-guard
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg text-[13px] lg:text-[11.5px] font-semibold px-1.5 leading-tight tracking-tight text-center"
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg text-[13px] lg:text-[11px] font-semibold px-1 leading-tight tracking-tight text-center"
             style={{
               backgroundImage: EMERALD_PAIR,
               color: "#FFFFFF",
