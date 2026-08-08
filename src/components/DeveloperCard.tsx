@@ -40,9 +40,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const candidates = useMemo(() => [...new Set([
     officialFlagship,
     ...heroImageUrls,
-    developer.feature_image_url,
     heroImageUrl,
-  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, heroImageUrl, heroImageUrls, officialFlagship]);
+  ].filter((value): value is string => Boolean(value)))], [heroImageUrl, heroImageUrls, officialFlagship]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
@@ -97,21 +96,11 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                   photo as a plate, with automatic light/dark plate contrast. */}
             </>
           ) : (
-            /* No verified project photograph available: never leave the hero
-               blank. Fill it with the brand emerald ombre and the developer's
-               own logo/wordmark so the card always reads as branded. */
+            /* Never substitute a developer logo for project photography. */
             <div className="absolute inset-0 flex items-center justify-center bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] px-6">
-              <DeveloperLogo
-                variant="bare"
-                 src={developerLogoUrl}
-                name={developer.name}
-                alt={`${developer.name} logo`}
-                websiteUrl={(developer as { website_url?: string | null }).website_url}
-                loading={isEager ? "eager" : "lazy"}
-                embedded
-                 size="md"
-                 className="!border-0 !bg-transparent !shadow-none"
-              />
+              <span className="allow-white text-center text-xs font-semibold uppercase tracking-[0.16em] text-white">
+                Project photography being verified
+              </span>
             </div>
           )}
 

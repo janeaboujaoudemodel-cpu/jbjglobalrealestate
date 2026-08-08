@@ -184,32 +184,36 @@ const Developers = () => {
         </section>
 
         
-        {/* Unified Search Filter — sticky emerald rail */}
+        {/* Unified Search Filter — exact light project-page treatment */}
         <section
-          className="sticky top-[88px] z-40 py-4 border-y border-white/12 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.5)]"
-          style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
+          data-filter-clean="true"
+          data-filter-band-light="true"
+          className="sticky top-[88px] z-40 border-b border-[#B89555]/28 py-3 md:py-4"
+          style={{ background: "linear-gradient(180deg,#FFFFFF 0%,#FDFBF7 58%,#F7F2EA 100%)" }}
         >
-          <div className="container mx-auto px-4">
-            <PropertySearchBar 
-              value={search}
-              onChange={setSearch}
-              onSubmit={setSearch}
-              dark={true}
-              showTiers={true}
-              showSort={true}
-              sortOptions={[
-                { slug: "default", label: "Recommended" },
-                { slug: "alpha", label: "Alphabetical" },
-                { slug: "most_projects", label: "Most Projects" },
-              ]}
-              countOverride={filteredDevelopers.length}
-              countNoun="developers"
-              typewriterPhrases={[
-                "Search by developer name...",
-                "Emaar, Nakheel, DAMAC...",
-                "Elite UAE developers...",
-              ]}
-            />
+          <div className="container mx-auto px-3 sm:px-4">
+            <div className="jjpf-shell" style={{ overflow: "visible" }}>
+              <PropertySearchBar 
+                value={search}
+                onChange={setSearch}
+                onSubmit={setSearch}
+                showTiers={true}
+                showSort={true}
+                sortOptions={[
+                  { slug: "default", label: "Recommended" },
+                  { slug: "alpha", label: "Alphabetical" },
+                  { slug: "most_projects", label: "Most Projects" },
+                ]}
+                countOverride={filteredDevelopers.length}
+                countNoun="developers"
+                typewriterPhrases={[
+                  "Search by developer name...",
+                  "Emaar, Nakheel, DAMAC...",
+                  "Elite UAE developers...",
+                ]}
+                showActiveSummary
+              />
+            </div>
           </div>
         </section>
 
@@ -259,7 +263,7 @@ const Developers = () => {
                       key={developer.id} 
                       developer={developer} 
                       projectCount={projectCounts[developer.id] || projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0}
-                       heroImageUrl={topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)] || developer.feature_image_url}
+                       heroImageUrl={topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
                       heroImageUrls={[
                         ...(projectStats?.imageCandidates?.[developer.id] || []),
                         ...(projectStats?.imageCandidatesByName?.[normalizeDeveloperName(developer.name)] || []),
