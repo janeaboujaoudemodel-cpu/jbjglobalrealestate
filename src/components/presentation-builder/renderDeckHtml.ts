@@ -81,6 +81,21 @@ const esc = (s: unknown): string =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
+/**
+ * Rich-text fields (project / developer descriptions) are stored as HTML.
+ * The deck is plain print HTML, so strip markup to readable plain text
+ * before escaping — otherwise raw <p>/<a> tags render literally on the slide.
+ */
+const plainText = (s: unknown): string =>
+  String(s ?? "")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<\/(p|div|li|h[1-6])>/gi, " ")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const fmtPrice = (n?: number) =>
   typeof n === "number" && isFinite(n) ? `AED ${n.toLocaleString()}` : "";
 
@@ -161,7 +176,7 @@ function highlightsSlide(project: DeckProject): string | null {
       <div class="kicker">Highlights</div>
       <h2 class="title">${esc(project.usp_headline || `Why ${project.name}`)}</h2>
       <div class="gold-rule"></div>
-      ${project.description ? `<p class="lead" style="margin-bottom:16px;">${esc(project.description).slice(0, 600)}</p>` : ""}
+      ${project.description ? `<p class="lead" style="margin-bottom:16px;">${esc(plainText(project.description).slice(0, 600))}</p>` : ""}
       ${stats.length ? `<div class="grid-4" style="margin-bottom:16px;">${stats.map(([l, v]) => `<div class="stat"><div class="v">${v}</div><div class="l">${esc(l)}</div></div>`).join("")}</div>` : ""}
       ${bullets.length ? `<ul class="bullets">${bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>` : ""}
       <div class="footer-strip"><span>JBJ Global Real Estate</span><span>${esc(project.name)}</span></div>
@@ -265,7 +280,7 @@ function developerSlide(project: DeckProject): string | null {
       <div class="gold-rule"></div>
       <div style="display:flex; gap:16mm; align-items:flex-start;">
         ${logo ? `<img src="${esc(logo)}" alt="" style="max-width:60mm; max-height:40mm; object-fit:contain; background:#F7F2EA; padding:8px; border:1px solid rgba(184,149,85,0.3); border-radius:8px;" />` : ""}
-        ${desc ? `<p class="lead" style="flex:1;">${esc(desc).slice(0, 800)}</p>` : ""}
+        ${desc ? `<p class="lead" style="flex:1;">${esc(plainText(desc).slice(0, 800))}</p>` : ""}
       </div>
       <div class="footer-strip"><span>JBJ Global Real Estate</span><span>${esc(project.name)}</span></div>
     </section>`;
