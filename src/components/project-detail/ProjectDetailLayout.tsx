@@ -477,10 +477,11 @@ function ProjectDetailLayoutInner({
     ].map((name, index) => ({ id: `amra-approved-${index}`, url: amraAsset(name), alt: `${project.name} official factsheet` }));
   }, [project.images, project.name]);
 
-  // Fallback chain: project_images → cover_image_url → placeholder
+  // Owner-selected cover is authoritative. Gallery ordering must never replace it.
+  // Fallback chain: cover_image_url → project_images → placeholder.
   const heroImage = useMemo(() => {
-    if (images[0]?.url) return { ...images[0], url: getHighResImageUrl(images[0].url!), alt: images[0].alt || project.name };
     if (project.cover_image_url) return { url: getHighResImageUrl(project.cover_image_url), alt: project.name };
+    if (images[0]?.url) return { ...images[0], url: getHighResImageUrl(images[0].url!), alt: images[0].alt || project.name };
     return undefined;
   }, [images, project.cover_image_url, project.name]);
 

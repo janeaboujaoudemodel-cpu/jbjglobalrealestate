@@ -18,7 +18,8 @@ interface Props {
   cardImageUrl?: string | null;
 }
 
-const BUCKET = "rel-media";
+// Owner uploads are immutable source material and belong in project-media.
+const BUCKET = "project-media";
 
 export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl }: Props) {
   const canEdit = useCanEdit("project_photos");
