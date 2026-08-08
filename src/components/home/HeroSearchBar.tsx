@@ -848,11 +848,14 @@ const HeroSearchBar = () => {
           <Popover>
             <PopoverTrigger asChild>
               <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
-                {developerId !== 'all' && developers?.find(d => d.id === developerId)?.logo_url ? (
-                  <img
-                    src={developers.find(d => d.id === developerId)?.logo_url!}
-                    alt=""
-                    className="w-4 h-4 object-contain rounded-sm bg-[#FDFBF7]"
+                {developerId !== 'all' && developers?.find(d => d.id === developerId) ? (
+                  <DeveloperLogo
+                    src={developers.find(d => d.id === developerId)?.logo_url}
+                    name={developers.find(d => d.id === developerId)?.name}
+                    alt={`${developers.find(d => d.id === developerId)?.name} logo`}
+                    variant="bare"
+                    size="sm"
+                    className="!w-10 !h-6 !rounded-sm !p-[2px] flex-shrink-0"
                   />
                 ) : (
                   <svg className="w-3.5 h-3.5 text-[#1A1A1A]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
