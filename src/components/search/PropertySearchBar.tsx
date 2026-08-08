@@ -78,7 +78,7 @@ function Seg({
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#FDFBF7",
             backdropFilter: dark ? "blur(10px)" : undefined,
-            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
+            border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
             color: ink,
             WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
           }}
@@ -174,6 +174,8 @@ interface Props {
    * so the bar and the grid can never disagree.
    */
   countOverride?: number | null;
+  /** Noun used in the count button, e.g. "properties" | "developers". */
+  countNoun?: string;
   /** Shows the active-filter chip row + Reset control under the bar. */
   showTiers?: boolean;
   showActiveSummary?: boolean;
@@ -192,6 +194,7 @@ export default function PropertySearchBar({
   sortOptions = SORT_OPTIONS,
   showTiers = false,
   countOverride,
+  countNoun = "properties",
   showActiveSummary = false,
 }: Props) {
 
@@ -308,7 +311,7 @@ export default function PropertySearchBar({
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#F2EBDC",
             backdropFilter: dark ? "blur(10px)" : undefined,
-            border: dark ? "1px solid rgba(255,255,255,0.34)" : "1px solid rgba(184,149,85,0.3)",
+            border: dark ? "1.5px solid rgba(255,255,255,0.44)" : "1.5px solid rgba(184,149,85,0.58)",
           }}
         >
           {PURPOSES.map((p, index) => (
@@ -353,7 +356,7 @@ export default function PropertySearchBar({
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#FDFBF7",
             backdropFilter: dark ? "blur(10px)" : undefined,
-            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
+            border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
           }}
         >
           <Search className="w-4 h-4 shrink-0 opacity-80" style={{ color: dark ? "#FFF" : "#1A1A1A" }} />
@@ -386,6 +389,23 @@ export default function PropertySearchBar({
               caretColor: dark ? "#FFFFFF" : "#1A1A1A",
             }}
           />
+          {f.q ? (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => {
+                const next = { ...f, q: "" };
+                setInternal(next);
+                onChange?.(next);
+                onSubmit(next);
+              }}
+              data-no-contrast-guard
+              className="shrink-0 inline-flex h-6 w-6 items-center justify-center rounded-full"
+              style={{ background: dark ? "rgba(255,255,255,0.14)" : "rgba(184,149,85,0.16)" }}
+            >
+              <X className="w-3.5 h-3.5" style={{ color: dark ? "#FFFFFF" : "#1A1A1A" }} />
+            </button>
+          ) : null}
         </div>
 
         {showTiers && (
@@ -427,7 +447,7 @@ export default function PropertySearchBar({
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#FDFBF7",
             backdropFilter: dark ? "blur(10px)" : undefined,
-            border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
+            border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
           }}
         >
           <InlineCurrencySelect dark={dark} />
@@ -438,15 +458,17 @@ export default function PropertySearchBar({
           className="contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none jj-sspan-6 min-w-0"
           style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
         >
+          {/* Keeps the sq ft / sq m pair in the same column as "Show N" below. */}
+          {!onConsultation ? <div aria-hidden="true" className="hidden lg:block" /> : null}
           <div
-            className="order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg"
+            className={`order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg${!onConsultation ? " lg:order-first" : ""}`}
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
               backgroundImage: dark ? DARK_SURFACE : undefined,
               background: dark ? undefined : "#FDFBF7",
               backdropFilter: dark ? "blur(10px)" : undefined,
-              border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
+              border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
             }}
           >
             {(["sqft", "sqm"] as const).map((unit, i) => {
@@ -666,7 +688,7 @@ export default function PropertySearchBar({
               backgroundImage: dark ? DARK_SURFACE : undefined,
               background: dark ? undefined : "#FDFBF7",
               backdropFilter: dark ? "blur(10px)" : undefined,
-              border: `1px solid ${dark ? "rgba(255,255,255,0.34)" : "rgba(184,149,85,0.30)"}`,
+              border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
               color: dark ? "#FFFFFF" : "#1A1A1A",
               WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
             }}
@@ -688,7 +710,12 @@ export default function PropertySearchBar({
             className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold text-white px-2 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
-            {count == null ? "Search" : `Show ${count.toLocaleString()}`}
+            {count == null ? "Search" : (
+              <>
+                Show {count.toLocaleString()}
+                <span className="hidden xl:inline"> {countNoun}</span>
+              </>
+            )}
           </button>
         </div>
       </div>
