@@ -41,6 +41,11 @@ const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
 
 
 
+// JPG/JPEG artwork is always opaque: knocking it out to pure white renders a
+// blank white block on the emerald plate. Those logos are shown as-is on a
+// small ivory inner tile so the real mark stays visible.
+const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
+
 export function DeveloperLogo({
   src,
   alt = "Developer",
@@ -138,13 +143,15 @@ export function DeveloperLogo({
         className={cn(
           "block w-full h-full object-contain",
           scale === "compact" ? "rounded-sm" : "rounded-md",
+          isOpaqueRaster(url) && !dataKeepGold && "bg-[#FDFBF7] p-0.5 ring-1 ring-[#B89555]/60",
         )}
         style={{
           // Emerald plates: knock the artwork out to pure white so every
           // wordmark reads at full contrast. Gold hero plate keeps dark ink.
+          // Opaque JPG artwork is never knocked out (it would go fully white).
           filter: override.imageBlendMode
             ? (override.imageFilter ?? "none")
-            : dataKeepGold
+            : dataKeepGold || isOpaqueRaster(url)
               ? (override.imageFilter ?? "none")
               : "brightness(0) invert(1)",
           mixBlendMode: override.imageBlendMode ?? "normal",
