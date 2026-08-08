@@ -53,7 +53,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
   };
 
   return (
-    <div className="relative flex-shrink-0 w-36 h-36">
+    <div className="relative flex-shrink-0 w-44 h-[99px]">
       {/* Unified identity plate: emerald pair gradient + white knocked-out mark */}
       <DeveloperLogo
         src={isValidDeveloperLogoUrl(displayLogoUrl) ? (displayLogoUrl as string) : null}
@@ -61,7 +61,8 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
         name={developerName}
         variant="bare"
         renderFallback
-        className="!w-36 !h-36 !rounded-2xl !p-3 flex-shrink-0"
+        className="!w-44 !h-[99px] !rounded-xl !p-3 flex-shrink-0"
+
       />
 
 
