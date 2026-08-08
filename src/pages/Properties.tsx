@@ -769,7 +769,7 @@ const Properties = () => {
               {/* Results Count (hidden while initial fetch in flight) */}
               <div className="px-4 pt-4 pb-2 flex items-center justify-between min-h-[24px]">
                 {!showSkeletons && (
-                  <p className="text-[#1A1A1A]/70 text-sm">
+                   <p className="text-[#1A1A1A] text-sm">
                     Showing <span className="text-[#1A1A1A] font-medium">{displayedResultCount}</span> {hasAnyActiveFilter ? 'matching ' : ''}properties
                   </p>
                 )}
@@ -860,7 +860,7 @@ const Properties = () => {
               {/* Results Count — single authoritative line, no duplicated intent wording */}
               <div className="mb-6 flex items-center justify-between pt-2 min-h-[28px]">
                 {!showSkeletons && (
-                  <p className="text-[#1A1A1A]/70">
+                   <p className="text-[#1A1A1A]">
                     Showing <span className="text-[#1A1A1A] font-medium">{displayedResultCount}</span> {hasAnyActiveFilter ? 'matching ' : ''}properties
                   </p>
                 )}
@@ -869,7 +869,7 @@ const Properties = () => {
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                     className="text-[#1A1A1A] hover:text-[#1A1A1A]"
                   >
                     <X className="w-4 h-4 mr-2" />
                     Clear all filters
@@ -921,7 +921,7 @@ const Properties = () => {
               {!showSkeletons && finalProjects.length > PAGE_SIZE && (
                 <div className="px-2 sm:px-4 pt-4 pb-2">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <p className="text-[12px] text-[#1A1A1A]/70 font-medium">
+                     <p className="text-[12px] text-[#1A1A1A] font-medium">
                       Showing <span className="text-[#1A1A1A] font-semibold">{(safePage - 1) * PAGE_SIZE + 1}</span>–
                       <span className="text-[#1A1A1A] font-semibold">{Math.min(safePage * PAGE_SIZE, finalProjects.length)}</span> of{" "}
                       <span className="text-[#1A1A1A] font-semibold">{finalProjects.length}</span> properties · Page{" "}

@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
+import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import type { Developer } from "@/hooks/useProjects";
+import omniyatMasterpiece from "@/assets/omniyat-masterpiece.jpg.asset.json";
 
 
 interface DeveloperCardProps {
@@ -23,21 +25,28 @@ interface DeveloperCardProps {
 const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
   nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
   "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
+  omniyat: omniyatMasterpiece.url,
 };
 
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
   const isEager = index < 8;
+  const normalizedSlug = (developer.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const officialFlagship = normalizedSlug.includes("omniyat") || normalizedName.includes("omniyat")
+    ? OFFICIAL_FLAGSHIP_MEDIA.omniyat
+    : OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug] || OFFICIAL_FLAGSHIP_MEDIA[normalizedName];
   const candidates = useMemo(() => [...new Set([
-    OFFICIAL_FLAGSHIP_MEDIA[(developer.slug || developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "")],
+    officialFlagship,
     ...heroImageUrls,
     developer.feature_image_url,
     heroImageUrl,
-  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, developer.name, developer.slug, heroImageUrl, heroImageUrls]);
+  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, heroImageUrl, heroImageUrls, officialFlagship]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
+  const developerLogoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
 
   const hasHero = !!cardHeroImageUrl;
   // LOCKED (no cropped text): never render an ellipsis. The blurb is trimmed on
@@ -94,13 +103,14 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             <div className="absolute inset-0 flex items-center justify-center bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] px-6">
               <DeveloperLogo
                 variant="bare"
-                src={developer.logo_url}
+                 src={developerLogoUrl}
                 name={developer.name}
                 alt={`${developer.name} logo`}
                 websiteUrl={(developer as { website_url?: string | null }).website_url}
                 loading={isEager ? "eager" : "lazy"}
                 embedded
-                className="!h-16 !w-auto !max-w-[70%] !border-0 !bg-transparent !shadow-none !p-0"
+                 size="md"
+                 className="!border-0 !bg-transparent !shadow-none"
               />
             </div>
           )}
@@ -122,16 +132,17 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         {/* LOCKED (PASS 273): the logo plate always straddles the photo seam and
             sits ABOVE the card — never clipped, never hidden under it. */}
         {hasHero ? (
-          <div className="absolute bottom-0 left-4 z-20 h-16 w-16 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
+          <div className="absolute bottom-0 left-4 z-20 h-16 w-28 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
             <DeveloperLogo
               variant="bare"
-              src={developer.logo_url}
+               src={developerLogoUrl}
               name={developer.name}
               alt={`${developer.name} logo`}
               websiteUrl={(developer as { website_url?: string | null }).website_url}
               loading={isEager ? "eager" : "lazy"}
               embedded
-              className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
+               size="md"
+               className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
             />
           </div>
         ) : null}
