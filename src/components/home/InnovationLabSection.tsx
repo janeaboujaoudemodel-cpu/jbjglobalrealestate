@@ -96,7 +96,11 @@ function Brackets() {
 function Wireframe() {
   return (
     <svg
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-70"
+      style={{
+        maskImage: "linear-gradient(to top, #000 0%, rgba(0,0,0,0.35) 55%, transparent 92%)",
+        WebkitMaskImage: "linear-gradient(to top, #000 0%, rgba(0,0,0,0.35) 55%, transparent 92%)",
+      }}
       viewBox="0 0 400 260"
       preserveAspectRatio="none"
       aria-hidden
@@ -107,12 +111,12 @@ function Wireframe() {
           <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
         </linearGradient>
       </defs>
-      {Array.from({ length: 9 }).map((_, i) => (
+      {Array.from({ length: 5 }).map((_, i) => (
         <line
           key={`v${i}`}
-          x1={i * 50}
+          x1={i * 95}
           y1={0}
-          x2={i * 50 - 60}
+          x2={i * 95 - 70}
           y2={260}
           stroke="url(#jbj-mesh-fade)"
           strokeWidth="0.6"
