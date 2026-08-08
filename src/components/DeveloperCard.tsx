@@ -73,7 +73,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     const parts: string[] = [];
     if (developer.founded_year) parts.push(`Established ${developer.founded_year}`);
     if (developer.headquarters) parts.push(`headquartered in ${developer.headquarters}`);
-    if (projectCount > 0) parts.push(`${projectCount} live ${projectCount === 1 ? "project" : "projects"} on JBJ`);
+    if (projectCount > 0) parts.push(`${projectCount} live ${projectCount === 1 ? "project" : "projects"} listed`);
     else if (developer.offplan_projects && developer.offplan_projects > 0)
       parts.push(`${developer.offplan_projects} off-plan developments`);
     if (!parts.length) return "";
