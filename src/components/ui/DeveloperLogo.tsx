@@ -6,6 +6,11 @@ import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
 import agPropertiesWhite from "@/assets/developer-logos/ag-properties-white.png";
 import dubaiSouthWhite from "@/assets/developer-logos/dubai-south-white.png.asset.json";
+import adeVerifiedWhite from "@/assets/developer-logos/verified-local/ade-white.png";
+import agVerifiedWhite from "@/assets/developer-logos/verified-local/ag-white.png";
+import aiznVerifiedWhite from "@/assets/developer-logos/verified-local/aizn-white.png";
+import amisVerifiedWhite from "@/assets/developer-logos/verified-local/amis-white.png";
+import anaxVerifiedWhite from "@/assets/developer-logos/verified-local/anax-white.png";
 
 const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
 
@@ -78,16 +83,30 @@ export function DeveloperLogo({
   const isAgProperties = /^agproperties(?:llc)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
+  const normalizedIdentity = (name || alt || "").replace(/[^a-z0-9]+/gi, "").toLowerCase();
+  const verifiedWhiteLogo = /^adeproperties(?:llc)?$/.test(normalizedIdentity)
+    ? adeVerifiedWhite
+    : /^agproperties(?:llc)?$/.test(normalizedIdentity)
+      ? agVerifiedWhite
+      : /^aizn(?:realestate)?development(?:llc)?$/.test(normalizedIdentity)
+        ? aiznVerifiedWhite
+        : /^amisdevelopment(?:llc)?$/.test(normalizedIdentity)
+          ? amisVerifiedWhite
+          : /^anaxdevelopments?(?:llc)?$/.test(normalizedIdentity)
+            ? anaxVerifiedWhite
+            : null;
   const isDubaiSouth = /^dubaisouth(?:properties)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
   // Curated pure-white knockouts. The database artwork for these developers is
   // baked on an opaque dark field, which browser blend modes turn into a blank
   // white block, so the official mark is shipped pre-knocked-out instead.
-  const resolvedSrc = isDubaiSouth
+  const resolvedSrc = verifiedWhiteLogo
+    ? verifiedWhiteLogo
+    : isDubaiSouth
     ? dubaiSouthWhite.url
     : isAgProperties
-    ? agPropertiesWhite
+    ? agVerifiedWhite || agPropertiesWhite
     : isAbDevelopers
     ? abDevelopersTransparent
     : isLaraix
@@ -100,7 +119,7 @@ export function DeveloperLogo({
   // override still suppresses unreliable database artwork (opaque/blocked
   // bitmaps that paint as blank white blocks on the emerald plate).
   const hasCuratedArtwork =
-    isDubaiSouth || isAgProperties || isAbDevelopers || isLaraix || !!curatedLogo;
+    !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers || isLaraix || !!curatedLogo;
   const valid =
     isValidDeveloperLogoUrl(resolvedSrc) &&
     !error &&
@@ -181,10 +200,10 @@ export function DeveloperLogo({
           // then erased it, leaving an empty emerald plate.
           filter:
             override.imageFilter ??
-            (dataKeepGold || needsInvert === false ? "none" : "brightness(0) invert(1)"),
+            (verifiedWhiteLogo || dataKeepGold || needsInvert === false ? "none" : "brightness(0) invert(1)"),
           mixBlendMode:
             override.imageBlendMode ??
-            (dataKeepGold || needsInvert === false ? "normal" : "screen"),
+            (verifiedWhiteLogo || dataKeepGold || needsInvert === false ? "normal" : "screen"),
         }}
       />
     </div>
