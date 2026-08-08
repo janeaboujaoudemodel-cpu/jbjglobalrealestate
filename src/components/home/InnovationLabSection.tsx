@@ -258,17 +258,12 @@ export default function InnovationLabSection() {
                   key={stage.index}
                   data-ink-emerald="true"
                   data-surface="dark"
-                  className="absolute left-1/2 top-1/2 flex flex-col justify-between overflow-hidden rounded-2xl border p-6 md:p-8"
+                  className="relative z-20 flex w-full flex-col justify-between overflow-hidden rounded-2xl border p-5 md:absolute md:left-1/2 md:top-1/2 md:h-[78%] md:w-[92%] md:-ml-[46%] md:-mt-[39%] md:p-8"
                   style={{
-                    height: "78%",
-                    width: "92%",
-                    marginLeft: "-46%",
-                    marginTop: "-39%",
                     background: EMERALD_INK,
                     borderColor: "rgba(184,149,85,0.38)",
                     boxShadow: "0 44px 90px -30px rgba(4,44,28,0.65)",
                     transformStyle: "preserve-3d",
-                    zIndex: 20,
                   }}
                   initial={{ opacity: 0, y: 34, rotateX: 16, rotateY: -14, scale: 0.94 }}
                   animate={{ opacity: 1, y: 0, rotateX: 5, rotateY: -6, scale: 1 }}
