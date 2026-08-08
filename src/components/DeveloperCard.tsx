@@ -7,7 +7,6 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
-import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
 import type { Developer } from "@/hooks/useProjects";
 

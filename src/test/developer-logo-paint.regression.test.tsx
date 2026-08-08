@@ -79,28 +79,25 @@ describe("DeveloperLogo rendering guard", () => {
     expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
   });
 
-  it("knocks dark database artwork out to white instead of leaving it dark", () => {
-    const { container } = renderLogo({
+  it("never paints unverified database artwork before its transparency audit", () => {
+    const { container, getByText } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "card",
     });
-    const img = container.querySelector("img") as HTMLImageElement;
-    expect(paint(img)).toEqual({
-      filter: "brightness(0) invert(1)",
-      blend: "screen",
-    });
+    expect(container.querySelector("img")).toBeNull();
+    expect(getByText("Some Unknown Developer")).toBeTruthy();
   });
 
-  it("does not invert light artwork coming from the database", () => {
-    const { container } = renderLogo({
+  it("does not trust an unaudited database image solely from a paint hint", () => {
+    const { container, getByText } = renderLogo({
       name: "Light Artwork Developer",
       src: "https://cdn.example.com/white-logo.png",
       needsInvert: false,
       variant: "card",
     });
-    const img = container.querySelector("img") as HTMLImageElement;
-    expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
+    expect(container.querySelector("img")).toBeNull();
+    expect(getByText("Light Artwork Developer")).toBeTruthy();
   });
 
   it("never paints a white plate background on any variant", () => {
@@ -118,15 +115,16 @@ describe("DeveloperLogo rendering guard", () => {
     }
   });
 
-  it("keeps the emerald surface hidden until its logo is ready", () => {
-    const { container } = renderLogo({
+  it("shows one complete emerald identity plate while artwork is audited", () => {
+    const { container, getByText } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "bare",
     });
     const plate = container.firstElementChild as HTMLElement;
-    expect(plate.className).toMatch(/opacity-0/);
+    expect(plate.className).not.toMatch(/opacity-0/);
     expect(plate.getAttribute("data-logo-loaded")).toBe("false");
+    expect(getByText("Some Unknown Developer")).toBeTruthy();
   });
 
   it("uses the premium wide plate dimensions for listing logos", () => {
