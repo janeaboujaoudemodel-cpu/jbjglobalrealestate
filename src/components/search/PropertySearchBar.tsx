@@ -194,7 +194,7 @@ export default function PropertySearchBar({
   sortOptions = SORT_OPTIONS,
   showTiers = false,
   countOverride,
-  countNoun = "properties",
+  countNoun: _countNoun = "properties",
   showActiveSummary = false,
 }: Props) {
 
@@ -710,12 +710,7 @@ export default function PropertySearchBar({
             className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold text-white px-2 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR }}
           >
-            {count == null ? "Search" : (
-              <>
-                Show {count.toLocaleString()}
-                <span className="hidden xl:inline"> {countNoun}</span>
-              </>
-            )}
+            {count == null ? "Search" : `Show ${count.toLocaleString()}`}
           </button>
         </div>
       </div>

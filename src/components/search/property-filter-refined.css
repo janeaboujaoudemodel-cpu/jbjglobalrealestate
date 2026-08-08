@@ -180,3 +180,13 @@
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
+
+/* No nested frame inside the keyword field — one field, one border. */
+.jjpf-shell [data-search-segment] input,
+.jjpf-shell [data-search-segment] input:focus,
+.jjpf-shell [data-search-segment] input:focus-visible {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
