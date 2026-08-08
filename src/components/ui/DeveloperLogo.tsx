@@ -230,7 +230,7 @@ export function DeveloperLogo({
           // Paint rules live in getLogoPaintStyle (see STYLING GUARD above) and
           // are covered by src/test/developer-logo-paint.regression.test.tsx.
           ...getLogoPaintStyle({
-            isLightArtwork: !!verifiedWhiteLogo,
+            isLightArtwork: isCuratedWhiteArtwork,
             keepGold: dataKeepGold,
             needsInvert,
             overrideFilter: override.imageFilter,
