@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { PearlButton } from "@/components/ui/pearl-button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import DeveloperLogoUploader from "@/components/project-detail/owner/DeveloperLogoUploader";
 import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
