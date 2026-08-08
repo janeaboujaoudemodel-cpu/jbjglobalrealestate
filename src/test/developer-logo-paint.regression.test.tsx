@@ -188,16 +188,16 @@ describe("DeveloperLogo rendering guard", () => {
     }
   });
 
-  it("shows one complete emerald identity plate while artwork is audited", () => {
+  it("keeps the whole identity plate hidden until its real artwork loads", () => {
     const { container } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "bare",
     });
     const plate = container.firstElementChild as HTMLElement;
-    expect(plate.className).not.toMatch(/opacity-0/);
+    expect(plate.className).toMatch(/opacity-0/);
     expect(plate.getAttribute("data-logo-loaded")).toBe("false");
-    expect(plate.getAttribute("data-developer-logo")).toBe("unresolved");
+    expect(plate.getAttribute("data-developer-logo")).toBe("database");
   });
 
   it("uses the premium wide plate dimensions for listing logos", () => {
