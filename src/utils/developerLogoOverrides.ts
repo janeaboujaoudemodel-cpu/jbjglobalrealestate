@@ -73,6 +73,12 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   // Official AB Developers artwork has an opaque black background. Screen
   // blending removes only that black field while preserving the real gold AB
   // monogram, preventing the solid white square caused by blanket inversion.
+  // Iman Developer's official artwork is a bare serif "I" monogram on a
+  // terracotta square — it reads as an empty block on our plates. Render the
+  // approved emerald nameplate so it matches Imtiaz/Sobha/Holm.
+  iman: { forceNameplate: true },
+  imandeveloper: { forceNameplate: true },
+  imandevelopers: { forceNameplate: true },
   ab: { imageBlendMode: "screen", imageFilter: "none" },
   abdevelopers: { imageBlendMode: "screen", imageFilter: "none" },
   abdevelopersllc: { imageBlendMode: "screen", imageFilter: "none" },
