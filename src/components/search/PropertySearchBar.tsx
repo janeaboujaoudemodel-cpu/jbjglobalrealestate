@@ -194,7 +194,6 @@ export default function PropertySearchBar({
   sortOptions = SORT_OPTIONS,
   showTiers = false,
   countOverride,
-  countNoun: _countNoun = "properties",
   showActiveSummary = false,
 }: Props) {
 
