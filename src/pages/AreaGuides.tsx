@@ -293,7 +293,6 @@ const AreaGuides = () => {
             priorityFilter="areas"
             resultsCount={filteredAreas.length}
             resultsLabel="Areas"
-            hideSort
           />
         </div>
       </section>
