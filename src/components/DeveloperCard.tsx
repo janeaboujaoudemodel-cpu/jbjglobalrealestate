@@ -193,7 +193,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
             loading="eager"
             size="md"
-            className="!h-full !w-full !p-2 !rounded-lg"
+            className="!h-full !w-full !p-2.5 !rounded-lg"
           />
         </div>
 
@@ -202,7 +202,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         {/* Content section — white surface with black text & icons.
             The developer name is intentionally NOT repeated here: the logo
             plate above already identifies the brand. */}
-        <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-10">
+        <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-12">
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#0A0A0A] text-[11px] font-semibold tracking-[0.08em] uppercase mb-2">
             {projectCount > 0 ? (

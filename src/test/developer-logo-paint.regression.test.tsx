@@ -150,26 +150,26 @@ describe("DeveloperLogo rendering guard", () => {
     }
   });
 
-  it("never paints unverified database artwork before its transparency audit", () => {
+  it("mounts real database artwork immediately so cross-origin logos never remain blank", () => {
     const { container } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "card",
     });
-    expect(container.querySelector("img")).toBeNull();
-    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
+    expect(container.querySelector("img")?.getAttribute("src")).toBe("https://cdn.example.com/logo.png");
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeNull();
     expect(container.textContent).not.toContain("Some Unknown Developer");
   });
 
-  it("does not trust an unaudited database image solely from a paint hint", () => {
+  it("mounts light database artwork immediately while retaining its paint hint", () => {
     const { container } = renderLogo({
       name: "Light Artwork Developer",
       src: "https://cdn.example.com/white-logo.png",
       needsInvert: false,
       variant: "card",
     });
-    expect(container.querySelector("img")).toBeNull();
-    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
+    expect(container.querySelector("img")?.getAttribute("src")).toBe("https://cdn.example.com/white-logo.png");
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeNull();
     expect(container.textContent).not.toContain("Light Artwork Developer");
   });
 

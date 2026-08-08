@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Sparkles, ChevronRight, CreditCard } from "lucide-react";
+import { Sparkles, ChevronRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { UnifiedProject } from "@/types/unifiedProject";
@@ -12,6 +12,7 @@ import { getDeveloperLogoUrl, getDeveloperWebsiteUrl } from "@/utils/developerLo
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { HandoverPill } from "@/components/ui/HandoverPill";
 import { stripHtmlTags } from "@/utils/contentSanitizer";
+import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -189,11 +190,6 @@ export default function RecommendedProjects({
         {/* Projects Grid — items-stretch ensures equal height columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-6 items-stretch">
           {recommendedProjects.map((project) => {
-            const breakdown = (project as any).payment_breakdown;
-            const percentages = breakdown && Array.isArray(breakdown)
-              ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
-              : [];
-            const paymentLabel = percentages.length > 0 ? percentages.join('/') : null;
             const saleStatus = (project as any).sale_status || "On Sale";
             const devLogo = getDeveloperLogoUrl(project.developer);
             const devWebsite = getDeveloperWebsiteUrl(project.developer);
@@ -229,16 +225,17 @@ export default function RecommendedProjects({
                     loading="eager"
                   />
 
-                  {/* Developer Logo — TOP-LEFT (unified square plate, no rectangular text fallback) */}
-                  <div className="absolute top-3 left-3 z-20">
+                  {/* Canonical seam plate — compact because recommendation cards are smaller. */}
+                  <div className="absolute bottom-0 left-4 z-20 translate-y-1/2">
                     <DeveloperLogo
                       src={devLogo}
                       alt={project.developer?.name || "Developer"}
                       name={project.developer?.name}
                       websiteUrl={devWebsite}
                       variant="bare"
-                      renderFallback
+                      size="sm"
                       loading="eager"
+                      className="!h-10 !w-20 !p-2"
                     />
                   </div>
 
@@ -257,7 +254,7 @@ export default function RecommendedProjects({
                 </div>
 
                 {/* Content — flex-col flex-1 so it fills remaining card height */}
-                <div className="p-4 flex flex-col flex-1">
+                <div className="p-4 pt-8 flex flex-col flex-1">
                   <h3 className="text-lg font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors whitespace-normal break-words leading-tight mb-1">
                     {project.name}
                   </h3>
@@ -287,32 +284,12 @@ export default function RecommendedProjects({
                   {/* Spacer to push price row to bottom */}
                   <div className="flex-1 min-h-[8px]" />
 
-                  {/* Divider + Price (LEFT) + Handover (RIGHT) — pinned to bottom, same line */}
-                  <div className="border-t border-[#B89555]/20 pt-3 mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 min-w-0">
-                    {project.price_from ? (
-                      <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center gap-1 px-3 py-1 rounded-full text-[12px] font-semibold max-w-full min-w-0 shrink">
-                        <span className="text-[10px] uppercase tracking-wider opacity-90">From</span>
-                        <span className="truncate font-bold">{formatPrice(project.price_from)}</span>
-                      </div>
-                    ) : (
-                      <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center px-3 py-1 rounded-full text-[12px] font-semibold max-w-full min-w-0 shrink">
-                        <span className="truncate">Price on request</span>
-                      </div>
-                    )}
-
-                    <div className="flex flex-wrap items-center gap-1.5 min-w-0 shrink justify-end">
-                      {paymentLabel && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A] bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full px-2 py-0.5 whitespace-nowrap shrink-0">
-                          <CreditCard className="w-3 h-3" />
-                          {paymentLabel}
-                        </span>
-                      )}
-                      {project.handover_date && (
-                        <span data-emerald-action="true" className="jj-emerald-action inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap shrink-0">
-                          {project.handover_date}
-                        </span>
-                      )}
-                    </div>
+                  {/* Canonical price/payment presentation used by every project card. */}
+                  <div className="border-t border-[#B89555]/20 pt-3 mt-3 min-w-0">
+                    <CardPricePaymentRow
+                      price={project.price_from}
+                      project={project as any}
+                    />
                   </div>
 
                 </div>
