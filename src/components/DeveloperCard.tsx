@@ -7,6 +7,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import type { Developer } from "@/hooks/useProjects";
 
 
@@ -47,11 +48,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     developerFeatureImage,
   ].filter((value): value is string => Boolean(value) && isUsableProjectMedia(value)))], [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage]);
   const [heroIndex, setHeroIndex] = useState(0);
+  const [logoFailed, setLogoFailed] = useState(false);
   useEffect(() => setHeroIndex(0), [developer.id]);
+  useEffect(() => setLogoFailed(false), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
   const developerLogoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
+  const logoOverride = getDeveloperLogoOverride(developer.name);
 
   const hasHero = !!cardHeroImageUrl;
+  const isVisuallyPublishable = hasHero && Boolean(developerLogoUrl) && !logoOverride.forceNameplate && !logoFailed;
   // LOCKED (no cropped text): never render an ellipsis. The blurb is trimmed on
   // a word boundary so the two-line slot always holds a complete phrase.
   const safeDescription = useMemo(() => {
@@ -72,10 +77,12 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
       <motion.div
         whileHover={{ y: -8, scale: 1.015, boxShadow: "0 26px 54px -14px rgba(0,0,0,0.36), 0 14px 28px -12px rgba(6,78,59,0.34)" }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        data-developer-card
+        data-developer-card={isVisuallyPublishable ? "true" : undefined}
+        aria-hidden={isVisuallyPublishable ? undefined : true}
         className="group relative rounded-2xl cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
         style={{
           boxShadow: "0 6px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)",
+          display: isVisuallyPublishable ? undefined : "none",
         }}
       >
 
@@ -163,22 +170,12 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               websiteUrl={(developer as { website_url?: string | null }).website_url}
               needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
               loading={isEager ? "eager" : "lazy"}
+              onError={() => setLogoFailed(true)}
               embedded
               size="md"
               className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
             />
-          ) : (
-            /* No official artwork on file: the plate carries the full wordmark
-               in white — never initials, never a blank plate. */
-            <span
-              data-surface="emerald"
-              data-no-contrast-guard
-              className="allow-white px-1 text-center text-[8.5px] font-semibold uppercase leading-[1.15] tracking-[0.1em]"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-            >
-              {developer.name}
-            </span>
-          )}
+          ) : null}
         </div>
 
         </div>

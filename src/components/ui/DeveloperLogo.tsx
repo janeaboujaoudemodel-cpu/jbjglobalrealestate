@@ -182,7 +182,9 @@ export function DeveloperLogo({
           filter:
             override.imageFilter ??
             (dataKeepGold || needsInvert === false ? "none" : "brightness(0) invert(1)"),
-          mixBlendMode: override.imageBlendMode ?? (dataKeepGold ? "normal" : "screen"),
+          mixBlendMode:
+            override.imageBlendMode ??
+            (dataKeepGold || needsInvert === false ? "normal" : "screen"),
         }}
       />
     </div>
