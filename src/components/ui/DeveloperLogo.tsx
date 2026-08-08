@@ -15,6 +15,8 @@ interface DeveloperLogoProps {
   name?: string | null;
   websiteUrl?: string | null;
   variant?: "tile" | "bare" | "card" | "nameplate";
+  /** "sm" caps wide-wordmark expansion for compact rails (e.g. Continue Searching). */
+  size?: "sm" | "md";
   embedded?: boolean;
   "data-keep-gold"?: boolean | string;
 }
@@ -55,6 +57,7 @@ export function DeveloperLogo({
   name,
   websiteUrl,
   variant = "tile",
+  size = "md",
   embedded = false,
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
@@ -112,7 +115,9 @@ export function DeveloperLogo({
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
     <div
-      className={cn(containerClass, wide && scale === "compact" && "!w-auto !aspect-auto min-w-[3.5rem] max-w-[9rem] px-2")}
+      className={cn(containerClass, wide && scale === "compact" && (size === "sm"
+        ? "!w-auto !aspect-auto min-w-[2.5rem] max-w-[6rem] px-1.5"
+        : "!w-auto !aspect-auto min-w-[3.5rem] max-w-[9rem] px-2"))}
       data-wide-logo={wide ? "true" : undefined}
       data-keep-gold={dataKeepGold}
       data-developer-logo={embedded ? undefined : "database"}
