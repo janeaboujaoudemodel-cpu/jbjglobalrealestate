@@ -52,6 +52,37 @@ const UNIFIED_PLATE =
 
 const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
 
+/**
+ * STYLING GUARD (single source of truth for logo paint).
+ * Rules that must never regress:
+ *  - Artwork that is already white/light (curated knockouts, gold identity
+ *    plates, or needsInvert === false) is rendered as-is: no invert filter and
+ *    no screen blend. Inverting light artwork produced black-on-emerald or an
+ *    erased (blank) plate.
+ *  - Only unknown/dark artwork gets the `brightness(0) invert(1)` + `screen`
+ *    knockout, which cannot produce a white block because screen blending
+ *    removes the artwork's own white canvas.
+ *  - An explicit override always wins so curated per-developer paint is honored.
+ */
+export function getLogoPaintStyle(opts: {
+  isLightArtwork?: boolean | null;
+  keepGold?: boolean | string;
+  needsInvert?: boolean | null;
+  overrideFilter?: string;
+  overrideBlendMode?: string;
+}): { filter: string; mixBlendMode: "normal" | "screen" } {
+  const alreadyWhite =
+    !!opts.isLightArtwork || !!opts.keepGold || opts.needsInvert === false;
+  return {
+    filter: opts.overrideFilter ?? (alreadyWhite ? "none" : "brightness(0) invert(1)"),
+    mixBlendMode:
+      (opts.overrideBlendMode as "normal" | "screen") ??
+      (alreadyWhite ? "normal" : "screen"),
+  };
+}
+
+
+
 
 
 export function DeveloperLogo({
