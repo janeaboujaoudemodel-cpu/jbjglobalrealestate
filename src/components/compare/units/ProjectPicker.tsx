@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Search, X, Building2 } from "lucide-react";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 export interface PickedProject {
   id: string;
@@ -43,8 +44,15 @@ export default function ProjectPicker({ value, onChange }: Props) {
         className="flex items-center gap-4 p-4 rounded-2xl"
         style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.55)" }}
       >
-        {value.developer?.logo_url ? (
-          <img src={value.developer.logo_url} alt="" className="w-12 h-12 rounded-lg object-contain bg-white p-1"  loading="lazy" decoding="async" />
+        {value.developer?.name ? (
+          <DeveloperLogo
+            src={value.developer.logo_url}
+            name={value.developer.name}
+            alt={`${value.developer.name} logo`}
+            variant="bare"
+            size="sm"
+            className="!w-16 !h-12 !rounded-lg !p-1 flex-shrink-0"
+          />
         ) : (
           <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ background: "#F7F2EA" }}>
             <Building2 className="w-6 h-6" style={{ color: "#B89555" }} />
@@ -103,8 +111,15 @@ export default function ProjectPicker({ value, onChange }: Props) {
               className="w-full flex items-start gap-3 p-3 text-left hover:bg-[#EFE6D6] border-b border-[#B89555]/15 last:border-b-0 overflow-visible"
               data-no-contrast-guard
             >
-              {p.developer?.logo_url ? (
-                <img src={p.developer.logo_url} alt="" className="w-9 h-9 rounded object-contain bg-white p-0.5"  loading="lazy" decoding="async" />
+              {p.developer?.name ? (
+                <DeveloperLogo
+                  src={p.developer.logo_url}
+                  name={p.developer.name}
+                  alt={`${p.developer.name} logo`}
+                  variant="bare"
+                  size="sm"
+                  className="!w-14 !h-9 !rounded !p-[3px] flex-shrink-0"
+                />
               ) : (
                 <div className="w-9 h-9 rounded flex items-center justify-center bg-[#F7F2EA]">
                   <Building2 className="w-4 h-4 text-[#B89555]" />

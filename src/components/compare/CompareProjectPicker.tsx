@@ -23,6 +23,7 @@ import { Search, X, Check, Building2, MapPin, Sparkles, ImageIcon, ChevronDown, 
 import { toast } from "sonner";
 import { formatPriceShort } from "@/lib/formatPrice";
 import comparePropertyFallback from "@/assets/compare-property-fallback.jpg";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 type PickerMode = "multi" | "replace";
 
@@ -358,10 +359,14 @@ export default function CompareProjectPicker({
                 <button type="button" onClick={() => setDeveloperFilter("all")} className="w-full min-h-11 rounded-lg px-2 text-left text-sm font-semibold hover:bg-[#EAF4EF]" style={{ color: "#1A1A1A" }}>All developers</button>
                 {visibleDeveloperOptions.map((developer) => (
                   <button key={developer.id || developer.name} type="button" onClick={() => setDeveloperFilter(developer.id || developer.name)} className="w-full min-h-12 rounded-lg px-2 text-left text-sm hover:bg-[#EAF4EF] flex items-center gap-2" style={{ color: "#1A1A1A" }}>
-                    <Avatar className="h-8 w-8 border border-[#064E3B]/20 bg-white">
-                      {developer.logo_url && <AvatarImage src={developer.logo_url} alt={`${developer.name} logo`} />}
-                      <AvatarFallback className="text-[10px] font-bold bg-[#EAF4EF] text-[#064E3B]">{initials(developer.name)}</AvatarFallback>
-                    </Avatar>
+                    <DeveloperLogo
+                      src={developer.logo_url}
+                      name={developer.name}
+                      alt={`${developer.name} logo`}
+                      variant="bare"
+                      size="sm"
+                      className="!w-14 !h-8 !rounded-md !p-[3px] flex-shrink-0"
+                    />
                     <span className="min-w-0 flex-1 truncate font-semibold">{developer.name}</span>
                     {(developerFilter === developer.id || developerFilter === developer.name) && <Check className="w-4 h-4 text-[#064E3B]" />}
                   </button>
@@ -499,9 +504,16 @@ export default function CompareProjectPicker({
                         ) : (
                           <ImageIcon className="w-5 h-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#064E3B]" />
                         )}
-                        {r.developer?.logo_url && (
-                          <span className="absolute left-1 bottom-1 h-7 w-7 rounded bg-white/92 p-0.5 shadow-sm">
-                            <img src={r.developer.logo_url} alt={`${r.developer.name} logo`} className="h-full w-full object-contain" loading="lazy" decoding="async" />
+                        {r.developer?.name && (
+                          <span className="absolute left-1 bottom-1 inline-flex">
+                            <DeveloperLogo
+                              src={r.developer.logo_url}
+                              name={r.developer.name}
+                              alt={`${r.developer.name} logo`}
+                              variant="bare"
+                              size="sm"
+                              className="!w-12 !h-7 !rounded !p-[2px]"
+                            />
                           </span>
                         )}
                       </div>

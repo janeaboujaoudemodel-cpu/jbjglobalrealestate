@@ -70,6 +70,8 @@ describe("DeveloperLogo rendering guard", () => {
     "AMIS Development",
     "ANAX Developments",
     "Dubai South Properties",
+    "Tiger Properties",
+    "Tiger Group",
   ];
 
   it.each(curated)("renders %s curated artwork uninverted", (name) => {

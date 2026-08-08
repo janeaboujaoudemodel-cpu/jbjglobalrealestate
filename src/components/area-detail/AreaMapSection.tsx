@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { Map as MapIcon, Maximize } from "lucide-react";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyRemoveLayer } from "@/utils/leafletSafety";
@@ -215,8 +216,15 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                     )}
                       <div className="p-3">
                       <div className="flex items-center gap-2 mb-1">
-                        {project.developer_logo && (
-                          <img src={project.developer_logo} alt="" className="w-6 h-6 object-contain rounded" loading="eager" decoding="async" {...({ fetchpriority: "high" } as any)} />
+                        {project.developer_name && (
+                          <DeveloperLogo
+                            src={project.developer_logo}
+                            name={project.developer_name}
+                            alt={`${project.developer_name} logo`}
+                            variant="bare"
+                            size="sm"
+                            className="!w-12 !h-7 !rounded !p-[2px] flex-shrink-0"
+                          />
                         )}
                         <Link to={`/project/${project.slug}`} className="font-bold text-sm hover:underline block leading-tight">
                           {project.name}
