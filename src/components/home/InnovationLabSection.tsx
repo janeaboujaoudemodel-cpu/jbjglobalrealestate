@@ -220,14 +220,15 @@ export default function InnovationLabSection() {
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
           >
-            <div className="relative h-[400px] w-full md:h-[440px]" style={{ perspective: 1400 }}>
+            <div className="relative w-full md:h-[440px]" style={{ perspective: 1400 }}>
               <TechField />
 
-              {/* Receding ghost plates — decorative only, never hold text */}
+              {/* Receding ghost plates — decorative only, never hold text.
+                  Hidden on phones so nothing can sit on top of the copy. */}
               {[3, 2, 1].map((depth) => (
                 <motion.div
                   key={depth}
-                  className="absolute left-1/2 top-1/2 rounded-2xl border"
+                  className="hidden md:absolute md:left-1/2 md:top-1/2 md:block rounded-2xl border"
                   style={{
                     height: "68%",
                     width: "84%",
