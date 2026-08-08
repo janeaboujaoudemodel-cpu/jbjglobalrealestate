@@ -17,7 +17,9 @@ interface Props {
   coverImageUrl?: string | null;
 }
 
-const BUCKET = "rel-media";
+// Owner uploads live in the durable public project-media bucket. Never route
+// owner media through temporary/import buckets or overwrite existing rows.
+const BUCKET = "project-media";
 
 export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
   const canEdit = useCanEdit("project_photos");

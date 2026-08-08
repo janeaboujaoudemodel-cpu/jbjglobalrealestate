@@ -405,26 +405,17 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                 <span>Download All Photos</span>
               </button>
             </div>
-            <div className="grid grid-cols-6 gap-2">
-              {images.slice(0, 6).map((image, index) => {
-                const isOverflowTile = index === 5 && total > 6;
+            <div className="flex gap-2 overflow-x-auto overscroll-x-contain pb-2 snap-x snap-mandatory [scrollbar-width:thin]">
+              {images.map((image, index) => {
                 return (
                   <button
                     key={image.id}
-                    onClick={() => {
-                      if (isOverflowTile) {
-                         // Continue at the first photo hidden behind the +N tile.
-                         openFullscreen(6);
-                      } else {
-                        setPageIndex(index);
-                      }
-                    }}
-
-                    className={`aspect-[4/3] rounded overflow-hidden border-2 transition-colors relative ${
-                      index === safePageIndex && !isOverflowTile ? "border-primary" : "border-transparent hover:border-border"
+                    onClick={() => setPageIndex(index)}
+                    className={`w-[136px] md:w-[168px] shrink-0 aspect-[4/3] snap-start rounded overflow-hidden border-2 transition-colors relative ${
+                      index === safePageIndex ? "border-primary" : "border-transparent hover:border-border"
                     }`}
                     type="button"
-                    aria-label={isOverflowTile ? `View all ${total} photos` : `View photo ${index + 1}`}
+                    aria-label={`View photo ${index + 1} of ${total}`}
                   >
                     <SafeImage
                       src={getHighResImageUrl(image.image_url, "464x312")}
@@ -435,11 +426,6 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                       data-no-fallback
                       onError={() => markImageFailed(image.image_url)}
                     />
-                    {isOverflowTile && (
-                      <div className="absolute inset-0 bg-[#1A1A1A]/45 backdrop-blur-[1px] flex items-center justify-center">
-                        <span className="text-white font-semibold text-lg">+{total - 6}</span>
-                      </div>
-                    )}
                   </button>
                 );
               })}

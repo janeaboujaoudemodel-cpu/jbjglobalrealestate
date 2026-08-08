@@ -18,7 +18,7 @@ interface OwnerDocDropzoneProps {
 }
 
 const BUCKET = "project-documents";
-const PUBLIC_MEDIA_BUCKET = "rel-media";
+const PUBLIC_MEDIA_BUCKET = "project-media";
 
 const isImageFile = (file: File) => file.type.startsWith("image/") || /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(file.name);
 const isVideoFile = (file: File) => file.type.startsWith("video/") || /\.(mp4|mov|webm|ogg|m4v)(\?|$)/i.test(file.name);
