@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useDeveloper, useProjectsByDeveloper, useDevelopers, useProjectsListing } from "@/hooks/useProjects";
+import { useDeveloper, useProjectsByDeveloper, useDevelopers } from "@/hooks/useProjects";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import { type FilterState } from "@/components/ProjectFilters";
@@ -235,7 +235,6 @@ const DeveloperDetail = () => {
   const { data: developer, isLoading: loadingDeveloper } = useDeveloper(slug || "");
   const { data: projects, isLoading: loadingProjects } = useProjectsByDeveloper(slug || "");
   const { data: allDevelopers } = useDevelopers();
-  const { data: allPublishedProjects } = useProjectsListing();
   const { trackView } = useRecentSearches();
 
   // Track developer view
@@ -391,10 +390,9 @@ const DeveloperDetail = () => {
         priceFloor: current.priceFloor + Number(project.price_from || 0),
       });
     };
-    (allPublishedProjects || []).forEach(addProject);
     (projects || []).forEach(addProject);
     return metrics;
-  }, [allPublishedProjects, projects]);
+  }, [projects]);
 
   if (loadingDeveloper) {
     return (
@@ -499,11 +497,9 @@ const DeveloperDetail = () => {
 
   const heroImageUrl = isEmaarDeveloper(developer.name, developer.slug)
     ? emaarCreekHarbourMasterplan
-    : developer.feature_image_url || (projects || []).find((project) =>
-        project.card_image_url || project.gallery_start_image_url || project.cover_image_url
-      )?.card_image_url || (projects || []).find((project) =>
-        project.gallery_start_image_url || project.cover_image_url
-      )?.gallery_start_image_url || (projects || []).find((project) => project.cover_image_url)?.cover_image_url;
+    : (projects || []).find((project) => project.cover_image_url)?.cover_image_url
+      || (projects || []).find((project) => project.card_image_url)?.card_image_url
+      || (projects || []).find((project) => project.gallery_start_image_url)?.gallery_start_image_url;
 
 
   const competitorDevelopers = (allDevelopers || [])
@@ -563,13 +559,7 @@ const DeveloperDetail = () => {
             alt={`${developer.name} featured project`}
             className="w-full h-full object-cover"
             loading="eager"
-            onError={(e) => {
-              // Fallback to original URL if high-res fails
-              const img = e.currentTarget;
-              if (developer.feature_image_url && img.src !== developer.feature_image_url) {
-                img.src = developer.feature_image_url;
-              }
-            }}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black" />

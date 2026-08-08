@@ -93,34 +93,22 @@ export default function RecommendedDevelopers({
     enabled: recommendedIds.length > 0,
     staleTime: 10 * 60 * 1000,
     queryFn: async () => {
-      const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "");
-      const searches = recommended.map(async (developer: any) => {
-        const nameStem = developer.name.replace(/\b(properties|developers?|developments?|real estate|llc|group)\b/gi, "").trim();
-        const { data, error } = await supabase
-          .from("projects")
-          .select("developer_id, developer_name, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units, created_at")
-          .or(`developer_id.eq.${developer.id},developer_name.ilike.%${nameStem}%`)
-          .eq("is_published", true)
-          .not("cover_image_url", "is", null)
-          .order("is_featured", { ascending: false })
-          .order("total_units", { ascending: false, nullsFirst: false })
-          .limit(12);
-        if (error) throw error;
-        const urls = (data || [])
-          .filter((row: any) => row.developer_id === developer.id || normalize(row.developer_name || "").includes(normalize(nameStem)))
-          .flatMap((row: any) => [row.card_image_url, row.gallery_start_image_url, row.cover_image_url])
-          .filter((url): url is string => typeof url === "string" && url.length > 0);
-        const stableFirst = [...new Set(urls)].sort((a, b) => {
-          const aStable = /reelly-backend\.s3|\/storage\/v1\/object\/public\//i.test(a) ? 1 : 0;
-          const bStable = /reelly-backend\.s3|\/storage\/v1\/object\/public\//i.test(b) ? 1 : 0;
-          return bStable - aStable;
-        });
-        return [developer.id, stableFirst] as const;
-      });
-      const data = await Promise.all(searches);
       const map: Record<string, string[]> = {};
-      data.forEach(([developerId, urls]) => {
-        if (urls.length) map[developerId] = [...urls];
+      const { data, error } = await supabase
+        .from("projects")
+        .select("developer_id, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units")
+        .in("developer_id", recommendedIds)
+        .eq("is_published", true)
+        .is("deleted_at", null)
+        .order("is_featured", { ascending: false })
+        .order("total_units", { ascending: false, nullsFirst: false })
+        .limit(48);
+      if (error) throw error;
+      (data || []).forEach((row: any) => {
+        if (!row.developer_id) return;
+        const urls = [row.cover_image_url, row.card_image_url, row.gallery_start_image_url]
+          .filter((url): url is string => typeof url === "string" && url.length > 0);
+        map[row.developer_id] = [...new Set([...(map[row.developer_id] || []), ...urls])].slice(0, 12);
       });
       return map;
     },
