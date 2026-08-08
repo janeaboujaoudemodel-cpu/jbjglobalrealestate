@@ -141,9 +141,38 @@ export function DragMarquee({
     setGrabbing(false);
   };
 
+  // Two-finger trackpad / horizontal wheel: nudge the rail immediately.
+  // React's onWheel is passive, so the listener is attached natively.
+  const rootRef = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    let resume: number | undefined;
+    const onWheel = (e: WheelEvent) => {
+      const anim = animationRef.current;
+      const cycle = cycleWidthRef.current;
+      if (!anim || !cycle) return;
+      const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : 0;
+      if (!dx) return;
+      e.preventDefault();
+      anim.pause();
+      const duration = (cycle / speed) * 1000;
+      let next = (Number(anim.currentTime ?? 0) + (dx / speed) * 1000) % duration;
+      if (next < 0) next += duration;
+      anim.currentTime = next;
+      window.clearTimeout(resume);
+      resume = window.setTimeout(() => anim.play(), 700);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      window.clearTimeout(resume);
+    };
+  }, [speed]);
 
   return (
     <div
+      ref={rootRef}
       className={`relative w-full select-none overflow-hidden ${className ?? ""}`}
       aria-label={ariaLabel}
       onMouseEnter={() => {
