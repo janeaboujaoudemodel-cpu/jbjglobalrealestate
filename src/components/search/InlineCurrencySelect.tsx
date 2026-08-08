@@ -59,15 +59,18 @@ export default function InlineCurrencySelect({ dark }: Props) {
           style={{ color: fg, borderRadius: 0 }}
           aria-label="Select currency"
         >
-          {/* Line 1 — flag + label + chevron, all on the same baseline */}
+          {/* Line 1 — symbol + label + chevron, all on the same baseline.
+              We render the currency symbol, never a flag emoji: emoji flags
+              fall back to tofu boxes on several platforms/fonts. */}
           <span className="flex w-full min-w-0 items-center justify-center gap-1.5">
             <span
               aria-hidden
-              className="shrink-0 text-[13px] leading-none"
-              style={{ filter: "saturate(1.05)" }}
+              className="shrink-0 text-[11px] font-semibold leading-none"
+              style={{ color: dark ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.65)" }}
             >
-              {active.flag}
+              {active.symbol === active.code ? null : active.symbol}
             </span>
+
             <span
               className="min-w-0 truncate text-[8.5px] uppercase leading-none tracking-[0.18em]"
               style={{
@@ -95,7 +98,7 @@ export default function InlineCurrencySelect({ dark }: Props) {
       <DropdownMenuContent align="start" className="z-[300] max-h-80 w-64 overflow-y-auto">
         {SUPPORTED_CURRENCIES.map((c) => (
           <DropdownMenuItem key={c.code} onClick={() => pick(c.code)} className="gap-2 text-sm">
-            <span>{c.flag}</span>
+            <span className="w-8 shrink-0 text-[11px] font-semibold opacity-70">{c.symbol === c.code ? "" : c.symbol}</span>
             <span className="font-semibold">{c.code}</span>
             <span className="truncate opacity-70">{c.name}</span>
             {c.code === code ? <Check className="ml-auto h-4 w-4" /> : null}
