@@ -61,12 +61,14 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     ? OFFICIAL_FLAGSHIP_MEDIA.omniyat
     : OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug] || OFFICIAL_FLAGSHIP_MEDIA[normalizedName];
   const developerFeatureImage = (developer as { feature_image_url?: string | null }).feature_image_url || undefined;
-  const candidates = useMemo(() => [...new Set([
-    officialFlagship,
-    ...heroImageUrls,
-    heroImageUrl,
-    developerFeatureImage,
-  ].filter((value): value is string => Boolean(value) && isUsableProjectMedia(value)))], [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage]);
+  const candidates = useMemo(() => {
+    const verifiedOnly = normalizedSlug.includes("alfahadholding") || normalizedName.includes("alfahadholding");
+    return [...new Set([
+      officialFlagship,
+      ...(verifiedOnly ? [] : heroImageUrls),
+      ...(verifiedOnly ? [] : [heroImageUrl, developerFeatureImage]),
+    ].filter((value): value is string => Boolean(value) && isUsableProjectMedia(value)))];
+  }, [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage, normalizedName, normalizedSlug]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
