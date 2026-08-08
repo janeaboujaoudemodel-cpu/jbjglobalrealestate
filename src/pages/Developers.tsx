@@ -259,7 +259,7 @@ const Developers = () => {
                       key={developer.id} 
                       developer={developer} 
                       projectCount={projectCounts[developer.id] || projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0}
-                      heroImageUrl={developer.feature_image_url || topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
+                       heroImageUrl={topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)] || developer.feature_image_url}
                       heroImageUrls={[
                         ...(projectStats?.imageCandidates?.[developer.id] || []),
                         ...(projectStats?.imageCandidatesByName?.[normalizeDeveloperName(developer.name)] || []),

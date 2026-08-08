@@ -308,7 +308,7 @@ export default function PropertySearchBar({
           data-search-segment
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
-            background: dark ? undefined : "#F2EBDC",
+            background: dark ? undefined : "#FDFBF7",
             backdropFilter: dark ? "blur(10px)" : undefined,
             border: dark ? "1.5px solid rgba(255,255,255,0.44)" : "1.5px solid rgba(184,149,85,0.58)",
           }}
@@ -706,8 +706,9 @@ export default function PropertySearchBar({
             onClick={() => onSubmit(f)}
              data-surface="emerald"
              data-search-segment
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold text-white px-2 whitespace-nowrap"
-            style={{ backgroundImage: EMERALD_PAIR }}
+             data-no-contrast-guard
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold px-2 whitespace-nowrap"
+            style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
             {count == null ? "Search" : `Show ${count.toLocaleString()}`}
           </button>

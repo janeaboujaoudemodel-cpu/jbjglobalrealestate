@@ -713,9 +713,11 @@ export function useProjectsListing() {
       // Sort first so canonical duplicates retain the most complete owner-
       // maintained record, then enforce the same identity contract used by
       // community, developer and map views.
-      return dedupePublicProjects(sortPublicProjectsForListing(
+      // Keep every database-eligible listing. Missing media or a similar name
+      // must never silently remove an owner-maintained published project.
+      return sortPublicProjectsForListing(
         (all as unknown as UnifiedProject[]).map((project) => ({ ...project, images: [] })),
-      ));
+      );
     },
   });
 }
@@ -756,7 +758,7 @@ export function useProjectsMapListing() {
         .limit(1200);
 
       if (error) throw error;
-      return dedupePublicProjects((data ?? []) as unknown as UnifiedProject[]);
+      return (data ?? []) as unknown as UnifiedProject[];
     },
   });
 }
