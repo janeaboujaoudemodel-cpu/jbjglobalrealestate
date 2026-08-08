@@ -203,6 +203,7 @@ const Developers = () => {
                 { slug: "most_projects", label: "Most Projects" },
               ]}
               countOverride={filteredDevelopers.length}
+              countNoun="developers"
               typewriterPhrases={[
                 "Search by developer name...",
                 "Emaar, Nakheel, DAMAC...",

@@ -725,6 +725,13 @@ const Properties = () => {
               onChange={setSearch}
               onSubmit={submitSearch}
               countOverride={showSkeletons ? null : displayedResultCount}
+              countNoun="properties"
+              typewriterPhrases={[
+                "Try “Dubai Marina 2 bed under 2M”",
+                "Try “Emaar off-plan handover 2027”",
+                "Try “Business Bay distress deal”",
+                "Try “Ras Al Khaimah beachfront”",
+              ]}
               showActiveSummary
             />
           </div>

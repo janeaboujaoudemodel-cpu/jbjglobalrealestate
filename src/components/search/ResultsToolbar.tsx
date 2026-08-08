@@ -128,7 +128,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
           </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap ml-auto justify-end">
           <SavedFilterMenu search={f} />
           <Popover>
             <PopoverTrigger asChild>

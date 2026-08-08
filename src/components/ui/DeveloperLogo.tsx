@@ -41,6 +41,11 @@ const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
 
 
 
+// JPG/JPEG artwork is always opaque: knocking it out to pure white renders a
+// blank white block on the emerald plate. Those logos are shown as-is on a
+// small ivory inner tile so the real mark stays visible.
+const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
+
 export function DeveloperLogo({
   src,
   alt = "Developer",
@@ -54,6 +59,9 @@ export function DeveloperLogo({
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
+  // Wide wordmarks (e.g. 233x29 SVGs) shrink to a hairline inside a square
+  // plate. Detected on load so the plate widens instead of looking empty.
+  const [wide, setWide] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
   const fallbackLogo = getWebsiteLogoFallbackUrl(websiteUrl);
@@ -104,7 +112,8 @@ export function DeveloperLogo({
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
     <div
-      className={containerClass}
+      className={cn(containerClass, wide && scale === "compact" && "!w-auto !aspect-auto min-w-[3.5rem] max-w-[9rem] px-2")}
+      data-wide-logo={wide ? "true" : undefined}
       data-keep-gold={dataKeepGold}
       data-developer-logo={embedded ? undefined : "database"}
       data-developer-logo-content={embedded ? "true" : undefined}
@@ -122,7 +131,9 @@ export function DeveloperLogo({
           if (img.naturalWidth < 4 || img.naturalHeight < 4) {
             setError(true);
             onError?.();
+            return;
           }
+          if (img.naturalWidth / img.naturalHeight >= 2.2) setWide(true);
         }}
         onError={() => {
           setError(true);
@@ -132,13 +143,15 @@ export function DeveloperLogo({
         className={cn(
           "block w-full h-full object-contain",
           scale === "compact" ? "rounded-sm" : "rounded-md",
+          isOpaqueRaster(url) && !dataKeepGold && "bg-[#FDFBF7] p-0.5 ring-1 ring-[#B89555]/60",
         )}
         style={{
           // Emerald plates: knock the artwork out to pure white so every
           // wordmark reads at full contrast. Gold hero plate keeps dark ink.
+          // Opaque JPG artwork is never knocked out (it would go fully white).
           filter: override.imageBlendMode
             ? (override.imageFilter ?? "none")
-            : dataKeepGold
+            : dataKeepGold || isOpaqueRaster(url)
               ? (override.imageFilter ?? "none")
               : "brightness(0) invert(1)",
           mixBlendMode: override.imageBlendMode ?? "normal",
