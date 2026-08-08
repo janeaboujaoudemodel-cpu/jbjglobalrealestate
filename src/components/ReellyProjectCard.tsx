@@ -11,6 +11,8 @@ import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
+import { useAreaUnit } from "@/hooks/useAreaUnit";
+
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -29,10 +31,13 @@ const ReellyProjectCard = ({
   showFavorite = true, 
   showBadgeButton = true, 
   currency = 'AED', 
-  sizeUnit = 'sqft',
+  sizeUnit,
   compact = false,
 }: ReellyProjectCardProps) => {
+   const { areaUnit } = useAreaUnit();
+   const effectiveSizeUnit: 'sqft' | 'sqm' = sizeUnit ?? areaUnit;
    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
    const images = project.images || [];
    const primaryImageUrl = images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null;
  
@@ -52,14 +57,16 @@ const ReellyProjectCard = ({
    const whatsappHref = getWhatsAppUrl(whatsappMessage);
    const callHref = getCallUrl();
  
-   // Get size range text
+   // Get size range text — follows the active global area unit.
    const getSizeText = () => {
      if (!project.size_min) return null;
-     const min = project.size_min.toLocaleString();
-     const max = project.size_max?.toLocaleString();
-     if (min === max || !max) return `${min} ${sizeUnit}`;
-     return `${min}-${max} ${sizeUnit}`;
+     const toUnit = (v: number) => (effectiveSizeUnit === 'sqm' ? Math.round(v * 0.092903) : v);
+     const min = toUnit(project.size_min).toLocaleString();
+     const max = project.size_max ? toUnit(project.size_max).toLocaleString() : undefined;
+     if (min === max || !max) return `${min} ${effectiveSizeUnit}`;
+     return `${min}-${max} ${effectiveSizeUnit}`;
    };
+
  
    // Truncate description - strip markdown/headers + HTML + competitor refs
      const getTruncatedDescription = () => {

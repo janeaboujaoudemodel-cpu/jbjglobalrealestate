@@ -429,7 +429,7 @@ const Properties = () => {
         priceMax: priceMaxParam ? Number(priceMaxParam) : 500000000,
         sizeMin: sizeMinParam ? Number(sizeMinParam) : 0,
         sizeMax: sizeMaxParam ? Number(sizeMaxParam) : 50000,
-        sizeUnit: sizeUnitParam || 'sqft',
+        sizeUnit: sizeUnitParam || (typeof window !== 'undefined' ? ((localStorage.getItem('jj_area_unit') as 'sqft' | 'sqm') || 'sqft') : 'sqft'),
         currency: (currencyParam || 'AED') as ExtendedCurrency,
         emirate: emirateParam && emirateParam !== 'all' ? emirateParam : null,
         saleStatus: saleStatusParam && saleStatusParam !== 'all' ? saleStatusParam : null,
@@ -786,7 +786,6 @@ const Properties = () => {
                       <ProjectCard
                         project={project}
                         currency={filters.currency}
-                        sizeUnit={filters.sizeUnit}
                       />
                     </div>
                   ))
@@ -890,7 +889,6 @@ const Properties = () => {
                         key={project.id}
                         project={project}
                         currency={filters.currency}
-                        sizeUnit={filters.sizeUnit}
                         priority={index < 6}
                       />,
                     ];
@@ -1051,7 +1049,6 @@ const Properties = () => {
                             key={project.id} 
                             project={project} 
                             currency={filters.currency}
-                            sizeUnit={filters.sizeUnit}
                           />
                         ))}
                       </div>
