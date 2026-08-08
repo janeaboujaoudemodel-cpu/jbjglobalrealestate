@@ -891,8 +891,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
                 onClick={() => setMobileMenuOpen(false)}
               />
-              {/* Menu Panel — champagne creamy surface, not raw white */}
+              {/* Menu Panel — mirrors the desktop vertical sidebar language:
+                  champagne surface, black ink, no filled inactive rows. */}
               <div 
+                data-jj-mobile-drawer
                 className="relative w-full h-full overflow-y-auto overscroll-contain"
                 style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%)' }}
               >
