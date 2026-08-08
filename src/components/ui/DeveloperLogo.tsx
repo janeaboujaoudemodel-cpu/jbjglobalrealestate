@@ -150,16 +150,15 @@ export function DeveloperLogo({
   const artworkVerdict = useLogoArtworkGuard(
     hasCuratedArtwork ? null : (resolvedSrc as string | null),
   );
-  // Never optimistically paint an unverified raster. That was the root cause
-  // of the visible white rectangle: the plate rendered the image while the
-  // async artwork audit was still `unknown` (and third-party CORS failures
-  // stayed unknown forever). Curated assets are trusted; every other image is
-  // shown only after the guard proves it has usable transparency. Until then,
-  // retain the developer identity as a readable white wordmark.
+  // Render real artwork while the audit is pending. Cross-origin official
+  // marks cannot be canvas-inspected and otherwise stayed `unknown` forever,
+  // leaving a permanent empty emerald plate. The image and plate still reveal
+  // atomically on `onLoad`; an analysable opaque slab is removed if the guard
+  // later returns `block`.
   const valid =
     isValidDeveloperLogoUrl(resolvedSrc) &&
     !error &&
-    (hasCuratedArtwork || artworkVerdict === "ok");
+    artworkVerdict !== "block";
 
 
   const needsDarkPlate = !dataKeepGold;
@@ -225,7 +224,7 @@ export function DeveloperLogo({
 
         className={cn(
           "block w-full h-full object-contain",
-          scale === "compact" ? "rounded-sm p-0" : "rounded-md p-0",
+          scale === "compact" ? "rounded-sm p-2.5" : "rounded-md p-3",
           "scale-100",
         )}
         style={{

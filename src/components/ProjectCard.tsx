@@ -323,9 +323,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               variant={developerLogoUrl ? "bare" : "nameplate"}
               name={developerName}
               websiteUrl={developerWebsiteUrl}
-              loading={priority ? "eager" : "lazy"}
+              loading="eager"
               size="md"
-              className="!rounded-lg !p-1.5"
+              className="!rounded-lg !p-2.5"
             />
           </Link>
         </div>
@@ -479,7 +479,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             Every row below reserves a fixed min-height so cards stay
             pixel-identical even when properties have missing/short
             location, unit-types, size, developer, or description. */}
-        <div className="p-5 pt-10 flex-1 flex flex-col gap-2">
+        <div className="p-5 pt-12 flex-1 flex flex-col gap-2">
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1">
             <h4 data-area-card-text className="text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] transition-colors" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
