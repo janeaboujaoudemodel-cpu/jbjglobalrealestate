@@ -27,6 +27,9 @@ const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
   omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
 };
 
+const isUsableProjectMedia = (value: string) =>
+  !/(?:logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/16x16\/)/i.test(value);
+
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
@@ -42,7 +45,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     ...heroImageUrls,
     heroImageUrl,
     developerFeatureImage,
-  ].filter((value): value is string => Boolean(value)))], [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage]);
+  ].filter((value): value is string => Boolean(value) && isUsableProjectMedia(value)))], [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
@@ -89,6 +92,12 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                 referrerPolicy="no-referrer"
                 decoding="async"
                 onError={() => setHeroIndex((current) => Math.min(current + 1, candidates.length))}
+                onLoad={(event) => {
+                  const image = event.currentTarget;
+                  if (image.naturalWidth < 40 || image.naturalHeight < 40) {
+                    setHeroIndex((current) => Math.min(current + 1, candidates.length));
+                  }
+                }}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
