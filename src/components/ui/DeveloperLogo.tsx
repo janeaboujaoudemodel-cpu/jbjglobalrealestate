@@ -43,11 +43,6 @@ const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
 
 
 
-// JPG/JPEG artwork is always opaque: knocking it out to pure white renders a
-// blank white block on the emerald plate. Those logos are shown as-is on a
-// small ivory inner tile so the real mark stays visible.
-const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
-
 export function DeveloperLogo({
   src,
   alt = "Developer",
@@ -57,7 +52,6 @@ export function DeveloperLogo({
   name,
   websiteUrl,
   variant = "tile",
-  size = "md",
   embedded = false,
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
