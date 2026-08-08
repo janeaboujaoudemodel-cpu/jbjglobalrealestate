@@ -335,7 +335,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <div
             className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611] group/photo"
             data-surface="ink"
-            data-photo-count={primaryImageCandidates.length} data-lazy-count={lazyPhotos.length} data-img-count={images.length}
+           
 
             onMouseEnter={prefetchPhotos}
             onFocus={prefetchPhotos}
