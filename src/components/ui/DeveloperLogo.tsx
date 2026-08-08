@@ -189,11 +189,13 @@ export function DeveloperLogo({
           className={cn(
             "block w-full max-w-full text-center font-serif font-semibold leading-[1.05] px-1 whitespace-normal break-words",
             dataKeepGold ? "text-[#042C1C]" : "text-white",
-            nameplateLabel.length > 22
-              ? "text-[11px]"
-              : nameplateLabel.length > 12
-                ? "text-xs"
-                : "text-sm",
+            nameplateLabel.length > 30
+              ? "text-xs"
+              : nameplateLabel.length > 20
+                ? "text-[13px]"
+                : nameplateLabel.length > 12
+                  ? "text-sm"
+                  : "text-base",
           )}
         >
           {nameplateLabel}
