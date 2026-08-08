@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, TrendingUp } from "lucide-react";
+import { ArrowRight, Building2, Layers, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
@@ -67,6 +67,25 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
       .replace(/\s+(and|or|with|the|a|an|of|in|to|for|by|is|are)$/i, "")
       .trim();
   }, [developer]);
+
+  // Factual fallback built only from stored data — never marketing filler.
+  const factualDescription = useMemo(() => {
+    const parts: string[] = [];
+    if (developer.founded_year) parts.push(`Established ${developer.founded_year}`);
+    if (developer.headquarters) parts.push(`headquartered in ${developer.headquarters}`);
+    if (projectCount > 0) parts.push(`${projectCount} live ${projectCount === 1 ? "project" : "projects"} listed`);
+    else if (developer.offplan_projects && developer.offplan_projects > 0)
+      parts.push(`${developer.offplan_projects} off-plan developments`);
+    if (!parts.length) return "";
+    const sentence = parts.join(", ");
+    return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
+  }, [developer, projectCount]);
+
+  const cardDescription = safeDescription || factualDescription;
+  const rawDescriptionLength = (getSafeDeveloperDescription(developer) || "").trim().length;
+  const isDescriptionTrimmed = Boolean(safeDescription) && rawDescriptionLength > safeDescription.length;
+
+
 
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
@@ -181,43 +200,61 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
 
         </div>
 
-        {/* Content section — white surface with black text & icons */}
+        {/* Content section — white surface with black text & icons.
+            The developer name is intentionally NOT repeated here: the logo
+            plate above already identifies the brand. */}
         <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-10">
 
-          <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 break-words">
-            {getPublicDeveloperName(developer.name)}
-          </h3>
-
-          <div className="flex-1 min-h-[36px]">
-            {safeDescription ? (
-              <p className="text-[#0A0A0A]/75 text-xs leading-relaxed">
-                {safeDescription}
-              </p>
-            ) : (
-              <p className="text-[#0A0A0A]/60 text-xs italic">
-                Premier developer in the UAE market
-              </p>
-            )}
-          </div>
-
-          <div className="flex items-center gap-3 text-[#0A0A0A]/80 text-xs mt-3 pt-3 border-t border-[#0A0A0A]/10">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#0A0A0A] text-[11px] font-semibold tracking-[0.08em] uppercase mb-2">
             {projectCount > 0 ? (
-              <div className="flex items-center gap-1">
-                <Building2 className="w-3.5 h-3.5 text-[#0A0A0A]" />
-                <span>{projectCount} Projects</span>
-              </div>
+              <span className="flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
+                {projectCount} {projectCount === 1 ? "Project" : "Projects"}
+              </span>
             ) : null}
             {developer.completed_projects && developer.completed_projects > 0 ? (
-              <div className="flex items-center gap-1">
-                <TrendingUp className="w-3.5 h-3.5 text-[#0A0A0A]" />
-                <span>{developer.completed_projects.toLocaleString()}+ Delivered</span>
-              </div>
+              <span className="flex items-center gap-1.5">
+                <TrendingUp className="w-3.5 h-3.5 text-[#B89555]" />
+                {developer.completed_projects.toLocaleString()}+ Delivered
+              </span>
             ) : null}
-            {!projectCount && (!developer.completed_projects || developer.completed_projects === 0) && (
-              <span className="text-[#0A0A0A]/70 text-xs">View developer portfolio</span>
-            )}
+            {developer.total_units_delivered && developer.total_units_delivered > 0 ? (
+              <span className="flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-[#B89555]" />
+                {developer.total_units_delivered.toLocaleString()} Units
+              </span>
+            ) : null}
+            {!projectCount &&
+            !developer.completed_projects &&
+            !developer.total_units_delivered &&
+            developer.founded_year ? (
+              <span className="flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
+                Established {developer.founded_year}
+              </span>
+            ) : null}
           </div>
+
+          <div className="flex-1 min-h-[36px]">
+            {cardDescription ? (
+              <p className="text-[#0A0A0A]/75 text-xs leading-relaxed">
+                {cardDescription}
+                {isDescriptionTrimmed ? (
+                  <span className="ml-1 text-[#B89555] font-semibold whitespace-nowrap">Read more</span>
+                ) : null}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="mt-3 pt-3 border-t border-[#B89555]/30">
+            <span className="flex items-center justify-between gap-2 text-[#8A6D2F] text-[10px] font-semibold tracking-[0.10em] uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-[#B89555]">
+              View developer portfolio
+              <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </div>
+
         </div>
+
       </motion.div>
     </Link>
   );
