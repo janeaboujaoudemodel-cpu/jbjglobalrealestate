@@ -4,6 +4,7 @@ import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLo
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-transparent.png";
+import dubaiSouthWhite from "@/assets/developer-logos/dubai-south-white.png.asset.json";
 
 const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
 
@@ -70,10 +71,15 @@ export function DeveloperLogo({
   const isAbDevelopers = /^ab(?:developers?)?(?:llc)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
+  const isDubaiSouth = /^dubaisouth(?:properties)?$/i.test(
+    (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
+  );
   // The database's official AB artwork is a gold mark baked onto a black
   // square. Use the same official artwork with only that black field removed,
   // rather than relying on browser blend modes that can produce a blank tile.
-  const resolvedSrc = isAbDevelopers
+  const resolvedSrc = isDubaiSouth
+    ? dubaiSouthWhite.url
+    : isAbDevelopers
     ? abDevelopersTransparent
     : isLaraix
       ? laraixTransparent.url
