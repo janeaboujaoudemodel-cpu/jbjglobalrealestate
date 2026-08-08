@@ -15,7 +15,6 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas } from "@/hooks/useAreas";
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
-import ContinueSearching from "@/components/ContinueSearching";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
 const ITEMS_PER_PAGE = 24;
@@ -578,7 +577,6 @@ const AreaGuides = () => {
       />
 
       {/* Continue Searching - Recently viewed areas */}
-      <ContinueSearching type="area" />
     </div>
   );
 };

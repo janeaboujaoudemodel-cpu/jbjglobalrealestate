@@ -36,11 +36,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const officialFlagship = normalizedSlug.includes("omniyat") || normalizedName.includes("omniyat")
     ? OFFICIAL_FLAGSHIP_MEDIA.omniyat
     : OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug] || OFFICIAL_FLAGSHIP_MEDIA[normalizedName];
+  const developerFeatureImage = (developer as { feature_image_url?: string | null }).feature_image_url || undefined;
   const candidates = useMemo(() => [...new Set([
     officialFlagship,
     ...heroImageUrls,
     heroImageUrl,
-  ].filter((value): value is string => Boolean(value)))], [heroImageUrl, heroImageUrls, officialFlagship]);
+    developerFeatureImage,
+  ].filter((value): value is string => Boolean(value)))], [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
@@ -95,13 +97,35 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                   photo as a plate, with automatic light/dark plate contrast. */}
             </>
           ) : (
-            /* Never substitute a developer logo for project photography. */
-            <div className="absolute inset-0 flex items-center justify-center bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] px-6">
-              <span className="allow-white text-center text-xs font-semibold uppercase tracking-[0.16em] text-white">
-                Project photography being verified
-              </span>
+            /* No verified project photography on file yet: render a silent
+               architectural blueprint field. Never a status message, never a
+               logo substituted for real estate media. */
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)]"
+            >
+              <div
+                className="absolute inset-0 opacity-[0.22]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(rgba(255,255,255,0.30) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.30) 1px, transparent 1px)",
+                  backgroundSize: "34px 34px",
+                }}
+              />
+              <div
+                className="absolute inset-0 opacity-[0.16]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, transparent 46%, rgba(184,149,85,0.9) 47%, rgba(184,149,85,0.9) 48%, transparent 49%)",
+                  backgroundSize: "120px 120px",
+                }}
+              />
+              <div className="absolute inset-x-6 bottom-6 h-[38%] border border-white/25 rounded-sm" />
+              <div className="absolute left-10 bottom-6 h-[58%] w-[26%] border border-white/20 rounded-sm" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
             </div>
           )}
+
 
 
           {/* Tier Badge — unified emerald metallic pill, white text, always present */}
@@ -117,27 +141,27 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             </div>
           )}
         </div>
-        {/* LOCKED (PASS 273): the logo plate always straddles the photo seam and
-            sits ABOVE the card — never clipped, never hidden under it. */}
-        {hasHero ? (
-          <div className="absolute bottom-0 left-4 z-20 h-16 w-28 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
-            <DeveloperLogo
-              variant="bare"
-               src={developerLogoUrl}
-              name={developer.name}
-              alt={`${developer.name} logo`}
-              websiteUrl={(developer as { website_url?: string | null }).website_url}
-              loading={isEager ? "eager" : "lazy"}
-              embedded
-               size="md"
-               className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
-            />
-          </div>
-        ) : null}
+        {/* LOCKED (PASS 273): the rectangular logo plate always straddles the
+            photo seam and sits ABOVE the card — present on every developer card
+            whether or not verified project photography exists. */}
+        <div className="absolute bottom-0 left-4 z-20 h-16 w-28 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
+          <DeveloperLogo
+            variant="bare"
+            src={developerLogoUrl}
+            name={developer.name}
+            alt={`${developer.name} logo`}
+            websiteUrl={(developer as { website_url?: string | null }).website_url}
+            loading={isEager ? "eager" : "lazy"}
+            embedded
+            size="md"
+            className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
+          />
+        </div>
         </div>
 
         {/* Content section — white surface with black text & icons */}
-        <div className={`flex-1 px-4 pb-4 bg-white flex flex-col ${hasHero ? "pt-10" : "pt-4"}`}>
+        <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-10">
+
           <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 break-words">
             {developer.name}
           </h3>

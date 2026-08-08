@@ -9,7 +9,6 @@ import { getDeveloperTier, ELITE_PRIORITY_ORDER } from "@/utils/developerTier";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
-import ContinueSearching from "@/components/ContinueSearching";
 import { Button } from "@/components/ui/button";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
@@ -323,9 +322,6 @@ const Developers = () => {
             )}
           </div>
         </section>
-
-        {/* Continue Searching - Recently viewed developers */}
-        <ContinueSearching type="developer" />
 
         {/* DLD Market Intelligence */}
         <DLDMarketWidget />

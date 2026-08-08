@@ -290,8 +290,7 @@ export function useDeveloperProjectStats() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("developer_id, developer_name, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units")
-        .eq("is_published", true);
+        .select("developer_id, developer_name, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units, is_published");
       if (error) throw error;
 
       const counts: Record<string, number> = {};
@@ -312,7 +311,12 @@ export function useDeveloperProjectStats() {
         gallery_start_image_url: string | null;
         is_featured: boolean | null;
         total_units: number | null;
+        is_published: boolean | null;
       }>) {
+        // Published projects drive the counts; project photography from any
+        // project record (published or not) is still real media and is allowed
+        // to hydrate the developer hero so no card falls back to a placeholder.
+        const countable = row.is_published === true;
         // LOCKED: developer-directory heroes must come from an actual project's
         // authoritative cover. Card/gallery derivatives are only fallbacks;
         // developer profile artwork and logos are never part of this query.
@@ -320,7 +324,7 @@ export function useDeveloperProjectStats() {
         const score = (row.is_featured ? 1_000_000 : 0) + Math.max(0, row.total_units ?? 0);
         const normalizedName = normalizeDeveloperName(row.developer_name);
         if (normalizedName) {
-          countsByName[normalizedName] = (countsByName[normalizedName] ?? 0) + 1;
+          if (countable) countsByName[normalizedName] = (countsByName[normalizedName] ?? 0) + 1;
           if (image && score >= (imageScoresByName[normalizedName] ?? -1)) {
             imageScoresByName[normalizedName] = score;
             imagesByName[normalizedName] = image;
@@ -328,7 +332,7 @@ export function useDeveloperProjectStats() {
           if (image) imageCandidatesByName[normalizedName] = [...(imageCandidatesByName[normalizedName] || []), { url: image, score }];
         }
         if (!row.developer_id) continue;
-        counts[row.developer_id] = (counts[row.developer_id] ?? 0) + 1;
+        if (countable) counts[row.developer_id] = (counts[row.developer_id] ?? 0) + 1;
         if (image) {
           imageCandidates[row.developer_id] = [...(imageCandidates[row.developer_id] || []), { url: image, score }];
           if (score >= (imageScores[row.developer_id] ?? -1)) {
@@ -400,10 +404,14 @@ export function useDevelopers(includeHidden = false) {
       const scoreOf = (d: Developer): number => {
         const slug = (d.slug || "").toLowerCase();
         const hasLogo = d.logo_url ? 3 : 0;
+        // Real master-plan/feature photography outranks a bare logo-only row:
+        // duplicate brand records where the logo row has no projects and no
+        // media must never win the directory card.
+        const hasFeatureImage = (d as { feature_image_url?: string | null }).feature_image_url ? 4 : 0;
         const canonicalSlug = !/^\d/.test(slug) && !slug.startsWith("developed-by-") ? 2 : 0;
         const shortSlug = slug.length > 0 && slug.length < 40 ? 1 : 0;
         const rankBonus = typeof d.rank === "number" ? Math.max(0, 1000 - d.rank) / 1000 : 0;
-        return hasLogo + canonicalSlug + shortSlug + rankBonus;
+        return hasLogo + hasFeatureImage + canonicalSlug + shortSlug + rankBonus;
       };
 
       // Normalize name → strip common corporate suffixes so
@@ -430,9 +438,21 @@ export function useDevelopers(includeHidden = false) {
         const key = normalizeBrand(row.name || "");
         if (!key) continue;
         const existing = byKey.get(key);
-        if (!existing || scoreOf(row) > scoreOf(existing)) {
+        if (!existing) {
           byKey.set(key, row);
+          continue;
         }
+        // Merge duplicate brand rows so neither the official logo nor the real
+        // master-plan photography is lost when the winner is chosen.
+        const winner = scoreOf(row) > scoreOf(existing) ? row : existing;
+        const loser = winner === row ? existing : row;
+        const merged = { ...winner } as Developer & { feature_image_url?: string | null };
+        const loserAny = loser as Developer & { feature_image_url?: string | null };
+        if (!merged.logo_url && loser.logo_url) merged.logo_url = loser.logo_url;
+        if (!merged.feature_image_url && loserAny.feature_image_url) merged.feature_image_url = loserAny.feature_image_url;
+        if (!merged.description && loser.description) merged.description = loser.description;
+        if (!merged.website_url && loser.website_url) merged.website_url = loser.website_url;
+        byKey.set(key, merged);
       }
 
       return Array.from(byKey.values()).sort((a, b) => {
