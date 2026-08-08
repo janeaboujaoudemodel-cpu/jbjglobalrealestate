@@ -76,7 +76,7 @@ export function DeveloperLogo({
     ? abDevelopersTransparent
     : isLaraix
       ? laraixTransparent.url
-      : (isValidDeveloperLogoUrl(src) ? src : (curatedLogo ?? fallbackLogo));
+      : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
   // A real canonical/website logo always wins. Historical forceNameplate
   // overrides created text substitutes and blank-looking blocks, which are no
   // longer permitted on public cards.
@@ -84,38 +84,10 @@ export function DeveloperLogo({
 
   const needsDarkPlate = !dataKeepGold;
 
-  const renderEmptyPlate = (containerClass: string) => {
-    const label = (name || alt || "Developer").trim();
-    return (
-      <div
-        className={cn(
-          containerClass,
-          "text-center",
-          !containerClass.includes("bg-") && !dataKeepGold && EMERALD_PLATE_SURFACE,
-        )}
-        data-keep-gold={dataKeepGold}
-        data-no-contrast-guard="true"
-        data-developer-logo={embedded ? undefined : "wordmark"}
-        data-developer-logo-content={embedded ? "true" : undefined}
-        aria-label={`${label} logo`}
-      >
-        <span
-          className="block px-1 font-semibold uppercase leading-[1.05]"
-          style={{
-            color: dataKeepGold ? "#1A1A1A" : "#FFFFFF",
-            WebkitTextFillColor: dataKeepGold ? "#1A1A1A" : "#FFFFFF",
-            fontSize: label.length > 22 ? "6px" : label.length > 14 ? "7px" : "8.5px",
-            letterSpacing: "0.04em",
-            wordBreak: "normal",
-            overflowWrap: "break-word",
-            hyphens: "none",
-          }}
-        >
-          {label}
-        </span>
-      </div>
-    );
-  };
+  // Public cards must never invent a typographic logo from the developer name.
+  // If the canonical, curated, or website-derived official artwork is missing,
+  // render nothing rather than showing a misleading white block/name fallback.
+  const renderEmptyPlate = (_containerClass: string) => null;
 
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (

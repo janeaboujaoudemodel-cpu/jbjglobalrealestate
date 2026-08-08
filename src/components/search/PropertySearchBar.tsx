@@ -44,7 +44,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1 h-11 lg:h-16 px-1.5 lg:px-2 rounded-lg text-[12.5px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-hidden";
+  "flex items-center justify-between gap-1 h-11 lg:h-16 px-1.5 lg:px-2 rounded-lg text-[12.5px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-hidden shadow-none";
 
 function Seg({
   label,
@@ -76,7 +76,7 @@ function Seg({
           data-no-contrast-guard
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
-            background: dark ? undefined : "#FDFBF7",
+            background: dark ? undefined : "#FFFFFF",
             backdropFilter: dark ? "blur(10px)" : undefined,
             border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
             color: ink,
@@ -357,12 +357,12 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className={`order-10 relative flex items-center gap-2 h-12 lg:h-16 px-3 lg:px-3.5 rounded-lg min-w-0 col-span-2 lg:order-none lg:col-span-1 ${KEYWORD_SPAN}`}
+          className={`order-10 relative flex items-center gap-2 h-12 lg:h-16 px-3 lg:px-3.5 rounded-lg min-w-0 col-span-2 lg:order-none lg:col-span-1 shadow-none ${KEYWORD_SPAN}`}
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
-            background: dark ? undefined : "#FDFBF7",
+            background: dark ? undefined : "#FFFFFF",
             backdropFilter: dark ? "blur(10px)" : undefined,
             border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
           }}
@@ -453,7 +453,7 @@ export default function PropertySearchBar({
           data-surface={dark ? "dark" : "light"}
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
-            background: dark ? undefined : "#FDFBF7",
+            background: dark ? undefined : "#FFFFFF",
             backdropFilter: dark ? "blur(10px)" : undefined,
             border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
           }}
@@ -464,7 +464,7 @@ export default function PropertySearchBar({
         {/* Mobile/tablet: area unit sits beside currency. Desktop keeps the aligned utility pair. */}
         <div
           className="contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none jj-sspan-6 min-w-0"
-          style={{ gridTemplateColumns: "minmax(0, 0.75fr) minmax(7.5rem, 1.25fr)" }}
+          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
         >
           {/* Keeps the sq ft / sq m pair in the same column as "Show N" below. */}
           {!onConsultation ? <div aria-hidden="true" className="hidden lg:block" /> : null}
@@ -474,7 +474,7 @@ export default function PropertySearchBar({
             data-surface={dark ? "dark" : "light"}
             style={{
               backgroundImage: dark ? DARK_SURFACE : undefined,
-              background: dark ? undefined : "#FDFBF7",
+              background: dark ? undefined : "#FFFFFF",
               backdropFilter: dark ? "blur(10px)" : undefined,
               border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
             }}
@@ -680,7 +680,7 @@ export default function PropertySearchBar({
 
         <div
           className={`contents lg:grid lg:gap-2 lg:col-span-2 ${ROW2_UTILITY_SPAN} min-w-0`}
-          style={{ gridTemplateColumns: "minmax(0, 0.8fr) minmax(0, 1.2fr)" }}
+           style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
         >
           <button
             type="button"
@@ -693,7 +693,7 @@ export default function PropertySearchBar({
             data-search-segment
             style={{
               backgroundImage: dark ? DARK_SURFACE : undefined,
-              background: dark ? undefined : "#FDFBF7",
+               background: dark ? undefined : "#FFFFFF",
               backdropFilter: dark ? "blur(10px)" : undefined,
               border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
               color: dark ? "#FFFFFF" : "#1A1A1A",
@@ -754,7 +754,8 @@ export default function PropertySearchBar({
                 onSubmit(next);
               }}
               data-no-contrast-guard
-              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11.5px] font-semibold"
+               data-active-filter-chip
+               className="allow-white inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11.5px] font-semibold !text-white [&_*]:!text-white"
               style={{
                 backgroundImage: EMERALD_PAIR,
                 color: "#FFFFFF",

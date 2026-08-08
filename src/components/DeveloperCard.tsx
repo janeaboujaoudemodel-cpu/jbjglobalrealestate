@@ -122,7 +122,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         {/* LOCKED (PASS 273): the logo plate always straddles the photo seam and
             sits ABOVE the card — never clipped, never hidden under it. */}
         {hasHero ? (
-          <div className="absolute bottom-0 left-4 z-20 h-16 w-16 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
+          <div className="absolute bottom-0 left-4 z-20 h-16 w-28 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
             <DeveloperLogo
               variant="bare"
               src={developer.logo_url}

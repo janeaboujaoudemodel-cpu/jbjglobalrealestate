@@ -12,10 +12,10 @@
 
 /* ── Container ─────────────────────────────────────────────── */
 .jjpf-shell {
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF9 100%) !important;
+  background: #FFFFFF !important;
   border: 1px solid rgba(15, 29, 24, 0.18) !important;
   border-radius: 8px !important;
-  box-shadow: 0 14px 34px -24px rgba(6, 78, 59, 0.32), 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+  box-shadow: 0 12px 28px -24px rgba(6, 78, 59, 0.28) !important;
   padding: 14px !important;
 }
 @media (min-width: 1024px) {
@@ -45,11 +45,13 @@
 .jjpf-shell [data-search-utility-controls] {
   border-width: 1.5px !important;
   border-color: rgba(184, 149, 85, 0.58) !important;
+  box-shadow: none !important;
+  background-color: #FFFFFF !important;
 }
 .jjpf-shell [data-search-segment]:hover,
 .jjpf-shell [data-search-utility-controls]:hover {
   border-color: rgba(184, 149, 85, 0.9) !important;
-  box-shadow: 0 6px 18px -12px rgba(6, 78, 59, 0.35) !important;
+  box-shadow: none !important;
 }
 .jjpf-shell [data-search-segment]:focus-within,
 .jjpf-shell [data-search-utility-controls]:focus-within {
@@ -113,6 +115,19 @@
   box-shadow: 0 12px 26px -12px rgba(6, 78, 59, 0.65) !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em;
+}
+
+/* The unit pair, currency, More and Show controls use equal grid tracks. */
+.jjpf-shell [data-search-utility-controls] {
+  min-width: 0 !important;
+}
+
+/* Applied filters such as One Sky Park are never repainted as faded ink. */
+.jjpf-shell [data-active-filter-chip],
+.jjpf-shell [data-active-filter-chip] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
 }
 .jjpf-shell [data-surface="emerald"][data-search-segment]:hover {
   filter: brightness(1.08);
