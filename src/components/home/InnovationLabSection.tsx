@@ -77,39 +77,88 @@ const STAGES: Stage[] = [
 ];
 
 const EMERALD_INK = "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)";
+const HAIRLINE = "rgba(255,255,255,0.16)";
 
-/** Ambient AI-tech field: drifting scanlines + orbiting gold nodes. */
-function TechField() {
+/** Corner brackets that make the console frame legible as a structure. */
+function Brackets() {
+  const base = "pointer-events-none absolute z-20 h-5 w-5 border-white/45";
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-      <motion.div
-        className="absolute inset-[-40%]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(184,149,85,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(184,149,85,0.10) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-          transform: "rotateX(62deg)",
-        }}
-        animate={{ backgroundPositionY: ["0px", "64px"] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-      />
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            left: `${18 + i * 28}%`,
-            top: `${28 + i * 16}%`,
-            height: 6,
-            width: 6,
-            background: "#B89555",
-            boxShadow: "0 0 18px 4px rgba(184,149,85,0.45)",
-          }}
-          animate={{ y: [0, -26, 0], opacity: [0.25, 0.9, 0.25] }}
-          transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.7 }}
+    <>
+      <span className={`${base} left-3 top-3 border-l border-t`} aria-hidden />
+      <span className={`${base} right-3 top-3 border-r border-t`} aria-hidden />
+      <span className={`${base} bottom-3 left-3 border-b border-l`} aria-hidden />
+      <span className={`${base} bottom-3 right-3 border-b border-r`} aria-hidden />
+    </>
+  );
+}
+
+/** Wireframe mesh + node network inside the console — the "AI tech" texture. */
+function Wireframe() {
+  return (
+    <svg
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-70"
+      style={{
+        maskImage: "linear-gradient(to top, #000 0%, rgba(0,0,0,0.35) 55%, transparent 92%)",
+        WebkitMaskImage: "linear-gradient(to top, #000 0%, rgba(0,0,0,0.35) 55%, transparent 92%)",
+      }}
+      viewBox="0 0 400 260"
+      preserveAspectRatio="none"
+      aria-hidden
+    >
+      <defs>
+        <linearGradient id="jbj-mesh-fade" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.13)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
+        </linearGradient>
+      </defs>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <line
+          key={`v${i}`}
+          x1={i * 95}
+          y1={0}
+          x2={i * 95 - 70}
+          y2={260}
+          stroke="url(#jbj-mesh-fade)"
+          strokeWidth="0.6"
         />
       ))}
-    </div>
+      {Array.from({ length: 7 }).map((_, i) => (
+        <line
+          key={`h${i}`}
+          x1={0}
+          y1={i * 43}
+          x2={400}
+          y2={i * 43}
+          stroke="rgba(255,255,255,0.045)"
+          strokeWidth="0.6"
+        />
+      ))}
+      <motion.polyline
+        points="20,220 90,170 150,190 220,110 300,140 380,70"
+        fill="none"
+        stroke="#D4B87A"
+        strokeWidth="1"
+        strokeLinecap="round"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 0.5 }}
+        transition={{ duration: 1.6, ease: "easeInOut" }}
+      />
+      {[
+        [90, 170],
+        [220, 110],
+        [380, 70],
+      ].map(([cx, cy], i) => (
+        <motion.circle
+          key={i}
+          cx={cx}
+          cy={cy}
+          r="2.6"
+          fill="#D4B87A"
+          animate={{ opacity: [0.3, 1, 0.3], r: [2.2, 3.4, 2.2] }}
+          transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.5, ease: "easeInOut" }}
+        />
+      ))}
+    </svg>
   );
 }
 
@@ -132,7 +181,7 @@ export default function InnovationLabSection() {
 
   useEffect(() => {
     if (!live || paused) return;
-    const t = window.setInterval(() => setActive((p) => (p + 1) % STAGES.length), 4200);
+    const t = window.setInterval(() => setActive((p) => (p + 1) % STAGES.length), 4600);
     return () => window.clearInterval(t);
   }, [live, paused]);
 
@@ -203,7 +252,7 @@ export default function InnovationLabSection() {
                             className="block h-full rounded-full bg-[#B89555]"
                             initial={false}
                             animate={{ width: on ? "100%" : "0%" }}
-                            transition={{ duration: on && !paused ? 4.2 : 0.3, ease: "linear" }}
+                            transition={{ duration: on && !paused ? 4.6 : 0.3, ease: "linear" }}
                           />
                         </span>
                       </span>
@@ -214,114 +263,149 @@ export default function InnovationLabSection() {
             </ol>
           </div>
 
-          {/* ---------- 3D stage: one readable panel, deck receding behind ---------- */}
+          {/* ---------- Geometric AI console ---------- */}
           <div
             className="order-2 lg:order-2"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
           >
-            <div className="relative w-full md:h-[440px]" style={{ perspective: 1400 }}>
-              <TechField />
+            {/* Static, fully contained frame so the structure is always readable. */}
+            <div className="relative w-full pl-3 pt-3 md:pl-5 md:pt-5">
+              {/* Depth plates: visible, offset, hairlined — they read as a stack. */}
+              <div
+                className="pointer-events-none absolute inset-0 -translate-x-3 -translate-y-3 rounded-[20px] border md:-translate-x-5 md:-translate-y-5"
+                style={{ borderColor: "rgba(6,78,59,0.22)", background: "rgba(6,78,59,0.05)" }}
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute inset-0 -translate-x-1.5 -translate-y-1.5 rounded-[20px] border md:-translate-x-2.5 md:-translate-y-2.5"
+                style={{ borderColor: "rgba(6,78,59,0.32)", background: "rgba(6,78,59,0.10)" }}
+                aria-hidden
+              />
 
-              {/* Receding ghost plates — decorative only, never hold text.
-                  Hidden on phones so nothing can sit on top of the copy. */}
-              {[3, 2, 1].map((depth) => (
-                <motion.div
-                  key={depth}
-                  className="hidden md:absolute md:left-1/2 md:top-1/2 md:block rounded-2xl border"
+              <article
+                data-ink-emerald="true"
+                data-surface="dark"
+                className="relative isolate overflow-hidden rounded-[20px] border"
+                style={{
+                  background: EMERALD_INK,
+                  borderColor: HAIRLINE,
+                  boxShadow: "0 40px 80px -34px rgba(4,44,28,0.6)",
+                }}
+              >
+                <Wireframe />
+                <Brackets />
+
+                {/* Scanning beam — the "AI reading" cue. */}
+                <motion.span
+                  className="pointer-events-none absolute inset-y-0 w-24"
                   style={{
-                    height: "68%",
-                    width: "84%",
-                    marginLeft: "-42%",
-                    marginTop: "-34%",
-                    background: EMERALD_INK,
-                    borderColor: "rgba(255,255,255,0.10)",
-                    transformStyle: "preserve-3d",
-                    zIndex: 10 - depth,
+                    background:
+                      "linear-gradient(90deg, transparent 0%, rgba(212,184,122,0.14) 50%, transparent 100%)",
                   }}
-                  animate={{
-                    y: [-depth * 16, -depth * 16 - 6, -depth * 16],
-                    x: depth * 10,
-                    rotateX: 8,
-                    rotateY: -10,
-                    scale: 1 - depth * 0.05,
-                    opacity: 0.34 - depth * 0.07,
-                  }}
-                  transition={{ duration: 5 + depth, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ x: ["-20%", "560%"] }}
+                  transition={{ duration: 6.5, repeat: Infinity, ease: "linear" }}
                   aria-hidden
                 />
-              ))}
 
-              {/* Active panel */}
-              <AnimatePresence mode="wait">
-                <motion.article
-                  key={stage.index}
-                  data-ink-emerald="true"
-                  data-surface="dark"
-                  className="relative z-20 flex w-full flex-col justify-between overflow-hidden rounded-2xl border p-5 md:absolute md:left-1/2 md:top-1/2 md:h-[78%] md:w-[92%] md:-ml-[46%] md:-mt-[39%] md:p-8"
-                  style={{
-                    background: EMERALD_INK,
-                    borderColor: "rgba(184,149,85,0.38)",
-                    boxShadow: "0 44px 90px -30px rgba(4,44,28,0.65)",
-                    transformStyle: "preserve-3d",
-                  }}
-                  initial={{ opacity: 0, y: 34, rotateX: 16, rotateY: -14, scale: 0.94 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 5, rotateY: -6, scale: 1 }}
-                  exit={{ opacity: 0, y: -26, rotateX: -8, rotateY: 6, scale: 0.96 }}
-                  transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                {/* HUD top rail */}
+                <div
+                  className="relative z-10 flex items-center justify-between gap-3 border-b px-5 py-3 md:px-7"
+                  style={{ borderColor: HAIRLINE }}
                 >
-                  {/* sheen sweep */}
-                  <motion.span
-                    className="pointer-events-none absolute inset-y-0 w-1/3"
-                    style={{
-                      background:
-                        "linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.10) 45%, transparent 100%)",
-                    }}
-                    animate={{ x: ["-120%", "360%"] }}
-                    transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
-                    aria-hidden
-                  />
-
-                  <header className="relative flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#D4B87A]">
-                        Stage {stage.index} — {stage.kicker}
-                      </p>
-                      <h3 className="mt-2 font-serif text-2xl leading-tight text-white md:text-[32px]">
-                        {stage.title}
-                      </h3>
-                    </div>
-                    <span
-                      className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border"
-                      style={{ borderColor: "rgba(184,149,85,0.45)", background: "rgba(255,255,255,0.08)" }}
-                    >
-                      <ActiveIcon className="h-5 w-5 text-white" strokeWidth={1.9} aria-hidden />
+                  <div className="flex items-center gap-2">
+                    <motion.span
+                      className="h-1.5 w-1.5 rounded-full bg-[#D4B87A]"
+                      animate={{ opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1.8, repeat: Infinity }}
+                      aria-hidden
+                    />
+                    <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/70">
+                      JBJ decision engine
                     </span>
-                  </header>
-
-                  <p className="relative mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-[15px]">
-                    {stage.body}
-                  </p>
-
-                  <div className="relative mt-6 grid grid-cols-3 gap-3">
-                    {stage.metrics.map((m, i) => (
-                      <motion.div
-                        key={m.label}
-                        className="rounded-xl border px-3 py-2.5"
-                        style={{ borderColor: "rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)" }}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.18 + i * 0.08, duration: 0.35 }}
-                      >
-                        <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-white/60">
-                          {m.label}
-                        </span>
-                        <span className="mt-1 block text-sm font-semibold text-white md:text-base">{m.value}</span>
-                      </motion.div>
+                  </div>
+                  <div className="flex items-center gap-1.5" aria-hidden>
+                    {STAGES.map((s, i) => (
+                      <span
+                        key={s.index}
+                        className="h-1 rounded-full transition-all"
+                        style={{
+                          width: i === active ? 22 : 8,
+                          background: i === active ? "#D4B87A" : "rgba(255,255,255,0.22)",
+                        }}
+                      />
                     ))}
                   </div>
-                </motion.article>
-              </AnimatePresence>
+                </div>
+
+                {/* Body */}
+                <div className="relative z-10 px-5 py-6 md:min-h-[300px] md:px-7 md:py-8">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={stage.index}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -12 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                    >
+                      <header className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#D4B87A]">
+                            Stage {stage.index} — {stage.kicker}
+                          </p>
+                          <h3 className="mt-2 font-serif text-2xl leading-tight text-white md:text-[32px]">
+                            {stage.title}
+                          </h3>
+                        </div>
+                        <span
+                          className="relative grid h-12 w-12 shrink-0 place-items-center rounded-xl border"
+                          style={{ borderColor: HAIRLINE, background: "rgba(255,255,255,0.08)" }}
+                        >
+                          <motion.span
+                            className="absolute inset-0 rounded-xl border"
+                            style={{ borderColor: "rgba(212,184,122,0.35)" }}
+                            animate={{ opacity: [0.15, 0.7, 0.15], scale: [0.94, 1.06, 0.94] }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            aria-hidden
+                          />
+                          <ActiveIcon className="h-5 w-5 text-white" strokeWidth={1.9} aria-hidden />
+                        </span>
+                      </header>
+
+                      <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-[15px]">
+                        {stage.body}
+                      </p>
+
+                      <div className="mt-6 grid grid-cols-3 gap-2.5 md:gap-3">
+                        {stage.metrics.map((m, i) => (
+                          <motion.div
+                            key={m.label}
+                            className="relative overflow-hidden rounded-xl border px-3 py-2.5"
+                            style={{ borderColor: HAIRLINE, background: "rgba(255,255,255,0.06)" }}
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.14 + i * 0.08, duration: 0.35 }}
+                          >
+                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-white/60">
+                              {m.label}
+                            </span>
+                            <span className="mt-1 block text-sm font-semibold text-white md:text-base">
+                              {m.value}
+                            </span>
+                            <motion.span
+                              className="absolute bottom-0 left-0 h-[2px] bg-[#D4B87A]/70"
+                              initial={{ width: "0%" }}
+                              animate={{ width: "100%" }}
+                              transition={{ delay: 0.2 + i * 0.1, duration: 0.9, ease: "easeOut" }}
+                              aria-hidden
+                            />
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </article>
             </div>
           </div>
         </div>
