@@ -120,24 +120,26 @@ describe("DeveloperLogo rendering guard", () => {
   });
 
   it("never paints unverified database artwork before its transparency audit", () => {
-    const { container, getByText } = renderLogo({
+    const { container } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "card",
     });
     expect(container.querySelector("img")).toBeNull();
-    expect(getByText("Some Unknown Developer")).toBeTruthy();
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
+    expect(container.textContent).not.toContain("Some Unknown Developer");
   });
 
   it("does not trust an unaudited database image solely from a paint hint", () => {
-    const { container, getByText } = renderLogo({
+    const { container } = renderLogo({
       name: "Light Artwork Developer",
       src: "https://cdn.example.com/white-logo.png",
       needsInvert: false,
       variant: "card",
     });
     expect(container.querySelector("img")).toBeNull();
-    expect(getByText("Light Artwork Developer")).toBeTruthy();
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
+    expect(container.textContent).not.toContain("Light Artwork Developer");
   });
 
   it("never paints a white plate background on any variant", () => {
@@ -156,7 +158,7 @@ describe("DeveloperLogo rendering guard", () => {
   });
 
   it("shows one complete emerald identity plate while artwork is audited", () => {
-    const { container, getByText } = renderLogo({
+    const { container } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "bare",
@@ -164,7 +166,7 @@ describe("DeveloperLogo rendering guard", () => {
     const plate = container.firstElementChild as HTMLElement;
     expect(plate.className).not.toMatch(/opacity-0/);
     expect(plate.getAttribute("data-logo-loaded")).toBe("false");
-    expect(getByText("Some Unknown Developer")).toBeTruthy();
+    expect(plate.getAttribute("data-developer-logo")).toBe("unresolved");
   });
 
   it("uses the premium wide plate dimensions for listing logos", () => {
@@ -177,34 +179,30 @@ describe("DeveloperLogo rendering guard", () => {
     expect(container.firstElementChild?.className).toMatch(/h-\[72px\].*w-36/);
   });
 
-  it.each([
-    ["ADE Properties", "scale-[1.45]"],
-    ["Ag Properties", "scale-[1.18]"],
-    ["Ahmadyar Developments", "scale-[1.32]"],
-  ])("normalizes the visible scale of %s without replacing its mark", (name, scaleClass) => {
+  it.each(["ADE Properties", "Ag Properties", "Ahmadyar Developments"])("uses the shared visible scale for %s", (name) => {
     const { container } = renderLogo({ name, src: "https://cdn.example.com/logo.png" });
-    expect(container.querySelector("img")?.className).toContain(scaleClass);
+    expect(container.querySelector("img")?.className).toContain("scale-100");
   });
 
-  it("falls back to a readable white wordmark instead of an empty slot", () => {
-    const { container, getByText } = renderLogo({
+  it("never fabricates a typed logo when official artwork is unresolved", () => {
+    const { container } = renderLogo({
       name: "Developer Without Logo",
       src: null,
       variant: "card",
     });
     expect(container.querySelector("img")).toBeNull();
-    const label = getByText("Developer Without Logo");
-    expect(label.className).toMatch(/text-white/);
+    expect(container.textContent).not.toContain("Developer Without Logo");
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
     expect(container.firstElementChild?.className).toMatch(/#042C1C/);
   });
 
-  it("uses dark text on the gold identity plate for contrast", () => {
-    const { getByText } = renderLogo({
+  it("never adds typed text to an unresolved gold identity plate", () => {
+    const { container } = renderLogo({
       name: "Developer Without Logo",
       src: null,
       variant: "card",
       "data-keep-gold": true,
     });
-    expect(getByText("Developer Without Logo").className).toMatch(/#042C1C/);
+    expect(container.textContent).not.toContain("Developer Without Logo");
   });
 });

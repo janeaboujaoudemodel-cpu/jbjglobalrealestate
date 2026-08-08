@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { SEOHead } from "@/components/SEOHead";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface Developer {
   id: string;
@@ -65,18 +66,15 @@ interface SoftDeletedProject {
   deleted_at: string;
 }
 
-const DeveloperLogo = ({ dev }: { dev?: Developer | null }) => {
-  const src = dev?.logo_url_processed || dev?.logo_url;
-  return (
-    <div className="w-10 h-10 rounded-md bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center overflow-hidden shrink-0">
-      {src ? (
-        <img src={src} alt={dev?.name || "developer"} className="max-w-full max-h-full object-contain p-1"  loading="lazy" decoding="async" />
-      ) : (
-        <Building2 className="w-5 h-5 text-[#1A1A1A]/40" />
-      )}
-    </div>
-  );
-};
+const PartnershipDeveloperLogo = ({ dev }: { dev?: Developer | null }) => (
+  <DeveloperLogo
+    src={dev?.logo_url_processed || dev?.logo_url}
+    name={dev?.name}
+    alt={`${dev?.name ?? "Developer"} logo`}
+    variant="bare"
+    size="micro"
+  />
+);
 
 const DeveloperPartnershipPanel = () => {
   const { user } = useAuth();
@@ -321,7 +319,7 @@ const DeveloperPartnershipPanel = () => {
                   return (
                     <Card key={app.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30">
                       <div className="flex items-start gap-4">
-                        <DeveloperLogo dev={dev} />
+                        <PartnershipDeveloperLogo dev={dev} />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="font-semibold text-[#1A1A1A]">
@@ -465,7 +463,7 @@ const DeveloperPartnershipPanel = () => {
                 return (
                   <Card key={rep.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30">
                     <div className="flex items-center gap-4">
-                      <DeveloperLogo dev={dev} />
+                      <PartnershipDeveloperLogo dev={dev} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-semibold text-[#1A1A1A]">{rep.full_name}</span>
@@ -533,7 +531,7 @@ const DeveloperPartnershipPanel = () => {
                 const dev = devById(p.developer_id);
                 return (
                   <Card key={p.id} className="p-3 bg-[#F7F2EA] border-[#B89555]/30 flex items-center gap-3">
-                    <DeveloperLogo dev={dev} />
+                    <PartnershipDeveloperLogo dev={dev} />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-[#1A1A1A] truncate">{p.name}</p>
                       <p className="text-xs text-[#1A1A1A]/60">

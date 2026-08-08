@@ -114,7 +114,6 @@ export function DeveloperLogo({
   const isAgProperties = /^agproperties(?:llc)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
-  const normalizedIdentity = (name || alt || "").replace(/[^a-z0-9]+/gi, "").toLowerCase();
   // Single source of truth for curated pure-white official marks.
   const verifiedWhiteLogo = getVerifiedWhiteLogo(name || alt);
   const isDubaiSouth = /^dubaisouth(?:properties)?$/i.test(
@@ -143,12 +142,7 @@ export function DeveloperLogo({
   const isCuratedWhiteArtwork =
     !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers;
 
-  // A real canonical/website logo always wins. Historical forceNameplate
-  // overrides created text substitutes and blank-looking blocks, which are no
-  // longer permitted on public cards.
-  // Curated pure-white knockouts always win. Otherwise a forceNameplate
-  // override still suppresses unreliable database artwork (opaque/blocked
-  // bitmaps that paint as blank white blocks on the emerald plate).
+  // Real canonical/website artwork always wins; typed substitutes are forbidden.
   const hasCuratedArtwork =
     !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers || isLaraix || !!curatedLogo;
   // White-block guard: opaque slab artwork is rejected outright (never painted

@@ -22,6 +22,7 @@ import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdminNotificationBell } from "@/components/admin/AdminNotificationBell";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { useAdmin } from "@/pages/useAdmin";
 
 // Lazy-load ALL tab content components
@@ -284,9 +285,7 @@ const Admin = () => {
                       {h.developers?.map((dev) => (
                         <div key={dev.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-[#B89555]/20 hover:border-[#B89555]/40 transition-all">
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center overflow-hidden flex-shrink-0">
-                              {dev.logo_url ? <img src={dev.logo_url} alt={dev.name} className="w-full h-full object-contain"  loading="lazy" decoding="async" /> : <Building2 className="w-5 h-5 text-[#1A1A1A]" />}
-                            </div>
+                            <DeveloperLogo src={dev.logo_url} name={dev.name} alt={`${dev.name} logo`} variant="bare" size="micro" />
                             <div className="min-w-0 overflow-visible"><p data-developer-name className="font-semibold text-[#1A1A1A] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</p><p className="text-xs text-[#1A1A1A]/70">{dev.slug}</p></div>
                           </div>
                           <Button variant="ghost" size="sm" onClick={() => window.open(`/developers/${dev.slug}`, '_blank')}><ExternalLink className="w-4 h-4" /></Button>

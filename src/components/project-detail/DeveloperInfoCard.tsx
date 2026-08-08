@@ -49,17 +49,12 @@ interface DeveloperInfoCardProps {
 
 const DESCRIPTION_PREVIEW_LENGTH = 500;
 
-const getDisplayLogoUrl = (developerName: string, logoUrl?: string | null) => {
-  return logoUrl || null;
-};
-
 export default function DeveloperInfoCard({ developer, projectName, projectCount, editable }: DeveloperInfoCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
   if (!developer) return null;
 
   const computedOffplanProjects = developer.offplan_projects ?? projectCount ?? null;
-  const displayLogoUrl = getDisplayLogoUrl(developer.name, developer.logo_url);
 
   const stats = [
     { label: "Founded", value: developer.founded_year ? `${developer.founded_year.toLocaleString()}` : null, icon: Calendar },
@@ -93,13 +88,12 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               />
             ) : (
               <DeveloperLogo
-                src={displayLogoUrl}
+                src={developer.logo_url}
                 alt={`${developer.name} logo`}
                 name={developer.name}
                 websiteUrl={(developer as any).website_url}
                 variant="bare"
-                renderFallback
-                className="!w-44 !h-[99px] !rounded-xl !p-3 flex-shrink-0"
+                size="lg"
               />
             )}
 

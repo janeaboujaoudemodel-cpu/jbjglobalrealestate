@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { DeveloperLogo } from '@/components/ui/DeveloperLogo';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -706,9 +707,7 @@ export default function BrochureGeneratorPage() {
             {developerInfo && (
               <div className="mt-3 p-3 rounded-lg bg-blue-50/50 border border-blue-100">
                 <div className="flex items-center gap-3">
-                  {developerInfo.logo_url && (
-                    <img src={developerInfo.logo_url} alt={developerInfo.name} className="w-8 h-8 object-contain rounded bg-[#FDFBF7] p-0.5 border border-blue-200"  loading="lazy" decoding="async" />
-                  )}
+                  <DeveloperLogo src={developerInfo.logo_url} name={developerInfo.name} alt={`${developerInfo.name} logo`} variant="bare" size="micro" />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-[#1A1A1A]">{developerInfo.name}</p>
                     <p className="text-[10px] text-[#1A1A1A]/70 truncate">

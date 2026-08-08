@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCanEdit } from "@/hooks/useEffectiveOwner";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 
@@ -16,19 +15,11 @@ interface Props {
 
 const BUCKET = "project-images"; // existing public bucket
 
-const getDisplayLogoUrl = (developerName: string, logoUrl?: string | null) => {
-  if (/^citi\s+developers$/i.test(developerName.trim()) && isValidDeveloperLogoUrl(logoUrl)) {
-    return "/citi-developers-logo-transparent.png";
-  }
-  return logoUrl || null;
-};
-
 export default function DeveloperLogoUploader({ developerId, developerName, logoUrl }: Props) {
   const canEdit = useCanEdit("developer_info");
   const qc = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
-  const displayLogoUrl = getDisplayLogoUrl(developerName, logoUrl);
 
   const upload = async (file: File) => {
     setBusy(true);
@@ -56,7 +47,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
     <div className="relative flex-shrink-0 w-44 h-[99px]">
       {/* Unified identity plate: emerald pair gradient + white knocked-out mark */}
       <DeveloperLogo
-        src={isValidDeveloperLogoUrl(displayLogoUrl) ? (displayLogoUrl as string) : null}
+        src={logoUrl}
         alt={`${developerName} logo`}
         name={developerName}
         variant="bare"
