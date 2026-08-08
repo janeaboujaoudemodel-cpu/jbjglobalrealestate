@@ -59,14 +59,19 @@ const MobileHandpickedStrip = ({ projects }: { projects: any[] }) => {
   return (
     <div
       ref={trackRef}
-      className="sm:hidden -mx-4 px-4 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-      style={{ WebkitOverflowScrolling: "touch" }}
+      className="sm:hidden -mx-[var(--jj-page-gutter,1rem)] flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      style={{
+        WebkitOverflowScrolling: "touch",
+        paddingInline: "var(--jj-page-gutter, 1rem)",
+        scrollPaddingInline: "var(--jj-page-gutter, 1rem)",
+      }}
       aria-label="Handpicked projects carousel"
     >
       {projects.map((project, idx) => (
-        <div key={project.id} className="snap-start shrink-0 w-[85%] [&>*]:w-full [&>*]:h-full">
+        <div key={project.id} className="snap-center shrink-0 w-[82%] [&>*]:w-full [&>*]:h-full">
           <ProjectCard project={project as any} priority={idx < 2} />
         </div>
+
       ))}
     </div>
   );
