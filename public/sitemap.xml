@@ -1242,13 +1242,13 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/emaar-properties</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://jbj.ae/developer/sankari-east-development-l-l-c</loc>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/sankari-east-development-l-l-c</loc>
+    <loc>https://jbj.ae/developer/emaar-properties</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -3120,6 +3120,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://jbj.ae/developer/nakheel</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://jbj.ae/developer/trinity-developers-limited</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -3133,12 +3139,6 @@
   </url>
   <url>
     <loc>https://jbj.ae/developer/venture-27-property-development-l-l-c</loc>
-    <lastmod>2026-08-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://jbj.ae/developer/nakheel</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
