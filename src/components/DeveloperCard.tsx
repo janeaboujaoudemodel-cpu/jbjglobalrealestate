@@ -247,11 +247,12 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
           </div>
 
           <div className="mt-3 pt-3 border-t border-[#B89555]/30">
-            <span className="inline-flex items-center gap-2 text-[#8A6D2F] text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors duration-300 group-hover:text-[#B89555]">
+            <span className="flex items-center justify-between gap-2 text-[#8A6D2F] text-[10px] font-semibold tracking-[0.10em] uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-[#B89555]">
               View developer portfolio
-              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
             </span>
           </div>
+
         </div>
 
       </motion.div>
