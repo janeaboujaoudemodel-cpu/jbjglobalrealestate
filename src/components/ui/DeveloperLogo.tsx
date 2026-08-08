@@ -115,17 +115,8 @@ export function DeveloperLogo({
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
   const normalizedIdentity = (name || alt || "").replace(/[^a-z0-9]+/gi, "").toLowerCase();
-  const verifiedWhiteLogo = /^adeproperties(?:llc)?$/.test(normalizedIdentity)
-    ? adeVerifiedWhite
-    : /^agproperties(?:llc)?$/.test(normalizedIdentity)
-      ? agVerifiedWhite
-      : /^aizn(?:realestate)?development(?:llc)?$/.test(normalizedIdentity)
-        ? aiznVerifiedWhite
-        : /^amisdevelopment(?:llc)?$/.test(normalizedIdentity)
-          ? amisVerifiedWhite
-          : /^anaxdevelopments?(?:llc)?$/.test(normalizedIdentity)
-            ? anaxVerifiedWhite
-            : null;
+  // Single source of truth for curated pure-white official marks.
+  const verifiedWhiteLogo = getVerifiedWhiteLogo(name || alt);
   const isDubaiSouth = /^dubaisouth(?:properties)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
