@@ -210,6 +210,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const [statusOpen, setStatusOpen] = useState(false);
   const [constructionOpen, setConstructionOpen] = useState(false);
   const [viewsOpen, setViewsOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
+
 
   // Local draft state for price popover (prevents per-keystroke re-render/navigation)
   const [draftPriceMin, setDraftPriceMin] = useState(filters.priceMin);
