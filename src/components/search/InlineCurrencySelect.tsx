@@ -72,7 +72,7 @@ export default function InlineCurrencySelect({ dark }: Props) {
             </span>
 
             <span
-              className="min-w-0 truncate text-[8.5px] uppercase leading-none tracking-[0.18em]"
+              className="min-w-0 text-[8px] uppercase leading-none tracking-[0.1em] whitespace-nowrap"
               style={{
                 color: dark ? "rgba(255,255,255,0.62)" : "rgba(26,26,26,0.55)",
               }}

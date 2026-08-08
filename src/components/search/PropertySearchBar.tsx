@@ -44,7 +44,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1.5 h-11 lg:h-16 px-2.5 lg:px-3 rounded-lg text-[12.5px] lg:text-sm font-medium tracking-tight min-w-0 w-full transition-colors";
+  "flex items-center justify-between gap-1 h-11 lg:h-16 px-2 lg:px-2.5 rounded-lg text-[12.5px] lg:text-[13px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-hidden";
 
 function Seg({
   label,
@@ -84,10 +84,10 @@ function Seg({
           }}
         >
 
-          <span className="flex items-center gap-2 min-w-0">
-            {icon}
+          <span className="flex flex-1 items-center gap-1.5 min-w-0">
+            <span className="shrink-0 inline-flex items-center">{icon}</span>
             <span
-              className="truncate leading-none"
+              className="min-w-0 truncate leading-none"
               style={{
                 color: active ? ink : muted,
                 WebkitTextFillColor: active ? ink : muted,
@@ -230,7 +230,12 @@ export default function PropertySearchBar({
   const extras = countExtraFilters(f);
   /* Both rows share the same lg column count so every card edge lines up. */
   const GRID_KEY = showSort ? "27" : "24";
-  const KEYWORD_SPAN = showSort ? "jj-sspan-12" : "jj-sspan-9";
+  // Row 1 must always total the grid width (24 / 27). The keyword field absorbs
+  // the 3 columns taken by the optional developer-tier segment so the sq ft /
+  // sq m pair stays on the same line instead of wrapping to a second row.
+  const KEYWORD_SPAN = showSort
+    ? (showTiers ? "jj-sspan-9" : "jj-sspan-12")
+    : (showTiers ? "jj-sspan-6" : "jj-sspan-9");
 
   const setAreaUnit = (unit: AreaUnit) => setAreaUnitGlobal(unit);
 
@@ -673,7 +678,7 @@ export default function PropertySearchBar({
 
         <div
           className="contents lg:grid lg:gap-2 lg:col-span-2 jj-sspan-6 min-w-0"
-          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+          style={{ gridTemplateColumns: "minmax(0, 0.85fr) minmax(0, 1.15fr)" }}
         >
           <button
             type="button"
@@ -708,8 +713,15 @@ export default function PropertySearchBar({
              data-surface="emerald"
              data-search-segment
              data-no-contrast-guard
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold px-2 whitespace-nowrap"
-            style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg text-[13px] lg:text-[11.5px] font-semibold px-1.5 leading-tight tracking-tight text-center"
+            style={{
+              backgroundImage: EMERALD_PAIR,
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              whiteSpace: "normal",
+              wordBreak: "normal",
+              overflowWrap: "break-word",
+            }}
           >
             {count == null ? "Search" : `Show ${count.toLocaleString()} ${countNoun}`}
           </button>

@@ -967,7 +967,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             >
               <Activity className="w-3.5 h-3.5 text-white" />
               <span className="tabular-nums">{resultsCount.toLocaleString()}</span>
-              <span className="text-white/85 font-medium">{resultsLabel || 'Results'}</span>
+              <span className="allow-white font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{resultsLabel || 'Results'}</span>
             </div>
           </div>
         )}
