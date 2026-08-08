@@ -194,6 +194,7 @@ export default function PropertySearchBar({
   sortOptions = SORT_OPTIONS,
   showTiers = false,
   countOverride,
+  countNoun = "properties",
   showActiveSummary = false,
 }: Props) {
 
@@ -298,7 +299,7 @@ export default function PropertySearchBar({
 
 
   return (
-    <div data-property-search-bar className={`grid gap-1.5 lg:block ${className}`} style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
+    <div data-property-search-bar data-search-tone={dark ? "dark" : "light"} className={`grid gap-1.5 lg:block ${className}`} style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
       <div className={`contents lg:grid lg:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] lg:items-stretch lg:gap-2 lg:mb-2`} data-search-grid={GRID_KEY}>
         <div
@@ -308,7 +309,7 @@ export default function PropertySearchBar({
           data-search-segment
           style={{
             backgroundImage: dark ? DARK_SURFACE : undefined,
-            background: dark ? undefined : "#F2EBDC",
+            background: dark ? undefined : "#FDFBF7",
             backdropFilter: dark ? "blur(10px)" : undefined,
             border: dark ? "1.5px solid rgba(255,255,255,0.44)" : "1.5px solid rgba(184,149,85,0.58)",
           }}
@@ -455,7 +456,7 @@ export default function PropertySearchBar({
         {/* Mobile/tablet: area unit sits beside currency. Desktop keeps the aligned utility pair. */}
         <div
           className="contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none jj-sspan-6 min-w-0"
-          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+          style={{ gridTemplateColumns: "minmax(0, 0.75fr) minmax(7.5rem, 1.25fr)" }}
         >
           {/* Keeps the sq ft / sq m pair in the same column as "Show N" below. */}
           {!onConsultation ? <div aria-hidden="true" className="hidden lg:block" /> : null}
@@ -706,10 +707,11 @@ export default function PropertySearchBar({
             onClick={() => onSubmit(f)}
              data-surface="emerald"
              data-search-segment
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold text-white px-2 whitespace-nowrap"
-            style={{ backgroundImage: EMERALD_PAIR }}
+             data-no-contrast-guard
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold px-2 whitespace-nowrap"
+            style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            {count == null ? "Search" : `Show ${count.toLocaleString()}`}
+            {count == null ? "Search" : `Show ${count.toLocaleString()} ${countNoun}`}
           </button>
         </div>
       </div>

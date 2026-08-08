@@ -5,6 +5,8 @@ import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-transparent.png";
 
+const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
+
 interface DeveloperLogoProps {
   src?: string | null;
   alt?: string;
@@ -43,11 +45,6 @@ const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
 
 
 
-// JPG/JPEG artwork is always opaque: knocking it out to pure white renders a
-// blank white block on the emerald plate. Those logos are shown as-is on a
-// small ivory inner tile so the real mark stays visible.
-const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
-
 export function DeveloperLogo({
   src,
   alt = "Developer",
@@ -57,14 +54,10 @@ export function DeveloperLogo({
   name,
   websiteUrl,
   variant = "tile",
-  size = "md",
   embedded = false,
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
-  // Wide wordmarks (e.g. 233x29 SVGs) shrink to a hairline inside a square
-  // plate. Detected on load so the plate widens instead of looking empty.
-  const [wide, setWide] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
   const fallbackLogo = getWebsiteLogoFallbackUrl(websiteUrl);
@@ -80,45 +73,27 @@ export function DeveloperLogo({
     : isLaraix
       ? laraixTransparent.url
       : (isValidDeveloperLogoUrl(src) ? src : fallbackLogo);
-  const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error && !override.forceNameplate;
+  // A real canonical/website logo always wins. Historical forceNameplate
+  // overrides created text substitutes and blank-looking blocks, which are no
+  // longer permitted on public cards.
+  const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error;
 
   const needsDarkPlate = !dataKeepGold;
 
-  const renderNameplate = (containerClass: string) => {
-    const label = (name || alt || "Developer").trim();
-    const display = label
-      .replace(/\b(properties|property|developers?|developments?|real estate|llc|l\.l\.c\.?|group)\b/gi, "")
-      .replace(/\s+/g, " ")
-      .trim() || label;
-
-    return (
-      <div
-        className={cn(containerClass, !containerClass.includes("bg-") && !dataKeepGold && EMERALD_PLATE_SURFACE)}
-        data-keep-gold={dataKeepGold}
-        data-no-contrast-guard="true"
-        data-developer-logo={embedded ? undefined : "nameplate"}
-        data-developer-logo-content={embedded ? "true" : undefined}
-        aria-label={`${label} logo pending`}
-        title={label}
-      >
-        <span className="sr-only">{label}</span>
-        <span
-          aria-hidden="true"
-          className="font-serif font-bold leading-tight text-center tracking-normal px-0.5"
-          style={{ color: dataKeepGold ? "#3a2a08" : "#FFFFFF", WebkitTextFillColor: dataKeepGold ? "#3a2a08" : "#FFFFFF", fontSize: display.length > 14 ? "0.48rem" : display.length > 9 ? "0.56rem" : "0.68rem" }}
-        >
-          {display}
-        </span>
-      </div>
-    );
-  };
+  const renderEmptyPlate = (containerClass: string) => (
+    <div
+      className={cn(containerClass, !containerClass.includes("bg-") && !dataKeepGold && EMERALD_PLATE_SURFACE)}
+      data-keep-gold={dataKeepGold}
+      data-no-contrast-guard="true"
+      data-developer-logo={embedded ? undefined : "pending"}
+      data-developer-logo-content={embedded ? "true" : undefined}
+      aria-label={`${(name || alt || "Developer").trim()} logo unavailable`}
+    />
+  );
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
     <div
-      className={cn(containerClass, wide && scale === "compact" && (size === "sm"
-        ? "!w-auto !aspect-auto min-w-[2.5rem] max-w-[6rem] px-1.5"
-        : "!w-auto !aspect-auto min-w-[3.5rem] max-w-[9rem] px-2"))}
-      data-wide-logo={wide ? "true" : undefined}
+      className={cn(containerClass)}
       data-keep-gold={dataKeepGold}
       data-developer-logo={embedded ? undefined : "database"}
       data-developer-logo-content={embedded ? "true" : undefined}
@@ -138,7 +113,6 @@ export function DeveloperLogo({
             onError?.();
             return;
           }
-          if (img.naturalWidth / img.naturalHeight >= 2.2) setWide(true);
         }}
         onError={() => {
           setError(true);
@@ -147,19 +121,14 @@ export function DeveloperLogo({
 
         className={cn(
           "block w-full h-full object-contain",
-          scale === "compact" ? "rounded-sm" : "rounded-md",
-          isOpaqueRaster(url) && !dataKeepGold && "bg-[#FDFBF7] p-0.5 ring-1 ring-[#B89555]/60",
+          scale === "compact" ? "rounded-sm p-1" : "rounded-md p-1",
         )}
         style={{
           // Emerald plates: knock the artwork out to pure white so every
           // wordmark reads at full contrast. Gold hero plate keeps dark ink.
           // Opaque JPG artwork is never knocked out (it would go fully white).
-          filter: override.imageBlendMode
-            ? (override.imageFilter ?? "none")
-            : dataKeepGold || isOpaqueRaster(url)
-              ? (override.imageFilter ?? "none")
-              : "brightness(0) invert(1)",
-          mixBlendMode: override.imageBlendMode ?? "normal",
+          filter: override.imageFilter ?? (dataKeepGold || isOpaqueRaster(url) ? "none" : "brightness(0) invert(1)"),
+          mixBlendMode: override.imageBlendMode ?? (dataKeepGold ? "normal" : isOpaqueRaster(url) ? "multiply" : "screen"),
         }}
       />
     </div>
@@ -167,7 +136,7 @@ export function DeveloperLogo({
 
   // ── Nameplate variant — if no valid logo exists, show the approved icon fallback ──
   if (variant === "nameplate") {
-    if (!valid) return renderNameplate(cn(UNIFIED_PLATE, className));
+    if (!valid) return renderEmptyPlate(cn(UNIFIED_PLATE, className));
     return renderImage(
       resolvedSrc as string,
       cn(UNIFIED_PLATE, className),
@@ -176,7 +145,7 @@ export function DeveloperLogo({
 
   if (variant === "bare") {
     if (!valid) {
-      return renderNameplate(cn(
+      return renderEmptyPlate(cn(
         "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
         embedded ? "bg-transparent border-0 shadow-none" : logoPlateSurface(false),
         className,
@@ -199,7 +168,7 @@ export function DeveloperLogo({
     );
 
     if (!valid) {
-      return renderNameplate(cardContainer);
+      return renderEmptyPlate(cardContainer);
     }
     return renderImage(resolvedSrc as string, cardContainer, "card");
   }
@@ -212,7 +181,7 @@ export function DeveloperLogo({
   );
 
   if (!valid) {
-    return renderNameplate(tileContainer);
+    return renderEmptyPlate(tileContainer);
   }
 
   return renderImage(resolvedSrc as string, tileContainer);
