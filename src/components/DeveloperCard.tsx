@@ -31,7 +31,11 @@ const getPublicDeveloperName = (name: string) => {
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
-  const isEager = index < 8;
+  // The directory paginates to 24 cards, so every visible cover belongs to the
+  // current viewport workload. Lazy-loading the lower rows left large beige
+  // fields in screenshots and during normal scrolling; eagerly decode the
+  // complete page instead of presenting the card before its media.
+  const isEager = index < 24;
   const normalizedSlug = (developer.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const officialFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
@@ -108,7 +112,9 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                 loading={isEager ? "eager" : "lazy"}
                 referrerPolicy="no-referrer"
                 decoding="async"
-                onError={() => setHeroIndex((current) => Math.min(current + 1, candidates.length))}
+                onError={() => setHeroIndex((current) =>
+                  current + 1 < candidates.length ? current + 1 : current,
+                )}
                 onLoad={(event) => {
                   const image = event.currentTarget;
                   // Premium quality gate: skip low-resolution artwork, but
@@ -177,7 +183,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         {/* LOCKED (PASS 273): the rectangular logo plate always straddles the
             photo seam and sits ABOVE the card — present on every developer card
             whether or not verified project photography exists. */}
-        <div className="absolute bottom-0 left-4 z-20 h-[72px] w-32 translate-y-1/2">
+        <div className="absolute bottom-0 left-4 z-20 h-[72px] w-36 translate-y-1/2">
           <DeveloperLogo
             variant="bare"
             src={developerLogoUrl}
@@ -187,7 +193,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
             loading="eager"
             size="md"
-            className="!h-full !w-full !p-1.5 !rounded-lg"
+            className="!h-full !w-full !p-2 !rounded-lg"
           />
         </div>
 
