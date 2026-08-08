@@ -299,6 +299,7 @@ Deno.serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const batch_size: number = Math.min(Math.max(Number(body?.batch_size) || 5, 1), 25);
     const explicit_ids: string[] = Array.isArray(body?.developer_ids) ? body.developer_ids : [];
+    const retry_unavailable = body?.retry_unavailable === true;
 
     let q = supabase
       .from("developers")
@@ -306,6 +307,8 @@ Deno.serve(async (req) => {
 
     if (explicit_ids.length > 0) {
       q = q.in("id", explicit_ids).neq("logo_status", "approved");
+    } else if (retry_unavailable) {
+      q = q.in("logo_status", ["missing", "unavailable"]).order("logo_last_attempt_at", { ascending: true, nullsFirst: true }).limit(batch_size);
     } else {
       q = q.eq("logo_status", "missing").order("name").limit(batch_size);
     }
@@ -320,13 +323,22 @@ Deno.serve(async (req) => {
 
     // Process in background so we don't hit the 150s request idle timeout.
     const task = (async () => {
-      for (const d of devs as DevRow[]) {
-        try {
-          await processDeveloper(supabase, FIRECRAWL_API_KEY, d);
-        } catch (e: any) {
-          console.error(`[process ${d.name}]`, e?.message);
+      const queue = devs as DevRow[];
+      // A small worker pool completes full 25-record batches within the edge
+      // runtime while remaining gentle on official sites and Firecrawl.
+      let cursor = 0;
+      async function worker() {
+        while (cursor < queue.length) {
+          const d = queue[cursor++];
+          if (!d) return;
+          try {
+            await processDeveloper(supabase, FIRECRAWL_API_KEY, d);
+          } catch (e: any) {
+            console.error(`[process ${d.name}]`, e?.message);
+          }
         }
       }
+      await Promise.all(Array.from({ length: Math.min(5, queue.length) }, () => worker()));
     })();
     // @ts-ignore EdgeRuntime is available in Supabase edge runtime
     if (typeof EdgeRuntime !== "undefined" && EdgeRuntime?.waitUntil) {
