@@ -216,7 +216,7 @@ export default function InnovationLabSection() {
 
           {/* ---------- 3D stage: one readable panel, deck receding behind ---------- */}
           <div
-            className="order-1 lg:order-2"
+            className="order-2 lg:order-2"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
           >
