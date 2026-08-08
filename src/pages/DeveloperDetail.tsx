@@ -23,6 +23,7 @@ import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/de
 
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
 import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
 import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
@@ -489,10 +490,12 @@ const DeveloperDetail = () => {
   ].filter(s => s.value !== null);
 
   const verifiedFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
-  const heroImageUrl = verifiedFlagship
-    || (projects || []).map((project) => project.cover_image_url).find(isUsableDeveloperCover)
+  const heroImageUrl = (projects || []).map((project) => project.cover_image_url).find(isUsableDeveloperCover)
     || (projects || []).map((project) => project.card_image_url).find(isUsableDeveloperCover)
-    || (projects || []).map((project) => project.gallery_start_image_url).find(isUsableDeveloperCover);
+    || (projects || []).map((project) => project.gallery_start_image_url).find(isUsableDeveloperCover)
+    || (isUsableDeveloperCover(developer.feature_image_url) ? developer.feature_image_url : undefined)
+    || verifiedFlagship;
+  const developerLogoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
 
 
   const competitorDevelopers = (allDevelopers || [])
@@ -512,7 +515,7 @@ const DeveloperDetail = () => {
         title={`${developer.name} | UAE Property Developer`}
         description={(safeDeveloperDescription || `Explore ${developer.name} property projects in Dubai and the UAE. ${developer.completed_projects ? `${developer.completed_projects.toLocaleString()}+ units delivered. ` : ""}Off-plan and ready properties on JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
         canonicalPath={`/developer/${slug}`}
-        ogImage={heroImageUrl || developer.logo_url}
+        ogImage={heroImageUrl || developerLogoUrl}
         breadcrumbItems={[
           { name: 'Home', path: '/' },
           { name: 'Developers', path: '/developers' },
@@ -592,7 +595,7 @@ const DeveloperDetail = () => {
           {/* Logo plate — gold border, padded so wide wordmarks (EMAAR, DAMAC) fit */}
           {/* PASS 273 unified plate: emerald pair gradient + white knocked-out mark */}
           <DeveloperLogo
-            src={developer.logo_url}
+            src={developerLogoUrl}
             alt={`${developer.name} logo`}
             name={developer.name}
             websiteUrl={(developer as any).website_url || (developer as any).website}
