@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
@@ -97,6 +97,7 @@ export function DeveloperLogo({
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
   // Curated official artwork keyed by developer name always wins over an
@@ -131,6 +132,10 @@ export function DeveloperLogo({
     : isLaraix
       ? laraixTransparent.url
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
+  useEffect(() => {
+    setError(false);
+    setImageLoaded(false);
+  }, [resolvedSrc]);
   // Every curated asset above is shipped pre-knocked-out to pure white, so it
   // must render as-is (no invert, no screen blend).
   const isCuratedWhiteArtwork =
@@ -150,7 +155,7 @@ export function DeveloperLogo({
     (hasCuratedArtwork || !override.forceNameplate);
 
   const needsDarkPlate = !dataKeepGold;
-  const compactPlate = size === "sm" ? "h-10 w-20" : "h-14 w-28";
+  const compactPlate = size === "sm" ? "h-10 w-20" : "h-[72px] w-32";
 
   // When no official artwork is available, the plate keeps the developer
   // identity with a white wordmark (never a blank/invisible slot).
@@ -184,10 +189,17 @@ export function DeveloperLogo({
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
     <div
-      className={cn(containerClass)}
+      className={cn(
+        containerClass,
+        // The surface and artwork reveal as one atomic identity plate. This
+        // prevents the emerald rectangle painting first while a lazy logo is
+        // still downloading.
+        imageLoaded ? "opacity-100" : "opacity-0",
+      )}
       data-keep-gold={dataKeepGold}
       data-developer-logo={embedded ? undefined : "database"}
       data-developer-logo-content={embedded ? "true" : undefined}
+      data-logo-loaded={imageLoaded ? "true" : "false"}
     >
       <img
         src={url}
@@ -204,6 +216,7 @@ export function DeveloperLogo({
             onError?.();
             return;
           }
+          setImageLoaded(true);
         }}
         onError={() => {
           setError(true);
@@ -212,7 +225,10 @@ export function DeveloperLogo({
 
         className={cn(
           "block w-full h-full object-contain",
-          scale === "compact" ? "rounded-sm p-1" : "rounded-md p-1",
+          scale === "compact" ? "rounded-sm p-0.5" : "rounded-md p-0.5",
+          // ADE's official square export contains generous transparent space.
+          // Enlarge the untouched artwork within the plate without cropping it.
+          /^adeproperties(?:llc)?$/.test(normalizedIdentity) && "scale-[1.45]",
         )}
         style={{
           // Paint rules live in getLogoPaintStyle (see STYLING GUARD above) and

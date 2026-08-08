@@ -118,6 +118,27 @@ describe("DeveloperLogo rendering guard", () => {
     }
   });
 
+  it("keeps the emerald surface hidden until its logo is ready", () => {
+    const { container } = renderLogo({
+      name: "Some Unknown Developer",
+      src: "https://cdn.example.com/logo.png",
+      variant: "bare",
+    });
+    const plate = container.firstElementChild as HTMLElement;
+    expect(plate.className).toMatch(/opacity-0/);
+    expect(plate.getAttribute("data-logo-loaded")).toBe("false");
+  });
+
+  it("uses the premium wide plate dimensions for listing logos", () => {
+    const { container } = renderLogo({
+      name: "Some Unknown Developer",
+      src: "https://cdn.example.com/logo.png",
+      variant: "bare",
+      size: "md",
+    });
+    expect(container.firstElementChild?.className).toMatch(/h-\[72px\].*w-32/);
+  });
+
   it("falls back to a readable white wordmark instead of an empty slot", () => {
     const { container, getByText } = renderLogo({
       name: "Developer Without Logo",

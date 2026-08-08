@@ -191,7 +191,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         {/* LOCKED (PASS 273): the rectangular logo plate always straddles the
             photo seam and sits ABOVE the card — present on every developer card
             whether or not verified project photography exists. */}
-        <div className="absolute bottom-0 left-4 z-20 flex h-16 w-28 items-center justify-center overflow-hidden translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] p-1.5 shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
+        <div className="absolute bottom-0 left-4 z-20 h-[72px] w-32 translate-y-1/2">
           {developerLogoUrl ? (
             <DeveloperLogo
               variant="bare"
@@ -200,10 +200,9 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               alt={`${developer.name} logo`}
               websiteUrl={(developer as { website_url?: string | null }).website_url}
               needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
-              loading={isEager ? "eager" : "lazy"}
-              embedded
+              loading="eager"
               size="md"
-              className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
+              className="!h-full !w-full !p-1.5 !rounded-lg"
             />
           ) : null}
         </div>
