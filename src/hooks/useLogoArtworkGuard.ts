@@ -26,6 +26,15 @@ function analyze(url: string): Promise<LogoArtworkVerdict> {
   const task = new Promise<LogoArtworkVerdict>((resolve) => {
     // SVG marks are vector brand files and are never baked onto a slab.
     if (/\.svg(\?|$)/i.test(url)) return resolve("ok");
+    // Only analyse origins that serve CORS headers (our own storage / app
+    // assets). Third-party CDNs would fail the canvas read and log noise.
+    const analysable =
+      url.startsWith("/") ||
+      url.startsWith("data:") ||
+      url.includes("supabase.co/storage/") ||
+      (typeof window !== "undefined" && url.startsWith(window.location.origin));
+    if (!analysable) return resolve("unknown");
+
 
     const img = new Image();
     img.crossOrigin = "anonymous";
