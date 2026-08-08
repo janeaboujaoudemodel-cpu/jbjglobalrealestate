@@ -32,12 +32,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
   const isEager = index < 8;
+  const normalizedSlug = (developer.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const candidates = useMemo(() => [...new Set([
-    OFFICIAL_FLAGSHIP_MEDIA[(developer.slug || developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "")],
+    OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug],
+    OFFICIAL_FLAGSHIP_MEDIA[normalizedName],
     ...heroImageUrls,
     developer.feature_image_url,
     heroImageUrl,
-  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, developer.name, developer.slug, heroImageUrl, heroImageUrls]);
+  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, heroImageUrl, heroImageUrls, normalizedName, normalizedSlug]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
