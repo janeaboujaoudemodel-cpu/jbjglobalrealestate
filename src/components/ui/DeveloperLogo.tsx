@@ -52,6 +52,37 @@ const UNIFIED_PLATE =
 
 const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
 
+/**
+ * STYLING GUARD (single source of truth for logo paint).
+ * Rules that must never regress:
+ *  - Artwork that is already white/light (curated knockouts, gold identity
+ *    plates, or needsInvert === false) is rendered as-is: no invert filter and
+ *    no screen blend. Inverting light artwork produced black-on-emerald or an
+ *    erased (blank) plate.
+ *  - Only unknown/dark artwork gets the `brightness(0) invert(1)` + `screen`
+ *    knockout, which cannot produce a white block because screen blending
+ *    removes the artwork's own white canvas.
+ *  - An explicit override always wins so curated per-developer paint is honored.
+ */
+export function getLogoPaintStyle(opts: {
+  isLightArtwork?: boolean | null;
+  keepGold?: boolean | string;
+  needsInvert?: boolean | null;
+  overrideFilter?: string;
+  overrideBlendMode?: string;
+}): { filter: string; mixBlendMode: "normal" | "screen" } {
+  const alreadyWhite =
+    !!opts.isLightArtwork || !!opts.keepGold || opts.needsInvert === false;
+  return {
+    filter: opts.overrideFilter ?? (alreadyWhite ? "none" : "brightness(0) invert(1)"),
+    mixBlendMode:
+      (opts.overrideBlendMode as "normal" | "screen") ??
+      (alreadyWhite ? "normal" : "screen"),
+  };
+}
+
+
+
 
 
 export function DeveloperLogo({
@@ -112,6 +143,11 @@ export function DeveloperLogo({
     : isLaraix
       ? laraixTransparent.url
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
+  // Every curated asset above is shipped pre-knocked-out to pure white, so it
+  // must render as-is (no invert, no screen blend).
+  const isCuratedWhiteArtwork =
+    !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers;
+
   // A real canonical/website logo always wins. Historical forceNameplate
   // overrides created text substitutes and blank-looking blocks, which are no
   // longer permitted on public cards.
@@ -191,20 +227,17 @@ export function DeveloperLogo({
           scale === "compact" ? "rounded-sm p-1" : "rounded-md p-1",
         )}
         style={{
-          // Emerald overlays: white artwork only, with no white backing tile.
-          // For opaque JPG logos, invert first so their white canvas becomes
-          // black; screen blending then removes that canvas and leaves the
-          // original dark wordmark as a clean white knockout.
-          // Light artwork (needsInvert === false) is already white/pale, so it
-          // must NOT be inverted — inverting turned it black and screen blending
-          // then erased it, leaving an empty emerald plate.
-          filter:
-            override.imageFilter ??
-            (verifiedWhiteLogo || dataKeepGold || needsInvert === false ? "none" : "brightness(0) invert(1)"),
-          mixBlendMode:
-            override.imageBlendMode ??
-            (verifiedWhiteLogo || dataKeepGold || needsInvert === false ? "normal" : "screen"),
+          // Paint rules live in getLogoPaintStyle (see STYLING GUARD above) and
+          // are covered by src/test/developer-logo-paint.regression.test.tsx.
+          ...getLogoPaintStyle({
+            isLightArtwork: isCuratedWhiteArtwork,
+            keepGold: dataKeepGold,
+            needsInvert,
+            overrideFilter: override.imageFilter,
+            overrideBlendMode: override.imageBlendMode,
+          }),
         }}
+
       />
     </div>
   );

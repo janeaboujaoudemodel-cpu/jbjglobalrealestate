@@ -1,0 +1,142 @@
+import { describe, it, expect } from "vitest";
+import { render } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { DeveloperLogo, getLogoPaintStyle } from "@/components/ui/DeveloperLogo";
+
+/**
+ * LOGO RENDERING GUARD
+ * Locks the two failure modes the owner rejected:
+ *  1. Light/white artwork must never be inverted (turns black or erases to blank).
+ *  2. A logo plate must never render as a white block, and never as an empty slot.
+ */
+
+const paint = (el: HTMLElement) => ({
+  filter: el.style.filter,
+  blend: el.style.mixBlendMode,
+});
+
+describe("getLogoPaintStyle", () => {
+  it("never inverts curated white artwork", () => {
+    expect(getLogoPaintStyle({ isLightArtwork: true })).toEqual({
+      filter: "none",
+      mixBlendMode: "normal",
+    });
+  });
+
+  it("never inverts artwork flagged as already light", () => {
+    expect(getLogoPaintStyle({ needsInvert: false })).toEqual({
+      filter: "none",
+      mixBlendMode: "normal",
+    });
+  });
+
+  it("never inverts the gold identity plate", () => {
+    expect(getLogoPaintStyle({ keepGold: true })).toEqual({
+      filter: "none",
+      mixBlendMode: "normal",
+    });
+  });
+
+  it("knocks unknown/dark artwork out to white with screen blending", () => {
+    expect(getLogoPaintStyle({ needsInvert: true })).toEqual({
+      filter: "brightness(0) invert(1)",
+      mixBlendMode: "screen",
+    });
+  });
+
+  it("honors curated per-developer overrides", () => {
+    expect(
+      getLogoPaintStyle({
+        needsInvert: true,
+        overrideFilter: "none",
+        overrideBlendMode: "normal",
+      }),
+    ).toEqual({ filter: "none", mixBlendMode: "normal" });
+  });
+});
+
+const renderLogo = (props: Parameters<typeof DeveloperLogo>[0]) =>
+  render(
+    <MemoryRouter>
+      <DeveloperLogo {...props} />
+    </MemoryRouter>,
+  );
+
+describe("DeveloperLogo rendering guard", () => {
+  const curated = [
+    "ADE Properties",
+    "AG Properties",
+    "AIZN Development",
+    "AMIS Development",
+    "ANAX Developments",
+    "Dubai South Properties",
+  ];
+
+  it.each(curated)("renders %s curated artwork uninverted", (name) => {
+    const { container } = renderLogo({ name, alt: name, variant: "card" });
+    const img = container.querySelector("img") as HTMLImageElement;
+    expect(img).toBeTruthy();
+    expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
+  });
+
+  it("knocks dark database artwork out to white instead of leaving it dark", () => {
+    const { container } = renderLogo({
+      name: "Some Unknown Developer",
+      src: "https://cdn.example.com/logo.png",
+      variant: "card",
+    });
+    const img = container.querySelector("img") as HTMLImageElement;
+    expect(paint(img)).toEqual({
+      filter: "brightness(0) invert(1)",
+      blend: "screen",
+    });
+  });
+
+  it("does not invert light artwork coming from the database", () => {
+    const { container } = renderLogo({
+      name: "Light Artwork Developer",
+      src: "https://cdn.example.com/white-logo.png",
+      needsInvert: false,
+      variant: "card",
+    });
+    const img = container.querySelector("img") as HTMLImageElement;
+    expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
+  });
+
+  it("never paints a white plate background on any variant", () => {
+    for (const variant of ["tile", "bare", "card", "nameplate"] as const) {
+      const { container, unmount } = renderLogo({
+        name: "Some Unknown Developer",
+        src: "https://cdn.example.com/logo.png",
+        variant,
+      });
+      const plate = container.firstElementChild as HTMLElement;
+      const cls = plate.className;
+      expect(cls).not.toMatch(/bg-white|bg-\[#fff|bg-ivory|bg-background/i);
+      expect(cls).toMatch(/#042C1C/);
+      unmount();
+    }
+  });
+
+  it("falls back to a readable white wordmark instead of an empty slot", () => {
+    const { container, getByText } = renderLogo({
+      name: "Developer Without Logo",
+      src: null,
+      variant: "card",
+    });
+    expect(container.querySelector("img")).toBeNull();
+    const label = getByText("Developer Without Logo");
+    expect(label.className).toMatch(/text-white/);
+    expect(container.firstElementChild?.className).toMatch(/#042C1C/);
+  });
+
+  it("uses dark text on the gold identity plate for contrast", () => {
+    const { getByText } = renderLogo({
+      name: "Developer Without Logo",
+      src: null,
+      variant: "card",
+      "data-keep-gold": true,
+    });
+    expect(getByText("Developer Without Logo").className).toMatch(/#042C1C/);
+  });
+});
