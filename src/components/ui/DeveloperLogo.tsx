@@ -54,6 +54,7 @@ export function DeveloperLogo({
   name,
   websiteUrl,
   variant = "tile",
+  size = "md",
   embedded = false,
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
@@ -83,6 +84,7 @@ export function DeveloperLogo({
   const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error;
 
   const needsDarkPlate = !dataKeepGold;
+  const compactPlate = size === "sm" ? "h-10 w-20" : "h-14 w-28";
 
   // Public cards must never invent a typographic logo from the developer name.
   // If the canonical, curated, or website-derived official artwork is missing,
@@ -145,13 +147,15 @@ export function DeveloperLogo({
   if (variant === "bare") {
     if (!valid) {
       return renderEmptyPlate(cn(
-        "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
+        compactPlate,
+        "inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
         embedded ? "bg-transparent border-0 shadow-none" : logoPlateSurface(false),
         className,
       ));
     }
     return renderImage(resolvedSrc as string, cn(
-      "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
+      compactPlate,
+      "inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
       embedded ? "bg-transparent border-0 shadow-none" : logoPlateSurface(needsDarkPlate),
       className,
     ));
