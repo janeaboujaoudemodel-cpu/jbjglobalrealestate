@@ -37,13 +37,27 @@ const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
 const isUsableProjectMedia = (value: string) =>
   !/(?:logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/16x16\/)/i.test(value);
 
+const getPublicDeveloperName = (name: string) => {
+  if (/^aizn\b/i.test(name)) return "AIZN Development";
+  return name
+    .replace(/\s*\((?:l\.?l\.?c\.?|pjsc)\)\s*$/i, "")
+    .replace(/\s+(?:l\.?l\.?c\.?|pjsc)\s*$/i, "")
+    .trim();
+};
+
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
   const isEager = index < 8;
   const normalizedSlug = (developer.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
-  const officialFlagship = normalizedSlug.includes("omniyat") || normalizedName.includes("omniyat")
+  const officialFlagship = normalizedSlug.includes("alfahadholding") || normalizedName.includes("alfahadholding")
+    ? OFFICIAL_FLAGSHIP_MEDIA.alfahadholding
+    : normalizedSlug.includes("amisdevelopment") || normalizedName.includes("amisdevelopment")
+      ? OFFICIAL_FLAGSHIP_MEDIA.amisdevelopment
+      : normalizedSlug.includes("anaxdevelopment") || normalizedName.includes("anaxdevelopment")
+        ? OFFICIAL_FLAGSHIP_MEDIA.anaxdevelopments
+        : normalizedSlug.includes("omniyat") || normalizedName.includes("omniyat")
     ? OFFICIAL_FLAGSHIP_MEDIA.omniyat
     : OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug] || OFFICIAL_FLAGSHIP_MEDIA[normalizedName];
   const developerFeatureImage = (developer as { feature_image_url?: string | null }).feature_image_url || undefined;
@@ -187,7 +201,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-10">
 
           <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 break-words">
-            {developer.name}
+            {getPublicDeveloperName(developer.name)}
           </h3>
 
           <div className="flex-1 min-h-[36px]">
