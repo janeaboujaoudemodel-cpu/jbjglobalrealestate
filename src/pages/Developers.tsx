@@ -10,6 +10,8 @@ import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Button } from "@/components/ui/button";
+import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
@@ -44,10 +46,21 @@ const Developers = () => {
   const filteredDevelopers = useMemo(() => {
     if (!developers) return [];
     
-    // Never remove a developer because an asset is missing or under audit.
-    // The shared card/logo components own graceful rendering; the directory
-    // must preserve the complete database catalog.
-    let filtered = [...developers];
+    // Public quality gate: incomplete identities stay in the owner audit queue,
+    // never as empty emerald plates or synthetic cover fields on the live site.
+    let filtered = developers.filter((developer) => {
+      const key = normalizeDeveloperName(developer.name);
+      const logo = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
+      const coverCandidates = [
+        ...(projectStats?.imageCandidates?.[developer.id] || []),
+        ...(projectStats?.imageCandidatesByName?.[key] || []),
+        topProjectImageByDev[developer.id],
+        projectStats?.imagesByName?.[key],
+        developer.feature_image_url,
+        getVerifiedDeveloperFlagship(developer.name, developer.slug),
+      ];
+      return Boolean(logo) && coverCandidates.some(isUsableDeveloperCover);
+    });
 
     // Search filter (name only for accuracy)
     const q = (search.q || "").trim().toLowerCase();

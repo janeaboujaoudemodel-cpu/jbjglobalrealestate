@@ -250,4 +250,21 @@ describe("DeveloperLogo rendering guard", () => {
     });
     expect(container.textContent).not.toContain("Developer Without Logo");
   });
+
+  it("keeps every semantic wordmark size inside the same protected safe area", () => {
+    for (const size of ["micro", "sm", "md", "lg"] as const) {
+      const { container, unmount } = renderLogo({
+        name: "Official Developer",
+        src: "https://cdn.example.com/official-logo.png",
+        variant: "bare",
+        size,
+      });
+      const img = container.querySelector("img") as HTMLImageElement;
+      expect(img.className).toMatch(/object-contain/);
+      expect(img.className).toMatch(/object-center/);
+      expect(img.className).toMatch(/p-3/);
+      expect(img.className).not.toMatch(/object-cover/);
+      unmount();
+    }
+  });
 });

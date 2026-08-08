@@ -122,6 +122,11 @@ export function isWrongBrandLogoFile(url: unknown, name: unknown): boolean {
 export function getDeveloperLogoUrl(developer: unknown): string | null {
   const dev = normalizeDeveloper(developer);
   if (!dev) return null;
+  // Curated, audited artwork is the canonical source whenever it exists. This
+  // must run before the database URL because several legacy rows still point
+  // at opaque slabs, expired remote files, or processed mirrors.
+  const verifiedWhite = getVerifiedWhiteLogo(dev.name);
+  if (verifiedWhite) return verifiedWhite;
   const url = dev.logo_url;
   const mirrored = getOfficialLogoMirror(url, dev.name);
   if (mirrored) return mirrored;

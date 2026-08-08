@@ -43,9 +43,9 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const candidates = useMemo(() => {
     const verifiedOnly = normalizedSlug.includes("alfahadholding") || normalizedName.includes("alfahadholding");
     return [...new Set([
-      officialFlagship,
       ...(verifiedOnly ? [] : heroImageUrls),
       ...(verifiedOnly ? [] : [heroImageUrl, developerFeatureImage]),
+      officialFlagship,
     ].filter((value): value is string => Boolean(value) && isUsableDeveloperCover(value)))];
   }, [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage, normalizedName, normalizedSlug]);
   const [heroIndex, setHeroIndex] = useState(0);
@@ -135,35 +135,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                   project photo is used as the card hero. It always rides on the
                   photo as a plate, with automatic light/dark plate contrast. */}
             </>
-          ) : (
-            /* No verified project photography on file yet: render a silent
-               architectural blueprint field. Never a status message, never a
-               logo substituted for real estate media. */
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)]"
-            >
-              <div
-                className="absolute inset-0 opacity-[0.22]"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(rgba(255,255,255,0.30) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.30) 1px, transparent 1px)",
-                  backgroundSize: "34px 34px",
-                }}
-              />
-              <div
-                className="absolute inset-0 opacity-[0.16]"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(135deg, transparent 46%, rgba(184,149,85,0.9) 47%, rgba(184,149,85,0.9) 48%, transparent 49%)",
-                  backgroundSize: "120px 120px",
-                }}
-              />
-              <div className="absolute inset-x-6 bottom-6 h-[38%] border border-white/25 rounded-sm" />
-              <div className="absolute left-10 bottom-6 h-[58%] w-[26%] border border-white/20 rounded-sm" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-            </div>
-          )}
+          ) : null}
 
 
 
