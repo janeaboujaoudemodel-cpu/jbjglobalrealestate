@@ -79,18 +79,25 @@ function getOfficialLogoMirror(url: unknown, name: unknown): string | null {
   }
   if (typeof url === "string") {
     const byUrl = OFFICIAL_LOGO_MIRRORS.find((entry) => entry.match.test(url));
-    const brandToken = /emaar/i.test(url) ? /\bemaar\b/i : null;
-    const brandMatchesName =
-      !brandToken || (typeof name === "string" && brandToken.test(name));
-    if (byUrl && brandMatchesName) return byUrl.logo;
-    // Wrong-brand artwork is not a valid logo for this developer.
-    if (byUrl && !brandMatchesName) return null;
-  }
-  if (typeof name === "string" && name.trim()) {
-    const byName = OFFICIAL_LOGOS_BY_NAME.find((entry) => entry.match.test(name));
-    if (byName) return byName.logo;
+    if (byUrl && !isWrongBrandLogoFile(url, name)) return byUrl.logo;
   }
   return null;
+}
+
+// Brand tokens baked into shared CDN filenames. When the file belongs to a
+// different brand than the developer, the artwork is rejected outright — a card
+// must never display another developer's mark.
+const LOGO_FILE_BRAND_TOKENS: Array<{ file: RegExp; brand: RegExp }> = [
+  { file: /emaar_properties_f2c4d0a72c/i, brand: /\bemaar\b/i },
+  { file: /binghattiweb/i, brand: /binghatti/i },
+  { file: /nakheel-log/i, brand: /nakheel/i },
+];
+
+export function isWrongBrandLogoFile(url: unknown, name: unknown): boolean {
+  if (typeof url !== "string" || typeof name !== "string") return false;
+  return LOGO_FILE_BRAND_TOKENS.some(
+    (entry) => entry.file.test(url) && !entry.brand.test(name),
+  );
 }
 
 /**
@@ -104,6 +111,7 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
   const url = dev.logo_url;
   const mirrored = getOfficialLogoMirror(url, dev.name);
   if (mirrored) return mirrored;
+  if (isWrongBrandLogoFile(url, dev.name)) return null;
   return isAllowedLogoUrl(url) ? url : null;
 }
 
