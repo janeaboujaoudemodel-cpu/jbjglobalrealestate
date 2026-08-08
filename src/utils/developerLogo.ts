@@ -14,6 +14,7 @@
  * Supabase joins can return either an array (when expanded) or an object,
  * so this resolver handles both safely.
  */
+import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
 
 const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /screenshot/i,

@@ -2,15 +2,12 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
+import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
 import agPropertiesWhite from "@/assets/developer-logos/ag-properties-white.png";
 import dubaiSouthWhite from "@/assets/developer-logos/dubai-south-white.png.asset.json";
-import adeVerifiedWhite from "@/assets/developer-logos/verified-local/ade-white.png";
 import agVerifiedWhite from "@/assets/developer-logos/verified-local/ag-white.png";
-import aiznVerifiedWhite from "@/assets/developer-logos/verified-local/aizn-white.png";
-import amisVerifiedWhite from "@/assets/developer-logos/verified-local/amis-white.png";
-import anaxVerifiedWhite from "@/assets/developer-logos/verified-local/anax-white.png";
 
 const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
 
