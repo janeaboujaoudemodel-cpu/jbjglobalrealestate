@@ -1,3 +1,4 @@
+import { setAreaUnitGlobal } from "@/hooks/useAreaUnit";
 import React, { useState, forwardRef } from "react";
 import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles, Star, Check, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -232,8 +233,14 @@ const ProjectFilters = ({
     key: K,
     value: FilterState[K]
   ) => {
+    // The area unit is a global preference — keep the header switch and the
+    // filter panel in lockstep so cards never disagree with the header.
+    if (key === "sizeUnit" && (value === "sqft" || value === "sqm")) {
+      setAreaUnitGlobal(value);
+    }
     onFiltersChange({ ...filters, [key]: value });
   };
+
 
   const toggleArrayFilter = (key: "views" | "amenities" | "facilities", value: string) => {
     const currentArray = filters[key];

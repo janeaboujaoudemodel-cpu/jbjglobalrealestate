@@ -23,6 +23,9 @@ import ListingLabels from "@/components/property/ListingLabels";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 import { formatBedroomRange } from "@/utils/formatBedroomRange";
 import { isGalleryPhoto } from "@/lib/media/classifyProjectImage";
+import { useAreaUnit } from "@/hooks/useAreaUnit";
+import { useProjectCardPhotos } from "@/hooks/useProjectCardPhotos";
+
 
 const VERIFIED_CARD_MEDIA: Record<string, string> = {
   "a0d78087-ad89-4532-b237-8795aaa9524f": "https://api.reelly.io/vault/ZZLvFZFt/2vU167fSNHhf_s4DDM9mNt6fU68/04w3Yw../5.jpg",
@@ -101,12 +104,21 @@ const getCardPhaseLabel = (project: Project & { is_sold_out?: boolean | null }):
 // Sale status label resolver — visual style is owned by <CardBadge variant="status" />.
 const getSaleStatusLabel = resolveSaleStatusLabel;
 
-const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft', priority = false }: ProjectCardProps) => {
+const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit, priority = false }: ProjectCardProps) => {
   const { isOwner } = useUserRole();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  // Area unit follows the global header switch unless a caller pins one.
+  const { areaUnit } = useAreaUnit();
+  const effectiveSizeUnit: 'sqft' | 'sqm' = sizeUnit ?? areaUnit;
   // Card carousel only includes assets classified as genuine project photography.
   const images = project.images || [];
+  // Listing grids ship without photo rows; pull a small slice on hover intent so
+  // the gold hover arrows work from outside the project page too.
+  const { photos: lazyPhotos, prefetch: prefetchPhotos } = useProjectCardPhotos(
+    project.id,
+    images.length === 0,
+  );
   const primaryImageCandidates = useMemo(() => {
     const seen = new Set<string>();
     return [
@@ -118,6 +130,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       ...images
         .filter((image: any) => isGalleryPhoto({ url: image?.image_url, alt: image?.alt_text }))
         .map((image: any) => image?.image_url),
+      ...lazyPhotos.filter((url) => isGalleryPhoto({ url })),
       VERIFIED_CARD_MEDIA[project.id],
     ]
       .filter(isValidImageUrl)
@@ -128,12 +141,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         seen.add(key);
         return true;
       });
-  }, [images, priority, project.id, project.cover_image_url, (project as any).card_image_url, (project as any).gallery_start_image_url]);
+  }, [images, lazyPhotos, priority, project.id, project.cover_image_url, (project as any).card_image_url, (project as any).gallery_start_image_url]);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
   useEffect(() => {
-    setPrimaryImageIndex(0);
-  }, [project.id, primaryImageCandidates.join("|")]);
+    setPrimaryImageIndex((current) => (current < primaryImageCandidates.length ? current : 0));
+  }, [project.id, primaryImageCandidates.length]);
   const primaryImageUrl = primaryImageCandidates[primaryImageIndex] || null;
+
   const rawDeveloperName = project.developer?.name || project.developer_name || null;
   const developerName = isPropertyTypeOnlyLabel(rawDeveloperName) ? null : rawDeveloperName;
   const displayProjectName = cleanCardProjectName(project.name, developerName);
@@ -163,14 +177,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   // See src/utils/formatBedroomRange.ts for the locked rule.
   const getUnitTypesText = () => formatBedroomRange(project as any);
 
-  // Get size range text
+  // Get size range text — follows the active global area unit (sq ft / sq m).
   const getSizeText = () => {
     if (!project.size_min) return null;
-    const min = project.size_min.toLocaleString();
-    const max = project.size_max?.toLocaleString();
-    if (min === max || !max) return `${min} ${sizeUnit}`;
-    return `${min}-${max} ${sizeUnit}`;
+    const toUnit = (v: number) => (effectiveSizeUnit === 'sqm' ? Math.round(v * 0.092903) : v);
+    const min = toUnit(project.size_min).toLocaleString();
+    const max = project.size_max ? toUnit(project.size_max).toLocaleString() : undefined;
+
+    if (min === max || !max) return `${min} ${effectiveSizeUnit}`;
+    return `${min}-${max} ${effectiveSizeUnit}`;
   };
+
 
   // Truncate description for card preview - strip HTML + competitor refs
   const getTruncatedDescription = () => {
@@ -318,7 +335,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <div
             className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611] group/photo"
             data-surface="ink"
+           
+
+            onMouseEnter={prefetchPhotos}
+            onFocus={prefetchPhotos}
+            onTouchStart={prefetchPhotos}
           >
+
           <VerifiedMedia
             src={primaryImageUrl}
             alt={
