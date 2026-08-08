@@ -359,24 +359,26 @@ export function getSystemStatus(): typeof SYSTEM_STATUS {
 
 export const DEVELOPER_LOGO_LOCK = Object.freeze({
   STATUS: 'GLOBALLY_LOCKED',
-  LOCK_DATE: '2026-03-31',
+  LOCK_DATE: '2026-08-08',
 
   RULES: Object.freeze([
     'logo_url values in the database are READ-ONLY — no overwriting',
     'No fake initials, generated letters, or placeholder logos',
-    'Logo container styling (bg-[#FDFBF7]/90, object-contain, padding) is LOCKED',
-    'Only the database source of truth may provide logo_url values',
+    'Every public developer identity uses the canonical DeveloperLogo component and official artwork resolver',
+    'Official database artwork or a verified local white knockout of that same official artwork may provide the logo',
     'All Supabase developer joins MUST include logo_url',
     'Property images must NEVER be used as logo substitutes',
+    'Text, initials, generated marks, and project imagery are forbidden as logo substitutes',
+    'The emerald three-stop plate, pure-white artwork, object-contain fit, and normalized footprint are globally locked',
     'Changes require explicit Founder unlock authorization',
   ]),
 
   CONTAINER_SPEC: Object.freeze({
-    DEFAULT_SIZE: 'w-14 h-14',
-    BACKGROUND: 'bg-[#FDFBF7]',
+    DEFAULT_SIZE: 'h-[72px] w-36',
+    BACKGROUND: 'linear-gradient(155deg,#064E3B 0%,#042C1C 58%,#000000 100%)',
     FIT: 'object-contain',
     PADDING: 'p-1.5',
-    BORDER_RADIUS: 'rounded-xl',
+    BORDER_RADIUS: 'rounded-lg',
     SHADOW: 'shadow-md',
     SHRINK: 'shrink-0',
     COMPONENT: 'DeveloperLogo from src/components/ui/DeveloperLogo.tsx',
@@ -384,12 +386,13 @@ export const DEVELOPER_LOGO_LOCK = Object.freeze({
   }),
 
   FALLBACK: Object.freeze({
-    ALLOWED: 'Building2 icon only',
+    ALLOWED: 'No public fallback; source official artwork and add it to the verified resolver',
     FORBIDDEN: Object.freeze([
       'initial-letter fallbacks',
       'generated monograms',
       'placeholder images',
       'property photos as logos',
+      'typed developer-name wordmarks',
     ]),
   }),
 });

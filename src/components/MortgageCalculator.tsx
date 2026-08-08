@@ -13,6 +13,7 @@ import {
 
 import MortgageAIAssistant from "@/components/mortgage/MortgageAIAssistant";
 import MortgageParityPanel from "@/components/mortgage/MortgageParityPanel";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface MortgageProject {
   id: string;
@@ -268,8 +269,15 @@ const MortgageCalculator = ({
             boxShadow: "0 0 24px rgba(184,149,85,0.18)",
           }}
         >
-          {selectedProject.developer?.logo_url ? (
-            <img src={selectedProject.developer.logo_url} alt="" className="w-10 h-10 rounded-xl object-contain bg-white/90 p-1"  loading="lazy" decoding="async" />
+          {selectedProject.developer?.name ? (
+            <DeveloperLogo
+              src={selectedProject.developer.logo_url}
+              name={selectedProject.developer.name}
+              alt={`${selectedProject.developer.name} logo`}
+              variant="bare"
+              size="sm"
+              className="!w-20 !h-10 !rounded-lg !p-1"
+            />
           ) : (
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(184,149,85,0.18)" }}>
               <Building2 className="w-5 h-5 allow-white" style={{ color: "#BFDBFE" }} />
@@ -330,8 +338,15 @@ const MortgageCalculator = ({
                   className="allow-white w-full flex items-center gap-3 p-3 text-left transition-colors hover:bg-white/10"
                   data-no-contrast-guard
                 >
-                  {project.developer?.logo_url ? (
-                    <img src={project.developer.logo_url} alt="" className="w-9 h-9 rounded-lg object-contain bg-white/90 p-1"  loading="lazy" decoding="async" />
+                  {project.developer?.name ? (
+                    <DeveloperLogo
+                      src={project.developer.logo_url}
+                      name={project.developer.name}
+                      alt={`${project.developer.name} logo`}
+                      variant="bare"
+                      size="sm"
+                      className="!w-20 !h-10 !rounded-lg !p-1"
+                    />
                   ) : (
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(184,149,85,0.16)" }}>
                       <Building2 className="w-4 h-4 allow-white" style={{ color: "#BFDBFE" }} />
