@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logAdminEdit } from "@/hooks/useAdminEditLog";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProjectImage {
   id: string;
@@ -31,6 +32,7 @@ type ImageRole = "card" | "hero" | "gallery";
 
 const isVideoFile = (file: File) => file.type.startsWith("video/") || /\.(mp4|mov|webm|ogg|m4v)(\?|$)/i.test(file.name);
 const isImageFile = (file: File) => file.type.startsWith("image/") || /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(file.name);
+const MEDIA_BUCKET = "project-media";
 
 const ROLE_CONFIG: Record<ImageRole, { label: string; icon: typeof Star; color: string; field: string }> = {
   card: { label: "Card", icon: CreditCard, color: "bg-blue-500", field: "card_image_url" },
@@ -39,6 +41,12 @@ const ROLE_CONFIG: Record<ImageRole, { label: string; icon: typeof Star; color: 
 };
 
 export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerProps) {
+  const queryClient = useQueryClient();
+  const refreshPublicMedia = () => {
+    queryClient.invalidateQueries({ queryKey: ["project"] });
+    queryClient.invalidateQueries({ queryKey: ["projects"] });
+    queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === "handpicked-projects-v3-owner-controlled" });
+  };
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -84,6 +92,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
       });
 
       toast.success(newValue ? `${ROLE_CONFIG[role].label} image set` : `${ROLE_CONFIG[role].label} image cleared`);
+      refreshPublicMedia();
       onRefresh();
     } catch (err: any) {
       toast.error(err.message || "Failed to set image role");
@@ -97,8 +106,10 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
     setIsDeletingId(img.id);
     try {
       // Remove from storage if it's our file
+      const projectMediaParts = img.image_url.split("/project-media/");
       const relMediaParts = img.image_url.split("/rel-media/");
       const legacyParts = img.image_url.split("/project-files/");
+      if (projectMediaParts[1]) await supabase.storage.from(MEDIA_BUCKET).remove([projectMediaParts[1]]);
       if (relMediaParts[1]) await supabase.storage.from("rel-media").remove([relMediaParts[1]]);
       if (legacyParts[1]) await supabase.storage.from("project-files").remove([legacyParts[1]]);
 
@@ -125,6 +136,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
       });
 
       toast.success("Image deleted");
+      refreshPublicMedia();
       onRefresh();
     } catch (err: any) {
       toast.error(err.message || "Failed to delete image");
@@ -144,10 +156,10 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
       for (const file of Array.from(files)) {
         if (!isImageFile(file) && !isVideoFile(file)) continue;
         const fileName = `project-uploads/${project.id}/${crypto.randomUUID()}-${file.name}`;
-        const { error: uploadError } = await supabase.storage.from("rel-media").upload(fileName, file);
+        const { error: uploadError } = await supabase.storage.from(MEDIA_BUCKET).upload(fileName, file);
         if (uploadError) continue;
 
-        const { data: urlData } = supabase.storage.from("rel-media").getPublicUrl(fileName);
+        const { data: urlData } = supabase.storage.from(MEDIA_BUCKET).getPublicUrl(fileName);
         const { error: dbError } = isVideoFile(file)
           ? await supabase.from("project_videos").insert({
               project_id: project.id,
@@ -169,6 +181,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
 
       if (successCount > 0) {
         toast.success(`${successCount} image(s) uploaded`);
+        refreshPublicMedia();
         await logAdminEdit({
           entity_type: "project",
           entity_id: project.id,

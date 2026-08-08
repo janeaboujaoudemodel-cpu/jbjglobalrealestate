@@ -46,6 +46,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
     qc.invalidateQueries({ queryKey: ["project"] });
     qc.invalidateQueries({ queryKey: ["projects"] });
     qc.invalidateQueries({ queryKey: ["nearby-projects"] });
+    qc.invalidateQueries({ predicate: (query) => query.queryKey[0] === "handpicked-projects-v3-owner-controlled" });
   };
 
   const setAsCover = async (img: ImageRow) => {

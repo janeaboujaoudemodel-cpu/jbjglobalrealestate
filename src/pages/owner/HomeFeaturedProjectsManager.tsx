@@ -103,7 +103,10 @@ export default function HomeFeaturedProjectsManager() {
     },
   });
 
-  const invalidate = () => qc.invalidateQueries({ queryKey: ["owner-home-featured-projects-v2"] });
+  const invalidate = () => {
+    qc.invalidateQueries({ queryKey: ["owner-home-featured-projects-v2"] });
+    qc.invalidateQueries({ predicate: (query) => query.queryKey[0] === "handpicked-projects-v3-owner-controlled" });
+  };
 
   const byDevice = (d: Device) => featured.filter((f) => f.device === d).sort((a, b) => a.display_order - b.display_order);
 

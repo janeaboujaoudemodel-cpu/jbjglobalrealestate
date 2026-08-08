@@ -110,14 +110,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const primaryImageCandidates = useMemo(() => {
     const seen = new Set<string>();
     return [
-      VERIFIED_CARD_MEDIA[project.id],
+      // LOCKED: the owner-selected cover is authoritative on every listing
+      // surface. Profile/gallery/legacy overrides may only be fallbacks.
+      project.cover_image_url,
       (project as any).card_image_url,
       (project as any).gallery_start_image_url,
-      (project as any).hero_image_url,
       ...images
         .filter((image: any) => isGalleryPhoto({ url: image?.image_url, alt: image?.alt_text }))
         .map((image: any) => image?.image_url),
-      project.cover_image_url,
+      VERIFIED_CARD_MEDIA[project.id],
     ]
       .filter(isValidImageUrl)
       .map((url) => normalizeProvidentImageUrl(url, priority ? "928x624" : "464x312"))
@@ -127,7 +128,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         seen.add(key);
         return true;
       });
-  }, [images, priority, project.id, project.cover_image_url]);
+  }, [images, priority, project.id, project.cover_image_url, (project as any).card_image_url, (project as any).gallery_start_image_url]);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
   useEffect(() => {
     setPrimaryImageIndex(0);

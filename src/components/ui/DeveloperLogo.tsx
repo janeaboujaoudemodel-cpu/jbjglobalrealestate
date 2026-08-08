@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
+import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-transparent.png";
 
 interface DeveloperLogoProps {
   src?: string | null;
@@ -57,7 +58,17 @@ export function DeveloperLogo({
   const override = getDeveloperLogoOverride(name ?? alt);
   const fallbackLogo = getWebsiteLogoFallbackUrl(websiteUrl);
   const isLaraix = /laraix/i.test(name || alt || "");
-  const resolvedSrc = isLaraix ? laraixTransparent.url : (isValidDeveloperLogoUrl(src) ? src : fallbackLogo);
+  const isAbDevelopers = /^ab(?:developers?)?(?:llc)?$/i.test(
+    (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
+  );
+  // The database's official AB artwork is a gold mark baked onto a black
+  // square. Use the same official artwork with only that black field removed,
+  // rather than relying on browser blend modes that can produce a blank tile.
+  const resolvedSrc = isAbDevelopers
+    ? abDevelopersTransparent
+    : isLaraix
+      ? laraixTransparent.url
+      : (isValidDeveloperLogoUrl(src) ? src : fallbackLogo);
   const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error && !override.forceNameplate;
 
   const needsDarkPlate = !dataKeepGold;
@@ -125,12 +136,12 @@ export function DeveloperLogo({
         style={{
           // Emerald plates: knock the artwork out to pure white so every
           // wordmark reads at full contrast. Gold hero plate keeps dark ink.
-          filter: dataKeepGold
+          filter: override.imageBlendMode
             ? (override.imageFilter ?? "none")
-            : "brightness(0) invert(1)",
-          mixBlendMode: dataKeepGold
-            ? (override as { imageBlendMode?: React.CSSProperties["mixBlendMode"] }).imageBlendMode
-            : "normal",
+            : dataKeepGold
+              ? (override.imageFilter ?? "none")
+              : "brightness(0) invert(1)",
+          mixBlendMode: override.imageBlendMode ?? "normal",
         }}
       />
     </div>
