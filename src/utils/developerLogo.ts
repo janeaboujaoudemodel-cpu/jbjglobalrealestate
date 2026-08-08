@@ -14,6 +14,7 @@
  * Supabase joins can return either an array (when expanded) or an object,
  * so this resolver handles both safely.
  */
+import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
 
 const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /screenshot/i,
@@ -69,15 +70,35 @@ const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
 ];
 
 function getOfficialLogoMirror(url: unknown, name: unknown): string | null {
-  if (typeof url === "string") {
-    const byUrl = OFFICIAL_LOGO_MIRRORS.find((entry) => entry.match.test(url));
-    if (byUrl) return byUrl.logo;
-  }
+  // Name-first: a URL mirror may NEVER paint another brand's mark on a card.
+  // Some database rows carry the wrong CDN file (e.g. Ellington / Sobha Realty
+  // inherited Emaar's logo file), so a URL mirror only applies when the mirror
+  // brand also matches the developer name.
   if (typeof name === "string" && name.trim()) {
     const byName = OFFICIAL_LOGOS_BY_NAME.find((entry) => entry.match.test(name));
     if (byName) return byName.logo;
   }
+  if (typeof url === "string") {
+    const byUrl = OFFICIAL_LOGO_MIRRORS.find((entry) => entry.match.test(url));
+    if (byUrl && !isWrongBrandLogoFile(url, name)) return byUrl.logo;
+  }
   return null;
+}
+
+// Brand tokens baked into shared CDN filenames. When the file belongs to a
+// different brand than the developer, the artwork is rejected outright — a card
+// must never display another developer's mark.
+const LOGO_FILE_BRAND_TOKENS: Array<{ file: RegExp; brand: RegExp }> = [
+  { file: /emaar_properties_f2c4d0a72c/i, brand: /\bemaar\b/i },
+  { file: /binghattiweb/i, brand: /binghatti/i },
+  { file: /nakheel-log/i, brand: /nakheel/i },
+];
+
+export function isWrongBrandLogoFile(url: unknown, name: unknown): boolean {
+  if (typeof url !== "string" || typeof name !== "string") return false;
+  return LOGO_FILE_BRAND_TOKENS.some(
+    (entry) => entry.file.test(url) && !entry.brand.test(name),
+  );
 }
 
 /**
@@ -91,6 +112,7 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
   const url = dev.logo_url;
   const mirrored = getOfficialLogoMirror(url, dev.name);
   if (mirrored) return mirrored;
+  if (isWrongBrandLogoFile(url, dev.name)) return null;
   return isAllowedLogoUrl(url) ? url : null;
 }
 
@@ -127,6 +149,9 @@ export function getKnownDeveloperWebsiteUrl(name: unknown): string | null {
 
 export function getKnownDeveloperLogoUrl(name: unknown): string | null {
   if (typeof name !== "string" || !name.trim()) return null;
+  // Curated pure-white official marks win over the generic known-logo list.
+  const verifiedWhite = getVerifiedWhiteLogo(name);
+  if (verifiedWhite) return verifiedWhite;
   const hit = KNOWN_DEVELOPER_LOGOS.find((entry) => entry.match.test(name));
   return hit?.logo ?? null;
 }
