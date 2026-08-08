@@ -81,7 +81,7 @@ const HAIRLINE = "rgba(255,255,255,0.16)";
 
 /** Corner brackets that make the console frame legible as a structure. */
 function Brackets() {
-  const base = "pointer-events-none absolute h-5 w-5 border-white/45";
+  const base = "pointer-events-none absolute z-20 h-5 w-5 border-white/45";
   return (
     <>
       <span className={`${base} left-3 top-3 border-l border-t`} aria-hidden />
@@ -96,14 +96,14 @@ function Brackets() {
 function Wireframe() {
   return (
     <svg
-      className="pointer-events-none absolute inset-0 h-full w-full"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full"
       viewBox="0 0 400 260"
       preserveAspectRatio="none"
       aria-hidden
     >
       <defs>
         <linearGradient id="jbj-mesh-fade" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.20)" />
+          <stop offset="0%" stopColor="rgba(255,255,255,0.13)" />
           <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
         </linearGradient>
       </defs>
@@ -125,7 +125,7 @@ function Wireframe() {
           y1={i * 43}
           x2={400}
           y2={i * 43}
-          stroke="rgba(255,255,255,0.07)"
+          stroke="rgba(255,255,255,0.045)"
           strokeWidth="0.6"
         />
       ))}
@@ -133,10 +133,10 @@ function Wireframe() {
         points="20,220 90,170 150,190 220,110 300,140 380,70"
         fill="none"
         stroke="#D4B87A"
-        strokeWidth="1.2"
+        strokeWidth="1"
         strokeLinecap="round"
         initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.85 }}
+        animate={{ pathLength: 1, opacity: 0.5 }}
         transition={{ duration: 1.6, ease: "easeInOut" }}
       />
       {[
@@ -306,7 +306,7 @@ export default function InnovationLabSection() {
 
                 {/* HUD top rail */}
                 <div
-                  className="relative flex items-center justify-between gap-3 border-b px-5 py-3 md:px-7"
+                  className="relative z-10 flex items-center justify-between gap-3 border-b px-5 py-3 md:px-7"
                   style={{ borderColor: HAIRLINE }}
                 >
                   <div className="flex items-center gap-2">
@@ -335,7 +335,7 @@ export default function InnovationLabSection() {
                 </div>
 
                 {/* Body */}
-                <div className="relative px-5 py-6 md:min-h-[300px] md:px-7 md:py-8">
+                <div className="relative z-10 px-5 py-6 md:min-h-[300px] md:px-7 md:py-8">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={stage.index}
