@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, TrendingUp } from "lucide-react";
+import { ArrowRight, Building2, Layers, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
