@@ -169,11 +169,12 @@ export function DeveloperLogo({
           scale === "compact" ? "rounded-sm p-1" : "rounded-md p-1",
         )}
         style={{
-          // Emerald plates: knock the artwork out to pure white so every
-          // wordmark reads at full contrast. Gold hero plate keeps dark ink.
-          // Opaque JPG artwork is never knocked out (it would go fully white).
-          filter: override.imageFilter ?? (dataKeepGold || isOpaqueRaster(url) ? "none" : "brightness(0) invert(1)"),
-          mixBlendMode: override.imageBlendMode ?? (dataKeepGold ? "normal" : isOpaqueRaster(url) ? "multiply" : "screen"),
+          // Emerald overlays: white artwork only, with no white backing tile.
+          // For opaque JPG logos, invert first so their white canvas becomes
+          // black; screen blending then removes that canvas and leaves the
+          // original dark wordmark as a clean white knockout.
+          filter: override.imageFilter ?? (dataKeepGold ? "none" : "brightness(0) invert(1)"),
+          mixBlendMode: override.imageBlendMode ?? (dataKeepGold ? "normal" : "screen"),
         }}
       />
     </div>
