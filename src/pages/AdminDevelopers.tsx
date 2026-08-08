@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import BriefingManagement from "@/components/admin/BriefingManagement";
 import DeveloperOverviewTab from "@/components/admin/DeveloperOverviewTab";
 
@@ -608,13 +609,7 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/10 border border-[#B89555]/30 flex items-center justify-center overflow-hidden">
-              {developer.logo_url ? (
-                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-1"  loading="lazy" decoding="async" />
-              ) : (
-                <Building2 className="w-6 h-6 text-[#1A1A1A]" />
-              )}
-            </div>
+            <DeveloperLogo src={developer.logo_url} name={developer.name} alt={`${developer.name} logo`} variant="bare" size="micro" />
             <div>
               <a href={`/admin/developers/profile/${developer.slug}`} className="hover:underline">
                 <CardTitle className="text-foreground text-lg cursor-pointer">{developer.name}</CardTitle>

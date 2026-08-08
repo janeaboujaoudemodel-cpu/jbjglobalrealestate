@@ -27,6 +27,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import {
   ArrowLeft, RefreshCw, Search, Users, Building2, Home, Landmark,
   CheckCircle2, Clock, Bell, Handshake, XCircle, Sparkles, Calendar,
@@ -568,31 +569,5 @@ export default function RelationshipsHub() {
 }
 
 function EntityLogo({ name, website, logoUrl }: { name: string; website?: string | null; logoUrl?: string | null }) {
-  const [stage, setStage] = useState<0 | 1 | 2>(0);
-  const domain = (() => {
-    try {
-      if (!website) return null;
-      const u = new URL(website.startsWith("http") ? website : `https://${website}`);
-      return u.hostname.replace(/^www\./, "");
-    } catch { return null; }
-  })();
-  const src = stage === 0 && logoUrl ? logoUrl
-    : stage <= 1 && domain ? `https://logo.clearbit.com/${domain}`
-    : null;
-  if (src) {
-    return (
-      <img
-        src={src}
-        alt=""
-        className="size-6 rounded object-contain bg-white border border-[#B89555]/25"
-        onError={() => setStage((s) => (s < 2 ? ((s + 1) as 0 | 1 | 2) : 2))}
-      />
-    );
-  }
-  const initial = (name || "?").trim().charAt(0).toUpperCase();
-  return (
-    <span className="size-6 rounded bg-[#064E3B] text-white text-[10px] font-black inline-flex items-center justify-center">
-      {initial}
-    </span>
-  );
+  return <DeveloperLogo src={logoUrl} name={name} websiteUrl={website} alt={`${name} logo`} variant="bare" size="micro" />;
 }

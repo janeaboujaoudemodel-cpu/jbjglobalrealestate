@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Search, MapPin, Calendar, Eye } from "lucide-react";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface Developer {
   id: string;
@@ -87,17 +88,7 @@ export function DeveloperList({ onSelectDeveloper, onRequestVisit, onCheckIn }: 
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
                   {/* Logo */}
-                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
-                    {developer.logo_url ? (
-                      <img
-                        src={developer.logo_url}
-                        alt={developer.name}
-                        className="w-full h-full object-contain p-1"
-                       loading="lazy" decoding="async" />
-                    ) : (
-                      <Building2 className="h-6 w-6 text-muted-foreground" />
-                    )}
-                  </div>
+                  <DeveloperLogo src={developer.logo_url} name={developer.name} alt={`${developer.name} logo`} variant="bare" size="micro" />
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">

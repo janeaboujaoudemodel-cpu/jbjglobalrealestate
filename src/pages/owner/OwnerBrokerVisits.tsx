@@ -4,6 +4,7 @@ import { Building2, Trophy, Users, Calendar as CalendarIcon, ArrowLeft } from "l
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 type Row = {
   id: string;
@@ -167,13 +168,7 @@ export default function OwnerBrokerVisits() {
             <ul className="divide-y divide-[#B89555]/15">
               {topDevs.map((row) => (
                 <li key={row.dev?.id} className="px-5 py-3 flex items-center gap-3">
-                  {row.dev?.logo_url ? (
-                    <img src={row.dev.logo_url} alt="" className="h-8 w-8 object-contain rounded bg-[#EFE6D6] p-0.5"  loading="lazy" decoding="async" />
-                  ) : (
-                    <div className="h-8 w-8 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A]">
-                      {(row.dev?.name ?? "?").slice(0, 2).toUpperCase()}
-                    </div>
-                  )}
+                  <DeveloperLogo src={row.dev?.logo_url} name={row.dev?.name} alt={`${row.dev?.name ?? "Developer"} logo`} variant="bare" size="micro" />
                   <div className="flex-1 text-sm font-medium text-[#1A1A1A] truncate">{row.dev?.name}</div>
                   <div className="text-base font-semibold tabular-nums text-[#1A1A1A]">{row.count}</div>
                 </li>
@@ -219,9 +214,7 @@ export default function OwnerBrokerVisits() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        {r.developer?.logo_url ? (
-                          <img src={r.developer.logo_url} alt="" className="h-6 w-6 object-contain rounded bg-[#EFE6D6] p-0.5"  loading="lazy" decoding="async" />
-                        ) : null}
+                        <DeveloperLogo src={r.developer?.logo_url} name={r.developer?.name} alt={`${r.developer?.name ?? "Developer"} logo`} variant="bare" size="micro" />
                         <span className="text-[#1A1A1A]">{r.developer?.name ?? "—"}</span>
                       </div>
                     </td>

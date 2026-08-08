@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { DeveloperLogo, getLogoPaintStyle } from "@/components/ui/DeveloperLogo";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 /**
  * LOGO RENDERING GUARD
@@ -52,6 +54,35 @@ describe("getLogoPaintStyle", () => {
         overrideBlendMode: "normal",
       }),
     ).toEqual({ filter: "none", mixBlendMode: "normal" });
+  });
+});
+
+describe("developer logo repository enforcement", () => {
+  it("rejects raw image elements wired to developer logo fields", () => {
+    const root = join(process.cwd(), "src");
+    const violations: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir)) {
+        const path = join(dir, entry);
+        if (statSync(path).isDirectory()) {
+          walk(path);
+          continue;
+        }
+        if (!/\.tsx?$/.test(path) || path.endsWith("DeveloperLogo.tsx")) continue;
+        const source = readFileSync(path, "utf8");
+        if (/<img[\s\S]{0,500}(?:developer|dev)\??\.(?:logo_url|logo_url_processed|developer_logo)/i.test(source)) {
+          violations.push(path.replace(`${process.cwd()}/`, ""));
+        }
+      }
+    };
+    walk(root);
+    expect(violations).toEqual([]);
+  });
+
+  it("rejects typed developer-logo fallback markers", () => {
+    const component = readFileSync(join(process.cwd(), "src/components/ui/DeveloperLogo.tsx"), "utf8");
+    expect(component).not.toContain('data-developer-logo={embedded ? undefined : "nameplate"}');
+    expect(component).not.toContain("forceNameplate");
   });
 });
 
@@ -120,24 +151,26 @@ describe("DeveloperLogo rendering guard", () => {
   });
 
   it("never paints unverified database artwork before its transparency audit", () => {
-    const { container, getByText } = renderLogo({
+    const { container } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "card",
     });
     expect(container.querySelector("img")).toBeNull();
-    expect(getByText("Some Unknown Developer")).toBeTruthy();
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
+    expect(container.textContent).not.toContain("Some Unknown Developer");
   });
 
   it("does not trust an unaudited database image solely from a paint hint", () => {
-    const { container, getByText } = renderLogo({
+    const { container } = renderLogo({
       name: "Light Artwork Developer",
       src: "https://cdn.example.com/white-logo.png",
       needsInvert: false,
       variant: "card",
     });
     expect(container.querySelector("img")).toBeNull();
-    expect(getByText("Light Artwork Developer")).toBeTruthy();
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
+    expect(container.textContent).not.toContain("Light Artwork Developer");
   });
 
   it("never paints a white plate background on any variant", () => {
@@ -156,7 +189,7 @@ describe("DeveloperLogo rendering guard", () => {
   });
 
   it("shows one complete emerald identity plate while artwork is audited", () => {
-    const { container, getByText } = renderLogo({
+    const { container } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "bare",
@@ -164,7 +197,7 @@ describe("DeveloperLogo rendering guard", () => {
     const plate = container.firstElementChild as HTMLElement;
     expect(plate.className).not.toMatch(/opacity-0/);
     expect(plate.getAttribute("data-logo-loaded")).toBe("false");
-    expect(getByText("Some Unknown Developer")).toBeTruthy();
+    expect(plate.getAttribute("data-developer-logo")).toBe("unresolved");
   });
 
   it("uses the premium wide plate dimensions for listing logos", () => {
@@ -177,34 +210,30 @@ describe("DeveloperLogo rendering guard", () => {
     expect(container.firstElementChild?.className).toMatch(/h-\[72px\].*w-36/);
   });
 
-  it.each([
-    ["ADE Properties", "scale-[1.45]"],
-    ["Ag Properties", "scale-[1.18]"],
-    ["Ahmadyar Developments", "scale-[1.32]"],
-  ])("normalizes the visible scale of %s without replacing its mark", (name, scaleClass) => {
+  it.each(["ADE Properties", "Ag Properties", "Ahmadyar Developments"])("uses the shared visible scale for %s", (name) => {
     const { container } = renderLogo({ name, src: "https://cdn.example.com/logo.png" });
-    expect(container.querySelector("img")?.className).toContain(scaleClass);
+    expect(container.querySelector("img")?.className).toContain("scale-100");
   });
 
-  it("falls back to a readable white wordmark instead of an empty slot", () => {
-    const { container, getByText } = renderLogo({
+  it("never fabricates a typed logo when official artwork is unresolved", () => {
+    const { container } = renderLogo({
       name: "Developer Without Logo",
       src: null,
       variant: "card",
     });
     expect(container.querySelector("img")).toBeNull();
-    const label = getByText("Developer Without Logo");
-    expect(label.className).toMatch(/text-white/);
+    expect(container.textContent).not.toContain("Developer Without Logo");
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeTruthy();
     expect(container.firstElementChild?.className).toMatch(/#042C1C/);
   });
 
-  it("uses dark text on the gold identity plate for contrast", () => {
-    const { getByText } = renderLogo({
+  it("never adds typed text to an unresolved gold identity plate", () => {
+    const { container } = renderLogo({
       name: "Developer Without Logo",
       src: null,
       variant: "card",
       "data-keep-gold": true,
     });
-    expect(getByText("Developer Without Logo").className).toMatch(/#042C1C/);
+    expect(container.textContent).not.toContain("Developer Without Logo");
   });
 });

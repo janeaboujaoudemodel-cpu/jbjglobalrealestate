@@ -10,6 +10,7 @@ import { BadgeCheck, Phone, Mail, MessageCircle, Upload, Download } from "lucide
 import { Link } from "react-router-dom";
 import { useEntityTotal } from "@/hooks/useEntityTotal";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface RepRow {
   id: string;
@@ -149,11 +150,7 @@ export default function DevSalesRepsDirectory() {
                   <tr key={r.id} className="hover:bg-[#F7F2EA]/60">
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-[#F7F2EA] border border-[#B89555]/20 flex items-center justify-center overflow-hidden flex-none">
-                          {r.developer?.logo_url
-                            ? <img src={r.developer.logo_url} alt="" className="max-w-full max-h-full object-contain"  loading="lazy" decoding="async" />
-                            : <BadgeCheck className="h-4 w-4 text-[#B89555]" />}
-                        </div>
+                        <DeveloperLogo src={r.developer?.logo_url} name={r.developer?.name} alt={`${r.developer?.name ?? "Developer"} logo`} variant="bare" size="micro" />
                         <span className="font-semibold text-[#1A1A1A]">{r.full_name}</span>
                       </div>
                     </td>

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { useEntityTotal } from "@/hooks/useEntityTotal";
 
 interface DeveloperRow {
@@ -224,11 +225,7 @@ export default function DevelopersDirectory() {
                 >
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded bg-[#F7F2EA] border border-[#B89555]/20 flex items-center justify-center overflow-hidden flex-none">
-                        {logo
-                          ? <img src={logo} alt="" className="max-w-full max-h-full object-contain"  loading="lazy" decoding="async" />
-                          : <Building2 className="h-4 w-4 text-[#1A1A1A]/40" />}
-                      </div>
+                      <DeveloperLogo src={logo} name={d.name} websiteUrl={d.website_url} alt={`${d.name} logo`} variant="bare" size="micro" />
                       <span className="font-semibold text-[#1A1A1A] truncate">{d.name}</span>
                     </div>
                   </td>
