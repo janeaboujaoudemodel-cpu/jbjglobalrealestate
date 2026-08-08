@@ -824,7 +824,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             <div className="flex flex-col shrink min-w-0 overflow-hidden">
               <span
                 className={cn(
-                  "font-bold text-[13px] sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.10em] sm:tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate",
+                  "font-bold text-[15px] sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.08em] sm:tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate",
                   "jj-header-wordmark"
                 )}
               >
