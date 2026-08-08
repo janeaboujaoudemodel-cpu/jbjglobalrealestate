@@ -183,6 +183,7 @@ export function DeveloperLogo({
         data-keep-gold={dataKeepGold}
         data-developer-logo={embedded ? undefined : "nameplate"}
         data-developer-logo-content={embedded ? "true" : undefined}
+        data-logo-loaded="false"
       >
         <span
           className={cn(
