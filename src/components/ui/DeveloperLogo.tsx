@@ -174,10 +174,7 @@ export function DeveloperLogo({
 
   // When no official artwork is available, the plate keeps the developer
   // identity with a white wordmark (never a blank/invisible slot).
-  const nameplateLabel = (name || alt || "")
-    .replace(/\s+(?:real\s+estate\s+)?(?:development|developments|developer|developers|properties)\s*(?:l\.?l\.?c\.?)?$/i, "")
-    .replace(/\s+l\.?l\.?c\.?$/i, "")
-    .trim() || (name || alt || "").trim();
+  const nameplateLabel = (name || alt || "").trim();
   const renderEmptyPlate = (containerClass: string) => {
     if (!nameplateLabel) return null;
     return (
