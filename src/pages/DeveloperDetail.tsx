@@ -590,6 +590,7 @@ const DeveloperDetail = () => {
         {/* Developer header */}
         <div id="developer-overview" className="flex flex-col md:flex-row md:items-start gap-6 scroll-mt-40">
           {/* Logo plate — gold border, padded so wide wordmarks (EMAAR, DAMAC) fit */}
+          {/* PASS 273 unified plate: emerald pair gradient + white knocked-out mark */}
           <DeveloperLogo
             src={developer.logo_url}
             alt={`${developer.name} logo`}
@@ -598,8 +599,7 @@ const DeveloperDetail = () => {
             variant="bare"
             renderFallback
             loading="eager"
-            data-keep-gold
-            className="!w-44 !h-28 !rounded-xl !p-2 flex-shrink-0"
+            className="!w-44 !h-28 !rounded-xl !p-3 flex-shrink-0"
           />
 
           {/* Text */}
