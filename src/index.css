@@ -38060,9 +38060,10 @@ html body #root [data-developer-logo]:not([data-keep-gold]) {
   border-color: rgba(255, 255, 255, 0.35) !important;
 }
 html body #root [data-developer-logo]:not([data-keep-gold]) img {
-  filter: brightness(0) invert(1) !important;
-  mix-blend-mode: normal !important;
   opacity: 1 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
 }
 html body #root [data-developer-logo="nameplate"]:not([data-keep-gold]) span[aria-hidden="true"] {
   color: #FFFFFF !important;
