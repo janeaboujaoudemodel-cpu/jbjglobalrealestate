@@ -8,18 +8,12 @@ import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { supabase } from "@/integrations/supabase/client";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
 
 interface RecommendedDevelopersProps {
   currentDeveloperSlug: string;
   currentDeveloperEmirate?: string | null;
 }
-
-const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
-  omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6528eba69ec9911fdda1b151_omniyat-share-image.webp",
-  nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
-  dubaisouthproperties: "https://dubaisouthproperties.ae/wp-content/uploads/2026/05/SG01-VIEW4.webp",
-  "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
-};
 
 function RecommendedDeveloperPhoto({ urls, name }: { urls: string[]; name: string }) {
   const [index, setIndex] = useState(0);
@@ -151,18 +145,13 @@ export default function RecommendedDevelopers({
               // Prefer a real project cover image. Never use the developer
               // logo/wordmark as the card hero — that's what produced the
               // "DPF" text placeholder on DAMAC.
-              const looksLikeLogoUrl = (url?: string | null) => {
-                if (!url) return false;
-                return /logo|nameplate|thumb|icon|placeholder|wordmark/i.test(url);
-              };
-              const normalizedDeveloper = (dev.slug || dev.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
               const rawProjectImages = projectImageByDev?.[dev.id];
               const projectImages = Array.isArray(rawProjectImages) ? rawProjectImages : rawProjectImages ? [rawProjectImages] : [];
               const cardImages = [...new Set([
-                OFFICIAL_FLAGSHIP_MEDIA[normalizedDeveloper],
+                getVerifiedDeveloperFlagship(dev.name, dev.slug),
                 ...projectImages,
                 dev.feature_image_url,
-              ].filter((url): url is string => Boolean(url) && !looksLikeLogoUrl(url)))];
+              ].filter((url): url is string => Boolean(url) && isUsableDeveloperCover(url)))];
               return (
               <motion.div
                 key={dev.slug}

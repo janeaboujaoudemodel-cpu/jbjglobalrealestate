@@ -19,10 +19,7 @@ import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
 import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
-import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan.jpg";
-import alFahadFlagship from "@/assets/developer-logos/verified-local/alfahad-project.jpg";
-import amisFlagship from "@/assets/developer-logos/verified-local/amis-project.jpg";
-import anaxFlagship from "@/assets/developer-logos/verified-local/anax-project.jpg";
+import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
 
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
@@ -43,21 +40,6 @@ const MapLoadingFallback = () => (
     </div>
   </div>
 );
-
-// Emaar's flagship Dubai Creek Harbour masterplan render — used as a premium
-// hero cover when no curated feature image is set upstream.
-const isEmaarDeveloper = (name?: string | null, slug?: string | null) => {
-  const text = `${name || ""} ${slug || ""}`.toLowerCase();
-  return /\bemaar\b/.test(text);
-};
-
-const getVerifiedFlagship = (name?: string | null, slug?: string | null) => {
-  const identity = `${name || ""} ${slug || ""}`.toLowerCase().replace(/[^a-z0-9]+/g, "");
-  if (identity.includes("alfahadholding")) return alFahadFlagship;
-  if (identity.includes("amisdevelopment")) return amisFlagship;
-  if (identity.includes("anaxdevelopment")) return anaxFlagship;
-  return null;
-};
 
 const fmtNumber = (value?: number | null) => Number(value || 0).toLocaleString("en-US");
 
@@ -506,13 +488,11 @@ const DeveloperDetail = () => {
 
   ].filter(s => s.value !== null);
 
-  const verifiedFlagship = getVerifiedFlagship(developer.name, developer.slug);
+  const verifiedFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
   const heroImageUrl = verifiedFlagship
-    || (isEmaarDeveloper(developer.name, developer.slug)
-    ? emaarCreekHarbourMasterplan
-    : (projects || []).find((project) => project.cover_image_url)?.cover_image_url
-      || (projects || []).find((project) => project.card_image_url)?.card_image_url
-      || (projects || []).find((project) => project.gallery_start_image_url)?.gallery_start_image_url);
+    || (projects || []).map((project) => project.cover_image_url).find(isUsableDeveloperCover)
+    || (projects || []).map((project) => project.card_image_url).find(isUsableDeveloperCover)
+    || (projects || []).map((project) => project.gallery_start_image_url).find(isUsableDeveloperCover);
 
 
   const competitorDevelopers = (allDevelopers || [])
@@ -532,7 +512,7 @@ const DeveloperDetail = () => {
         title={`${developer.name} | UAE Property Developer`}
         description={(safeDeveloperDescription || `Explore ${developer.name} property projects in Dubai and the UAE. ${developer.completed_projects ? `${developer.completed_projects.toLocaleString()}+ units delivered. ` : ""}Off-plan and ready properties on JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
         canonicalPath={`/developer/${slug}`}
-        ogImage={developer.feature_image_url || developer.logo_url}
+        ogImage={heroImageUrl || developer.logo_url}
         breadcrumbItems={[
           { name: 'Home', path: '/' },
           { name: 'Developers', path: '/developers' },
