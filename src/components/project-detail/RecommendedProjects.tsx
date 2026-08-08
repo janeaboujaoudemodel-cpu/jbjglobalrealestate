@@ -6,7 +6,6 @@ import type { UnifiedProject } from "@/types/unifiedProject";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
-import { useCurrency } from "@/hooks/useCurrency";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getDeveloperLogoUrl, getDeveloperWebsiteUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
@@ -52,7 +51,6 @@ export default function RecommendedProjects({
       return (data || []).map((project) => ({ ...project, images: [] })) as unknown as UnifiedProject[];
     },
   });
-  const { formatPrice } = useCurrency();
   const browsingContext = useUserBrowsingContext();
 
   const recommendedProjects = useMemo(() => {
