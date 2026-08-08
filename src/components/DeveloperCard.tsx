@@ -34,13 +34,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const isEager = index < 8;
   const normalizedSlug = (developer.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const officialFlagship = normalizedSlug.includes("omniyat") || normalizedName.includes("omniyat")
+    ? OFFICIAL_FLAGSHIP_MEDIA.omniyat
+    : OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug] || OFFICIAL_FLAGSHIP_MEDIA[normalizedName];
   const candidates = useMemo(() => [...new Set([
-    OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug],
-    OFFICIAL_FLAGSHIP_MEDIA[normalizedName],
+    officialFlagship,
     ...heroImageUrls,
     developer.feature_image_url,
     heroImageUrl,
-  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, heroImageUrl, heroImageUrls, normalizedName, normalizedSlug]);
+  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, heroImageUrl, heroImageUrls, officialFlagship]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
