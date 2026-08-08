@@ -120,7 +120,9 @@ const ContinueSearching = ({
           name: p.name,
           slug: p.slug,
           imageUrl: p.cover_image_url,
-          subtitle: [p.location, p.emirate].filter(Boolean).join(", "),
+          // Subtitle is ALWAYS the developer identity, never the city — a card
+          // must never read "By Dubai" or show "Dubai" on the emerald plate.
+          subtitle: p.developer_name || "",
           viewedAt: Date.now(),
         }));
         const seenProjects = new Set<string>();

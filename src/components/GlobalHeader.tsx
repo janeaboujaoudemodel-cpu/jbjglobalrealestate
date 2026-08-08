@@ -93,6 +93,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       : "Investor Dashboard";
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Mark the drawer row for the current route so it gets the single emerald
+  // pill, exactly like the desktop vertical sidebar's active item.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const drawer = document.querySelector("[data-jj-mobile-drawer]");
+    if (!drawer) return;
+    const current = location.pathname.replace(/\/+$/, "") || "/";
+    drawer.querySelectorAll("a[href]").forEach((a) => {
+      const href = (a.getAttribute("href") || "").replace(/\/+$/, "") || "/";
+      if (href === current) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+  }, [mobileMenuOpen, location.pathname]);
+
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchInitialQuery, setSearchInitialQuery] = useState("");
   const [showWalkthrough, setShowWalkthrough] = useState(false);
@@ -799,7 +814,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             className="flex items-center gap-2 sm:gap-3 xl:gap-4 min-w-0 group transition-all duration-300"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative shrink-0 ml-0 w-12 h-12 sm:w-16 sm:h-16 lg:w-14 lg:h-14 xl:w-16 xl:h-16 overflow-visible">
+            <div className="relative shrink-0 ml-0 w-[54px] h-[54px] sm:w-16 sm:h-16 lg:w-14 lg:h-14 xl:w-16 xl:h-16 overflow-visible">
               {/* Logo glow backdrop */}
               <div 
                 className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -824,7 +839,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             <div className="flex flex-col shrink min-w-0 overflow-hidden">
               <span
                 className={cn(
-                  "font-bold text-[13px] sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.10em] sm:tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate",
+                  "font-bold text-[15px] sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.08em] sm:tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate",
                   "jj-header-wordmark"
                 )}
               >
@@ -891,8 +906,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
                 onClick={() => setMobileMenuOpen(false)}
               />
-              {/* Menu Panel — champagne creamy surface, not raw white */}
+              {/* Menu Panel — mirrors the desktop vertical sidebar language:
+                  champagne surface, black ink, no filled inactive rows. */}
               <div 
+                data-jj-mobile-drawer
                 className="relative w-full h-full overflow-y-auto overscroll-contain"
                 style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%)' }}
               >

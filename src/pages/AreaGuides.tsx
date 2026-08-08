@@ -182,7 +182,8 @@ const AreaGuides = () => {
         ref={heroRef}
         data-hero-dark
         data-no-contrast-guard
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0A1020]"
+        className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#0A1020] pb-16"
+        style={{ paddingTop: "calc(var(--header-height, 96px) + 1.5rem)" }}
       >
         {/* Background — UAE aerial */}
         <div
@@ -429,8 +430,10 @@ const AreaGuides = () => {
                             )}
                           </div>
 
-                          {/* Stats Row */}
-                          <div className="flex items-center gap-3 text-[#0A0A0A]/80 text-xs mt-3 pt-3 border-t border-[#0A0A0A]/10">
+                          {/* Stats Row — wraps as whole chips; a word is never
+                              split across two lines (No Cropped Text). */}
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[#0A0A0A]/80 text-xs mt-3 pt-3 border-t border-[#0A0A0A]/10 [&>div]:whitespace-nowrap">
+
                             {(area.property_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
                                 <Building2 className="w-3.5 h-3.5 text-[#0A0A0A]" />
