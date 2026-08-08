@@ -40,12 +40,24 @@
 .jjpf-shell [data-search-utility-controls] {
   border-radius: 8px !important;
 }
+/* Fields keep a defined gold frame; hover/focus deepen the gold — never green. */
+.jjpf-shell [data-search-segment],
+.jjpf-shell [data-search-utility-controls] {
+  border-width: 1.5px !important;
+  border-color: rgba(184, 149, 85, 0.58) !important;
+}
 .jjpf-shell [data-search-segment]:hover,
-.jjpf-shell [data-search-utility-controls]:hover { border-color: rgba(6, 78, 59, 0.55) !important; }
+.jjpf-shell [data-search-utility-controls]:hover {
+  border-color: rgba(184, 149, 85, 0.9) !important;
+  box-shadow: 0 6px 18px -12px rgba(6, 78, 59, 0.35) !important;
+}
+.jjpf-shell [data-search-segment]:focus-within,
+.jjpf-shell [data-search-utility-controls]:focus-within {
+  border-color: rgba(184, 149, 85, 1) !important;
+}
 .jjpf-shell [data-search-segment]:focus-visible,
 .jjpf-shell [data-search-segment] :focus-visible {
-  outline: 2px solid rgba(6, 78, 59, 0.55);
-  outline-offset: 2px;
+  outline: none !important;
 }
 
 /* Inner padding for triggers so text never touches the edges */
