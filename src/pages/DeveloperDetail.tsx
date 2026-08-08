@@ -20,9 +20,9 @@ import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
 import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
 import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan.jpg";
-import alFahadFlagship from "@/assets/developer-logos/verified/alfahad-project.jpg.asset.json";
-import amisFlagship from "@/assets/developer-logos/verified/amis-project.jpg.asset.json";
-import anaxFlagship from "@/assets/developer-logos/verified/anax-project.jpg.asset.json";
+import alFahadFlagship from "@/assets/developer-logos/verified-local/alfahad-project.jpg";
+import amisFlagship from "@/assets/developer-logos/verified-local/amis-project.jpg";
+import anaxFlagship from "@/assets/developer-logos/verified-local/anax-project.jpg";
 
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
@@ -53,9 +53,9 @@ const isEmaarDeveloper = (name?: string | null, slug?: string | null) => {
 
 const getVerifiedFlagship = (name?: string | null, slug?: string | null) => {
   const identity = `${name || ""} ${slug || ""}`.toLowerCase().replace(/[^a-z0-9]+/g, "");
-  if (identity.includes("alfahadholding")) return alFahadFlagship.url;
-  if (identity.includes("amisdevelopment")) return amisFlagship.url;
-  if (identity.includes("anaxdevelopment")) return anaxFlagship.url;
+  if (identity.includes("alfahadholding")) return alFahadFlagship;
+  if (identity.includes("amisdevelopment")) return amisFlagship;
+  if (identity.includes("anaxdevelopment")) return anaxFlagship;
   return null;
 };
 

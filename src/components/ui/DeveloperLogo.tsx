@@ -6,11 +6,11 @@ import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
 import agPropertiesWhite from "@/assets/developer-logos/ag-properties-white.png";
 import dubaiSouthWhite from "@/assets/developer-logos/dubai-south-white.png.asset.json";
-import adeVerifiedWhite from "@/assets/developer-logos/verified/ade-white.png.asset.json";
-import agVerifiedWhite from "@/assets/developer-logos/verified/ag-white.png.asset.json";
-import aiznVerifiedWhite from "@/assets/developer-logos/verified/aizn-white.png.asset.json";
-import amisVerifiedWhite from "@/assets/developer-logos/verified/amis-white.png.asset.json";
-import anaxVerifiedWhite from "@/assets/developer-logos/verified/anax-white.png.asset.json";
+import adeVerifiedWhite from "@/assets/developer-logos/verified-local/ade-white.png";
+import agVerifiedWhite from "@/assets/developer-logos/verified-local/ag-white.png";
+import aiznVerifiedWhite from "@/assets/developer-logos/verified-local/aizn-white.png";
+import amisVerifiedWhite from "@/assets/developer-logos/verified-local/amis-white.png";
+import anaxVerifiedWhite from "@/assets/developer-logos/verified-local/anax-white.png";
 
 const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
 
@@ -85,15 +85,15 @@ export function DeveloperLogo({
   );
   const normalizedIdentity = (name || alt || "").replace(/[^a-z0-9]+/gi, "").toLowerCase();
   const verifiedWhiteLogo = /^adeproperties(?:llc)?$/.test(normalizedIdentity)
-    ? adeVerifiedWhite.url
+    ? adeVerifiedWhite
     : /^agproperties(?:llc)?$/.test(normalizedIdentity)
-      ? agVerifiedWhite.url
+      ? agVerifiedWhite
       : /^aizn(?:realestate)?development(?:llc)?$/.test(normalizedIdentity)
-        ? aiznVerifiedWhite.url
+        ? aiznVerifiedWhite
         : /^amisdevelopment(?:llc)?$/.test(normalizedIdentity)
-          ? amisVerifiedWhite.url
+          ? amisVerifiedWhite
           : /^anaxdevelopments?(?:llc)?$/.test(normalizedIdentity)
-            ? anaxVerifiedWhite.url
+            ? anaxVerifiedWhite
             : null;
   const isDubaiSouth = /^dubaisouth(?:properties)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
@@ -106,7 +106,7 @@ export function DeveloperLogo({
     : isDubaiSouth
     ? dubaiSouthWhite.url
     : isAgProperties
-    ? agVerifiedWhite.url || agPropertiesWhite
+    ? agVerifiedWhite || agPropertiesWhite
     : isAbDevelopers
     ? abDevelopersTransparent
     : isLaraix

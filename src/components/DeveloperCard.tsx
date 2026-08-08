@@ -9,9 +9,9 @@ import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import type { Developer } from "@/hooks/useProjects";
-import alFahadFlagship from "@/assets/developer-logos/verified/alfahad-project.jpg.asset.json";
-import amisFlagship from "@/assets/developer-logos/verified/amis-project.jpg.asset.json";
-import anaxFlagship from "@/assets/developer-logos/verified/anax-project.jpg.asset.json";
+import alFahadFlagship from "@/assets/developer-logos/verified-local/alfahad-project.jpg";
+import amisFlagship from "@/assets/developer-logos/verified-local/amis-project.jpg";
+import anaxFlagship from "@/assets/developer-logos/verified-local/anax-project.jpg";
 
 
 interface DeveloperCardProps {
@@ -29,9 +29,9 @@ const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
   nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
   "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
   omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
-  alfahadholding: alFahadFlagship.url,
-  amisdevelopment: amisFlagship.url,
-  anaxdevelopments: anaxFlagship.url,
+  alfahadholding: alFahadFlagship,
+  amisdevelopment: amisFlagship,
+  anaxdevelopments: anaxFlagship,
 };
 
 const isUsableProjectMedia = (value: string) =>
