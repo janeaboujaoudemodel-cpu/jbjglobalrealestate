@@ -190,10 +190,10 @@ export function DeveloperLogo({
     <div
       className={cn(
         containerClass,
-        // The surface and artwork reveal as one atomic identity plate. This
-        // prevents the emerald rectangle painting first while a lazy logo is
-        // still downloading.
-        imageLoaded ? "opacity-100" : "opacity-0",
+        // The official plate must never disappear while the browser decodes its
+        // artwork. Keeping the stable emerald frame visible removes the blank /
+        // delayed card state without introducing a fabricated fallback.
+        "opacity-100",
       )}
       data-keep-gold={dataKeepGold}
       data-developer-logo={embedded ? undefined : "database"}
@@ -204,6 +204,7 @@ export function DeveloperLogo({
         src={url}
         alt={alt}
         loading={loading}
+        decoding="async"
         data-no-fallback
         onLoad={(e) => {
           // Some CDN logos resolve to an empty/zero-size or 1px response, which
@@ -223,8 +224,11 @@ export function DeveloperLogo({
         }}
 
         className={cn(
-          "block w-full h-full object-contain",
-          scale === "compact" ? "rounded-sm p-2.5" : "rounded-md p-3",
+          // A fixed safe area on all four sides protects first/last letters in
+          // tightly-authored SVG/PNG canvases. Object-contain and centered
+          // positioning are non-negotiable on every semantic size.
+          "block h-full w-full max-h-full max-w-full object-contain object-center",
+          scale === "compact" ? "rounded-sm p-3" : "rounded-md p-3.5",
           "scale-100",
         )}
         style={{

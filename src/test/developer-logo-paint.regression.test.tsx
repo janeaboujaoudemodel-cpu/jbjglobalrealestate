@@ -188,16 +188,30 @@ describe("DeveloperLogo rendering guard", () => {
     }
   });
 
-  it("keeps the whole identity plate hidden until its real artwork loads", () => {
+  it("keeps the identity plate visible while its real artwork loads", () => {
     const { container } = renderLogo({
       name: "Some Unknown Developer",
       src: "https://cdn.example.com/logo.png",
       variant: "bare",
     });
     const plate = container.firstElementChild as HTMLElement;
-    expect(plate.className).toMatch(/opacity-0/);
+    expect(plate.className).toMatch(/opacity-100/);
     expect(plate.getAttribute("data-logo-loaded")).toBe("false");
     expect(plate.getAttribute("data-developer-logo")).toBe("database");
+  });
+
+  it("protects every official wordmark with a centered safe area", () => {
+    const { container } = renderLogo({
+      name: "Binghatti",
+      src: "/developer-logos/binghatti.svg",
+      variant: "bare",
+      size: "md",
+    });
+    const img = container.querySelector("img") as HTMLImageElement;
+    expect(img.className).toContain("object-contain");
+    expect(img.className).toContain("object-center");
+    expect(img.className).toContain("p-3");
+    expect(img.className).toContain("scale-100");
   });
 
   it("uses the premium wide plate dimensions for listing logos", () => {

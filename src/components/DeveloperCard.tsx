@@ -113,7 +113,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                 referrerPolicy="no-referrer"
                 decoding="async"
                 onError={() => setHeroIndex((current) =>
-                  current + 1 < candidates.length ? current + 1 : current,
+                  current + 1 < candidates.length ? current + 1 : candidates.length,
                 )}
                 onLoad={(event) => {
                   const image = event.currentTarget;
@@ -193,7 +193,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
             loading="eager"
             size="md"
-            className="!h-full !w-full !p-2.5 !rounded-lg"
+            className="!h-full !w-full !p-0 !rounded-lg"
           />
         </div>
 
