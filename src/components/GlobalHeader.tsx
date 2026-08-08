@@ -93,6 +93,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       : "Investor Dashboard";
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Mark the drawer row for the current route so it gets the single emerald
+  // pill, exactly like the desktop vertical sidebar's active item.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const drawer = document.querySelector("[data-jj-mobile-drawer]");
+    if (!drawer) return;
+    const current = location.pathname.replace(/\/+$/, "") || "/";
+    drawer.querySelectorAll("a[href]").forEach((a) => {
+      const href = (a.getAttribute("href") || "").replace(/\/+$/, "") || "/";
+      if (href === current) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+  }, [mobileMenuOpen, location.pathname]);
+
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchInitialQuery, setSearchInitialQuery] = useState("");
   const [showWalkthrough, setShowWalkthrough] = useState(false);
