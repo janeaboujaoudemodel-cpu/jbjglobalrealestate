@@ -229,6 +229,10 @@ export function DeveloperLogo({
           // ADE's official square export contains generous transparent space.
           // Enlarge the untouched artwork within the plate without cropping it.
           /^adeproperties(?:llc)?$/.test(normalizedIdentity) && "scale-[1.45]",
+          // Preserve the official marks while normalizing their visible ink
+          // footprint to the Acube/AHS reference size.
+          /^(?:agproperties|agpropertiesllc)$/.test(normalizedIdentity) && "scale-[1.18]",
+          /^ahmadyardevelopments?$/.test(normalizedIdentity) && "scale-[1.32]",
         )}
         style={{
           // Paint rules live in getLogoPaintStyle (see STYLING GUARD above) and
