@@ -456,7 +456,7 @@ export default function PropertySearchBar({
         {/* Mobile/tablet: area unit sits beside currency. Desktop keeps the aligned utility pair. */}
         <div
           className="contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none jj-sspan-6 min-w-0"
-          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+          style={{ gridTemplateColumns: "minmax(0, 0.75fr) minmax(7.5rem, 1.25fr)" }}
         >
           {/* Keeps the sq ft / sq m pair in the same column as "Show N" below. */}
           {!onConsultation ? <div aria-hidden="true" className="hidden lg:block" /> : null}
