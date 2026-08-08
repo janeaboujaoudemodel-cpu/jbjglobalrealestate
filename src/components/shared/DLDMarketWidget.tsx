@@ -234,27 +234,51 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
     { label: "Mortgage Deals",  value: ytd2026.mortgage.toLocaleString(),   sub: `${mortgagePct}% of total`, icon: BarChart3 },
   ];
 
+  const INK = "#1A1A1A";
+  const EMERALD_GRADIENT = "linear-gradient(155deg,#064E3B 0%,#042C1C 58%,#000000 100%)";
+  const PANEL_GRADIENT = "linear-gradient(135deg,#FFFDF9 0%,#FBF6EC 52%,#F3EADA 100%)";
+  const CARD_SURFACE = "linear-gradient(135deg,#FFFFFF 0%,#FBF7F0 100%)";
+  const GOLD = "rgba(184,149,85,0.42)";
+
   return (
-    <section data-dld-market-widget data-surface="champagne" className="py-10 md:py-14 overflow-hidden" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
-      <div className="w-full px-4 md:px-8 lg:px-12">
-        <div data-dld-market-panel data-surface="emerald" className="max-w-[1600px] mx-auto rounded-[28px] p-4 md:p-8 shadow-[0_24px_70px_rgba(0,0,0,0.28)]" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#010806 100%)', border: '1px solid rgba(255,255,255,0.16)' }}>
-
-
+    <section
+      data-dld-market-widget
+      data-surface="champagne"
+      className="py-10 md:py-14 overflow-hidden"
+      style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)" }}
+    >
+      {/* Edges are deliberately aligned with the "Launching a new development?"
+          pre-footer card (max-w-6xl + identical horizontal padding). */}
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div
+          data-dld-market-panel
+          data-surface="champagne"
+          className="rounded-3xl border p-6 md:p-9"
+          style={{ background: PANEL_GRADIENT, borderColor: GOLD, boxShadow: "0 24px 56px -36px rgba(44,31,13,0.34)" }}
+        >
           {/* Header */}
-          <div className="text-center mb-10">
-            <div data-label-emerald-only data-allow-dark-cta data-no-contrast-guard className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 border-0 rounded-full px-4 py-1.5 mb-4 transition-colors">
+          <div className="text-center mb-9">
+            <div
+              data-label-emerald-only
+              data-allow-dark-cta
+              data-no-contrast-guard
+              data-surface="emerald"
+              className="allow-white inline-flex items-center gap-2 border-0 rounded-full px-4 py-1.5 mb-4"
+              style={{ background: EMERALD_GRADIENT }}
+            >
               <Banknote className="w-4 h-4 text-white" />
-              <span className="text-white text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
+              <span className="text-white text-[11px] uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
             </div>
 
-            <h2 data-no-contrast-guard className="text-2xl md:text-3xl font-bold mb-2" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+            <h2
+              className="text-3xl md:text-4xl font-semibold leading-tight"
+              style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}
+            >
               Dubai Market Intelligence
             </h2>
-            <p data-no-contrast-guard className="text-sm font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+            <p className="mt-2 text-sm" style={{ color: "rgba(26,26,26,0.68)" }}>
               DLD Transaction Data • As of {today}
-              {lastUpdated && (
-                <span data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}> • synced {todayFmt(new Date(lastUpdated))}</span>
-              )}
+              {lastUpdated && <span> • synced {todayFmt(new Date(lastUpdated))}</span>}
             </p>
 
             <div className="mt-5 flex justify-center">
@@ -268,123 +292,122 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
           </div>
 
-          {/* Growth Banner */}
-          <div className="rounded-2xl p-5 mb-8 flex items-center justify-between" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
+          {/* Growth banner — the single emerald hero block in the panel */}
+          <div
+            data-surface="emerald"
+            className="rounded-2xl p-5 md:p-6 mb-8 flex flex-wrap items-center justify-between gap-4"
+            style={{ background: EMERALD_GRADIENT, border: "1px solid rgba(184,149,85,0.34)" }}
+          >
             <div className="flex items-center gap-3">
-              <div data-emerald-action="true" className="jj-emerald-action w-12 h-12 rounded-xl flex items-center justify-center">
-                <ArrowUpRight className="w-6 h-6" style={{ color: '#FFFFFF' }} />
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.24)" }}>
+                <ArrowUpRight className="w-6 h-6" style={{ color: "#FFFFFF" }} />
               </div>
               <div>
-                <p data-no-contrast-guard className="text-xs uppercase tracking-wider font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>YTD Market Growth</p>
-                <p data-no-contrast-guard className="text-[11px] font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Year-over-year volume increase</p>
+                <p data-no-contrast-guard className="text-[11px] uppercase tracking-[0.18em] font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>YTD Market Growth</p>
+                <p data-no-contrast-guard className="text-[11px]" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>Year-over-year volume increase</p>
               </div>
             </div>
-            <div className="text-right">
-              <p data-no-contrast-guard className="text-3xl md:text-5xl font-extrabold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{ytd2026.growth}</p>
-            </div>
+            <p data-no-contrast-guard className="text-4xl md:text-5xl font-semibold tabular-nums" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{ytd2026.growth}</p>
           </div>
 
-          {/* 6-Metric Grid */}
+          {/* 6-metric grid — ivory cards, ink figures, emerald icon chips */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {mainStats.map((stat) => (
-              <div key={stat.label} data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-xl p-5 relative overflow-hidden group transition-all duration-300" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
+              <div
+                key={stat.label}
+                className="rounded-2xl p-5"
+                style={{ background: CARD_SURFACE, border: `1px solid ${GOLD}` }}
+              >
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-white" />
-                  <span data-no-contrast-guard className="text-[10px] uppercase tracking-[0.15em] font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{stat.label}</span>
+                  <span data-surface="emerald" className="inline-flex h-7 w-7 items-center justify-center rounded-full" style={{ background: EMERALD_GRADIENT }}>
+                    <stat.icon className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} />
+                  </span>
+                  <span className="text-[10px] uppercase tracking-[0.16em] font-bold" style={{ color: "rgba(26,26,26,0.62)" }}>{stat.label}</span>
                 </div>
-                <p data-no-contrast-guard className="text-2xl md:text-3xl font-extrabold mb-1" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{stat.value}</p>
-                <p data-no-contrast-guard className="text-[11px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{stat.sub}</p>
+                <p className="text-2xl md:text-3xl font-semibold tabular-nums" style={{ color: INK }}>{stat.value}</p>
+                <p className="mt-1 text-[11px]" style={{ color: "rgba(26,26,26,0.60)" }}>{stat.sub}</p>
               </div>
             ))}
           </div>
 
           {/* Transaction split bars */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Off-Plan vs Secondary */}
-            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <h3 data-no-contrast-guard className="font-semibold text-sm" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Off-Plan vs Secondary</h3>
-              </div>
+            {[
+              {
+                icon: TrendingUp,
+                title: "Off-Plan vs Secondary",
+                leftPct: offPlanPct,
+                rightPct: secondaryPct,
+                leftLabel: "Off-Plan",
+                rightLabel: "Secondary",
+                leftValue: ytd2026.offPlan,
+                rightValue: ytd2026.secondary,
+              },
+              {
+                icon: Banknote,
+                title: "Cash vs Mortgage",
+                leftPct: cashPct,
+                rightPct: mortgagePct,
+                leftLabel: "Cash",
+                rightLabel: "Mortgage",
+                leftValue: ytd2026.cash,
+                rightValue: ytd2026.mortgage,
+              },
+            ].map((split) => (
+              <div key={split.title} className="rounded-2xl p-6" style={{ background: CARD_SURFACE, border: `1px solid ${GOLD}` }}>
+                <div className="flex items-center gap-2 mb-4">
+                  <split.icon className="w-4 h-4" style={{ color: "#064E3B" }} />
+                  <h3 className="font-semibold text-sm" style={{ color: INK }}>{split.title}</h3>
+                </div>
 
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#010806]" data-dld-split-bar>
-                <div data-dld-split-segment="left" data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%`, minWidth: offPlanPct > 0 ? 44 : 0 }}>
-                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
-                </div>
-                <div data-dld-split-segment="right" className="h-full flex-1 flex items-center justify-center" style={{ minWidth: secondaryPct > 0 ? 44 : 0, background: "linear-gradient(135deg,#042C1C 0%,#010806 100%)" }}>
-                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{secondaryPct}%</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                    <span data-no-contrast-guard className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Off-Plan</span>
+                <div className="h-8 rounded-full overflow-hidden mb-4 flex" style={{ background: "#EFE6D6" }} data-dld-split-bar>
+                  <div
+                    data-dld-split-segment="left"
+                    data-surface="emerald"
+                    className="h-full flex items-center justify-center"
+                    style={{ width: `${split.leftPct}%`, minWidth: split.leftPct > 0 ? 44 : 0, background: EMERALD_GRADIENT }}
+                  >
+                    <span data-no-contrast-guard style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} className="text-[11px] font-bold">{split.leftPct}%</span>
                   </div>
-                  <p data-no-contrast-guard className="text-lg font-extrabold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{ytd2026.offPlan.toLocaleString()}</p>
-                  <p data-no-contrast-guard className="text-[10px] font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{offPlanPct}% of total</p>
-                </div>
-                <div data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                    <span data-no-contrast-guard className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Secondary</span>
+                  <div
+                    data-dld-split-segment="right"
+                    className="h-full flex-1 flex items-center justify-center"
+                    style={{ minWidth: split.rightPct > 0 ? 44 : 0 }}
+                  >
+                    <span className="text-[11px] font-bold" style={{ color: INK }}>{split.rightPct}%</span>
                   </div>
-                  <p data-no-contrast-guard className="text-lg font-extrabold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{ytd2026.secondary.toLocaleString()}</p>
-                  <p data-no-contrast-guard className="text-[10px] font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{secondaryPct}% of total</p>
                 </div>
-              </div>
-            </div>
 
-            {/* Cash vs Mortgage */}
-            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <Banknote className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <h3 data-no-contrast-guard className="font-semibold text-sm" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Cash vs Mortgage</h3>
-              </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#010806]" data-dld-split-bar>
-                <div data-dld-split-segment="left" data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${cashPct}%`, minWidth: cashPct > 0 ? 44 : 0 }}>
-                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{cashPct}%</span>
-                </div>
-                <div data-dld-split-segment="right" className="h-full flex-1 flex items-center justify-center" style={{ minWidth: mortgagePct > 0 ? 44 : 0, background: "linear-gradient(135deg,#042C1C 0%,#010806 100%)" }}>
-                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{mortgagePct}%</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div data-surface="emerald" className="jj-market-emerald-card rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                    <span data-no-contrast-guard className="text-white text-[10px] uppercase tracking-wider font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Cash</span>
-                  </div>
-                  <p data-no-contrast-guard className="text-white text-lg font-extrabold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{ytd2026.cash.toLocaleString()}</p>
-                  <p data-no-contrast-guard className="text-white/70 text-[10px] font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{cashPct}% of total</p>
-                </div>
-                <div data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                    <span data-no-contrast-guard className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Mortgage</span>
-                  </div>
-                  <p data-no-contrast-guard className="text-lg font-extrabold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{ytd2026.mortgage.toLocaleString()}</p>
-                  <p data-no-contrast-guard className="text-[10px] font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{mortgagePct}% of total</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { label: split.leftLabel, value: split.leftValue, pct: split.leftPct },
+                    { label: split.rightLabel, value: split.rightValue, pct: split.rightPct },
+                  ].map((cell) => (
+                    <div key={cell.label} className="rounded-xl p-3" style={{ background: "#FFFFFF", border: `1px solid ${GOLD}` }}>
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="w-2 h-2 rounded-full" style={{ background: "#064E3B" }} />
+                        <span className="text-[10px] uppercase tracking-[0.14em] font-bold" style={{ color: "rgba(26,26,26,0.62)" }}>{cell.label}</span>
+                      </div>
+                      <p className="text-lg font-semibold tabular-nums" style={{ color: INK }}>{cell.value.toLocaleString()}</p>
+                      <p className="text-[10px]" style={{ color: "rgba(26,26,26,0.58)" }}>{cell.pct}% of total</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
           {/* Top Areas + Nationalities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            {/* Top 10 Areas — single muted gold accent, expandable for nationalities */}
-            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
+            {/* Top 10 Areas — expandable for nationalities */}
+            <div className="rounded-2xl p-6" style={{ background: CARD_SURFACE, border: `1px solid ${GOLD}` }}>
               <div className="flex items-center gap-2 mb-5">
-                <MapPin className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <h3 data-no-contrast-guard className="text-sm font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Top 10 Areas by Transactions</h3>
+                <MapPin className="w-4 h-4" style={{ color: "#064E3B" }} />
+                <h3 className="text-sm font-semibold" style={{ color: INK }}>Top 10 Areas by Transactions</h3>
               </div>
 
               <div className="space-y-1.5">
                 {topAreas2026.slice(0, 10).map((area: any, i: number) => {
-                  const isHighlighted =
-                    highlightArea && area.area.toLowerCase().includes(highlightArea.toLowerCase());
                   const maxTx = topAreas2026[0]?.transactions || 1;
                   const barWidth = Math.max((area.transactions / maxTx) * 100, 8);
                   const isExpanded = expandedArea === area.area;
@@ -393,41 +416,44 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   return (
                     <div
                       key={area.area}
-                      data-surface="emerald"
-                      className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-white/16"
-                      style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}
+                      className="relative rounded-xl overflow-hidden"
+                      style={{ background: "#FFFFFF", border: `1px solid ${GOLD}` }}
                     >
-                      <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg,#064E3B 0%,#042C1C 100%)" }} />
+                      <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg, rgba(6,78,59,0.14) 0%, rgba(6,78,59,0.05) 100%)" }} />
                       <button
                         type="button"
                         onClick={() => setExpandedArea(isExpanded ? null : area.area)}
-                        className="relative w-full grid items-center gap-3 px-3 py-2.5 hover:bg-white/10 transition-colors text-left min-h-[54px]"
-                        style={{ gridTemplateColumns: '40px minmax(0,1fr) 92px 74px 26px' }}
+                        className="relative w-full grid items-center gap-3 px-3 py-2.5 text-left min-h-[54px] transition-colors hover:bg-[#F7F2EA]"
+                        style={{ gridTemplateColumns: "40px minmax(0,1fr) 92px 74px 26px" }}
                       >
-                        <span className="inline-flex h-8 w-8 items-center justify-center justify-self-center rounded-lg bg-white/15 border border-white/28 text-xs font-extrabold tabular-nums" style={{ color: "#FFFFFF" }}>
+                        <span
+                          data-surface="emerald"
+                          className="inline-flex h-8 w-8 items-center justify-center justify-self-center rounded-lg text-xs font-bold tabular-nums"
+                          style={{ background: EMERALD_GRADIENT, color: "#FFFFFF" }}
+                        >
                           {i + 1}
                         </span>
-                        <span className="min-w-0 truncate text-sm font-semibold leading-tight" style={{ color: "#FFFFFF" }}>
-                          {area.area}
-                        </span>
-                        <span className="justify-self-end text-right text-xs font-bold tabular-nums" style={{ color: "#FFFFFF" }}>{area.transactions.toLocaleString()}</span>
-                        <span className="inline-flex h-7 min-w-[64px] items-center justify-center justify-self-center rounded-full bg-white/15 border border-white/24 px-2 text-[11px] font-extrabold tabular-nums" style={{ color: "#FFFFFF" }}>
+                        <span className="min-w-0 truncate text-sm font-semibold leading-tight" style={{ color: INK }}>{area.area}</span>
+                        <span className="justify-self-end text-right text-xs font-bold tabular-nums" style={{ color: INK }}>{area.transactions.toLocaleString()}</span>
+                        <span
+                          className="inline-flex h-7 min-w-[64px] items-center justify-center justify-self-center rounded-full px-2 text-[11px] font-bold tabular-nums"
+                          style={{ background: "#F1EADC", border: `1px solid ${GOLD}`, color: "#064E3B" }}
+                        >
                           {area.change}
                         </span>
-                        <span className="flex h-7 w-7 items-center justify-center justify-self-end rounded-full bg-white/10">
+                        <span className="flex h-7 w-7 items-center justify-center justify-self-end rounded-full" style={{ background: nats.length > 0 ? "#F1EADC" : "transparent" }}>
                           {nats.length > 0 &&
                             (isExpanded ? (
-                              <ChevronUp className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.5} />
+                              <ChevronUp className="w-3.5 h-3.5" style={{ color: "#064E3B" }} strokeWidth={2.5} />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.5} />
+                              <ChevronDown className="w-3.5 h-3.5" style={{ color: "#064E3B" }} strokeWidth={2.5} />
                             ))}
                         </span>
                       </button>
 
-
                       {isExpanded && nats.length > 0 && (
-                        <div className="relative bg-[#FDFBF7] border-t border-[#064E3B]/20 px-3 py-3">
-                          <p className="text-[10px] uppercase tracking-[0.15em] text-[#1A1A1A]/55 font-bold mb-2">
+                        <div className="relative px-3 py-3" style={{ background: "#FBF6EC", borderTop: `1px solid ${GOLD}` }}>
+                          <p className="text-[10px] uppercase tracking-[0.15em] font-bold mb-2" style={{ color: "rgba(26,26,26,0.55)" }}>
                             Top 5 Buyer Nationalities
                           </p>
                           <div className="space-y-1.5">
@@ -435,13 +461,13 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                               <div key={n.country} className="flex items-center justify-between gap-3">
                                 <div className="flex items-center gap-2 min-w-0">
                                   <span className="text-base leading-none">{n.flag}</span>
-                                  <span className="text-[#1A1A1A] text-xs font-medium truncate">{n.country}</span>
+                                  <span className="text-xs font-medium truncate" style={{ color: INK }}>{n.country}</span>
                                 </div>
                                 <div className="flex items-center gap-2 flex-1 max-w-[140px]">
-                                  <div className="flex-1 h-1.5 rounded-full bg-[#EFE6D6] overflow-hidden">
-                            <div className="h-full bg-[#064E3B] origin-left" style={{ width: `${Math.min(n.percentage * 3, 100)}%` }} />
+                                  <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#EFE6D6" }}>
+                                    <div className="h-full origin-left" style={{ width: `${Math.min(n.percentage * 3, 100)}%`, background: EMERALD_GRADIENT }} />
                                   </div>
-                                  <span className="text-[#1A1A1A] text-[11px] font-bold w-7 text-right">{n.percentage}%</span>
+                                  <span className="text-[11px] font-bold w-7 text-right" style={{ color: INK }}>{n.percentage}%</span>
                                 </div>
                               </div>
                             ))}
@@ -454,11 +480,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
             </div>
 
-            {/* Top 10 Nationalities — single bronze accent */}
-            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
+            {/* Top 10 Nationalities */}
+            <div className="rounded-2xl p-6" style={{ background: CARD_SURFACE, border: `1px solid ${GOLD}` }}>
               <div className="flex items-center gap-2 mb-5">
-                <Globe className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <h3 data-no-contrast-guard className="text-sm font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Top 10 Buyer Nationalities</h3>
+                <Globe className="w-4 h-4" style={{ color: "#064E3B" }} />
+                <h3 className="text-sm font-semibold" style={{ color: INK }}>Top 10 Buyer Nationalities</h3>
               </div>
 
               <div className="space-y-1.5">
@@ -466,20 +492,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   const maxPct = topNationalities[0]?.percentage || 1;
                   const barWidth = Math.max((nat.percentage / maxPct) * 100, 8);
                   return (
-                    <div key={nat.country} data-surface="emerald" className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-white/16" style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}>
-                      <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg,#064E3B 0%,#042C1C 100%)" }} />
-                      <div className="relative grid items-center gap-3 px-3 py-2.5 min-h-[54px]" style={{ gridTemplateColumns: '36px minmax(0,1fr) 132px' }}>
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/12">
+                    <div key={nat.country} className="relative rounded-xl overflow-hidden" style={{ background: "#FFFFFF", border: `1px solid ${GOLD}` }}>
+                      <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg, rgba(6,78,59,0.14) 0%, rgba(6,78,59,0.05) 100%)" }} />
+                      <div className="relative grid items-center gap-3 px-3 py-2.5 min-h-[54px]" style={{ gridTemplateColumns: "36px minmax(0,1fr) 132px" }}>
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "#F1EADC", border: `1px solid ${GOLD}` }}>
                           <span className="text-lg leading-none">{nat.flag}</span>
                         </div>
                         <div className="min-w-0">
-                          <span className="block truncate font-semibold text-sm" style={{ color: "#FFFFFF" }}>{nat.country}</span>
+                          <span className="block truncate font-semibold text-sm" style={{ color: INK }}>{nat.country}</span>
                         </div>
                         <div className="flex items-center justify-end gap-3">
-                          <div className="w-24 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
-                            <div className="h-full bg-[#064E3B] rounded-full origin-left" style={{ width: `${nat.percentage * 4}%` }} />
+                          <div className="w-24 h-2 rounded-full overflow-hidden" style={{ background: "#EFE6D6" }}>
+                            <div className="h-full rounded-full origin-left" style={{ width: `${Math.min(nat.percentage * 4, 100)}%`, background: EMERALD_GRADIENT }} />
                           </div>
-                          <span className="text-xs font-extrabold w-8 text-right" style={{ color: "#FFFFFF" }}>{nat.percentage}%</span>
+                          <span className="text-xs font-bold w-8 text-right tabular-nums" style={{ color: INK }}>{nat.percentage}%</span>
                         </div>
                       </div>
                     </div>
@@ -489,29 +515,30 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
           </div>
 
-          {/* Gifts row — emerald premium treatment */}
+          {/* Gifts row */}
           {ytd2026.gifts && ytd2026.gifts > 0 && (
-            <div className="mt-6 rounded-xl p-4 flex items-center justify-between shadow-sm" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
+            <div className="mt-6 rounded-2xl p-4 flex items-center justify-between" style={{ background: CARD_SURFACE, border: `1px solid ${GOLD}` }}>
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#064E3B]" />
-                <span data-no-contrast-guard className="text-xs uppercase tracking-wider font-extrabold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Gift Transactions</span>
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#064E3B" }} />
+                <span className="text-xs uppercase tracking-[0.16em] font-bold" style={{ color: "rgba(26,26,26,0.65)" }}>Gift Transactions</span>
               </div>
               <div className="flex items-center gap-3">
-                <span data-no-contrast-guard className="text-2xl font-extrabold tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{ytd2026.gifts.toLocaleString()}</span>
-                <span data-no-contrast-guard className="text-xs font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{giftsPct}% of total</span>
+                <span className="text-2xl font-semibold tabular-nums" style={{ color: INK }}>{ytd2026.gifts.toLocaleString()}</span>
+                <span className="text-xs font-bold" style={{ color: "rgba(26,26,26,0.60)" }}>{giftsPct}% of total</span>
               </div>
             </div>
           )}
 
-          {/* Disclaimer — untouched */}
-          <p data-no-contrast-guard className="text-[10px] text-center mt-8 max-w-2xl mx-auto leading-relaxed" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+          {/* Disclaimer — untouched copy */}
+          <p className="text-[10px] text-center mt-8 max-w-2xl mx-auto leading-relaxed" style={{ color: "rgba(26,26,26,0.58)" }}>
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
-            <Link to="/contact" className="hover:underline" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Contact our team</Link> for professional guidance.
+            <Link to="/contact" className="hover:underline" style={{ color: "#064E3B" }}>Contact our team</Link> for professional guidance.
           </p>
         </div>
       </div>
     </section>
   );
 };
+
 
 export default DLDMarketWidget;
