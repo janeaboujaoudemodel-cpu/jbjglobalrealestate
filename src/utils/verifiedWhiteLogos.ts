@@ -16,6 +16,7 @@ import sobhaWhite from "@/assets/developer-logos/verified-local/sobha-white.svg"
 import ahmadyarWhite from "@/assets/developer-logos/verified-local/ahmadyar-white.png";
 import aradaWhite from "@/assets/developer-logos/verified-local/arada-white.svg";
 import tigerWhite from "@/assets/developer-logos/verified-local/tiger-white.png";
+import hvmLivingWhite from "@/assets/developer-logos/verified-local/hvm-living-white.png";
 
 const normalizeIdentity = (value: unknown) =>
   typeof value === "string" ? value.replace(/[^a-z0-9]+/gi, "").toLowerCase() : "";
@@ -32,6 +33,7 @@ const VERIFIED_WHITE_LOGOS: Array<{ match: RegExp; logo: string }> = [
   { match: /^ahmadyar(developments?|realestatedevelopment)?(llc)?$/, logo: ahmadyarWhite },
   // Tiger Group / Tiger Properties — official horizontal mark, repainted white.
   { match: /^tiger(properties|group|developments?|realestate(development)?)?(llc)?$/, logo: tigerWhite },
+  { match: /^hvmliving(realestate)?development(llc)?$/, logo: hvmLivingWhite },
 ];
 
 export function getVerifiedWhiteLogo(name: unknown): string | null {

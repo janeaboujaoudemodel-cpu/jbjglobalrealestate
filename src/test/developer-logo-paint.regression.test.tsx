@@ -72,6 +72,7 @@ describe("DeveloperLogo rendering guard", () => {
     "Dubai South Properties",
     "Tiger Properties",
     "Tiger Group",
+    "Hvm Living Real Estate Development L.L.C",
   ];
 
   it.each(curated)("renders %s curated artwork uninverted", (name) => {
@@ -98,6 +99,24 @@ describe("DeveloperLogo rendering guard", () => {
     expect(img).toBeTruthy();
     expect(img.getAttribute("src")).toBe(expectedSrc);
     expect(queryByText(name)).toBeNull();
+  });
+
+  it("renders HVM Living with its official white artwork on every canonical surface", () => {
+    for (const variant of ["bare", "card", "nameplate", "tile"] as const) {
+      const { container, queryByText, unmount } = renderLogo({
+        name: "Hvm Living Real Estate Development L.L.C",
+        alt: "HVM Living logo",
+        src: "https://api.reelly.io/vault/example/opaque-logo.png",
+        variant,
+        loading: "eager",
+      });
+      const img = container.querySelector("img") as HTMLImageElement;
+      expect(img).toBeTruthy();
+      expect(img.getAttribute("src")).toContain("hvm-living-white.png");
+      expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
+      expect(queryByText("Hvm Living Real Estate Development L.L.C")).toBeNull();
+      unmount();
+    }
   });
 
   it("never paints unverified database artwork before its transparency audit", () => {
