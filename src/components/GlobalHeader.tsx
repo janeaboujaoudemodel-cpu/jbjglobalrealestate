@@ -827,7 +827,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
-                className="w-full h-full object-contain relative z-10 transition-transform duration-300"
+                className="w-full h-full object-contain relative z-10 transition-transform duration-300 scale-[1.2] sm:scale-100"
                 style={{
                   filter: useLightHeaderIdentity 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
