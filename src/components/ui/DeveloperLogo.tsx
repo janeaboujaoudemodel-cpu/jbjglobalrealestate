@@ -156,10 +156,16 @@ export function DeveloperLogo({
   const artworkVerdict = useLogoArtworkGuard(
     hasCuratedArtwork ? null : (resolvedSrc as string | null),
   );
+  // Never optimistically paint an unverified raster. That was the root cause
+  // of the visible white rectangle: the plate rendered the image while the
+  // async artwork audit was still `unknown` (and third-party CORS failures
+  // stayed unknown forever). Curated assets are trusted; every other image is
+  // shown only after the guard proves it has usable transparency. Until then,
+  // retain the developer identity as a readable white wordmark.
   const valid =
     isValidDeveloperLogoUrl(resolvedSrc) &&
     !error &&
-    artworkVerdict !== "block" &&
+    (hasCuratedArtwork || artworkVerdict === "ok") &&
     (hasCuratedArtwork || !override.forceNameplate);
 
 
@@ -177,6 +183,7 @@ export function DeveloperLogo({
         data-keep-gold={dataKeepGold}
         data-developer-logo={embedded ? undefined : "nameplate"}
         data-developer-logo-content={embedded ? "true" : undefined}
+        data-logo-loaded="false"
       >
         <span
           className={cn(
