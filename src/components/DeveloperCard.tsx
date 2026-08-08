@@ -9,6 +9,9 @@ import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import type { Developer } from "@/hooks/useProjects";
+import alFahadFlagship from "@/assets/developer-logos/verified/alfahad-project.jpg.asset.json";
+import amisFlagship from "@/assets/developer-logos/verified/amis-project.jpg.asset.json";
+import anaxFlagship from "@/assets/developer-logos/verified/anax-project.jpg.asset.json";
 
 
 interface DeveloperCardProps {
@@ -26,6 +29,9 @@ const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
   nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
   "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
   omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
+  alfahadholding: alFahadFlagship.url,
+  amisdevelopment: amisFlagship.url,
+  anaxdevelopments: anaxFlagship.url,
 };
 
 const isUsableProjectMedia = (value: string) =>
@@ -48,15 +54,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     developerFeatureImage,
   ].filter((value): value is string => Boolean(value) && isUsableProjectMedia(value)))], [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage]);
   const [heroIndex, setHeroIndex] = useState(0);
-  const [logoFailed, setLogoFailed] = useState(false);
   useEffect(() => setHeroIndex(0), [developer.id]);
-  useEffect(() => setLogoFailed(false), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
   const developerLogoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
   const logoOverride = getDeveloperLogoOverride(developer.name);
 
   const hasHero = !!cardHeroImageUrl;
-  const isVisuallyPublishable = hasHero && Boolean(developerLogoUrl) && !logoOverride.forceNameplate && !logoFailed;
+  const isVisuallyPublishable = hasHero && Boolean(developerLogoUrl) && !logoOverride.forceNameplate;
   // LOCKED (no cropped text): never render an ellipsis. The blurb is trimmed on
   // a word boundary so the two-line slot always holds a complete phrase.
   const safeDescription = useMemo(() => {
@@ -170,7 +174,6 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               websiteUrl={(developer as { website_url?: string | null }).website_url}
               needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
               loading={isEager ? "eager" : "lazy"}
-              onError={() => setLogoFailed(true)}
               embedded
               size="md"
               className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-1 !rounded-md"
