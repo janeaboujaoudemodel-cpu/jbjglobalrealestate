@@ -52,17 +52,16 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
 
   return (
     <div className="relative flex-shrink-0 w-36 h-36">
-      <div
-        data-keep-gold
-        data-developer-logo-plate="true"
-        className="jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden"
-      >
-        {isValidDeveloperLogoUrl(displayLogoUrl) ? (
-          <img src={displayLogoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
-        ) : (
-          <span className="text-[#1A1A1A] font-bold text-base text-center px-3 leading-snug w-full flex items-center justify-center min-h-full">{developerName}</span>
-        )}
-      </div>
+      {/* Unified identity plate: emerald pair gradient + white knocked-out mark */}
+      <DeveloperLogo
+        src={isValidDeveloperLogoUrl(displayLogoUrl) ? (displayLogoUrl as string) : null}
+        alt={`${developerName} logo`}
+        name={developerName}
+        variant="bare"
+        renderFallback
+        className="!w-36 !h-36 !rounded-2xl !p-3 flex-shrink-0"
+      />
+
 
 
       {canEdit && (
