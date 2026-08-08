@@ -1,0 +1,1 @@
+GRANT SELECT (logo_needs_invert) ON public.developers TO anon, authenticated;

@@ -21,6 +21,8 @@ interface DeveloperLogoProps {
   variant?: "tile" | "bare" | "card" | "nameplate";
   /** "sm" caps wide-wordmark expansion for compact rails (e.g. Continue Searching). */
   size?: "sm" | "md";
+  /** false = artwork is already light (render as-is); true/undefined = dark artwork needing a white knockout. */
+  needsInvert?: boolean | null;
   embedded?: boolean;
   "data-keep-gold"?: boolean | string;
 }
@@ -57,6 +59,7 @@ export function DeveloperLogo({
   websiteUrl,
   variant = "tile",
   size = "md",
+  needsInvert,
   embedded = false,
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
@@ -173,7 +176,12 @@ export function DeveloperLogo({
           // For opaque JPG logos, invert first so their white canvas becomes
           // black; screen blending then removes that canvas and leaves the
           // original dark wordmark as a clean white knockout.
-          filter: override.imageFilter ?? (dataKeepGold ? "none" : "brightness(0) invert(1)"),
+          // Light artwork (needsInvert === false) is already white/pale, so it
+          // must NOT be inverted — inverting turned it black and screen blending
+          // then erased it, leaving an empty emerald plate.
+          filter:
+            override.imageFilter ??
+            (dataKeepGold || needsInvert === false ? "none" : "brightness(0) invert(1)"),
           mixBlendMode: override.imageBlendMode ?? (dataKeepGold ? "normal" : "screen"),
         }}
       />

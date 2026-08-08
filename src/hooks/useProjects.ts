@@ -220,6 +220,7 @@ export interface Developer {
   logo_url_dark: string | null;
   feature_image_url: string | null;
   logo_bg_color: string | null;
+  logo_needs_invert?: boolean | null;
   rank: number;
   founded_year: number | null;
   completed_projects: number | null;
@@ -354,7 +355,7 @@ export function useDeveloperProjectStats() {
 
 const DEVELOPERS_PUBLIC_SELECT = [
   "id", "name", "slug", "logo_url", "logo_url_processed", "logo_url_dark", "logo_bg_color",
-  "logo_verified", "logo_locked", "logo_source", "logo_status", "logo_candidates",
+  "logo_verified", "logo_locked", "logo_source", "logo_status", "logo_candidates", "logo_needs_invert",
   "description", "description_languages", "rank", "excel_order", "created_at", "updated_at",
   "founded_year", "completed_projects", "offplan_projects", "portfolio_worth", "headquarters",
   "feature_image_url", "website_url", "ceo_name", "total_units_delivered", "upcoming_units",

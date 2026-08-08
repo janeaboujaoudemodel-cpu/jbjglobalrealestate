@@ -13429,6 +13429,33 @@ export type Database = {
         }
         Relationships: []
       }
+      dev_media_import: {
+        Row: {
+          created_at: string
+          id: string
+          logo: string | null
+          needs_invert: boolean | null
+          photo: string | null
+          site: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          logo?: string | null
+          needs_invert?: boolean | null
+          photo?: string | null
+          site?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo?: string | null
+          needs_invert?: boolean | null
+          photo?: string | null
+          site?: string | null
+        }
+        Relationships: []
+      }
       developer_action_items: {
         Row: {
           confidence: number | null
@@ -15820,6 +15847,7 @@ export type Database = {
           logo_candidates: Json
           logo_last_attempt_at: string | null
           logo_locked: boolean
+          logo_needs_invert: boolean | null
           logo_source: string | null
           logo_status: string
           logo_url: string | null
@@ -15899,6 +15927,7 @@ export type Database = {
           logo_candidates?: Json
           logo_last_attempt_at?: string | null
           logo_locked?: boolean
+          logo_needs_invert?: boolean | null
           logo_source?: string | null
           logo_status?: string
           logo_url?: string | null
@@ -15978,6 +16007,7 @@ export type Database = {
           logo_candidates?: Json
           logo_last_attempt_at?: string | null
           logo_locked?: boolean
+          logo_needs_invert?: boolean | null
           logo_source?: string | null
           logo_status?: string
           logo_url?: string | null
