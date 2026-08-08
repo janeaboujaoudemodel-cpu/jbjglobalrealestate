@@ -23,8 +23,8 @@ interface DeveloperLogoProps {
   name?: string | null;
   websiteUrl?: string | null;
   variant?: "tile" | "bare" | "card" | "nameplate";
-  /** "sm" caps wide-wordmark expansion for compact rails (e.g. Continue Searching). */
-  size?: "sm" | "md";
+  /** Semantic identity size. Call sites must not invent per-developer dimensions. */
+  size?: "micro" | "sm" | "md" | "lg";
   /** false = artwork is already light (render as-is); true/undefined = dark artwork needing a white knockout. */
   needsInvert?: boolean | null;
   embedded?: boolean;
@@ -165,42 +165,30 @@ export function DeveloperLogo({
   const valid =
     isValidDeveloperLogoUrl(resolvedSrc) &&
     !error &&
-    (hasCuratedArtwork || artworkVerdict === "ok") &&
-    (hasCuratedArtwork || !override.forceNameplate);
+    (hasCuratedArtwork || artworkVerdict === "ok");
 
 
   const needsDarkPlate = !dataKeepGold;
-  const compactPlate = size === "sm" ? "h-10 w-20" : "h-[72px] w-36";
+  const compactPlate = {
+    micro: "h-8 w-16",
+    sm: "h-10 w-20",
+    md: "h-[72px] w-36",
+    lg: "h-[88px] w-44",
+  }[size];
 
-  // When no official artwork is available, the plate keeps the developer
-  // identity with a white wordmark (never a blank/invisible slot).
-  const nameplateLabel = (name || alt || "").trim();
+  // LOCKED: never fabricate a developer logo from typed text or initials.
+  // Unresolved identities remain in the catalogue as an explicit audit failure.
   const renderEmptyPlate = (containerClass: string) => {
-    if (!nameplateLabel) return null;
     return (
       <div
         className={cn(containerClass)}
+        role="img"
+        aria-label={`${name || alt || "Developer"} official logo unavailable`}
         data-keep-gold={dataKeepGold}
-        data-developer-logo={embedded ? undefined : "nameplate"}
+        data-developer-logo={embedded ? undefined : "unresolved"}
         data-developer-logo-content={embedded ? "true" : undefined}
         data-logo-loaded="false"
-      >
-        <span
-          className={cn(
-            "block w-full max-w-full text-center font-serif font-semibold leading-[1.05] px-1 whitespace-normal break-words",
-            dataKeepGold ? "text-[#042C1C]" : "text-white",
-            nameplateLabel.length > 30
-              ? "text-xs"
-              : nameplateLabel.length > 20
-                ? "text-[13px]"
-                : nameplateLabel.length > 12
-                  ? "text-sm"
-                  : "text-base",
-          )}
-        >
-          {nameplateLabel}
-        </span>
-      </div>
+      />
     );
   };
 
@@ -244,13 +232,7 @@ export function DeveloperLogo({
         className={cn(
           "block w-full h-full object-contain",
           scale === "compact" ? "rounded-sm p-0" : "rounded-md p-0",
-          // ADE's official square export contains generous transparent space.
-          // Enlarge the untouched artwork within the plate without cropping it.
-          /^adeproperties(?:llc)?$/.test(normalizedIdentity) && "scale-[1.45]",
-          // Preserve the official marks while normalizing their visible ink
-          // footprint to the Acube/AHS reference size.
-          /^(?:agproperties|agpropertiesllc)$/.test(normalizedIdentity) && "scale-[1.18]",
-          /^ahmadyardevelopments?$/.test(normalizedIdentity) && "scale-[1.32]",
+          "scale-100",
         )}
         style={{
           // Paint rules live in getLogoPaintStyle (see STYLING GUARD above) and

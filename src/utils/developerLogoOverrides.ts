@@ -11,7 +11,6 @@
  */
 export type DeveloperLogoOverride = {
   invert?: boolean;
-  forceNameplate?: boolean;
   darkPlate?: boolean;
   imageFilter?: string;
   imageBlendMode?: "normal" | "multiply" | "screen";
@@ -47,18 +46,8 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   // Kingdom By MAG — branded as a white "Kingdom" wordmark on a dark grey
   // square plate. The grey plate clashes with our white logo plate, so we
   // skip the bitmap and render a clean ink wordmark instead.
-  kingdombymag: { forceNameplate: true },
-  kingdom: { forceNameplate: true },
-  kingdomdevelopment: { forceNameplate: true },
-  kingdomdevelopments: { forceNameplate: true },
   // Browser favicons and dark-on-transparent/blocked marks caused fake globe
   // icons or empty white boxes on property cards. Use approved text marks.
-  modon: { forceNameplate: true },
-  modonproperties: { forceNameplate: true },
-  prestigeone: { forceNameplate: true },
-  prestigeonedevelopments: { forceNameplate: true },
-  vincitore: { forceNameplate: true },
-  vincitorerealestatedevelopment: { forceNameplate: true },
   // Zoya's official SVG is a very light embedded wordmark; it fades on white.
   zoya: { darkPlate: true, imageFilter: "contrast(1.28) saturate(1.14) brightness(1.08)" },
   zoyadevelopment: { darkPlate: true, imageFilter: "contrast(1.28) saturate(1.14) brightness(1.08)" },
@@ -68,17 +57,12 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   laraixdevelopers: { imageFilter: "contrast(1.08) saturate(1.08)" },
   // The supplied Dubai South bitmap contains an opaque white square. Render
   // the approved wordmark directly on the single emerald plate instead.
-  dubaisouth: { forceNameplate: true },
-  dubaisouthproperties: { forceNameplate: true },
   // Official AB Developers artwork has an opaque black background. Screen
   // blending removes only that black field while preserving the real gold AB
   // monogram, preventing the solid white square caused by blanket inversion.
   // Iman Developer's official artwork is a bare serif "I" monogram on a
   // terracotta square — it reads as an empty block on our plates. Render the
   // approved emerald nameplate so it matches Imtiaz/Sobha/Holm.
-  iman: { forceNameplate: true },
-  imandeveloper: { forceNameplate: true },
-  imandevelopers: { forceNameplate: true },
   ab: { imageBlendMode: "screen", imageFilter: "none" },
   abdevelopers: { imageBlendMode: "screen", imageFilter: "none" },
   abdevelopersllc: { imageBlendMode: "screen", imageFilter: "none" },
