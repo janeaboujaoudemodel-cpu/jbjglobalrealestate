@@ -1608,7 +1608,7 @@ function ProjectDetailLayoutInner({
               onFilterChange={setShortcutFilters}
               priorityFilter="projects"
               hidePropertyType
-              hideTrendingSort
+              hideSort
             />
           </div>
         </div>

@@ -210,6 +210,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const [statusOpen, setStatusOpen] = useState(false);
   const [constructionOpen, setConstructionOpen] = useState(false);
   const [viewsOpen, setViewsOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
+
 
   // Local draft state for price popover (prevents per-keystroke re-render/navigation)
   const [draftPriceMin, setDraftPriceMin] = useState(filters.priceMin);
@@ -886,23 +888,41 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             sold, and that surfaces in the resale UI, not here. */}
         <div className={filterDivider} />
 
-        {/* Sort pills (hidden when consumer page uses a dedicated SortBySelect) */}
-        {!hideSort && SORT_OPTIONS.filter((opt) => !(hideTrendingSort && opt.value === 'trending')).map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
-            className={cn(
-              pillBase, "px-2.5 py-1.5",
-              filters.sortBy === opt.value ? pillActive : pillInactiveCls
-            )}
-          >
-            {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{opt.label}</span>}
-          </button>
-        ))}
-
+        {/* Sort — single dropdown (Newest / Low-High / High-Low / A-Z / Trending) */}
         {!hideSort && (
-          <div className={filterDivider} />
+          <>
+            <Popover open={sortOpen} onOpenChange={setSortOpen}>
+              <PopoverTrigger asChild>
+                <button className={cn(pillBase, "px-2.5 py-1.5", filters.sortBy ? pillActive : pillInactiveCls)}>
+                  <ArrowUpDown className="w-3.5 h-3.5 text-white" />
+                  <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                    {filters.sortBy
+                      ? (SORT_OPTIONS.find((o) => o.value === filters.sortBy)?.label ?? 'Sort')
+                      : 'Sort'}
+                  </span>
+                  <ChevronDown className="w-3 h-3 text-white opacity-100" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-56 p-3", popoverClass)} side="bottom" align="start" sideOffset={6}>
+                <h4 className="text-sm font-bold text-[#1A1A1A] mb-2">Sort by</h4>
+                <div className="flex flex-col gap-1.5">
+                  {SORT_OPTIONS.filter((opt) => !(hideTrendingSort && opt.value === 'trending')).map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => { update({ sortBy: filters.sortBy === opt.value ? null : opt.value }); setSortOpen(false); }}
+                      data-filter-selected={filters.sortBy === opt.value ? "true" : undefined}
+                      className={cn(togglePillBase, "justify-start w-full", filters.sortBy === opt.value ? togglePillOn : togglePillOff)}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+            <div className={filterDivider} />
+          </>
         )}
+
 
         {/* Map toggle */}
         <button
