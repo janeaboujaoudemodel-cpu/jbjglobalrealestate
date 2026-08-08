@@ -69,9 +69,22 @@ const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
 ];
 
 function getOfficialLogoMirror(url: unknown, name: unknown): string | null {
+  // Name-first: a URL mirror may NEVER paint another brand's mark on a card.
+  // Some database rows carry the wrong CDN file (e.g. Ellington / Sobha Realty
+  // inherited Emaar's logo file), so a URL mirror only applies when the mirror
+  // brand also matches the developer name.
+  if (typeof name === "string" && name.trim()) {
+    const byName = OFFICIAL_LOGOS_BY_NAME.find((entry) => entry.match.test(name));
+    if (byName) return byName.logo;
+  }
   if (typeof url === "string") {
     const byUrl = OFFICIAL_LOGO_MIRRORS.find((entry) => entry.match.test(url));
-    if (byUrl) return byUrl.logo;
+    const brandToken = /emaar/i.test(url) ? /\bemaar\b/i : null;
+    const brandMatchesName =
+      !brandToken || (typeof name === "string" && brandToken.test(name));
+    if (byUrl && brandMatchesName) return byUrl.logo;
+    // Wrong-brand artwork is not a valid logo for this developer.
+    if (byUrl && !brandMatchesName) return null;
   }
   if (typeof name === "string" && name.trim()) {
     const byName = OFFICIAL_LOGOS_BY_NAME.find((entry) => entry.match.test(name));
