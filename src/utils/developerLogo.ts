@@ -65,6 +65,7 @@ const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
   { match: /\bbinghatti\b/i, logo: "/developer-logos/binghatti.svg" },
+  { match: /\bwellington\b/i, logo: "https://wellingtondevelopments.ae/wp-content/uploads/2025/09/wellington.svg" },
 ];
 
 function getOfficialLogoMirror(url: unknown, name: unknown): string | null {
@@ -115,6 +116,7 @@ const KNOWN_DEVELOPER_LOGOS: Array<{ match: RegExp; logo: string }> = [
   { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
   { match: /\bbinghatti\b/i, logo: "/developer-logos/binghatti.svg" },
+  { match: /\bwellington\b/i, logo: "https://wellingtondevelopments.ae/wp-content/uploads/2025/09/wellington.svg" },
 ];
 
 export function getKnownDeveloperWebsiteUrl(name: unknown): string | null {
