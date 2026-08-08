@@ -93,15 +93,47 @@ export function DeveloperLogo({
   // A real canonical/website logo always wins. Historical forceNameplate
   // overrides created text substitutes and blank-looking blocks, which are no
   // longer permitted on public cards.
-  const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error;
+  // Curated pure-white knockouts always win. Otherwise a forceNameplate
+  // override still suppresses unreliable database artwork (opaque/blocked
+  // bitmaps that paint as blank white blocks on the emerald plate).
+  const hasCuratedArtwork =
+    isDubaiSouth || isAgProperties || isAbDevelopers || isLaraix || !!curatedLogo;
+  const valid =
+    isValidDeveloperLogoUrl(resolvedSrc) &&
+    !error &&
+    (hasCuratedArtwork || !override.forceNameplate);
 
   const needsDarkPlate = !dataKeepGold;
   const compactPlate = size === "sm" ? "h-10 w-20" : "h-14 w-28";
 
-  // Public cards must never invent a typographic logo from the developer name.
-  // If the canonical, curated, or website-derived official artwork is missing,
-  // render nothing rather than showing a misleading white block/name fallback.
-  const renderEmptyPlate = (_containerClass: string) => null;
+  // When no official artwork is available, the plate keeps the developer
+  // identity with a white wordmark (never a blank/invisible slot).
+  const nameplateLabel = (name || alt || "").trim();
+  const renderEmptyPlate = (containerClass: string) => {
+    if (!nameplateLabel) return null;
+    return (
+      <div
+        className={cn(containerClass)}
+        data-keep-gold={dataKeepGold}
+        data-developer-logo={embedded ? undefined : "nameplate"}
+        data-developer-logo-content={embedded ? "true" : undefined}
+      >
+        <span
+          className={cn(
+            "block w-full text-center font-serif font-semibold leading-tight px-0.5",
+            dataKeepGold ? "text-[#042C1C]" : "text-white",
+            nameplateLabel.length > 18
+              ? "text-[8px]"
+              : nameplateLabel.length > 10
+                ? "text-[9px]"
+                : "text-[11px]",
+          )}
+        >
+          {nameplateLabel}
+        </span>
+      </div>
+    );
+  };
 
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
