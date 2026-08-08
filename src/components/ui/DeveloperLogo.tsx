@@ -222,20 +222,17 @@ export function DeveloperLogo({
           scale === "compact" ? "rounded-sm p-1" : "rounded-md p-1",
         )}
         style={{
-          // Emerald overlays: white artwork only, with no white backing tile.
-          // For opaque JPG logos, invert first so their white canvas becomes
-          // black; screen blending then removes that canvas and leaves the
-          // original dark wordmark as a clean white knockout.
-          // Light artwork (needsInvert === false) is already white/pale, so it
-          // must NOT be inverted — inverting turned it black and screen blending
-          // then erased it, leaving an empty emerald plate.
-          filter:
-            override.imageFilter ??
-            (verifiedWhiteLogo || dataKeepGold || needsInvert === false ? "none" : "brightness(0) invert(1)"),
-          mixBlendMode:
-            override.imageBlendMode ??
-            (verifiedWhiteLogo || dataKeepGold || needsInvert === false ? "normal" : "screen"),
+          // Paint rules live in getLogoPaintStyle (see STYLING GUARD above) and
+          // are covered by src/test/developer-logo-paint.regression.test.tsx.
+          ...getLogoPaintStyle({
+            isLightArtwork: !!verifiedWhiteLogo,
+            keepGold: dataKeepGold,
+            needsInvert,
+            overrideFilter: override.imageFilter,
+            overrideBlendMode: override.imageBlendMode,
+          }),
         }}
+
       />
     </div>
   );
