@@ -5,7 +5,7 @@ import { useDevelopers, useProjects, useCommunities, useTrendingAreas } from "@/
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import { Skeleton } from "@/components/ui/skeleton";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { PricePill } from "@/components/ui/price-pill";
 
 const formatPortfolioWorth = (value: number | null) => {
@@ -102,20 +102,16 @@ const DeveloperGrid = () => {
                 to={`/developer/${developer.slug}`}
                 className="inline-block group mb-6"
               >
-                {/* Developer Logo Tile — uniform white plate, full-fit logo */}
-                <div className="w-[260px] h-[120px] rounded-2xl bg-white border border-[#B89555]/35 shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:-translate-y-0.5 flex items-center justify-center p-5 overflow-hidden">
-                  {isValidDeveloperLogoUrl(developer.logo_url) ? (
-                    <img
-                      src={developer.logo_url as string}
-                      alt={`${developer.name} logo`}
-                      className="block max-h-full max-w-full w-auto h-auto object-contain"
-                     loading="lazy" decoding="async" />
-                  ) : (
-                    <h2 className="text-[#1A1A1A] font-bold text-xl md:text-2xl text-center line-clamp-2">
-                      {developer.name}
-                    </h2>
-                  )}
-                </div>
+                <DeveloperLogo
+                  src={developer.logo_url}
+                  name={developer.name}
+                  alt={`${developer.name} logo`}
+                  websiteUrl={developer.website_url}
+                  variant="bare"
+                  renderFallback
+                  loading="eager"
+                  className="!w-[260px] !h-[120px] !rounded-xl !p-3 group-hover:-translate-y-0.5"
+                />
               </Link>
 
               {/* Developer Description */}

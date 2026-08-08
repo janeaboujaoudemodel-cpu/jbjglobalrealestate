@@ -118,6 +118,36 @@ describe("DeveloperLogo rendering guard", () => {
     }
   });
 
+  it("keeps the emerald surface hidden until its logo is ready", () => {
+    const { container } = renderLogo({
+      name: "Some Unknown Developer",
+      src: "https://cdn.example.com/logo.png",
+      variant: "bare",
+    });
+    const plate = container.firstElementChild as HTMLElement;
+    expect(plate.className).toMatch(/opacity-0/);
+    expect(plate.getAttribute("data-logo-loaded")).toBe("false");
+  });
+
+  it("uses the premium wide plate dimensions for listing logos", () => {
+    const { container } = renderLogo({
+      name: "Some Unknown Developer",
+      src: "https://cdn.example.com/logo.png",
+      variant: "bare",
+      size: "md",
+    });
+    expect(container.firstElementChild?.className).toMatch(/h-\[72px\].*w-32/);
+  });
+
+  it.each([
+    ["ADE Properties", "scale-[1.45]"],
+    ["Ag Properties", "scale-[1.18]"],
+    ["Ahmadyar Developments", "scale-[1.32]"],
+  ])("normalizes the visible scale of %s without replacing its mark", (name, scaleClass) => {
+    const { container } = renderLogo({ name, src: "https://cdn.example.com/logo.png" });
+    expect(container.querySelector("img")?.className).toContain(scaleClass);
+  });
+
   it("falls back to a readable white wordmark instead of an empty slot", () => {
     const { container, getByText } = renderLogo({
       name: "Developer Without Logo",
