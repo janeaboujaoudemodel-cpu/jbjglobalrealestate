@@ -148,6 +148,9 @@ export function getKnownDeveloperWebsiteUrl(name: unknown): string | null {
 
 export function getKnownDeveloperLogoUrl(name: unknown): string | null {
   if (typeof name !== "string" || !name.trim()) return null;
+  // Curated pure-white official marks win over the generic known-logo list.
+  const verifiedWhite = getVerifiedWhiteLogo(name);
+  if (verifiedWhite) return verifiedWhite;
   const hit = KNOWN_DEVELOPER_LOGOS.find((entry) => entry.match.test(name));
   return hit?.logo ?? null;
 }
