@@ -99,7 +99,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 websiteUrl={(developer as any).website_url}
                 variant="bare"
                 renderFallback
-                className="!w-36 !h-36 !rounded-2xl !p-3 flex-shrink-0"
+                className="!w-44 !h-[99px] !rounded-xl !p-3 flex-shrink-0"
               />
             )}
 
