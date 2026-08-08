@@ -313,7 +313,10 @@ export function useDeveloperProjectStats() {
         is_featured: boolean | null;
         total_units: number | null;
       }>) {
-        const image = row.card_image_url || row.gallery_start_image_url || row.cover_image_url;
+        // LOCKED: developer-directory heroes must come from an actual project's
+        // authoritative cover. Card/gallery derivatives are only fallbacks;
+        // developer profile artwork and logos are never part of this query.
+        const image = row.cover_image_url || row.card_image_url || row.gallery_start_image_url;
         const score = (row.is_featured ? 1_000_000 : 0) + Math.max(0, row.total_units ?? 0);
         const normalizedName = normalizeDeveloperName(row.developer_name);
         if (normalizedName) {

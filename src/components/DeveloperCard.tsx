@@ -8,7 +8,6 @@ import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import type { Developer } from "@/hooks/useProjects";
-import omniyatMasterpiece from "@/assets/omniyat-masterpiece.jpg.asset.json";
 
 
 interface DeveloperCardProps {
@@ -25,7 +24,7 @@ interface DeveloperCardProps {
 const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
   nakheel: "https://www.nakheel.com/images/nakheelcorporatelibraries/developments/palmjumeirah.jpg",
   "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
-  omniyat: omniyatMasterpiece.url,
+  omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
 };
 
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
@@ -40,9 +39,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const candidates = useMemo(() => [...new Set([
     officialFlagship,
     ...heroImageUrls,
-    developer.feature_image_url,
     heroImageUrl,
-  ].filter((value): value is string => Boolean(value)))], [developer.feature_image_url, heroImageUrl, heroImageUrls, officialFlagship]);
+  ].filter((value): value is string => Boolean(value)))], [heroImageUrl, heroImageUrls, officialFlagship]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
@@ -97,21 +95,11 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                   photo as a plate, with automatic light/dark plate contrast. */}
             </>
           ) : (
-            /* No verified project photograph available: never leave the hero
-               blank. Fill it with the brand emerald ombre and the developer's
-               own logo/wordmark so the card always reads as branded. */
+            /* Never substitute a developer logo for project photography. */
             <div className="absolute inset-0 flex items-center justify-center bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] px-6">
-              <DeveloperLogo
-                variant="bare"
-                 src={developerLogoUrl}
-                name={developer.name}
-                alt={`${developer.name} logo`}
-                websiteUrl={(developer as { website_url?: string | null }).website_url}
-                loading={isEager ? "eager" : "lazy"}
-                embedded
-                 size="md"
-                 className="!border-0 !bg-transparent !shadow-none"
-              />
+              <span className="allow-white text-center text-xs font-semibold uppercase tracking-[0.16em] text-white">
+                Project photography being verified
+              </span>
             </div>
           )}
 
