@@ -38182,6 +38182,13 @@ html body #root .jj-filter-rail > button[class][class] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* Catalog active filters are emerald surfaces and always use white ink. */
+html body #root [data-property-search-bar] [data-active-filter-summary] button,
+html body #root [data-property-search-bar] [data-active-filter-summary] button * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
 html body #root .jj-filter-rail > button[class][class],
 html body #root .jj-filter-rail > div[class][class].jj-filter-search-pill {
   box-sizing: border-box !important;
