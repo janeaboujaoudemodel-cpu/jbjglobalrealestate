@@ -8,12 +8,8 @@ import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
+import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
 import type { Developer } from "@/hooks/useProjects";
-import alFahadFlagship from "@/assets/developer-logos/verified-local/alfahad-project.jpg";
-import amisFlagship from "@/assets/developer-logos/verified-local/amis-project.jpg";
-import anaxFlagship from "@/assets/developer-logos/verified-local/anax-project.jpg";
-import nakheelFlagship from "@/assets/developer-logos/verified-local/nakheel-project.jpg";
-import sobhaFlagship from "@/assets/developer-logos/verified-local/sobha-project.jpg";
 
 
 interface DeveloperCardProps {
@@ -24,22 +20,6 @@ interface DeveloperCardProps {
   heroImageUrls?: string[];
 }
 
-
-// Verified project photography only. Never list social "share images" here —
-// those are wordmarks on flat backgrounds and read as a broken/blank hero.
-const OFFICIAL_FLAGSHIP_MEDIA: Record<string, string> = {
-  nakheel: nakheelFlagship,
-  sobharealty: sobhaFlagship,
-  sobha: sobhaFlagship,
-  "4directiondevelopments": "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
-  omniyat: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
-  alfahadholding: alFahadFlagship,
-  amisdevelopment: amisFlagship,
-  anaxdevelopments: anaxFlagship,
-};
-
-const isUsableProjectMedia = (value: string) =>
-  !/(?:logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/16x16\/)/i.test(value);
 
 const getPublicDeveloperName = (name: string) => {
   if (/^aizn\b/i.test(name)) return "AIZN Development";
@@ -55,15 +35,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const isEager = index < 8;
   const normalizedSlug = (developer.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
-  const officialFlagship = normalizedSlug.includes("alfahadholding") || normalizedName.includes("alfahadholding")
-    ? OFFICIAL_FLAGSHIP_MEDIA.alfahadholding
-    : normalizedSlug.includes("amisdevelopment") || normalizedName.includes("amisdevelopment")
-      ? OFFICIAL_FLAGSHIP_MEDIA.amisdevelopment
-      : normalizedSlug.includes("anaxdevelopment") || normalizedName.includes("anaxdevelopment")
-        ? OFFICIAL_FLAGSHIP_MEDIA.anaxdevelopments
-        : normalizedSlug.includes("omniyat") || normalizedName.includes("omniyat")
-    ? OFFICIAL_FLAGSHIP_MEDIA.omniyat
-    : OFFICIAL_FLAGSHIP_MEDIA[normalizedSlug] || OFFICIAL_FLAGSHIP_MEDIA[normalizedName];
+  const officialFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
   const developerFeatureImage = (developer as { feature_image_url?: string | null }).feature_image_url || undefined;
   const candidates = useMemo(() => {
     const verifiedOnly = normalizedSlug.includes("alfahadholding") || normalizedName.includes("alfahadholding");
@@ -71,7 +43,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
       officialFlagship,
       ...(verifiedOnly ? [] : heroImageUrls),
       ...(verifiedOnly ? [] : [heroImageUrl, developerFeatureImage]),
-    ].filter((value): value is string => Boolean(value) && isUsableProjectMedia(value)))];
+    ].filter((value): value is string => Boolean(value) && isUsableDeveloperCover(value)))];
   }, [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage, normalizedName, normalizedSlug]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
