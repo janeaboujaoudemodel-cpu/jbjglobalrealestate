@@ -37372,9 +37372,19 @@ html body #root [data-guide-toc] [data-toc-state="active"] {
 /* Search bars are a single, closed control system. Every top-level field owns
    a complete border and equal height; no legacy inset/background rule may
    erase the top edge. */
-html body #root [data-property-search-bar] [data-search-segment] {
+html body #root [data-property-search-bar][data-search-tone="dark"] [data-search-segment] {
   min-height: 3rem;
   border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+html body #root [data-property-search-bar][data-search-tone="light"] [data-search-segment],
+html body #root [data-property-search-bar][data-search-tone="light"] [data-search-utility-controls] {
+  min-height: 3rem;
+  border: 1.5px solid rgba(184,149,85,0.72) !important;
+  box-shadow: none !important;
+}
+html body #root [data-property-search-bar][data-search-tone="dark"] [data-search-utility-controls] {
+  border: 1.5px solid rgba(255,255,255,0.44) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
 }
 

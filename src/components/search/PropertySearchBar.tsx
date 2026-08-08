@@ -194,6 +194,7 @@ export default function PropertySearchBar({
   sortOptions = SORT_OPTIONS,
   showTiers = false,
   countOverride,
+  countNoun = "properties",
   showActiveSummary = false,
 }: Props) {
 
@@ -298,7 +299,7 @@ export default function PropertySearchBar({
 
 
   return (
-    <div data-property-search-bar className={`grid gap-1.5 lg:block ${className}`} style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
+    <div data-property-search-bar data-search-tone={dark ? "dark" : "light"} className={`grid gap-1.5 lg:block ${className}`} style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
       <div className={`contents lg:grid lg:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] lg:items-stretch lg:gap-2 lg:mb-2`} data-search-grid={GRID_KEY}>
         <div
@@ -710,7 +711,7 @@ export default function PropertySearchBar({
             className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full rounded-lg text-[13px] lg:text-sm font-semibold px-2 whitespace-nowrap"
             style={{ backgroundImage: EMERALD_PAIR, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            {count == null ? "Search" : `Show ${count.toLocaleString()}`}
+            {count == null ? "Search" : `Show ${count.toLocaleString()} ${countNoun}`}
           </button>
         </div>
       </div>

@@ -71,7 +71,10 @@ export function DeveloperLogo({
     : isLaraix
       ? laraixTransparent.url
       : (isValidDeveloperLogoUrl(src) ? src : fallbackLogo);
-  const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error && !override.forceNameplate;
+  // A real canonical/website logo always wins. Historical forceNameplate
+  // overrides created text substitutes and blank-looking blocks, which are no
+  // longer permitted on public cards.
+  const valid = isValidDeveloperLogoUrl(resolvedSrc) && !error;
 
   const needsDarkPlate = !dataKeepGold;
 
