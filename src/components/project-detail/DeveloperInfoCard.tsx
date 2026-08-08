@@ -9,6 +9,7 @@ import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import DeveloperLogoUploader from "@/components/project-detail/owner/DeveloperLogoUploader";
 import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
 import { DeveloperLink } from "@/components/ui/developer-link";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 type PublicFieldKey =
   | "instagram_url" | "linkedin_url" | "office_address" | "google_maps_url"
