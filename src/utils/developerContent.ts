@@ -20,5 +20,7 @@ export function getSafeDeveloperDescription(developer: {
   const clean = sanitizeForDisplay(developer.description);
   if (clean && !hasUnsafeDeveloperCopy(clean)) return clean;
   if (VERIFIED_DEVELOPER_COPY[slug]) return VERIFIED_DEVELOPER_COPY[slug];
-  return `${developer.name || "This developer"} profile information is being verified. JBJ only displays confirmed project and portfolio data on this page.`;
+  // LOCKED (no placeholder status copy): never surface "profile information is
+  // being verified" on a public card or page — the slot stays silent instead.
+  return "";
 }

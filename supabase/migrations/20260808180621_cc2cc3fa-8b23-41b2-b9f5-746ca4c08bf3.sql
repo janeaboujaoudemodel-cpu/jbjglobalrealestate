@@ -1,0 +1,1 @@
+GRANT SELECT, INSERT, UPDATE ON public.dev_media_import TO sandbox_exec;

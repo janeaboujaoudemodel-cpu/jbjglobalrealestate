@@ -161,6 +161,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
               name={developer.name}
               alt={`${developer.name} logo`}
               websiteUrl={(developer as { website_url?: string | null }).website_url}
+              needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
               loading={isEager ? "eager" : "lazy"}
               embedded
               size="md"
