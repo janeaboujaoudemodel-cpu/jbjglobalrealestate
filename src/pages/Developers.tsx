@@ -10,6 +10,8 @@ import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Button } from "@/components/ui/button";
+import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
@@ -44,7 +46,24 @@ const Developers = () => {
   const filteredDevelopers = useMemo(() => {
     if (!developers) return [];
     
-    let filtered = [...developers];
+    // Public directory quality gate: a developer is only publishable when the
+    // card can show both official artwork and real development photography.
+    // This prevents legal-name wordmarks, blank/white plates and blueprint
+    // placeholders from leaking into the customer-facing directory while the
+    // asset recovery queue completes.
+    let filtered = developers.filter((dev) => {
+      const normalizedName = normalizeDeveloperName(dev.name);
+      const hasOfficialLogo = Boolean(
+        getDeveloperLogoUrl(dev) || getKnownDeveloperLogoUrl(dev.name),
+      );
+      const usesLegacyTextOverride = Boolean(getDeveloperLogoOverride(dev.name).forceNameplate);
+      const hasRealPhoto = Boolean(
+        topProjectImageByDev[dev.id] ||
+        projectStats?.imagesByName?.[normalizedName] ||
+        dev.feature_image_url,
+      );
+      return hasOfficialLogo && !usesLegacyTextOverride && hasRealPhoto;
+    });
 
     // Search filter (name only for accuracy)
     const q = (search.q || "").trim().toLowerCase();
@@ -103,7 +122,7 @@ const Developers = () => {
     }
     
     return filtered;
-  }, [developers, search, search.sort, projectCounts]);
+  }, [developers, search, search.sort, projectCounts, projectStats, topProjectImageByDev]);
 
 
   // Reset to page 1 when filters change
