@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
+import { useLogoArtworkGuard } from "@/hooks/useLogoArtworkGuard";
+
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
 import agPropertiesWhite from "@/assets/developer-logos/ag-properties-white.png";
