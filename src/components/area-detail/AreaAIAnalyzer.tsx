@@ -374,7 +374,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
               const matched = developerAssets.map.get(normalizedName)
                 || Array.from(developerAssets.map.entries()).find(([key]) => key.includes(normalizedName) || normalizedName.includes(key))?.[1];
               return matched?.logo_url ? (
-                <DeveloperLogo src={matched.logo_url} alt={matched.name || dev.name} name={matched.name || dev.name} variant="bare" loading="eager" className="!w-9 !h-9 !min-w-9 !rounded-lg !border-white/25" />
+                <DeveloperLogo src={matched.logo_url} alt={matched.name || dev.name} name={matched.name || dev.name} variant="bare" loading="eager" size="micro" />
               ) : (
                 <div className="w-9 h-9 rounded-lg bg-white/12 border border-white/25 flex items-center justify-center flex-shrink-0">
                   <Building2 className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />

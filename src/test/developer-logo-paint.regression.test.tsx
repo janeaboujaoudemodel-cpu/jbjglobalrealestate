@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { DeveloperLogo, getLogoPaintStyle } from "@/components/ui/DeveloperLogo";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 /**
  * LOGO RENDERING GUARD
@@ -52,6 +54,35 @@ describe("getLogoPaintStyle", () => {
         overrideBlendMode: "normal",
       }),
     ).toEqual({ filter: "none", mixBlendMode: "normal" });
+  });
+});
+
+describe("developer logo repository enforcement", () => {
+  it("rejects raw image elements wired to developer logo fields", () => {
+    const root = join(process.cwd(), "src");
+    const violations: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir)) {
+        const path = join(dir, entry);
+        if (statSync(path).isDirectory()) {
+          walk(path);
+          continue;
+        }
+        if (!/\.tsx?$/.test(path) || path.endsWith("DeveloperLogo.tsx")) continue;
+        const source = readFileSync(path, "utf8");
+        if (/<img[\s\S]{0,500}(?:developer|dev)\??\.(?:logo_url|logo_url_processed|developer_logo)/i.test(source)) {
+          violations.push(path.replace(`${process.cwd()}/`, ""));
+        }
+      }
+    };
+    walk(root);
+    expect(violations).toEqual([]);
+  });
+
+  it("rejects typed developer-logo fallback markers", () => {
+    const component = readFileSync(join(process.cwd(), "src/components/ui/DeveloperLogo.tsx"), "utf8");
+    expect(component).not.toContain('data-developer-logo={embedded ? undefined : "nameplate"}');
+    expect(component).not.toContain("forceNameplate");
   });
 });
 

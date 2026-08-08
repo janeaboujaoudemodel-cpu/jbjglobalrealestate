@@ -221,7 +221,7 @@ function DevelopersView({ jobs }: { jobs: Job[] }) {
             <tr key={j.id} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7]">
               <td className="px-4 py-3">
                 <Link to={`/owner/developers/${j.developers?.slug ?? ""}`} className="inline-flex items-center gap-2 font-medium hover:underline">
-                  <DeveloperLogo src={getDeveloperLogoUrl(j.developers)} name={j.developers?.name} alt={j.developers?.name ?? "Developer"} variant="bare" className="!w-8 !h-8 !rounded-md" loading="lazy" />
+                  <DeveloperLogo src={getDeveloperLogoUrl(j.developers)} name={j.developers?.name} alt={j.developers?.name ?? "Developer"} variant="bare" size="micro" loading="lazy" />
                   {j.developers?.name ?? j.developer_id}
                 </Link>
               </td>
@@ -257,7 +257,7 @@ function ProjectsView({ projects }: { projects: DriveProject[] }) {
                 {p.areas?.name && <> · {p.areas.name}</>}
               </div>
             </div>
-            <DeveloperLogo src={getDeveloperLogoUrl(p.developers)} name={p.developers?.name} alt={p.developers?.name ?? "Developer"} variant="bare" className="!w-10 !h-10 !rounded-md shrink-0" loading="lazy" />
+            <DeveloperLogo src={getDeveloperLogoUrl(p.developers)} name={p.developers?.name} alt={p.developers?.name ?? "Developer"} variant="bare" size="micro" loading="lazy" />
           </div>
           <div className="mt-3 flex items-center gap-2 text-[11px] text-[#1A1A1A]/60">
             <FileText className="w-3.5 h-3.5" />
@@ -298,7 +298,7 @@ function GroupedView({ mode, projects }: { mode: "community" | "area"; projects:
           <ul className="divide-y divide-[#B89555]/15">
             {g.items.map(p => (
               <li key={p.id} className="px-4 py-2 flex items-center gap-3 hover:bg-[#FDFBF7]">
-                <DeveloperLogo src={getDeveloperLogoUrl(p.developers)} name={p.developers?.name} alt={p.developers?.name ?? "Developer"} variant="bare" className="!w-7 !h-7 !rounded-md" loading="lazy" />
+                <DeveloperLogo src={getDeveloperLogoUrl(p.developers)} name={p.developers?.name} alt={p.developers?.name ?? "Developer"} variant="bare" size="micro" loading="lazy" />
                 <Link to={`/project/${p.slug}`} className="text-sm hover:underline truncate">{p.name}</Link>
                 <span className="ml-auto text-[11px] text-[#1A1A1A]/60">{p.developers?.name}</span>
               </li>

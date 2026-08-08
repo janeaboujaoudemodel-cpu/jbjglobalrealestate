@@ -25,6 +25,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -389,20 +390,8 @@ export const DeveloperApprovalQueue = () => {
                       )}
 
                       {/* Logo overlay at bottom-left - Fixed height */}
-                      <div className="absolute bottom-3 left-3 bg-[#FDFBF7]/95 px-2 py-1 rounded shadow h-8 flex items-center">
-                        {developer.logo_url ? (
-                          <img
-                            src={developer.logo_url}
-                            alt={`${developer.name} logo`}
-                            className="h-5 w-auto object-contain max-w-[80px]"
-                            referrerPolicy="no-referrer"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
-                            }}
-                          />
-                        ) : (
-                          <span className="text-xs text-[#1A1A1A]/70">No logo</span>
-                        )}
+                      <div className="absolute bottom-3 left-3">
+                        <DeveloperLogo src={developer.logo_url} name={developer.name} alt={`${developer.name} logo`} variant="bare" size="micro" />
                       </div>
 
                       {/* Update existing badge */}
