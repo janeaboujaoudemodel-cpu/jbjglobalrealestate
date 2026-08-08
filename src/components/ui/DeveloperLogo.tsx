@@ -54,6 +54,9 @@ export function DeveloperLogo({
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
+  // Wide wordmarks (e.g. 233x29 SVGs) shrink to a hairline inside a square
+  // plate. Detected on load so the plate widens instead of looking empty.
+  const [wide, setWide] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
   const fallbackLogo = getWebsiteLogoFallbackUrl(websiteUrl);
@@ -104,7 +107,8 @@ export function DeveloperLogo({
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
     <div
-      className={containerClass}
+      className={cn(containerClass, wide && scale === "compact" && "!w-auto !aspect-auto min-w-[3.5rem] max-w-[9rem] px-2")}
+      data-wide-logo={wide ? "true" : undefined}
       data-keep-gold={dataKeepGold}
       data-developer-logo={embedded ? undefined : "database"}
       data-developer-logo-content={embedded ? "true" : undefined}
@@ -122,7 +126,9 @@ export function DeveloperLogo({
           if (img.naturalWidth < 4 || img.naturalHeight < 4) {
             setError(true);
             onError?.();
+            return;
           }
+          if (img.naturalWidth / img.naturalHeight >= 2.2) setWide(true);
         }}
         onError={() => {
           setError(true);
