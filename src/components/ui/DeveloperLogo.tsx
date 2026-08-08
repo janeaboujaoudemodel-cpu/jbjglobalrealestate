@@ -143,6 +143,11 @@ export function DeveloperLogo({
     : isLaraix
       ? laraixTransparent.url
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
+  // Every curated asset above is shipped pre-knocked-out to pure white, so it
+  // must render as-is (no invert, no screen blend).
+  const isCuratedWhiteArtwork =
+    !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers;
+
   // A real canonical/website logo always wins. Historical forceNameplate
   // overrides created text substitutes and blank-looking blocks, which are no
   // longer permitted on public cards.
