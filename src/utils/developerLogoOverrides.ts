@@ -70,6 +70,12 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   // the approved wordmark directly on the single emerald plate instead.
   dubaisouth: { forceNameplate: true },
   dubaisouthproperties: { forceNameplate: true },
+  // Official AB Developers artwork has an opaque black background. Screen
+  // blending removes only that black field while preserving the real gold AB
+  // monogram, preventing the solid white square caused by blanket inversion.
+  ab: { imageBlendMode: "screen", imageFilter: "none" },
+  abdevelopers: { imageBlendMode: "screen", imageFilter: "none" },
+  abdevelopersllc: { imageBlendMode: "screen", imageFilter: "none" },
 };
 
 

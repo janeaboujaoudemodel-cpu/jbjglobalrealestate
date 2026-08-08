@@ -27,11 +27,10 @@ const SELECT = `
   property_type_label, status_label, emirate,
   created_at, updated_at,
   reelly_id, construction_status, sale_status,
-  area_name, cover_image_url, is_published,
+  area_name, cover_image_url, card_image_url, gallery_start_image_url, is_published,
   developer_name, latitude, longitude,
   developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url, has_active_rep),
-  community:communities(id, name, slug),
-  images:project_images(id, image_url, alt_text, display_order)
+  community:communities(id, name, slug)
 `;
 
 // Promote off-plan; suppress ANY "ready/completed" listing on the homepage
@@ -177,7 +176,7 @@ function dedupePush(out: Project[], seen: Set<string>, candidates: Project[], ta
     const key = homepageDedupeKey(p);
     if (seen.has(key)) continue;
     // Require an image to keep the grid visually uniform
-    if (!p.cover_image_url && !(p.images && p.images.length > 0)) continue;
+    if (!p.cover_image_url && !p.card_image_url && !p.gallery_start_image_url) continue;
     seen.add(key);
     out.push(p);
   }

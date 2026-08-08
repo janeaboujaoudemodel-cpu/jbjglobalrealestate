@@ -125,12 +125,12 @@ export function DeveloperLogo({
         style={{
           // Emerald plates: knock the artwork out to pure white so every
           // wordmark reads at full contrast. Gold hero plate keeps dark ink.
-          filter: dataKeepGold
+          filter: override.imageBlendMode
             ? (override.imageFilter ?? "none")
-            : "brightness(0) invert(1)",
-          mixBlendMode: dataKeepGold
-            ? (override as { imageBlendMode?: React.CSSProperties["mixBlendMode"] }).imageBlendMode
-            : "normal",
+            : dataKeepGold
+              ? (override.imageFilter ?? "none")
+              : "brightness(0) invert(1)",
+          mixBlendMode: override.imageBlendMode ?? "normal",
         }}
       />
     </div>
