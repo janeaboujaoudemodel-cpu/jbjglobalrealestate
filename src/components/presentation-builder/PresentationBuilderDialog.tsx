@@ -110,18 +110,37 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
         units: chosenUnits,
         salesOffer: salesOffer.trim() || undefined,
       });
-      const w = window.open("", "_blank", "noopener,noreferrer");
-      if (!w) {
-        alert("Please allow pop-ups to export the presentation.");
-        return;
+
+      // Auto-open the print dialog from inside the deck document itself, so it
+      // works even when the opener reference is unavailable (sandboxed preview,
+      // popup blockers, cross-origin `noopener` windows).
+      const autoPrint =
+        `<script>window.addEventListener("load",function(){setTimeout(function(){try{window.focus();window.print();}catch(e){}},700);});<\/script>`;
+      const doc = html.includes("</body>")
+        ? html.replace("</body>", `${autoPrint}</body>`)
+        : html + autoPrint;
+
+      const blob = new Blob([doc], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      // `noopener` makes window.open() return null in most browsers, which used
+      // to break the export entirely. Open the blob URL directly, and fall back
+      // to a programmatic anchor click (survives popup blockers / iframes).
+      const win = window.open(url, "_blank");
+      if (!win) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noreferrer";
+        a.download = `${(project.name || "project").replace(/[^\w\-]+/g, "-")}-presentation.html`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
       }
-      w.document.open();
-      w.document.write(html);
-      w.document.close();
-      // Give the new window a tick to load images then trigger print
-      setTimeout(() => {
-        try { w.focus(); w.print(); } catch (_e) { /* user can press Cmd+P */ }
-      }, 800);
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch (err) {
+      console.error("Presentation export failed:", err);
+      alert("The presentation could not be generated. Please try again.");
     } finally {
       setIsExporting(false);
     }
