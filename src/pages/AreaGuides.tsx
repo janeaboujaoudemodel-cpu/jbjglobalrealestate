@@ -182,7 +182,8 @@ const AreaGuides = () => {
         ref={heroRef}
         data-hero-dark
         data-no-contrast-guard
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0A1020]"
+        className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#0A1020] pb-16"
+        style={{ paddingTop: "calc(var(--header-height, 96px) + 1.5rem)" }}
       >
         {/* Background — UAE aerial */}
         <div
