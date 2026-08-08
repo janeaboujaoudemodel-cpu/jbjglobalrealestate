@@ -14,6 +14,7 @@ import anaxWhite from "@/assets/developer-logos/verified-local/anax-white.png";
 import ellingtonWhite from "@/assets/developer-logos/verified-local/ellington-white.png";
 import sobhaWhite from "@/assets/developer-logos/verified-local/sobha-white.svg";
 import ahmadyarWhite from "@/assets/developer-logos/verified-local/ahmadyar-white.png";
+import aradaWhite from "@/assets/developer-logos/verified-local/arada-white.svg";
 
 const normalizeIdentity = (value: unknown) =>
   typeof value === "string" ? value.replace(/[^a-z0-9]+/gi, "").toLowerCase() : "";
@@ -26,6 +27,7 @@ const VERIFIED_WHITE_LOGOS: Array<{ match: RegExp; logo: string }> = [
   { match: /^anaxdevelopments?(llc)?$/, logo: anaxWhite },
   { match: /^ellington(properties|propertiesllc)?$/, logo: ellingtonWhite },
   { match: /^sobha(realty|properties|group)?(llc)?$/, logo: sobhaWhite },
+  { match: /^arada(properties|developments?|holding)?(llc)?$/, logo: aradaWhite },
   { match: /^ahmadyar(developments?|realestatedevelopment)?(llc)?$/, logo: ahmadyarWhite },
 ];
 
