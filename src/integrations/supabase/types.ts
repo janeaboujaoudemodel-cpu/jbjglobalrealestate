@@ -5667,6 +5667,7 @@ export type Database = {
           feedback_type: string | null
           how_heard_about_us: string | null
           id: string
+          identity_verified: boolean
           ip_hash: string | null
           is_spam_flagged: boolean | null
           messages: Json
@@ -5697,6 +5698,7 @@ export type Database = {
           feedback_type?: string | null
           how_heard_about_us?: string | null
           id?: string
+          identity_verified?: boolean
           ip_hash?: string | null
           is_spam_flagged?: boolean | null
           messages?: Json
@@ -5727,6 +5729,7 @@ export type Database = {
           feedback_type?: string | null
           how_heard_about_us?: string | null
           id?: string
+          identity_verified?: boolean
           ip_hash?: string | null
           is_spam_flagged?: boolean | null
           messages?: Json
