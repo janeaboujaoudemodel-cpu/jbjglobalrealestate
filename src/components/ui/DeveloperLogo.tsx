@@ -279,7 +279,7 @@ export function DeveloperLogo({
           // tightly-authored SVG/PNG canvases. Object-contain and centered
           // positioning are non-negotiable on every semantic size.
           "block h-full w-full max-h-full max-w-full object-contain object-center",
-          scale === "compact" ? "rounded-sm p-2" : "rounded-md p-2.5",
+          scale === "compact" ? "rounded-sm p-1" : "rounded-md p-1.5",
           "scale-100",
         )}
         style={{
@@ -290,8 +290,11 @@ export function DeveloperLogo({
             keepGold: dataKeepGold,
             needsInvert,
             paintMode,
-            overrideFilter: override.imageFilter,
-            overrideBlendMode: override.imageBlendMode,
+            // Locked white-knockout artwork is already pure white on a
+            // transparent canvas. Per-developer legacy paint overrides must
+            // never re-tint or blend it away.
+            overrideFilter: isCuratedWhiteArtwork ? undefined : override.imageFilter,
+            overrideBlendMode: isCuratedWhiteArtwork ? undefined : override.imageBlendMode,
           }),
         }}
 
