@@ -203,7 +203,6 @@ export function DeveloperLogo({
       <img
         src={url}
         alt={alt}
-        crossOrigin="anonymous"
         loading={loading}
         decoding="async"
         data-no-fallback
