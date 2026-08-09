@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl, isLockedWhiteLogoAsset } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
 
@@ -128,10 +128,16 @@ export function DeveloperLogo({
   const isDubaiSouth = /^dubaisouth(?:properties)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
+  // LOCKED white-v1 artwork from the database is the approved final mark for a
+  // developer and outranks every legacy curated file (several of which are
+  // still full-colour brand files, e.g. blue/red wordmarks).
+  const lockedWhiteSrc = isLockedWhiteLogoAsset(src) ? (src as string) : null;
   // Curated pure-white knockouts. The database artwork for these developers is
   // baked on an opaque dark field, which browser blend modes turn into a blank
   // white block, so the official mark is shipped pre-knocked-out instead.
-  const resolvedSrc = verifiedWhiteLogo
+  const resolvedSrc = lockedWhiteSrc
+    ? lockedWhiteSrc
+    : verifiedWhiteLogo
     ? verifiedWhiteLogo
     : isDubaiSouth
     ? dubaiSouthWhite.url
@@ -142,14 +148,21 @@ export function DeveloperLogo({
     : isLaraix
       ? `https://jbj.ae${laraixTransparent.url}`
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
+
   useEffect(() => {
     setError(false);
     setImageLoaded(false);
   }, [resolvedSrc]);
   // Every curated asset above is shipped pre-knocked-out to pure white, so it
-  // must render as-is (no invert, no screen blend).
+  // must render as-is (no invert, no screen blend). The same holds for the
+  // locked `white-v1` pipeline assets stored in the database.
   const isCuratedWhiteArtwork =
-    !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers;
+    !!verifiedWhiteLogo ||
+    isDubaiSouth ||
+    isAgProperties ||
+    isAbDevelopers ||
+    isLockedWhiteLogoAsset(resolvedSrc);
+
 
   // Never reject a real logo merely because its source canvas is opaque. That
   // old runtime heuristic classified normal PNG/WebP brand files as a "slab"

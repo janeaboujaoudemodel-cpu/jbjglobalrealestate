@@ -126,6 +126,12 @@ export function isWrongBrandLogoFile(url: unknown, name: unknown): boolean {
 export function getDeveloperLogoUrl(developer: unknown): string | null {
   const dev = normalizeDeveloper(developer);
   if (!dev) return null;
+  // LOCKED: a processed white-knockout asset in the `developer-logos/white-v1`
+  // storage folder is the approved, audited final artwork for that developer.
+  // It always wins — it is the exact official mark with its background removed
+  // and its ink repainted pure white, so it needs no runtime paint tricks.
+  const locked = dev.logo_url_processed;
+  if (isLockedWhiteLogoAsset(locked)) return secureLogoUrl(locked as string);
   // Curated, audited artwork is the canonical source whenever it exists. This
   // must run before the database URL because several legacy rows still point
   // at opaque slabs, expired remote files, or processed mirrors.
@@ -142,6 +148,16 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
   const processed = dev.logo_url_processed;
   return isAllowedLogoUrl(processed) ? secureLogoUrl(processed) : null;
 }
+
+/**
+ * True for the permanently locked white-knockout assets produced by the
+ * developer logo pipeline. Such artwork is already pure white on a transparent
+ * canvas and must render as-is (no invert filter, no screen blend).
+ */
+export function isLockedWhiteLogoAsset(url: unknown): boolean {
+  return typeof url === "string" && /developer-logos\/white-v1\//i.test(url);
+}
+
 
 export function getDeveloperWebsiteUrl(developer: unknown): string | null {
   const dev = normalizeDeveloper(developer);
