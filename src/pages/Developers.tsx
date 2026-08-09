@@ -10,8 +10,6 @@ import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Button } from "@/components/ui/button";
-import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
-import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
@@ -46,21 +44,10 @@ const Developers = () => {
   const filteredDevelopers = useMemo(() => {
     if (!developers) return [];
     
-    // Public quality gate: incomplete identities stay in the owner audit queue,
-    // never as empty emerald plates or synthetic cover fields on the live site.
-    let filtered = developers.filter((developer) => {
-      const key = normalizeDeveloperName(developer.name);
-      const logo = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
-      const coverCandidates = [
-        getVerifiedDeveloperFlagship(developer.name, developer.slug),
-        ...(projectStats?.imageCandidates?.[developer.id] || []),
-        ...(projectStats?.imageCandidatesByName?.[key] || []),
-        topProjectImageByDev[developer.id],
-        projectStats?.imagesByName?.[key],
-        developer.feature_image_url,
-      ];
-      return Boolean(logo) && coverCandidates.some((cover) => cover !== logo && isUsableDeveloperCover(cover));
-    });
+    // LOCKED: never hide a database developer because enrichment is incomplete.
+    // Missing identity/media remains visible and auditable rather than silently
+    // shrinking the public catalogue to only the currently enriched subset.
+    let filtered = [...developers];
 
     // Search filter (name only for accuracy)
     const q = (search.q || "").trim().toLowerCase();
