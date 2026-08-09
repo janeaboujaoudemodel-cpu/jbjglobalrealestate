@@ -382,10 +382,13 @@ const Developers = () => {
                     perPage={perPage}
                     onPerPageChange={setPerPage}
                     total={visibleDevelopers.length}
+                    canonicalTotal={filteredDevelopers.length}
                     missingLogo={missingLogoCount}
                     missingCover={missingCoverCount}
-                    auditOnly={auditOnly}
-                    onAuditOnlyChange={setAuditOnly}
+                    missingBoth={missingBothCount}
+                    auditFilter={auditFilter}
+                    onAuditFilterChange={setAuditFilter}
+
                     showAuditData={effectiveOwner}
                   />
 
