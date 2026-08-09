@@ -167,8 +167,13 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
  * canvas and must render as-is (no invert filter, no screen blend).
  */
 export function isLockedWhiteLogoAsset(url: unknown): boolean {
-  return typeof url === "string" && /developer-logos\/white-v(?:1|2)\//i.test(url);
+  if (typeof url !== "string") return false;
+  // Supabase public URLs may percent-encode the folder separator
+  // (`white-v2%2Ffile.png`); both forms are the same locked asset.
+  const decoded = url.replace(/%2F/gi, "/");
+  return /developer-logos\/white-v(?:1|2)\//i.test(decoded);
 }
+
 
 
 export function getDeveloperWebsiteUrl(developer: unknown): string | null {
