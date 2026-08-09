@@ -38341,3 +38341,9 @@ html body #root [data-view-mode-button][data-active="true"] * {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
+/* PASS 278c — inactive mode button keeps dark ink on white */
+html body #root [data-view-mode-button][data-active="false"],
+html body #root [data-view-mode-button][data-active="false"] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
