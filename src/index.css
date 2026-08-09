@@ -38334,3 +38334,10 @@ html body #root [data-view-mode-button][data-active="true"] {
 }
 html body #root [data-view-mode-button][data-active="true"] svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 html body #root [data-view-density-rail] { row-gap: 12px !important; }
+/* PASS 278b — active mode button ink wins over every contrast guard */
+html body #root [data-view-mode-button][data-active="true"],
+html body #root [data-view-mode-button][data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}

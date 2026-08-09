@@ -55,6 +55,9 @@ const DeveloperDirectoryViewControls = ({
         <button
           type="button"
           data-view-mode-button="true"
+          data-on-dark
+          data-allow-dark-cta
+          className="allow-white"
           data-active={view === "grid" ? "true" : "false"}
           onClick={() => onViewChange("grid")}
         >
@@ -64,6 +67,9 @@ const DeveloperDirectoryViewControls = ({
         <button
           type="button"
           data-view-mode-button="true"
+          data-on-dark
+          data-allow-dark-cta
+          className="allow-white"
           data-active={view === "list" ? "true" : "false"}
           onClick={() => onViewChange("list")}
         >
@@ -108,6 +114,9 @@ const DeveloperDirectoryViewControls = ({
         <button
           type="button"
           data-view-mode-button="true"
+          data-on-dark
+          data-allow-dark-cta
+          className="allow-white"
           data-active={auditOnly ? "true" : "false"}
           onClick={() => onAuditOnlyChange(!auditOnly)}
         >
