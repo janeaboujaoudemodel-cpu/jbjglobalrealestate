@@ -4,6 +4,10 @@ import alFahadFlagship from "@/assets/developer-logos/verified-local/alfahad-pro
 import amisFlagship from "@/assets/developer-logos/verified-local/amis-project.jpg";
 import anaxFlagship from "@/assets/developer-logos/verified-local/anax-project.jpg";
 import sobhaFlagship from "@/assets/developer-logos/verified-local/sobha-project.jpg";
+import sobhaStableCover from "@/assets/developer-covers/sobha-cover.jpg.asset.json";
+import aldarStableCover from "@/assets/developer-covers/aldar-cover.png.asset.json";
+import wellingtonStableCover from "@/assets/developer-covers/wellington-cover.jpg.asset.json";
+import majidAlFuttaimStableCover from "@/assets/developer-covers/majid-al-futtaim-cover.jpg.asset.json";
 
 const normalizeIdentity = (value?: string | null) =>
   (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
@@ -11,10 +15,45 @@ const normalizeIdentity = (value?: string | null) =>
 const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
   { identities: ["emaar", "emaarproperties"], url: emaarCreekHarbour },
   { identities: ["nakheel", "nakheelproperties"], url: nakheelPalmJebelAli },
-  { identities: ["sobha", "sobharealty"], url: sobhaFlagship },
+  { identities: ["sobha", "sobharealty"], url: sobhaStableCover.url || sobhaFlagship },
+  { identities: ["aldar", "aldarproperties"], url: aldarStableCover.url },
+  { identities: ["wellingtondevelopment", "wellingtondevelopmentllc"], url: wellingtonStableCover.url },
+  { identities: ["majidalfuttaim"], url: majidAlFuttaimStableCover.url },
   { identities: ["alfahadholding"], url: alFahadFlagship },
   { identities: ["amisdevelopment"], url: amisFlagship },
   { identities: ["anaxdevelopment", "anaxdevelopments"], url: anaxFlagship },
+  {
+    identities: ["alfahadholding", "alfahaddevelopment"],
+    url: "https://www.alfahadholding.com/images/fullscreen/1.jpg",
+  },
+  {
+    identities: ["barondevelopment", "baronprime"],
+    url: "https://baron.ae/wp-content/uploads/2025/09/10015.webp",
+  },
+  {
+    identities: ["majidalfuttaim", "majidalfuttaimcommunities", "majidalfuttaimproperties"],
+    url: "https://communities.majidalfuttaim.com/en/assets/images/allbanner/Ghaf-Woods-1.jpg",
+  },
+  {
+    identities: ["seventides", "seventidesrealestatedevelopmentllc"],
+    url: "https://www.seventides.com/static/img/hospitality/nhcollection/exterior/2.webp",
+  },
+  {
+    identities: ["bamx", "bamxdevelopment"],
+    url: "https://api.reelly.io/vault/ZZLvFZFt/Uqo6KpqJWGgNmS1lLiXKV3llDm8/uxWd1A../day-3.jpg",
+  },
+  {
+    identities: ["gfsdevelopments", "gfsdevelopment"],
+    url: "https://gfsdevelopments.ae/public_assets/img/VR.webp",
+  },
+  {
+    identities: ["laraixdevelopers", "laraixdevelopment"],
+    url: "https://reelly-backend.s3.amazonaws.com/projects/3060/images/21b8d500d280472cb79554dbe4d7eeea.webp",
+  },
+  {
+    identities: ["saas", "saasproperties"],
+    url: "https://api.reelly.io/vault/ZZLvFZFt/_JuPIAasUn6kzrzvEMucUsycYTg/JrnbNA../cover.jpeg",
+  },
   {
     identities: ["4directiondevelopments"],
     url: "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
