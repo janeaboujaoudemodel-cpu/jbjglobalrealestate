@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { Building2 } from "lucide-react";
-import { useDevelopers, useDeveloperProjectStats } from "@/hooks/useProjects";
+import { useDevelopers, useDeveloperProjectStats, type Developer } from "@/hooks/useProjects";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import { EMPTY_SEARCH, type PropertySearch } from "@/lib/propertySearch";
 import { getDeveloperTier, ELITE_PRIORITY_ORDER } from "@/utils/developerTier";
@@ -44,7 +44,7 @@ const Developers = () => {
   
   // LOCKED (canonical identity): merge duplicate developer records so one brand
   // never renders twice. Project counts and hero candidates are combined.
-  const rawCount = (dev: { id: string; name: string }) =>
+  const rawCount = (dev: Developer) =>
     projectCounts[dev.id] || projectStats?.countsByName?.[normalizeDeveloperName(dev.name)] || 0;
 
   const canonical = useMemo(
