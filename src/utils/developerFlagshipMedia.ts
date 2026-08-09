@@ -1,5 +1,6 @@
-import emaarCreekHarbour from "@/assets/developer-covers/emaar-dubai-creek-harbour-master-community.jpg";
-import nakheelPalmJebelAli from "@/assets/developer-covers/nakheel-palm-jebel-ali-master-community.jpg";
+import emaarCreekHarbour from "@/assets/developer-covers/emaar-dubai-creek-harbour-master-community.jpg.asset.json";
+import nakheelPalmJebelAli from "@/assets/developer-covers/nakheel-palm-jebel-ali-master-community.jpg.asset.json";
+import omniyatMasterpiece from "@/assets/omniyat-masterpiece.jpg.asset.json";
 import alFahadFlagship from "@/assets/developer-logos/verified-local/alfahad-project.jpg";
 import amisFlagship from "@/assets/developer-logos/verified-local/amis-project.jpg";
 import anaxFlagship from "@/assets/developer-logos/verified-local/anax-project.jpg";
@@ -13,8 +14,9 @@ const normalizeIdentity = (value?: string | null) =>
   (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
 
 const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
-  { identities: ["emaar", "emaarproperties"], url: emaarCreekHarbour },
-  { identities: ["nakheel", "nakheelproperties"], url: nakheelPalmJebelAli },
+  { identities: ["emaar", "emaarproperties"], url: emaarCreekHarbour.url },
+  { identities: ["nakheel", "nakheelproperties"], url: nakheelPalmJebelAli.url },
+  { identities: ["omniyat"], url: omniyatMasterpiece.url },
   { identities: ["sobha", "sobharealty"], url: sobhaStableCover.url || sobhaFlagship },
   { identities: ["aldar", "aldarproperties"], url: aldarStableCover.url },
   { identities: ["wellingtondevelopment", "wellingtondevelopmentllc"], url: wellingtonStableCover.url },
@@ -59,10 +61,6 @@ const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
     url: "https://4direction.ae/wp-content/uploads/2025/04/BARARI-GARDENS1.png",
   },
   {
-    identities: ["omniyat"],
-    url: "https://cdn.prod.website-files.com/64cd0df1806781d956403b26/6819deb6d3bcde4e482f8006_BINYAN_LIV3021_Plot31_S060_EXT_HeroBack_BeachSide_Final_3500%20(1).jpg",
-  },
-  {
     identities: ["agarkredevelopment"],
     url: "https://agproperty.ae/wp-content/uploads/2026/01/ag-residence.jpg",
   },
@@ -78,9 +76,7 @@ export const getVerifiedDeveloperFlagship = (
 ) => {
   const identities = [normalizeIdentity(name), normalizeIdentity(slug)].filter(Boolean);
   return VERIFIED_FLAGSHIP_MEDIA.find((entry) =>
-    entry.identities.some((candidate) =>
-      identities.some((identity) => identity === candidate || identity.includes(candidate)),
-    ),
+    entry.identities.some((candidate) => identities.some((identity) => identity === candidate)),
   )?.url;
 };
 

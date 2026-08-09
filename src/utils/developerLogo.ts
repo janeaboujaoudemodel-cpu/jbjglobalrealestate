@@ -132,7 +132,12 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
   const mirrored = getOfficialLogoMirror(url, dev.name);
   if (mirrored) return mirrored;
   if (isWrongBrandLogoFile(url, dev.name)) return null;
-  return isAllowedLogoUrl(url) ? url : null;
+  if (isAllowedLogoUrl(url)) return url;
+  // Processed artwork is a legitimate final fallback when the canonical field
+  // is empty or contains a rejected photo/favicon. It is never allowed to
+  // outrank a valid official canonical logo.
+  const processed = dev.logo_url_processed;
+  return isAllowedLogoUrl(processed) ? processed : null;
 }
 
 export function getDeveloperWebsiteUrl(developer: unknown): string | null {

@@ -173,6 +173,18 @@ describe("DeveloperLogo rendering guard", () => {
     expect(container.textContent).not.toContain("Light Artwork Developer");
   });
 
+  it("does not replace an opaque official raster with an empty plate", () => {
+    const { container } = renderLogo({
+      name: "Official Raster Developer",
+      src: "https://cdn.example.com/official-logo.webp",
+      variant: "card",
+    });
+    expect(container.querySelector("img")?.getAttribute("src")).toBe(
+      "https://cdn.example.com/official-logo.webp",
+    );
+    expect(container.querySelector('[data-developer-logo="unresolved"]')).toBeNull();
+  });
+
   it("never paints a white plate background on any variant", () => {
     for (const variant of ["tile", "bare", "card", "nameplate"] as const) {
       const { container, unmount } = renderLogo({

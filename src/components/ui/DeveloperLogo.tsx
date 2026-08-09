@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
-import { useLogoArtworkGuard } from "@/hooks/useLogoArtworkGuard";
 
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
@@ -155,20 +154,14 @@ export function DeveloperLogo({
   // Real canonical/website artwork always wins; typed substitutes are forbidden.
   const hasCuratedArtwork =
     !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers || isLaraix || !!curatedLogo;
-  // White-block guard: opaque slab artwork is rejected outright (never painted
-  // as a blank rectangle on the plate).
-  const artworkVerdict = useLogoArtworkGuard(
-    hasCuratedArtwork ? null : (resolvedSrc as string | null),
-  );
-  // Render real artwork while the audit is pending. Cross-origin official
-  // marks cannot be canvas-inspected and otherwise stayed `unknown` forever,
-  // leaving a permanent empty emerald plate. The image and plate still reveal
-  // atomically on `onLoad`; an analysable opaque slab is removed if the guard
-  // later returns `block`.
+  // Never reject a real logo merely because its source canvas is opaque. That
+  // old runtime heuristic classified normal PNG/WebP brand files as a "slab"
+  // and replaced them with an empty emerald plate. Approved transparent-white
+  // artwork remains preferred; other official artwork is painted by the
+  // knockout style below until its processed version is available.
   const valid =
     isValidDeveloperLogoUrl(resolvedSrc) &&
-    !error &&
-    artworkVerdict !== "block";
+    !error;
 
 
   const needsDarkPlate = !dataKeepGold;
