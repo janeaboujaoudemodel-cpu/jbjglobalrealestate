@@ -67,6 +67,10 @@ const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
     identities: ["agarkredevelopment"],
     url: "https://agproperty.ae/wp-content/uploads/2026/01/ag-residence.jpg",
   },
+  {
+    identities: ["sikantarealestatedevelopmentllc", "sikantadevelopments"],
+    url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/developer-logos/developer-covers%2Fsikanta-myra-residences-official-facade.jpg",
+  },
 ];
 
 /**
@@ -83,8 +87,12 @@ export const getVerifiedDeveloperFlagship = (
   )?.url;
 };
 
-export const isUsableDeveloperCover = (value?: string | null) =>
-  Boolean(value) &&
-  !/(?:\.svg(?:\?|$)|logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/(?:16x16|118x|296x)\/|mobile[-_]?app|app[-_]?banner|iphone|phone|meeting|celebration|team[-_]|portrait|suspended[_-]?account|beback[-_]?soon|coming[-_]?soon|under[-_]?construction)/i.test(
-    value || "",
-  );
+export const isUsableDeveloperCover = (value?: string | null) => {
+  if (!value) return false;
+  const decoded = decodeURIComponent(value);
+  const filename = decoded.split(/[/?#]/).filter(Boolean).pop() || "";
+  // Asset buckets may legitimately contain "developer-logos" in their path;
+  // reject logo artwork by its filename rather than rejecting the whole bucket.
+  if (/(?:\.svg$|logo|wordmark|favicon)/i.test(filename)) return false;
+  return !/(?:snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/(?:16x16|118x|296x)\/|mobile[-_]?app|app[-_]?banner|iphone|phone|meeting|celebration|team[-_]|portrait|suspended[_-]?account|beback[-_]?soon|coming[-_]?soon|under[-_]?construction)/i.test(decoded);
+};
