@@ -80,6 +80,7 @@ const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
   { match: /\bbinghatti\b/i, logo: "/developer-logos/binghatti.svg" },
   { match: /\bwellington\b/i, logo: "/developer-logos/wellington.svg" },
+  { match: /majid\s+al\s+futtaim/i, logo: "https://communities.majidalfuttaim.com/en/assets/images/logo.svg" },
 ];
 
 function getOfficialLogoMirror(url: unknown, name: unknown): string | null {
@@ -160,6 +161,7 @@ const KNOWN_DEVELOPER_LOGOS: Array<{ match: RegExp; logo: string }> = [
   { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
   { match: /\bbinghatti\b/i, logo: "/developer-logos/binghatti.svg" },
   { match: /\bwellington\b/i, logo: "/developer-logos/wellington.svg" },
+  { match: /majid\s+al\s+futtaim/i, logo: "https://communities.majidalfuttaim.com/en/assets/images/logo.svg" },
 ];
 
 export function getKnownDeveloperWebsiteUrl(name: unknown): string | null {

@@ -52,14 +52,14 @@ const Developers = () => {
       const key = normalizeDeveloperName(developer.name);
       const logo = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
       const coverCandidates = [
+        getVerifiedDeveloperFlagship(developer.name, developer.slug),
         ...(projectStats?.imageCandidates?.[developer.id] || []),
         ...(projectStats?.imageCandidatesByName?.[key] || []),
         topProjectImageByDev[developer.id],
         projectStats?.imagesByName?.[key],
         developer.feature_image_url,
-        getVerifiedDeveloperFlagship(developer.name, developer.slug),
       ];
-      return Boolean(logo) && coverCandidates.some(isUsableDeveloperCover);
+      return Boolean(logo) && coverCandidates.some((cover) => cover !== logo && isUsableDeveloperCover(cover));
     });
 
     // Search filter (name only for accuracy)
