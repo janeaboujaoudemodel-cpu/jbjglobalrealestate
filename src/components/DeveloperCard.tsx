@@ -193,7 +193,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             (essential for monogram-only marks), then exactly ONE metadata row. */}
         <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-12">
 
-          <h3 className="jj-gold-animated text-[15px] font-semibold leading-snug tracking-[-0.01em] mb-1.5">
+          <h3 className="developer-name-shine !text-[#B89555] text-[15px] font-bold leading-snug tracking-[-0.01em] mb-1.5">
             {getPublicDeveloperName(developer.name)}
           </h3>
 
