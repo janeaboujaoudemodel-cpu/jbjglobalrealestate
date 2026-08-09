@@ -91,9 +91,11 @@ const getPublicDeveloperName = (name: string) => {
     .trim();
 };
 
-const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
+const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [], density = 4 }: DeveloperCardProps) => {
+  const scale = DENSITY_SCALE(density);
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
+
   // The directory paginates to 24 cards, so every visible cover belongs to the
   // current viewport workload. Lazy-loading the lower rows left large beige
   // fields in screenshots and during normal scrolling; eagerly decode the
