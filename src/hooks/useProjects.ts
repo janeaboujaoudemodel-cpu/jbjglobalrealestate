@@ -12,7 +12,7 @@ const hasPublicPhoto = (p: UnifiedProject) =>
   !!(p.cover_image_url || p.card_image_url || p.gallery_start_image_url || p.images?.some((img) => !!img.image_url));
 
 const hasApprovedDeveloperLogo = (project: UnifiedProject) =>
-  isValidDeveloperLogoUrl(project.developer?.logo_url);
+  isValidDeveloperLogoUrl(project.developer?.logo_url_processed || project.developer?.logo_url);
 
 const GENERIC_DUPLICATE_WORDS = new Set([
   "the",
@@ -567,7 +567,7 @@ export function useProjectsPaginated(
           .from("projects")
           .select(`
             *,
-            developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url),
+            developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, logo_url_processed, logo_locked, website_url),
             community:communities(id, name, slug)
           `)
           .or("is_published.is.null,is_published.eq.false")
@@ -587,7 +587,7 @@ export function useProjectsPaginated(
         .from("projects")
         .select(`
           *,
-          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, logo_url_processed, logo_locked, website_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
@@ -639,7 +639,7 @@ export function useProjects() {
         .from("projects")
         .select(`
           *,
-          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, logo_url_processed, logo_locked, website_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -703,7 +703,7 @@ export function useProjectsListing() {
         roi_estimate, rental_yield_estimate, latitude, longitude,
           deleted_at,
         developer_id,
-        developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url, logo_bg_color),
+        developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, logo_url_processed, logo_locked, website_url, logo_bg_color),
         community:communities(id, name, slug)
       `;
 
@@ -795,7 +795,7 @@ export function useProjectsByCommunity(communitySlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, logo_url_processed, logo_locked, website_url),
           community:communities!inner(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -821,7 +821,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers!projects_developer_id_fkey!inner(id, name, slug, logo_url, website_url),
+          developer:developers!projects_developer_id_fkey!inner(id, name, slug, logo_url, logo_url_processed, logo_locked, website_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -846,7 +846,7 @@ export function useProject(projectSlug: string) {
     queryFn: async () => {
       const PROJECT_SELECT = `
           *,
-          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, upcoming_units, total_units_delivered, description, headquarters, ceo_name, website_url, specialization, parent_company, license_number, linkedin_url, instagram_url, portfolio_worth),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, logo_url_processed, logo_locked, founded_year, completed_projects, offplan_projects, upcoming_units, total_units_delivered, description, headquarters, ceo_name, website_url, specialization, parent_company, license_number, linkedin_url, instagram_url, portfolio_worth),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path),

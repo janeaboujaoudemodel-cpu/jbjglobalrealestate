@@ -11,6 +11,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { getRecentSearches, clearRecentSearches } from "@/lib/searchHistory";
 import ContentTrack from "@/components/layout/ContentTrack";
 import { getCanonicalProjectKey } from "@/utils/projectIdentity";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 
 
 interface ContinueSearchingProps {
@@ -158,7 +159,7 @@ const ContinueSearching = ({
     let cancelled = false;
     supabase
       .from("projects")
-      .select("slug, cover_image_url, card_image_url, gallery_start_image_url, developer_name, developer:developers(name, logo_url)")
+      .select("slug, cover_image_url, card_image_url, gallery_start_image_url, developer_name, developer:developers(name, logo_url, logo_url_processed, logo_locked)")
       .in("slug", slugs)
       .then(({ data }) => {
         if (cancelled) return;
@@ -169,7 +170,7 @@ const ContinueSearching = ({
           patchItem(current.id, "property", {
             imageUrl: project.card_image_url || project.gallery_start_image_url || project.cover_image_url || current.imageUrl,
             subtitle: developer?.name || project.developer_name || current.subtitle,
-            developerLogo: developer?.logo_url || current.developerLogo,
+            developerLogo: getDeveloperLogoUrl(developer) || current.developerLogo,
           });
         }
       });
