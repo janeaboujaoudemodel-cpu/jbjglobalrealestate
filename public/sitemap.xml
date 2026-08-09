@@ -1200,12 +1200,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/dalands-real-estate-development</loc>
-    <lastmod>2026-08-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://jbj.ae/developer/al-waleed-real-estate-development</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -1244,6 +1238,12 @@
   <url>
     <loc>https://jbj.ae/developer/bling-development-dwc-llc</loc>
     <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/developer/dalands-real-estate-development</loc>
+    <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -1464,6 +1464,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://jbj.ae/developer/estro-real-estate-development-l-l-c</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://jbj.ae/developer/pantheon-development</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -1471,12 +1477,6 @@
   </url>
   <url>
     <loc>https://jbj.ae/developer/elitist-real-estate-development-l-l-c</loc>
-    <lastmod>2026-08-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://jbj.ae/developer/estro-real-estate-development-l-l-c</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -1716,6 +1716,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://jbj.ae/developer/m-four-development</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://jbj.ae/developer/reef-development</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -1724,12 +1730,6 @@
   <url>
     <loc>https://jbj.ae/developer/lacasa-living-real-estate-development-l-l-c</loc>
     <lastmod>2026-08-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://jbj.ae/developer/m-four-development</loc>
-    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -1794,13 +1794,13 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/grand-signature-real-estate-development-l-l-c</loc>
+    <loc>https://jbj.ae/developer/blackwood-development-l-l-c</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/blackwood-development-l-l-c</loc>
+    <loc>https://jbj.ae/developer/grand-signature-real-estate-development-l-l-c</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -1843,7 +1843,7 @@
   </url>
   <url>
     <loc>https://jbj.ae/developer/n-a-m-o-real-estate-development-l-l-c</loc>
-    <lastmod>2026-08-08</lastmod>
+    <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -2214,6 +2214,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://jbj.ae/developer/imperial-55-real-estate-development</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://jbj.ae/developer/bonyan-international-investment-group</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -2239,12 +2245,6 @@
   </url>
   <url>
     <loc>https://jbj.ae/developer/preatoni-properties-dubai</loc>
-    <lastmod>2026-08-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://jbj.ae/developer/imperial-55-real-estate-development</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -2280,12 +2280,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/blue-square-real-estate-development</loc>
-    <lastmod>2026-08-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://jbj.ae/developer/rijas-development</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -2311,6 +2305,12 @@
   </url>
   <url>
     <loc>https://jbj.ae/developer/al-wazan-group</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/developer/blue-square-real-estate-development</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -3234,14 +3234,14 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/dar-comfort-real-estate-l-l-c</loc>
-    <lastmod>2026-08-08</lastmod>
+    <loc>https://jbj.ae/developer/dara-development-l-l-c</loc>
+    <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/dara-development-l-l-c</loc>
-    <lastmod>2026-08-08</lastmod>
+    <loc>https://jbj.ae/developer/dar-comfort-real-estate-l-l-c</loc>
+    <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
