@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { Map as MapIcon, Maximize } from "lucide-react";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
@@ -125,7 +126,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, latitude, longitude, developer_name, cover_image_url, price_from, handover_date, developer:developers(logo_url)")
+        .select("id, name, slug, latitude, longitude, developer_name, cover_image_url, price_from, handover_date, developer:developers(logo_url, logo_url_processed)")
         .ilike("area_name", `%${areaName}%`)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .not("latitude", "is", null)
@@ -134,7 +135,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
       if (error) throw error;
       return (data || []).map((p: any) => ({
         ...p,
-        developer_logo: p.developer?.[0]?.logo_url || p.developer?.logo_url || null,
+        developer_logo: getDeveloperLogoUrl(p.developer) || null,
       }));
     },
     staleTime: 5 * 60 * 1000,

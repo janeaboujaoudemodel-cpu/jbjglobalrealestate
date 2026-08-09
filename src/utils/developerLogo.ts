@@ -42,7 +42,11 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /Group\+544\.png/i,
   /Smart-Investments-Ltd\.png/i,
   /ank-developers-logo\.png/i,
+  // Social-media photo exports (Instagram/Facebook CDN naming) are never brand
+  // marks — they knock out to an opaque block on the emerald plate.
+  /\/\d{9,}_\d{10,}_/,
 ];
+
 
 
 function isAllowedLogoUrl(url: unknown): url is string {

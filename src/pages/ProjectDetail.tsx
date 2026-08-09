@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { useParams, Link } from "react-router-dom";
 import { useProject } from "@/hooks/useProjects";
 import { useReellyProjectBySlug } from "@/hooks/useReellyProjects";
@@ -168,7 +169,7 @@ const ProjectDetail = () => {
       slug: p.slug || slug || "",
       imageUrl: (project?.cover_image_url || (project?.images?.[0] as any)?.image_url || (reellyProject as any)?.thumbnail) ?? undefined,
       subtitle: project?.developer?.name || (reellyProject as any)?.developer_name || undefined,
-      developerLogo: (project?.developer as any)?.logo_url || undefined,
+      developerLogo: getDeveloperLogoUrl(project?.developer) || undefined,
     });
   }, [project, reellyProject]);
 
@@ -226,7 +227,8 @@ const ProjectDetail = () => {
         id: (project.developer as any).id ?? (project as any).developer_id ?? null,
         name: project.developer.name, 
         slug: project.developer.slug,
-        logo_url: (project.developer as any).logo_url ?? null,
+        logo_url: getDeveloperLogoUrl(project.developer) ?? (project.developer as any).logo_url ?? null,
+        logo_url_processed: (project.developer as any).logo_url_processed ?? null,
         website_url: (project.developer as any).website_url ?? (project.developer as any).website ?? null,
         founded_year: (project.developer as any).founded_year ?? null,
         completed_projects: (project.developer as any).completed_projects ?? null,

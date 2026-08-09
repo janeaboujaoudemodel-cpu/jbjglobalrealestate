@@ -14,11 +14,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useDevelopers } from "@/hooks/useProjects";
 import { cn } from "@/lib/utils";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface Developer {
   id: string;
   name: string;
   logo_url?: string | null;
+  logo_url_processed?: string | null;
   rank?: number | null;
 }
 
@@ -68,7 +70,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
               className={cn("w-full min-h-11 flex items-start gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors overflow-visible", value === dev.id ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
             >
               <DeveloperLogo
-                src={dev.logo_url}
+                src={getDeveloperLogoUrl(dev) ?? dev.logo_url}
                 alt={dev.name}
                 name={dev.name}
                 variant="bare"

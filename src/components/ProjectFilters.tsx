@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import {
   Sheet,
@@ -360,7 +361,7 @@ const ProjectFilters = ({
                 <SelectItem key={developer.id} value={developer.id}>
                     <div data-developer-option className="flex w-full min-w-0 items-start gap-2.5 py-0.5 overflow-visible">
                       <DeveloperLogo
-                        src={developer.logo_url}
+                        src={getDeveloperLogoUrl(developer) ?? developer.logo_url}
                         alt={developer.name}
                         name={developer.name}
                         variant="bare"

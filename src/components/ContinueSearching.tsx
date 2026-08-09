@@ -348,13 +348,13 @@ function resolveDeveloperLogoByName(name: string): Promise<string | null> {
   const task = Promise.resolve(
     supabase
       .from("developers")
-      .select("logo_url")
+      .select("name, logo_url, logo_url_processed")
       .ilike("name", `%${name}%`)
-      .not("logo_url", "is", null)
+      .or("logo_url.not.is.null,logo_url_processed.not.is.null")
       .limit(1)
       .maybeSingle(),
   ).then(({ data }) => {
-    const url = data?.logo_url ?? null;
+    const url = getDeveloperLogoUrl(data) ?? null;
     developerLogoCache.set(key, url);
     developerLogoInflight.delete(key);
     return url;
@@ -415,7 +415,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
       // logo_url separately for the logo overlay.
       supabase
         .from("developers")
-        .select("logo_url, feature_image_url")
+        .select("name, logo_url, logo_url_processed, feature_image_url")
         .eq("slug", item.slug)
         .limit(1)
         .maybeSingle()
@@ -425,8 +425,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             patchItem(item.id, item.type, { imageUrl: bgUrl });
             setImgBroken(false);
           }
-          if (data?.logo_url && data.logo_url !== item.developerLogo) {
-            patchItem(item.id, item.type, { developerLogo: data.logo_url });
+          const resolvedLogo = getDeveloperLogoUrl(data);
+          if (resolvedLogo && resolvedLogo !== item.developerLogo) {
+            patchItem(item.id, item.type, { developerLogo: resolvedLogo });
           }
         });
     } else if (item.type === "area") {
