@@ -73,7 +73,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
                 name={dev.name}
                 variant="bare"
                 renderFallback
-                className="!w-10 !h-10 !min-w-10 !min-h-10 !rounded-md !p-[3px]"
+                className="!w-20 !h-10 !min-w-20 !min-h-10 !rounded-md !p-[3px]"
               />
               <span data-developer-name className="min-w-0 flex-1 text-left leading-snug whitespace-normal break-words [overflow-wrap:anywhere] overflow-visible">{dev.name}</span>
               {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-[#1A1A1A] flex-shrink-0" />}

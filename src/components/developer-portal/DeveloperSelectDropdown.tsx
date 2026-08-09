@@ -97,7 +97,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                 name={selectedDev.name}
                 variant="bare"
                 renderFallback
-                className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
+                className="!w-16 !h-8 !min-w-16 !min-h-8 !rounded-md !p-[3px]"
               />
               <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground whitespace-normal break-words [overflow-wrap:anywhere]">{selectedDev.name}</span>
             </>
@@ -108,7 +108,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                 name={placeholder}
                 variant="bare"
                 renderFallback
-                className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
+                className="!w-16 !h-8 !min-w-16 !min-h-8 !rounded-md !p-[3px]"
               />
               <span className="min-w-0 flex-1 text-sm leading-snug text-[#1A1A1A]/70 whitespace-normal break-words [overflow-wrap:anywhere]">{placeholder}</span>
             </>
@@ -162,7 +162,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                     name={dev.name}
                     variant="bare"
                     renderFallback
-                    className="!w-9 !h-9 !min-w-9 !min-h-9 !rounded-md !p-[3px]"
+                    className="!w-[72px] !h-9 !min-w-[72px] !min-h-9 !rounded-md !p-[3px]"
                   />
                   <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground whitespace-normal break-words [overflow-wrap:anywhere]">{dev.name}</span>
                 </button>

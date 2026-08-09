@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl, isLockedWhiteLogoAsset } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
+import { getCachedLogoPaintMode, probeLogoPaintMode } from "@/utils/logoArtworkProbe";
 
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
@@ -44,11 +45,15 @@ const EMERALD_PLATE_SURFACE =
   "bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] " +
   "border border-white/35 shadow-[0_6px_18px_rgba(0,0,0,0.30)]";
 
+// ONE plate geometry for every developer logo across the entire platform:
+// same rectangle, same radius, same padding, same alignment. Never square,
+// never resized to fit a particular brand mark.
 const UNIFIED_PLATE =
-  "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
+  "h-[72px] w-36 inline-flex items-center justify-center overflow-hidden " +
   "rounded-lg p-1.5 " + EMERALD_PLATE_SURFACE;
 
 const logoPlateSurface = (_darkPlate?: boolean) => EMERALD_PLATE_SURFACE;
+
 
 /**
  * STYLING GUARD (single source of truth for logo paint).
@@ -68,6 +73,8 @@ export function getLogoPaintStyle(opts: {
   needsInvert?: boolean | null;
   overrideFilter?: string;
   overrideBlendMode?: string;
+  /** Result of the runtime alpha probe (see utils/logoArtworkProbe). */
+  paintMode?: "silhouette" | "screen" | null;
 }): { filter: string; mixBlendMode: "normal" | "screen" } {
   // Pure-white lock: every developer mark on an emerald plate is knocked out to
   // pure white, regardless of the source ink (gold, navy, brand colour). Only
@@ -75,19 +82,31 @@ export function getLogoPaintStyle(opts: {
   const keepAsIs = !!opts.keepGold;
   const verifiedWhite = !!opts.isLightArtwork;
   const lightMarkOnDarkField = opts.needsInvert === false;
+  if (opts.overrideFilter || opts.overrideBlendMode) {
+    return {
+      filter: opts.overrideFilter ?? "none",
+      mixBlendMode: (opts.overrideBlendMode as "normal" | "screen") ?? "normal",
+    };
+  }
+  // Artwork proven to sit on a transparent canvas is repainted to a pure white
+  // silhouette. This is direction-agnostic: white wordmarks stay white (they no
+  // longer invert to black and vanish under screen blending) and dark marks
+  // become white, and a transparent canvas can never become a white slab.
+  if (!keepAsIs && !verifiedWhite && opts.paintMode === "silhouette") {
+    return { filter: "brightness(0) invert(1)", mixBlendMode: "normal" };
+  }
   return {
-    // Never use brightness(0) before inversion on unaudited rasters: that
-    // converts every opaque background pixel to white and creates the exact
-    // solid slab this component is required to prevent. Verified transparent
-    // white artwork renders unchanged. Dark marks on a light field use a plain
-    // inversion plus screen blending; light marks on dark fields use screen
-    // blending without inversion so the dark field disappears.
+    // Never use brightness(0) before inversion on unaudited opaque rasters: that
+    // converts every background pixel to white and creates the exact solid slab
+    // this component is required to prevent. Verified transparent white artwork
+    // renders unchanged; opaque fields are removed with screen blending.
     filter: opts.overrideFilter ?? (keepAsIs || verifiedWhite || lightMarkOnDarkField ? "none" : "invert(1)"),
     mixBlendMode:
       (opts.overrideBlendMode as "normal" | "screen") ??
       (keepAsIs || verifiedWhite ? "normal" : "screen"),
   };
 }
+
 
 
 
@@ -149,10 +168,29 @@ export function DeveloperLogo({
       ? `https://jbj.ae${laraixTransparent.url}`
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
 
+  const [paintMode, setPaintMode] = useState<"silhouette" | "screen" | null>(() =>
+    getCachedLogoPaintMode(resolvedSrc as string | null),
+  );
+
   useEffect(() => {
     setError(false);
     setImageLoaded(false);
+    if (!resolvedSrc || typeof resolvedSrc !== "string") {
+      setPaintMode(null);
+      return;
+    }
+    const cached = getCachedLogoPaintMode(resolvedSrc);
+    setPaintMode(cached);
+    if (cached) return;
+    let alive = true;
+    probeLogoPaintMode(resolvedSrc).then((mode) => {
+      if (alive) setPaintMode(mode);
+    });
+    return () => {
+      alive = false;
+    };
   }, [resolvedSrc]);
+
   // Every curated asset above is shipped pre-knocked-out to pure white, so it
   // must render as-is (no invert, no screen blend). The same holds for the
   // locked `white-v1` pipeline assets stored in the database.
@@ -251,6 +289,7 @@ export function DeveloperLogo({
             isLightArtwork: isCuratedWhiteArtwork,
             keepGold: dataKeepGold,
             needsInvert,
+            paintMode,
             overrideFilter: override.imageFilter,
             overrideBlendMode: override.imageBlendMode,
           }),
@@ -301,12 +340,14 @@ export function DeveloperLogo({
     return renderImage(resolvedSrc as string, cardContainer, "card");
   }
 
-  // ── Default tile variant (developer directory, dev-detail, area chips) ──
+  // ── Default tile variant — same rectangular plate as every other surface ──
   const tileContainer = cn(
-    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center p-1.5 overflow-hidden",
+    compactPlate,
+    "rounded-lg shrink-0 inline-flex items-center justify-center p-1.5 overflow-hidden",
     logoPlateSurface(needsDarkPlate),
     className,
   );
+
 
   if (!valid) {
     return renderEmptyPlate(tileContainer);

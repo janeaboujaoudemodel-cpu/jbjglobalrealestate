@@ -39,8 +39,15 @@ export const normalizeDeveloperKey = (value?: string | null) =>
  * both records are the same registered brand (shared official domain / logo).
  */
 const CANONICAL_ALIASES: Record<string, string> = {
-  agark: "ag", // AG Ark RE Development == AG Properties (agproperty.ae)
+  // AG Ark RE Development (agproperty.ae) == AG Properties L.L.C — same brand,
+  // same official domain and same official mark, two legacy records.
+  agark: "ag",
+  agarkre: "ag",
+  agarkredevelopment: "ag",
+  aagproperties: "ag",
+  aag: "ag",
 };
+
 
 export const normalizeDomain = (value?: unknown) => {
   if (typeof value !== "string" || !value.trim()) return "";
