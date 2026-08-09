@@ -2,11 +2,12 @@ import { useState, useMemo, useEffect } from "react";
 import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { Building2 } from "lucide-react";
-import { useDevelopers, useDeveloperProjectStats } from "@/hooks/useProjects";
+import { useDevelopers, useDeveloperProjectStats, type Developer } from "@/hooks/useProjects";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import { EMPTY_SEARCH, type PropertySearch } from "@/lib/propertySearch";
 import { getDeveloperTier, ELITE_PRIORITY_ORDER } from "@/utils/developerTier";
 import DeveloperCard from "@/components/DeveloperCard";
+import { dedupeDevelopers } from "@/utils/developerDedupe";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Button } from "@/components/ui/button";
@@ -41,13 +42,47 @@ const Developers = () => {
 
   // Apply filters to developers
   
+  // LOCKED (canonical identity): merge duplicate developer records so one brand
+  // never renders twice. Project counts and hero candidates are combined.
+  const rawCount = (dev: Developer) =>
+    projectCounts[dev.id] || projectStats?.countsByName?.[normalizeDeveloperName(dev.name)] || 0;
+
+  const canonical = useMemo(
+    () => dedupeDevelopers(developers ?? [], rawCount),
+    [developers, projectCounts, projectStats],
+  );
+
+  const canonicalDevelopers = useMemo(() => canonical.map((entry) => entry.developer), [canonical]);
+
+  const mergedStats = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const heroes: Record<string, string[]> = {};
+    for (const { developer, mergedIds } of canonical) {
+      let count = 0;
+      const images: string[] = [];
+      for (const id of mergedIds) {
+        count += projectCounts[id] || 0;
+        images.push(...(projectStats?.imageCandidates?.[id] || []));
+        const single = topProjectImageByDev[id];
+        if (single) images.push(single);
+      }
+      const byName = projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0;
+      counts[developer.id] = Math.max(count, byName);
+      heroes[developer.id] = [
+        ...new Set([
+          ...images,
+          ...(projectStats?.imageCandidatesByName?.[normalizeDeveloperName(developer.name)] || []),
+        ]),
+      ];
+    }
+    return { counts, heroes };
+  }, [canonical, projectCounts, projectStats, topProjectImageByDev]);
+
   const filteredDevelopers = useMemo(() => {
-    if (!developers) return [];
-    
-    // LOCKED: never hide a database developer because enrichment is incomplete.
-    // Missing identity/media remains visible and auditable rather than silently
-    // shrinking the public catalogue to only the currently enriched subset.
-    let filtered = [...developers];
+    if (!canonicalDevelopers.length) return [];
+
+    let filtered = [...canonicalDevelopers];
+
 
     // Search filter (name only for accuracy)
     const q = (search.q || "").trim().toLowerCase();
@@ -87,7 +122,7 @@ const Developers = () => {
     if ((search.sort as string) === "alpha") {
       filtered.sort((a, b) => a.name.localeCompare(b.name));
     } else if ((search.sort as string) === "most_projects") {
-      filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
+      filtered.sort((a, b) => (mergedStats.counts[b.id] || 0) - (mergedStats.counts[a.id] || 0));
     } else {
       filtered.sort((a, b) => {
         const aSlug = a.slug?.toLowerCase() || "";
@@ -106,7 +141,7 @@ const Developers = () => {
     }
     
     return filtered;
-  }, [developers, search, search.sort, projectCounts, projectStats, topProjectImageByDev]);
+  }, [canonicalDevelopers, search, search.sort, mergedStats]);
 
 
   // Reset to page 1 when filters change
@@ -264,12 +299,9 @@ const Developers = () => {
                     <DeveloperCard
                       key={developer.id} 
                       developer={developer} 
-                      projectCount={projectCounts[developer.id] || projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0}
-                       heroImageUrl={topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
-                      heroImageUrls={[
-                        ...(projectStats?.imageCandidates?.[developer.id] || []),
-                        ...(projectStats?.imageCandidatesByName?.[normalizeDeveloperName(developer.name)] || []),
-                      ]}
+                      projectCount={mergedStats.counts[developer.id] || 0}
+                      heroImageUrl={mergedStats.heroes[developer.id]?.[0] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
+                      heroImageUrls={mergedStats.heroes[developer.id] || []}
                       index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
                     />
                   ))}

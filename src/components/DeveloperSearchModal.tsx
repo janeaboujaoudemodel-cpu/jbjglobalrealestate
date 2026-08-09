@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Search, Building2, ChevronRight, Crown, Award, Star } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { dedupeDevelopers } from "@/utils/developerDedupe";
+
 
 interface DeveloperSearchModalProps {
   isOpen: boolean;
@@ -16,16 +18,22 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
+  // LOCKED (canonical identity): one card per real brand, never duplicates.
+  const canonicalDevelopers = useMemo(
+    () => dedupeDevelopers(developers ?? []).map((entry) => entry.developer),
+    [developers],
+  );
+
   const filteredDevelopers = useMemo(() => {
-    if (!developers) return [];
-    if (!searchQuery) return developers;
-    
+    if (!searchQuery) return canonicalDevelopers;
+
     const query = searchQuery.toLowerCase();
-    return developers.filter(dev => 
+    return canonicalDevelopers.filter(dev => 
       dev.name.toLowerCase().includes(query) ||
       dev.headquarters?.toLowerCase().includes(query)
     );
-  }, [developers, searchQuery]);
+  }, [canonicalDevelopers, searchQuery]);
+
 
   const handleSelectDeveloper = (slug: string) => {
     onClose();
