@@ -1,5 +1,4 @@
 import { LayoutGrid, List } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export type DirectoryViewMode = "grid" | "list";
 
@@ -21,7 +20,12 @@ interface Props {
 const COLUMN_OPTIONS = [1, 2, 3, 4, 5, 6, 8];
 const PER_PAGE_OPTIONS = [24, 48, 96, 0];
 
-/** Public directory layout controls. Audit diagnostics remain owner-only. */
+/**
+ * PASS 278 — VIEW DENSITY RAIL (LOCKED GEOMETRY)
+ * Mode buttons match the sidebar Collapse control (42px tall, rounded-lg,
+ * gold hairline, emerald ombré). Count chips are TRUE circles (42×42,
+ * aspect-square, rounded-full) — never vertically squeezed ovals.
+ */
 const DeveloperDirectoryViewControls = ({
   view,
   onViewChange,
@@ -36,82 +40,86 @@ const DeveloperDirectoryViewControls = ({
   onAuditOnlyChange,
   showAuditData = false,
 }: Props) => {
-  const chip =
-    "h-8 px-3 rounded-md text-[11px] font-semibold uppercase transition-colors";
-  const active = "jj-pill-emerald-metallic allow-white border-0 text-primary-foreground";
-  const idle = "border-border bg-background text-foreground hover:border-primary hover:bg-accent";
+  const label =
+    "text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground whitespace-nowrap";
 
   return (
     <div
       data-directory-controls="true"
-      className="mx-3 sm:mx-4 mb-6 rounded-md border border-border bg-card px-3 py-3 flex flex-wrap items-center gap-x-4 gap-y-3"
+      data-view-density-rail="true"
+      className="mx-3 sm:mx-4 mb-6 rounded-lg border border-border bg-card px-4 py-3 flex flex-wrap items-center gap-x-5 gap-y-3"
     >
-      <span className="text-[10px] font-bold uppercase text-muted-foreground">
-        View
-      </span>
+      <span className={label}>View</span>
 
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm"
+        <button
           type="button"
+          data-view-mode-button="true"
+          data-active={view === "grid" ? "true" : "false"}
           onClick={() => onViewChange("grid")}
-          className={`${chip} inline-flex items-center gap-1.5 ${view === "grid" ? active : idle}`}
         >
-          <LayoutGrid className="w-3.5 h-3.5" /> Grid
-        </Button>
-        <Button variant="outline" size="sm"
+          <LayoutGrid className="w-4 h-4 shrink-0" strokeWidth={2.2} />
+          <span>Grid</span>
+        </button>
+        <button
           type="button"
+          data-view-mode-button="true"
+          data-active={view === "list" ? "true" : "false"}
           onClick={() => onViewChange("list")}
-          className={`${chip} inline-flex items-center gap-1.5 ${view === "list" ? active : idle}`}
         >
-          <List className="w-3.5 h-3.5" /> List
-        </Button>
+          <List className="w-4 h-4 shrink-0" strokeWidth={2.2} />
+          <span>List</span>
+        </button>
       </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-bold uppercase text-muted-foreground">
-            Per row
-          </span>
-          {COLUMN_OPTIONS.map((option) => (
-            <Button variant="outline" size="sm"
-              key={option}
-              type="button"
-              onClick={() => onColumnsChange(option)}
-              className={`${chip} !px-2.5 ${columns === option ? active : idle}`}
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
-
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold uppercase text-muted-foreground">
-          Per page
-        </span>
-        {PER_PAGE_OPTIONS.map((option) => (
-          <Button variant="outline" size="sm"
+      <div className="flex flex-wrap items-center gap-2">
+        <span className={label}>Per row</span>
+        {COLUMN_OPTIONS.map((option) => (
+          <button
             key={option}
             type="button"
-            onClick={() => onPerPageChange(option)}
-            className={`${chip} !px-2.5 ${perPage === option ? active : idle}`}
+            data-count-chip="true"
+            data-active={columns === option ? "true" : "false"}
+            onClick={() => onColumnsChange(option)}
           >
-            {option === 0 ? "All" : option}
-          </Button>
+            {option}
+          </button>
         ))}
       </div>
 
-      {showAuditData ? <Button variant="outline" size="sm"
-        type="button"
-        onClick={() => onAuditOnlyChange(!auditOnly)}
-        className={`${chip} ${auditOnly ? active : idle}`}
-      >
-        Needs media only
-      </Button> : null}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className={label}>Per page</span>
+        {PER_PAGE_OPTIONS.map((option) => (
+          <button
+            key={option}
+            type="button"
+            data-count-chip="true"
+            data-active={perPage === option ? "true" : "false"}
+            onClick={() => onPerPageChange(option)}
+          >
+            {option === 0 ? "All" : option}
+          </button>
+        ))}
+      </div>
 
-      {showAuditData ? <div className="ml-auto flex flex-wrap items-center gap-3 text-[11px] font-semibold text-foreground">
-        <span>{total} shown</span>
-        <span className="text-muted-foreground">{missingLogo} missing logo</span>
-        <span className="text-muted-foreground">{missingCover} missing photo</span>
-      </div> : null}
+      {showAuditData ? (
+        <button
+          type="button"
+          data-view-mode-button="true"
+          data-active={auditOnly ? "true" : "false"}
+          onClick={() => onAuditOnlyChange(!auditOnly)}
+        >
+          <span>Needs media only</span>
+        </button>
+      ) : null}
+
+      {showAuditData ? (
+        <div className="ml-auto flex flex-wrap items-center gap-3 text-[11px] font-semibold text-foreground">
+          <span>{total} shown</span>
+          <span className="text-muted-foreground">{missingLogo} missing logo</span>
+          <span className="text-muted-foreground">{missingCover} missing photo</span>
+        </div>
+      ) : null}
     </div>
   );
 };
