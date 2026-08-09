@@ -4,6 +4,7 @@
 //   - { cron: true } → sync every active account (called by pg_cron with service role)
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { decryptToken, encryptToken } from "../_shared/brokerEmailTokenCrypto.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
