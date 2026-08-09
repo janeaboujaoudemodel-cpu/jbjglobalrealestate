@@ -10,6 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { searchItems, nearestSearchItems } from "@/config/globalSearchIndex";
 import type { SearchItem } from "@/config/globalSearchIndex";
 import { SafeImage } from "@/components/SafeImage";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { IconTile } from "@/components/ui/icon-tile";
 import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
 import useDisplayFirstName from "@/hooks/useDisplayFirstName";
@@ -196,24 +198,27 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     queryFn: async (): Promise<DbResult[]> => {
       const { data } = await supabase
         .from('developers' as any)
-        .select('id, name, slug, logo_url')
+        .select('id, name, slug, logo_url, logo_url_processed, website_url')
         .ilike('name', `%${debouncedQuery}%`)
         .limit(12);
-      return ((data as unknown as Array<{ id: string; name: string; slug: string; logo_url: string | null }>) || [])
+      return ((data as unknown as Array<Record<string, any>>) || [])
         .sort((a, b) => rankSearchName(a.name, debouncedQuery) - rankSearchName(b.name, debouncedQuery))
         .slice(0, 5)
-        .map(d => ({ id: d.id, name: d.name, slug: d.slug, image: d.logo_url }));
+        // LOCKED: never pass a raw logo_url — the canonical resolver prefers the
+        // verified pure-white knockout (logo_url_processed / white-v2).
+        .map(d => ({ id: d.id, name: d.name, slug: d.slug, image: getDeveloperLogoUrl(d) }));
     },
     enabled: debouncedQuery.length >= 2 && isOpen,
     staleTime: 30000,
   });
+
 
   const { data: dbProjects = [] } = useQuery({
     queryKey: ['search-projects', debouncedQuery],
     queryFn: async (): Promise<DbResult[]> => {
       const { data } = await supabase
         .from('projects')
-        .select('id, name, slug, cover_image_url, developer_name, is_published, status, deleted_at, developer:developers(logo_url)')
+        .select('id, name, slug, cover_image_url, developer_name, is_published, status, deleted_at, developer:developers(name, logo_url, logo_url_processed, website_url)')
         .or(`name.ilike.%${debouncedQuery}%,developer_name.ilike.%${debouncedQuery}%`)
         .or('listing_kind.is.null,listing_kind.neq.leasing')
         .is('deleted_at', null)
@@ -222,7 +227,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       return (data || [])
         .sort((a: any, b: any) => rankSearchName(a.name, debouncedQuery) - rankSearchName(b.name, debouncedQuery))
         .slice(0, 6)
-        .map((p: any) => ({ id: p.id, name: p.name, slug: p.slug, image: p.cover_image_url, developerLogo: p.developer?.logo_url || null }));
+        .map((p: any) => ({ id: p.id, name: p.name, slug: p.slug, image: p.cover_image_url, developerLogo: p.developer ? getDeveloperLogoUrl(p.developer) : null }));
     },
     enabled: debouncedQuery.length >= 2 && isOpen,
     staleTime: 30000,
@@ -334,7 +339,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       : route;
     navigate(safeRoute);
     onClose();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
   const handleRecentSearchClick = (search: string) => {
@@ -399,14 +404,28 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   };
 
   // Reusable DB result row
-  const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false }: { item: DbResult; route: string; fallbackIcon: import("lucide-react").LucideIcon; isFirst?: boolean }) => (
+  // LOCKED: developer identity artwork always renders through the canonical
+  // DeveloperLogo plate (emerald gradient + pure-white knockout, object-contain
+  // so nothing is ever cropped). Never a raw <img> with object-cover.
+  const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false, isDeveloper = false }: { item: DbResult; route: string; fallbackIcon: import("lucide-react").LucideIcon; isFirst?: boolean; isDeveloper?: boolean }) => (
     <button
       onClick={() => handleSelect(route)}
       className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left jj-hover-emerald ${isFirst ? 'bg-[#FDFBF7] border-[#B89555]/55 shadow-sm' : 'bg-[#FDFBF7]/70 border-[#B89555]/20 hover:border-[#B89555]/55'}`}
     >
-      {item.image || item.developerLogo ? (
+      {isDeveloper || (!item.image && item.developerLogo) ? (
+        <DeveloperLogo
+          src={isDeveloper ? item.image : item.developerLogo}
+          name={item.name}
+          alt={`${item.name} logo`}
+          variant="bare"
+          size="sm"
+          renderFallback
+          loading="eager"
+          className="!w-[76px] !h-9 !rounded-md !p-1 shrink-0"
+        />
+      ) : item.image ? (
         <div className="w-9 h-9 rounded-lg overflow-hidden border border-[#B89555]/40 bg-white flex items-center justify-center flex-shrink-0">
-          <SafeImage src={item.image || item.developerLogo || ""} alt={item.name} className="w-full h-full object-cover" />
+          <SafeImage src={item.image} alt={item.name} className="w-full h-full object-cover" />
         </div>
       ) : (
         <IconTile icon={FallbackIcon} tone="emerald" size="sm" />
@@ -438,7 +457,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             <p className={`${compact ? 'text-xs' : 'text-xs'} font-semibold text-[#1A1A1A] mb-1 px-1 uppercase tracking-wider`}>Developers</p>
             <div className="space-y-0.5">
               {dbDevelopers.map((d) => (
-                <DbResultItem key={d.id} item={d} route={`/developer/${d.slug}`} fallbackIcon={Building2} />
+                <DbResultItem key={d.id} item={d} route={`/developer/${d.slug}`} fallbackIcon={Building2} isDeveloper />
               ))}
             </div>
           </div>
