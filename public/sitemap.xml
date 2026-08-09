@@ -528,6 +528,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://jbj.ae/developer/danube-properties</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://jbj.ae/developer/stamn-developer</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -2563,12 +2569,6 @@
   </url>
   <url>
     <loc>https://jbj.ae/developer/dalmore-real-estate-development-l-l-c</loc>
-    <lastmod>2026-08-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://jbj.ae/developer/danube-properties</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
