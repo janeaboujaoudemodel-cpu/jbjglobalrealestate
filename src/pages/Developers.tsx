@@ -36,7 +36,7 @@ const Developers = () => {
   const [view, setView] = useState<DirectoryViewMode>("grid");
   const [columns, setColumns] = useState(4);
   const [perPage, setPerPage] = useState(24);
-  const [auditOnly, setAuditOnly] = useState(false);
+  const [auditFilter, setAuditFilter] = useState<DirectoryAuditFilter>("all");
   const [viewportWidth, setViewportWidth] = useState(
     typeof window === "undefined" ? 1440 : window.innerWidth,
   );
