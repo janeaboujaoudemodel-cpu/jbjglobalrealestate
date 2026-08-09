@@ -41,13 +41,47 @@ const Developers = () => {
 
   // Apply filters to developers
   
+  // LOCKED (canonical identity): merge duplicate developer records so one brand
+  // never renders twice. Project counts and hero candidates are combined.
+  const rawCount = (dev: { id: string; name: string }) =>
+    projectCounts[dev.id] || projectStats?.countsByName?.[normalizeDeveloperName(dev.name)] || 0;
+
+  const canonical = useMemo(
+    () => dedupeDevelopers(developers ?? [], rawCount),
+    [developers, projectCounts, projectStats],
+  );
+
+  const canonicalDevelopers = useMemo(() => canonical.map((entry) => entry.developer), [canonical]);
+
+  const mergedStats = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const heroes: Record<string, string[]> = {};
+    for (const { developer, mergedIds } of canonical) {
+      let count = 0;
+      const images: string[] = [];
+      for (const id of mergedIds) {
+        count += projectCounts[id] || 0;
+        images.push(...(projectStats?.imageCandidates?.[id] || []));
+        const single = topProjectImageByDev[id];
+        if (single) images.push(single);
+      }
+      const byName = projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0;
+      counts[developer.id] = Math.max(count, byName);
+      heroes[developer.id] = [
+        ...new Set([
+          ...images,
+          ...(projectStats?.imageCandidatesByName?.[normalizeDeveloperName(developer.name)] || []),
+        ]),
+      ];
+    }
+    return { counts, heroes };
+  }, [canonical, projectCounts, projectStats, topProjectImageByDev]);
+
   const filteredDevelopers = useMemo(() => {
-    if (!developers) return [];
-    
-    // LOCKED: never hide a database developer because enrichment is incomplete.
-    // Missing identity/media remains visible and auditable rather than silently
-    // shrinking the public catalogue to only the currently enriched subset.
-    let filtered = [...developers];
+    if (!canonicalDevelopers.length) return [];
+
+    let filtered = [...canonicalDevelopers];
+
 
     // Search filter (name only for accuracy)
     const q = (search.q || "").trim().toLowerCase();
