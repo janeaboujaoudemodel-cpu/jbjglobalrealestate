@@ -11,21 +11,46 @@ import { dedupeDevelopers } from "@/utils/developerDedupe";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Button } from "@/components/ui/button";
+import { useEffectiveOwner } from "@/hooks/useEffectiveOwner";
+import DeveloperDirectoryViewControls, { type DirectoryViewMode } from "@/components/developers/DeveloperDirectoryViewControls";
+import DeveloperAuditRow from "@/components/developers/DeveloperAuditRow";
+import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
+
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const developersHeroVideo = developersHeroVideoAsset.url;
 
 const Developers = () => {
+  console.log("DEV_PAGE_MOUNT");
   const { data: developers, isLoading, refetch: refetchDevelopers } = useDevelopers();
   const { data: projectStats } = useDeveloperProjectStats();
-  
+  const { effectiveOwner } = useEffectiveOwner();
+
   // Filter states
   const [search, setSearch] = useState<PropertySearch>(EMPTY_SEARCH);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
-  // Multi-country geography cascade (Country → Emirate/City → Area)
-  const ITEMS_PER_PAGE = 24;
+
+  // Owner-only directory inspection controls
+  const [view, setView] = useState<DirectoryViewMode>("grid");
+  const [columns, setColumns] = useState(4);
+  const [perPage, setPerPage] = useState(24);
+  const [auditOnly, setAuditOnly] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(
+    typeof window === "undefined" ? 1440 : window.innerWidth,
+  );
+  useEffect(() => {
+    const onResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const effectiveColumns =
+    viewportWidth < 640 ? 1 : viewportWidth < 1024 ? Math.min(2, columns) : columns;
+
+  const ITEMS_PER_PAGE = effectiveOwner && perPage === 0 ? 100000 : effectiveOwner ? perPage : 24;
+
 
 
   // Count projects per developer (precomputed by the lightweight stats query)
@@ -143,18 +168,50 @@ const Developers = () => {
     return filtered;
   }, [canonicalDevelopers, search, search.sort, mergedStats]);
 
+  // Owner audit: which records still lack a logo or a cover photo.
+  const mediaStatus = useMemo(() => {
+    const map: Record<string, { hasLogo: boolean; hasCover: boolean }> = {};
+    for (const dev of filteredDevelopers) {
+      const logo = getDeveloperLogoUrl(dev) || getKnownDeveloperLogoUrl(dev.name);
+      const cover = [
+        getVerifiedDeveloperFlagship(dev.name, dev.slug),
+        (dev as { feature_image_url?: string | null }).feature_image_url || undefined,
+        ...(mergedStats.heroes[dev.id] || []),
+      ].find((value): value is string => Boolean(value) && value !== logo && isUsableDeveloperCover(value));
+      map[dev.id] = { hasLogo: Boolean(logo), hasCover: Boolean(cover) };
+    }
+    return map;
+  }, [filteredDevelopers, mergedStats]);
+
+  const visibleDevelopers = useMemo(() => {
+    if (!effectiveOwner || !auditOnly) return filteredDevelopers;
+    return filteredDevelopers.filter((dev) => {
+      const status = mediaStatus[dev.id];
+      return status && (!status.hasLogo || !status.hasCover);
+    });
+  }, [filteredDevelopers, effectiveOwner, auditOnly, mediaStatus]);
+
+  const missingLogoCount = useMemo(
+    () => filteredDevelopers.filter((dev) => !mediaStatus[dev.id]?.hasLogo).length,
+    [filteredDevelopers, mediaStatus],
+  );
+  const missingCoverCount = useMemo(
+    () => filteredDevelopers.filter((dev) => !mediaStatus[dev.id]?.hasCover).length,
+    [filteredDevelopers, mediaStatus],
+  );
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, search.sort]);
+  }, [search, search.sort, auditOnly, perPage]);
 
 
-  const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
-  const paginatedDevelopers = filteredDevelopers.slice(
+  const totalPages = Math.ceil(visibleDevelopers.length / ITEMS_PER_PAGE);
+  const paginatedDevelopers = visibleDevelopers.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
 
   const activeFilterCount = [search.q.trim(), search.developerTier, search.region, search.areasInclude.length].filter(Boolean).length;
 
@@ -294,18 +351,52 @@ const Developers = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
-                  {paginatedDevelopers.map((developer, idx) => (
-                    <DeveloperCard
-                      key={developer.id} 
-                      developer={developer} 
-                      projectCount={mergedStats.counts[developer.id] || 0}
-                      heroImageUrl={mergedStats.heroes[developer.id]?.[0] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
-                      heroImageUrls={mergedStats.heroes[developer.id] || []}
-                      index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
-                    />
-                  ))}
-                </div>
+                {effectiveOwner ? (
+                  <DeveloperDirectoryViewControls
+                    view={view}
+                    onViewChange={setView}
+                    columns={columns}
+                    onColumnsChange={setColumns}
+                    perPage={perPage}
+                    onPerPageChange={setPerPage}
+                    total={visibleDevelopers.length}
+                    missingLogo={missingLogoCount}
+                    missingCover={missingCoverCount}
+                    auditOnly={auditOnly}
+                    onAuditOnlyChange={setAuditOnly}
+                  />
+                ) : null}
+
+                {effectiveOwner && view === "list" ? (
+                  <div className="flex flex-col gap-2 px-3 sm:px-4">
+                    {paginatedDevelopers.map((developer) => (
+                      <DeveloperAuditRow
+                        key={developer.id}
+                        developer={developer}
+                        projectCount={mergedStats.counts[developer.id] || 0}
+                        heroImageUrl={mergedStats.heroes[developer.id]?.[0] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
+                        heroImageUrls={mergedStats.heroes[developer.id] || []}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    className={effectiveOwner ? "grid gap-6 items-stretch" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"}
+                    style={effectiveOwner ? { gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))` } : undefined}
+                  >
+                    {paginatedDevelopers.map((developer, idx) => (
+                      <DeveloperCard
+                        key={developer.id} 
+                        developer={developer} 
+                        projectCount={mergedStats.counts[developer.id] || 0}
+                        heroImageUrl={mergedStats.heroes[developer.id]?.[0] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
+                        heroImageUrls={mergedStats.heroes[developer.id] || []}
+                        index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
+                      />
+                    ))}
+                  </div>
+                )}
+
 
 
                 {/* Pagination */}

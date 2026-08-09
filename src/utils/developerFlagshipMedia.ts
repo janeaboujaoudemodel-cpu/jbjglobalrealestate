@@ -89,7 +89,12 @@ export const getVerifiedDeveloperFlagship = (
 
 export const isUsableDeveloperCover = (value?: string | null) => {
   if (!value) return false;
-  const decoded = decodeURIComponent(value);
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    decoded = value;
+  }
   const filename = decoded.split(/[/?#]/).filter(Boolean).pop() || "";
   // Asset buckets may legitimately contain "developer-logos" in their path;
   // reject logo artwork by its filename rather than rejecting the whole bucket.
