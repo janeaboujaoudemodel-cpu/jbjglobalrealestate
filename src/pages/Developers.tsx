@@ -32,7 +32,7 @@ const Developers = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Owner-only directory inspection controls
+  // Public viewing controls; audit diagnostics remain owner-only.
   const [view, setView] = useState<DirectoryViewMode>("grid");
   const [columns, setColumns] = useState(4);
   const [perPage, setPerPage] = useState(24);
@@ -45,10 +45,15 @@ const Developers = () => {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-  const effectiveColumns =
-    viewportWidth < 640 ? 1 : viewportWidth < 1024 ? Math.min(2, columns) : columns;
+  const effectiveColumns = viewportWidth < 640
+    ? 1
+    : viewportWidth < 900
+      ? Math.min(2, columns)
+      : viewportWidth < 1200
+        ? Math.min(4, columns)
+        : columns;
 
-  const ITEMS_PER_PAGE = effectiveOwner && perPage === 0 ? 100000 : effectiveOwner ? perPage : 24;
+  const ITEMS_PER_PAGE = perPage === 0 ? Math.max(visibleDevelopers?.length || 0, 1) : perPage;
 
 
 
@@ -350,8 +355,7 @@ const Developers = () => {
               </div>
             ) : (
               <>
-                {effectiveOwner ? (
-                  <DeveloperDirectoryViewControls
+                <DeveloperDirectoryViewControls
                     view={view}
                     onViewChange={setView}
                     columns={columns}
@@ -363,11 +367,14 @@ const Developers = () => {
                     missingCover={missingCoverCount}
                     auditOnly={auditOnly}
                     onAuditOnlyChange={setAuditOnly}
+                    showAuditData={effectiveOwner}
                   />
-                ) : null}
 
-                {effectiveOwner && view === "list" ? (
-                  <div className="flex flex-col gap-2 px-3 sm:px-4">
+                {view === "list" ? (
+                  <div
+                    className="grid gap-3 px-3 sm:px-4"
+                    style={{ gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))` }}
+                  >
                     {paginatedDevelopers.map((developer) => (
                       <DeveloperAuditRow
                         key={developer.id}
@@ -380,12 +387,11 @@ const Developers = () => {
                   </div>
                 ) : (
                   <div
-                  <div
-                    className={effectiveOwner ? "grid items-stretch" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"}
-                    style={effectiveOwner ? { 
-                      gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))`, 
-                      gap: effectiveColumns > 4 ? "1rem" : "1.5rem" 
-                    } : undefined}
+                    className="grid items-stretch"
+                    style={{
+                      gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))`,
+                      gap: effectiveColumns >= 6 ? "0.75rem" : "1.5rem",
+                    }}
                   >
                     {paginatedDevelopers.map((developer, idx) => (
                       <DeveloperCard
