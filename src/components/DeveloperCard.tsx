@@ -45,8 +45,9 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     const verifiedOnly = normalizedSlug.includes("alfahadholding") || normalizedName.includes("alfahadholding");
     return [...new Set([
       officialFlagship,
+      developerFeatureImage,
       ...(verifiedOnly ? [] : heroImageUrls),
-      ...(verifiedOnly ? [] : [heroImageUrl, developerFeatureImage]),
+      ...(verifiedOnly ? [] : [heroImageUrl]),
     ].filter((value): value is string =>
       Boolean(value) && value !== developerLogoUrl && isUsableDeveloperCover(value),
     ))];

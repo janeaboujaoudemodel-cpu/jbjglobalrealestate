@@ -368,7 +368,9 @@ const DEVELOPERS_PUBLIC_SELECT = [
 
 export function useDevelopers(includeHidden = false) {
   return useQuery({
-    queryKey: ["developers", includeHidden],
+    // Asset revision participates in the key so newly verified directory media
+    // replaces any hydrated/stale card record immediately across the site.
+    queryKey: ["developers", "verified-media-v2", includeHidden],
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     queryFn: async () => {

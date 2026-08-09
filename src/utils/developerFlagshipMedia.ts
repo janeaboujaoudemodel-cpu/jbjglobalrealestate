@@ -67,6 +67,10 @@ const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
     identities: ["agarkredevelopment"],
     url: "https://agproperty.ae/wp-content/uploads/2026/01/ag-residence.jpg",
   },
+  {
+    identities: ["sikantarealestatedevelopmentllc", "sikantadevelopments"],
+    url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/developer-logos/developer-covers%2Fsikanta-myra-residences-official-facade.jpg",
+  },
 ];
 
 /**
