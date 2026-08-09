@@ -71,25 +71,36 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   }, [developer]);
 
   // Factual fallback built only from stored data — never marketing filler.
+  // LOCKED (no duplicated metadata): the established year and project count are
+  // rendered once, in the metadata row, so they are never repeated here.
   const factualDescription = useMemo(() => {
     const parts: string[] = [];
-    if (developer.founded_year) parts.push(`Established ${developer.founded_year}`);
-    if (developer.headquarters) parts.push(`headquartered in ${developer.headquarters}`);
-    if (projectCount > 0) parts.push(`${projectCount} live ${projectCount === 1 ? "project" : "projects"} listed`);
-    else if (developer.offplan_projects && developer.offplan_projects > 0)
-      parts.push(`${developer.offplan_projects} off-plan developments`);
+    if (developer.headquarters) parts.push(`Headquartered in ${developer.headquarters}`);
+    if (developer.total_units_delivered && developer.total_units_delivered > 0)
+      parts.push(`${developer.total_units_delivered.toLocaleString()} units delivered`);
     if (!parts.length) {
-      // Never leave a card blank: fall back to a factual DLD-registry line.
       const city = developer.headquarters || "the UAE";
       return `Registered real estate developer operating in ${city}.`;
     }
     const sentence = parts.join(", ");
     return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
-  }, [developer, projectCount]);
+  }, [developer]);
 
-  const cardDescription = safeDescription || factualDescription;
+  // Strip any leading "Established YYYY" clause so the metadata row above is
+  // never echoed inside the blurb.
+  const dedupedDescription = useMemo(
+    () =>
+      safeDescription
+        .replace(/^(established|founded)\s+in?\s*\d{4}[,.\s-]*/i, "")
+        .replace(/^\w/, (c) => c.toUpperCase())
+        .trim(),
+    [safeDescription],
+  );
+
+  const cardDescription = dedupedDescription || factualDescription;
   const rawDescriptionLength = (getSafeDeveloperDescription(developer) || "").trim().length;
-  const isDescriptionTrimmed = Boolean(safeDescription) && rawDescriptionLength > safeDescription.length;
+  const isDescriptionTrimmed = Boolean(dedupedDescription) && rawDescriptionLength > safeDescription.length;
+
 
 
 
