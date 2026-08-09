@@ -26,10 +26,17 @@ pixel within distance 45, ramp to opaque at 110, force RGB to white, keep the
 original alpha edges, then tight-crop. Vectors are rasterized at ~1600px wide
 with all fills/strokes forced to `#fff`.
 
-**When no official artwork exists** (site uses a text-only site title, domain
-dead): clear `logo_url` / `logo_url_processed` and set `logo_status = 'missing'`
-so the canonical wordmark treatment renders on the emerald plate. Never invent,
-redraw or keep the defective file.
+**When the brand has no symbol/monogram at all** (site uses a plain text
+title, or the domain is dead and no mark can be sourced): build a real plain
+wordmark asset — the brand name set in the closest matching typeface (the
+site's own font when known, otherwise the JBJ pair: Jost for modern brands,
+Cormorant Garamond for classic ones), uppercase, generously letterspaced,
+name on line 1 and the descriptor smaller on line 2, rendered pure white on
+transparency and tight-cropped — then store it like any other logo with
+`logo_status = 'approved'`. This is allowed because it reproduces the brand's
+actual (text-only) identity. Never invent a symbol, monogram or icon, never
+redraw a real mark, and never keep a defective file. `logo_status = 'missing'`
+is reserved for brands whose real mark exists but has not been sourced yet.
 
 DB writes are blocked by `enforce_developer_logo_lock` and
 `protect_approved_developer_logos`; a trusted correction runs
