@@ -18,16 +18,16 @@ const paint = (el: HTMLElement) => ({
 });
 
 describe("getLogoPaintStyle", () => {
-  it("never inverts curated white artwork", () => {
+  it("knocks curated artwork out to pure white without blending", () => {
     expect(getLogoPaintStyle({ isLightArtwork: true })).toEqual({
-      filter: "none",
+      filter: "brightness(0) invert(1)",
       mixBlendMode: "normal",
     });
   });
 
-  it("never inverts artwork flagged as already light", () => {
+  it("knocks light artwork out to pure white without blending", () => {
     expect(getLogoPaintStyle({ needsInvert: false })).toEqual({
-      filter: "none",
+      filter: "brightness(0) invert(1)",
       mixBlendMode: "normal",
     });
   });
@@ -106,11 +106,11 @@ describe("DeveloperLogo rendering guard", () => {
     "Hvm Living Real Estate Development L.L.C",
   ];
 
-  it.each(curated)("renders %s curated artwork uninverted", (name) => {
+  it.each(curated)("renders %s curated artwork knocked out to pure white", (name) => {
     const { container } = renderLogo({ name, alt: name, variant: "card" });
     const img = container.querySelector("img") as HTMLImageElement;
     expect(img).toBeTruthy();
-    expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
+    expect(paint(img)).toEqual({ filter: "brightness(0) invert(1)", blend: "normal" });
   });
 
   it.each([
@@ -144,7 +144,7 @@ describe("DeveloperLogo rendering guard", () => {
       const img = container.querySelector("img") as HTMLImageElement;
       expect(img).toBeTruthy();
       expect(img.getAttribute("src")).toContain("hvm-living-white.png");
-      expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
+      expect(paint(img)).toEqual({ filter: "brightness(0) invert(1)", blend: "normal" });
       expect(queryByText("Hvm Living Real Estate Development L.L.C")).toBeNull();
       unmount();
     }
@@ -210,7 +210,7 @@ describe("DeveloperLogo rendering guard", () => {
     const img = container.querySelector("img") as HTMLImageElement;
     expect(img.className).toContain("object-contain");
     expect(img.className).toContain("object-center");
-    expect(img.className).toContain("p-3");
+    expect(img.className).toContain("p-2");
     expect(img.className).toContain("scale-100");
   });
 
@@ -262,7 +262,7 @@ describe("DeveloperLogo rendering guard", () => {
       const img = container.querySelector("img") as HTMLImageElement;
       expect(img.className).toMatch(/object-contain/);
       expect(img.className).toMatch(/object-center/);
-      expect(img.className).toMatch(/p-3/);
+      expect(img.className).toMatch(/p-2/);
       expect(img.className).not.toMatch(/object-cover/);
       unmount();
     }
