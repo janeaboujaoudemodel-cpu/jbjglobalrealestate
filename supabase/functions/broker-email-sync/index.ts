@@ -61,15 +61,19 @@ Deno.serve(async (req) => {
 
 async function ensureAccessToken(svc: any, acc: any): Promise<string> {
   const exp = acc.token_expires_at ? new Date(acc.token_expires_at).getTime() : 0;
-  if (exp - 60_000 > Date.now()) return acc.access_token_encrypted;
-  if (!acc.refresh_token_encrypted) throw new Error("No refresh token; reconnect required");
+  if (exp - 60_000 > Date.now()) {
+    const current = await decryptToken(acc.access_token_encrypted);
+    if (current) return current;
+  }
+  const refresh = await decryptToken(acc.refresh_token_encrypted);
+  if (!refresh) throw new Error("No refresh token; reconnect required");
   const isG = acc.provider === "gmail";
   const { data: appRows } = await svc.rpc("get_broker_oauth_app", { _user_id: acc.user_id, _provider: acc.provider });
   const app = appRows?.[0];
   if (!app?.client_id || !app?.client_secret) throw new Error("OAuth app credentials missing for this broker; re-add in Email Setup");
   const endpoint = isG ? "https://oauth2.googleapis.com/token" : "https://login.microsoftonline.com/common/oauth2/v2.0/token";
   const body = new URLSearchParams({
-    refresh_token: acc.refresh_token_encrypted,
+    refresh_token: refresh,
     grant_type: "refresh_token",
     client_id: app.client_id,
     client_secret: app.client_secret,
@@ -78,7 +82,8 @@ async function ensureAccessToken(svc: any, acc: any): Promise<string> {
   if (!r.ok) throw new Error(`Refresh failed: ${r.status} ${await r.text()}`);
   const t = await r.json();
   await svc.from("broker_email_accounts").update({
-    access_token_encrypted: t.access_token,
+    access_token_encrypted: await encryptToken(t.access_token),
+    ...(t.refresh_token ? { refresh_token_encrypted: await encryptToken(t.refresh_token) } : {}),
     token_expires_at: new Date(Date.now() + (t.expires_in ?? 3600) * 1000).toISOString(),
   }).eq("id", acc.id);
   return t.access_token;
