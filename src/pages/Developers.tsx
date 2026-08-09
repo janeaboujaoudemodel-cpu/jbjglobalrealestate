@@ -51,7 +51,7 @@ const Developers = () => {
       ? Math.min(2, columns)
       : viewportWidth < 1200
         ? Math.min(4, columns)
-        : columns;
+        : Math.min(columns, 8);
 
   const ITEMS_PER_PAGE = perPage === 0 ? 100000 : perPage;
 
@@ -415,7 +415,7 @@ const Developers = () => {
                       variant="outline"
                       size="sm"
                       disabled={currentPage <= 1}
-                      onClick={() => { setCurrentPage(p => p - 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                      onClick={() => { setCurrentPage(p => p - 1); window.scrollTo({ top: 400, behavior: 'auto' }); }}
                       className="border-[#064E3B]/25 text-foreground"
                     >
                       Previous
@@ -435,7 +435,7 @@ const Developers = () => {
                             key={p}
                             variant={p === currentPage ? "default" : "outline"}
                             size="sm"
-                            onClick={() => { setCurrentPage(p); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                            onClick={() => { setCurrentPage(p); window.scrollTo({ top: 400, behavior: 'auto' }); }}
                             className={p === currentPage ? "jj-pill-emerald-metallic allow-white text-white border-0" : "border-[#064E3B]/25 text-foreground"}
                           >
                             {p}
@@ -446,7 +446,7 @@ const Developers = () => {
                       variant="outline"
                       size="sm"
                       disabled={currentPage >= totalPages}
-                      onClick={() => { setCurrentPage(p => p + 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                      onClick={() => { setCurrentPage(p => p + 1); window.scrollTo({ top: 400, behavior: 'auto' }); }}
                       className="border-[#064E3B]/25 text-foreground"
                     >
                       Next
