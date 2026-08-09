@@ -3,7 +3,6 @@ import { chromium } from 'playwright';
 const BASE = 'http://localhost:8080';
 const browser = await chromium.launch({ executablePath: '/bin/chromium', args: ['--no-sandbox'] });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-page.on('console', m => { if (/error/i.test(m.type())) console.log('CONSOLE', m.text()); });
 
 await page.goto(`${BASE}/developers`, { waitUntil: 'networkidle', timeout: 60000 });
 
