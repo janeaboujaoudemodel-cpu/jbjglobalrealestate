@@ -422,8 +422,10 @@ const Developers = () => {
                         projectCount={mergedStats.counts[developer.id] || 0}
                         heroImageUrl={mergedStats.heroes[developer.id]?.[0] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
                         heroImageUrls={mergedStats.heroes[developer.id] || []}
+                        density={effectiveColumns}
                         index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
                       />
+
                     ))}
                   </div>
                 )}
