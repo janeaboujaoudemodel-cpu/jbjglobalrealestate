@@ -38247,3 +38247,90 @@ html body #root [data-jj-mobile-drawer] a[aria-current="page"] svg {
 }
 /* Sidebar rhythm: ~4px between rows, tighter inside submenus */
 html body #root [data-jj-mobile-drawer] .space-y-0\.5 > * + * { margin-top: 4px !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 278 — VIEW DENSITY RAIL + COUNT CHIP GEOMETRY (LOCKED)
+   Numeric/label chips are TRUE circles that own their space; they
+   are never allowed to shrink into vertical ovals. Mode buttons
+   (Grid / List / toggles) match the sidebar "Collapse" control:
+   42px tall, rounded-lg, gold hairline, emerald ombré when active.
+   ───────────────────────────────────────────────────────────── */
+html body #root [data-count-chip],
+html body #root nav[aria-label="pagination"] :is(a, button):not([data-keep-shape]) {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  border-radius: 9999px !important;
+  border: 1px solid hsl(var(--border)) !important;
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+  transition: background-image 160ms ease, border-color 160ms ease, transform 160ms ease !important;
+}
+/* "All" and other word chips need horizontal room — stay pill, never squeezed */
+html body #root [data-count-chip]:not([data-numeric]) {
+  width: auto !important;
+  min-width: 42px !important;
+  aspect-ratio: auto !important;
+  padding: 0 14px !important;
+}
+html body #root [data-count-chip][data-active="true"],
+html body #root nav[aria-label="pagination"] :is(a, button)[aria-current="page"] {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  border-color: #B89555 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-count-chip]:hover:not([data-active="true"]) {
+  border-color: #064E3B !important;
+  transform: translateY(-1px) !important;
+}
+
+html body #root [data-view-mode-button] {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 16px !important;
+  flex: 0 0 auto !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid hsl(var(--border)) !important;
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  transition: background-image 160ms ease, border-color 160ms ease !important;
+}
+html body #root [data-view-mode-button] svg { color: currentColor !important; }
+html body #root [data-view-mode-button][data-active="true"] {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  border: 2px solid #B89555 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 4px 12px -4px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10) !important;
+}
+html body #root [data-view-mode-button][data-active="true"] svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+html body #root [data-view-density-rail] { row-gap: 12px !important; }
