@@ -151,9 +151,6 @@ export function DeveloperLogo({
   const isCuratedWhiteArtwork =
     !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers;
 
-  // Real canonical/website artwork always wins; typed substitutes are forbidden.
-  const hasCuratedArtwork =
-    !!verifiedWhiteLogo || isDubaiSouth || isAgProperties || isAbDevelopers || isLaraix || !!curatedLogo;
   // Never reject a real logo merely because its source canvas is opaque. That
   // old runtime heuristic classified normal PNG/WebP brand files as a "slab"
   // and replaced them with an empty emerald plate. Approved transparent-white
