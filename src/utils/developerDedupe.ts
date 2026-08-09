@@ -46,6 +46,7 @@ const CANONICAL_ALIASES: Record<string, string> = {
   agarkredevelopment: "ag",
   aagproperties: "ag",
   aag: "ag",
+  sobha: "sobharealty",
 };
 
 

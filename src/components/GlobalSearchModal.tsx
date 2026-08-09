@@ -201,6 +201,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         .from('developers' as any)
         .select('id, name, slug, logo_url, logo_url_processed, website_url')
         .ilike('name', `%${debouncedQuery}%`)
+        .or('is_hidden.is.null,is_hidden.eq.false')
         .limit(12);
         const deduped = dedupeDevelopers((data as any) || []);
         return deduped

@@ -30,9 +30,9 @@ const DeveloperAuditRow = ({ developer, projectCount = 0, heroImageUrl, heroImag
       to={`/developer/${developer.slug}`}
       data-developer-audit-row="true"
       data-developer-name={developer.name}
-      className="flex items-center gap-4 rounded-xl bg-white border border-[#B89555]/25 px-3 py-2.5 hover:border-[#B89555] transition-colors"
+      className="grid min-h-[142px] grid-cols-[96px_minmax(0,1fr)] items-center gap-x-4 gap-y-2 rounded-xl bg-white border border-[#B89555]/25 p-4 hover:border-[#B89555] transition-colors"
     >
-      <div className="h-11 w-24 shrink-0">
+      <div className="h-14 w-24 shrink-0">
         <DeveloperLogo
           variant="bare"
           src={logoUrl}
@@ -46,7 +46,7 @@ const DeveloperAuditRow = ({ developer, projectCount = 0, heroImageUrl, heroImag
         />
       </div>
 
-      <div className="h-11 w-20 shrink-0 rounded-md overflow-hidden bg-[#F5F0E6]">
+      <div className="h-14 w-full min-w-0 rounded-md overflow-hidden bg-[#F5F0E6]">
         {cover ? (
           <img
             src={cover}
@@ -58,16 +58,16 @@ const DeveloperAuditRow = ({ developer, projectCount = 0, heroImageUrl, heroImag
         ) : null}
       </div>
 
-      <span className="developer-name-shine !text-[#B89555] text-[13px] font-bold">
+      <span className="developer-name-shine col-span-2 !text-[#B89555] text-base font-bold break-words">
         {developer.name}
       </span>
 
-      <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#0A0A0A]/60 whitespace-nowrap">
+      <span className="col-span-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#0A0A0A]/70">
         {developer.founded_year ? `Est. ${developer.founded_year}` : ""}
         {projectCount > 0 ? `${developer.founded_year ? " · " : ""}${projectCount} projects` : ""}
       </span>
 
-      <span className="ml-auto flex items-center gap-2">
+      <span className="col-span-2 flex items-center justify-end gap-2">
         {!logoUrl ? (
           <span className="rounded-md bg-[#7C2D12] text-white text-[10px] font-bold uppercase tracking-[0.1em] px-2 py-1">
             No logo

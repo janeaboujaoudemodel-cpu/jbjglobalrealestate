@@ -9,6 +9,8 @@ import { getHighResImageUrl } from "@/lib/imageUtils";
 import { supabase } from "@/integrations/supabase/client";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
+import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
+import { dedupeDevelopers } from "@/utils/developerDedupe";
 
 interface RecommendedDevelopersProps {
   currentDeveloperSlug: string;
@@ -33,7 +35,7 @@ export default function RecommendedDevelopers({
   const recommended = useMemo(() => {
     if (!developers || developers.length === 0) return [];
 
-    const others = developers.filter(
+    const others = dedupeDevelopers(developers as any[]).map((entry) => entry.developer).filter(
       (d: any) => d.slug !== currentDeveloperSlug && d.is_active !== false
     );
 
@@ -173,7 +175,7 @@ export default function RecommendedDevelopers({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                   </div>
                     <div className="absolute bottom-0 left-4 z-20 h-12 w-24 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
-                      <DeveloperLogo src={dev.logo_url} name={dev.name} alt={`${dev.name} logo`} variant="bare" size="sm" embedded loading="eager" className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-2 !rounded-md" />
+                      <DeveloperLogo src={getDeveloperLogoUrl(dev) || getKnownDeveloperLogoUrl(dev.name)} name={dev.name} alt={`${dev.name} logo`} variant="bare" size="sm" embedded loading="eager" className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-2 !rounded-md" />
                     </div>
                   </div>
 

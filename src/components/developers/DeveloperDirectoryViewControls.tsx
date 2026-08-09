@@ -1,4 +1,5 @@
 import { LayoutGrid, List } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export type DirectoryViewMode = "grid" | "list";
 
@@ -14,9 +15,10 @@ interface Props {
   missingCover: number;
   auditOnly: boolean;
   onAuditOnlyChange: (value: boolean) => void;
+  showAuditData?: boolean;
 }
 
-const COLUMN_OPTIONS = [2, 3, 4, 5, 6];
+const COLUMN_OPTIONS = [1, 2, 3, 4, 5, 6, 8];
 const PER_PAGE_OPTIONS = [24, 48, 96, 0];
 
 /**
@@ -36,6 +38,7 @@ const DeveloperDirectoryViewControls = ({
   missingCover,
   auditOnly,
   onAuditOnlyChange,
+  showAuditData = false,
 }: Props) => {
   const chip =
     "h-8 px-3 rounded-lg text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors";
@@ -51,35 +54,34 @@ const DeveloperDirectoryViewControls = ({
       className="mx-3 sm:mx-4 mb-6 rounded-xl border border-[#B89555]/40 bg-white px-3 py-3 flex flex-wrap items-center gap-x-4 gap-y-3"
     >
       <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#8A6D2F]">
-        Owner view
+        View
       </span>
 
       <div className="flex items-center gap-2">
-        <button
+        <Button variant="outline" size="sm"
           type="button"
           onClick={() => onViewChange("grid")}
           className={`${chip} inline-flex items-center gap-1.5 ${view === "grid" ? active : idle}`}
           style={view === "grid" ? activeStyle : undefined}
         >
           <LayoutGrid className="w-3.5 h-3.5" /> Grid
-        </button>
-        <button
+        </Button>
+        <Button variant="outline" size="sm"
           type="button"
           onClick={() => onViewChange("list")}
           className={`${chip} inline-flex items-center gap-1.5 ${view === "list" ? active : idle}`}
           style={view === "list" ? activeStyle : undefined}
         >
           <List className="w-3.5 h-3.5" /> List
-        </button>
+        </Button>
       </div>
 
-      {view === "grid" ? (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A0A0A]/60">
             Per row
           </span>
           {COLUMN_OPTIONS.map((option) => (
-            <button
+            <Button variant="outline" size="sm"
               key={option}
               type="button"
               onClick={() => onColumnsChange(option)}
@@ -87,17 +89,16 @@ const DeveloperDirectoryViewControls = ({
               style={columns === option ? activeStyle : undefined}
             >
               {option}
-            </button>
+            </Button>
           ))}
         </div>
-      ) : null}
 
       <div className="flex items-center gap-2">
         <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A0A0A]/60">
           Per page
         </span>
         {PER_PAGE_OPTIONS.map((option) => (
-          <button
+          <Button variant="outline" size="sm"
             key={option}
             type="button"
             onClick={() => onPerPageChange(option)}
@@ -105,24 +106,24 @@ const DeveloperDirectoryViewControls = ({
             style={perPage === option ? activeStyle : undefined}
           >
             {option === 0 ? "All" : option}
-          </button>
+          </Button>
         ))}
       </div>
 
-      <button
+      {showAuditData ? <Button variant="outline" size="sm"
         type="button"
         onClick={() => onAuditOnlyChange(!auditOnly)}
         className={`${chip} ${auditOnly ? active : idle}`}
         style={auditOnly ? activeStyle : undefined}
       >
         Needs media only
-      </button>
+      </Button> : null}
 
-      <div className="ml-auto flex items-center gap-3 text-[11px] font-semibold text-[#0A0A0A]">
+      {showAuditData ? <div className="ml-auto flex items-center gap-3 text-[11px] font-semibold text-[#0A0A0A]">
         <span>{total} shown</span>
         <span className="text-[#8A6D2F]">{missingLogo} missing logo</span>
         <span className="text-[#8A6D2F]">{missingCover} missing photo</span>
-      </div>
+      </div> : null}
     </div>
   );
 };
