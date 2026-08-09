@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Search, Building2, ChevronRight, Crown, Award, Star } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { dedupeDevelopers } from "@/utils/developerDedupe";
+
 
 interface DeveloperSearchModalProps {
   isOpen: boolean;
