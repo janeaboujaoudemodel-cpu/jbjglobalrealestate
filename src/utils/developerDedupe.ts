@@ -34,6 +34,14 @@ export const normalizeDeveloperKey = (value?: string | null) =>
     .replace(/\b(real\s?estate|development|developments|developer|developers|properties|property)\b/g, " ")
     .replace(/[^a-z0-9]+/g, "");
 
+/**
+ * Verified same-company aliases (LOCKED). Only add a pair here after proving
+ * both records are the same registered brand (shared official domain / logo).
+ */
+const CANONICAL_ALIASES: Record<string, string> = {
+  agark: "ag", // AG Ark RE Development == AG Properties (agproperty.ae)
+};
+
 export const normalizeDomain = (value?: unknown) => {
   if (typeof value !== "string" || !value.trim()) return "";
   try {
@@ -68,7 +76,8 @@ export function dedupeDevelopers<T extends DedupeInput>(
   const domainToKey = new Map<string, string>();
 
   for (const dev of developers) {
-    const nameKey = normalizeDeveloperKey(dev.name) || (dev.slug || dev.id);
+    const baseKey = normalizeDeveloperKey(dev.name) || (dev.slug || dev.id);
+    const nameKey = CANONICAL_ALIASES[baseKey] || baseKey;
     const domain = normalizeDomain((dev as Record<string, unknown>).website_url);
     let key = nameKey;
     if (domain) {
