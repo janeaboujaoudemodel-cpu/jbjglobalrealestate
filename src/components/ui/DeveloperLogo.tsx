@@ -4,6 +4,8 @@ import { getKnownDeveloperLogoUrl, getWebsiteLogoFallbackUrl, isValidDeveloperLo
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getVerifiedWhiteLogo } from "@/utils/verifiedWhiteLogos";
 import { getCachedLogoPaintMode, probeLogoPaintMode } from "@/utils/logoArtworkProbe";
+import { decodeStoragePath, getRegistryWhiteLogo, primeWhiteLogoRegistry } from "@/utils/whiteLogoRegistry";
+
 
 import laraixTransparent from "@/assets/laraix-transparent.png.asset.json";
 import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-white.png";
@@ -150,12 +152,31 @@ export function DeveloperLogo({
   // LOCKED white-v1 artwork from the database is the approved final mark for a
   // developer and outranks every legacy curated file (several of which are
   // still full-colour brand files, e.g. blue/red wordmarks).
-  const lockedWhiteSrc = isLockedWhiteLogoAsset(src) ? (src as string) : null;
+  const lockedWhiteSrc = isLockedWhiteLogoAsset(src)
+    ? decodeStoragePath(src as string)
+    : null;
+  // GLOBAL WIRING (LOCKED): audited white knockouts propagate to every surface
+  // by developer name, even when a call site passed the raw `logo_url`.
+  const [registryLogo, setRegistryLogo] = useState<string | null>(() =>
+    getRegistryWhiteLogo(name ?? alt),
+  );
+  useEffect(() => {
+    if (registryLogo) return;
+    let alive = true;
+    primeWhiteLogoRegistry().then(() => {
+      if (alive) setRegistryLogo(getRegistryWhiteLogo(name ?? alt));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [name, alt, registryLogo]);
   // Curated pure-white knockouts. The database artwork for these developers is
   // baked on an opaque dark field, which browser blend modes turn into a blank
   // white block, so the official mark is shipped pre-knocked-out instead.
   const resolvedSrc = lockedWhiteSrc
     ? lockedWhiteSrc
+    : registryLogo
+    ? registryLogo
     : verifiedWhiteLogo
     ? verifiedWhiteLogo
     : isDubaiSouth
@@ -167,6 +188,7 @@ export function DeveloperLogo({
     : isLaraix
       ? `https://jbj.ae${laraixTransparent.url}`
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
+
 
   const [paintMode, setPaintMode] = useState<"silhouette" | "screen" | null>(() =>
     getCachedLogoPaintMode(resolvedSrc as string | null),
