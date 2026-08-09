@@ -23,7 +23,7 @@ const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
   { identities: ["sobha", "sobharealty"], url: assetUrl(sobhaStableCover.url) || sobhaFlagship },
   { identities: ["aldar", "aldarproperties"], url: assetUrl(aldarStableCover.url) },
   { identities: ["wellingtondevelopment", "wellingtondevelopmentllc"], url: assetUrl(wellingtonStableCover.url) },
-  { identities: ["majidalfuttaim"], url: assetUrl(majidAlFuttaimStableCover.url) },
+  { identities: ["majidalfuttaim", "majidalfuttaimcommunities"], url: assetUrl(majidAlFuttaimStableCover.url) },
   { identities: ["alfahadholding"], url: alFahadFlagship },
   { identities: ["amisdevelopment"], url: amisFlagship },
   { identities: ["anaxdevelopment", "anaxdevelopments"], url: anaxFlagship },

@@ -140,7 +140,7 @@ export function DeveloperLogo({
     : isAbDevelopers
     ? abDevelopersTransparent
     : isLaraix
-      ? laraixTransparent.url
+      ? `https://jbj.ae${laraixTransparent.url}`
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
   useEffect(() => {
     setError(false);
