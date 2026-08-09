@@ -1,6 +1,7 @@
 // Receives the OAuth redirect, exchanges code → tokens using the broker's OWN OAuth app credentials,
 // upserts broker_email_accounts, posts back to opener.
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { encryptToken } from "../_shared/brokerEmailTokenCrypto.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -37,8 +38,8 @@ Deno.serve(async (req) => {
       email_address: profile.email,
       display_name: profile.name ?? null,
       provider_account_id: profile.id ?? null,
-      access_token_encrypted: tokens.access_token,
-      refresh_token_encrypted: tokens.refresh_token ?? null,
+      access_token_encrypted: await encryptToken(tokens.access_token),
+      refresh_token_encrypted: await encryptToken(tokens.refresh_token ?? null),
       token_expires_at: new Date(Date.now() + (tokens.expires_in ?? 3600) * 1000).toISOString(),
       scope: tokens.scope ?? null,
       status: "active",
