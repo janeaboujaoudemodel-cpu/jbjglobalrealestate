@@ -189,39 +189,34 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         </div>
 
         {/* Content section — white surface with black text & icons.
-            The developer name is intentionally NOT repeated here: the logo
-            plate above already identifies the brand. */}
+            LOCKED: developer name in gold directly under the emerald plate
+            (essential for monogram-only marks), then exactly ONE metadata row. */}
         <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-12">
 
+          <h3 className="jj-gold-animated text-[15px] font-semibold leading-snug tracking-[-0.01em] mb-1.5">
+            {getPublicDeveloperName(developer.name)}
+          </h3>
+
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#0A0A0A] text-[11px] font-semibold tracking-[0.08em] uppercase mb-2 min-h-[16px]">
-            {projectCount > 0 ? (
-              <span className="flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
-                {projectCount} {projectCount === 1 ? "Project" : "Projects"}
-              </span>
-            ) : null}
-            {developer.completed_projects && developer.completed_projects > 0 ? (
-              <span className="flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-[#B89555]" />
-                {developer.completed_projects.toLocaleString()}+ Delivered
-              </span>
-            ) : null}
-            {developer.total_units_delivered && developer.total_units_delivered > 0 ? (
-              <span className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-[#B89555]" />
-                {developer.total_units_delivered.toLocaleString()} Units
-              </span>
-            ) : null}
-            {!projectCount &&
-            !developer.completed_projects &&
-            !developer.total_units_delivered &&
-            developer.founded_year ? (
+            {developer.founded_year ? (
               <span className="flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
                 Established {developer.founded_year}
               </span>
             ) : null}
+            {projectCount > 0 ? (
+              <span className="flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-[#B89555]" />
+                {projectCount} live {projectCount === 1 ? "project" : "projects"} listed
+              </span>
+            ) : developer.completed_projects && developer.completed_projects > 0 ? (
+              <span className="flex items-center gap-1.5">
+                <TrendingUp className="w-3.5 h-3.5 text-[#B89555]" />
+                {developer.completed_projects.toLocaleString()}+ Delivered
+              </span>
+            ) : null}
           </div>
+
 
           <div className="flex-1 min-h-[48px]">
             {cardDescription ? (
