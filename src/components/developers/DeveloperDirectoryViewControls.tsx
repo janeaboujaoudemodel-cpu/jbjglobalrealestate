@@ -79,6 +79,7 @@ const DeveloperDirectoryViewControls = ({
             key={option}
             type="button"
             data-count-chip="true"
+            data-numeric="true"
             data-active={columns === option ? "true" : "false"}
             onClick={() => onColumnsChange(option)}
           >
@@ -94,6 +95,7 @@ const DeveloperDirectoryViewControls = ({
             key={option}
             type="button"
             data-count-chip="true"
+            data-numeric={option === 0 ? undefined : "true"}
             data-active={perPage === option ? "true" : "false"}
             onClick={() => onPerPageChange(option)}
           >
