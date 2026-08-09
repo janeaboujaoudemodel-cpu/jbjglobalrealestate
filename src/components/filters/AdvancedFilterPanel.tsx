@@ -500,7 +500,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                             alt={dev.name}
                             name={dev.name}
                             variant="bare"
-                            className="!w-12 !h-12 !rounded-lg !p-[3px] flex-shrink-0"
+                            className="!w-20 !h-10 !rounded-lg !p-[3px] flex-shrink-0"
                             renderFallback
                           />
                           <span data-developer-name className="text-sm leading-snug text-[#1A1A1A] group-hover:text-white group-focus:text-white text-left whitespace-normal break-words [overflow-wrap:anywhere] flex-1 min-w-0 overflow-visible" title={dev.name}>

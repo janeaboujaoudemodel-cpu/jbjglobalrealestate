@@ -365,7 +365,7 @@ const ProjectFilters = ({
                         name={developer.name}
                         variant="bare"
                         renderFallback
-                        className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
+                        className="!w-16 !h-8 !min-w-16 !min-h-8 !rounded-md !p-[3px]"
                       />
                       <span data-developer-name className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
                         {developer.name}

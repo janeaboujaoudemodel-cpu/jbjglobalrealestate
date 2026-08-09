@@ -907,7 +907,7 @@ const HeroSearchBar = () => {
                       name={dev.name}
                       variant="bare"
                       renderFallback
-                      className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px] flex-shrink-0"
+                      className="!w-16 !h-8 !min-w-16 !min-h-8 !rounded-md !p-[3px] flex-shrink-0"
                     />
                     <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">{dev.name}</span>
                   </button>
@@ -1154,7 +1154,7 @@ const HeroSearchBar = () => {
                           name={dev.name}
                           variant="bare"
                           renderFallback
-                          className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px] flex-shrink-0"
+                          className="!w-16 !h-8 !min-w-16 !min-h-8 !rounded-md !p-[3px] flex-shrink-0"
                         />
                         <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">{dev.name}</span>
                       </button>

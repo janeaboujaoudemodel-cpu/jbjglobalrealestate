@@ -538,7 +538,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
               alt={item.subtitle || item.name || "Developer"}
               size="micro"
               loading="eager"
-              className="!h-11 !w-11 rounded-md !p-1.5"
+              className="!h-11 !w-[88px] rounded-md !p-1.5"
               onError={() => setLogoError(true)}
             />
           </div>
@@ -551,7 +551,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
                 alt={item.subtitle}
                 size="micro"
                 loading="eager"
-                className="!h-11 !w-11 rounded-md !p-1.5"
+                className="!h-11 !w-[88px] rounded-md !p-1.5"
               />
             </div>
           )

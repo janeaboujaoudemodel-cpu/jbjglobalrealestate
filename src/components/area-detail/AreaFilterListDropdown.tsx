@@ -186,7 +186,7 @@ export const AreaFilterListDropdown = ({ scope, label, active, onScope, onQuery 
               className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-white/10 transition-colors"
             >
               {item.isDev ? (
-                <DeveloperLogo src={item.img} alt={item.label} name={item.label} className="w-8 h-8 flex-none" renderFallback />
+                <DeveloperLogo src={item.img} alt={item.label} name={item.label} className="w-16 h-8 flex-none" renderFallback />
               ) : item.img ? (
                 <img src={item.img} alt="" loading="lazy" className="w-8 h-8 rounded object-cover flex-none" />
               ) : (
