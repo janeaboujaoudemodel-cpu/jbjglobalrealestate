@@ -54,6 +54,9 @@ function isAllowedLogoUrl(url: unknown): url is string {
   return !FORBIDDEN_LOGO_PATTERNS.some((pat) => pat.test(trimmed));
 }
 
+const secureLogoUrl = (url: string): string =>
+  url.startsWith("http://") ? `https://${url.slice("http://".length)}` : url;
+
 function normalizeDeveloper(developer: unknown): Record<string, unknown> | null {
   if (!developer) return null;
   const dev = Array.isArray(developer) ? developer[0] : developer;
@@ -132,12 +135,12 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
   const mirrored = getOfficialLogoMirror(url, dev.name);
   if (mirrored) return mirrored;
   if (isWrongBrandLogoFile(url, dev.name)) return null;
-  if (isAllowedLogoUrl(url)) return url;
+  if (isAllowedLogoUrl(url)) return secureLogoUrl(url);
   // Processed artwork is a legitimate final fallback when the canonical field
   // is empty or contains a rejected photo/favicon. It is never allowed to
   // outrank a valid official canonical logo.
   const processed = dev.logo_url_processed;
-  return isAllowedLogoUrl(processed) ? processed : null;
+  return isAllowedLogoUrl(processed) ? secureLogoUrl(processed) : null;
 }
 
 export function getDeveloperWebsiteUrl(developer: unknown): string | null {
