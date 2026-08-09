@@ -1,6 +1,7 @@
 // Receives the OAuth redirect, exchanges code → tokens using the broker's OWN OAuth app credentials,
 // upserts broker_email_accounts, posts back to opener.
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { encryptToken } from "../_shared/brokerEmailTokenCrypto.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
