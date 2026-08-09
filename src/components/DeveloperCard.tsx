@@ -17,7 +17,70 @@ interface DeveloperCardProps {
   index?: number;
   heroImageUrl?: string;
   heroImageUrls?: string[];
+  /** Number of cards rendered per row — the card rescales itself to stay premium. */
+  density?: number;
 }
+
+/**
+ * PASS 280 — DENSITY-ADAPTIVE DEVELOPER CARD (LOCKED)
+ * The logo plate, type scale, paddings and blurb all rescale with the number of
+ * cards per row (1–8). Nothing is ever left oversized, squeezed or clipped when
+ * the owner switches density; the blurb is dropped rather than cropped once the
+ * card is too narrow to hold two full lines.
+ */
+const DENSITY_SCALE = (columns: number) => {
+  if (columns >= 7) {
+    return {
+      plate: "h-[42px] w-[92px] left-2.5",
+      pad: "px-2.5 pb-3 pt-7",
+      name: "text-[11px]",
+      meta: "text-[9px] gap-x-2",
+      metaIcon: "w-3 h-3",
+      cta: "text-[8.5px]",
+      badge: "px-2 py-0.5 text-[8px]",
+      showBlurb: false,
+      blurbMin: "min-h-0",
+    };
+  }
+  if (columns >= 5) {
+    return {
+      plate: "h-[54px] w-[112px] left-3",
+      pad: "px-3 pb-3.5 pt-9",
+      name: "text-[12.5px]",
+      meta: "text-[10px] gap-x-3",
+      metaIcon: "w-3 h-3",
+      cta: "text-[9px]",
+      badge: "px-2.5 py-0.5 text-[9px]",
+      showBlurb: false,
+      blurbMin: "min-h-0",
+    };
+  }
+  if (columns === 4) {
+    return {
+      plate: "h-[66px] w-[132px] left-4",
+      pad: "px-4 pb-4 pt-11",
+      name: "text-[14px]",
+      meta: "text-[10.5px] gap-x-4",
+      metaIcon: "w-3.5 h-3.5",
+      cta: "text-[10px]",
+      badge: "px-3 py-1 text-[10px]",
+      showBlurb: true,
+      blurbMin: "min-h-[44px]",
+    };
+  }
+  return {
+    plate: "h-[78px] w-[156px] left-5",
+    pad: "px-5 pb-5 pt-14",
+    name: "text-[17px]",
+    meta: "text-[11px] gap-x-4",
+    metaIcon: "w-4 h-4",
+    cta: "text-[10px]",
+    badge: "px-3 py-1 text-[10px]",
+    showBlurb: true,
+    blurbMin: "min-h-[52px]",
+  };
+};
+
 
 
 const getPublicDeveloperName = (name: string) => {
