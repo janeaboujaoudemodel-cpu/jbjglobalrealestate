@@ -23,7 +23,6 @@ import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const developersHeroVideo = developersHeroVideoAsset.url;
 
 const Developers = () => {
-  console.log("DEV_PAGE_MOUNT");
   const { data: developers, isLoading, refetch: refetchDevelopers } = useDevelopers();
   const { data: projectStats } = useDeveloperProjectStats();
   const { effectiveOwner } = useEffectiveOwner();
