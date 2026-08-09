@@ -12,7 +12,7 @@ import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Button } from "@/components/ui/button";
 import { useEffectiveOwner } from "@/hooks/useEffectiveOwner";
-import DeveloperDirectoryViewControls, { type DirectoryViewMode } from "@/components/developers/DeveloperDirectoryViewControls";
+import DeveloperDirectoryViewControls, { type DirectoryViewMode, type DirectoryAuditFilter } from "@/components/developers/DeveloperDirectoryViewControls";
 import DeveloperAuditRow from "@/components/developers/DeveloperAuditRow";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
