@@ -13,14 +13,17 @@ import majidAlFuttaimStableCover from "@/assets/developer-covers/majid-al-futtai
 const normalizeIdentity = (value?: string | null) =>
   (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
 
+const assetUrl = (url: string) =>
+  url.startsWith("/__l5e/assets-v1/") ? `https://jbj.ae${url}` : url;
+
 const VERIFIED_FLAGSHIP_MEDIA: Array<{ identities: string[]; url: string }> = [
-  { identities: ["emaar", "emaarproperties"], url: emaarCreekHarbour.url },
-  { identities: ["nakheel", "nakheelproperties"], url: nakheelPalmJebelAli.url },
-  { identities: ["omniyat"], url: omniyatMasterpiece.url },
-  { identities: ["sobha", "sobharealty"], url: sobhaStableCover.url || sobhaFlagship },
-  { identities: ["aldar", "aldarproperties"], url: aldarStableCover.url },
-  { identities: ["wellingtondevelopment", "wellingtondevelopmentllc"], url: wellingtonStableCover.url },
-  { identities: ["majidalfuttaim"], url: majidAlFuttaimStableCover.url },
+  { identities: ["emaar", "emaarproperties"], url: assetUrl(emaarCreekHarbour.url) },
+  { identities: ["nakheel", "nakheelproperties"], url: assetUrl(nakheelPalmJebelAli.url) },
+  { identities: ["omniyat"], url: assetUrl(omniyatMasterpiece.url) },
+  { identities: ["sobha", "sobharealty"], url: assetUrl(sobhaStableCover.url) || sobhaFlagship },
+  { identities: ["aldar", "aldarproperties"], url: assetUrl(aldarStableCover.url) },
+  { identities: ["wellingtondevelopment", "wellingtondevelopmentllc"], url: assetUrl(wellingtonStableCover.url) },
+  { identities: ["majidalfuttaim"], url: assetUrl(majidAlFuttaimStableCover.url) },
   { identities: ["alfahadholding"], url: alFahadFlagship },
   { identities: ["amisdevelopment"], url: amisFlagship },
   { identities: ["anaxdevelopment", "anaxdevelopments"], url: anaxFlagship },
