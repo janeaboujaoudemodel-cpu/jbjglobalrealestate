@@ -816,8 +816,9 @@ export function useProjectsByCommunity(communitySlug: string) {
 }
 
 export function useProjectsByDeveloper(developerSlug: string) {
+  const canonicalSlug = developerSlug === "sobha" ? "sobha-realty" : developerSlug;
   return useQuery({
-    queryKey: ["projects", "developer", developerSlug],
+    queryKey: ["projects", "developer", canonicalSlug],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
@@ -828,7 +829,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
-        .eq("developer.slug", developerSlug)
+        .eq("developer.slug", canonicalSlug)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
@@ -909,14 +910,15 @@ export function useCommunity(communitySlug: string) {
 }
 
 export function useDeveloper(developerSlug: string) {
+  const canonicalSlug = developerSlug === "sobha" ? "sobha-realty" : developerSlug;
   return useQuery({
-    queryKey: ["developer", developerSlug],
+    queryKey: ["developer", canonicalSlug],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("developers")
         .select(DEVELOPERS_PUBLIC_SELECT)
 
-        .eq("slug", developerSlug)
+        .eq("slug", canonicalSlug)
         .maybeSingle();
       
       if (error) throw error;

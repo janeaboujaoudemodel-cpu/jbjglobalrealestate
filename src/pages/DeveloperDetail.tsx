@@ -490,11 +490,11 @@ const DeveloperDetail = () => {
   ].filter(s => s.value !== null);
 
   const verifiedFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
-  const heroImageUrl = (projects || []).map((project) => project.cover_image_url).find(isUsableDeveloperCover)
-    || (projects || []).map((project) => project.card_image_url).find(isUsableDeveloperCover)
-    || (projects || []).map((project) => project.gallery_start_image_url).find(isUsableDeveloperCover)
+  const heroImageUrl = verifiedFlagship
     || (isUsableDeveloperCover(developer.feature_image_url) ? developer.feature_image_url : undefined)
-    || verifiedFlagship;
+    || (projects || []).map((project) => project.cover_image_url).find(isUsableDeveloperCover)
+    || (projects || []).map((project) => project.card_image_url).find(isUsableDeveloperCover)
+    || (projects || []).map((project) => project.gallery_start_image_url).find(isUsableDeveloperCover);
   const developerLogoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
 
 

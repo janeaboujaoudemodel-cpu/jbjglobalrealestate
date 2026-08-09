@@ -31,7 +31,7 @@ export const normalizeDeveloperKey = (value?: string | null) =>
     .toLowerCase()
     .replace(/[^a-z0-9\s.]/g, " ")
     .replace(LEGAL_SUFFIX, " ")
-    .replace(/\b(real\s?estate|development|developments|developer|developers|properties|property)\b/g, " ")
+    .replace(/\b(real\s?estate|development|developments|developer|developers|properties|property|realty)\b/g, " ")
     .replace(/[^a-z0-9]+/g, "");
 
 /**
@@ -46,6 +46,7 @@ const CANONICAL_ALIASES: Record<string, string> = {
   agarkredevelopment: "ag",
   aagproperties: "ag",
   aag: "ag",
+  sobha: "sobharealty",
 };
 
 
