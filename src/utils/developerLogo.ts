@@ -155,7 +155,7 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
  * canvas and must render as-is (no invert filter, no screen blend).
  */
 export function isLockedWhiteLogoAsset(url: unknown): boolean {
-  return typeof url === "string" && /developer-logos\/white-v1\//i.test(url);
+  return typeof url === "string" && /developer-logos\/white-v(?:1|2)\//i.test(url);
 }
 
 
