@@ -7,6 +7,7 @@ import PropertySearchBar from "@/components/search/PropertySearchBar";
 import { EMPTY_SEARCH, type PropertySearch } from "@/lib/propertySearch";
 import { getDeveloperTier, ELITE_PRIORITY_ORDER } from "@/utils/developerTier";
 import DeveloperCard from "@/components/DeveloperCard";
+import { dedupeDevelopers } from "@/utils/developerDedupe";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Button } from "@/components/ui/button";
@@ -121,7 +122,7 @@ const Developers = () => {
     if ((search.sort as string) === "alpha") {
       filtered.sort((a, b) => a.name.localeCompare(b.name));
     } else if ((search.sort as string) === "most_projects") {
-      filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
+      filtered.sort((a, b) => (mergedStats.counts[b.id] || 0) - (mergedStats.counts[a.id] || 0));
     } else {
       filtered.sort((a, b) => {
         const aSlug = a.slug?.toLowerCase() || "";
@@ -140,7 +141,7 @@ const Developers = () => {
     }
     
     return filtered;
-  }, [developers, search, search.sort, projectCounts, projectStats, topProjectImageByDev]);
+  }, [canonicalDevelopers, search, search.sort, mergedStats]);
 
 
   // Reset to page 1 when filters change
@@ -298,12 +299,9 @@ const Developers = () => {
                     <DeveloperCard
                       key={developer.id} 
                       developer={developer} 
-                      projectCount={projectCounts[developer.id] || projectStats?.countsByName?.[normalizeDeveloperName(developer.name)] || 0}
-                       heroImageUrl={topProjectImageByDev[developer.id] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
-                      heroImageUrls={[
-                        ...(projectStats?.imageCandidates?.[developer.id] || []),
-                        ...(projectStats?.imageCandidatesByName?.[normalizeDeveloperName(developer.name)] || []),
-                      ]}
+                      projectCount={mergedStats.counts[developer.id] || 0}
+                      heroImageUrl={mergedStats.heroes[developer.id]?.[0] || projectStats?.imagesByName?.[normalizeDeveloperName(developer.name)]}
+                      heroImageUrls={mergedStats.heroes[developer.id] || []}
                       index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
                     />
                   ))}
