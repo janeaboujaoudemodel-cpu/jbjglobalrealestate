@@ -17,6 +17,11 @@ import ahmadyarWhite from "@/assets/developer-logos/verified-local/ahmadyar-whit
 import aradaWhite from "@/assets/developer-logos/verified-local/arada-white.svg";
 import tigerWhite from "@/assets/developer-logos/verified-local/tiger-white.png";
 import hvmLivingWhite from "@/assets/developer-logos/verified-local/hvm-living-white.png";
+import abraWhite from "@/assets/developer-logos/verified-local/abra-white.png.asset.json";
+import majidAlFuttaimWhite from "@/assets/developer-logos/verified-local/majid-al-futtaim-white.png.asset.json";
+import bamxWhite from "@/assets/developer-logos/verified-local/bamx-white.png.asset.json";
+import alFahadWhite from "@/assets/developer-logos/verified-local/alfahad-white.png.asset.json";
+import albaitWhite from "@/assets/developer-logos/verified-local/albait-white.png.asset.json";
 
 const normalizeIdentity = (value: unknown) =>
   typeof value === "string" ? value.replace(/[^a-z0-9]+/gi, "").toLowerCase() : "";
@@ -34,6 +39,11 @@ const VERIFIED_WHITE_LOGOS: Array<{ match: RegExp; logo: string }> = [
   // Tiger Group / Tiger Properties — official horizontal mark, repainted white.
   { match: /^tiger(properties|group|developments?|realestate(development)?)?(llc)?$/, logo: tigerWhite },
   { match: /^hvmliving(realestate)?development(llc)?$/, logo: hvmLivingWhite },
+  { match: /^abra(group)?$/, logo: abraWhite.url },
+  { match: /^majidalfuttaim(communities|properties|group)?$/, logo: majidAlFuttaimWhite.url },
+  { match: /^bamx(development)?$/, logo: bamxWhite.url },
+  { match: /^alfahad(holding|development)?$/, logo: alFahadWhite.url },
+  { match: /^albaitalduwaliy(realestate)?(development)?$/, logo: albaitWhite.url },
 ];
 
 export function getVerifiedWhiteLogo(name: unknown): string | null {

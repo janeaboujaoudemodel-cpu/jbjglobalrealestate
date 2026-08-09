@@ -20,15 +20,15 @@ const paint = (el: HTMLElement) => ({
 describe("getLogoPaintStyle", () => {
   it("knocks curated artwork out to pure white without blending", () => {
     expect(getLogoPaintStyle({ isLightArtwork: true })).toEqual({
-      filter: "brightness(0) invert(1)",
+      filter: "none",
       mixBlendMode: "normal",
     });
   });
 
   it("knocks light artwork out to pure white without blending", () => {
     expect(getLogoPaintStyle({ needsInvert: false })).toEqual({
-      filter: "brightness(0) invert(1)",
-      mixBlendMode: "normal",
+      filter: "none",
+      mixBlendMode: "screen",
     });
   });
 
@@ -41,7 +41,7 @@ describe("getLogoPaintStyle", () => {
 
   it("knocks unknown/dark artwork out to white with screen blending", () => {
     expect(getLogoPaintStyle({ needsInvert: true })).toEqual({
-      filter: "brightness(0) invert(1)",
+      filter: "invert(1)",
       mixBlendMode: "screen",
     });
   });
@@ -110,7 +110,7 @@ describe("DeveloperLogo rendering guard", () => {
     const { container } = renderLogo({ name, alt: name, variant: "card" });
     const img = container.querySelector("img") as HTMLImageElement;
     expect(img).toBeTruthy();
-    expect(paint(img)).toEqual({ filter: "brightness(0) invert(1)", blend: "normal" });
+    expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
   });
 
   it.each([
@@ -144,7 +144,7 @@ describe("DeveloperLogo rendering guard", () => {
       const img = container.querySelector("img") as HTMLImageElement;
       expect(img).toBeTruthy();
       expect(img.getAttribute("src")).toContain("hvm-living-white.png");
-      expect(paint(img)).toEqual({ filter: "brightness(0) invert(1)", blend: "normal" });
+      expect(paint(img)).toEqual({ filter: "none", blend: "normal" });
       expect(queryByText("Hvm Living Real Estate Development L.L.C")).toBeNull();
       unmount();
     }

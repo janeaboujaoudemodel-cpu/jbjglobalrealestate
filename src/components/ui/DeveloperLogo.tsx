@@ -74,13 +74,19 @@ export function getLogoPaintStyle(opts: {
   // pure white, regardless of the source ink (gold, navy, brand colour). Only
   // the gold identity plate (keepGold) or an explicit override opts out.
   const keepAsIs = !!opts.keepGold;
-  const transparentArtwork =
-    !!opts.isLightArtwork || opts.needsInvert === false;
+  const verifiedWhite = !!opts.isLightArtwork;
+  const lightMarkOnDarkField = opts.needsInvert === false;
   return {
-    filter: opts.overrideFilter ?? (keepAsIs ? "none" : "brightness(0) invert(1)"),
+    // Never use brightness(0) before inversion on unaudited rasters: that
+    // converts every opaque background pixel to white and creates the exact
+    // solid slab this component is required to prevent. Verified transparent
+    // white artwork renders unchanged. Dark marks on a light field use a plain
+    // inversion plus screen blending; light marks on dark fields use screen
+    // blending without inversion so the dark field disappears.
+    filter: opts.overrideFilter ?? (keepAsIs || verifiedWhite || lightMarkOnDarkField ? "none" : "invert(1)"),
     mixBlendMode:
       (opts.overrideBlendMode as "normal" | "screen") ??
-      (keepAsIs || transparentArtwork ? "normal" : "screen"),
+      (keepAsIs || verifiedWhite ? "normal" : "screen"),
   };
 }
 
