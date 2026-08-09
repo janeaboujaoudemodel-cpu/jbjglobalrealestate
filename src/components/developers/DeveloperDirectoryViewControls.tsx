@@ -1,6 +1,7 @@
 import { LayoutGrid, List } from "lucide-react";
 
 export type DirectoryViewMode = "grid" | "list";
+export type DirectoryAuditFilter = "all" | "missing_logo" | "missing_photo" | "missing_both";
 
 interface Props {
   view: DirectoryViewMode;
@@ -10,10 +11,12 @@ interface Props {
   perPage: number;
   onPerPageChange: (perPage: number) => void;
   total: number;
+  canonicalTotal: number;
   missingLogo: number;
   missingCover: number;
-  auditOnly: boolean;
-  onAuditOnlyChange: (value: boolean) => void;
+  missingBoth: number;
+  auditFilter: DirectoryAuditFilter;
+  onAuditFilterChange: (value: DirectoryAuditFilter) => void;
   showAuditData?: boolean;
 }
 
@@ -25,6 +28,11 @@ const PER_PAGE_OPTIONS = [24, 48, 96, 0];
  * Mode buttons match the sidebar Collapse control (42px tall, rounded-lg,
  * gold hairline, emerald ombré). Count chips are TRUE circles (42×42,
  * aspect-square, rounded-full) — never vertically squeezed ovals.
+ *
+ * PASS 279 — OWNER MEDIA AUDIT BUCKETS (LOCKED)
+ * The owner rail exposes four MUTUALLY PRECISE buckets, never one blurred
+ * "needs media" mixture: Total, Missing logo only, Missing photo only,
+ * Missing both. Each chip filters to exactly what its label says.
  */
 const DeveloperDirectoryViewControls = ({
   view,
@@ -34,14 +42,23 @@ const DeveloperDirectoryViewControls = ({
   perPage,
   onPerPageChange,
   total,
+  canonicalTotal,
   missingLogo,
   missingCover,
-  auditOnly,
-  onAuditOnlyChange,
+  missingBoth,
+  auditFilter,
+  onAuditFilterChange,
   showAuditData = false,
 }: Props) => {
   const label =
     "text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground whitespace-nowrap";
+
+  const auditButtons: { key: DirectoryAuditFilter; text: string; count: number }[] = [
+    { key: "all", text: "All developers", count: canonicalTotal },
+    { key: "missing_logo", text: "Missing logo only", count: missingLogo },
+    { key: "missing_photo", text: "Missing photo only", count: missingCover },
+    { key: "missing_both", text: "Missing both", count: missingBoth },
+  ];
 
   return (
     <div
@@ -109,23 +126,28 @@ const DeveloperDirectoryViewControls = ({
       </div>
 
       {showAuditData ? (
-        <button
-          type="button"
-          data-view-mode-button="true"
-          data-active={auditOnly ? "true" : "false"}
-          className={auditOnly ? "allow-white" : undefined}
-          data-on-dark={auditOnly ? "" : undefined}
-          onClick={() => onAuditOnlyChange(!auditOnly)}
-        >
-          <span>Needs media only</span>
-        </button>
-      ) : null}
-
-      {showAuditData ? (
-        <div className="ml-auto flex flex-wrap items-center gap-3 text-[11px] font-semibold text-foreground">
-          <span>{total} shown</span>
-          <span className="text-muted-foreground">{missingLogo} missing logo</span>
-          <span className="text-muted-foreground">{missingCover} missing photo</span>
+        <div className="w-full flex flex-col gap-2 border-t border-border pt-3">
+          <span className={label}>Media audit</span>
+          <div className="flex flex-wrap items-center gap-2">
+            {auditButtons.map((item) => (
+              <button
+                key={item.key}
+                type="button"
+                data-view-mode-button="true"
+                data-active={auditFilter === item.key ? "true" : "false"}
+                className={auditFilter === item.key ? "allow-white" : undefined}
+                data-on-dark={auditFilter === item.key ? "" : undefined}
+                onClick={() => onAuditFilterChange(item.key)}
+              >
+                <span>
+                  {item.text} · {item.count}
+                </span>
+              </button>
+            ))}
+            <span className="ml-auto text-[11px] font-semibold text-foreground">
+              {total} shown
+            </span>
+          </div>
         </div>
       ) : null}
     </div>

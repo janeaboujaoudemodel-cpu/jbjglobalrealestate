@@ -17,7 +17,70 @@ interface DeveloperCardProps {
   index?: number;
   heroImageUrl?: string;
   heroImageUrls?: string[];
+  /** Number of cards rendered per row — the card rescales itself to stay premium. */
+  density?: number;
 }
+
+/**
+ * PASS 280 — DENSITY-ADAPTIVE DEVELOPER CARD (LOCKED)
+ * The logo plate, type scale, paddings and blurb all rescale with the number of
+ * cards per row (1–8). Nothing is ever left oversized, squeezed or clipped when
+ * the owner switches density; the blurb is dropped rather than cropped once the
+ * card is too narrow to hold two full lines.
+ */
+const DENSITY_SCALE = (columns: number) => {
+  if (columns >= 7) {
+    return {
+      plate: "h-[42px] w-[92px] left-2.5",
+      pad: "px-2.5 pb-3 pt-7",
+      name: "text-[11px]",
+      meta: "text-[9px] gap-x-2",
+      metaIcon: "w-3 h-3",
+      cta: "text-[8.5px]",
+      badge: "px-2 py-0.5 text-[8px]",
+      showBlurb: false,
+      blurbMin: "min-h-0",
+    };
+  }
+  if (columns >= 5) {
+    return {
+      plate: "h-[54px] w-[112px] left-3",
+      pad: "px-3 pb-3.5 pt-9",
+      name: "text-[12.5px]",
+      meta: "text-[10px] gap-x-3",
+      metaIcon: "w-3 h-3",
+      cta: "text-[9px]",
+      badge: "px-2.5 py-0.5 text-[9px]",
+      showBlurb: false,
+      blurbMin: "min-h-0",
+    };
+  }
+  if (columns === 4) {
+    return {
+      plate: "h-[66px] w-[132px] left-4",
+      pad: "px-4 pb-4 pt-11",
+      name: "text-[14px]",
+      meta: "text-[10.5px] gap-x-4",
+      metaIcon: "w-3.5 h-3.5",
+      cta: "text-[10px]",
+      badge: "px-3 py-1 text-[10px]",
+      showBlurb: true,
+      blurbMin: "min-h-[44px]",
+    };
+  }
+  return {
+    plate: "h-[78px] w-[156px] left-5",
+    pad: "px-5 pb-5 pt-14",
+    name: "text-[17px]",
+    meta: "text-[11px] gap-x-4",
+    metaIcon: "w-4 h-4",
+    cta: "text-[10px]",
+    badge: "px-3 py-1 text-[10px]",
+    showBlurb: true,
+    blurbMin: "min-h-[52px]",
+  };
+};
+
 
 
 const getPublicDeveloperName = (name: string) => {
@@ -28,9 +91,11 @@ const getPublicDeveloperName = (name: string) => {
     .trim();
 };
 
-const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [] }: DeveloperCardProps) => {
+const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [], density = 4 }: DeveloperCardProps) => {
+  const scale = DENSITY_SCALE(density);
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
+
   // The directory paginates to 24 cards, so every visible cover belongs to the
   // current viewport workload. Lazy-loading the lower rows left large beige
   // fields in screenshots and during normal scrolling; eagerly decode the
@@ -158,10 +223,10 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
 
 
           {/* Tier Badge — unified emerald metallic pill, white text, always present */}
-          {tierKey !== "other" && (
+          {tierKey !== "other" && density <= 5 && (
             <div className="absolute top-3 right-3 z-10">
               <Badge
-                className="jj-pill-emerald-metallic allow-white text-white border-0 px-3 py-1 text-[10px] font-bold tracking-[0.14em] shadow-[0_6px_16px_rgba(4,31,24,0.35)] rounded-full"
+                className={`jj-pill-emerald-metallic allow-white text-white border-0 ${scale.badge} font-bold tracking-[0.14em] shadow-[0_6px_16px_rgba(4,31,24,0.35)] rounded-full`}
                 data-no-contrast-guard
                 data-allow-white
               >
@@ -172,8 +237,9 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         </div>
         {/* LOCKED (PASS 273): the rectangular logo plate always straddles the
             photo seam and sits ABOVE the card — present on every developer card
-            whether or not verified project photography exists. */}
-        <div className="absolute bottom-0 left-4 z-20 h-[72px] w-36 translate-y-1/2">
+            whether or not verified project photography exists.
+            LOCKED (PASS 280): the plate rescales with card density. */}
+        <div className={`absolute bottom-0 z-20 translate-y-1/2 ${scale.plate}`}>
           <DeveloperLogo
             variant="bare"
             src={developerLogoUrl}
@@ -182,7 +248,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             websiteUrl={(developer as { website_url?: string | null }).website_url}
             needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
             loading="eager"
-            size="md"
+            size={density >= 7 ? "sm" : density >= 5 ? "sm" : "md"}
             className="!h-full !w-full !p-0 !rounded-lg"
           />
         </div>
@@ -192,35 +258,35 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
         {/* Content section — white surface with black text & icons.
             LOCKED: developer name in gold directly under the emerald plate
             (essential for monogram-only marks), then exactly ONE metadata row. */}
-        <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-12">
+        <div className={`flex-1 bg-white flex flex-col ${scale.pad}`}>
 
-          <h3 className="developer-name-shine !text-[#B89555] text-[15px] font-bold leading-snug tracking-[-0.01em] mb-1.5">
+          <h3 className={`developer-name-shine !text-[#B89555] ${scale.name} font-bold leading-snug tracking-[-0.01em] mb-1.5`}>
             {getPublicDeveloperName(developer.name)}
           </h3>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#0A0A0A] text-[11px] font-semibold tracking-[0.08em] uppercase mb-2 min-h-[16px]">
+          <div className={`flex flex-wrap items-center ${scale.meta} gap-y-1 text-[#0A0A0A] font-semibold tracking-[0.08em] uppercase mb-2`}>
             {developer.founded_year ? (
               <span className="flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
+                <Building2 className={`${scale.metaIcon} text-[#B89555]`} />
                 Established {developer.founded_year}
               </span>
             ) : null}
             {projectCount > 0 ? (
               <span className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-[#B89555]" />
+                <Layers className={`${scale.metaIcon} text-[#B89555]`} />
                 {projectCount} live {projectCount === 1 ? "project" : "projects"} listed
               </span>
             ) : developer.completed_projects && developer.completed_projects > 0 ? (
               <span className="flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-[#B89555]" />
+                <TrendingUp className={`${scale.metaIcon} text-[#B89555]`} />
                 {developer.completed_projects.toLocaleString()}+ Delivered
               </span>
             ) : null}
           </div>
 
 
-          <div className="flex-1 min-h-[48px]">
-            {cardDescription ? (
+          <div className={`flex-1 ${scale.blurbMin}`}>
+            {scale.showBlurb && cardDescription ? (
               <p className="text-[#0A0A0A]/75 text-xs leading-relaxed">
                 {cardDescription}
                 {isDescriptionTrimmed ? (
@@ -230,12 +296,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             ) : null}
           </div>
 
-          <div className="mt-3 pt-3 border-t border-[#B89555]/30">
-            <span className="flex items-center justify-between gap-2 text-[#8A6D2F] text-[10px] font-semibold tracking-[0.10em] uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-[#B89555]">
-              View developer portfolio
+          <div className={`${density >= 5 ? "mt-2 pt-2" : "mt-3 pt-3"} border-t border-[#B89555]/30`}>
+            <span className={`flex items-center justify-between gap-2 text-[#8A6D2F] ${scale.cta} font-semibold tracking-[0.10em] uppercase whitespace-nowrap transition-colors duration-300 group-hover:text-[#B89555]`}>
+              {density >= 7 ? "View portfolio" : "View developer portfolio"}
               <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
             </span>
           </div>
+
 
         </div>
 
