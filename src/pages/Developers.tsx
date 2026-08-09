@@ -187,27 +187,46 @@ const Developers = () => {
     return map;
   }, [filteredDevelopers, mergedStats]);
 
+  // Owner audit buckets are PRECISE: "missing logo only", "missing photo only"
+  // and "missing both" never overlap, so a chip shows exactly what it says.
   const visibleDevelopers = useMemo(() => {
-    if (!effectiveOwner || !auditOnly) return filteredDevelopers;
+    if (!effectiveOwner || auditFilter === "all") return filteredDevelopers;
     return filteredDevelopers.filter((dev) => {
       const status = mediaStatus[dev.id];
-      return status && (!status.hasLogo || !status.hasCover);
+      if (!status) return false;
+      if (auditFilter === "missing_both") return !status.hasLogo && !status.hasCover;
+      if (auditFilter === "missing_logo") return !status.hasLogo && status.hasCover;
+      return status.hasLogo && !status.hasCover;
     });
-  }, [filteredDevelopers, effectiveOwner, auditOnly, mediaStatus]);
+  }, [filteredDevelopers, effectiveOwner, auditFilter, mediaStatus]);
 
   const missingLogoCount = useMemo(
-    () => filteredDevelopers.filter((dev) => !mediaStatus[dev.id]?.hasLogo).length,
+    () =>
+      filteredDevelopers.filter(
+        (dev) => !mediaStatus[dev.id]?.hasLogo && mediaStatus[dev.id]?.hasCover,
+      ).length,
     [filteredDevelopers, mediaStatus],
   );
   const missingCoverCount = useMemo(
-    () => filteredDevelopers.filter((dev) => !mediaStatus[dev.id]?.hasCover).length,
+    () =>
+      filteredDevelopers.filter(
+        (dev) => mediaStatus[dev.id]?.hasLogo && !mediaStatus[dev.id]?.hasCover,
+      ).length,
+    [filteredDevelopers, mediaStatus],
+  );
+  const missingBothCount = useMemo(
+    () =>
+      filteredDevelopers.filter(
+        (dev) => !mediaStatus[dev.id]?.hasLogo && !mediaStatus[dev.id]?.hasCover,
+      ).length,
     [filteredDevelopers, mediaStatus],
   );
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, search.sort, auditOnly, perPage]);
+  }, [search, search.sort, auditFilter, perPage]);
+
 
 
   const totalPages = Math.ceil(visibleDevelopers.length / ITEMS_PER_PAGE);
