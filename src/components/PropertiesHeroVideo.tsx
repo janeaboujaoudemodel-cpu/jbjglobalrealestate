@@ -4,7 +4,7 @@
  */
 
 import { motion } from "framer-motion";
-import propertiesHeroVideoAsset from "@/assets/properties-hero-video.mp4.asset.json";
+import propertiesHeroVideoAsset from "@/assets/projects-hero-video.mp4.asset.json";
 const propertiesHeroVideo = propertiesHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 
