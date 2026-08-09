@@ -53,7 +53,7 @@ const Developers = () => {
         ? Math.min(4, columns)
         : columns;
 
-  const ITEMS_PER_PAGE = perPage === 0 ? Math.max(visibleDevelopers?.length || 0, 1) : perPage;
+  const ITEMS_PER_PAGE = perPage === 0 ? 100000 : perPage;
 
 
 
