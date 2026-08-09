@@ -55,10 +55,9 @@ const DeveloperDirectoryViewControls = ({
         <button
           type="button"
           data-view-mode-button="true"
-          data-on-dark
-          data-allow-dark-cta
           data-active={view === "grid" ? "true" : "false"}
           className={view === "grid" ? "allow-white" : undefined}
+          data-on-dark={view === "grid" ? "" : undefined}
           onClick={() => onViewChange("grid")}
         >
           <LayoutGrid className="w-4 h-4 shrink-0" strokeWidth={2.2} />
@@ -67,10 +66,9 @@ const DeveloperDirectoryViewControls = ({
         <button
           type="button"
           data-view-mode-button="true"
-          data-on-dark
-          data-allow-dark-cta
           data-active={view === "list" ? "true" : "false"}
           className={view === "list" ? "allow-white" : undefined}
+          data-on-dark={view === "list" ? "" : undefined}
           onClick={() => onViewChange("list")}
         >
           <List className="w-4 h-4 shrink-0" strokeWidth={2.2} />
@@ -114,10 +112,9 @@ const DeveloperDirectoryViewControls = ({
         <button
           type="button"
           data-view-mode-button="true"
-          data-on-dark
-          data-allow-dark-cta
           data-active={auditOnly ? "true" : "false"}
           className={auditOnly ? "allow-white" : undefined}
+          data-on-dark={auditOnly ? "" : undefined}
           onClick={() => onAuditOnlyChange(!auditOnly)}
         >
           <span>Needs media only</span>
