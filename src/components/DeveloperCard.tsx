@@ -40,18 +40,20 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const officialFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
   const developerFeatureImage = (developer as { feature_image_url?: string | null }).feature_image_url || undefined;
+  const developerLogoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
   const candidates = useMemo(() => {
     const verifiedOnly = normalizedSlug.includes("alfahadholding") || normalizedName.includes("alfahadholding");
     return [...new Set([
+      officialFlagship,
       ...(verifiedOnly ? [] : heroImageUrls),
       ...(verifiedOnly ? [] : [heroImageUrl, developerFeatureImage]),
-      officialFlagship,
-    ].filter((value): value is string => Boolean(value) && isUsableDeveloperCover(value)))];
-  }, [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage, normalizedName, normalizedSlug]);
+    ].filter((value): value is string =>
+      Boolean(value) && value !== developerLogoUrl && isUsableDeveloperCover(value),
+    ))];
+  }, [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage, developerLogoUrl, normalizedName, normalizedSlug]);
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
-  const developerLogoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
   const hasHero = !!cardHeroImageUrl;
   // LOCKED (no cropped text): never render an ellipsis. The blurb is trimmed on
   // a word boundary so the two-line slot always holds a complete phrase.

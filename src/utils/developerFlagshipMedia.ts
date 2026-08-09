@@ -47,6 +47,6 @@ export const getVerifiedDeveloperFlagship = (
 
 export const isUsableDeveloperCover = (value?: string | null) =>
   Boolean(value) &&
-  !/(?:logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/16x16\/|mobile[-_]?app|app[-_]?banner|iphone|phone|meeting|celebration|team[-_]|portrait|suspended[_-]?account|beback[-_]?soon|coming[-_]?soon|under[-_]?construction)/i.test(
+  !/(?:\.svg(?:\?|$)|logo|wordmark|favicon|snapedit|screenshot|whatsapp|convert\.io|1080x1080|\/x\/(?:16x16|118x|296x)\/|mobile[-_]?app|app[-_]?banner|iphone|phone|meeting|celebration|team[-_]|portrait|suspended[_-]?account|beback[-_]?soon|coming[-_]?soon|under[-_]?construction)/i.test(
     value || "",
   );
