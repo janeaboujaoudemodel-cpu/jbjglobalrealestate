@@ -16,6 +16,7 @@ import { IconTile } from "@/components/ui/icon-tile";
 import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
 import useDisplayFirstName from "@/hooks/useDisplayFirstName";
 import { Inbox, ListChecks, Bell, CalendarClock } from "lucide-react";
+import { dedupeDevelopers } from "@/utils/developerDedupe";
 
 // Per-mode "prime shortcuts" — the user's most-used daily destinations.
 // Surfaced as "{FirstName}'s Shortcuts" in the search modal for every signed-in user.
@@ -201,12 +202,11 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         .select('id, name, slug, logo_url, logo_url_processed, website_url')
         .ilike('name', `%${debouncedQuery}%`)
         .limit(12);
-      return ((data as unknown as Array<Record<string, any>>) || [])
-        .sort((a, b) => rankSearchName(a.name, debouncedQuery) - rankSearchName(b.name, debouncedQuery))
-        .slice(0, 5)
-        // LOCKED: never pass a raw logo_url — the canonical resolver prefers the
-        // verified pure-white knockout (logo_url_processed / white-v2).
-        .map(d => ({ id: d.id, name: d.name, slug: d.slug, image: getDeveloperLogoUrl(d) }));
+        const deduped = dedupeDevelopers((data as any) || []);
+        return deduped
+          .sort((a, b) => rankSearchName(a.developer.name, debouncedQuery) - rankSearchName(b.developer.name, debouncedQuery))
+          .slice(0, 5)
+          .map(entry => ({ id: entry.developer.id, name: entry.developer.name, slug: entry.developer.slug, image: getDeveloperLogoUrl(entry.developer) }));
     },
     enabled: debouncedQuery.length >= 2 && isOpen,
     staleTime: 30000,

@@ -144,7 +144,7 @@ export function DeveloperLogo({
   );
   // Single source of truth for curated pure-white official marks.
   const verifiedWhiteLogo = getVerifiedWhiteLogo(name || alt);
-  const isDubaiSouth = /^dubaisouth(?:properties)?$/i.test(
+  const isDubaiSouth = /^dubaisouth(?:properties|realty)?$/i.test(
     (name || alt || "").replace(/[^a-z0-9]+/gi, ""),
   );
   // LOCKED white-v1 artwork from the database is the approved final mark for a

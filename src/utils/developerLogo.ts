@@ -33,6 +33,14 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /\/x\/16x16\//i, // favicon-size CDN paths only; larger CDN logo plates are valid developer logos
   /habtoor_polo/i,
   /tilal_/i,
+  /exterior/i,
+  /interior/i,
+  /facade/i,
+  /tower/i,
+  /building/i,
+  /community/i,
+  /masterplan/i,
+  /bedroom/i,
   // Raster photo formats are never transparent brand marks — they always knock
   // out to a solid block on the emerald plate.
   /\.jpe?g(\?|$)/i,

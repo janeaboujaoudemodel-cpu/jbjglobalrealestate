@@ -380,8 +380,12 @@ const Developers = () => {
                   </div>
                 ) : (
                   <div
-                    className={effectiveOwner ? "grid gap-6 items-stretch" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"}
-                    style={effectiveOwner ? { gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))` } : undefined}
+                  <div
+                    className={effectiveOwner ? "grid items-stretch" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"}
+                    style={effectiveOwner ? { 
+                      gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))`, 
+                      gap: effectiveColumns > 4 ? "1rem" : "1.5rem" 
+                    } : undefined}
                   >
                     {paginatedDevelopers.map((developer, idx) => (
                       <DeveloperCard
