@@ -17,7 +17,6 @@ export interface DedupeInput {
   rank?: number | null;
   founded_year?: number | null;
   description?: string | null;
-  [key: string]: unknown;
 }
 
 export interface DedupedDeveloper<T extends DedupeInput> {
