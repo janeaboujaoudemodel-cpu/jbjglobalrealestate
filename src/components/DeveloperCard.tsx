@@ -76,7 +76,11 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     if (projectCount > 0) parts.push(`${projectCount} live ${projectCount === 1 ? "project" : "projects"} listed`);
     else if (developer.offplan_projects && developer.offplan_projects > 0)
       parts.push(`${developer.offplan_projects} off-plan developments`);
-    if (!parts.length) return "";
+    if (!parts.length) {
+      // Never leave a card blank: fall back to a factual DLD-registry line.
+      const city = developer.headquarters || "the UAE";
+      return `Registered real estate developer operating in ${city}.`;
+    }
     const sentence = parts.join(", ");
     return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
   }, [developer, projectCount]);
@@ -176,7 +180,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             plate above already identifies the brand. */}
         <div className="flex-1 px-4 pb-4 bg-white flex flex-col pt-12">
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#0A0A0A] text-[11px] font-semibold tracking-[0.08em] uppercase mb-2">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#0A0A0A] text-[11px] font-semibold tracking-[0.08em] uppercase mb-2 min-h-[16px]">
             {projectCount > 0 ? (
               <span className="flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
@@ -206,7 +210,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             ) : null}
           </div>
 
-          <div className="flex-1 min-h-[36px]">
+          <div className="flex-1 min-h-[48px]">
             {cardDescription ? (
               <p className="text-[#0A0A0A]/75 text-xs leading-relaxed">
                 {cardDescription}

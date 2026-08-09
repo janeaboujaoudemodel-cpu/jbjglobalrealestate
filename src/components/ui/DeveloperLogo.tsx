@@ -70,13 +70,17 @@ export function getLogoPaintStyle(opts: {
   overrideFilter?: string;
   overrideBlendMode?: string;
 }): { filter: string; mixBlendMode: "normal" | "screen" } {
-  const alreadyWhite =
-    !!opts.isLightArtwork || !!opts.keepGold || opts.needsInvert === false;
+  // Pure-white lock: every developer mark on an emerald plate is knocked out to
+  // pure white, regardless of the source ink (gold, navy, brand colour). Only
+  // the gold identity plate (keepGold) or an explicit override opts out.
+  const keepAsIs = !!opts.keepGold;
+  const transparentArtwork =
+    !!opts.isLightArtwork || opts.needsInvert === false;
   return {
-    filter: opts.overrideFilter ?? (alreadyWhite ? "none" : "brightness(0) invert(1)"),
+    filter: opts.overrideFilter ?? (keepAsIs ? "none" : "brightness(0) invert(1)"),
     mixBlendMode:
       (opts.overrideBlendMode as "normal" | "screen") ??
-      (alreadyWhite ? "normal" : "screen"),
+      (keepAsIs || transparentArtwork ? "normal" : "screen"),
   };
 }
 
@@ -228,7 +232,7 @@ export function DeveloperLogo({
           // tightly-authored SVG/PNG canvases. Object-contain and centered
           // positioning are non-negotiable on every semantic size.
           "block h-full w-full max-h-full max-w-full object-contain object-center",
-          scale === "compact" ? "rounded-sm p-3" : "rounded-md p-3.5",
+          scale === "compact" ? "rounded-sm p-2" : "rounded-md p-2.5",
           "scale-100",
         )}
         style={{
