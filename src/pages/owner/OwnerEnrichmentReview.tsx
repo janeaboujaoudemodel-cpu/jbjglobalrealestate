@@ -55,7 +55,7 @@ function FieldValue({ value }: { value: any }) {
     return (
       <div className="flex flex-wrap gap-1">
         {value.map((v, i) => (
-          <span key={i} className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-900/5 border border-emerald-900/10 text-neutral-800">
+          <span key={i} className="text-[11px] px-2 py-0.5 rounded-full bg-white border border-[rgba(6,78,59,0.25)] text-neutral-800">
             {typeof v === "object" ? JSON.stringify(v) : String(v)}
           </span>
         ))}
@@ -213,14 +213,25 @@ export default function OwnerEnrichmentReview() {
   }), [drafts]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6" data-page="enrichment-review">
+    <div className="max-w-6xl mx-auto p-6" data-page="enrichment-review" data-no-contrast-guard>
+      <style>{`
+        [data-page="enrichment-review"] .er-pill{transition:background .15s,color .15s}
+        [data-page="enrichment-review"] .er-pill:hover{background:#064E3B !important;color:#fff !important;border-color:#064E3B !important}
+        [data-page="enrichment-review"] .er-pill:hover svg{color:#fff !important;stroke:#fff !important}
+        [data-page="enrichment-review"] .er-plate-glyph{color:#FFFFFF !important;font-size:15px;line-height:1;font-weight:700}
+        [data-page="enrichment-review"] .er-plate svg{color:#FFFFFF !important;stroke:#FFFFFF !important;opacity:1 !important}
+        [data-page="enrichment-review"] .er-pill,[data-page="enrichment-review"] .er-pill *{color:inherit}
+        [data-page="enrichment-review"] button.er-pill.er-pill-idle > span.er-txt{color:#064E3B !important;-webkit-text-fill-color:#064E3B !important}
+        [data-page="enrichment-review"] button.er-pill.er-pill-on > span.er-txt{color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important}
+        [data-page="enrichment-review"] button.er-pill:hover > span.er-txt{color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important}
+      `}</style>
       <div className="flex items-center gap-3 mb-2">
         <span
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg"
-          style={EMERALD_PILL}
+          className="er-plate inline-flex h-8 w-8 items-center justify-center rounded-lg"
+          style={{ ...EMERALD_PILL, boxShadow: "0 6px 18px -10px rgba(6,78,59,.7)" }}
           data-no-contrast-guard
         >
-          <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+          <span className="er-plate-glyph" aria-hidden>&#10022;</span>
         </span>
         <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">Enrichment Review</h1>
       </div>
@@ -239,19 +250,19 @@ export default function OwnerEnrichmentReview() {
           type="button"
           onClick={() => setFilter("pending")}
           data-no-contrast-guard
-          style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.2)" }}
-          className="px-3 py-1.5 rounded-full text-xs font-semibold"
+          style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
+          className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "pending" ? "er-pill-on" : "er-pill-idle"}`}
         >
-          Pending ({summary.pending})
+          <span className="er-txt">Pending ({summary.pending})</span>
         </button>
         <button
           type="button"
           onClick={() => setFilter("all")}
           data-no-contrast-guard
-          style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.2)" }}
-          className="px-3 py-1.5 rounded-full text-xs font-semibold"
+          style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
+          className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "all" ? "er-pill-on" : "er-pill-idle"}`}
         >
-          All
+          <span className="er-txt">All</span>
         </button>
       </div>
 
@@ -370,7 +381,7 @@ export default function OwnerEnrichmentReview() {
                       className="rounded-lg border px-3 py-2.5"
                       style={already
                         ? { backgroundColor: "#FFFFFF", borderColor: "rgba(0,0,0,0.08)", borderStyle: "dashed" }
-                        : { backgroundColor: "#F0FDF4", borderColor: "rgba(6,78,59,0.2)" }}
+                        : { backgroundColor: "#FFFFFF", borderColor: "rgba(6,78,59,0.3)" }}
                     >
                       <div className="text-[10px] uppercase tracking-wider font-bold text-emerald-900 mb-1">
                         {humanize(k)}

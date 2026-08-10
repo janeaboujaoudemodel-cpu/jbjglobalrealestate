@@ -27287,11 +27287,15 @@ export type Database = {
           gallery: Json
           headquarters: string | null
           id: string
+          jbj_developer_id: string | null
           logo_url: string | null
           name: string
           ongoing_projects: number | null
           payload: Json
           rating: number | null
+          review_decision: string
+          reviewed_at: string | null
+          reviewed_by: string | null
           run_id: string | null
           source_id: string | null
           source_slug: string
@@ -27313,11 +27317,15 @@ export type Database = {
           gallery?: Json
           headquarters?: string | null
           id?: string
+          jbj_developer_id?: string | null
           logo_url?: string | null
           name: string
           ongoing_projects?: number | null
           payload?: Json
           rating?: number | null
+          review_decision?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           run_id?: string | null
           source_id?: string | null
           source_slug: string
@@ -27339,11 +27347,15 @@ export type Database = {
           gallery?: Json
           headquarters?: string | null
           id?: string
+          jbj_developer_id?: string | null
           logo_url?: string | null
           name?: string
           ongoing_projects?: number | null
           payload?: Json
           rating?: number | null
+          review_decision?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           run_id?: string | null
           source_id?: string | null
           source_slug?: string
@@ -27386,6 +27398,7 @@ export type Database = {
           id: string
           investment: Json
           is_offplan: boolean
+          jbj_project_id: string | null
           latitude: number | null
           launch_date: string | null
           longitude: number | null
@@ -27396,6 +27409,9 @@ export type Database = {
           payload: Json
           payment_plans: Json
           plot_size_sqft: number | null
+          review_decision: string
+          reviewed_at: string | null
+          reviewed_by: string | null
           run_id: string | null
           source_id: string | null
           source_slug: string
@@ -27430,6 +27446,7 @@ export type Database = {
           id?: string
           investment?: Json
           is_offplan?: boolean
+          jbj_project_id?: string | null
           latitude?: number | null
           launch_date?: string | null
           longitude?: number | null
@@ -27440,6 +27457,9 @@ export type Database = {
           payload?: Json
           payment_plans?: Json
           plot_size_sqft?: number | null
+          review_decision?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           run_id?: string | null
           source_id?: string | null
           source_slug: string
@@ -27474,6 +27494,7 @@ export type Database = {
           id?: string
           investment?: Json
           is_offplan?: boolean
+          jbj_project_id?: string | null
           latitude?: number | null
           launch_date?: string | null
           longitude?: number | null
@@ -27484,6 +27505,9 @@ export type Database = {
           payload?: Json
           payment_plans?: Json
           plot_size_sqft?: number | null
+          review_decision?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           run_id?: string | null
           source_id?: string | null
           source_slug?: string
