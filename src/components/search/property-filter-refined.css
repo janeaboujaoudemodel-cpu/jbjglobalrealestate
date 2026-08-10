@@ -12,15 +12,17 @@
 
 /* ── Container ─────────────────────────────────────────────── */
 .jjpf-shell {
-  background: #FFFFFF !important;
-  border: 1px solid rgba(15, 29, 24, 0.18) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 12px 28px -24px rgba(6, 78, 59, 0.28) !important;
-  padding: 14px !important;
+  /* No card frame: the filter content sits directly on the page background. */
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 @media (min-width: 1024px) {
-  .jjpf-shell { padding: 16px !important; }
+  .jjpf-shell { padding: 0 !important; }
 }
+
 
 /* ── Container header ──────────────────────────────────────────
    The duplicate title/subtitle is suppressed (the page already has an H1),
