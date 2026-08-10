@@ -2356,11 +2356,11 @@ function ProjectDetailLayoutInner({
                     Request the brochure, fact sheet and floor plans for {project.name}. Our team will share them with you directly.
                   </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
                   {([
-                    { key: "brochure", label: "Brochure", desc: "Full project booklet" },
-                    { key: "fact_sheet", label: "Fact Sheet", desc: "Specs at a glance" },
-                    { key: "floor_plan", label: "Floor Plans", desc: "Layouts & sizes" },
+                    { key: "brochure", label: "Brochure", desc: "Full project booklet", cta: "Request brochure" },
+                    { key: "fact_sheet", label: "Fact Sheet", desc: "Specs at a glance", cta: "Request fact sheet" },
+                    { key: "floor_plan", label: "Floor Plans", desc: "Layouts & sizes", cta: "Request floor plans" },
                   ] as const).map((slot) => (
                     <button
                       key={slot.key}
@@ -2370,22 +2370,24 @@ function ProjectDetailLayoutInner({
                         setCaptureDocUrl(undefined);
                         setLeadCaptureOpen(true);
                       }}
-                      className="group text-left rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 hover:border-[#B89555] p-5 transition-all shadow-sm hover:shadow-md"
+                      className="group flex h-full flex-col items-start gap-4 text-left rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 hover:border-[#B89555] px-6 py-6 transition-all shadow-sm hover:shadow-md"
                     >
-                      <div className="flex items-center gap-3 mb-3">
-                        <span
-                          className="inline-flex w-9 h-9 items-center justify-center rounded-lg ring-1 ring-[#B89555]/50"
-                          style={{ background: "linear-gradient(135deg,#F7ECD0 0%,#EFE6D6 100%)" }}
-                        >
-                          <FileText className="w-4 h-4 text-[#1A1A1A]" />
+                      <span
+                        className="inline-flex w-11 h-11 items-center justify-center rounded-xl ring-1 ring-[#B89555]/50 shrink-0"
+                        style={{ background: "linear-gradient(135deg,#F7ECD0 0%,#EFE6D6 100%)" }}
+                      >
+                        <FileText className="w-5 h-5 text-[#1A1A1A]" />
+                      </span>
+                      <span className="block w-full">
+                        <span className="block text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 font-bold leading-relaxed">
+                          {slot.desc}
                         </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 font-bold">{slot.desc}</p>
-                          <p className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">{slot.label}</p>
-                        </div>
-                      </div>
-                      <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#1A1A1A]">
-                        Request {slot.label.toLowerCase()}
+                        <span className="block text-[17px] font-semibold text-[#1A1A1A] leading-snug mt-1">
+                          {slot.label}
+                        </span>
+                      </span>
+                      <span className="mt-auto inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#064E3B] pt-1">
+                        {slot.cta}
                         <span aria-hidden>→</span>
                       </span>
                     </button>
