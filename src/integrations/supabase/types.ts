@@ -31428,6 +31428,39 @@ export type Database = {
         }
         Relationships: []
       }
+      project_publish_audit: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          new_state: boolean | null
+          previous_state: boolean | null
+          project_id: string
+          project_name: string | null
+          reason: string | null
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_state?: boolean | null
+          previous_state?: boolean | null
+          project_id: string
+          project_name?: string | null
+          reason?: string | null
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_state?: boolean | null
+          previous_state?: boolean | null
+          project_id?: string
+          project_name?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
       project_reports: {
         Row: {
           created_at: string
@@ -43990,6 +44023,7 @@ export type Database = {
       }
       has_verified_first_deal: { Args: { _user_id: string }; Returns: boolean }
       hash_otp: { Args: { p_code: string }; Returns: string }
+      heal_media_unpublished_projects: { Args: never; Returns: number }
       hr_announcement_mark_read: { Args: { _id: string }; Returns: undefined }
       hr_announcement_publish: { Args: { _id: string }; Returns: undefined }
       hr_candidate_self_update_safe: {
