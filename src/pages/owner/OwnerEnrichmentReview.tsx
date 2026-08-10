@@ -217,11 +217,15 @@ export default function OwnerEnrichmentReview() {
       <style>{`
         [data-page="enrichment-review"] .er-pill{transition:background .15s,color .15s}
         [data-page="enrichment-review"] .er-pill:hover{background:#064E3B !important;color:#fff !important;border-color:#064E3B !important}
-        [data-page="enrichment-review"] .er-pill:hover svg{color:#fff !important}
+        [data-page="enrichment-review"] .er-pill:hover svg{color:#fff !important;stroke:#fff !important}
+        [data-page="enrichment-review"] .er-plate svg{color:#FFFFFF !important;stroke:#FFFFFF !important;opacity:1 !important}
+        [data-page="enrichment-review"] .er-pill,[data-page="enrichment-review"] .er-pill *{color:inherit}
+        [data-page="enrichment-review"] .er-pill-idle{color:#064E3B !important}
+        [data-page="enrichment-review"] .er-pill-on{color:#FFFFFF !important}
       `}</style>
       <div className="flex items-center gap-3 mb-2">
         <span
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg"
+          className="er-plate inline-flex h-8 w-8 items-center justify-center rounded-lg"
           style={{ ...EMERALD_PILL, boxShadow: "0 6px 18px -10px rgba(6,78,59,.7)" }}
           data-no-contrast-guard
         >
@@ -245,7 +249,7 @@ export default function OwnerEnrichmentReview() {
           onClick={() => setFilter("pending")}
           data-no-contrast-guard
           style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
-          className="er-pill px-3 py-1.5 rounded-full text-xs font-semibold"
+          className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "pending" ? "er-pill-on" : "er-pill-idle"}`}
         >
           Pending ({summary.pending})
         </button>
@@ -254,7 +258,7 @@ export default function OwnerEnrichmentReview() {
           onClick={() => setFilter("all")}
           data-no-contrast-guard
           style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
-          className="er-pill px-3 py-1.5 rounded-full text-xs font-semibold"
+          className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "all" ? "er-pill-on" : "er-pill-idle"}`}
         >
           All
         </button>
