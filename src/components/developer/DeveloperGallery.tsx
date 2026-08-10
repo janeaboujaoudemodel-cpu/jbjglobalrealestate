@@ -61,7 +61,7 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
           <div>
             <h2 className="font-cormorant text-2xl md:text-3xl leading-tight text-[#064E3B]">Project Gallery</h2>
             <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-[#1A1A1A]/70">
-              {items.length} verified images from {developerName} developments
+              {items.length} verified images from {developerName}
             </p>
           </div>
         </div>
@@ -83,8 +83,8 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
               onError={() => setBroken((prev) => ({ ...prev, [item.id]: true }))}
             />
             {item.caption && (
-              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2.5 py-2 text-left text-[11px] font-semibold leading-snug text-white">
-                {item.caption}
+              <span className="absolute inset-x-0 bottom-0 flex min-h-[34%] items-end bg-gradient-to-t from-black/90 via-black/60 to-transparent px-2.5 pb-2 pt-6 text-left text-[11px] font-semibold leading-snug text-white">
+                <span className="block w-full break-words">{item.caption}</span>
               </span>
             )}
           </button>
