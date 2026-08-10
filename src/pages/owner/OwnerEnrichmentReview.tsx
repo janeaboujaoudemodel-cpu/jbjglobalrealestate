@@ -218,6 +218,7 @@ export default function OwnerEnrichmentReview() {
         [data-page="enrichment-review"] .er-pill{transition:background .15s,color .15s}
         [data-page="enrichment-review"] .er-pill:hover{background:#064E3B !important;color:#fff !important;border-color:#064E3B !important}
         [data-page="enrichment-review"] .er-pill:hover svg{color:#fff !important;stroke:#fff !important}
+        [data-page="enrichment-review"] .er-plate-glyph{color:#FFFFFF !important;font-size:15px;line-height:1;font-weight:700}
         [data-page="enrichment-review"] .er-plate svg{color:#FFFFFF !important;stroke:#FFFFFF !important;opacity:1 !important}
         [data-page="enrichment-review"] .er-pill,[data-page="enrichment-review"] .er-pill *{color:inherit}
         [data-page="enrichment-review"] .er-pill-idle{color:#064E3B !important}
@@ -229,7 +230,7 @@ export default function OwnerEnrichmentReview() {
           style={{ ...EMERALD_PILL, boxShadow: "0 6px 18px -10px rgba(6,78,59,.7)" }}
           data-no-contrast-guard
         >
-          <Sparkles className="w-4 h-4" strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span className="er-plate-glyph" aria-hidden>&#10022;</span>
         </span>
         <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">Enrichment Review</h1>
       </div>
