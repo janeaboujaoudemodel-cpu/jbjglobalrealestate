@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { ChevronDown, ExternalLink, LogOut, MoreHorizontal, PanelLeft, Crown } from "lucide-react";
+import { ChevronDown, ExternalLink, LogOut, MoreHorizontal, PanelLeft, Crown, Search } from "lucide-react";
 
 import {
   CRM_DEFAULT_SECTION,
@@ -94,7 +94,16 @@ export default function CrmSidebar() {
           <ChevronDown size={17} />
           <button type="button" aria-label="Teamspace options"><MoreHorizontal size={20} /></button>
         </div>
-        {/* Teamspace-local search removed — the header ⌘K search is the single global entry point. */}
+        <button
+          type="button"
+          className="jc-side-search"
+          aria-label="Search backend shortcuts"
+          onClick={() => window.dispatchEvent(new CustomEvent("jc-open-search"))}
+        >
+          <Search size={18} />
+          <span className="jc-side-search__label">Search shortcuts</span>
+          <kbd className="jc-side-search__kbd">⌘ K</kbd>
+        </button>
 
         <nav className="jc-team-nav" aria-label="Teamspace modules">
           {CRM_TEAMSPACE_TOP.map((m) => renderModule(m, true))}
