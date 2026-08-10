@@ -58,19 +58,25 @@ export default function CompanyProfileCard({ developerId, developerName }: Props
   };
 
   const submitRequest = async () => {
-    if (!form.email && !form.phone) {
-      toast.error("Add an email or phone so we can send it to you");
+    if (!form.email) {
+      toast.error("Add your email so we can send you the profile");
       return;
     }
     setRequesting(true);
-    const { error } = await supabase.from("company_profile_requests").insert({
-      developer_id: developerId,
-      requester_name: form.name || null,
-      requester_email: form.email || null,
-      requester_phone: form.phone || null,
-    });
+    const { data, error } = await supabase
+      .from("company_profile_requests")
+      .insert({
+        developer_id: developerId,
+        requester_name: form.name || null,
+        requester_email: form.email || null,
+        requester_phone: form.phone || null,
+      })
+      .select("id")
+      .single();
     setRequesting(false);
     if (error) return toast.error(error.message);
+    // Alert the owner by email (in-app alert is raised by a DB trigger).
+    void supabase.functions.invoke("company-profile-notify", { body: { requestId: data.id } });
     setRequested(true);
     toast.success("Request sent — we'll email you the profile shortly");
   };
