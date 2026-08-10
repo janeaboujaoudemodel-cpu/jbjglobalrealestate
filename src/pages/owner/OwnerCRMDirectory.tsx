@@ -76,7 +76,7 @@ export default function OwnerCRMDirectory() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={load}><RefreshCw className="w-4 h-4 mr-2" />Refresh</Button>
-          <Button onClick={exportCsv} className="bg-[#064E3B] hover:bg-[#053929] text-white">
+          <Button onClick={exportCsv} className="jj-surface-emerald text-white">
             <Download className="w-4 h-4 mr-2" /> Export CSV
           </Button>
         </div>
@@ -159,7 +159,7 @@ function StatCard({ label, value, active, onClick }: { label: string; value: num
   return (
     <button
       type="button" onClick={onClick}
-      className={`text-left p-3 rounded-md border transition-colors ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white border-[#B89555]/30 hover:border-[#064E3B]"}`}
+      className={`text-left p-3 rounded-md border transition-colors ${active ? "jj-surface-emerald text-white border-transparent" : "bg-white border-[#B89555]/30 hover:border-[#064E3B]"}`}
     >
       <div className={`text-[10px] tracking-[0.18em] uppercase ${active ? "text-white/80" : "text-[#1A1A1A]/60"}`}>{label}</div>
       <div className="font-serif text-2xl mt-1">{value}</div>
@@ -244,7 +244,7 @@ function ProfileDrawer({ profile, onClose, onSaved }: { profile: any; onClose: (
       <SheetContent className="w-full sm:max-w-2xl overflow-y-auto bg-[#FDFBF7]">
         <SheetHeader>
           <SheetTitle className="font-serif text-2xl text-[#0d3a2b]">
-            {form.full_name} <Badge className="ml-2 bg-[#064E3B]">{CAT_LABELS[form.category] ?? form.category}</Badge>
+            {form.full_name} <Badge className="ml-2 jj-surface-emerald">{CAT_LABELS[form.category] ?? form.category}</Badge>
           </SheetTitle>
         </SheetHeader>
 
@@ -301,7 +301,7 @@ function ProfileDrawer({ profile, onClose, onSaved }: { profile: any; onClose: (
               {!notes.length && <div className="text-xs text-[#1A1A1A]/50">No notes yet.</div>}
             </div>
             <Textarea placeholder="Add a note…" value={newNote} onChange={(e) => setNewNote(e.target.value)} />
-            <Button className="mt-2 bg-[#064E3B] hover:bg-[#053929] text-white" onClick={addNote}>Add note</Button>
+            <Button className="mt-2 jj-surface-emerald text-white" onClick={addNote}>Add note</Button>
           </section>
 
           <section>
@@ -318,7 +318,7 @@ function ProfileDrawer({ profile, onClose, onSaved }: { profile: any; onClose: (
 
           <div className="flex justify-between border-t border-[#B89555]/20 pt-4">
             <Button variant="ghost" onClick={archive}><ArchiveIcon className="w-4 h-4 mr-2" /> Archive</Button>
-            <Button className="bg-[#064E3B] hover:bg-[#053929] text-white" onClick={save} disabled={saving}>
+            <Button className="jj-surface-emerald text-white" onClick={save} disabled={saving}>
               {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />} Save changes
             </Button>
           </div>
