@@ -14229,6 +14229,44 @@ export type Database = {
           },
         ]
       }
+      developer_media_repair_attempts: {
+        Row: {
+          attempted_at: string
+          batch: number
+          developer_id: string
+          developer_name: string | null
+          id: string
+          note: string | null
+          outcome: string | null
+        }
+        Insert: {
+          attempted_at?: string
+          batch: number
+          developer_id: string
+          developer_name?: string | null
+          id?: string
+          note?: string | null
+          outcome?: string | null
+        }
+        Update: {
+          attempted_at?: string
+          batch?: number
+          developer_id?: string
+          developer_name?: string | null
+          id?: string
+          note?: string | null
+          outcome?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_media_repair_attempts_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_merge_log: {
         Row: {
           canonical_name: string
