@@ -186,14 +186,22 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
                     <span className="w-2 h-2 rounded-full bg-red-500 mt-2 flex-shrink-0" />
                   )}
                   {n.is_read && <span className="w-2 flex-shrink-0" />}
-                  <div className="w-8 h-8 rounded-full border border-[#064E3B]/50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Headphones className="w-4 h-4 text-[#1A1A1A]" />
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                    data-no-contrast-guard
+                    style={{ backgroundImage: 'linear-gradient(135deg,#064E3B,#042c1c,#000)', backgroundColor: '#064E3B' }}
+                  >
+                    {(() => {
+                      const Icon = iconForType(n.type);
+                      return <Icon className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />;
+                    })()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#064E3B] truncate">{n.title}</p>
+                    <p className="text-sm font-medium text-[#064E3B] break-words">{n.title}</p>
                     {n.message && (
-                      <p className="text-xs text-[#1A1A1A]/70 mt-0.5 line-clamp-2">{n.message}</p>
+                      <p className="text-xs text-[#1A1A1A]/70 mt-0.5 break-words">{n.message}</p>
                     )}
+
                     <p className="text-[10px] text-[#1A1A1A]/70 mt-1">
                       {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </p>
