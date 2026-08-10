@@ -187,10 +187,24 @@ const Developers = () => {
     return map;
   }, [filteredDevelopers, mergedStats]);
 
+  // LOCKED (never show an emerald blueprint): a developer without a verified
+  // cover photograph is ARCHIVED from the public directory and flagged in the
+  // owner backend Developer Hub alerts instead of rendering an empty field.
+  const archivedNoCover = useMemo(
+    () => filteredDevelopers.filter((dev) => !mediaStatus[dev.id]?.hasCover),
+    [filteredDevelopers, mediaStatus],
+  );
+
+  const publicDevelopers = useMemo(
+    () => filteredDevelopers.filter((dev) => mediaStatus[dev.id]?.hasCover),
+    [filteredDevelopers, mediaStatus],
+  );
+
   // Owner audit buckets are PRECISE: "missing logo only", "missing photo only"
   // and "missing both" never overlap, so a chip shows exactly what it says.
   const visibleDevelopers = useMemo(() => {
-    if (!effectiveOwner || auditFilter === "all") return filteredDevelopers;
+    if (!effectiveOwner) return publicDevelopers;
+    if (auditFilter === "all") return filteredDevelopers;
     return filteredDevelopers.filter((dev) => {
       const status = mediaStatus[dev.id];
       if (!status) return false;
@@ -198,7 +212,8 @@ const Developers = () => {
       if (auditFilter === "missing_logo") return !status.hasLogo && status.hasCover;
       return status.hasLogo && !status.hasCover;
     });
-  }, [filteredDevelopers, effectiveOwner, auditFilter, mediaStatus]);
+  }, [filteredDevelopers, publicDevelopers, effectiveOwner, auditFilter, mediaStatus]);
+
 
   const missingLogoCount = useMemo(
     () =>
