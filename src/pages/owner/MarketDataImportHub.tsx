@@ -30,6 +30,29 @@ import {
   XCircle,
 } from "lucide-react";
 
+/**
+ * Market sources deliver headquarters as a raw list/map string, e.g.
+ * `[{'address': 'Office 701, Prime Tower, Business Bay', 'city': 'Dubai', ...}]`.
+ * The queue only ever shows a clean, human address line.
+ */
+const formatHeadquarters = (raw?: string | null) => {
+  const text = (raw || "").trim();
+  if (!text) return "—";
+  if (!/^[[{]/.test(text)) return text;
+  const address = text.match(/['"]address['"]\s*:\s*['"]([^'"]+)['"]/i)?.[1]?.trim();
+  const city = text.match(/['"]city['"]\s*:\s*['"]([^'"]+)['"]/i)?.[1]?.trim();
+  const country = text.match(/['"]country['"]\s*:\s*['"]([^'"]+)['"]/i)?.[1]?.trim();
+  const parts = [address, city, country].filter(Boolean) as string[];
+  const seen = new Set<string>();
+  const unique = parts.filter((part) => {
+    const key = part.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  return unique.length ? unique.join(", ").replace(/,\s*,/g, ",") : "—";
+};
+
 const EMERALD = "#042c1c";
 const EMERALD_GRADIENT = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
 
@@ -237,7 +260,7 @@ function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | nul
           <p className="truncate text-sm font-semibold text-neutral-900">{record?.name || "—"}</p>
           <p className="mt-1 text-xs text-neutral-600">{line(record)}</p>
           <p className="mt-1 text-xs text-neutral-500">
-            {record?.status || record?.headquarters || record?.sale_status || "Status not set"}
+            {record?.status || (record?.headquarters ? formatHeadquarters(record.headquarters) : null) || record?.sale_status || "Status not set"}
           </p>
         </div>
       </div>
@@ -899,7 +922,7 @@ export default function MarketDataImportHub() {
                         </button>
                       </td>
                       <td className="px-4 py-3 text-neutral-900">{d.name}</td>
-                      <td className="px-4 py-3 text-neutral-600">{d.headquarters || "—"}</td>
+                      <td className="px-4 py-3 text-neutral-600">{formatHeadquarters(d.headquarters)}</td>
                       <td className="px-4 py-3 text-neutral-600">{d.total_projects ?? "—"}</td>
                       <td className="px-4 py-3">
                         <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${d.review_decision && d.review_decision !== "pending" ? "mir-solid" : "mir-pill"}`}>
