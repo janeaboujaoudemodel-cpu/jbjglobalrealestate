@@ -139,8 +139,8 @@ const StatCard = ({
 );
 
 
-/** Before / after panel for a match — live JBJ values vs staged market values. */
-function MatchDiff({ match }: { match: MatchRow }) {
+/** Side-by-side comparison — our live JBJ card vs the market-source card. */
+function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | null }) {
   const isDev = match.entity_type === "developer";
   const { data, isLoading } = useQuery({
     queryKey: ["market-match-diff", match.id],
