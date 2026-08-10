@@ -96,8 +96,11 @@ function FieldValue({ value }: { value: any }) {
   );
 }
 
-const EMERALD_PILL: React.CSSProperties = { backgroundColor: "#064E3B", color: "#FFFFFF" };
-const EMERALD_OUTLINE: React.CSSProperties = { borderColor: "#064E3B", color: "#064E3B", backgroundColor: "#FFFFFF" };
+const EMERALD_PILL: React.CSSProperties = {
+  background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+  color: "#FFFFFF",
+};
+const EMERALD_OUTLINE: React.CSSProperties = { borderColor: "#042c1c", color: "#042c1c", backgroundColor: "#FFFFFF" };
 
 export default function OwnerEnrichmentReview() {
   const qc = useQueryClient();
@@ -216,12 +219,12 @@ export default function OwnerEnrichmentReview() {
     <div className="max-w-6xl mx-auto p-6" data-page="enrichment-review" data-no-contrast-guard>
       <style>{`
         [data-page="enrichment-review"] .er-pill{transition:background .15s,color .15s}
-        [data-page="enrichment-review"] .er-pill:hover{background:#064E3B !important;color:#fff !important;border-color:#064E3B !important}
+        [data-page="enrichment-review"] .er-pill:hover{background:linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%) !important;color:#fff !important;border-color:transparent !important}
         [data-page="enrichment-review"] .er-pill:hover svg{color:#fff !important;stroke:#fff !important}
         [data-page="enrichment-review"] .er-plate-glyph{color:#FFFFFF !important;font-size:15px;line-height:1;font-weight:700}
         [data-page="enrichment-review"] .er-plate svg{color:#FFFFFF !important;stroke:#FFFFFF !important;opacity:1 !important}
         [data-page="enrichment-review"] .er-pill,[data-page="enrichment-review"] .er-pill *{color:inherit}
-        [data-page="enrichment-review"] button.er-pill.er-pill-idle > span.er-txt{color:#064E3B !important;-webkit-text-fill-color:#064E3B !important}
+        [data-page="enrichment-review"] button.er-pill.er-pill-idle > span.er-txt{color:#042c1c !important;-webkit-text-fill-color:#042c1c !important}
         [data-page="enrichment-review"] button.er-pill.er-pill-on > span.er-txt{color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important}
         [data-page="enrichment-review"] button.er-pill:hover > span.er-txt{color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important}
       `}</style>
@@ -250,7 +253,7 @@ export default function OwnerEnrichmentReview() {
           type="button"
           onClick={() => setFilter("pending")}
           data-no-contrast-guard
-          style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
+          style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#042c1c", border: "1px solid rgba(6,78,59,0.25)" }}
           className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "pending" ? "er-pill-on" : "er-pill-idle"}`}
         >
           <span className="er-txt">Pending ({summary.pending})</span>
@@ -259,7 +262,7 @@ export default function OwnerEnrichmentReview() {
           type="button"
           onClick={() => setFilter("all")}
           data-no-contrast-guard
-          style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
+          style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#042c1c", border: "1px solid rgba(6,78,59,0.25)" }}
           className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "all" ? "er-pill-on" : "er-pill-idle"}`}
         >
           <span className="er-txt">All</span>

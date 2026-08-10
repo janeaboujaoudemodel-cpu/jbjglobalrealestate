@@ -2231,6 +2231,24 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
   /* Back-compat alias (legacy callers). Tracks left gutter. */
   --jj-content-gutter: 0px;
 }
+
+/* LOCKED BRAND GUARD — #064E3B is one stop in the official emerald ombre,
+   never a standalone filled surface. This catches legacy utility and inline
+   fills throughout the site while preserving deep-emerald text and borders. */
+:where(
+  [class~="bg-[#064E3B]"],
+  [class*="bg-[#064E3B]"],
+  [style*="background-color: rgb(6, 78, 59)"],
+  [style*="background-color:#064E3B" i],
+  [style*="background-color: #064E3B" i],
+  [style*="background:#064E3B" i],
+  [style*="background: #064E3B" i]
+) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
 @media (min-width: 1024px) {
   :root {
     --jj-content-gutter-l: 80px;

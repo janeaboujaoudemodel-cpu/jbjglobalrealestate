@@ -114,7 +114,7 @@ export default function DriveDropPanel() {
         className="border-[#B89555]/50 bg-white text-[#1A1A1A] mb-3"
       />
       <div className="flex items-center gap-2">
-        <Button onClick={submit} disabled={submitting} className="bg-[#064E3B] hover:bg-[#042c1c] text-white rounded-md">
+        <Button onClick={submit} disabled={submitting} className="jj-surface-emerald text-white rounded-md">
           {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
           Analyze & Match
         </Button>
@@ -163,7 +163,7 @@ export default function DriveDropPanel() {
                             <div className="flex items-center gap-2 text-xs mb-1">
                               <span
                                 data-no-contrast-guard
-                                className="allow-white inline-flex items-center px-2 py-0.5 rounded-full bg-[#064E3B] text-white border border-[#064E3B] uppercase tracking-wide text-[10px] font-semibold"
+                                className="allow-white jj-surface-emerald inline-flex items-center px-2 py-0.5 rounded-full text-white border-0 uppercase tracking-wide text-[10px] font-semibold"
                               >
                                 {row.type}
                               </span>

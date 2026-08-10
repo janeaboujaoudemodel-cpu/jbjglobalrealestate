@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { ChevronDown, ExternalLink, LogOut, MoreHorizontal, PanelLeft, Search, Crown } from "lucide-react";
+import { ChevronDown, ExternalLink, LogOut, MoreHorizontal, PanelLeft, Crown } from "lucide-react";
 
 import {
   CRM_DEFAULT_SECTION,
-  CRM_OWNER_HUB_MODULES,
   CRM_OWNER_HUB_SECTIONS,
   type CrmModule,
   CRM_PRIMARY_NAV,
@@ -24,12 +23,6 @@ export default function CrmSidebar() {
   const { isOwner } = useOwnerVerification();
   const { signOut } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
-  const [shortcutQuery, setShortcutQuery] = useState("");
-  const shortcutMatches = useMemo(() => {
-    const query = shortcutQuery.trim().toLowerCase();
-    if (!query) return [];
-    return CRM_OWNER_HUB_MODULES.filter((module) => module.label.toLowerCase().includes(query)).slice(0, 8);
-  }, [shortcutQuery]);
 
   useEffect(() => {
     document.querySelector(".jc-app")?.setAttribute("data-sidebar-collapsed", collapsed ? "true" : "false");
@@ -93,33 +86,6 @@ export default function CrmSidebar() {
       <nav className="jc-main-nav" aria-label="Primary CRM modules">
         {CRM_PRIMARY_NAV.map((m) => renderModule(m))}
       </nav>
-
-      {isOwner && (
-        <section className="jc-teamspace jc-owner-hub" aria-label="JBJ Hub shortcuts">
-          <div className="jc-teamspace__title jc-owner-hub__title">
-            <span className="jc-teamspace__badge jc-owner-hub__badge">
-              <Crown size={12} />
-            </span>
-            <span>JBJ Hub</span>
-            <ChevronDown size={17} />
-          </div>
-          <label className="jc-side-search" aria-label="Search JBJ Hub shortcuts">
-            <Search size={17} aria-hidden />
-            <input
-              value={shortcutQuery}
-              onChange={(event) => setShortcutQuery(event.target.value)}
-              placeholder="Search shortcuts"
-            />
-          </label>
-          {shortcutQuery.trim() && (
-            <nav className="jc-team-nav" aria-label="Matching JBJ Hub shortcuts">
-              {shortcutMatches.length ? shortcutMatches.map((module) => renderHubModule(module)) : (
-                <p className="jc-shortcut-empty">No shortcut found</p>
-              )}
-            </nav>
-          )}
-        </section>
-      )}
 
       <section className="jc-teamspace" aria-label="CRM Teamspace">
         <div className="jc-teamspace__title">
