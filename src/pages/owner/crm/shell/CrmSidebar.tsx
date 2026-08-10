@@ -94,6 +94,33 @@ export default function CrmSidebar() {
         {CRM_PRIMARY_NAV.map((m) => renderModule(m))}
       </nav>
 
+      {isOwner && (
+        <section className="jc-teamspace jc-owner-hub" aria-label="JBJ Hub shortcuts">
+          <div className="jc-teamspace__title jc-owner-hub__title">
+            <span className="jc-teamspace__badge jc-owner-hub__badge">
+              <Crown size={12} />
+            </span>
+            <span>JBJ Hub</span>
+            <ChevronDown size={17} />
+          </div>
+          <label className="jc-side-search" aria-label="Search JBJ Hub shortcuts">
+            <Search size={17} aria-hidden />
+            <input
+              value={shortcutQuery}
+              onChange={(event) => setShortcutQuery(event.target.value)}
+              placeholder="Search shortcuts"
+            />
+          </label>
+          {shortcutQuery.trim() && (
+            <nav className="jc-team-nav" aria-label="Matching JBJ Hub shortcuts">
+              {shortcutMatches.length ? shortcutMatches.map((module) => renderHubModule(module)) : (
+                <p className="jc-shortcut-empty">No shortcut found</p>
+              )}
+            </nav>
+          )}
+        </section>
+      )}
+
       <section className="jc-teamspace" aria-label="CRM Teamspace">
         <div className="jc-teamspace__title">
           <span className="jc-teamspace__badge">CT</span>
@@ -125,28 +152,16 @@ export default function CrmSidebar() {
       </section>
 
       {isOwner && (
-        <section className="jc-teamspace jc-owner-hub" aria-label="Owner JBJ Hub">
+        <section className="jc-teamspace jc-owner-hub" aria-label="JBJ Hub navigation">
           <div className="jc-teamspace__title jc-owner-hub__title">
             <span className="jc-teamspace__badge jc-owner-hub__badge">
               <Crown size={12} />
             </span>
-            <span>Owner Backend</span>
+            <span>Backend Shortcuts</span>
             <ChevronDown size={17} />
           </div>
-          <label className="jc-side-search" aria-label="Search JBJ Hub shortcuts">
-            <Search size={17} aria-hidden />
-            <input
-              value={shortcutQuery}
-              onChange={(event) => setShortcutQuery(event.target.value)}
-              placeholder="Search shortcuts"
-            />
-          </label>
           <nav className="jc-team-nav" aria-label="Owner backend modules inside JBJ Hub">
-            {shortcutQuery.trim() ? (
-              shortcutMatches.length ? shortcutMatches.map((module) => renderHubModule(module)) : (
-                <p className="jc-shortcut-empty">No shortcut found</p>
-              )
-            ) : CRM_OWNER_HUB_SECTIONS.map((folder) => {
+            {CRM_OWNER_HUB_SECTIONS.map((folder) => {
               const FolderIcon = folder.icon;
               return (
                 <div className="jc-folder jc-folder--owner" key={folder.label} data-open={folder.defaultOpen ? "true" : "false"}>
