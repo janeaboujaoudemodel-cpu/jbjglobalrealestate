@@ -77,12 +77,25 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
    * Hero-search handoff: when the AI search router cannot understand a
    * visitor's sentence it stores it and opens this widget, so the visitor sees
    * their own words already typed and simply presses send.
+   *
+   * The sentence is parked until the composer actually exists (the `chatting`
+   * step). Consuming it at open time used to drop it, because the widget opens
+   * on the welcome/onboarding steps where there is no input to type into.
    */
+  const [pendingPrefill, setPendingPrefill] = useState<string | null>(null);
+
   useEffect(() => {
     if (isCollapsed) return;
     const prefill = consumeChatPrefill();
-    if (prefill) setInput(prefill);
+    if (prefill) setPendingPrefill(prefill);
   }, [isCollapsed]);
+
+  useEffect(() => {
+    if (!pendingPrefill || step !== 'chatting') return;
+    setInput(pendingPrefill);
+    setPendingPrefill(null);
+  }, [pendingPrefill, step]);
+
 
 
 
