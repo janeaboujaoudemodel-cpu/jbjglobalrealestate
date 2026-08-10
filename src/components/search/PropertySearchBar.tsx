@@ -427,7 +427,7 @@ export default function PropertySearchBar({
         </div>
 
         {showTiers && (
-          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-4">
+          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3">
             <Seg
               label={f.developerTier ? (TIER_LABELS[f.developerTier as DeveloperTier] || "Tier") : "All Tiers"}
               active={!!f.developerTier}
