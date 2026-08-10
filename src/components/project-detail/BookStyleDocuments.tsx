@@ -148,10 +148,11 @@ export default function BookStyleDocuments({
               {/* Book cover — top portion. Company Profile books display the
                   developer LOGO on a champagne backdrop (locked rule) instead
                   of a cropped project photo. */}
-              <div className="absolute inset-x-0 top-0 h-[62%] overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden">
                 {isCompanyProfile ? (
                   <div
-                    className="w-full h-full flex items-center justify-center p-6"
+                    className="w-full h-full flex items-center justify-center p-6 pb-[40%]"
+
                     style={{
                       background:
                         "radial-gradient(120% 90% at 50% 0%, #FDFBF7 0%, #F5EEDC 55%, #E7D7B0 100%)",
@@ -172,7 +173,7 @@ export default function BookStyleDocuments({
                       </span>
                     )}
                     {/* Gilded frame */}
-                    <div className="absolute inset-3 border border-[#B89555]/40 rounded-md pointer-events-none" />
+                    <div className="absolute inset-x-3 top-3 bottom-[40%] border border-[#B89555]/40 rounded-md pointer-events-none" />
                   </div>
                 ) : coverUrl ? (
                   <SafeImage
@@ -189,9 +190,8 @@ export default function BookStyleDocuments({
                 )}
               </div>
 
-              {/* Spine effect on left edge */}
-              <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A1A]/40 to-transparent z-10" />
-              <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/50 z-10" />
+
+
 
               {/* Bottom panel — premium title plate + action buttons */}
               <div

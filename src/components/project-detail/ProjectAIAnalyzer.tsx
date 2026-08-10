@@ -260,27 +260,93 @@ export const ProjectAIAnalyzer = ({
   }
 
   return (
-    <section ref={sectionRef} className="py-12 md:py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl overflow-hidden">
-      <div className="w-full px-5 sm:px-7 md:px-9">
-        <div className="flex items-center justify-center gap-3 mb-5 text-center">
-          <Brain className="w-6 h-6 text-[#1A1A1A]" />
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+    <section ref={sectionRef} className="py-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl overflow-hidden border border-[#B89555]/40" style={{ boxShadow: "0 26px 64px -30px rgba(4,44,28,0.45)" }}>
+      {/* Premium emerald intelligence header — animated neural grid + gold aura */}
+      <div
+        data-no-contrast-guard
+        data-on-dark
+        className="relative overflow-hidden px-5 py-8 sm:px-7 md:px-9 md:py-10 allow-white"
+        style={{
+          background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
+          color: "#FFFFFF",
+        }}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.18]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(184,149,85,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(184,149,85,0.5) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+            maskImage: "radial-gradient(120% 110% at 50% 0%, #000 0%, transparent 74%)",
+            WebkitMaskImage: "radial-gradient(120% 110% at 50% 0%, #000 0%, transparent 74%)",
+          }}
+        />
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(184,149,85,0.4) 0%, transparent 68%)" }}
+          animate={{ scale: [1, 1.16, 1], opacity: [0.5, 0.9, 0.5] }}
+          transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(232,199,122,0.9), transparent)" }}
+          animate={{ opacity: [0.25, 1, 0.25] }}
+          transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="relative flex flex-col items-center text-center">
+          <motion.span
+            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl allow-white"
+            style={{
+              background: "linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 100%)",
+              border: "1px solid rgba(184,149,85,0.65)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 10px 26px rgba(0,0,0,0.35)",
+            }}
+            animate={{ boxShadow: [
+              "inset 0 1px 0 rgba(255,255,255,0.3), 0 10px 26px rgba(0,0,0,0.35)",
+              "inset 0 1px 0 rgba(255,255,255,0.3), 0 10px 34px rgba(184,149,85,0.5)",
+              "inset 0 1px 0 rgba(255,255,255,0.3), 0 10px 26px rgba(0,0,0,0.35)",
+            ] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Brain className="h-6 w-6 allow-white" style={{ color: "#FFFFFF" }} />
+          </motion.span>
+
+          <p className="mt-4 text-[10px] uppercase tracking-[0.34em] font-semibold allow-white" style={{ color: "#E8DCC0" }}>
+            Institutional Intelligence
+          </p>
+          <h2
+            className="mt-2 text-3xl md:text-5xl font-medium leading-[1.05] allow-white"
+            style={{ color: "#FFFFFF", fontFamily: "'Cormorant Garamond', 'Cormorant', serif" }}
+          >
             JBJ AI Project Intelligence
           </h2>
-        </div>
+          <span
+            aria-hidden
+            className="mt-4 block h-px w-20"
+            style={{ background: "linear-gradient(90deg, transparent, #E8C77A, transparent)" }}
+          />
 
-        <p className="text-[#1A1A1A]/80 text-sm mb-6 font-medium text-center max-w-3xl mx-auto">
-          Comprehensive AI analysis for <span className="font-semibold text-[#1A1A1A]">{projectName}</span>
-          {developer && (
-            <> by {developerSlug ? (
-              <Link to={`/developer/${developerSlug}`} className="font-semibold text-[#1A1A1A] hover:underline transition-all">
-                {developer}
-              </Link>
-            ) : (
-              <span className="font-semibold text-[#1A1A1A]">{developer}</span>
-            )}</>
-          )}
-        </p>
+          <p className="mt-4 max-w-3xl text-[13px] md:text-sm allow-white" style={{ color: "rgba(255,255,255,0.86)" }}>
+            Comprehensive AI analysis for <span className="font-semibold allow-white" style={{ color: "#FFFFFF" }}>{projectName}</span>
+            {developer && (
+              <> by {developerSlug ? (
+                <Link to={`/developer/${developerSlug}`} className="font-semibold underline-offset-4 hover:underline allow-white" style={{ color: "#E8C77A" }}>
+                  {developer}
+                </Link>
+              ) : (
+                <span className="font-semibold allow-white" style={{ color: "#E8C77A" }}>{developer}</span>
+              )}</>
+            )}
+          </p>
+        </div>
+      </div>
+
+      <div className="w-full px-5 sm:px-7 md:px-9 py-8 md:py-10">
+
 
         {/* AI Analysis */}
         {errorMsg ? (
