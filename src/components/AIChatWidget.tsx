@@ -90,10 +90,13 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     if (prefill) setPendingPrefill(prefill);
   }, [isCollapsed]);
 
+  const [autoSendPrefill, setAutoSendPrefill] = useState(false);
+
   useEffect(() => {
     if (!pendingPrefill || step !== 'chatting') return;
     setInput(pendingPrefill);
     setPendingPrefill(null);
+    setAutoSendPrefill(true);
   }, [pendingPrefill, step]);
 
 
@@ -139,6 +142,13 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     fetchUserName();
   }, [user]);
 
+  /**
+   * Identity survives remounts: the persist effect must never write the empty
+   * initial state back over a restored visitor (that used to reset returning
+   * visitors to the welcome step).
+   */
+  const [hydrated, setHydrated] = useState(false);
+
   // Restore session from localStorage on mount (persistent across sessions)
   useEffect(() => {
     const savedStep = sessionStorage.getItem('jbj_chat_step');
@@ -159,6 +169,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           } else {
             setStep(savedStep as ChatStep);
           }
+          setHydrated(true);
           return;
         }
       } catch (e) {
@@ -182,13 +193,15 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     if (savedStep) {
       setStep(savedStep as ChatStep);
     }
+    setHydrated(true);
   }, [user]);
 
   // Persist step and userInfo to localStorage
   useEffect(() => {
+    if (!hydrated) return;
     sessionStorage.setItem('jbj_chat_step', step);
     sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
-  }, [step, userInfo]);
+  }, [step, userInfo, hydrated]);
 
   // Restore chat messages from sessionStorage on mount
   useEffect(() => {
@@ -688,6 +701,26 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     }
   }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, ownerJoined]);
 
+  /**
+   * Known visitor + a handed-off sentence = no onboarding. We open a general
+   * conversation straight away so the message lands in the chat itself.
+   */
+  useEffect(() => {
+    if (!pendingPrefill || isCollapsed) return;
+    if (step === 'chatting' || step === 'agent_joining') return;
+    const knownEmail = userInfo.email || user?.email;
+    if (!knownEmail) return;
+    void handleSelectService('general');
+  }, [pendingPrefill, isCollapsed, step, userInfo.email, user?.email, handleSelectService]);
+
+  /** Send the handed-off sentence automatically once it is in the composer. */
+  useEffect(() => {
+    if (!autoSendPrefill || step !== 'chatting' || !input.trim() || isLoading) return;
+    setAutoSendPrefill(false);
+    void handleSend();
+  }, [autoSendPrefill, step, input, isLoading, handleSend]);
+
+
   // Submit to team - saves full transcript to owner notes + sends email notification
   const handleSubmitToTeam = useCallback(async (inquirySummary?: string) => {
     if (!conversationId) return;
@@ -736,6 +769,25 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           },
         },
       });
+
+      // 2b) Advisory Desk ticket — the owner queue with full identity + transcript
+      try {
+        await supabase.functions.invoke('advisory-desk-request', {
+          body: {
+            query: inquirySummary || messages.filter(m => m.role === 'user').slice(-1)[0]?.content || serviceName,
+            source: 'chat_transfer',
+            pageSource: window.location.pathname,
+            conversationId,
+            transcript,
+            visitorName: fullName || undefined,
+            visitorEmail: userInfo.email || undefined,
+            visitorPhone: userInfo.phone || undefined,
+          },
+        });
+      } catch (deskErr) {
+        console.warn('Advisory desk ticket failed (escalation still processed):', deskErr);
+      }
+
 
       // 3) Save to owner's AI Notes system (best-effort, non-blocking)
       try {

@@ -171,7 +171,7 @@ const ChatMessages = React.memo(({
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-[#1A1A1A]">
-                <T>Describe your inquiry</T>
+                <T>Transfer to JBJ — what do you need?</T>
               </p>
               <button onClick={() => setShowSubmitPanel(false)} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
                 <X className="w-4 h-4" />
@@ -180,7 +180,7 @@ const ChatMessages = React.memo(({
             <Textarea
               value={inquirySummary}
               onChange={(e) => setInquirySummary(e.target.value)}
-              placeholder="Please describe what you need from our team..."
+              placeholder="Tell JBJ what you are looking for — we will answer by email and WhatsApp."
               className="min-h-[80px] text-sm"
             />
             <div className="flex gap-2">
@@ -189,7 +189,7 @@ const ChatMessages = React.memo(({
                 className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] text-sm font-bold shadow-lg shadow-gold/20"
               >
                 <Shield className="w-4 h-4 mr-2" />
-                <T>Submit Now</T>
+                <T>Transfer to JBJ</T>
               </Button>
               <Button
                 variant="outline"
@@ -230,7 +230,7 @@ const ChatMessages = React.memo(({
               className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
             >
               <Shield className="w-4 h-4 mr-2" />
-              <T>Submit to Team</T>
+              <T>Transfer my chat to JBJ</T>
             </Button>
           )}
         </div>
