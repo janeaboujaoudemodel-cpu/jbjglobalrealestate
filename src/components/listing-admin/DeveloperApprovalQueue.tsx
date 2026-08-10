@@ -168,7 +168,9 @@ export const DeveloperApprovalQueue = () => {
             description: developer.description,
             logo_url: developer.logo_url,
             feature_image_url: developer.feature_image_url,
-            headquarters: "Dubai, UAE",
+            // Never invent a Dubai headquarters. Unknown metadata stays empty
+            // until verified; a location fallback must not masquerade as fact.
+            headquarters: null,
             rank: 20,
           })
           .select()
