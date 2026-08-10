@@ -30,6 +30,29 @@ import {
   XCircle,
 } from "lucide-react";
 
+/**
+ * Market sources deliver headquarters as a raw list/map string, e.g.
+ * `[{'address': 'Office 701, Prime Tower, Business Bay', 'city': 'Dubai', ...}]`.
+ * The queue only ever shows a clean, human address line.
+ */
+const formatHeadquarters = (raw?: string | null) => {
+  const text = (raw || "").trim();
+  if (!text) return "—";
+  if (!/^[[{]/.test(text)) return text;
+  const address = text.match(/['"]address['"]\s*:\s*['"]([^'"]+)['"]/i)?.[1]?.trim();
+  const city = text.match(/['"]city['"]\s*:\s*['"]([^'"]+)['"]/i)?.[1]?.trim();
+  const country = text.match(/['"]country['"]\s*:\s*['"]([^'"]+)['"]/i)?.[1]?.trim();
+  const parts = [address, city, country].filter(Boolean) as string[];
+  const seen = new Set<string>();
+  const unique = parts.filter((part) => {
+    const key = part.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  return unique.length ? unique.join(", ").replace(/,\s*,/g, ",") : "—";
+};
+
 const EMERALD = "#042c1c";
 const EMERALD_GRADIENT = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
 
@@ -108,6 +131,8 @@ const EmeraldStyles = () => (
     [data-mir] .mir-link{color:${EMERALD};font-weight:600}
     [data-mir] .mir-link:hover{text-decoration:underline}
     [data-mir] .mir-row:hover{background:rgba(6,78,59,0.04)}
+    [data-mir] .mir-row-selected{background:rgba(6,78,59,0.10) !important;box-shadow:inset 3px 0 0 0 ${EMERALD}}
+    [data-mir] .mir-row-selected:hover{background:rgba(6,78,59,0.14) !important}
     [data-mir] .mir-solid,[data-mir] .mir-solid:hover{background:${EMERALD_GRADIENT} !important;border-color:transparent}
     [data-mir] .mir-solid,[data-mir] .mir-solid *{color:#fff !important;-webkit-text-fill-color:#fff !important}
     [data-mir] .mir-solid svg{color:#fff !important;stroke:#fff !important}
@@ -235,7 +260,7 @@ function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | nul
           <p className="truncate text-sm font-semibold text-neutral-900">{record?.name || "—"}</p>
           <p className="mt-1 text-xs text-neutral-600">{line(record)}</p>
           <p className="mt-1 text-xs text-neutral-500">
-            {record?.status || record?.headquarters || record?.sale_status || "Status not set"}
+            {record?.status || (record?.headquarters ? formatHeadquarters(record.headquarters) : null) || record?.sale_status || "Status not set"}
           </p>
         </div>
       </div>
@@ -485,10 +510,12 @@ export default function MarketDataImportHub() {
     total,
     allIds,
     actions,
+    subsets = [],
   }: {
     total: number;
     allIds: string[];
     actions: { label: string; onClick: () => void; solid?: boolean; icon?: any }[];
+    subsets?: { label: string; ids: string[] }[];
   }) => (
     <div className="mir-card flex flex-wrap items-center gap-2 rounded-xl p-3">
       <button type="button" className="mir-pill rounded-full px-3 py-1.5 text-xs font-semibold" onClick={() => setSelected(new Set(allIds))}>
@@ -497,7 +524,19 @@ export default function MarketDataImportHub() {
       <button type="button" className="mir-pill rounded-full px-3 py-1.5 text-xs font-semibold" onClick={() => setSelected(new Set())}>
         <span className="inline-flex items-center gap-1"><Square className="h-3.5 w-3.5" aria-hidden /> Unselect all</span>
       </button>
-      <span className="text-xs text-neutral-600">{selected.size} selected</span>
+      {subsets.map((sub) => (
+        <button
+          key={sub.label}
+          type="button"
+          className="mir-pill rounded-full px-3 py-1.5 text-xs font-semibold"
+          onClick={() => setSelected(new Set(sub.ids))}
+        >
+          <span className="inline-flex items-center gap-1"><Check className="h-3.5 w-3.5" aria-hidden /> {sub.label} ({sub.ids.length})</span>
+        </button>
+      ))}
+      <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${selected.size ? "mir-solid" : "mir-pill"}`}>
+        {selected.size} selected of {total}
+      </span>
       <span className="ml-auto flex flex-wrap items-center gap-2">
         {actions.map((a) => (
           <button
@@ -670,7 +709,7 @@ export default function MarketDataImportHub() {
               : null;
             const open = !!openDiff[m.id];
             return (
-              <article key={m.id} className="mir-card rounded-xl p-4">
+              <article key={m.id} className={`mir-card rounded-xl p-4 ${selected.has(m.id) ? "mir-row-selected" : ""}`}>
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex min-w-0 items-start gap-3">
                     <button
@@ -767,6 +806,10 @@ export default function MarketDataImportHub() {
           <BulkBar
             total={newProjects.length}
             allIds={newProjects.map((p) => p.id)}
+            subsets={[
+              { label: "Select only not on JBJ", ids: newProjects.filter((p) => !resolveProjectLink(p)).map((p) => p.id) },
+              { label: "Select only already on JBJ", ids: newProjects.filter((p) => !!resolveProjectLink(p)).map((p) => p.id) },
+            ]}
             actions={[
               { label: "Approve selected", onClick: () => bulkStaged("project", "approved"), solid: true, icon: CheckCircle2 },
               { label: "Reject selected", onClick: () => bulkStaged("project", "rejected"), icon: XCircle },
@@ -791,7 +834,7 @@ export default function MarketDataImportHub() {
                 {newProjects.map((p) => {
                   const jbj = resolveProjectLink(p);
                   return (
-                    <tr key={p.id} className="mir-row border-t border-[rgba(6,78,59,0.1)]">
+                    <tr key={p.id} className={`mir-row border-t border-[rgba(6,78,59,0.1)] ${selected.has(p.id) ? "mir-row-selected" : ""}`}>
                       <td className="px-3 py-3">
                         <button
                           type="button"
@@ -840,6 +883,10 @@ export default function MarketDataImportHub() {
           <BulkBar
             total={newDevelopers.length}
             allIds={newDevelopers.map((d) => d.id)}
+            subsets={[
+              { label: "Select only not on JBJ", ids: newDevelopers.filter((d) => !resolveDeveloperLink(d)).map((d) => d.id) },
+              { label: "Select only already on JBJ", ids: newDevelopers.filter((d) => !!resolveDeveloperLink(d)).map((d) => d.id) },
+            ]}
             actions={[
               { label: "Approve selected", onClick: () => bulkStaged("developer", "approved"), solid: true, icon: CheckCircle2 },
               { label: "Reject selected", onClick: () => bulkStaged("developer", "rejected"), icon: XCircle },
@@ -863,7 +910,7 @@ export default function MarketDataImportHub() {
                 {newDevelopers.map((d) => {
                   const jbj = resolveDeveloperLink(d);
                   return (
-                    <tr key={d.id} className="mir-row border-t border-[rgba(6,78,59,0.1)]">
+                    <tr key={d.id} className={`mir-row border-t border-[rgba(6,78,59,0.1)] ${selected.has(d.id) ? "mir-row-selected" : ""}`}>
                       <td className="px-3 py-3">
                         <button
                           type="button"
@@ -875,7 +922,7 @@ export default function MarketDataImportHub() {
                         </button>
                       </td>
                       <td className="px-4 py-3 text-neutral-900">{d.name}</td>
-                      <td className="px-4 py-3 text-neutral-600">{d.headquarters || "—"}</td>
+                      <td className="px-4 py-3 text-neutral-600">{formatHeadquarters(d.headquarters)}</td>
                       <td className="px-4 py-3 text-neutral-600">{d.total_projects ?? "—"}</td>
                       <td className="px-4 py-3">
                         <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${d.review_decision && d.review_decision !== "pending" ? "mir-solid" : "mir-pill"}`}>

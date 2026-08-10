@@ -74,12 +74,19 @@ export const stripBracketedTitle = (value: string) =>
     .replace(/[,\s]+$/, "")
     .trim();
 
+/** Placeholder values ("not publicly disclosed", "n/a", ...) are never shown publicly. */
+export const isDisclosedFieldValue = (value?: string | null) => {
+  const text = (value || "").trim();
+  if (!text) return false;
+  return !/^(n\/?a|na|none|unknown|not\s+(publicly\s+)?(disclosed|available|provided)|tbc|tbd|-|—)$/i.test(text);
+};
+
 export const buildPublicDeveloperFacts = (developer: AnyDeveloper | null | undefined, projectCount = 0) => {
   if (!developer) return [];
   const custom = getDeveloperCustomFields(developer);
   const globalPresence = fieldToList(custom.global_presence);
   const facts = [
-    { label: "Leadership", value: stripBracketedTitle(fieldToText(developer.ceo_name)) },
+    { label: "Leadership", value: isDisclosedFieldValue(fieldToText(developer.ceo_name)) ? stripBracketedTitle(fieldToText(developer.ceo_name)) : "" },
     { label: "Founded", value: developer.founded_year ? String(developer.founded_year) : "" },
     { label: "Projects in UAE", value: fieldToText(custom.projects_uae) || (projectCount ? String(projectCount) : "") },
     { label: "Projects outside UAE", value: fieldToText(custom.projects_outside_uae) },

@@ -55,8 +55,13 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
         style={{ borderBottom: "1px solid rgba(184,149,85,0.7)" }}
       >
         <div className="flex items-center gap-3">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black">
-            <Images className="w-4 h-4 text-white" />
+          <span
+            data-no-contrast-guard
+            data-emerald-action="true"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+            style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
+          >
+            <Images className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </span>
           <div>
             <h2 className="font-cormorant text-2xl md:text-3xl leading-tight text-[#064E3B]">Project Gallery</h2>
