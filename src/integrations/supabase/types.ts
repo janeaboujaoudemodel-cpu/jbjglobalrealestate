@@ -14181,6 +14181,7 @@ export type Database = {
           display_order: number
           file_size_bytes: number | null
           id: string
+          is_public: boolean
           kind: string
           mime_type: string | null
           storage_path: string | null
@@ -14196,6 +14197,7 @@ export type Database = {
           display_order?: number
           file_size_bytes?: number | null
           id?: string
+          is_public?: boolean
           kind: string
           mime_type?: string | null
           storage_path?: string | null
@@ -14211,6 +14213,7 @@ export type Database = {
           display_order?: number
           file_size_bytes?: number | null
           id?: string
+          is_public?: boolean
           kind?: string
           mime_type?: string | null
           storage_path?: string | null
