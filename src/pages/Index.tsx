@@ -63,6 +63,7 @@ const MortgageCalculator = lazy(chunkImports.MortgageCalculator);
 const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
 const InnovationLabSection = lazy(() => import("@/components/home/InnovationLabSection"));
+const HowWeBuildSection = lazy(() => import("@/components/home/HowWeBuildSection"));
 const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 const ModePortalBanner = lazy(() => import("@/components/home/ModePortalBanner"));
 const CTABand = lazy(() => import("@/components/home/CTABand"));
