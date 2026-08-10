@@ -2237,6 +2237,7 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
    fills throughout the site while preserving deep-emerald text and borders. */
 :where(
   [class~="bg-[#064E3B]"],
+  [class*="bg-[#064E3B]"],
   [style*="background-color: rgb(6, 78, 59)"],
   [style*="background-color:#064E3B" i],
   [style*="background-color: #064E3B" i],
