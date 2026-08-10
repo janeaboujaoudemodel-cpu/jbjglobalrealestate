@@ -6,8 +6,8 @@
  * the existing JBJ record, and only moves after the owner picks
  * MERGE / KEEP SEPARATE / IGNORE here. Manually edited JBJ fields always win.
  *
- * LOCKED: every accent, active state and hover state on this page is emerald
- * (#064E3B) with pure white text — never a bright/mint green, never black on hover.
+ * LOCKED: every filled accent, active state and hover state uses the official
+ * emerald → deep emerald → black gradient with pure white text; never flat green.
  */
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 
 const EMERALD = "#064E3B";
+const EMERALD_GRADIENT = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
 
 type Run = {
   id: string;
@@ -96,17 +97,17 @@ const norm = (s: string | null | undefined) =>
 const EmeraldStyles = () => (
   <style>{`
     [data-mir] .mir-pill{border:1px solid rgba(6,78,59,0.25);background:#fff;color:${EMERALD};transition:background .15s,color .15s}
-    [data-mir] .mir-pill:hover{background:${EMERALD};color:#fff}
+    [data-mir] .mir-pill:hover{background:${EMERALD_GRADIENT};color:#fff;border-color:transparent}
     [data-mir] .mir-pill:hover svg{color:#fff}
-    [data-mir] .mir-pill-active{background:${EMERALD} !important;color:#fff !important;border-color:${EMERALD} !important}
+    [data-mir] .mir-pill-active{background:${EMERALD_GRADIENT} !important;color:#fff !important;border-color:transparent !important}
     [data-mir] .mir-pill-active svg{color:#fff !important}
     [data-mir] .mir-card{border:1px solid rgba(6,78,59,0.12);background:#fff;transition:border-color .15s,box-shadow .15s}
     [data-mir] .mir-card-click:hover{border-color:${EMERALD};box-shadow:0 8px 24px -14px rgba(6,78,59,.55)}
     [data-mir] .mir-link{color:${EMERALD};font-weight:600}
     [data-mir] .mir-link:hover{text-decoration:underline}
     [data-mir] .mir-row:hover{background:rgba(6,78,59,0.04)}
-    [data-mir] .mir-solid{background:${EMERALD};color:#fff}
-    [data-mir] .mir-solid:hover{background:#042c1c;color:#fff}
+    [data-mir] .mir-solid{background:${EMERALD_GRADIENT};color:#fff;border-color:transparent}
+    [data-mir] .mir-solid:hover{background:${EMERALD_GRADIENT};color:#fff;filter:brightness(1.08)}
     [data-mir] .mir-solid svg{color:#fff}
   `}</style>
 );

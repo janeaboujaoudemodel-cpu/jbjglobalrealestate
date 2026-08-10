@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, X, Clock, ArrowUpRight, Command, Loader2 } from "lucide-react";
 import {
   CRM_PRIMARY_NAV,
+  CRM_OWNER_HUB_MODULES,
   CRM_TEAMSPACE_TOP,
   CRM_TEAMSPACE_FOLDERS,
   type CrmModule,
@@ -29,6 +30,7 @@ const ALL_MODULES: CrmModule[] = [
   ...CRM_PRIMARY_NAV,
   ...CRM_TEAMSPACE_TOP,
   ...CRM_TEAMSPACE_FOLDERS.flatMap((f) => f.children),
+  ...CRM_OWNER_HUB_MODULES,
 ];
 
 type Props = { open: boolean; onClose: () => void };
@@ -143,7 +145,7 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
                     return (
                       <li key={m.slug}>
                         <Link
-                          to={`/owner/crm/jbj/${m.slug}`}
+                          to={m.slug.startsWith("owner-") ? `/owner/crm/jbj/${m.slug}` : `/owner/crm/jbj/${m.slug}`}
                           className="jc-search-overlay__chip"
                           onClick={onClose}
                         >

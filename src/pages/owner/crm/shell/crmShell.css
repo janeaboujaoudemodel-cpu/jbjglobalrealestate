@@ -242,7 +242,7 @@
 .jc-team-item:hover { background: rgba(255,255,255,.07) !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
 .jc-side-link[data-active="true"],
 .jc-team-item[data-active="true"] {
-  background: var(--jbjcrm-active) !important;
+  background: var(--jbjcrm-emerald-action) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   border-left: 0 !important;
@@ -484,6 +484,8 @@
   border-radius: 6px !important;
 }
 .jc-app .jc-content :where([class*="bg-[#064E3B]"], [class*="from-[#064E3B]"], [class*="to-[#042c1c]"], [class*="to-[#042C1C]"]) {
+  background: var(--jbjcrm-emerald-action) !important;
+  background-image: var(--jbjcrm-emerald-action) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }

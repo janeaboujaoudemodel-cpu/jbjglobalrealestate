@@ -96,7 +96,10 @@ function FieldValue({ value }: { value: any }) {
   );
 }
 
-const EMERALD_PILL: React.CSSProperties = { backgroundColor: "#064E3B", color: "#FFFFFF" };
+const EMERALD_PILL: React.CSSProperties = {
+  background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+  color: "#FFFFFF",
+};
 const EMERALD_OUTLINE: React.CSSProperties = { borderColor: "#064E3B", color: "#064E3B", backgroundColor: "#FFFFFF" };
 
 export default function OwnerEnrichmentReview() {
@@ -216,7 +219,7 @@ export default function OwnerEnrichmentReview() {
     <div className="max-w-6xl mx-auto p-6" data-page="enrichment-review" data-no-contrast-guard>
       <style>{`
         [data-page="enrichment-review"] .er-pill{transition:background .15s,color .15s}
-        [data-page="enrichment-review"] .er-pill:hover{background:#064E3B !important;color:#fff !important;border-color:#064E3B !important}
+        [data-page="enrichment-review"] .er-pill:hover{background:linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%) !important;color:#fff !important;border-color:transparent !important}
         [data-page="enrichment-review"] .er-pill:hover svg{color:#fff !important;stroke:#fff !important}
         [data-page="enrichment-review"] .er-plate-glyph{color:#FFFFFF !important;font-size:15px;line-height:1;font-weight:700}
         [data-page="enrichment-review"] .er-plate svg{color:#FFFFFF !important;stroke:#FFFFFF !important;opacity:1 !important}
