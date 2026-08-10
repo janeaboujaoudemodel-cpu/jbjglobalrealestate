@@ -407,6 +407,17 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
+      {/* HOW WE BUILD — animated 3D blueprint tower of the JBJ operating model */}
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto pb-16 md:pb-20">
+        <LazyVisible minHeight={520}>
+          <Suspense fallback={<SectionLoader />}>
+            <HowWeBuildSection />
+          </Suspense>
+        </LazyVisible>
+      </PremiumSectionCard>
+
+
+
 
       {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block. */}
       <div className="jj-fullbleed-band pt-6 md:pt-8" data-fullbleed-band>
