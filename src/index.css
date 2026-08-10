@@ -18696,12 +18696,14 @@ html body [data-search-utility-controls] button[aria-pressed] {
   gap: 0.625rem;
   transition: background-color 110ms ease, color 110ms ease, box-shadow 110ms ease, transform 110ms ease;
 }
-:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) {
+/* Accordion / FAQ triggers also carry [data-radix-collection-item]; they must
+   never be repainted by the dropdown-row emerald hover. */
+:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):not(.jj-faq-trigger):not(.jj-faq-item):not(.faq-trigger):not([data-faq-trigger]):not([data-radix-accordion-trigger]):not([data-radix-accordion-item]):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) {
   background: rgba(6, 78, 59, 0.10) !important;
   color: var(--jbj-emerald) !important;
   -webkit-text-fill-color: var(--jbj-emerald) !important;
 }
-:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) :where(svg, [class*="lucide"], [data-lucide], path, line, polyline, circle, rect) {
+:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):not(.jj-faq-trigger):not(.jj-faq-item):not(.faq-trigger):not([data-faq-trigger]):not([data-radix-accordion-trigger]):not([data-radix-accordion-item]):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) :where(svg, [class*="lucide"], [data-lucide], path, line, polyline, circle, rect) {
   color: var(--jbj-emerald) !important;
   stroke: currentColor !important;
 }
