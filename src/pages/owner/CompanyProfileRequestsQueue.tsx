@@ -198,10 +198,7 @@ export default function CompanyProfileRequestsQueue() {
                 return (
                   <div
                     key={r.id}
-                    role="button"
-                    tabIndex={0}
                     onClick={() => select(r.id)}
-                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") select(r.id); }}
                     className={`w-full text-left px-4 py-3 cursor-pointer bg-[#FDFBF7] hover:bg-[#064E3B]/[0.04] transition-colors ${isSel ? "bg-[#064E3B]/[0.06]" : ""}`}
                   >
                     <div className="flex items-start justify-between gap-3">
