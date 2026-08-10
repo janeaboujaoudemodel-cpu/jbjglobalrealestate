@@ -40,6 +40,7 @@ import {
 
   MapPin,
   AlertTriangle,
+  DatabaseZap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
