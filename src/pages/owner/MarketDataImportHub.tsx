@@ -174,7 +174,30 @@ const EmeraldStyles = () => (
   `}</style>
 );
 
+/**
+ * Supabase caps every response at 1000 rows. The review queue must show TRUE totals,
+ * so every staging/live read is paginated until the table is fully loaded — otherwise
+ * "Found" silently under-reports (e.g. 1000 instead of 1749).
+ */
+async function fetchAllRows<T>(table: string, columns: string, orderBy = "name"): Promise<T[]> {
+  const PAGE = 1000;
+  const out: T[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from(table as any)
+      .select(columns)
+      .order(orderBy, { ascending: true })
+      .range(from, from + PAGE - 1);
+    if (error) throw error;
+    const rows = (data || []) as unknown as T[];
+    out.push(...rows);
+    if (rows.length < PAGE) break;
+  }
+  return out;
+}
+
 /** Found in the market source / published live on JBJ / still remaining. */
+
 type Progress = { found: number; published: number };
 
 const ProgressChips = ({ found, published }: Progress) => {
