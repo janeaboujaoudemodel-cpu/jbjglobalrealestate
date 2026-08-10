@@ -93,22 +93,25 @@ const DECISIONS = [
 const norm = (s: string | null | undefined) =>
   (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\b(the|by|at|residence|residences|tower|towers)\b/g, "").trim();
 
-/** Scoped emerald styling so no bright green or black-on-hover can leak in. */
+/** Scoped emerald styling — pure white on every emerald fill, never black. */
 const EmeraldStyles = () => (
   <style>{`
     [data-mir] .mir-pill{border:1px solid rgba(6,78,59,0.25);background:#fff;color:${EMERALD};transition:background .15s,color .15s}
-    [data-mir] .mir-pill:hover{background:${EMERALD_GRADIENT};color:#fff;border-color:transparent}
-    [data-mir] .mir-pill:hover svg{color:#fff}
-    [data-mir] .mir-pill-active{background:${EMERALD_GRADIENT} !important;color:#fff !important;border-color:transparent !important}
-    [data-mir] .mir-pill-active svg{color:#fff !important}
+    [data-mir] .mir-pill:hover,[data-mir] .mir-pill:hover *{background-color:transparent;color:#fff !important;-webkit-text-fill-color:#fff !important}
+    [data-mir] .mir-pill:hover{background:${EMERALD_GRADIENT} !important;border-color:transparent}
+    [data-mir] .mir-pill:hover svg{color:#fff !important;stroke:#fff !important}
+    [data-mir] .mir-pill-active,[data-mir] .mir-pill-active:hover{background:${EMERALD_GRADIENT} !important;border-color:transparent !important}
+    [data-mir] .mir-pill-active,[data-mir] .mir-pill-active *{color:#fff !important;-webkit-text-fill-color:#fff !important}
+    [data-mir] .mir-pill-active svg{color:#fff !important;stroke:#fff !important}
     [data-mir] .mir-card{border:1px solid rgba(6,78,59,0.12);background:#fff;transition:border-color .15s,box-shadow .15s}
     [data-mir] .mir-card-click:hover{border-color:${EMERALD};box-shadow:0 8px 24px -14px rgba(6,78,59,.55)}
     [data-mir] .mir-link{color:${EMERALD};font-weight:600}
     [data-mir] .mir-link:hover{text-decoration:underline}
     [data-mir] .mir-row:hover{background:rgba(6,78,59,0.04)}
-    [data-mir] .mir-solid{background:${EMERALD_GRADIENT};color:#fff;border-color:transparent}
-    [data-mir] .mir-solid:hover{background:${EMERALD_GRADIENT};color:#fff;filter:brightness(1.08)}
-    [data-mir] .mir-solid svg{color:#fff}
+    [data-mir] .mir-solid,[data-mir] .mir-solid:hover{background:${EMERALD_GRADIENT} !important;border-color:transparent}
+    [data-mir] .mir-solid,[data-mir] .mir-solid *{color:#fff !important;-webkit-text-fill-color:#fff !important}
+    [data-mir] .mir-solid svg{color:#fff !important;stroke:#fff !important}
+    [data-mir] .mir-solid:hover{filter:brightness(1.1)}
   `}</style>
 );
 
@@ -126,16 +129,15 @@ const StatCard = ({
   <button
     type="button"
     onClick={onClick}
-    disabled={!onClick}
     style={{ display: "block" }}
-    className={`mir-card w-full rounded-xl p-4 text-left ${onClick ? "mir-card-click cursor-pointer" : "cursor-default"}`}
+    className="mir-card mir-card-click w-full cursor-pointer rounded-xl p-4 text-left"
   >
     <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{label}</p>
     <p className="mt-2 text-2xl font-semibold text-neutral-900">{value}</p>
     {hint ? <p className="mt-1 text-xs text-neutral-500">{hint}</p> : null}
-    {onClick ? <p className="mt-2 text-[11px] mir-link">Open →</p> : null}
   </button>
 );
+
 
 /** Before / after panel for a match — live JBJ values vs staged market values. */
 function MatchDiff({ match }: { match: MatchRow }) {
