@@ -1091,8 +1091,6 @@ const Properties = () => {
                         </Button>
                       </>
                     )}
-
-                    )}
                   </div>
 
                   {/* Suggested Properties Section */}
