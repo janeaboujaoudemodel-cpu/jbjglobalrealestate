@@ -232,7 +232,7 @@ const ProjectDetail = () => {
       id: project.id,
       name: project.name,
       slug: project.slug,
-      description: project.description,
+      description: project.description ? normalizeUnitWording(project.description) : project.description,
       location: project.location,
       developer: project.developer ? { 
         id: (project.developer as any).id ?? (project as any).developer_id ?? null,
