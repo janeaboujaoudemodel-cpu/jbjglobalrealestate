@@ -182,7 +182,8 @@ export function handOffToChatSupport(message: string, context?: Record<string, u
     /* storage blocked — the widget still opens, just without the prefill */
   }
   window.dispatchEvent(new CustomEvent("jbj:open-chat-support", { detail: { message } }));
-  notifyOwnerOfHandoff(message, context);
+  // No owner alert here: the AI desk answers first. An owner ticket is only
+  // created when the visitor explicitly transfers the chat to JBJ.
 }
 
 /**
