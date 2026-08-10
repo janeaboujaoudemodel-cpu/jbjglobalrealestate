@@ -284,17 +284,31 @@
 }
 .jc-teamspace__title button svg { width: 20px !important; height: 20px !important; min-width: 20px !important; stroke: #FFFFFF !important; color: #FFFFFF !important; opacity: 1 !important; }
 .jc-side-search {
-  height: 36px;
+  height: 38px;
+  width: 100%;
+  box-sizing: border-box;
   display: flex; align-items: center;
-  gap: 7px;
+  gap: 8px;
   padding: 0 10px;
-  margin: 0 0 5px;
+  margin: 8px 0 10px;
   border: 1px solid rgba(255,255,255,0.32);
-  border-radius: 6px;
+  border-radius: 8px;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   background: rgba(255,255,255,0.06) !important;
+  cursor: pointer;
+  text-align: left;
 }
+.jc-side-search__label { flex: 1; min-width: 0; font-size: 14px; }
+.jc-side-search__kbd {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.12);
+  color: #FFFFFF !important;
+}
+
 .jc-side-search svg { width: 20px !important; height: 20px !important; min-width: 20px !important; color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; stroke-width: 2 !important; }
 .jc-side-search input {
   min-width: 0; flex: 1;
