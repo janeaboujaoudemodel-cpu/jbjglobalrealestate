@@ -244,6 +244,15 @@ const Properties = () => {
     setSearch(next);
     window.dispatchEvent(new CustomEvent("jbj:property-search", { detail: next }));
   }, []);
+
+  /**
+   * Markets we are still onboarding hold no inventory yet. Saying "0 properties"
+   * there reads like a broken search, so those searches show an honest
+   * "coming soon" notice instead.
+   */
+  const selectedCountry = getCountry(search.country);
+  const marketComingSoon = !!selectedCountry && selectedCountry.live === false;
+
   const { data: projects, isLoading } = useProjectsListing();
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
