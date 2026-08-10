@@ -30,7 +30,7 @@ import {
   XCircle,
 } from "lucide-react";
 
-const EMERALD = "#064E3B";
+const EMERALD = "#042c1c";
 const EMERALD_GRADIENT = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
 
 type Run = {
