@@ -95,9 +95,9 @@ export default function HowWeBuildSection() {
       const h = rect.height;
       ctx.clearRect(0, 0, w, h);
 
-      const scale = Math.min(w, h) / 9.5;
+      const scale = Math.min(w, h) / 11.5;
       const cx = w / 2;
-      const cy = h / 2 + Math.min(h, w) * 0.22;
+      const cy = h * 0.72;
       const rot = t;
 
       // ground grid
@@ -144,7 +144,7 @@ export default function HowWeBuildSection() {
 
         if (isActive) {
           ctx.shadowColor = GOLD;
-          ctx.shadowBlur = 16;
+          ctx.shadowBlur = 10;
           ctx.fillStyle = `rgba(201,168,76,${0.05 + pulse * 0.07})`;
         } else {
           ctx.shadowBlur = 0;
@@ -262,12 +262,12 @@ export default function HowWeBuildSection() {
                     >
                       {String(LAYERS.length - i).padStart(2, "0")}
                     </span>
-                    <span className="min-w-0">
-                      <span className="block text-sm font-semibold text-white">
+                    <span className="min-w-0 text-left">
+                      <span className="block text-left text-sm font-semibold text-white">
                         {layer.label}
                       </span>
                       <span
-                        className="block text-xs leading-relaxed"
+                        className="block text-left text-xs leading-relaxed"
                         style={{ color: isActive ? "rgba(255,255,255,0.82)" : "rgba(255,255,255,0.5)" }}
                       >
                         {layer.caption}
