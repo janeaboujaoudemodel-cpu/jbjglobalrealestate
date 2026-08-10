@@ -147,11 +147,10 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
    * initial state back over a restored visitor (that used to reset returning
    * visitors to the welcome step).
    */
-  const hydratedRef = useRef(false);
+  const [hydrated, setHydrated] = useState(false);
 
   // Restore session from localStorage on mount (persistent across sessions)
   useEffect(() => {
-    hydratedRef.current = true;
     const savedStep = sessionStorage.getItem('jbj_chat_step');
     const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
     
@@ -170,6 +169,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           } else {
             setStep(savedStep as ChatStep);
           }
+          setHydrated(true);
           return;
         }
       } catch (e) {
@@ -193,14 +193,15 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     if (savedStep) {
       setStep(savedStep as ChatStep);
     }
+    setHydrated(true);
   }, [user]);
 
   // Persist step and userInfo to localStorage
   useEffect(() => {
-    if (!hydratedRef.current) return;
+    if (!hydrated) return;
     sessionStorage.setItem('jbj_chat_step', step);
     sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
-  }, [step, userInfo]);
+  }, [step, userInfo, hydrated]);
 
   // Restore chat messages from sessionStorage on mount
   useEffect(() => {
