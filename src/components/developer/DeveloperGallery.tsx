@@ -73,9 +73,9 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
             key={item.id}
             type="button"
             onClick={() => setLightboxIndex(index)}
-            className="group block overflow-hidden rounded-xl border border-[#B89555]/40 bg-white/70 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]"
+            className="group flex w-full flex-col items-stretch overflow-hidden rounded-xl border border-[#B89555]/40 bg-white/70 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]"
           >
-            <span className="block aspect-[4/3] overflow-hidden bg-[#F7F2EA]">
+            <span className="block w-full aspect-[4/3] shrink-0 overflow-hidden bg-[#F7F2EA]">
               <img
                 src={getHighResImageUrl(item.url)}
                 alt={item.caption || `${developerName} development`}
@@ -85,7 +85,7 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
               />
             </span>
             {item.caption && (
-              <span className="block break-words bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black px-2.5 py-2 text-[11px] font-semibold leading-[1.4] text-white">
+              <span className="block w-full break-words bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black px-2.5 py-2 text-[11px] font-semibold leading-[1.4] text-white">
                 {item.caption}
               </span>
             )}
