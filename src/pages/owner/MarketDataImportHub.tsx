@@ -690,38 +690,45 @@ export default function MarketDataImportHub() {
         <StatCard
           label="Developers discovered"
           value={String(stats.total_developers_discovered ?? stagedDevelopers.length)}
+          progress={progress.developers}
           onClick={() => setTab("newDevelopers")}
         />
         <StatCard
           label="Projects in scope"
           value={String(stats.total_projects_in_scope ?? stats.total_projects_discovered ?? stagedProjects.length)}
           hint={`incl. ${stats.ready_projects_included ?? 0} ready · ${stats.sold_out_projects_included ?? 0} sold out`}
+          progress={progress.projects}
           onClick={() => setTab("new")}
         />
         <StatCard
           label="Developers auto-merged"
           value={String(stats.developer_matches_auto_merged ?? "—")}
           hint={`${stats.developer_fields_filled ?? 0} empty fields filled`}
+          progress={progress.mergedDevelopers}
           onClick={() => { setEntity("developer"); setTab("matches"); }}
         />
         <StatCard
           label="Projects auto-merged"
           value={String(stats.project_exact_matches_auto_merged ?? "—")}
           hint={`${stats.project_fields_filled ?? 0} empty fields filled`}
+          progress={progress.mergedProjects}
           onClick={() => { setEntity("project"); setTab("matches"); }}
         />
         <StatCard
           label="New projects"
           value={String(newProjects.length || stats.new_projects_awaiting_approval || 0)}
           hint="awaiting your approval"
+          progress={progress.newProjects}
           onClick={() => setTab("new")}
         />
         <StatCard
           label="New developers"
           value={String(stats.new_developers ?? newDevelopers.length)}
           hint="awaiting your approval"
+          progress={progress.newDevelopers}
           onClick={() => setTab("newDevelopers")}
         />
+
         <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} onClick={() => { setEntity("project"); setTab("matches"); }} />
         <StatCard label="New area candidates" value={String(stats.area_candidates_not_in_jbj ?? "—")} hint="not created — your call" onClick={() => setTab("new")} />
       </div>
