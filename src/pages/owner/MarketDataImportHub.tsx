@@ -531,7 +531,7 @@ export default function MarketDataImportHub() {
       mergedProjects: { found: mergedProj.length, published: pub(mergedProj) },
       mergedDevelopers: { found: mergedDevs.length, published: pub(mergedDevs) },
     };
-  }, [stagedProjects, stagedDevelopers, matches, matchedStagedIds]);
+  }, [stagedProjects, stagedDevelopers, allMatches, matchedStagedIds]);
 
 
   const decide = async (id: string, decision: string) => {
