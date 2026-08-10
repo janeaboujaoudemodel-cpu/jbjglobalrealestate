@@ -92,6 +92,9 @@ type StagedProject = {
   excluded_reason: string | null;
   review_decision: string | null;
   jbj_project_id: string | null;
+  publish_status?: string | null;
+  published_at?: string | null;
+  publish_error?: string | null;
 };
 
 type StagedDeveloper = {
@@ -103,6 +106,9 @@ type StagedDeveloper = {
   total_projects: number | null;
   review_decision: string | null;
   jbj_developer_id: string | null;
+  publish_status?: string | null;
+  published_at?: string | null;
+  publish_error?: string | null;
 };
 
 type LiveRef = { id: string; name: string | null; slug: string | null };
@@ -112,6 +118,34 @@ const DECISIONS = [
   { key: "keep_separate", label: "Keep separate", icon: Layers },
   { key: "ignore", label: "Ignore", icon: XCircle },
 ] as const;
+
+/**
+ * Permanent publish record for a staged row — approving publishes it live and the row
+ * stays here forever with its status, so any developer or project can be followed up.
+ */
+const PublishCell = ({
+  status,
+  at,
+  error,
+}: {
+  status?: string | null;
+  at?: string | null;
+  error?: string | null;
+}) => {
+  const state = status || "not_published";
+  const label = state === "published" ? "Published live" : state === "failed" ? "Publish failed" : "Not published";
+  return (
+    <span className="inline-flex flex-col gap-0.5">
+      <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${state === "published" ? "mir-solid" : "mir-pill"}`}>
+        {label}
+      </span>
+      {state === "published" && at ? (
+        <span className="text-[10px] text-neutral-500">{new Date(at).toLocaleDateString()}</span>
+      ) : null}
+      {state === "failed" && error ? <span className="text-[10px] text-red-700">{error}</span> : null}
+    </span>
+  );
+};
 
 const norm = (s: string | null | undefined) =>
   (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\b(the|by|at|residence|residences|tower|towers)\b/g, "").trim();
@@ -357,7 +391,7 @@ export default function MarketDataImportHub() {
       const { data, error } = await supabase
         .from("market_staged_projects" as any)
         .select(
-          "id,name,source_slug,source_url,developer_name,city,area,status,is_offplan,excluded_reason,review_decision,jbj_project_id",
+          "id,name,source_slug,source_url,developer_name,city,area,status,is_offplan,excluded_reason,review_decision,jbj_project_id,publish_status,published_at,publish_error",
         )
         .order("name")
         .limit(3000);
@@ -371,7 +405,7 @@ export default function MarketDataImportHub() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("market_staged_developers" as any)
-        .select("id,name,source_slug,source_url,headquarters,total_projects,review_decision,jbj_developer_id")
+        .select("id,name,source_slug,source_url,headquarters,total_projects,review_decision,jbj_developer_id,publish_status,published_at,publish_error")
         .order("name")
         .limit(2000);
       if (error) throw error;
@@ -483,10 +517,41 @@ export default function MarketDataImportHub() {
     qc.invalidateQueries({ queryKey: ["market-review-matches", entity] });
   };
 
+  /**
+   * RULE — Approve = Publish (LOCKED).
+   * Approving a staged market record publishes it straight into live JBJ inventory in the
+   * same click. The staged row is never removed: it keeps its review + publish status and a
+   * link to the live JBJ page, so any developer or project can always be followed up here.
+   */
+  const publishApproved = async (kind: "project" | "developer", ids: string[]) => {
+    const { data, error } = await supabase.functions.invoke("market-import-publish", {
+      body: { kind, ids },
+    });
+    if (error) throw error;
+    return data as { published: number; failed: number };
+  };
+
   const bulkStaged = async (kind: "project" | "developer", decision: "approved" | "rejected" | "pending") => {
     const ids = Array.from(selected);
     if (!ids.length) return toast.error("Select at least one row first");
     setBulkBusy(true);
+
+    if (decision === "approved") {
+      try {
+        const res = await publishApproved(kind, ids);
+        toast.success(
+          `${res.published} ${kind === "project" ? "project" : "developer"}${res.published === 1 ? "" : "s"} approved and published live${res.failed ? ` · ${res.failed} failed` : ""}`,
+        );
+      } catch (e) {
+        toast.error(`Publishing failed: ${e instanceof Error ? e.message : "unknown error"}`);
+      }
+      setBulkBusy(false);
+      setSelected(new Set());
+      qc.invalidateQueries({ queryKey: [kind === "project" ? "market-staged-projects" : "market-staged-developers"] });
+      qc.invalidateQueries({ queryKey: [kind === "project" ? "market-live-projects" : "market-live-developers"] });
+      return;
+    }
+
     const table = kind === "project" ? "market_staged_projects" : "market_staged_developers";
     const { error } = await supabase
       .from(table as any)
@@ -811,7 +876,7 @@ export default function MarketDataImportHub() {
               { label: "Select only already on JBJ", ids: newProjects.filter((p) => !!resolveProjectLink(p)).map((p) => p.id) },
             ]}
             actions={[
-              { label: "Approve selected", onClick: () => bulkStaged("project", "approved"), solid: true, icon: CheckCircle2 },
+              { label: "Approve & publish selected", onClick: () => bulkStaged("project", "approved"), solid: true, icon: CheckCircle2 },
               { label: "Reject selected", onClick: () => bulkStaged("project", "rejected"), icon: XCircle },
               { label: "Reset to pending", onClick: () => bulkStaged("project", "pending"), icon: RefreshCw },
             ]}
@@ -826,6 +891,7 @@ export default function MarketDataImportHub() {
                   <th className="px-4 py-3">Location</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Review</th>
+                  <th className="px-4 py-3">Live status</th>
                   <th className="px-4 py-3">Source</th>
                   <th className="px-4 py-3">JBJ</th>
                 </tr>
@@ -854,6 +920,7 @@ export default function MarketDataImportHub() {
                           {p.review_decision || "pending"}
                         </span>
                       </td>
+                      <td className="px-4 py-3"><PublishCell status={p.publish_status} at={p.published_at} error={p.publish_error} /></td>
                       <td className="px-4 py-3">
                         <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />
@@ -888,7 +955,7 @@ export default function MarketDataImportHub() {
               { label: "Select only already on JBJ", ids: newDevelopers.filter((d) => !!resolveDeveloperLink(d)).map((d) => d.id) },
             ]}
             actions={[
-              { label: "Approve selected", onClick: () => bulkStaged("developer", "approved"), solid: true, icon: CheckCircle2 },
+              { label: "Approve & publish selected", onClick: () => bulkStaged("developer", "approved"), solid: true, icon: CheckCircle2 },
               { label: "Reject selected", onClick: () => bulkStaged("developer", "rejected"), icon: XCircle },
               { label: "Reset to pending", onClick: () => bulkStaged("developer", "pending"), icon: RefreshCw },
             ]}
@@ -902,6 +969,7 @@ export default function MarketDataImportHub() {
                   <th className="px-4 py-3">Headquarters</th>
                   <th className="px-4 py-3">Projects</th>
                   <th className="px-4 py-3">Review</th>
+                  <th className="px-4 py-3">Live status</th>
                   <th className="px-4 py-3">Source</th>
                   <th className="px-4 py-3">JBJ</th>
                 </tr>
@@ -929,6 +997,7 @@ export default function MarketDataImportHub() {
                           {d.review_decision || "pending"}
                         </span>
                       </td>
+                      <td className="px-4 py-3"><PublishCell status={d.publish_status} at={d.published_at} error={d.publish_error} /></td>
                       <td className="px-4 py-3">
                         <a href={d.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />

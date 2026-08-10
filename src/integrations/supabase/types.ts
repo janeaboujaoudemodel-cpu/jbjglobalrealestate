@@ -27292,6 +27292,9 @@ export type Database = {
           name: string
           ongoing_projects: number | null
           payload: Json
+          publish_error: string | null
+          publish_status: string
+          published_at: string | null
           rating: number | null
           review_decision: string
           reviewed_at: string | null
@@ -27322,6 +27325,9 @@ export type Database = {
           name: string
           ongoing_projects?: number | null
           payload?: Json
+          publish_error?: string | null
+          publish_status?: string
+          published_at?: string | null
           rating?: number | null
           review_decision?: string
           reviewed_at?: string | null
@@ -27352,6 +27358,9 @@ export type Database = {
           name?: string
           ongoing_projects?: number | null
           payload?: Json
+          publish_error?: string | null
+          publish_status?: string
+          published_at?: string | null
           rating?: number | null
           review_decision?: string
           reviewed_at?: string | null
@@ -27409,6 +27418,9 @@ export type Database = {
           payload: Json
           payment_plans: Json
           plot_size_sqft: number | null
+          publish_error: string | null
+          publish_status: string
+          published_at: string | null
           review_decision: string
           reviewed_at: string | null
           reviewed_by: string | null
@@ -27457,6 +27469,9 @@ export type Database = {
           payload?: Json
           payment_plans?: Json
           plot_size_sqft?: number | null
+          publish_error?: string | null
+          publish_status?: string
+          published_at?: string | null
           review_decision?: string
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -27505,6 +27520,9 @@ export type Database = {
           payload?: Json
           payment_plans?: Json
           plot_size_sqft?: number | null
+          publish_error?: string | null
+          publish_status?: string
+          published_at?: string | null
           review_decision?: string
           reviewed_at?: string | null
           reviewed_by?: string | null
