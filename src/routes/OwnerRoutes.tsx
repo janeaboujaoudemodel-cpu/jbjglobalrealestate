@@ -139,6 +139,7 @@ const InvestorPortal = lazy(() => import("@/pages/owner/InvestorPortal"));
 const DeveloperEnrichmentQueue = lazy(() => import("@/pages/developer-hub-admin/DeveloperEnrichmentQueue"));
 const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
 const CompanyProfileRequestsQueue = lazy(() => import("@/pages/owner/CompanyProfileRequestsQueue"));
+const AdvisoryDeskQueue = lazy(() => import("@/pages/owner/AdvisoryDeskQueue"));
 const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
 const RepDirectory = lazy(() => import("@/pages/developers-portal/reps/RepDirectory"));
 const RepByEmirate = lazy(() => import("@/pages/developers-portal/reps/RepByEmirate"));
@@ -239,6 +240,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-developer-profiles" element={<DeveloperEnrichmentQueue />} />
     <Route path="owner-missing-logos" element={<MissingLogosQueue />} />
     <Route path="owner-profile-requests" element={<CompanyProfileRequestsQueue />} />
+    <Route path="owner-advisory-desk" element={<AdvisoryDeskQueue />} />
     <Route path="owner-drive-extractions" element={<DriveExtractionsHub />} />
     <Route path="owner-properties" element={<Properties />} />
     <Route path="owner-featured-projects" element={<HomeFeaturedProjectsManager />} />
