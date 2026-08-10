@@ -225,6 +225,7 @@ export default function MarketDataImportHub() {
   const [openDiff, setOpenDiff] = useState<Record<string, boolean>>({});
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [matchLimit, setMatchLimit] = useState(100);
 
   useEffect(() => setSelected(new Set()), [tab, entity]);
 
@@ -584,7 +585,7 @@ export default function MarketDataImportHub() {
           {visibleMatches.length === 0 ? (
             <p className="mir-card rounded-xl p-6 text-sm text-neutral-600">Nothing to review here.</p>
           ) : null}
-          {visibleMatches.map((m) => {
+          {visibleMatches.slice(0, matchLimit).map((m) => {
             const liveRef =
               m.entity_type === "developer"
                 ? m.jbj_developer_id
@@ -677,6 +678,18 @@ export default function MarketDataImportHub() {
               </article>
             );
           })}
+          {visibleMatches.length > matchLimit ? (
+            <div className="flex items-center gap-2">
+              <button type="button" onClick={() => setMatchLimit((n) => n + 200)} className="mir-pill rounded-full px-4 py-2 text-sm">
+                Load 200 more ({matchLimit} of {visibleMatches.length})
+              </button>
+              <button type="button" onClick={() => setMatchLimit(visibleMatches.length)} className="mir-solid rounded-full px-4 py-2 text-sm">
+                Show all {visibleMatches.length}
+              </button>
+            </div>
+          ) : (
+            <p className="text-xs text-neutral-500">Showing all {visibleMatches.length} matched cards.</p>
+          )}
         </div>
       ) : null}
 
