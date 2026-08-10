@@ -63,8 +63,13 @@ export const ActionGateProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useActionGate = () => {
-  const ctx = useContext(ActionGateContext);
-  if (!ctx) throw new Error("useActionGate must be used within ActionGateProvider");
-  return ctx;
+/** Safe fallback for routes rendered outside ActionGateProvider (e.g. owner backend) */
+const FALLBACK_GATE: ActionGateContextType = {
+  requireAuth: () => {},
+  gatedAction: (callback: () => void) => callback(),
+  isGateOpen: false,
+  closeGate: () => {},
+  gateReason: null,
 };
+
+export const useActionGate = () => useContext(ActionGateContext) ?? FALLBACK_GATE;
