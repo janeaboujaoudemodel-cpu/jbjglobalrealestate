@@ -189,6 +189,7 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-developer-access": "/owner/developers/access-requests",
   "owner-developer-profiles": "/owner/developers/profile-rebuild",
   "owner-missing-logos": "/owner/developers/missing-logos",
+  "owner-profile-requests": "/owner/crm/jbj/owner-profile-requests",
   "owner-drive-extractions": "/owner/drive-extractions",
   "owner-properties": "/owner/properties",
   "owner-featured-projects": "/owner/properties/featured",
