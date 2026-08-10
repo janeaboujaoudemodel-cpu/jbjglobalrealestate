@@ -8,7 +8,7 @@ import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Briefcase, Info, UserRound } from "lucide-react";
+import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Briefcase, Info, UserRound, Images, CheckCircle2, Hammer, Home } from "lucide-react";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -27,6 +27,7 @@ import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developer
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
 import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
 import DeveloperAboutPanel from "@/components/developer/DeveloperAboutPanel";
+import DeveloperGallery from "@/components/developer/DeveloperGallery";
 import { buildPublicDeveloperFacts, stripBracketedTitle, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
@@ -315,7 +316,9 @@ const DeveloperDetail = () => {
 
   const developerStickyTabs = [
     { id: "developer-overview", label: "Developer", icon: Building2 },
+    { id: "developer-gallery", label: "Gallery", icon: Images },
     { id: "developer-map", label: "Location", icon: MapPin },
+
     { id: "developer-intelligence", label: "AI Analyzer", icon: BarChart3 },
     { id: "developer-projects", label: "Projects", icon: Briefcase },
   ];
@@ -468,6 +471,17 @@ const DeveloperDetail = () => {
   );
   const publishedUnits = (projects || []).reduce((sum, p) => sum + Number(p.total_units || 0), 0);
 
+  const cityLevelHeadquarters = (() => {
+    const raw = `${developer.headquarters || ""}`.trim();
+    if (!raw) return null;
+    // City-level only — never a street address, floor, office or PO box.
+    const parts = raw.split(",").map((part) => part.trim()).filter(Boolean);
+    const city = parts.find((part) => /^(dubai|abu dhabi|sharjah|ajman|ras al khaimah|umm al quwain|fujairah)$/i.test(part));
+    if (city) return `${city}, United Arab Emirates`;
+    if (parts.length <= 2 && !/\d/.test(raw)) return raw;
+    return null;
+  })();
+
   const stats = [
     {
       icon: Calendar,
@@ -484,10 +498,26 @@ const DeveloperDetail = () => {
       label: "Global Portfolio",
       value: globalProjectCount ? `${globalProjectCount.toLocaleString()}+` : null,
     },
+    {
+      icon: CheckCircle2,
+      label: "Completed",
+      value: Number(developer.completed_projects || 0) ? `${Number(developer.completed_projects).toLocaleString()}` : null,
+    },
+    {
+      icon: Hammer,
+      label: "Ongoing / Off-plan",
+      value: Number(developer.offplan_projects || 0) ? `${Number(developer.offplan_projects).toLocaleString()}` : null,
+    },
+    {
+      icon: Home,
+      label: "Properties Delivered",
+      value: Number(developer.total_units_delivered || 0) ? `${Number(developer.total_units_delivered).toLocaleString()}+` : null,
+    },
     ...(developer.ceo_name ? [{ icon: UserRound, label: "Leadership", value: stripBracketedTitle(developer.ceo_name) }] : []),
-    // Headquarters intentionally removed — never display developer office locations.
-
+    // City-level headquarters only — never street addresses, phone numbers or emails.
+    ...(cityLevelHeadquarters ? [{ icon: MapPin, label: "Headquarters", value: cityLevelHeadquarters }] : []),
   ].filter(s => s.value !== null);
+
 
   const verifiedFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
   const heroImageUrl = verifiedFlagship
@@ -740,8 +770,13 @@ const DeveloperDetail = () => {
           </div>
         </div>
 
+        {/* Verified project gallery sourced from public developer records */}
+        <div className="scroll-mt-40">
+          <DeveloperGallery developerId={developer.id} developerName={developer.name} />
+        </div>
 
         {/* Developer Projects Map - Wrapped in error boundary */}
+
         {projects && projects.length > 0 && (
           <div id="developer-map" className="mt-8 scroll-mt-40">
             <MapErrorBoundary>
