@@ -104,7 +104,27 @@ export const formatPaymentPlanSummary = (project: {
         }
       }
     }
-    return cleanVisiblePlanText(planStr);
+    // Any embedded numeric ratio (e.g. "20 / 38 / 1 (On Handover) / 41 (Post
+    // Handover)") collapses to a compact "<pre> / <on completion>" chip. Long
+    // descriptive text can never reach a card row — it would crush the price
+    // column and wrap the label one letter per line.
+    if (planStr.includes("/")) {
+      const nums = (planStr.match(/\d{1,3}(?:\.\d+)?/g) || [])
+        .map((t) => Number(t))
+        .filter((n) => Number.isFinite(n) && n > 0 && n <= 100);
+      if (nums.length >= 2) {
+        const total = nums.reduce((sum, n) => sum + n, 0);
+        if (total >= 95 && total <= 105) {
+          const onCompletion = Math.round(nums[nums.length - 1]);
+          const pre = Math.max(0, Math.min(100, 100 - onCompletion));
+          return `${pre} / ${onCompletion}`;
+        }
+      }
+    }
+    const text = cleanVisiblePlanText(planStr);
+    // Guard: compact surfaces get a short chip or nothing at all. A long
+    // sentence here is what previously crushed the "Price from" column.
+    return text.length > 18 ? null : text;
   }
 
 

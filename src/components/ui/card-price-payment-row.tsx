@@ -124,21 +124,22 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
   const hasPrice = typeof price === "number" && price > 0;
   const summary = formatPaymentPlanSummary(project);
   const breakdown = getBreakdownRows(project);
-  const hasPlan = Boolean(summary);
+  // Only compact numeric summaries ("60 / 40") belong on a card row.
+  const hasPlan = Boolean(summary) && summary !== PAYMENT_PLAN_NA && /^\d/.test(summary!) && summary!.length <= 18;
 
 
   return (
     <div
       data-card-price-payment-row
       className={cn(
-        "grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-4 min-w-0 min-h-[3.75rem]",
+        "grid grid-cols-[minmax(0,1fr)_minmax(0,auto)] items-end gap-x-4 min-w-0 min-h-[3.75rem]",
         className,
       )}
     >
 
       {/* LEFT — Price from */}
       <div className="flex min-w-0 flex-col justify-end">
-        <span data-area-price-label className="text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+        <span data-area-price-label className="whitespace-nowrap text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
           Price from
         </span>
         <span
@@ -154,8 +155,8 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
       </div>
 
       {hasPlan && breakdown && breakdown.length > 0 && (
-      <div className="flex min-w-[5.75rem] flex-col items-end justify-end text-right">
-        <span data-area-price-label className="text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+      <div className="flex min-w-[5.75rem] max-w-[55%] shrink flex-col items-end justify-end text-right">
+        <span data-area-price-label className="whitespace-nowrap text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
           Payment Plan
         </span>
          <div className="mt-1 flex min-h-5 items-center justify-end gap-1.5 whitespace-nowrap">
