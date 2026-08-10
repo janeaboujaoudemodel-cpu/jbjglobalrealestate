@@ -175,9 +175,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const isDescriptionTrimmed = Boolean(dedupedDescription) && rawDescriptionLength > safeDescription.length;
 
 
-
+  // LOCKED (no emerald blueprint / no empty field): the public directory only
+  // shows brands with a verified photograph. Everything else is archived and
+  // flagged in the owner backend Developer Hub alerts.
+  if (!hasHero && !allowMissingCover) return null;
 
   return (
+
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
       <motion.div
         whileHover={{ y: -8, scale: 1.015, boxShadow: "0 26px 54px -14px rgba(0,0,0,0.36), 0 14px 28px -12px rgba(6,78,59,0.34)" }}
