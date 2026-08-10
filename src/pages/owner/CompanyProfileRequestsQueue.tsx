@@ -228,7 +228,7 @@ export default function CompanyProfileRequestsQueue() {
                         {r.status}
                       </span>
                     </div>
-                  </button>
+                  </div>
                 );
               })}
             </div>
