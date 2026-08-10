@@ -2524,8 +2524,8 @@ function ProjectDetailLayoutInner({
 
       {/* Recommended Projects — seamless champagne bg continuation */}
       <SectionDividerGoldFullBleed />
-      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band px-4 sm:px-6" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
-      <div className="mx-auto w-full max-w-[1500px]">
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <div className="jj-project-shell">
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}
