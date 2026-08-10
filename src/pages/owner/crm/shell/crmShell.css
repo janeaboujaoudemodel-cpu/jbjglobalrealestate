@@ -3979,11 +3979,13 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 /* ============================================================
    Sidebar global search (top of rail)
 ============================================================ */
-.jc-side-search {
-  margin: 6px 12px 10px;
-  height: 34px;
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 10px;
+ .jc-side-search {
+   margin: 8px 0 10px;
+   width: 100%;
+   box-sizing: border-box;
+   height: 38px;
+   display: flex; align-items: center; gap: 8px;
+   padding: 0 10px;
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.22);
   border-radius: 8px;
