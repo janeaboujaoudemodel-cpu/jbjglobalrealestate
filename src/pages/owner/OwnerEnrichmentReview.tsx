@@ -182,7 +182,10 @@ export default function OwnerEnrichmentReview() {
         reviewed_at: new Date().toISOString(),
       }).eq("id", d.id);
       if (error) throw error;
-      toast.success(`Filled ${applied.length} field${applied.length === 1 ? "" : "s"}${skipped.length ? ` · skipped ${skipped.length}` : ""}`);
+      toast.success(
+        `Approved: ${applied.length} new field${applied.length === 1 ? "" : "s"} added` +
+        (skipped.length ? ` · ${skipped.length} existing value${skipped.length === 1 ? "" : "s"} kept unchanged` : ""),
+      );
       qc.invalidateQueries({ queryKey: ["enrichment-drafts"] });
     } catch (e: any) {
       toast.error(e.message || "Approve failed");
@@ -223,7 +226,7 @@ export default function OwnerEnrichmentReview() {
       </div>
       <p className="text-sm text-neutral-600 mb-5 max-w-3xl">
         AI-extracted fields from uploaded PDFs, developer websites and source links.
-        Approving fills <strong>empty</strong> fields only — existing values are never overwritten.
+        Approving adds every new value. If a field already has data, the existing JBJ value is protected and kept unchanged.
         {summary.empty > 0 && (
           <span className="ml-1 text-neutral-500">
             ({summary.empty} draft{summary.empty === 1 ? "" : "s"} hidden with nothing to fill.)
@@ -375,7 +378,7 @@ export default function OwnerEnrichmentReview() {
                       <FieldValue value={v} />
                       {already && (
                         <div className="mt-1.5 text-[10px] text-neutral-500 italic">
-                          Skipped — already set
+                           Existing JBJ value protected — not overwritten
                         </div>
                       )}
                     </div>
@@ -385,9 +388,9 @@ export default function OwnerEnrichmentReview() {
 
               {!isPending && (d.applied_fields?.length || d.skipped_fields?.length) ? (
                 <footer className="px-4 pb-3 text-[11px] text-neutral-500 border-t border-emerald-900/5 pt-2">
-                  {d.applied_fields?.length ? <>Filled: <span className="text-neutral-700">{d.applied_fields.join(", ")}</span></> : null}
+                   {d.applied_fields?.length ? <>Approved and added: <span className="text-neutral-700">{d.applied_fields.join(", ")}</span></> : null}
                   {d.applied_fields?.length && d.skipped_fields?.length ? " · " : ""}
-                  {d.skipped_fields?.length ? <>Skipped: <span className="text-neutral-700">{d.skipped_fields.join(", ")}</span></> : null}
+                   {d.skipped_fields?.length ? <>Existing values kept unchanged: <span className="text-neutral-700">{d.skipped_fields.join(", ")}</span></> : null}
                 </footer>
               ) : null}
             </article>

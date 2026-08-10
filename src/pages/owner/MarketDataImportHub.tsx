@@ -1,5 +1,5 @@
 /**
- * Owner backend — Market Data Import Preview.
+ * Owner backend — Market Import Review.
  *
  * LOCKED RULE: nothing crawled from the market source is written to the live directory
  * automatically. Everything lands in a staging area first, is scored against
@@ -160,9 +160,9 @@ export default function MarketDataImportHub() {
     <div className="space-y-6 p-4 md:p-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Enrichment source</p>
+           <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Owner review queue</p>
           <h1 className="mt-1 flex items-center gap-2 text-2xl font-semibold text-foreground">
-            <Sparkles className="h-5 w-5" aria-hidden /> Market data import preview
+             <Sparkles className="h-5 w-5" aria-hidden /> Market Import Review
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             Developer-built projects only — off-plan, ready and sold-out. Resale listings, agency inventory and
@@ -197,7 +197,7 @@ export default function MarketDataImportHub() {
         </p>
         <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
           <li>• Any JBJ field you edited manually always wins and is never overwritten.</li>
-          <li>• Per-field provenance (manual / market source / earlier source) is recorded on every merge.</li>
+           <li>• Per-field provenance (manual / imported / earlier source) is recorded on every merge.</li>
           <li>• No external phone numbers, emails, WhatsApp numbers or agents are copied — contact stays JBJ’s.</li>
           <li>• Unit-level and resale inventory is excluded at the source; only project totals are used.</li>
         </ul>
