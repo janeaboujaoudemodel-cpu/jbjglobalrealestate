@@ -1848,12 +1848,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/mostafa-bin-abdullatif-real-estate-development-l-l-c</loc>
-    <lastmod>2026-08-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://jbj.ae/developer/gulf-land-property-developers</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -1862,6 +1856,12 @@
   <url>
     <loc>https://jbj.ae/developer/n-a-m-o-real-estate-development-l-l-c</loc>
     <lastmod>2026-08-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/developer/mostafa-bin-abdullatif-real-estate-development-l-l-c</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -2196,13 +2196,13 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/tameer-holding-and-investment-llc</loc>
-    <lastmod>2026-08-08</lastmod>
+    <loc>https://jbj.ae/developer/omniyat</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/omniyat</loc>
+    <loc>https://jbj.ae/developer/tameer-holding-and-investment-llc</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -2256,12 +2256,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/preatoni-properties-dubai</loc>
-    <lastmod>2026-08-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://jbj.ae/developer/nyx-properties</loc>
     <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -2282,6 +2276,12 @@
   <url>
     <loc>https://jbj.ae/developer/koro-real-estate-development</loc>
     <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/developer/preatoni-properties-dubai</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -3438,14 +3438,14 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/mulk-properties-l-l-c</loc>
-    <lastmod>2026-08-08</lastmod>
+    <loc>https://jbj.ae/developer/one-yard-real-estate-development-l-l-c</loc>
+    <lastmod>2026-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/one-yard-real-estate-development-l-l-c</loc>
-    <lastmod>2026-08-09</lastmod>
+    <loc>https://jbj.ae/developer/mulk-properties-l-l-c</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
