@@ -427,6 +427,8 @@ const Properties = () => {
       bedsParam || typeParam || priceMinParam || priceMaxParam || sizeMinParam || sizeMaxParam ||
       currencyParam || emirateParam || saleStatusParam || communityIdFromUrl || sortParam || shortcutSortParam ||
       searchParams.get('developers') || searchParams.get('emirates') || searchParams.get('areas') ||
+      searchParams.get('areaSlugs') || searchParams.get('region') ||
+
       searchParams.get('propertyTypes') || searchParams.get('statuses') || searchParams.get('constructionStatuses') ||
       searchParams.get('views') || searchParams.get('paymentPlanMax') || searchParams.get('postHandoverOnly') ||
       searchParams.get('handoverFrom') || searchParams.get('handoverTo') || searchParams.get('category');
