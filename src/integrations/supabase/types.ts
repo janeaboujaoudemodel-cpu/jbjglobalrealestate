@@ -2431,6 +2431,13 @@ export type Database = {
             foreignKeyName: "briefing_rep_ratings_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "briefing_rep_ratings_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -2751,6 +2758,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "broker_access_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "broker_access_requests_developer_id_fkey"
             columns: ["developer_id"]
@@ -6240,6 +6254,13 @@ export type Database = {
             foreignKeyName: "company_profile_requests_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "company_profile_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -7762,6 +7783,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_brokerage_attendance_counts"
             referencedColumns: ["brokerage_id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_deals_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
           },
           {
             foreignKeyName: "crm_brokerage_deals_developer_id_fkey"
@@ -12896,6 +12924,13 @@ export type Database = {
             foreignKeyName: "deals_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "deals_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -13513,8 +13548,22 @@ export type Database = {
             foreignKeyName: "dev_excel_import_review_committed_developer_id_fkey"
             columns: ["committed_developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "dev_excel_import_review_committed_developer_id_fkey"
+            columns: ["committed_developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dev_excel_import_review_matched_developer_id_fkey"
+            columns: ["matched_developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
           },
           {
             foreignKeyName: "dev_excel_import_review_matched_developer_id_fkey"
@@ -13780,6 +13829,13 @@ export type Database = {
             foreignKeyName: "developer_applications_developer_fk"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "developer_applications_developer_fk"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -13820,6 +13876,13 @@ export type Database = {
           id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "developer_audit_log_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "developer_audit_log_developer_id_fkey"
             columns: ["developer_id"]
@@ -14098,6 +14161,13 @@ export type Database = {
             foreignKeyName: "developer_documents_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "developer_documents_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -14138,6 +14208,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "developer_drive_jobs_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "developer_drive_jobs_developer_id_fkey"
             columns: ["developer_id"]
@@ -14194,6 +14271,13 @@ export type Database = {
           status?: Database["public"]["Enums"]["developer_enrichment_status"]
         }
         Relationships: [
+          {
+            foreignKeyName: "developer_enrichment_log_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "developer_enrichment_log_developer_id_fkey"
             columns: ["developer_id"]
@@ -14344,6 +14428,13 @@ export type Database = {
             foreignKeyName: "developer_media_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "developer_media_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -14378,6 +14469,13 @@ export type Database = {
           outcome?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "developer_media_repair_attempts_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "developer_media_repair_attempts_developer_id_fkey"
             columns: ["developer_id"]
@@ -15421,6 +15519,13 @@ export type Database = {
             foreignKeyName: "devreps_developer_fk"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "devreps_developer_fk"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -15461,6 +15566,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "developer_sales_contacts_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "developer_sales_contacts_developer_id_fkey"
             columns: ["developer_id"]
@@ -15608,6 +15720,13 @@ export type Database = {
             foreignKeyName: "developer_scraped_projects_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "developer_scraped_projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -15747,6 +15866,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "developer_sync_status_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "developer_sync_status_developer_id_fkey"
             columns: ["developer_id"]
@@ -15907,6 +16033,13 @@ export type Database = {
             foreignKeyName: "developer_visit_requests_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "developer_visit_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -15959,6 +16092,13 @@ export type Database = {
           visit_time?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "developer_visits_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "developer_visits_developer_id_fkey"
             columns: ["developer_id"]
@@ -16024,6 +16164,7 @@ export type Database = {
           manually_verified_at: string | null
           manually_verified_by: string | null
           name: string
+          needs_real_logo: boolean
           needs_review: boolean
           notable_projects: string | null
           notes: string | null
@@ -16048,6 +16189,7 @@ export type Database = {
           website_url: string | null
           whatsapp: string | null
           whatsapp_group_url: string | null
+          wordmark_applied_at: string | null
         }
         Insert: {
           admin_email?: string | null
@@ -16104,6 +16246,7 @@ export type Database = {
           manually_verified_at?: string | null
           manually_verified_by?: string | null
           name: string
+          needs_real_logo?: boolean
           needs_review?: boolean
           notable_projects?: string | null
           notes?: string | null
@@ -16128,6 +16271,7 @@ export type Database = {
           website_url?: string | null
           whatsapp?: string | null
           whatsapp_group_url?: string | null
+          wordmark_applied_at?: string | null
         }
         Update: {
           admin_email?: string | null
@@ -16184,6 +16328,7 @@ export type Database = {
           manually_verified_at?: string | null
           manually_verified_by?: string | null
           name?: string
+          needs_real_logo?: boolean
           needs_review?: boolean
           notable_projects?: string | null
           notes?: string | null
@@ -16208,6 +16353,7 @@ export type Database = {
           website_url?: string | null
           whatsapp?: string | null
           whatsapp_group_url?: string | null
+          wordmark_applied_at?: string | null
         }
         Relationships: [
           {
@@ -19027,6 +19173,13 @@ export type Database = {
             foreignKeyName: "esign_envelopes_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "esign_envelopes_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -20227,6 +20380,13 @@ export type Database = {
           uploaded_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "external_agreements_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "external_agreements_developer_id_fkey"
             columns: ["developer_id"]
@@ -30227,6 +30387,13 @@ export type Database = {
             foreignKeyName: "pending_developer_imports_matched_developer_id_fkey"
             columns: ["matched_developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "pending_developer_imports_matched_developer_id_fkey"
+            columns: ["matched_developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -30456,6 +30623,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "communities"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_project_imports_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
           },
           {
             foreignKeyName: "pending_project_imports_developer_id_fkey"
@@ -32113,6 +32287,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "communities"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
           },
           {
             foreignKeyName: "projects_developer_id_fkey"
@@ -41129,6 +41310,36 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_logo_wordmark_gaps: {
+        Row: {
+          developer_id: string | null
+          developer_name: string | null
+          logo_source: string | null
+          logo_url_processed: string | null
+          published_projects: number | null
+          slug: string | null
+          wordmark_applied_at: string | null
+        }
+        Insert: {
+          developer_id?: string | null
+          developer_name?: string | null
+          logo_source?: string | null
+          logo_url_processed?: string | null
+          published_projects?: never
+          slug?: string | null
+          wordmark_applied_at?: string | null
+        }
+        Update: {
+          developer_id?: string | null
+          developer_name?: string | null
+          logo_source?: string | null
+          logo_url_processed?: string | null
+          published_projects?: never
+          slug?: string | null
+          wordmark_applied_at?: string | null
+        }
+        Relationships: []
+      }
       developer_sales_reps_public: {
         Row: {
           created_at: string | null
@@ -42048,6 +42259,13 @@ export type Database = {
             foreignKeyName: "projects_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
+          {
+            foreignKeyName: "projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
@@ -42061,6 +42279,13 @@ export type Database = {
           keeper_name: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developer_logo_wordmark_gaps"
+            referencedColumns: ["developer_id"]
+          },
           {
             foreignKeyName: "projects_developer_id_fkey"
             columns: ["developer_id"]
