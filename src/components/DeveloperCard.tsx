@@ -19,7 +19,14 @@ interface DeveloperCardProps {
   heroImageUrls?: string[];
   /** Number of cards rendered per row — the card rescales itself to stay premium. */
   density?: number;
+  /**
+   * LOCKED (no emerald blueprint): a developer without a verified cover photo is
+   * archived out of the public directory and flagged in the owner Developer Hub
+   * alerts. Only owner/backend views may render a card with no photograph.
+   */
+  allowMissingCover?: boolean;
 }
+
 
 /**
  * PASS 280 — DENSITY-ADAPTIVE DEVELOPER CARD (LOCKED)
@@ -91,7 +98,7 @@ const getPublicDeveloperName = (name: string) => {
     .trim();
 };
 
-const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [], density = 4 }: DeveloperCardProps) => {
+const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, heroImageUrls = [], density = 4, allowMissingCover = false }: DeveloperCardProps) => {
   const scale = DENSITY_SCALE(density);
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
@@ -168,9 +175,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const isDescriptionTrimmed = Boolean(dedupedDescription) && rawDescriptionLength > safeDescription.length;
 
 
-
+  // LOCKED (no emerald blueprint / no empty field): the public directory only
+  // shows brands with a verified photograph. Everything else is archived and
+  // flagged in the owner backend Developer Hub alerts.
+  if (!hasHero && !allowMissingCover) return null;
 
   return (
+
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
       <motion.div
         whileHover={{ y: -8, scale: 1.015, boxShadow: "0 26px 54px -14px rgba(0,0,0,0.36), 0 14px 28px -12px rgba(6,78,59,0.34)" }}

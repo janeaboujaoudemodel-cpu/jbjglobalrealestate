@@ -10,6 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { AlertTriangle, Building2, ExternalLink, ImageOff, RefreshCw, Search, UserX } from "lucide-react";
+import DeveloperHubAlerts from "@/components/owner/DeveloperHubAlerts";
+
 
 type GapRow = {
   project_id: string;
@@ -159,7 +161,10 @@ export default function DeveloperGapsQueue() {
         </button>
       </div>
 
+      <DeveloperHubAlerts />
+
       {visibleWordmarks.length > 0 && (
+
         <section className="space-y-3 rounded-2xl border border-border bg-card p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="space-y-1">

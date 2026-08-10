@@ -577,8 +577,12 @@ const DeveloperDetail = () => {
         </div>
       )}
 
-      {/* Hero section - always visible */}
-      <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
+      {/* Hero section - always visible.
+          LOCKED (no emerald blueprint): when there is no verified photograph we
+          never fill the hero with an emerald blueprint field. A compact
+          champagne masthead is used instead, and the missing cover is flagged
+          in the owner backend Developer Hub alerts. */}
+      <div className={`relative w-full overflow-hidden ${heroImageUrl ? "h-screen min-h-[500px]" : "min-h-[320px] py-20 md:py-24"}`}>
           {heroImageUrl ? (
           <img
             src={typeof heroImageUrl === "string" && heroImageUrl.startsWith("http") ? getHighResImageUrl(heroImageUrl) : heroImageUrl}
@@ -588,26 +592,48 @@ const DeveloperDetail = () => {
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555]" />
         )}
-        {/* Stronger 3-stop wash so hero copy always meets AA on any photo */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-transparent" />
+        {heroImageUrl ? (
+          <>
+            {/* Stronger 3-stop wash so hero copy always meets AA on any photo */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-transparent" />
+          </>
+        ) : null}
         {/* Hero Title Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 allow-white" data-no-contrast-guard>
-          <h1
-            data-developer-hero-title
-            className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-center mb-4 tracking-tight allow-white"
-          >
-            {developer.name}
-          </h1>
-          <p
-            data-developer-hero-subtitle
-            className="text-lg md:text-xl text-center max-w-2xl allow-white font-medium"
-          >
-            {(developer as any).tagline || `Discover premium developments by ${developer.name}`}
-          </p>
-        </div>
+        {heroImageUrl ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 allow-white" data-no-contrast-guard>
+            <h1
+              data-developer-hero-title
+              className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-center mb-4 tracking-tight allow-white"
+            >
+              {developer.name}
+            </h1>
+            <p
+              data-developer-hero-subtitle
+              className="text-lg md:text-xl text-center max-w-2xl allow-white font-medium"
+            >
+              {(developer as any).tagline || `Discover premium developments by ${developer.name}`}
+            </p>
+          </div>
+        ) : (
+          <div className="relative z-10 flex flex-col items-center justify-center px-4">
+            <h1
+              data-developer-hero-title
+              className="text-3xl md:text-5xl font-extrabold text-center mb-4 tracking-tight text-[#0A0A0A]"
+            >
+              {developer.name}
+            </h1>
+            <p
+              data-developer-hero-subtitle
+              className="text-base md:text-lg text-center max-w-2xl text-[#0A0A0A]/75 font-medium"
+            >
+              {(developer as any).tagline || `Discover premium developments by ${developer.name}`}
+            </p>
+          </div>
+        )}
+
         <div className="absolute bottom-4 left-4 md:left-8 z-10">
           <Link to="/developers">
             <Button variant="primary" size="sm" className="group">
