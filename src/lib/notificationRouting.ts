@@ -57,6 +57,12 @@ export const resolveNotificationRoute = ({
   const stage = typeof meta.stage === "string" ? meta.stage.toLowerCase() : "";
   const combinedText = `${title || ""} ${message || ""}`.toLowerCase();
 
+  if (notifType === "company_profile_request") {
+    const rid = typeof meta.request_id === "string" ? meta.request_id : "";
+    return rid
+      ? `/owner/crm/jbj/owner-profile-requests?request=${rid}`
+      : "/owner/crm/jbj/owner-profile-requests";
+  }
   if (notifType === "support_ticket") return "/my-tickets";
   if (notifType === "listing" || notifType === "property_listing") return "/listing-portal/my-listings";
 
