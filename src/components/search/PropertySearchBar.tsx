@@ -471,13 +471,13 @@ export default function PropertySearchBar({
           <InlineCurrencySelect dark={dark} />
         </div>
 
-        {/* Mobile/tablet: area unit sits beside currency. Desktop keeps the aligned utility pair. */}
+        {/* Mobile/tablet: area unit sits beside currency. Desktop: sq ft / sq m
+            occupies exactly the "Show N" column below (plus the hero CTA). */}
         <div
-          className="contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none jj-sspan-6 min-w-0"
-          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+          className={`contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none ${ROW1_UTILITY_SPAN} min-w-0`}
+          style={{ gridTemplateColumns: onConsultation ? "repeat(2, minmax(0, 1fr))" : "minmax(0, 1fr)" }}
         >
-          {/* Keeps the sq ft / sq m pair in the same column as "Show N" below. */}
-          {!onConsultation ? <div aria-hidden="true" className="hidden lg:block" /> : null}
+
           <div
             className={`order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg`}
             data-search-utility-controls
