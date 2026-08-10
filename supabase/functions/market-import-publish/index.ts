@@ -122,17 +122,19 @@ function amenityLabels(value: unknown): string[] {
   return out;
 }
 
-/** [{name, distance_minutes}] -> [{name, minutes}] for the location panel. */
-function landmarks(value: unknown): { name: string; minutes: number | null }[] {
+/** Source landmarks -> the exact {label,time} shape consumed by ProjectDetail. */
+function landmarks(value: unknown): { label: string; time: string }[] {
   if (!Array.isArray(value)) return [];
   return value
     .map((item) => {
       const o = (item || {}) as Record<string, unknown>;
-      const name = typeof o.name === "string" ? o.name : null;
+      const label = typeof o.name === "string" ? o.name : typeof o.label === "string" ? o.label : null;
       const minutes = Number(o.distance_minutes ?? o.minutes);
-      return name ? { name, minutes: Number.isFinite(minutes) ? minutes : null } : null;
+      const distance = typeof o.distance === "string" ? o.distance.trim() : "";
+      const time = Number.isFinite(minutes) ? `${minutes} min` : distance;
+      return label && time ? { label, time } : null;
     })
-    .filter(Boolean) as { name: string; minutes: number | null }[];
+    .filter(Boolean) as { label: string; time: string }[];
 }
 
 /** First payment plan -> "20 / 40 / 40" label + structured milestone breakdown. */
@@ -187,11 +189,15 @@ serve(async (req) => {
   const ownerAuth = await requireOwnerAuth(req, corsHeaders);
   if (ownerAuth.response) return ownerAuth.response;
 
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    { auth: { persistSession: false } },
-  );
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supabaseUrl || !serviceRoleKey) {
+    return new Response(JSON.stringify({ error: "Backend configuration is incomplete" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  const supabase = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
 
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -340,6 +346,11 @@ serve(async (req) => {
         if (k && !projByName.has(k)) projByName.set(k, p);
       }
       const projSlugs = new Set<string>((liveProjects || []).map((p: any) => p.slug));
+      const areaNames = Array.from(new Set((staged || []).map((row: any) => row.area).filter(Boolean)));
+      const { data: matchingAreas } = areaNames.length
+        ? await supabase.from("areas").select("id,name").in("name", areaNames)
+        : { data: [] as { id: string; name: string }[] };
+      const areaByName = new Map((matchingAreas || []).map((area: any) => [norm(area.name), area.id]));
 
       for (const s of staged || []) {
         try {
@@ -370,9 +381,28 @@ serve(async (req) => {
             .map((unit) => Number(objectValue(unit).bedrooms ?? objectValue(unit).bedroom_count))
             .filter((value) => Number.isFinite(value) && value >= 0);
           const sourceHighlights = [
-            ...(Array.isArray(timeline.milestones) ? timeline.milestones : []),
-            { label: "Investment indicators", ...invest },
-          ];
+            ...(Array.isArray(timeline.milestones) ? timeline.milestones : []).map((raw) => {
+              const milestone = objectValue(raw);
+              const name = String(milestone.name || "Construction milestone");
+              const date = typeof milestone.date === "string" ? milestone.date.slice(0, 10) : null;
+              const completion = Number(milestone.completion_percent);
+              return [name, date, Number.isFinite(completion) ? `${completion}%` : null].filter(Boolean).join(" — ");
+            }),
+            Number.isFinite(yieldPct) ? `Estimated rental yield: ${yieldPct}%` : null,
+            Number.isFinite(roiPct) ? `Estimated 1-year price appreciation: ${roiPct}%` : null,
+            invest.investment_visa_eligible === true ? "Eligible for a UAE property investment visa, subject to current authority requirements" : null,
+          ].filter((item): item is string => typeof item === "string" && item.length > 0);
+          const sourceEnvelope = {
+            source: "market_import",
+            source_url: s.source_url || null,
+            source_id: s.source_id || null,
+            payload: s.payload || null,
+            amenities: s.amenities || null,
+            nearby_landmarks: s.nearby_landmarks || null,
+            payment_plans: s.payment_plans || null,
+            investment: s.investment || null,
+            media: s.media || null,
+          };
 
           // Everything the market source knows, mapped onto JBJ detail fields.
           const detail: Record<string, unknown> = {
@@ -414,6 +444,8 @@ serve(async (req) => {
             video_urls: videoUrls.length ? videoUrls : null,
             source_id: s.source_id || null,
             external_id: s.source_id || null,
+            area_id: s.area ? areaByName.get(norm(s.area)) ?? null : null,
+            reelly_raw_data: sourceEnvelope,
           };
 
           let live =
@@ -435,6 +467,7 @@ serve(async (req) => {
               description: desc,
               emirate: s.city || null,
               area_name: s.area || null,
+              area_id: s.area ? areaByName.get(norm(s.area)) ?? null : null,
               latitude: s.latitude,
               longitude: s.longitude,
               price_currency: "AED",
@@ -472,6 +505,7 @@ serve(async (req) => {
             if (!live.latitude && s.latitude) patch.latitude = s.latitude;
             if (!live.longitude && s.longitude) patch.longitude = s.longitude;
             if (!live.area_name && s.area) patch.area_name = s.area;
+            if (!live.area_id && s.area) patch.area_id = areaByName.get(norm(s.area)) ?? null;
             if (!live.emirate && s.city) patch.emirate = s.city;
             for (const [k, v] of Object.entries(detail))
               if (v !== null && v !== undefined && isEmpty((live as Record<string, unknown>)[k])) patch[k] = v;
