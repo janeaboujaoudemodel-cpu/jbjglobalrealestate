@@ -363,6 +363,12 @@ verify_jwt = false
 [functions.company-profile-ai]
 verify_jwt = false
 
+[functions.company-profile-notify]
+verify_jwt = false
+
+[functions.company-profile-fulfill]
+verify_jwt = false
+
 [functions.send-ticket-status-email]
 verify_jwt = false
 
