@@ -159,7 +159,10 @@ export default function DeveloperGapsQueue() {
         </button>
       </div>
 
+      <DeveloperHubAlerts />
+
       {visibleWordmarks.length > 0 && (
+
         <section className="space-y-3 rounded-2xl border border-border bg-card p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="space-y-1">
