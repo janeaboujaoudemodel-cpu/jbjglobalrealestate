@@ -1,5 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Bell, Headphones, Eye, EyeOff } from 'lucide-react';
+import { Bell, Headphones, Eye, EyeOff, FileText, Home, Mail, Users, Sparkles } from 'lucide-react';
+
+const iconForType = (type?: string | null) => {
+  const t = (type || '').toLowerCase();
+  if (t.includes('company_profile') || t.includes('document')) return FileText;
+  if (t.includes('listing') || t.includes('property')) return Home;
+  if (t.includes('support') || t.includes('ticket')) return Headphones;
+  if (t.includes('message') || t.includes('email')) return Mail;
+  if (t.includes('cv') || t.includes('career') || t.includes('partnership')) return Users;
+  if (t.includes('ai') || t.includes('recommend')) return Sparkles;
+  return Bell;
+};
+
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
