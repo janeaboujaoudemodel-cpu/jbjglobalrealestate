@@ -146,6 +146,17 @@ export default function CompanyProfileRequestsQueue() {
   };
 
   const pending = requests.filter((r) => r.status === "pending");
+  const answered = requests.filter((r) => r.status !== "pending");
+
+  const filter = (params.get("filter") || "all") as "all" | "pending" | "answered";
+  const setFilter = (f: "all" | "pending" | "answered") => {
+    const next = new URLSearchParams(params);
+    if (f === "all") next.delete("filter"); else next.set("filter", f);
+    setParams(next, { replace: true });
+  };
+  const visible = filter === "pending" ? pending : filter === "answered" ? answered : requests;
+
+  const EMERALD = "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)";
 
   return (
     <div className="p-4 md:p-6 space-y-5">
@@ -160,67 +171,95 @@ export default function CompanyProfileRequestsQueue() {
         </div>
         <button
           onClick={() => refetch()}
-          className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-semibold border border-[#064E3B]/30 text-[#064E3B] hover:bg-[#064E3B]/5"
+          data-emerald="true"
+          data-no-contrast-guard
+          data-on-dark
+          className="allow-white inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold"
+          style={{ backgroundImage: EMERALD, backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          <RefreshCw className="w-4 h-4" /> Refresh
+          <RefreshCw className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Refresh</span>
         </button>
       </div>
 
+      {/* Clickable KPI filters */}
       <div className="flex flex-wrap gap-3">
-        {[
-          { label: "Pending", value: pending.length, icon: Clock },
-          { label: "Answered", value: requests.length - pending.length, icon: CheckCircle2 },
-          { label: "Total", value: requests.length, icon: FileText },
-        ].map((s) => (
-          <div key={s.label} className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] px-4 py-3 min-w-[140px]">
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/60">
-              <s.icon className="w-3.5 h-3.5" /> {s.label}
-            </div>
-            <div className="text-2xl font-semibold text-[#064E3B] mt-1">{s.value}</div>
-          </div>
-        ))}
+        {([
+          { key: "pending", label: "Pending", value: pending.length, icon: Clock },
+          { key: "answered", label: "Answered", value: answered.length, icon: CheckCircle2 },
+          { key: "all", label: "Total", value: requests.length, icon: FileText },
+        ] as const).map((s) => {
+          const active = filter === s.key;
+          return (
+            <button
+              key={s.key}
+              type="button"
+              onClick={() => setFilter(s.key)}
+              data-surface="light"
+              data-no-contrast-guard
+              className="text-left rounded-xl px-4 py-3 min-w-[150px] transition-shadow hover:shadow-md"
+              style={{
+                background: "#FDFBF7",
+                border: `1px solid ${active ? "#064E3B" : "rgba(184,149,85,0.4)"}`,
+                boxShadow: active ? "0 0 0 2px rgba(6,78,59,0.12)" : undefined,
+              }}
+            >
+              <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em]" style={{ color: "rgba(26,26,26,0.6)" }}>
+                <s.icon className="w-3.5 h-3.5" style={{ color: "#064E3B", stroke: "#064E3B" }} /> {s.label}
+              </span>
+              <span className="block text-2xl font-semibold mt-1" style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B" }}>{s.value}</span>
+            </button>
+          );
+        })}
       </div>
 
       <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] gap-5 items-start">
         {/* List */}
-        <div className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden">
+        <div className="rounded-xl overflow-hidden" data-surface="light" data-no-contrast-guard style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
           {isLoading ? (
             <div className="p-8 flex items-center justify-center text-[#1A1A1A]/60">
               <Loader2 className="w-5 h-5 animate-spin" />
             </div>
-          ) : requests.length === 0 ? (
-            <div className="p-8 text-center text-sm text-[#1A1A1A]/60">No requests yet.</div>
+          ) : visible.length === 0 ? (
+            <div className="p-8 text-center text-sm" style={{ color: "rgba(26,26,26,0.6)" }}>
+              {requests.length === 0 ? "No requests yet." : "No requests in this view."}
+            </div>
           ) : (
             <div className="divide-y divide-[#B89555]/25">
-              {requests.map((r) => {
+              {visible.map((r) => {
                 const dev = developers[r.developer_id];
                 const isSel = r.id === selectedId;
                 return (
                   <div
                     key={r.id}
                     onClick={() => select(r.id)}
-                    className={`w-full text-left px-4 py-3 cursor-pointer bg-[#FDFBF7] hover:bg-[#064E3B]/[0.04] transition-colors ${isSel ? "bg-[#064E3B]/[0.06]" : ""}`}
+                    data-surface="light"
+                    data-no-contrast-guard
+                    className="w-full text-left px-4 py-3 cursor-pointer transition-colors"
+                    style={{ background: isSel ? "rgba(6,78,59,0.07)" : "#FDFBF7" }}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2 text-sm font-semibold text-[#064E3B]">
-                          <Building2 className="w-4 h-4 shrink-0" />
+                        <div className="flex items-center gap-2 text-sm font-semibold" style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B" }}>
+                          <Building2 className="w-4 h-4 shrink-0" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                           <span className="break-words">{dev?.name || "Developer"}</span>
                         </div>
-                        <div className="mt-1 text-xs text-[#1A1A1A]/75 break-words">
+                        <div className="mt-1 text-xs break-words" style={{ color: "rgba(26,26,26,0.78)" }}>
                           {r.requester_name || "—"} · {r.requester_email || "no email"}
                           {r.requester_phone ? ` · ${r.requester_phone}` : ""}
                         </div>
-                        <div className="mt-1 text-[11px] text-[#1A1A1A]/55">
+                        <div className="mt-1 text-[11px]" style={{ color: "rgba(26,26,26,0.55)" }}>
                           {new Date(r.created_at).toLocaleString("en-GB")}
                         </div>
                       </div>
                       <span
-                        className={`shrink-0 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${
+                        data-no-contrast-guard
+                        className="shrink-0 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide"
+                        style={
                           r.status === "pending"
-                            ? "bg-amber-100 text-amber-800"
-                            : "bg-emerald-100 text-emerald-900"
-                        }`}
+                            ? { background: "#FEF3C7", color: "#92400E", WebkitTextFillColor: "#92400E" }
+                            : { backgroundImage: EMERALD, backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
+                        }
                       >
                         {r.status}
                       </span>
@@ -233,41 +272,80 @@ export default function CompanyProfileRequestsQueue() {
         </div>
 
         {/* Detail / send panel */}
-        <div className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] p-4 lg:sticky lg:top-4">
+        <div className="rounded-xl p-4 lg:sticky lg:top-4" data-surface="light" data-no-contrast-guard style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
           {!selected ? (
-            <p className="text-sm text-[#1A1A1A]/60">Select a request to review and send the profile.</p>
+            <div className="py-8 px-2 text-center">
+              <div
+                data-emerald="true"
+                data-no-contrast-guard
+                className="w-14 h-14 rounded-full mx-auto flex items-center justify-center"
+                style={{ backgroundImage: EMERALD, backgroundColor: "#064E3B" }}
+              >
+                <FileText className="w-6 h-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              </div>
+              <p className="mt-4 text-base font-semibold" style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B" }}>
+                Nothing selected yet
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.7)" }}>
+                Pick a request from the list to see the requester's email and phone, attach the company
+                profile PDF and send it in one click.
+              </p>
+            </div>
           ) : (
             <div className="space-y-3">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Request detail</div>
-              <div className="text-lg font-semibold text-[#064E3B] break-words">
+              <div className="text-[11px] uppercase tracking-[0.18em]" style={{ color: "rgba(26,26,26,0.6)" }}>Request detail</div>
+              <div className="text-lg font-semibold break-words" style={{ color: "#064E3B", WebkitTextFillColor: "#064E3B" }}>
                 {developers[selected.developer_id]?.name || "Developer"}
               </div>
-              <div className="space-y-1.5 text-sm text-[#1A1A1A]/85">
-                <div className="flex items-center gap-2"><User className="w-4 h-4 text-[#064E3B]" /> {selected.requester_name || "—"}</div>
-                <div className="flex items-center gap-2 break-all"><Mail className="w-4 h-4 text-[#064E3B]" /> {selected.requester_email || "—"}</div>
-                <div className="flex items-center gap-2"><Phone className="w-4 h-4 text-[#064E3B]" /> {selected.requester_phone || "—"}</div>
+              <div className="space-y-1.5 text-sm" style={{ color: "rgba(26,26,26,0.85)" }}>
+                <div className="flex items-center gap-2"><User className="w-4 h-4" style={{ color: "#064E3B", stroke: "#064E3B" }} /> {selected.requester_name || "—"}</div>
+                <div className="flex items-center gap-2 break-all">
+                  <Mail className="w-4 h-4 shrink-0" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+                  {selected.requester_email ? (
+                    <a href={`mailto:${selected.requester_email}`} className="underline" style={{ color: "#064E3B" }}>{selected.requester_email}</a>
+                  ) : "—"}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 shrink-0" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+                  {selected.requester_phone ? (
+                    <>
+                      <a href={`tel:${selected.requester_phone.replace(/[^\d+]/g, "")}`} className="underline" style={{ color: "#064E3B" }}>
+                        {selected.requester_phone}
+                      </a>
+                      <a
+                        href={`https://wa.me/${selected.requester_phone.replace(/\D/g, "")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[11px] font-semibold underline"
+                        style={{ color: "#064E3B" }}
+                      >
+                        WhatsApp
+                      </a>
+                    </>
+                  ) : "—"}
+                </div>
               </div>
               {selected.message && (
-                <p className="text-sm text-[#1A1A1A]/80 bg-white rounded-md border border-[#B89555]/30 p-2 whitespace-pre-wrap">
+                <p className="text-sm bg-white rounded-md border border-[#B89555]/30 p-2 whitespace-pre-wrap" style={{ color: "rgba(26,26,26,0.8)" }}>
                   {selected.message}
                 </p>
               )}
 
               <div className="rounded-md border border-[#B89555]/30 bg-white p-3 text-sm">
                 {existingDoc?.storage_path ? (
-                  <div className="flex items-start gap-2 text-[#064E3B]">
-                    <FileText className="w-4 h-4 mt-0.5" />
+                  <div className="flex items-start gap-2" style={{ color: "#064E3B" }}>
+                    <FileText className="w-4 h-4 mt-0.5" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                     <span className="break-words">
                       Saved on this developer: <strong>{existingDoc.file_name || "company profile"}</strong>
                     </span>
                   </div>
                 ) : (
-                  <span className="text-[#1A1A1A]/70">No profile saved for this developer yet — attach one below.</span>
+                  <span style={{ color: "rgba(26,26,26,0.7)" }}>No profile saved for this developer yet — attach one below.</span>
                 )}
               </div>
 
               <label className="block">
-                <span className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/60">
+                <span className="text-[11px] uppercase tracking-[0.16em]" style={{ color: "rgba(26,26,26,0.6)" }}>
                   {existingDoc?.storage_path ? "Replace with a new PDF (optional)" : "Attach company profile PDF"}
                 </span>
                 <input
@@ -290,22 +368,29 @@ export default function CompanyProfileRequestsQueue() {
               <button
                 onClick={send}
                 disabled={sending}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold text-white disabled:opacity-60"
-                style={{ background: "linear-gradient(135deg,#064E3B,#042c1c,#000)" }}
+                data-emerald="true"
+                data-no-contrast-guard
+                data-on-dark
+                className="allow-white w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold disabled:opacity-60"
+                style={{ backgroundImage: EMERALD, backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
-                {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                Send profile to {selected.requester_email || "requester"}
+                {sending
+                  ? <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  : <Send className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
+                <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  Send profile to {selected.requester_email || "requester"}
+                </span>
               </button>
 
-              <p className="text-[11px] text-[#1A1A1A]/60 flex items-start gap-1.5">
-                <Upload className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+              <p className="text-[11px] flex items-start gap-1.5" style={{ color: "rgba(26,26,26,0.6)" }}>
+                <Upload className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                 Sending attaches the PDF to the email and publishes it on the developer page, so the
                 request button is replaced by a Download button from now on.
               </p>
 
               {selected.status !== "pending" && (
-                <p className="text-[11px] text-emerald-800 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                <p className="text-[11px] flex items-center gap-1.5" style={{ color: "#065F46" }}>
+                  <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#065F46", stroke: "#065F46" }} />
                   Already answered{selected.fulfilled_at ? ` on ${new Date(selected.fulfilled_at).toLocaleString("en-GB")}` : ""}
                   {selected.sent_to_email ? ` to ${selected.sent_to_email}` : ""}.
                 </p>
