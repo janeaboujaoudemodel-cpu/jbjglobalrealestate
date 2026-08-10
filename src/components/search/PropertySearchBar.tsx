@@ -510,7 +510,13 @@ export default function PropertySearchBar({
                 >
                   {unit === "sqft" ? "sq ft" : "sq m"}
                   {i === 0 ? (
-                    <span aria-hidden="true" className="absolute right-0 top-1/2 h-5 w-px -translate-y-1/2 bg-white/45" />
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-0 top-1/2 h-6 w-px -translate-y-1/2 rounded-full"
+                      style={{
+                        background: `linear-gradient(180deg,transparent 0%,${dividerColor} 22%,${dividerColor} 78%,transparent 100%)`,
+                      }}
+                    />
                   ) : null}
                 </button>
               );
