@@ -573,8 +573,8 @@ export default function MarketDataImportHub() {
           hint="awaiting your approval"
           onClick={() => setTab("newDevelopers")}
         />
-        <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} />
-        <StatCard label="New area candidates" value={String(stats.area_candidates_not_in_jbj ?? "—")} hint="not created — your call" />
+        <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} onClick={() => { setEntity("project"); setTab("matches"); }} />
+        <StatCard label="New area candidates" value={String(stats.area_candidates_not_in_jbj ?? "—")} hint="not created — your call" onClick={() => setTab("new")} />
       </div>
 
       <div className="mir-card rounded-xl p-4">
