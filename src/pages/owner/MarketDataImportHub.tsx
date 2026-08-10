@@ -126,9 +126,10 @@ const StatCard = ({
     type="button"
     onClick={onClick}
     disabled={!onClick}
-    className={`mir-card rounded-xl p-4 text-left ${onClick ? "mir-card-click cursor-pointer" : "cursor-default"}`}
+    style={{ display: "block" }}
+    className={`mir-card w-full rounded-xl p-4 text-left ${onClick ? "mir-card-click cursor-pointer" : "cursor-default"}`}
   >
-    <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">{label}</p>
+    <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{label}</p>
     <p className="mt-2 text-2xl font-semibold text-neutral-900">{value}</p>
     {hint ? <p className="mt-1 text-xs text-neutral-500">{hint}</p> : null}
     {onClick ? <p className="mt-2 text-[11px] mir-link">Open →</p> : null}
