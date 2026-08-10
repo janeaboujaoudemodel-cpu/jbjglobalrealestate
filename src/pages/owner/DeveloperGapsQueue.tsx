@@ -22,6 +22,17 @@ type GapRow = {
   is_published: boolean;
 };
 
+type WordmarkRow = {
+  developer_id: string;
+  developer_name: string | null;
+  slug: string | null;
+  logo_url_processed: string | null;
+  logo_source: string | null;
+  wordmark_applied_at: string | null;
+  published_projects: number | null;
+};
+
+
 const REASON_LABEL: Record<string, string> = {
   no_developer_record: "No developer profile",
   developer_has_no_logo: "Developer has no logo",
@@ -42,6 +53,26 @@ export default function DeveloperGapsQueue() {
       return (data || []) as unknown as GapRow[];
     },
   });
+
+  const { data: wordmarks = [] } = useQuery({
+    queryKey: ["developer-wordmark-gaps"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developer_logo_wordmark_gaps" as any)
+        .select("*")
+        .limit(1000);
+      if (error) throw error;
+      return (data || []) as unknown as WordmarkRow[];
+    },
+  });
+
+  const visibleWordmarks = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    return wordmarks
+      .filter((w) => !needle || (w.developer_name || "").toLowerCase().includes(needle))
+      .sort((a, b) => (b.published_projects || 0) - (a.published_projects || 0));
+  }, [wordmarks, q]);
+
 
   const byDeveloper = useMemo(() => {
     const map = new Map<string, { name: string; reason: string; website: string | null; projects: GapRow[] }>();
@@ -128,7 +159,60 @@ export default function DeveloperGapsQueue() {
         </button>
       </div>
 
+      {visibleWordmarks.length > 0 && (
+        <section className="space-y-3 rounded-2xl border border-border bg-card p-4 md:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="space-y-1">
+              <h2 className="font-serif text-lg text-foreground">Temporary wordmark — needs real logo</h2>
+              <p className="text-sm text-muted-foreground">
+                {visibleWordmarks.length} developers publish with their name set as a pure-white wordmark on the emerald
+                plate. Replace each one with the official logo when you receive it.
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+              <ImageOff className="h-3.5 w-3.5" /> Awaiting official artwork
+            </span>
+          </div>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleWordmarks.map((w) => (
+              <li
+                key={w.developer_id}
+                className="flex items-center gap-3 rounded-xl border border-border p-3"
+              >
+                <span className="flex h-14 w-28 shrink-0 items-center justify-center rounded-lg bg-[linear-gradient(150deg,hsl(var(--emerald-plate-from,163_82%_16%)),#042c1c,#000)] p-2">
+                  {w.logo_url_processed ? (
+                    <img
+                      src={w.logo_url_processed}
+                      alt={`${w.developer_name ?? "Developer"} wordmark`}
+                      loading="lazy"
+                      className="h-full w-full object-contain"
+                    />
+                  ) : null}
+                </span>
+                <span className="min-w-0 space-y-1">
+                  <span className="block break-words text-sm font-medium text-foreground">
+                    {w.developer_name || "Unnamed developer"}
+                  </span>
+                  <span className="block text-xs text-muted-foreground">
+                    {(w.published_projects ?? 0)} live project{(w.published_projects ?? 0) === 1 ? "" : "s"}
+                  </span>
+                  {w.slug && (
+                    <Link
+                      to={`/developer/${w.slug}`}
+                      className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                    >
+                      Open profile <ExternalLink className="h-3 w-3" />
+                    </Link>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {isLoading ? (
+
         <p className="text-sm text-muted-foreground">Loading gaps…</p>
       ) : byDeveloper.length === 0 ? (
         <p className="text-sm text-muted-foreground">No developer gaps. Every live project has a developer and a logo.</p>
