@@ -73,18 +73,20 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
             key={item.id}
             type="button"
             onClick={() => setLightboxIndex(index)}
-            className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]"
+            className="group block overflow-hidden rounded-xl border border-[#B89555]/40 bg-white/70 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]"
           >
-            <img
-              src={getHighResImageUrl(item.url)}
-              alt={item.caption || `${developerName} development`}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              onError={() => setBroken((prev) => ({ ...prev, [item.id]: true }))}
-            />
+            <span className="block aspect-[4/3] overflow-hidden bg-[#F7F2EA]">
+              <img
+                src={getHighResImageUrl(item.url)}
+                alt={item.caption || `${developerName} development`}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={() => setBroken((prev) => ({ ...prev, [item.id]: true }))}
+              />
+            </span>
             {item.caption && (
-              <span className="absolute inset-x-0 bottom-0 block bg-gradient-to-t from-black/95 via-black/75 to-black/10 px-2.5 py-2.5 text-left text-[11px] font-semibold leading-[1.35] text-white">
-                <span className="block w-full break-words">{item.caption}</span>
+              <span className="block break-words bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black px-2.5 py-2 text-[11px] font-semibold leading-[1.4] text-white">
+                {item.caption}
               </span>
             )}
           </button>
