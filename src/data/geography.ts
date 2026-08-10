@@ -131,6 +131,36 @@ export const GEO_COUNTRIES: GeoCountry[] = [
     ],
   },
   {
+    slug: "turkiye",
+    name: "Türkiye",
+    code: "TR",
+    regionLabel: "Province",
+    areaLabel: "Area",
+    live: false,
+    regions: [
+      region("Istanbul", [
+        "Beşiktaş",
+        "Şişli",
+        "Kadıköy",
+        "Beyoğlu",
+        "Sarıyer",
+        "Başakşehir",
+        "Beylikdüzü",
+        "Maltepe",
+        "Ataşehir",
+        "Üsküdar",
+        "Bakırköy",
+        "Zeytinburnu",
+      ]),
+      region("Antalya", ["Konyaaltı", "Lara", "Muratpaşa", "Kepez", "Alanya", "Belek", "Kaş", "Side"]),
+      region("Muğla", ["Bodrum", "Yalıkavak", "Göcek", "Fethiye", "Marmaris", "Datça", "Türkbükü"]),
+      region("Izmir", ["Alsancak", "Çeşme", "Urla", "Bornova", "Karşıyaka", "Seferihisar"]),
+      region("Ankara", ["Pursaklar", "Çankaya", "Etimesgut", "Keçiören", "Yenimahalle", "Gölbaşı"]),
+      region("Bursa", ["Nilüfer", "Osmangazi", "Mudanya", "Gemlik"]),
+    ],
+  },
+  {
+
     slug: "lebanon",
     name: "Lebanon",
     code: "LB",
@@ -302,6 +332,7 @@ export const FURNISHING_OPTIONS = [
 /** Currency shown next to the price step, per country. */
 export const COUNTRY_CURRENCY: Record<string, string> = {
   uae: "AED",
+  turkiye: "USD",
   lebanon: "USD",
   cyprus: "EUR",
   greece: "EUR",

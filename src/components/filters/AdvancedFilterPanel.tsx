@@ -11,6 +11,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { EMIRATES_OPTIONS, VIEWS_OPTIONS } from "@/constants/filterConfig";
+import { GEO_COUNTRIES, getCountry } from "@/data/geography";
+
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import type { ShortcutFilterState } from "./FilterShortcutBar";
@@ -119,6 +121,9 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const [allAreas, setAllAreas] = useState<AreaEntry[]>([]);
   const [devSearch, setDevSearch] = useState('');
   const [emirateSearch, setEmirateSearch] = useState('');
+  const [countrySlug, setCountrySlug] = useState<string>('uae');
+  const [countryOpen, setCountryOpen] = useState(false);
+
   const [areaSearch, setAreaSearch] = useState('');
   const [emiratesOpen, setEmiratesOpen] = useState(false);
   const [devsOpen, setDevsOpen] = useState(false);
@@ -281,9 +286,19 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   } as CSSProperties;
 
 
-  const filteredEmirates = UAE_EMIRATES.filter(e =>
+  // Country-aware region list: UAE keeps the existing emirate values, other
+  // markets fall back to the geography registry (province / area labels).
+  const activeCountry = getCountry(countrySlug);
+  const regionOptions =
+    countrySlug === 'uae'
+      ? UAE_EMIRATES
+      : (activeCountry?.regions ?? []).map((r) => ({ value: r.name, label: r.name }));
+  const regionLabel = activeCountry?.regionLabel ?? 'Emirate';
+
+  const filteredEmirates = regionOptions.filter(e =>
     !emirateSearch || e.label.toLowerCase().includes(emirateSearch.toLowerCase())
   );
+
 
   const filteredDevs = developers
     .filter(d => !devSearch || d.name.toLowerCase().includes(devSearch.toLowerCase()))
@@ -348,25 +363,69 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         {/* Scrollable body */}
         <ScrollArea className="flex-1 overflow-y-auto">
           <div className="px-5 py-4 space-y-6">
-            {/* Location - UAE Only */}
+            {/* Country */}
+            <section>
+              <h4 className={sectionTitle}>Country</h4>
+              <button
+                onClick={() => { setCountryOpen(!countryOpen); setEmiratesOpen(false); setAreasOpen(false); setDevsOpen(false); }}
+                className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
+              >
+                <span className="text-[#1A1A1A]">{activeCountry?.name ?? 'United Arab Emirates'}</span>
+                <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A] transition-transform", countryOpen && "rotate-180")} />
+              </button>
+              {countryOpen && (
+                <div className={dropdownPanel}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto pr-1">
+                    {GEO_COUNTRIES.map((c) => (
+                      <button
+                        key={c.slug}
+                        data-filter-option-row="true"
+                        onClick={() => { setCountrySlug(c.slug); setCountryOpen(false); setEmirateSearch(''); update({ emirates: [], areas: [] }); }}
+                        className={optionRow}
+                      >
+                        <div className={cn(
+                          "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                          countrySlug === c.slug ? selectedBox : "border-[#B89555]/60 bg-white"
+                        )}>
+                          {countrySlug === c.slug && <Check className="w-3 h-3 text-white" />}
+                        </div>
+                        <span className="text-sm text-[#1A1A1A] group-hover:text-white group-focus:text-white">
+                          {c.name}
+                        </span>
+                        {!c.live && (
+                          <span className="ml-auto text-[10px] font-semibold uppercase tracking-wider text-[#1A1A1A]/60 group-hover:text-white/80">
+                            Coming soon
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </section>
+
+            {/* Location */}
             <section>
               <h4 className={sectionTitle}>Location</h4>
               <button
-                onClick={() => { setEmiratesOpen(!emiratesOpen); setAreasOpen(false); setDevsOpen(false); }}
+                onClick={() => { setEmiratesOpen(!emiratesOpen); setAreasOpen(false); setDevsOpen(false); setCountryOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
                 <span className="text-[#1A1A1A]">
-                  {localFilters.emirates.length === 0 ? "All Emirates" : `${localFilters.emirates.length} selected`}
+                  {localFilters.emirates.length === 0
+                    ? (countrySlug === 'uae' ? "All Emirates" : `All ${regionLabel}s`)
+                    : `${localFilters.emirates.length} selected`}
                 </span>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A] transition-transform", emiratesOpen && "rotate-180")} />
               </button>
+
               {emiratesOpen && (
                 <div className={dropdownPanel}>
                   <input
                     type="text"
                     value={emirateSearch}
                     onChange={(e) => setEmirateSearch(e.target.value)}
-                    placeholder="Search emirate..."
+                    placeholder={`Search ${regionLabel.toLowerCase()}...`}
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto pr-1">
