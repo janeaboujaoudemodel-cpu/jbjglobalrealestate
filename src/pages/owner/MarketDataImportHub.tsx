@@ -174,16 +174,32 @@ const EmeraldStyles = () => (
   `}</style>
 );
 
+/** Found in the market source / published live on JBJ / still remaining. */
+type Progress = { found: number; published: number };
+
+const ProgressChips = ({ found, published }: Progress) => {
+  const remaining = Math.max(0, found - published);
+  return (
+    <span className="mt-2 flex flex-wrap items-center gap-1.5">
+      <span className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold">Found {found}</span>
+      <span className="mir-solid rounded-full px-2 py-0.5 text-[10px] font-semibold">Published {published}</span>
+      <span className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold">Remaining {remaining}</span>
+    </span>
+  );
+};
+
 const StatCard = ({
   label,
   value,
   hint,
   onClick,
+  progress,
 }: {
   label: string;
   value: string | number;
   hint?: string;
   onClick?: () => void;
+  progress?: Progress;
 }) => (
   <button
     type="button"
@@ -194,8 +210,10 @@ const StatCard = ({
     <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{label}</p>
     <p className="mt-2 text-2xl font-semibold text-neutral-900">{value}</p>
     {hint ? <p className="mt-1 text-xs text-neutral-500">{hint}</p> : null}
+    {progress ? <ProgressChips {...progress} /> : null}
   </button>
 );
+
 
 
 /** Side-by-side comparison — our live JBJ card vs the market-source card. */
@@ -489,6 +507,33 @@ export default function MarketDataImportHub() {
 
   const stats = (run?.stats || {}) as Record<string, number | string>;
 
+  /**
+   * Publish progress per bucket: how many rows the crawl found, how many are already
+   * live on JBJ, and how many still remain to be approved & published.
+   */
+  const progress = useMemo(() => {
+    const pub = (rows: { publish_status?: string | null; jbj_project_id?: string | null; jbj_developer_id?: string | null }[]) =>
+      rows.filter((r) => r.publish_status === "published").length;
+
+    const offplan = stagedProjects.filter((p) => p.is_offplan);
+    const newProj = offplan.filter((p) => !matchedStagedIds.has(p.id));
+    const mergedProj = offplan.filter((p) => matchedStagedIds.has(p.id));
+    const matchedDevIds = new Set(
+      matches.filter((m) => m.entity_type === "developer").map((m) => m.staged_developer_id),
+    );
+    const mergedDevs = stagedDevelopers.filter((d) => matchedDevIds.has(d.id));
+
+    return {
+      developers: { found: stagedDevelopers.length, published: pub(stagedDevelopers) },
+      projects: { found: stagedProjects.length, published: pub(stagedProjects) },
+      newProjects: { found: newProj.length, published: pub(newProj) },
+      newDevelopers: { found: stagedDevelopers.length, published: pub(stagedDevelopers) },
+      mergedProjects: { found: mergedProj.length, published: pub(mergedProj) },
+      mergedDevelopers: { found: mergedDevs.length, published: pub(mergedDevs) },
+    };
+  }, [stagedProjects, stagedDevelopers, matches, matchedStagedIds]);
+
+
   const decide = async (id: string, decision: string) => {
     const { error } = await supabase
       .from("market_review_matches" as any)
@@ -645,38 +690,45 @@ export default function MarketDataImportHub() {
         <StatCard
           label="Developers discovered"
           value={String(stats.total_developers_discovered ?? stagedDevelopers.length)}
+          progress={progress.developers}
           onClick={() => setTab("newDevelopers")}
         />
         <StatCard
           label="Projects in scope"
           value={String(stats.total_projects_in_scope ?? stats.total_projects_discovered ?? stagedProjects.length)}
           hint={`incl. ${stats.ready_projects_included ?? 0} ready · ${stats.sold_out_projects_included ?? 0} sold out`}
+          progress={progress.projects}
           onClick={() => setTab("new")}
         />
         <StatCard
           label="Developers auto-merged"
           value={String(stats.developer_matches_auto_merged ?? "—")}
           hint={`${stats.developer_fields_filled ?? 0} empty fields filled`}
+          progress={progress.mergedDevelopers}
           onClick={() => { setEntity("developer"); setTab("matches"); }}
         />
         <StatCard
           label="Projects auto-merged"
           value={String(stats.project_exact_matches_auto_merged ?? "—")}
           hint={`${stats.project_fields_filled ?? 0} empty fields filled`}
+          progress={progress.mergedProjects}
           onClick={() => { setEntity("project"); setTab("matches"); }}
         />
         <StatCard
           label="New projects"
           value={String(newProjects.length || stats.new_projects_awaiting_approval || 0)}
           hint="awaiting your approval"
+          progress={progress.newProjects}
           onClick={() => setTab("new")}
         />
         <StatCard
           label="New developers"
           value={String(stats.new_developers ?? newDevelopers.length)}
           hint="awaiting your approval"
+          progress={progress.newDevelopers}
           onClick={() => setTab("newDevelopers")}
         />
+
         <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} onClick={() => { setEntity("project"); setTab("matches"); }} />
         <StatCard label="New area candidates" value={String(stats.area_candidates_not_in_jbj ?? "—")} hint="not created — your call" onClick={() => setTab("new")} />
       </div>
