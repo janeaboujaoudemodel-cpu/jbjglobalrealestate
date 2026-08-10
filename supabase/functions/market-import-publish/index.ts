@@ -45,11 +45,16 @@ function englishText(value: unknown): string | null {
     try {
       return englishText(JSON.parse(raw));
     } catch {
-      /* fall through */
+      // Some source rows contain Python-style single-quoted locale maps.
+      const match = raw.match(/['"]en['"]\s*:\s*(['"])([\s\S]*?)\1\s*(?:,\s*['"][a-z-]+['"]\s*:|}\s*$)/i);
+      if (match?.[2]) return match[2].replace(/\\'/g, "'").replace(/\\n/g, "\n").trim() || null;
     }
   }
   return raw;
 }
+
+const isRawLocalizedMap = (value: unknown) =>
+  typeof value === "string" && /^\s*[{[]\s*['"](?:en|tr|az)['"]\s*:/.test(value);
 
 function firstUrl(value: unknown): string | null {
   const arr = Array.isArray(value)
@@ -286,7 +291,7 @@ serve(async (req) => {
           } else {
             // fill only empty JBJ fields — manual JBJ values always win
             const patch: Record<string, unknown> = {};
-            if (!live.description && desc) patch.description = desc;
+            if ((!live.description || isRawLocalizedMap(live.description)) && desc) patch.description = desc;
             if (!live.founded_year && s.founded_year) patch.founded_year = s.founded_year;
             if (!live.headquarters && s.headquarters) patch.headquarters = s.headquarters;
             if (!live.completed_projects && s.completed_projects) patch.completed_projects = s.completed_projects;
