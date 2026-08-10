@@ -141,6 +141,7 @@ const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
 const CompanyProfileRequestsQueue = lazy(() => import("@/pages/owner/CompanyProfileRequestsQueue"));
 const AdvisoryDeskQueue = lazy(() => import("@/pages/owner/AdvisoryDeskQueue"));
 const DeveloperGapsQueue = lazy(() => import("@/pages/owner/DeveloperGapsQueue"));
+const WovenImportHub = lazy(() => import("@/pages/owner/WovenImportHub"));
 const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
 const RepDirectory = lazy(() => import("@/pages/developers-portal/reps/RepDirectory"));
 const RepByEmirate = lazy(() => import("@/pages/developers-portal/reps/RepByEmirate"));
