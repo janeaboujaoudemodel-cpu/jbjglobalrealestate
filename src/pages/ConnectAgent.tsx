@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
+import { PageMeta } from "@/components/seo/PageMeta";
 import { Check, Copy, ExternalLink } from "lucide-react";
 
 const APP_NAME = "JBJ Global Real Estate";
