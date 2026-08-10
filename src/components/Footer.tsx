@@ -298,6 +298,7 @@ const Footer = () => {
     { label: "Disclaimers", href: "/disclaimers" },
     { label: "Intellectual Property", href: "/intellectual-property" },
     { label: "AML & KYC Policy", href: "/aml-kyc" },
+    { label: "Connect an AI Assistant", href: "/connect" },
   ];
 
   const businessSuitesLinks = [

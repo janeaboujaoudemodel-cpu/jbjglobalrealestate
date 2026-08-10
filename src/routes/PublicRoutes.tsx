@@ -58,6 +58,7 @@ const LandlordRentalPortal = lazy(() => import("@/pages/LandlordRentalPortal"));
 const InvestorEducation = lazy(() => import("@/pages/InvestorEducation"));
 // BrokerEducation removed — content merged into JBJ Academy (/jbj-academy)
 const FAQ = lazy(() => import("@/pages/FAQ"));
+const ConnectAgent = lazy(() => import("@/pages/ConnectAgent"));
 const InvestorFAQ = lazy(() => import("@/pages/InvestorFAQ"));
 const BuyerFAQ = lazy(() => import("@/pages/BuyerFAQ"));
 const SellerFAQ = lazy(() => import("@/pages/SellerFAQ"));
@@ -322,6 +323,7 @@ export const PublicRoutes = () => (
     <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
     <Route path="/investor-education" element={<InsightsPageScope><InvestorEducation /></InsightsPageScope>} />
     <Route path="/broker-education" element={<Navigate to="/jbj-academy" replace />} />
+    <Route path="/connect" element={<ConnectAgent />} />
     <Route path="/faq" element={<InsightsPageScope><FAQ /></InsightsPageScope>} />
     <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<InsightsPageScope><BuyerFAQ /></InsightsPageScope>} />
