@@ -689,6 +689,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     } finally {
       setIsLoading(false);
     }
+  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, ownerJoined]);
 
   /**
    * Known visitor + a handed-off sentence = no onboarding. We open a general
