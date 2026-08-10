@@ -167,7 +167,7 @@ function MatchDiff({ match }: { match: MatchRow }) {
     const skip = new Set([
       "id", "run_id", "created_at", "updated_at", "payload", "source_id",
       "review_decision", "reviewed_at", "reviewed_by", "extraction_status", "extraction_error",
-      "jbj_project_id", "jbj_developer_id",
+      "jbj_project_id", "jbj_developer_id", "source_url", "source_slug", "developer_source_slug",
     ]);
     const keys = Object.keys(staged).filter((k) => !skip.has(k));
     return keys
