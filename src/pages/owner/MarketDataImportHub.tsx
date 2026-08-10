@@ -544,7 +544,7 @@ export default function MarketDataImportHub() {
       return;
     }
     toast.success(`Marked as ${decision.replace("_", " ")}`);
-    qc.invalidateQueries({ queryKey: ["market-review-matches", entity] });
+    qc.invalidateQueries({ queryKey: ["market-review-matches-all"] });
   };
 
   const bulkDecideMatches = async (decision: string) => {
@@ -559,7 +559,7 @@ export default function MarketDataImportHub() {
     if (error) return toast.error("Bulk update failed");
     toast.success(`${ids.length} card${ids.length === 1 ? "" : "s"} marked as ${decision.replace("_", " ")}`);
     setSelected(new Set());
-    qc.invalidateQueries({ queryKey: ["market-review-matches", entity] });
+    qc.invalidateQueries({ queryKey: ["market-review-matches-all"] });
   };
 
   /**
