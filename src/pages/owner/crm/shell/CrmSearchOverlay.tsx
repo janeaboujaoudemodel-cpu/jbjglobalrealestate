@@ -145,7 +145,7 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
                     return (
                       <li key={m.slug}>
                         <Link
-                          to={m.slug.startsWith("owner-") ? `/owner/crm/jbj/${m.slug}` : `/owner/crm/jbj/${m.slug}`}
+                          to={`/owner/crm/jbj/${m.slug}`}
                           className="jc-search-overlay__chip"
                           onClick={onClose}
                         >

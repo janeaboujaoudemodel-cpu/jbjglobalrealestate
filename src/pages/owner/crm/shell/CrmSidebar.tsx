@@ -87,18 +87,6 @@ export default function CrmSidebar() {
         {CRM_PRIMARY_NAV.map((m) => renderModule(m))}
       </nav>
 
-      {isOwner && (
-        <section className="jc-teamspace jc-owner-hub" aria-label="JBJ Hub shortcuts">
-          <div className="jc-teamspace__title jc-owner-hub__title">
-            <span className="jc-teamspace__badge jc-owner-hub__badge">
-              <Crown size={12} />
-            </span>
-            <span>JBJ Hub</span>
-            <ChevronDown size={17} />
-          </div>
-        </section>
-      )}
-
       <section className="jc-teamspace" aria-label="CRM Teamspace">
         <div className="jc-teamspace__title">
           <span className="jc-teamspace__badge">CT</span>
