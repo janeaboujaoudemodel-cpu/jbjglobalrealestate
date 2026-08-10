@@ -1045,6 +1045,28 @@ const Properties = () => {
                           </Button>
                         </div>
                       </>
+                    ) : marketComingSoon ? (
+                      <>
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#064E3B]/30 shadow-[0_0_30px_rgba(6,78,59,0.18)]">
+                          <MapPin className="w-10 h-10 text-[#1A1A1A]" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
+                          {selectedCountry?.name} — Coming Soon
+                        </h3>
+                        <p className="text-[#1A1A1A]/70 mb-6 max-w-lg mx-auto">
+                          We are onboarding inventory in {selectedCountry?.name} right now. Tell our
+                          advisory desk what you are looking for and we will bring you matching
+                          opportunities the moment this market goes live.
+                        </p>
+                        <Button
+                          onClick={() => window.dispatchEvent(new CustomEvent("jbj:open-inquiry"))}
+                          variant="outline"
+                          className="border-[#064E3B]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-11 px-6"
+                        >
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Register my requirement
+                        </Button>
+                      </>
                     ) : (
                       <>
                         <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#064E3B]/30 shadow-[0_0_30px_rgba(6,78,59,0.18)]">
@@ -1068,6 +1090,8 @@ const Properties = () => {
                           Clear All Filters
                         </Button>
                       </>
+                    )}
+
                     )}
                   </div>
 
