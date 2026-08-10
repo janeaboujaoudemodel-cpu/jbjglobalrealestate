@@ -53,15 +53,6 @@ Deno.serve(async (req) => {
 
   try {
     const authHeader = req.headers.get("Authorization") ?? "";
-    if (!authHeader.startsWith("Bearer ")) return json({ error: "sign_in_required" }, 401);
-
-    const userClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } }, auth: { persistSession: false } },
-    );
-    const { data: { user } } = await userClient.auth.getUser();
-    if (!user) return json({ error: "sign_in_required" }, 401);
 
     const parsed = BodySchema.safeParse(await req.json());
     if (!parsed.success) return json({ error: parsed.error.flatten().fieldErrors }, 400);
@@ -73,29 +64,45 @@ Deno.serve(async (req) => {
       { auth: { persistSession: false } },
     );
 
-    // Identity: JWT first, then the visitor's stored profile, then what the
-    // chat widget collected. Never a placeholder.
-    const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+    // Identity comes from the session when there is one. A ticket is never
+    // created for an unidentified visitor: without a session we require the
+    // contact details the chat widget already collected.
+    let user: { id: string; email?: string; user_metadata?: Record<string, unknown> } | null = null;
+    if (authHeader.startsWith("Bearer ")) {
+      const userClient = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_ANON_KEY")!,
+        { global: { headers: { Authorization: authHeader } }, auth: { persistSession: false } },
+      );
+      const { data } = await userClient.auth.getUser();
+      user = data.user as typeof user;
+    }
+
+    const meta = (user?.user_metadata ?? {}) as Record<string, unknown>;
     let name =
       b.visitorName ||
       (typeof meta.full_name === "string" ? meta.full_name : "") ||
       (typeof meta.name === "string" ? meta.name : "");
     let phone = b.visitorPhone || (typeof meta.phone === "string" ? meta.phone : "");
+    let email = user?.email || b.visitorEmail || "";
 
-    try {
-      const { data: profile } = await svc
-        .from("crm_users_profile")
-        .select("display_name, phone")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (!name && profile?.display_name) name = profile.display_name as string;
-      if (!phone && profile?.phone) phone = profile.phone as string;
-    } catch {
-      /* profile lookup is a nicety, not a requirement */
+    if (user) {
+      try {
+        const { data: profile } = await svc
+          .from("crm_users_profile")
+          .select("display_name, phone")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (!name && profile?.display_name) name = profile.display_name as string;
+        if (!phone && profile?.phone) phone = profile.phone as string;
+      } catch {
+        /* profile lookup is a nicety, not a requirement */
+      }
     }
 
-    const email = user.email ?? "";
-    if (!name) name = email ? email.split("@")[0] : "Signed-in visitor";
+    if (!email) return json({ error: "identity_required" }, 401);
+    if (!name) name = email.split("@")[0];
+
 
     const { data: ticket, error: insErr } = await svc
       .from("advisory_desk_requests")
