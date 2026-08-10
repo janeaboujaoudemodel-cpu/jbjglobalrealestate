@@ -77,10 +77,16 @@ function firstUrl(value: unknown): string | null {
 
 /** Every image url in a staged media blob, in source order, de-duplicated. */
 function allUrls(value: unknown): string[] {
+  const parsed = typeof value === "string"
+    ? (() => { try { return JSON.parse(value); } catch { return value; } })()
+    : value;
   const raw =
-    value && typeof value === "object" && !Array.isArray(value)
-      ? ((value as Record<string, unknown>).images ?? (value as Record<string, unknown>).gallery ?? [])
-      : value;
+    parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? ((parsed as Record<string, unknown>).images ??
+         (parsed as Record<string, unknown>).gallery ??
+         (parsed as Record<string, unknown>).videos ??
+         [])
+      : parsed;
   const arr = Array.isArray(raw) ? raw : [];
   const out: string[] = [];
   for (const item of arr) {
@@ -131,15 +137,32 @@ function landmarks(value: unknown): { name: string; minutes: number | null }[] {
 
 /** First payment plan -> "20 / 40 / 40" label + structured milestone breakdown. */
 function paymentPlan(value: unknown) {
-  const plan = Array.isArray(value) ? (value[0] as Record<string, unknown> | undefined) : undefined;
-  if (!plan) return { label: null as string | null, breakdown: null as unknown };
-  const stages = [
-    { milestone: "Down payment", percentage: Number(plan.startPayment ?? plan.start_payment) },
-    { milestone: "During Construction", percentage: Number(plan.interimPayment ?? plan.interim_payment) },
-    { milestone: "On Handover", percentage: Number(plan.endPayment ?? plan.end_payment) },
-  ].filter((s) => Number.isFinite(s.percentage) && s.percentage > 0);
-  if (!stages.length) return { label: null, breakdown: null };
-  return { label: stages.map((s) => s.percentage).join(" / "), breakdown: stages };
+  const plans = Array.isArray(value) ? value : [];
+  const breakdown = plans.flatMap((rawPlan, planIndex) => {
+    const plan = (rawPlan || {}) as Record<string, unknown>;
+    const prefix = plans.length > 1 ? `Plan ${planIndex + 1} — ` : "";
+    return [
+      { milestone: `${prefix}Down payment`, percentage: Number(plan.startPayment ?? plan.start_payment) },
+      { milestone: `${prefix}During Construction`, percentage: Number(plan.interimPayment ?? plan.interim_payment) },
+      { milestone: `${prefix}On Handover`, percentage: Number(plan.endPayment ?? plan.end_payment) },
+      { milestone: `${prefix}Post-handover`, percentage: Number(plan.postHandoverPayment ?? plan.post_handover_payment) },
+    ].filter((stage) => Number.isFinite(stage.percentage) && stage.percentage > 0);
+  });
+  if (!breakdown.length) return { label: null as string | null, breakdown: null as unknown, downPayment: null as number | null };
+  const firstPlanStages = breakdown.filter((stage) => !stage.milestone.startsWith("Plan ") || stage.milestone.startsWith("Plan 1 —"));
+  return {
+    label: firstPlanStages.map((stage) => stage.percentage).join(" / "),
+    breakdown,
+    downPayment: breakdown[0]?.percentage ?? null,
+  };
+}
+
+function objectValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+}
+
+function nonEmptyArray(value: unknown): unknown[] | null {
+  return Array.isArray(value) && value.length ? value : null;
 }
 
 const USD_TO_AED = 3.6725;
@@ -181,7 +204,7 @@ serve(async (req) => {
     const results: { id: string; name: string; status: string; live_id?: string; error?: string }[] = [];
 
     // live indexes
-    const { data: liveDevs } = await supabase.from("developers").select("id,name,slug,logo_url,description,founded_year,headquarters,completed_projects,offplan_projects,total_units_delivered,feature_image_url").limit(6000);
+    const { data: liveDevs } = await supabase.from("developers").select("id,name,slug,logo_url,description,founded_year,headquarters,completed_projects,offplan_projects,total_units_delivered,feature_image_url,notable_projects,public_fields,custom_fields").limit(6000);
     const devByName = new Map<string, any>();
     for (const d of liveDevs || []) {
       const k = norm(d.name);
@@ -204,7 +227,24 @@ serve(async (req) => {
             devByName.get(norm(s.name));
 
           const desc = englishText(s.description);
-          const cover = firstUrl(s.gallery);
+          const developerPayload = objectValue(s.payload);
+          const stagedGallery = allUrls(s.gallery);
+          const payloadGallery = allUrls(developerPayload.media);
+          const completeGallery = Array.from(new Set([...stagedGallery, ...payloadGallery]));
+          const developerVideos = Array.from(new Set([...allUrls(s.videos), ...allUrls(objectValue(developerPayload.media).videos)]));
+          const cover = completeGallery[0] ?? firstUrl(s.gallery) ?? firstUrl(developerPayload.media);
+          const developerSourceData = {
+            aliases: nonEmptyArray(s.aliases),
+            awards: nonEmptyArray(s.awards),
+            gallery: completeGallery.length ? completeGallery : null,
+            videos: developerVideos.length ? developerVideos : null,
+            rating: s.rating ?? null,
+            total_projects: s.total_projects ?? null,
+            portfolio: developerPayload.portfolio ?? null,
+            statistics: developerPayload.statistics ?? null,
+            source_url: s.source_url,
+            source_id: s.source_id,
+          };
 
           if (!live) {
             let slug = slugify(s.name);
@@ -222,6 +262,11 @@ serve(async (req) => {
                 completed_projects: s.completed_projects,
                 offplan_projects: s.ongoing_projects,
                 total_units_delivered: s.units_delivered,
+                notable_projects: Array.isArray(developerPayload.portfolio)
+                  ? (developerPayload.portfolio as unknown[]).map(String).join(", ")
+                  : null,
+                public_fields: { market_import: developerSourceData },
+                custom_fields: { market_import: developerSourceData },
                 logo_url: s.logo_url,
                 feature_image_url: cover,
                 enrichment_source: "market_import",
@@ -242,6 +287,13 @@ serve(async (req) => {
             if (!live.offplan_projects && s.ongoing_projects) patch.offplan_projects = s.ongoing_projects;
             if (!live.total_units_delivered && s.units_delivered) patch.total_units_delivered = s.units_delivered;
             if (!live.feature_image_url && cover) patch.feature_image_url = cover;
+            if (!live.notable_projects && Array.isArray(developerPayload.portfolio)) {
+              patch.notable_projects = (developerPayload.portfolio as unknown[]).map(String).join(", ");
+            }
+            const existingPublic = objectValue(live.public_fields);
+            const existingCustom = objectValue(live.custom_fields);
+            patch.public_fields = { ...existingPublic, market_import: developerSourceData };
+            patch.custom_fields = { ...existingCustom, market_import: developerSourceData };
             patch.is_hidden = false;
             patch.last_enriched_at = nowIso;
             const { error: upErr } = await supabase.from("developers").update(patch).eq("id", live.id);
@@ -279,7 +331,7 @@ serve(async (req) => {
       const { data: liveProjects } = await supabase
         .from("projects")
         .select(
-          "id,name,slug,is_published,description,short_description,cover_image_url,card_image_url,developer_id,price_from,total_units,available_units,latitude,longitude,area_name,emirate,floors,number_of_stories,built_up_area,plot_area,launch_date,expected_completion,handover_date,construction_start_date,construction_status,amenities,amenities_list,location_distances,payment_plan,payment_breakdown,rental_yield_estimate,roi_estimate,property_type_label",
+           "id,name,slug,is_published,description,short_description,cover_image_url,card_image_url,developer_id,price_from,total_units,available_units,latitude,longitude,location,area_name,emirate,floors,number_of_stories,building_count,built_up_area,plot_area,launch_date,expected_completion,handover_date,construction_start_date,construction_status,status,status_label,amenities,amenities_list,facilities,location_distances,payment_plan,payment_breakdown,down_payment_percent,rental_yield_estimate,roi_estimate,property_type_label,highlights,usp_bullets,units_data,unit_types,bedroom_types,bedrooms_min,bedrooms_max,video_url,video_urls,source_id,external_id",
         )
         .limit(8000);
       const projByName = new Map<string, any>();
@@ -299,10 +351,13 @@ serve(async (req) => {
           const distances = landmarks(s.nearby_landmarks);
           const plan = paymentPlan(s.payment_plans);
           const specs = (s.payload && (s.payload as Record<string, unknown>).specs) || null;
+          const payload = objectValue(s.payload);
           const invest = (s.investment || {}) as Record<string, unknown>;
+          const timeline = objectValue(payload.timeline);
+          const unitTypes = nonEmptyArray(payload.unitTypes);
+          const videoUrls = allUrls(s.videos ?? objectValue(s.media).videos ?? payload.media);
           const storeys = s.storeys ?? specNumber(specs, "storeys");
           const totalUnits = s.total_units ?? specNumber(specs, "total_units");
-          const availableUnits = specNumber(specs, "available_units");
           const builtArea = s.built_area_sqft ?? specNumber(specs, "built_area_sqft");
           const plotArea = s.plot_size_sqft ?? specNumber(specs, "plot_size_sqft");
           const yieldPct = Number(invest.estimated_rental_yield_percent);
@@ -311,13 +366,22 @@ serve(async (req) => {
           const typeLabel = Array.isArray(s.categories) && s.categories.length
             ? s.categories.map((c: string) => titleCase(c)).join(", ")
             : null;
+          const bedroomValues = (unitTypes || [])
+            .map((unit) => Number(objectValue(unit).bedrooms ?? objectValue(unit).bedroom_count))
+            .filter((value) => Number.isFinite(value) && value >= 0);
+          const sourceHighlights = [
+            ...(Array.isArray(timeline.milestones) ? timeline.milestones : []),
+            { label: "Investment indicators", ...invest },
+          ];
 
           // Everything the market source knows, mapped onto JBJ detail fields.
           const detail: Record<string, unknown> = {
             total_units: totalUnits ?? null,
-            available_units: availableUnits,
+            // LOCKED: source availability counts are unit-level inventory and
+            // must never be imported. Public availability remains On Request.
             floors: storeys ?? null,
             number_of_stories: storeys ?? null,
+            building_count: specNumber(payload, "tower_count"),
             built_up_area: fmtArea(builtArea),
             plot_area: fmtArea(plotArea),
             launch_date: s.launch_date || null,
@@ -325,15 +389,31 @@ serve(async (req) => {
             expected_completion: s.completion_date || null,
             handover_date: s.handover_starts || s.completion_date || null,
             construction_status: s.is_offplan === false ? "completed" : "under_construction",
+            status: s.status || null,
+            status_label: s.status ? titleCase(String(s.status)) : null,
             property_type_label: typeLabel,
             price_from: priceAed(s.starting_price, s.currency),
             rental_yield_estimate: Number.isFinite(yieldPct) ? yieldPct : null,
             roi_estimate: Number.isFinite(roiPct) ? roiPct : null,
             amenities: amenities.length ? amenities : null,
             amenities_list: amenities.length ? amenities : null,
+            facilities: amenities.length ? amenities : null,
             location_distances: distances.length ? distances : null,
             payment_plan: plan.label,
             payment_breakdown: plan.breakdown,
+            down_payment_percent: plan.downPayment,
+            location: s.address || [s.sub_area, s.area, s.city, s.country].filter(Boolean).join(", ") || null,
+            highlights: sourceHighlights.length ? sourceHighlights : null,
+            usp_bullets: sourceHighlights.length ? sourceHighlights : null,
+            units_data: unitTypes,
+            unit_types: unitTypes,
+            bedroom_types: unitTypes,
+            bedrooms_min: bedroomValues.length ? Math.min(...bedroomValues) : null,
+            bedrooms_max: bedroomValues.length ? Math.max(...bedroomValues) : null,
+            video_url: videoUrls[0] ?? null,
+            video_urls: videoUrls.length ? videoUrls : null,
+            source_id: s.source_id || null,
+            external_id: s.source_id || null,
           };
 
           let live =
@@ -361,6 +441,7 @@ serve(async (req) => {
               cover_image_url: cover,
               card_image_url: cover,
               source_url: s.source_url,
+              location: s.address || [s.sub_area, s.area, s.city, s.country].filter(Boolean).join(", ") || null,
               source: "market_import",
               import_source: "market_import",
               created_source: "market_import",
