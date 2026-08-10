@@ -43,6 +43,26 @@ export default function DeveloperGapsQueue() {
     },
   });
 
+  const { data: wordmarks = [] } = useQuery({
+    queryKey: ["developer-wordmark-gaps"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developer_logo_wordmark_gaps" as any)
+        .select("*")
+        .limit(1000);
+      if (error) throw error;
+      return (data || []) as unknown as WordmarkRow[];
+    },
+  });
+
+  const visibleWordmarks = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    return wordmarks
+      .filter((w) => !needle || (w.developer_name || "").toLowerCase().includes(needle))
+      .sort((a, b) => (b.published_projects || 0) - (a.published_projects || 0));
+  }, [wordmarks, q]);
+
+
   const byDeveloper = useMemo(() => {
     const map = new Map<string, { name: string; reason: string; website: string | null; projects: GapRow[] }>();
     rows
