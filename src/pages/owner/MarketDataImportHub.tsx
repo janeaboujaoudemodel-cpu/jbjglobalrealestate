@@ -736,14 +736,14 @@ export default function MarketDataImportHub() {
                   <button
                     type="button"
                     onClick={() => setOpenDiff((s) => ({ ...s, [m.id]: !s[m.id] }))}
-                    className="mir-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs"
+                    className={`mir-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs ${open ? "mir-pill-active" : ""}`}
                   >
                     {open ? <ChevronUp className="h-3.5 w-3.5" aria-hidden /> : <ChevronDown className="h-3.5 w-3.5" aria-hidden />}
-                    Before / after
+                    Compare side by side
                   </button>
                 </div>
 
-                {open ? <MatchDiff match={m} /> : null}
+                {open ? <MatchDiff match={m} jbjHref={jbjHref} /> : null}
               </article>
             );
           })}
