@@ -1,7 +1,7 @@
 /**
- * Owner backend — Woven Enrichment Import Preview.
+ * Owner backend — Market Data Import Preview.
  *
- * LOCKED RULE: nothing crawled from Woven is written to the live directory
+ * LOCKED RULE: nothing crawled from the market source is written to the live directory
  * automatically. Everything lands in a staging area first, is scored against
  * the existing JBJ record, and only moves after the owner picks
  * MERGE / KEEP SEPARATE / IGNORE here. Manually edited JBJ fields always win.
@@ -73,17 +73,17 @@ const StatCard = ({ label, value, hint }: { label: string; value: string | numbe
   </div>
 );
 
-export default function WovenImportHub() {
+export default function MarketDataImportHub() {
   const qc = useQueryClient();
   const [tab, setTab] = useState<"summary" | "matches" | "new">("summary");
   const [entity, setEntity] = useState<"project" | "developer">("project");
   const [q, setQ] = useState("");
 
   const { data: run } = useQuery({
-    queryKey: ["woven-import-run"],
+    queryKey: ["market-import-run"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("woven_import_runs" as any)
+        .from("market_import_runs" as any)
         .select("*")
         .order("started_at", { ascending: false })
         .limit(1)
@@ -94,10 +94,10 @@ export default function WovenImportHub() {
   });
 
   const { data: matches = [], isFetching, refetch } = useQuery({
-    queryKey: ["woven-review-matches", entity],
+    queryKey: ["market-review-matches", entity],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("woven_review_matches" as any)
+        .from("market_review_matches" as any)
         .select("*")
         .eq("entity_type", entity)
         .order("confidence", { ascending: false })
@@ -108,10 +108,10 @@ export default function WovenImportHub() {
   });
 
   const { data: stagedProjects = [] } = useQuery({
-    queryKey: ["woven-staged-projects"],
+    queryKey: ["market-staged-projects"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("woven_staged_projects" as any)
+        .from("market_staged_projects" as any)
         .select("id,name,source_slug,source_url,developer_name,city,area,status,is_offplan,excluded_reason")
         .order("name")
         .limit(2000);
@@ -145,7 +145,7 @@ export default function WovenImportHub() {
 
   const decide = async (id: string, decision: string) => {
     const { error } = await supabase
-      .from("woven_review_matches" as any)
+      .from("market_review_matches" as any)
       .update({ decision, decided_at: new Date().toISOString() })
       .eq("id", id);
     if (error) {
@@ -153,7 +153,7 @@ export default function WovenImportHub() {
       return;
     }
     toast.success(`Marked as ${decision.replace("_", " ")}`);
-    qc.invalidateQueries({ queryKey: ["woven-review-matches", entity] });
+    qc.invalidateQueries({ queryKey: ["market-review-matches", entity] });
   };
 
   return (
@@ -162,7 +162,7 @@ export default function WovenImportHub() {
         <div>
           <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Enrichment source</p>
           <h1 className="mt-1 flex items-center gap-2 text-2xl font-semibold text-foreground">
-            <Sparkles className="h-5 w-5" aria-hidden /> Woven import preview
+            <Sparkles className="h-5 w-5" aria-hidden /> Market data import preview
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             Developer-built projects only — off-plan, ready and sold-out. Resale listings, agency inventory and
@@ -197,8 +197,8 @@ export default function WovenImportHub() {
         </p>
         <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
           <li>• Any JBJ field you edited manually always wins and is never overwritten.</li>
-          <li>• Per-field provenance (manual / Woven / earlier source) is recorded on every merge.</li>
-          <li>• No Woven phone numbers, emails, WhatsApp numbers or agents are copied — contact stays JBJ’s.</li>
+          <li>• Per-field provenance (manual / market source / earlier source) is recorded on every merge.</li>
+          <li>• No external phone numbers, emails, WhatsApp numbers or agents are copied — contact stays JBJ’s.</li>
           <li>• Unit-level and resale inventory is excluded at the source; only project totals are used.</li>
         </ul>
       </div>
@@ -300,7 +300,7 @@ export default function WovenImportHub() {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-3 text-xs text-muted-foreground">No gaps detected — Woven adds nothing new.</p>
+                <p className="mt-3 text-xs text-muted-foreground">No gaps detected — the market source adds nothing new.</p>
               )}
 
               <div className="mt-4 flex flex-wrap items-center gap-2">
