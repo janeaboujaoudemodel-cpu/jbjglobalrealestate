@@ -90,10 +90,13 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     if (prefill) setPendingPrefill(prefill);
   }, [isCollapsed]);
 
+  const [autoSendPrefill, setAutoSendPrefill] = useState(false);
+
   useEffect(() => {
     if (!pendingPrefill || step !== 'chatting') return;
     setInput(pendingPrefill);
     setPendingPrefill(null);
+    setAutoSendPrefill(true);
   }, [pendingPrefill, step]);
 
 
