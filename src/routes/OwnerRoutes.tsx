@@ -240,6 +240,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-developer-access" element={<AccessRequestQueue />} />
     <Route path="owner-developer-profiles" element={<DeveloperEnrichmentQueue />} />
     <Route path="owner-missing-logos" element={<MissingLogosQueue />} />
+    <Route path="owner-developer-gaps" element={<DeveloperGapsQueue />} />
     <Route path="owner-profile-requests" element={<CompanyProfileRequestsQueue />} />
     <Route path="owner-advisory-desk" element={<AdvisoryDeskQueue />} />
     <Route path="owner-drive-extractions" element={<DriveExtractionsHub />} />
