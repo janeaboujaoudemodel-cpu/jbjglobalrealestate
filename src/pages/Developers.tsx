@@ -440,9 +440,11 @@ const Developers = () => {
                         heroImageUrls={mergedStats.heroes[developer.id] || []}
                         density={effectiveColumns}
                         index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
+                        allowMissingCover={effectiveOwner}
                       />
 
                     ))}
+
                   </div>
                 )}
 
