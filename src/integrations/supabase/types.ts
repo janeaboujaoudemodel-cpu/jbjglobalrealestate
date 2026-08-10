@@ -32544,6 +32544,45 @@ export type Database = {
         }
         Relationships: []
       }
+      record_field_provenance: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: string
+          field_name: string
+          id: string
+          locked: boolean
+          source: string
+          source_url: string | null
+          updated_at: string
+          value_hash: string | null
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          field_name: string
+          id?: string
+          locked?: boolean
+          source: string
+          source_url?: string | null
+          updated_at?: string
+          value_hash?: string | null
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          field_name?: string
+          id?: string
+          locked?: boolean
+          source?: string
+          source_url?: string | null
+          updated_at?: string
+          value_hash?: string | null
+        }
+        Relationships: []
+      }
       reelly_dictionaries: {
         Row: {
           dict_type: string
@@ -40941,6 +40980,356 @@ export type Database = {
           webhook_source?: string
         }
         Relationships: []
+      }
+      woven_import_runs: {
+        Row: {
+          created_at: string
+          finished_at: string | null
+          id: string
+          notes: string | null
+          phase: string
+          started_at: string
+          stats: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          notes?: string | null
+          phase?: string
+          started_at?: string
+          stats?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          notes?: string | null
+          phase?: string
+          started_at?: string
+          stats?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      woven_review_matches: {
+        Row: {
+          applied_at: string | null
+          apply_result: Json | null
+          confidence: number
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision: string
+          differences: Json
+          entity_type: string
+          id: string
+          jbj_developer_id: string | null
+          jbj_name: string | null
+          jbj_project_id: string | null
+          match_reasons: Json
+          run_id: string | null
+          staged_developer_id: string | null
+          staged_project_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          applied_at?: string | null
+          apply_result?: Json | null
+          confidence?: number
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision?: string
+          differences?: Json
+          entity_type: string
+          id?: string
+          jbj_developer_id?: string | null
+          jbj_name?: string | null
+          jbj_project_id?: string | null
+          match_reasons?: Json
+          run_id?: string | null
+          staged_developer_id?: string | null
+          staged_project_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          applied_at?: string | null
+          apply_result?: Json | null
+          confidence?: number
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision?: string
+          differences?: Json
+          entity_type?: string
+          id?: string
+          jbj_developer_id?: string | null
+          jbj_name?: string | null
+          jbj_project_id?: string | null
+          match_reasons?: Json
+          run_id?: string | null
+          staged_developer_id?: string | null
+          staged_project_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "woven_review_matches_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "woven_import_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "woven_review_matches_staged_developer_id_fkey"
+            columns: ["staged_developer_id"]
+            isOneToOne: false
+            referencedRelation: "woven_staged_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "woven_review_matches_staged_project_id_fkey"
+            columns: ["staged_project_id"]
+            isOneToOne: false
+            referencedRelation: "woven_staged_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      woven_staged_developers: {
+        Row: {
+          aliases: string[]
+          awards: Json
+          completed_projects: number | null
+          created_at: string
+          description: string | null
+          extraction_error: string | null
+          extraction_status: string
+          founded_year: number | null
+          gallery: Json
+          headquarters: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          ongoing_projects: number | null
+          payload: Json
+          rating: number | null
+          run_id: string | null
+          source_id: string | null
+          source_slug: string
+          source_url: string
+          total_projects: number | null
+          units_delivered: number | null
+          updated_at: string
+          videos: Json
+        }
+        Insert: {
+          aliases?: string[]
+          awards?: Json
+          completed_projects?: number | null
+          created_at?: string
+          description?: string | null
+          extraction_error?: string | null
+          extraction_status?: string
+          founded_year?: number | null
+          gallery?: Json
+          headquarters?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          ongoing_projects?: number | null
+          payload?: Json
+          rating?: number | null
+          run_id?: string | null
+          source_id?: string | null
+          source_slug: string
+          source_url: string
+          total_projects?: number | null
+          units_delivered?: number | null
+          updated_at?: string
+          videos?: Json
+        }
+        Update: {
+          aliases?: string[]
+          awards?: Json
+          completed_projects?: number | null
+          created_at?: string
+          description?: string | null
+          extraction_error?: string | null
+          extraction_status?: string
+          founded_year?: number | null
+          gallery?: Json
+          headquarters?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          ongoing_projects?: number | null
+          payload?: Json
+          rating?: number | null
+          run_id?: string | null
+          source_id?: string | null
+          source_slug?: string
+          source_url?: string
+          total_projects?: number | null
+          units_delivered?: number | null
+          updated_at?: string
+          videos?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "woven_staged_developers_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "woven_import_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      woven_staged_projects: {
+        Row: {
+          address: string | null
+          amenities: Json
+          area: string | null
+          built_area_sqft: number | null
+          categories: string[]
+          city: string | null
+          completion_date: string | null
+          construction_started: string | null
+          country: string | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          developer_name: string | null
+          developer_source_slug: string | null
+          excluded_reason: string | null
+          extraction_error: string | null
+          extraction_status: string
+          handover_starts: string | null
+          id: string
+          investment: Json
+          is_offplan: boolean
+          latitude: number | null
+          launch_date: string | null
+          longitude: number | null
+          map_link: string | null
+          media: Json
+          name: string
+          nearby_landmarks: Json
+          payload: Json
+          payment_plans: Json
+          plot_size_sqft: number | null
+          run_id: string | null
+          source_id: string | null
+          source_slug: string
+          source_url: string
+          starting_price: number | null
+          status: string | null
+          storeys: number | null
+          sub_area: string | null
+          total_units: number | null
+          updated_at: string
+          videos: Json
+        }
+        Insert: {
+          address?: string | null
+          amenities?: Json
+          area?: string | null
+          built_area_sqft?: number | null
+          categories?: string[]
+          city?: string | null
+          completion_date?: string | null
+          construction_started?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          developer_source_slug?: string | null
+          excluded_reason?: string | null
+          extraction_error?: string | null
+          extraction_status?: string
+          handover_starts?: string | null
+          id?: string
+          investment?: Json
+          is_offplan?: boolean
+          latitude?: number | null
+          launch_date?: string | null
+          longitude?: number | null
+          map_link?: string | null
+          media?: Json
+          name: string
+          nearby_landmarks?: Json
+          payload?: Json
+          payment_plans?: Json
+          plot_size_sqft?: number | null
+          run_id?: string | null
+          source_id?: string | null
+          source_slug: string
+          source_url: string
+          starting_price?: number | null
+          status?: string | null
+          storeys?: number | null
+          sub_area?: string | null
+          total_units?: number | null
+          updated_at?: string
+          videos?: Json
+        }
+        Update: {
+          address?: string | null
+          amenities?: Json
+          area?: string | null
+          built_area_sqft?: number | null
+          categories?: string[]
+          city?: string | null
+          completion_date?: string | null
+          construction_started?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          developer_source_slug?: string | null
+          excluded_reason?: string | null
+          extraction_error?: string | null
+          extraction_status?: string
+          handover_starts?: string | null
+          id?: string
+          investment?: Json
+          is_offplan?: boolean
+          latitude?: number | null
+          launch_date?: string | null
+          longitude?: number | null
+          map_link?: string | null
+          media?: Json
+          name?: string
+          nearby_landmarks?: Json
+          payload?: Json
+          payment_plans?: Json
+          plot_size_sqft?: number | null
+          run_id?: string | null
+          source_id?: string | null
+          source_slug?: string
+          source_url?: string
+          starting_price?: number | null
+          status?: string | null
+          storeys?: number | null
+          sub_area?: string | null
+          total_units?: number | null
+          updated_at?: string
+          videos?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "woven_staged_projects_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "woven_import_runs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
