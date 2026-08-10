@@ -221,8 +221,9 @@ export default function OwnerEnrichmentReview() {
         [data-page="enrichment-review"] .er-plate-glyph{color:#FFFFFF !important;font-size:15px;line-height:1;font-weight:700}
         [data-page="enrichment-review"] .er-plate svg{color:#FFFFFF !important;stroke:#FFFFFF !important;opacity:1 !important}
         [data-page="enrichment-review"] .er-pill,[data-page="enrichment-review"] .er-pill *{color:inherit}
-        [data-page="enrichment-review"] .er-pill-idle{color:#064E3B !important}
-        [data-page="enrichment-review"] .er-pill-on{color:#FFFFFF !important}
+        [data-page="enrichment-review"] button.er-pill.er-pill-idle > span.er-txt{color:#064E3B !important;-webkit-text-fill-color:#064E3B !important}
+        [data-page="enrichment-review"] button.er-pill.er-pill-on > span.er-txt{color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important}
+        [data-page="enrichment-review"] button.er-pill:hover > span.er-txt{color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important}
       `}</style>
       <div className="flex items-center gap-3 mb-2">
         <span
@@ -252,7 +253,7 @@ export default function OwnerEnrichmentReview() {
           style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
           className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "pending" ? "er-pill-on" : "er-pill-idle"}`}
         >
-          Pending ({summary.pending})
+          <span className="er-txt">Pending ({summary.pending})</span>
         </button>
         <button
           type="button"
@@ -261,7 +262,7 @@ export default function OwnerEnrichmentReview() {
           style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
           className={`er-pill px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "all" ? "er-pill-on" : "er-pill-idle"}`}
         >
-          All
+          <span className="er-txt">All</span>
         </button>
       </div>
 
