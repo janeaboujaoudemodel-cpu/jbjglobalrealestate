@@ -13,11 +13,22 @@ import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
 import ProjectStructuredData from "@/components/seo/ProjectStructuredData";
 
+/**
+ * UNIT COUNT WORDING (LOCKED): a numeric inventory figure is always "units" —
+ * never "residences"/"apartments"/"homes". Imported copy is normalised here so
+ * no source feed can reintroduce the wrong noun.
+ */
+const normalizeUnitWording = (text: string): string =>
+  text.replace(/(\d[\d,]*\+?)\s+(residences|residence|apartments|homes|keys)\b/gi, "$1 units");
+
 const asStringArray = (value: unknown): string[] | null => {
   if (!Array.isArray(value)) return null;
-  const out = value.filter((v): v is string => typeof v === "string" && v.trim().length > 0);
+  const out = value
+    .filter((v): v is string => typeof v === "string" && v.trim().length > 0)
+    .map(normalizeUnitWording);
   return out.length ? out : null;
 };
+
 
 const asFaqs = (value: unknown): Array<{ question: string; answer: string }> | null => {
   if (!Array.isArray(value)) return null;
