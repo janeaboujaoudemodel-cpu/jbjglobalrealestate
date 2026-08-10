@@ -337,6 +337,101 @@ export type Database = {
           },
         ]
       }
+      advisory_desk_replies: {
+        Row: {
+          body: string
+          channel: string
+          id: string
+          meta: Json
+          request_id: string
+          sent_at: string
+          sent_by: string | null
+        }
+        Insert: {
+          body: string
+          channel: string
+          id?: string
+          meta?: Json
+          request_id: string
+          sent_at?: string
+          sent_by?: string | null
+        }
+        Update: {
+          body?: string
+          channel?: string
+          id?: string
+          meta?: Json
+          request_id?: string
+          sent_at?: string
+          sent_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advisory_desk_replies_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "advisory_desk_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advisory_desk_requests: {
+        Row: {
+          conversation_id: string | null
+          created_at: string
+          handled_at: string | null
+          handled_by: string | null
+          id: string
+          page_source: string | null
+          preferred_channel: string | null
+          query: string
+          source: string
+          status: string
+          transcript: string | null
+          updated_at: string
+          user_id: string | null
+          visitor_email: string | null
+          visitor_name: string | null
+          visitor_phone: string | null
+        }
+        Insert: {
+          conversation_id?: string | null
+          created_at?: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          page_source?: string | null
+          preferred_channel?: string | null
+          query: string
+          source?: string
+          status?: string
+          transcript?: string | null
+          updated_at?: string
+          user_id?: string | null
+          visitor_email?: string | null
+          visitor_name?: string | null
+          visitor_phone?: string | null
+        }
+        Update: {
+          conversation_id?: string | null
+          created_at?: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          page_source?: string | null
+          preferred_channel?: string | null
+          query?: string
+          source?: string
+          status?: string
+          transcript?: string | null
+          updated_at?: string
+          user_id?: string | null
+          visitor_email?: string | null
+          visitor_name?: string | null
+          visitor_phone?: string | null
+        }
+        Relationships: []
+      }
       ai_brokers: {
         Row: {
           avatar_url: string | null
