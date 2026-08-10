@@ -75,6 +75,89 @@ function firstUrl(value: unknown): string | null {
   return null;
 }
 
+/** Every image url in a staged media blob, in source order, de-duplicated. */
+function allUrls(value: unknown): string[] {
+  const raw =
+    value && typeof value === "object" && !Array.isArray(value)
+      ? ((value as Record<string, unknown>).images ?? (value as Record<string, unknown>).gallery ?? [])
+      : value;
+  const arr = Array.isArray(raw) ? raw : [];
+  const out: string[] = [];
+  for (const item of arr) {
+    const url =
+      typeof item === "string"
+        ? item
+        : item && typeof item === "object"
+          ? ((item as Record<string, unknown>).url ??
+             (item as Record<string, unknown>).src ??
+             (item as Record<string, unknown>).image_url)
+          : null;
+    if (typeof url === "string" && /^https?:\/\//.test(url) && !out.includes(url)) out.push(url);
+  }
+  return out;
+}
+
+const titleCase = (s: string) =>
+  s.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim().replace(/^./, (c) => c.toUpperCase());
+
+/** Woven amenities arrive grouped ({indoor:[...], outdoor:[...]}) or flat. */
+function amenityLabels(value: unknown): string[] {
+  const out: string[] = [];
+  const push = (v: unknown) => {
+    if (typeof v === "string" && v.trim()) {
+      const label = titleCase(v);
+      if (!out.includes(label)) out.push(label);
+    }
+  };
+  if (Array.isArray(value)) value.forEach(push);
+  else if (value && typeof value === "object")
+    for (const group of Object.values(value as Record<string, unknown>))
+      Array.isArray(group) ? group.forEach(push) : push(group);
+  return out;
+}
+
+/** [{name, distance_minutes}] -> [{name, minutes}] for the location panel. */
+function landmarks(value: unknown): { name: string; minutes: number | null }[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => {
+      const o = (item || {}) as Record<string, unknown>;
+      const name = typeof o.name === "string" ? o.name : null;
+      const minutes = Number(o.distance_minutes ?? o.minutes);
+      return name ? { name, minutes: Number.isFinite(minutes) ? minutes : null } : null;
+    })
+    .filter(Boolean) as { name: string; minutes: number | null }[];
+}
+
+/** First payment plan -> "20 / 40 / 40" label + structured milestone breakdown. */
+function paymentPlan(value: unknown) {
+  const plan = Array.isArray(value) ? (value[0] as Record<string, unknown> | undefined) : undefined;
+  if (!plan) return { label: null as string | null, breakdown: null as unknown };
+  const stages = [
+    { milestone: "Down payment", percentage: Number(plan.startPayment ?? plan.start_payment) },
+    { milestone: "During Construction", percentage: Number(plan.interimPayment ?? plan.interim_payment) },
+    { milestone: "On Handover", percentage: Number(plan.endPayment ?? plan.end_payment) },
+  ].filter((s) => Number.isFinite(s.percentage) && s.percentage > 0);
+  if (!stages.length) return { label: null, breakdown: null };
+  return { label: stages.map((s) => s.percentage).join(" / "), breakdown: stages };
+}
+
+const USD_TO_AED = 3.6725;
+/** Market prices are quoted in USD; JBJ inventory is AED. */
+function priceAed(amount: unknown, currency: unknown): number | null {
+  const value = Number(amount);
+  if (!Number.isFinite(value) || value <= 0) return null;
+  const cur = String(currency ?? "AED").toUpperCase();
+  return cur === "USD" ? Math.round(value * USD_TO_AED) : Math.round(value);
+}
+
+function specNumber(specs: unknown, key: string): number | null {
+  const o = (specs && typeof specs === "object" ? specs : {}) as Record<string, unknown>;
+  const value = Number(o[key]);
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -195,7 +278,9 @@ serve(async (req) => {
 
       const { data: liveProjects } = await supabase
         .from("projects")
-        .select("id,name,slug,is_published,description,cover_image_url,developer_id,price_from,total_units,latitude,longitude,area_name,emirate")
+        .select(
+          "id,name,slug,is_published,description,short_description,cover_image_url,card_image_url,developer_id,price_from,total_units,available_units,latitude,longitude,area_name,emirate,floors,number_of_stories,built_up_area,plot_area,launch_date,expected_completion,handover_date,construction_start_date,construction_status,amenities,amenities_list,location_distances,payment_plan,payment_breakdown,rental_yield_estimate,roi_estimate,property_type_label",
+        )
         .limit(8000);
       const projByName = new Map<string, any>();
       for (const p of liveProjects || []) {
@@ -208,7 +293,49 @@ serve(async (req) => {
         try {
           const devMatch = s.developer_name ? devByName.get(norm(s.developer_name)) : null;
           const desc = englishText(s.description);
-          const cover = firstUrl(s.media);
+          const gallery = allUrls(s.media);
+          const cover = gallery[0] ?? firstUrl(s.media);
+          const amenities = amenityLabels(s.amenities);
+          const distances = landmarks(s.nearby_landmarks);
+          const plan = paymentPlan(s.payment_plans);
+          const specs = (s.payload && (s.payload as Record<string, unknown>).specs) || null;
+          const invest = (s.investment || {}) as Record<string, unknown>;
+          const storeys = s.storeys ?? specNumber(specs, "storeys");
+          const totalUnits = s.total_units ?? specNumber(specs, "total_units");
+          const availableUnits = specNumber(specs, "available_units");
+          const builtArea = s.built_area_sqft ?? specNumber(specs, "built_area_sqft");
+          const plotArea = s.plot_size_sqft ?? specNumber(specs, "plot_size_sqft");
+          const yieldPct = Number(invest.estimated_rental_yield_percent);
+          const roiPct = Number(invest.estimated_price_appreciation_1yr);
+          const fmtArea = (v: number | null) => (v ? `${Math.round(v).toLocaleString("en-US")} sqft` : null);
+          const typeLabel = Array.isArray(s.categories) && s.categories.length
+            ? s.categories.map((c: string) => titleCase(c)).join(", ")
+            : null;
+
+          // Everything the market source knows, mapped onto JBJ detail fields.
+          const detail: Record<string, unknown> = {
+            total_units: totalUnits ?? null,
+            available_units: availableUnits,
+            floors: storeys ?? null,
+            number_of_stories: storeys ?? null,
+            built_up_area: fmtArea(builtArea),
+            plot_area: fmtArea(plotArea),
+            launch_date: s.launch_date || null,
+            construction_start_date: s.construction_started ? String(s.construction_started).slice(0, 4) : null,
+            expected_completion: s.completion_date || null,
+            handover_date: s.handover_starts || s.completion_date || null,
+            construction_status: s.is_offplan === false ? "completed" : "under_construction",
+            property_type_label: typeLabel,
+            price_from: priceAed(s.starting_price, s.currency),
+            rental_yield_estimate: Number.isFinite(yieldPct) ? yieldPct : null,
+            roi_estimate: Number.isFinite(roiPct) ? roiPct : null,
+            amenities: amenities.length ? amenities : null,
+            amenities_list: amenities.length ? amenities : null,
+            location_distances: distances.length ? distances : null,
+            payment_plan: plan.label,
+            payment_breakdown: plan.breakdown,
+          };
+
           let live =
             (s.jbj_project_id && (liveProjects || []).find((p: any) => p.id === s.jbj_project_id)) ||
             projByName.get(norm(s.name));
@@ -218,53 +345,80 @@ serve(async (req) => {
             let n = 2;
             while (projSlugs.has(slug)) slug = `${slugify(s.name)}-${n++}`;
             projSlugs.add(slug);
+            const insertRow: Record<string, unknown> = {
+              name: s.name,
+              slug,
+              developer_id: devMatch?.id ?? null,
+              developer_name: s.developer_name || null,
+              developer_gap_reason: devMatch?.id ? null : s.developer_name ? "developer_not_in_jbj" : "developer_unknown",
+              developer_gap_flagged_at: devMatch?.id ? null : nowIso,
+              description: desc,
+              emirate: s.city || null,
+              area_name: s.area || null,
+              latitude: s.latitude,
+              longitude: s.longitude,
+              price_currency: "AED",
+              cover_image_url: cover,
+              card_image_url: cover,
+              source_url: s.source_url,
+              source: "market_import",
+              import_source: "market_import",
+              created_source: "market_import",
+              is_offplan: s.is_offplan ?? true,
+              is_published: true,
+            };
+            for (const [k, v] of Object.entries(detail)) if (v !== null && v !== undefined) insertRow[k] = v;
             const { data: inserted, error: insErr } = await supabase
               .from("projects")
-              .insert({
-                name: s.name,
-                slug,
-                developer_id: devMatch?.id ?? null,
-                developer_name: s.developer_name || null,
-                developer_gap_reason: devMatch?.id ? null : s.developer_name ? "developer_not_in_jbj" : "developer_unknown",
-                developer_gap_flagged_at: devMatch?.id ? null : nowIso,
-                description: desc,
-                emirate: s.city || null,
-                area_name: s.area || null,
-                latitude: s.latitude,
-                longitude: s.longitude,
-                total_units: s.total_units,
-                price_from: s.starting_price,
-                price_currency: s.currency || "AED",
-                expected_completion: s.completion_date || null,
-                handover_date: s.handover_starts || null,
-                launch_date: s.launch_date || null,
-                amenities_list: s.amenities ?? null,
-                cover_image_url: cover,
-                source_url: s.source_url,
-                source: "market_import",
-                import_source: "market_import",
-                created_source: "market_import",
-                is_offplan: s.is_offplan ?? true,
-                is_published: true,
-              })
+              .insert(insertRow)
               .select("id,name,slug")
               .single();
             if (insErr) throw insErr;
             live = inserted;
           } else {
+            // fill only empty JBJ fields — manual JBJ values always win
+            const isEmpty = (v: unknown) =>
+              v === null ||
+              v === undefined ||
+              v === "" ||
+              (Array.isArray(v) && v.length === 0) ||
+              (typeof v === "string" && /^(tbd|tbc|n\/?a|payment plan)$/i.test(v.trim()));
             const patch: Record<string, unknown> = { is_published: true };
             if (!live.description && desc) patch.description = desc;
             if (!live.cover_image_url && cover) patch.cover_image_url = cover;
+            if (!live.card_image_url && cover) patch.card_image_url = cover;
             if (!live.developer_id && devMatch?.id) patch.developer_id = devMatch.id;
-            if (!live.price_from && s.starting_price) patch.price_from = s.starting_price;
-            if (!live.total_units && s.total_units) patch.total_units = s.total_units;
             if (!live.latitude && s.latitude) patch.latitude = s.latitude;
             if (!live.longitude && s.longitude) patch.longitude = s.longitude;
             if (!live.area_name && s.area) patch.area_name = s.area;
             if (!live.emirate && s.city) patch.emirate = s.city;
+            for (const [k, v] of Object.entries(detail))
+              if (v !== null && v !== undefined && isEmpty((live as Record<string, unknown>)[k])) patch[k] = v;
             const { error: upErr } = await supabase.from("projects").update(patch).eq("id", live.id);
             if (upErr) throw upErr;
           }
+
+          // Gallery: additive only — existing owner photos are never touched.
+          if (gallery.length) {
+            const { data: existing } = await supabase
+              .from("project_images")
+              .select("image_url,display_order")
+              .eq("project_id", live.id);
+            const have = new Set((existing || []).map((r: any) => r.image_url));
+            let order = Math.max(-1, ...(existing || []).map((r: any) => Number(r.display_order) || 0));
+            const rows = gallery
+              .filter((url) => !have.has(url))
+              .map((url, i) => ({
+                project_id: live.id,
+                image_url: url,
+                alt_text: `${s.name} gallery`,
+                display_order: order + 1 + i,
+                asset_role: (existing || []).length === 0 && i === 0 ? "cover" : "gallery",
+                data_source: "market_data",
+              }));
+            if (rows.length) await supabase.from("project_images").insert(rows);
+          }
+
 
           const { error: stErr } = await supabase
             .from("market_staged_projects")
