@@ -6086,37 +6086,52 @@ export type Database = {
       }
       company_profile_requests: {
         Row: {
+          admin_notes: string | null
           created_at: string
           developer_id: string
+          document_id: string | null
           fulfilled_at: string | null
+          fulfilled_by: string | null
           id: string
           message: string | null
           requester_email: string | null
           requester_name: string | null
           requester_phone: string | null
+          sent_to_email: string | null
           status: string
+          updated_at: string
         }
         Insert: {
+          admin_notes?: string | null
           created_at?: string
           developer_id: string
+          document_id?: string | null
           fulfilled_at?: string | null
+          fulfilled_by?: string | null
           id?: string
           message?: string | null
           requester_email?: string | null
           requester_name?: string | null
           requester_phone?: string | null
+          sent_to_email?: string | null
           status?: string
+          updated_at?: string
         }
         Update: {
+          admin_notes?: string | null
           created_at?: string
           developer_id?: string
+          document_id?: string | null
           fulfilled_at?: string | null
+          fulfilled_by?: string | null
           id?: string
           message?: string | null
           requester_email?: string | null
           requester_name?: string | null
           requester_phone?: string | null
+          sent_to_email?: string | null
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
