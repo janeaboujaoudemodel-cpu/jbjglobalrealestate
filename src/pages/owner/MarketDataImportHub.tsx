@@ -187,38 +187,104 @@ function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | nul
       .filter((r) => r.state !== "none");
   }, [data]);
 
-  if (isLoading) return <p className="mt-3 text-xs text-neutral-500">Loading before / after…</p>;
-  if (!rows.length) return <p className="mt-3 text-xs text-neutral-500">Nothing to compare.</p>;
+  if (isLoading) return <p className="mt-3 text-xs text-neutral-500">Loading comparison…</p>;
+
+  const live = data?.live || null;
+  const staged = data?.staged || null;
+  const sourceHref = (staged?.source_url as string) || null;
+  const img = (r: Record<string, any> | null) =>
+    (r?.cover_image_url || r?.cover_image || r?.logo_url || r?.image_url || r?.hero_image_url || null) as string | null;
+  const line = (r: Record<string, any> | null) =>
+    [r?.developer_name, r?.area, r?.city, r?.country].filter(Boolean).join(" · ") || "—";
+
+  const Side = ({
+    title,
+    record,
+    href,
+    hrefLabel,
+    tone,
+  }: {
+    title: string;
+    record: Record<string, any> | null;
+    href: string | null;
+    hrefLabel: string;
+    tone: "jbj" | "source";
+  }) => (
+    <div className="mir-card mir-card-click rounded-xl p-3">
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${tone === "jbj" ? "mir-solid" : "mir-pill"}`}
+        >
+          {title}
+        </span>
+        {href ? (
+          <a href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 text-xs">
+            {hrefLabel} <ExternalLink className="h-3 w-3" aria-hidden />
+          </a>
+        ) : (
+          <span className="text-xs text-neutral-400">No link</span>
+        )}
+      </div>
+      <div className="mt-3 flex gap-3">
+        <div className="h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-[rgba(6,78,59,0.06)]">
+          {img(record) ? (
+            <img src={img(record) as string} alt={String(record?.name || title)} className="h-full w-full object-cover" loading="lazy" />
+          ) : null}
+        </div>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-neutral-900">{record?.name || "—"}</p>
+          <p className="mt-1 text-xs text-neutral-600">{line(record)}</p>
+          <p className="mt-1 text-xs text-neutral-500">
+            {record?.status || record?.headquarters || record?.sale_status || "Status not set"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="mt-3 overflow-x-auto rounded-lg border border-[rgba(6,78,59,0.15)]">
-      <table className="w-full text-xs">
-        <thead className="mir-solid text-left">
-          <tr>
-            <th className="px-3 py-2 font-semibold">Field</th>
-            <th className="px-3 py-2 font-semibold">Before (JBJ now)</th>
-            <th className="px-3 py-2 font-semibold">After merge</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.key} className="mir-row border-t border-[rgba(6,78,59,0.1)]">
-              <td className="px-3 py-2 font-medium text-neutral-800">{r.key.replace(/_/g, " ")}</td>
-              <td className="px-3 py-2 text-neutral-600">{r.before}</td>
-              <td className="px-3 py-2 text-neutral-900">
-                {r.state === "protected" ? (
-                  <span className="text-neutral-500 italic">{r.before} — manual JBJ value protected</span>
-                ) : (
-                  <span style={{ color: EMERALD, fontWeight: 600 }}>{r.after}</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="mt-4 space-y-3">
+      <div className="grid gap-3 md:grid-cols-2">
+        <Side title="JBJ listing (current)" record={live} href={jbjHref || null} hrefLabel="Open JBJ page" tone="jbj" />
+        <Side title="Market source" record={staged} href={sourceHref} hrefLabel="Open source page" tone="source" />
+      </div>
+
+      {rows.length === 0 ? (
+        <p className="text-xs text-neutral-500">Field-by-field: nothing new to add — JBJ already holds every value.</p>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-[rgba(6,78,59,0.15)]">
+          <table className="w-full text-xs">
+            <thead className="mir-solid text-left">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Field</th>
+                <th className="px-3 py-2 font-semibold">JBJ now</th>
+                <th className="px-3 py-2 font-semibold">Market source</th>
+                <th className="px-3 py-2 font-semibold">Result if you merge</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.key} className="mir-row border-t border-[rgba(6,78,59,0.1)]">
+                  <td className="px-3 py-2 font-medium text-neutral-800">{r.key.replace(/_/g, " ")}</td>
+                  <td className="px-3 py-2 text-neutral-600">{r.before}</td>
+                  <td className="px-3 py-2 text-neutral-600">{r.after}</td>
+                  <td className="px-3 py-2">
+                    {r.state === "protected" ? (
+                      <span className="text-neutral-500">Keeps JBJ value — protected</span>
+                    ) : (
+                      <span style={{ color: EMERALD, fontWeight: 600 }}>Fills empty field: {r.after}</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
+
 
 export default function MarketDataImportHub() {
   const qc = useQueryClient();
