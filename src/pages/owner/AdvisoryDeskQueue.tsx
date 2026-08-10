@@ -27,7 +27,7 @@ interface TicketRow {
   transcript: string | null;
   status: string;
   created_at: string;
-  resolved_at: string | null;
+  handled_at: string | null;
 }
 
 type Channel = "email" | "whatsapp" | "both";
@@ -46,7 +46,7 @@ export default function AdvisoryDeskQueue() {
       const { data, error } = await supabase
         .from("advisory_desk_requests")
         .select(
-          "id, user_id, visitor_name, visitor_email, visitor_phone, query, source, page_source, transcript, status, created_at, resolved_at",
+          "id, user_id, visitor_name, visitor_email, visitor_phone, query, source, page_source, transcript, status, created_at, handled_at",
         )
         .order("created_at", { ascending: false })
         .limit(200);
