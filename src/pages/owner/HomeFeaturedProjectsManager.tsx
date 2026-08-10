@@ -289,7 +289,7 @@ export default function HomeFeaturedProjectsManager() {
             <button
               key={s.id}
               onClick={() => setSurface(s.id)}
-              className={`rounded-md px-3 py-2 text-sm font-semibold transition ${active ? "bg-[#064E3B] text-white" : "bg-white text-[#0F172A] border border-[rgba(6,78,59,0.14)] hover:border-[#064E3B]"}`}
+              className={`rounded-md px-3 py-2 text-sm font-semibold transition ${active ? "jj-surface-emerald text-white" : "bg-white text-[#0F172A] border border-[rgba(6,78,59,0.14)] hover:border-[#064E3B]"}`}
             >
               {s.label}
               <span className={`ml-2 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${active ? "bg-white/25 text-white" : "bg-[rgba(6,78,59,0.08)] text-[#064E3B]"}`}>{s.hint}</span>
@@ -568,7 +568,7 @@ function AutomationPanel({
         </div>
         <Button
           onClick={() => onAutoFill(count, interval === "lifetime" ? null : Number(interval))}
-          className="bg-[#064E3B] text-white hover:bg-[#053f30]"
+          className="jj-surface-emerald text-white"
         >
           Replace with newest {count}
         </Button>

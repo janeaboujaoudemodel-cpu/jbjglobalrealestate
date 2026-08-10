@@ -178,7 +178,7 @@ export default function DataHub() {
                   <Button
                     onClick={distribute}
                     disabled={distributing || !selectedBroker || poolCount === 0}
-                    className="bg-[#064E3B] hover:bg-[#053a2c] !text-white"
+                    className="jj-surface-emerald !text-white"
                   >
                     {distributing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
                     Distribute {count} leads with AI

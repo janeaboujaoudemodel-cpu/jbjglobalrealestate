@@ -108,7 +108,7 @@ export default function DriveExtractionsHub() {
             </p>
           </div>
         </div>
-        <Button size="sm" onClick={load} className="rounded-md bg-[#064E3B] text-white hover:bg-[#053a2c] border border-[#064E3B]">
+        <Button size="sm" onClick={load} className="rounded-md jj-surface-emerald text-white border-0">
           <RefreshCw className="w-4 h-4 mr-1.5" /> Refresh
         </Button>
       </header>
@@ -143,8 +143,8 @@ export default function DriveExtractionsHub() {
               onClick={() => setActive(t.key)}
               className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition border"
               style={{
-                background: isActive ? "#064E3B" : "#FFFFFF",
-                borderColor: isActive ? "#064E3B" : "rgba(6,78,59,0.20)",
+                background: isActive ? "var(--jj-emerald-ombre)" : "#FFFFFF",
+                borderColor: isActive ? "transparent" : "rgba(6,78,59,0.20)",
                 color: isActive ? "#FFFFFF" : "#111827",
                 fontWeight: isActive ? 600 : 500,
               }}
