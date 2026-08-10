@@ -248,7 +248,7 @@ export default function MarketDataImportHub() {
             UAE and Türkiye.
           </p>
           <p className="mt-3">
-            Work the <strong className="text-foreground">Review matches</strong> tab first — those are staged Woven
+            Work the <strong className="text-foreground">Review matches</strong> tab first — those are staged market
             records that probably already exist on JBJ. Choose Merge to fill only the gaps, Keep separate if they are
             genuinely different projects, or Ignore to drop the staged record. Then approve the
             <strong className="text-foreground"> New records</strong> tab in batches.
