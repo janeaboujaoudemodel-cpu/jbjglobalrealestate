@@ -716,14 +716,14 @@ export default function MarketDataImportHub() {
         />
         <StatCard
           label="New projects"
-          value={String(newProjects.length || stats.new_projects_awaiting_approval || 0)}
+          value={String(progress.newProjects.found)}
           hint="awaiting your approval"
           progress={progress.newProjects}
           onClick={() => setTab("new")}
         />
         <StatCard
           label="New developers"
-          value={String(stats.new_developers ?? newDevelopers.length)}
+          value={String(progress.newDevelopers.found)}
           hint="awaiting your approval"
           progress={progress.newDevelopers}
           onClick={() => setTab("newDevelopers")}
