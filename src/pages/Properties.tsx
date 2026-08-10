@@ -71,7 +71,21 @@ import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
 
 import { EMPTY_SEARCH, paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
+import { findAreaExact } from "@/lib/areaResolver";
+import { getCountry } from "@/data/geography";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
+
+/**
+ * URL params can carry either geography SLUGS ("dubai-marina", emitted by the
+ * smart search) or DISPLAY NAMES ("Dubai Marina", emitted by the legacy filter
+ * bar). The results engine matches on display names, so every incoming value is
+ * normalised here — otherwise a slug silently applies no filter at all.
+ */
+const toDisplayNames = (values: string[]): string[] =>
+  values
+    .map((v) => findAreaExact(v)?.name ?? v.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()))
+    .filter(Boolean);
+
 const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
 import { CURRENCY_RATES, CURRENCY_SYMBOLS } from "@/hooks/useCurrency";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -333,8 +347,13 @@ const Properties = () => {
       priceMin: priceMinParam || "",
       priceMax: priceMaxParam || "",
       bedrooms: searchParams.get('bedrooms')?.split(',').filter(Boolean) || (bedsParam ? [bedsParam] : []),
-      emirates: searchParams.get('emirates')?.split(',').filter(Boolean) || (emirateParam ? [emirateParam] : []),
-      areas: searchParams.get('areas')?.split(',').filter(Boolean) || (areaParam ? [areaParam.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())] : []),
+      emirates: toDisplayNames(searchParams.get('emirates')?.split(',').filter(Boolean) || (emirateParam ? [emirateParam] : [])),
+      areas: toDisplayNames(
+        searchParams.get('areas')?.split(',').filter(Boolean)
+          || searchParams.get('areaSlugs')?.split(',').filter(Boolean)
+          || (areaParam ? [areaParam] : []),
+      ),
+
       developers: searchParams.get('developers')?.split(',').filter(Boolean) || [],
       propertyTypes: searchParams.get('propertyTypes')?.split(',').filter(Boolean) || (typeParam && typeParam !== 'all' ? [typeParam] : []),
       statuses: searchParams.get('statuses')?.split(',').filter(Boolean) || (saleStatusParam && saleStatusParam !== 'all' ? [saleStatusParam] : []),
