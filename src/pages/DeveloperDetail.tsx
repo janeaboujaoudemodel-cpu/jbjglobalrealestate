@@ -367,6 +367,14 @@ const DeveloperDetail = () => {
     filters.facilities.length > 0 ||
     filters.premiumOnly;
 
+  // A value is only shown when a real, disclosed value exists in the backend.
+  // Placeholders ("not publicly disclosed", "n/a", "-", "unknown") are hidden entirely.
+  const isDisclosedValue = (value?: string | null) => {
+    const text = (value || "").trim();
+    if (!text) return false;
+    return !/^(n\/?a|na|none|unknown|not\s+(publicly\s+)?(disclosed|available|provided)|tbc|tbd|-|—)$/i.test(text);
+  };
+
   const publicFacts = useMemo(() => buildPublicDeveloperFacts(developer, projects?.length || 0), [developer, projects?.length]);
   const safeDeveloperDescription = developer
     ? (developer.description ? getSafeDeveloperDescription(developer) : buildPublicDeveloperNarrative(developer, projects?.length || 0))
@@ -500,12 +508,12 @@ const DeveloperDetail = () => {
     },
     {
       icon: CheckCircle2,
-      label: "Completed",
+      label: "Projects Completed",
       value: Number(developer.completed_projects || 0) ? `${Number(developer.completed_projects).toLocaleString()}` : null,
     },
     {
       icon: Hammer,
-      label: "Ongoing / Off-plan",
+      label: "Projects Ongoing",
       value: Number(developer.offplan_projects || 0) ? `${Number(developer.offplan_projects).toLocaleString()}` : null,
     },
     {
@@ -513,11 +521,24 @@ const DeveloperDetail = () => {
       label: "Properties Delivered",
       value: Number(developer.total_units_delivered || 0) ? `${Number(developer.total_units_delivered).toLocaleString()}+` : null,
     },
-    ...(developer.ceo_name ? [{ icon: UserRound, label: "Leadership", value: stripBracketedTitle(developer.ceo_name) }] : []),
+    // Leadership is hidden entirely until a real name is entered in the backend.
+    ...(isDisclosedValue(developer.ceo_name) ? [{ icon: UserRound, label: "Leadership", value: stripBracketedTitle(developer.ceo_name) }] : []),
     // City-level headquarters only — never street addresses, phone numbers or emails.
     ...(cityLevelHeadquarters ? [{ icon: MapPin, label: "Headquarters", value: cityLevelHeadquarters }] : []),
   ].filter(s => s.value !== null);
 
+
+  // Never repeat a value the stat grid already shows (Leadership, Founded, ...).
+  const statLabelKeys = new Set(stats.map((s) => String(s.label).toLowerCase()));
+  const dedupedPublicFacts = publicFacts
+    .filter((fact) => isDisclosedValue(String(fact.value)))
+    .filter((fact) => {
+      const key = String(fact.label).toLowerCase();
+      if (statLabelKeys.has(key)) return false;
+      if (key === "projects in uae" && statLabelKeys.has("uae projects")) return false;
+      if (key === "projects outside uae" && statLabelKeys.has("global portfolio")) return false;
+      return true;
+    });
 
   const verifiedFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
   const heroImageUrl = verifiedFlagship
@@ -667,7 +688,7 @@ const DeveloperDetail = () => {
               {developer.name.split(" ").slice(1).join(" ")}
             </h1>
             {safeDeveloperDescription && (
-              <div className="max-w-3xl">
+              <div className="max-w-5xl">
                 <div className={`relative ${!isDevDescExpanded && safeDeveloperDescription.length > 400 ? 'max-h-32 overflow-hidden' : ''}`}>
                   <HtmlT
                     html={renderMarkdownToHtml(formatReellyDescription(safeDeveloperDescription))}
@@ -697,6 +718,7 @@ const DeveloperDetail = () => {
             <DeveloperAboutPanel
               developer={developer as any}
               projectCount={projects?.length || undefined}
+              hideExplainer={!!safeDeveloperDescription}
               className="mt-6 max-w-5xl"
             />
 
@@ -732,9 +754,9 @@ const DeveloperDetail = () => {
               ))}
             </div>
 
-            {publicFacts.length > 0 && (
+            {dedupedPublicFacts.length > 0 && (
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl">
-                {publicFacts.map((fact) => (
+                {dedupedPublicFacts.map((fact) => (
                   <div key={fact.label} className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] px-4 py-3">
                     <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#064E3B]">{fact.label}</div>
                     <div className="mt-1 text-sm font-semibold text-[#1A1A1A] break-words">{fact.value}</div>
