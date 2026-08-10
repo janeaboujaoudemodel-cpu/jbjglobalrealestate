@@ -402,9 +402,6 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
                     ? leadsQuery.error
                     : `Create your first ${label.toLowerCase()} to get started.`}
                 </p>
-                <button type="button" className="jc-list__cta" onClick={goCreate}>
-                  <Plus size={15} /> Create {label}
-                </button>
               </div>
             )}
           </section>
