@@ -32,7 +32,7 @@ export interface AIPersonality {
 export const JBJ_COMPANY_INFO = {
   name: "JBJ Global Real Estate",
   nameFull: "JBJ Global Real Estate L.L.C S.O.C.",
-  phone: "+974 15 15 015",
+  phone: "+971 54 15 15 015",
   email: "Contact@JBJ.ae",
   privacyEmail: "Privacy@JBJ.ae",
   website: "www.JBJ.ae",
@@ -69,7 +69,7 @@ export const SIGNATURE_TEMPLATES = {
 ${name}
 ${title}
 JBJ Global Real Estate
-www.jbj.ae | +974 15 15 015`,
+www.jbj.ae | +971 54 15 15 015`,
   
   warm: (name: string) => `Warm regards,
 ${name}
@@ -118,7 +118,7 @@ Communication style:
     signature: `Best regards,
 Jane Bou Jaoude
 Founder & CEO JBJ Global Real Estate
-www.jbj.ae | +974 15 15 015`,
+www.jbj.ae | +971 54 15 15 015`,
     permissions: ['all'],
     channels: ['chat', 'whatsapp', 'email', 'video', 'call'],
     canUseEmoji: false,
@@ -213,7 +213,7 @@ Communication rules:
 - Occasionally adds enthusiasm ("This one's truly worth a look.")
 - Always ends messages with a next step (call, link, or document)
 - Never reveal you are an AI
-- Use official contact: +974 15 15 015, Contact@JBJ.ae
+- Use official contact: +971 54 15 15 015, Contact@JBJ.ae
 - Never guarantee investment returns or provide financial advice
 - Guide clients toward suitable properties based on budget and preferences`,
     exampleMessage: `Good afternoon Mr. Omar,
@@ -372,7 +372,7 @@ Jessica | HR Manager`,
 Jessica
 HR Manager
 JBJ Global Real Estate
-www.jbj.ae | +974 15 15 015`,
+www.jbj.ae | +971 54 15 15 015`,
     permissions: ['manage_cvs', 'schedule_interviews', 'view_candidates', 'flag_candidates'],
     channels: ['chat', 'email', 'video'],
     canUseEmoji: false,
@@ -677,9 +677,7 @@ ABOUT JBJ GLOBAL REAL ESTATE:
 - 6+ years operating in Dubai's premium Real Estate market
 - Services: BUY · SELL · RENT (luxury properties)
 - Focus: Off-plan, ready, premium properties in Dubai
-- Website: www.jbj.ae | Contact: +974 15 15 015
-
-REAL ESTATE KNOWLEDGE (You are an expert on all of this):
+- Website: www.jbj.ae | Contact: +971 54 15 15 015REAL ESTATE KNOWLEDGE (You are an expert on all of this):
 - Off-Plan Properties: Purchased before/during construction. Payment plans: 50/50 or 60/40.
 - Ready Properties: Completed, immediate occupancy. Higher upfront cost.
 - Secondary/Resale: Sold by existing owners through DLD transfer.
@@ -770,7 +768,7 @@ JBJ Global Real Estate`,
 Amanda Clarke
 Executive Assistant to CEO
 JBJ Global Real Estate
-www.jbj.ae | +974 15 15 015`,
+www.jbj.ae | +971 54 15 15 015`,
     permissions: ['manage_ceo_calendar', 'priority_communications', 'executive_briefings', 'vip_coordination', 'all_departments_view', 'broker_reports', 'financial_tracking', 'cv_analysis', 'full_crm_access', 'collect_all_reports', 'flag_for_ceo', 'department_coordination'],
     channels: ['chat', 'whatsapp', 'email', 'video', 'call'],
     canUseEmoji: true,

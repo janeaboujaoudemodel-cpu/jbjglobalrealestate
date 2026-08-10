@@ -621,7 +621,7 @@ Deno.serve(async (req) => {
           <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;"><tr>
             <td style="opacity:.85;"><strong style="letter-spacing:.14em;">JBJ GLOBAL REAL ESTATE</strong><br/><span style="opacity:.7;">Private Office · Dubai, UAE</span></td>
             <td align="center" style="opacity:.85;">CONTACT@JBJ.AE<br/>WWW.JBJ.AE</td>
-            <td align="right" style="opacity:.85;">+974 15 15 015</td>
+            <td align="right" style="opacity:.85;">+971 54 15 15 015</td>
           </tr></table>
         </td></tr>
         <tr><td style="text-align:center;padding-top:14px;font-size:11px;color:#1A1A1A;opacity:.55;">© ${new Date().getFullYear()} JBJ Global Real Estate · Electronically signed &amp; legally binding</td></tr>

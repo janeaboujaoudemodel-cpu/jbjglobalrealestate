@@ -1459,7 +1459,7 @@ const VideoMeeting = () => {
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => window.location.href = 'https://wa.me/9741515015?text=I%20need%20help%20with%20JBJ%20Video%20Meet'}
+                onClick={() => window.location.href = 'https://wa.me/971541515015?text=I%20need%20help%20with%20JBJ%20Video%20Meet'}
               >
                 WhatsApp
               </Button>

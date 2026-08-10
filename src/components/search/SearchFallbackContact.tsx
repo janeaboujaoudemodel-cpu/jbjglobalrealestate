@@ -19,7 +19,7 @@ import { openWhatsApp, openTel } from "@/utils/contactActions";
 import { toast } from "sonner";
 
 const EMERALD_PAIR = "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)";
-const COMPANY_PHONE = "+974 15 15 015";
+const COMPANY_PHONE = "+971 54 15 15 015";
 
 interface Props {
   open: boolean;

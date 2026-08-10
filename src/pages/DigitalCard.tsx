@@ -30,13 +30,13 @@ const CONTACT_INFO = {
   email: "Contact@JBJ.AE",
   emailDisplay: "Contact@JBJ.AE",
   // Company phone
-  phoneCompany: "+974 15 15 015",
-  phoneCompanyClean: "+9741515015",
-  whatsappCompany: "9741515015",
+  phoneCompany: "+971 54 15 15 015",
+  phoneCompanyClean: "+971541515015",
+  whatsappCompany: "971541515015",
   // Personal phone
-  phonePersonal: "+971 50 44 88 763",
-  phonePersonalClean: "+971504488763",
-  whatsappPersonal: "971504488763",
+  phonePersonal: "+971 54 15 15 015",
+  phonePersonalClean: "+971541515015",
+  whatsappPersonal: "971541515015",
   // LOCKED: Website as JBJ.AE (display), https://jbj.ae (link)
   website: "https://jbj.ae",
   websiteDisplay: "JBJ.AE",

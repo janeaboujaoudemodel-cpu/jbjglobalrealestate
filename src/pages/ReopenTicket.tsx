@@ -118,7 +118,7 @@ const ReopenTicket = () => {
               Return to Homepage
             </Button>
             <a
-              href="https://wa.me/9741515015"
+              href="https://wa.me/971541515015"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full"

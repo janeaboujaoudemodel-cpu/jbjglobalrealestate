@@ -31,7 +31,7 @@ export const BRAND_LOCK = Object.freeze({
   DOMAIN: 'JBJ.ae',
   PRIMARY_EMAIL: 'contact@JBJ.ae',
   PRIVACY_EMAIL: 'privacy@JBJ.ae',
-  PRIMARY_PHONE: '+974 15 15 015',
+  PRIMARY_PHONE: '+971 54 15 15 015',
 });
 
 // Forbidden terms - instant block if detected

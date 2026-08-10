@@ -145,7 +145,7 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
     .replace(/Jane\s+Bouchaudey/gi, "JBJ Team")
     .replace(/Jane Bou Jaoude/gi, "JBJ Team")
     .replace(/Founder\s*&\s*CEO|Head of Business Development/gi, "JBJ GLOBAL REAL ESTATE")
-    .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+974 15 15 015")
+    .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 15 15 015")
     .replace(/\{\{sender_phone_name\}\}/g, "Jane Bou Jaoude")
     .replace(/__JBJ_PHONE_CONTACT_NAME__/g, "Jane Bou Jaoude")
     .replace(/<a\b[^>]*href=["']mailto:(?:contact|info|helpdesk)@jbj\.ae(?:\?[^"']*)?["'][^>]*>[\s\S]*?<\/a>/gi, mailToken)
@@ -161,7 +161,7 @@ const hardenRenderedDeveloperHtml = (html: string, developerName: string, replyT
       `<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand%2Fjbj-monogram-cropped.png" alt="JBJ Global Real Estate" width="72" style="max-width:72px;height:auto;display:inline-block;border:0;margin:0 auto 12px;" />$1`,
     )
     // Restore protected WhatsApp numbers AFTER phone normalization above.
-    .replace(/__JBJ_JANE_WA__/g, "+974 15 15 015")
+    .replace(/__JBJ_JANE_WA__/g, "+971 54 15 15 015")
     .replace(/__JBJ_WALID_WA1__/g, "+971 54 366 2223")
     .replace(/__JBJ_WALID_WA2__/g, "+971 50 999 3839");
 };
@@ -284,8 +284,8 @@ serve(async (req: Request) => {
       sender_name: fromName,
       sender_title: "Developer Registration Department",
       sender_phone_name: "__JBJ_PHONE_CONTACT_NAME__",
-      sender_phone: "+974 15 15 015",
-      sender_phone_tel: "tel:+9741515015",
+      sender_phone: "+971 54 15 15 015",
+      sender_phone_tel: "tel:+971541515015",
     });
     html = hardenRenderedDeveloperHtml(html, dev.developer_name, replyTo);
     html = injectJbjBrandHeader(html);
@@ -304,8 +304,8 @@ serve(async (req: Request) => {
       sender_name: fromName,
       sender_title: "Developer Registration Department",
       sender_phone_name: "__JBJ_PHONE_CONTACT_NAME__",
-      sender_phone: "+974 15 15 015",
-      sender_phone_tel: "tel:+9741515015",
+      sender_phone: "+971 54 15 15 015",
+      sender_phone_tel: "tel:+971541515015",
     });
     const cleanSubject = renderedSubject
       .replace(/\bAmelia\b/gi, "JBJ GLOBAL REAL ESTATE")

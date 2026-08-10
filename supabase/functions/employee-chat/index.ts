@@ -62,8 +62,7 @@ BEHAVIOR RULES:
 - If asked about something outside your expertise, acknowledge it and offer to coordinate with the right department
 
 COMPANY INFO:
-- Phone: +974 15 15 015
-- Email: contact@jbj.ae
+- Phone: +971 54 15 15 015Email: contact@jbj.ae
 - Based in Dubai, UAE
 - Services: Property Sales, Rentals, Investment Advisory, Holiday Homes
 

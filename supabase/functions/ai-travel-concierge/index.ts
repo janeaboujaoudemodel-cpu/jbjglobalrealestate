@@ -220,7 +220,7 @@ const RequestSchema = z.object({
 });
 
 const APPROVED_CONTACT_INFO = {
-  phone: '+974 15 15 015',
+  phone: '+971 54 15 15 015',
   email: 'contact@jbj.ae',
   privacyEmail: 'privacy@jbj.ae',
   website: 'jbj.ae',
@@ -246,7 +246,7 @@ function sanitizeContactInfo(text: string): string {
     sanitized = sanitized.replace(pattern, (match) => {
       // Normalize for comparison
       const normalized = match.replace(/[\s\-]/g, '');
-      if (normalized === '+974 15 15 015' || normalized === '+9741515015' || normalized === '547167107') {
+      if (normalized === '+971 54 15 15 015' || normalized === '+971541515015' || normalized === '547167107') {
         return match; // Keep approved number
       }
       return APPROVED_CONTACT_INFO.phone; // Replace with approved

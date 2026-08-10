@@ -24,9 +24,9 @@ export const COMPANY_NAP = {
   ogImageUrl: "https://www.jbj.ae/og-image.jpg",
 
   // Contact
-  phoneE164: "+9741515015", // Display / tel: links
-  phoneDisplay: "+974 15 15 015",
-  whatsappE164: "+9741515015",
+  phoneE164: "+971541515015", // Display / tel: links
+  phoneDisplay: "+971 54 15 15 015",
+  whatsappE164: "+971541515015",
   email: "contact@jbj.ae", // lowercase only
 
   // Address

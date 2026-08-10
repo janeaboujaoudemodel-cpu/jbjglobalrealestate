@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
       if (!r.ok) return json({ error: "email_failed", detail: body }, 502);
     } else if (channel === "whatsapp") {
       if (!doc.client_phone) return json({ error: "client_phone missing" }, 400);
-      const text = `${message ? message + "\n\n" : ""}Please review and sign your Property Advertising Agreement:\n${signUrl}\n\nJBJ Global Real Estate · +971 5471 67107`;
+      const text = `${message ? message + "\n\n" : ""}Please review and sign your Property Advertising Agreement:\n${signUrl}\n\nJBJ Global Real Estate · +971 54 15 15 015`;
       if (LOVABLE_API_KEY && TWILIO_API_KEY && TWILIO_FROM) {
         const r = await fetch("https://connector-gateway.lovable.dev/twilio/Messages.json", {
           method: "POST",
@@ -132,7 +132,7 @@ function renderEmail({ name, signUrl, message }: { name: string; signUrl: string
         <p style="margin:12px 0 0;font-size:12px;opacity:.7;">If the button does not work, paste this link into your browser:<br/><span style="word-break:break-all;">${signUrl}</span></p>
       </td></tr>
       <tr><td style="padding:18px 32px;border-top:1px solid #B89555;font-size:11px;opacity:.7;">
-        JBJ Global Real Estate · +971 5471 67107 · contact@jbj.ae · jbj.ae
+        JBJ Global Real Estate · +971 54 15 15 015· contact@jbj.ae · jbj.ae
       </td></tr>
     </table>
   </td></tr>

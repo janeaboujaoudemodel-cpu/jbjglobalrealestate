@@ -162,8 +162,7 @@ IDENTITY:
 
 COMPANY INFO:
 📧 Email: CONTACT@JBJ.AE
-📞 Phone: +974 15 15 015
-🌐 Website: WWW.JBJ.AE
+📞 Phone: +971 54 15 15 015🌐 Website: WWW.JBJ.AE
 
 CHANNEL: ${threadData.channel_type}
 ${toneInstructions}

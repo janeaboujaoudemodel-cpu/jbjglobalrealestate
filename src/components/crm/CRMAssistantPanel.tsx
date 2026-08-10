@@ -70,11 +70,11 @@ interface CRMAssistantPanelProps {
 // Company contact info for drafts - OFFICIAL NUMBERS ONLY
 const COMPANY_CONTACTS = {
   name: "JBJ GLOBAL REAL ESTATE",
-  phone: "+974 15 15 015",
+  phone: "+971 54 15 15 015",
   email: "CONTACT@JBJ.AE",
   website: "WWW.JBJ.AE",
   address: "Dubai, UAE",
-  founderPhone: "+974 15 15 015"
+  founderPhone: "+971 54 15 15 015"
 };
 
 const CRMAssistantPanel = ({ userId, isOpen, onClose }: CRMAssistantPanelProps) => {

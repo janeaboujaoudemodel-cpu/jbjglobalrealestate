@@ -533,10 +533,9 @@ const AdvancedBrokerToolkit = () => {
               <Mail className="h-4 w-4" />
               CONTACT@JBJ.AE
             </a>
-            <a href="tel:+9741515015" className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+            <a href="tel:+971541515015" className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
               <Phone className="h-4 w-4" />
-              +974 15 15 015
-            </a>
+              +971 54 15 15 015   </a>
           </div>
         </motion.div>
       </div>

@@ -192,8 +192,7 @@ CAPABILITIES:
 
 JBJ CONTACT INFO:
 📧 Email: CONTACT@JBJ.AE
-📞 Phone: +974 15 15 015
-🌐 Website: WWW.JBJ.AE
+📞 Phone: +971 54 15 15 015🌐 Website: WWW.JBJ.AE
 
 When asked to do tasks, confirm you've understood and will handle it. For complex requests, break them down into steps.`;
   };
