@@ -93,22 +93,25 @@ const DECISIONS = [
 const norm = (s: string | null | undefined) =>
   (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\b(the|by|at|residence|residences|tower|towers)\b/g, "").trim();
 
-/** Scoped emerald styling so no bright green or black-on-hover can leak in. */
+/** Scoped emerald styling — pure white on every emerald fill, never black. */
 const EmeraldStyles = () => (
   <style>{`
     [data-mir] .mir-pill{border:1px solid rgba(6,78,59,0.25);background:#fff;color:${EMERALD};transition:background .15s,color .15s}
-    [data-mir] .mir-pill:hover{background:${EMERALD_GRADIENT};color:#fff;border-color:transparent}
-    [data-mir] .mir-pill:hover svg{color:#fff}
-    [data-mir] .mir-pill-active{background:${EMERALD_GRADIENT} !important;color:#fff !important;border-color:transparent !important}
-    [data-mir] .mir-pill-active svg{color:#fff !important}
+    [data-mir] .mir-pill:hover,[data-mir] .mir-pill:hover *{background-color:transparent;color:#fff !important;-webkit-text-fill-color:#fff !important}
+    [data-mir] .mir-pill:hover{background:${EMERALD_GRADIENT} !important;border-color:transparent}
+    [data-mir] .mir-pill:hover svg{color:#fff !important;stroke:#fff !important}
+    [data-mir] .mir-pill-active,[data-mir] .mir-pill-active:hover{background:${EMERALD_GRADIENT} !important;border-color:transparent !important}
+    [data-mir] .mir-pill-active,[data-mir] .mir-pill-active *{color:#fff !important;-webkit-text-fill-color:#fff !important}
+    [data-mir] .mir-pill-active svg{color:#fff !important;stroke:#fff !important}
     [data-mir] .mir-card{border:1px solid rgba(6,78,59,0.12);background:#fff;transition:border-color .15s,box-shadow .15s}
     [data-mir] .mir-card-click:hover{border-color:${EMERALD};box-shadow:0 8px 24px -14px rgba(6,78,59,.55)}
     [data-mir] .mir-link{color:${EMERALD};font-weight:600}
     [data-mir] .mir-link:hover{text-decoration:underline}
     [data-mir] .mir-row:hover{background:rgba(6,78,59,0.04)}
-    [data-mir] .mir-solid{background:${EMERALD_GRADIENT};color:#fff;border-color:transparent}
-    [data-mir] .mir-solid:hover{background:${EMERALD_GRADIENT};color:#fff;filter:brightness(1.08)}
-    [data-mir] .mir-solid svg{color:#fff}
+    [data-mir] .mir-solid,[data-mir] .mir-solid:hover{background:${EMERALD_GRADIENT} !important;border-color:transparent}
+    [data-mir] .mir-solid,[data-mir] .mir-solid *{color:#fff !important;-webkit-text-fill-color:#fff !important}
+    [data-mir] .mir-solid svg{color:#fff !important;stroke:#fff !important}
+    [data-mir] .mir-solid:hover{filter:brightness(1.1)}
   `}</style>
 );
 
@@ -126,19 +129,18 @@ const StatCard = ({
   <button
     type="button"
     onClick={onClick}
-    disabled={!onClick}
     style={{ display: "block" }}
-    className={`mir-card w-full rounded-xl p-4 text-left ${onClick ? "mir-card-click cursor-pointer" : "cursor-default"}`}
+    className="mir-card mir-card-click w-full cursor-pointer rounded-xl p-4 text-left"
   >
     <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{label}</p>
     <p className="mt-2 text-2xl font-semibold text-neutral-900">{value}</p>
     {hint ? <p className="mt-1 text-xs text-neutral-500">{hint}</p> : null}
-    {onClick ? <p className="mt-2 text-[11px] mir-link">Open →</p> : null}
   </button>
 );
 
-/** Before / after panel for a match — live JBJ values vs staged market values. */
-function MatchDiff({ match }: { match: MatchRow }) {
+
+/** Side-by-side comparison — our live JBJ card vs the market-source card. */
+function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | null }) {
   const isDev = match.entity_type === "developer";
   const { data, isLoading } = useQuery({
     queryKey: ["market-match-diff", match.id],
@@ -185,38 +187,104 @@ function MatchDiff({ match }: { match: MatchRow }) {
       .filter((r) => r.state !== "none");
   }, [data]);
 
-  if (isLoading) return <p className="mt-3 text-xs text-neutral-500">Loading before / after…</p>;
-  if (!rows.length) return <p className="mt-3 text-xs text-neutral-500">Nothing to compare.</p>;
+  if (isLoading) return <p className="mt-3 text-xs text-neutral-500">Loading comparison…</p>;
+
+  const live = data?.live || null;
+  const staged = data?.staged || null;
+  const sourceHref = (staged?.source_url as string) || null;
+  const img = (r: Record<string, any> | null) =>
+    (r?.cover_image_url || r?.cover_image || r?.logo_url || r?.image_url || r?.hero_image_url || null) as string | null;
+  const line = (r: Record<string, any> | null) =>
+    [r?.developer_name, r?.area, r?.city, r?.country].filter(Boolean).join(" · ") || "—";
+
+  const Side = ({
+    title,
+    record,
+    href,
+    hrefLabel,
+    tone,
+  }: {
+    title: string;
+    record: Record<string, any> | null;
+    href: string | null;
+    hrefLabel: string;
+    tone: "jbj" | "source";
+  }) => (
+    <div className="mir-card mir-card-click rounded-xl p-3">
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${tone === "jbj" ? "mir-solid" : "mir-pill"}`}
+        >
+          {title}
+        </span>
+        {href ? (
+          <a href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 text-xs">
+            {hrefLabel} <ExternalLink className="h-3 w-3" aria-hidden />
+          </a>
+        ) : (
+          <span className="text-xs text-neutral-400">No link</span>
+        )}
+      </div>
+      <div className="mt-3 flex gap-3">
+        <div className="h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-[rgba(6,78,59,0.06)]">
+          {img(record) ? (
+            <img src={img(record) as string} alt={String(record?.name || title)} className="h-full w-full object-cover" loading="lazy" />
+          ) : null}
+        </div>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-neutral-900">{record?.name || "—"}</p>
+          <p className="mt-1 text-xs text-neutral-600">{line(record)}</p>
+          <p className="mt-1 text-xs text-neutral-500">
+            {record?.status || record?.headquarters || record?.sale_status || "Status not set"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="mt-3 overflow-x-auto rounded-lg border border-[rgba(6,78,59,0.15)]">
-      <table className="w-full text-xs">
-        <thead className="mir-solid text-left">
-          <tr>
-            <th className="px-3 py-2 font-semibold">Field</th>
-            <th className="px-3 py-2 font-semibold">Before (JBJ now)</th>
-            <th className="px-3 py-2 font-semibold">After merge</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.key} className="mir-row border-t border-[rgba(6,78,59,0.1)]">
-              <td className="px-3 py-2 font-medium text-neutral-800">{r.key.replace(/_/g, " ")}</td>
-              <td className="px-3 py-2 text-neutral-600">{r.before}</td>
-              <td className="px-3 py-2 text-neutral-900">
-                {r.state === "protected" ? (
-                  <span className="text-neutral-500 italic">{r.before} — manual JBJ value protected</span>
-                ) : (
-                  <span style={{ color: EMERALD, fontWeight: 600 }}>{r.after}</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="mt-4 space-y-3">
+      <div className="grid gap-3 md:grid-cols-2">
+        <Side title="JBJ listing (current)" record={live} href={jbjHref || null} hrefLabel="Open JBJ page" tone="jbj" />
+        <Side title="Market source" record={staged} href={sourceHref} hrefLabel="Open source page" tone="source" />
+      </div>
+
+      {rows.length === 0 ? (
+        <p className="text-xs text-neutral-500">Field-by-field: nothing new to add — JBJ already holds every value.</p>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-[rgba(6,78,59,0.15)]">
+          <table className="w-full text-xs">
+            <thead className="mir-solid text-left">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Field</th>
+                <th className="px-3 py-2 font-semibold">JBJ now</th>
+                <th className="px-3 py-2 font-semibold">Market source</th>
+                <th className="px-3 py-2 font-semibold">Result if you merge</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.key} className="mir-row border-t border-[rgba(6,78,59,0.1)]">
+                  <td className="px-3 py-2 font-medium text-neutral-800">{r.key.replace(/_/g, " ")}</td>
+                  <td className="px-3 py-2 text-neutral-600">{r.before}</td>
+                  <td className="px-3 py-2 text-neutral-600">{r.after}</td>
+                  <td className="px-3 py-2">
+                    {r.state === "protected" ? (
+                      <span className="text-neutral-500">Keeps JBJ value — protected</span>
+                    ) : (
+                      <span style={{ color: EMERALD, fontWeight: 600 }}>Fills empty field: {r.after}</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
+
 
 export default function MarketDataImportHub() {
   const qc = useQueryClient();
@@ -505,8 +573,8 @@ export default function MarketDataImportHub() {
           hint="awaiting your approval"
           onClick={() => setTab("newDevelopers")}
         />
-        <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} />
-        <StatCard label="New area candidates" value={String(stats.area_candidates_not_in_jbj ?? "—")} hint="not created — your call" />
+        <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} onClick={() => { setEntity("project"); setTab("matches"); }} />
+        <StatCard label="New area candidates" value={String(stats.area_candidates_not_in_jbj ?? "—")} hint="not created — your call" onClick={() => setTab("new")} />
       </div>
 
       <div className="mir-card rounded-xl p-4">
@@ -668,14 +736,14 @@ export default function MarketDataImportHub() {
                   <button
                     type="button"
                     onClick={() => setOpenDiff((s) => ({ ...s, [m.id]: !s[m.id] }))}
-                    className="mir-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs"
+                    className={`mir-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs ${open ? "mir-pill-active" : ""}`}
                   >
                     {open ? <ChevronUp className="h-3.5 w-3.5" aria-hidden /> : <ChevronDown className="h-3.5 w-3.5" aria-hidden />}
-                    Before / after
+                    Compare side by side
                   </button>
                 </div>
 
-                {open ? <MatchDiff match={m} /> : null}
+                {open ? <MatchDiff match={m} jbjHref={jbjHref} /> : null}
               </article>
             );
           })}
