@@ -337,7 +337,7 @@ serve(async (req) => {
       const { data: liveProjects } = await supabase
         .from("projects")
         .select(
-           "id,name,slug,is_published,description,short_description,cover_image_url,card_image_url,developer_id,price_from,total_units,available_units,latitude,longitude,location,area_name,emirate,floors,number_of_stories,building_count,built_up_area,plot_area,launch_date,expected_completion,handover_date,construction_start_date,construction_status,status,status_label,amenities,amenities_list,facilities,location_distances,payment_plan,payment_breakdown,down_payment_percent,rental_yield_estimate,roi_estimate,property_type_label,highlights,usp_bullets,units_data,unit_types,bedroom_types,bedrooms_min,bedrooms_max,video_url,video_urls,source_id,external_id",
+           "id,name,slug,is_published,description,short_description,cover_image_url,card_image_url,developer_id,price_from,total_units,available_units,latitude,longitude,location,area_id,area_name,emirate,floors,number_of_stories,building_count,built_up_area,plot_area,launch_date,expected_completion,handover_date,construction_start_date,construction_status,status,status_label,amenities,amenities_list,facilities,location_distances,payment_plan,payment_breakdown,down_payment_percent,rental_yield_estimate,roi_estimate,property_type_label,highlights,usp_bullets,units_data,unit_types,bedroom_types,bedrooms_min,bedrooms_max,video_url,video_urls,source_id,external_id,reelly_raw_data",
         )
         .limit(8000);
       const projByName = new Map<string, any>();
@@ -507,6 +507,14 @@ serve(async (req) => {
             if (!live.area_name && s.area) patch.area_name = s.area;
             if (!live.area_id && s.area) patch.area_id = areaByName.get(norm(s.area)) ?? null;
             if (!live.emirate && s.city) patch.emirate = s.city;
+            if (
+              sourceHighlights.length &&
+              (!Array.isArray(live.highlights) || live.highlights.length === 0 || live.highlights.some((item: unknown) => typeof item !== "string"))
+            ) patch.highlights = sourceHighlights;
+            if (
+              sourceHighlights.length &&
+              (!Array.isArray(live.usp_bullets) || live.usp_bullets.length === 0 || live.usp_bullets.some((item: unknown) => typeof item !== "string"))
+            ) patch.usp_bullets = sourceHighlights;
             for (const [k, v] of Object.entries(detail))
               if (v !== null && v !== undefined && isEmpty((live as Record<string, unknown>)[k])) patch[k] = v;
             const { error: upErr } = await supabase.from("projects").update(patch).eq("id", live.id);
