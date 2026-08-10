@@ -174,7 +174,30 @@ const EmeraldStyles = () => (
   `}</style>
 );
 
+/**
+ * Supabase caps every response at 1000 rows. The review queue must show TRUE totals,
+ * so every staging/live read is paginated until the table is fully loaded — otherwise
+ * "Found" silently under-reports (e.g. 1000 instead of 1749).
+ */
+async function fetchAllRows<T>(table: string, columns: string, orderBy = "name"): Promise<T[]> {
+  const PAGE = 1000;
+  const out: T[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from(table as any)
+      .select(columns)
+      .order(orderBy, { ascending: true })
+      .range(from, from + PAGE - 1);
+    if (error) throw error;
+    const rows = (data || []) as unknown as T[];
+    out.push(...rows);
+    if (rows.length < PAGE) break;
+  }
+  return out;
+}
+
 /** Found in the market source / published live on JBJ / still remaining. */
+
 type Progress = { found: number; published: number };
 
 const ProgressChips = ({ found, published }: Progress) => {
@@ -389,66 +412,43 @@ export default function MarketDataImportHub() {
     },
   });
 
-  const { data: matches = [], isFetching, refetch } = useQuery({
-    queryKey: ["market-review-matches", entity],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("market_review_matches" as any)
-        .select("*")
-        .eq("entity_type", entity)
-        .order("confidence", { ascending: false })
-        .limit(2000);
-      if (error) throw error;
-      return (data || []) as unknown as MatchRow[];
-    },
+  // All matches, both entities, fully paginated so the counters are exact.
+  const { data: allMatches = [], isFetching, refetch } = useQuery({
+    queryKey: ["market-review-matches-all"],
+    queryFn: () => fetchAllRows<MatchRow>("market_review_matches", "*", "confidence"),
   });
+
+  const matches = useMemo(() => allMatches.filter((m) => m.entity_type === entity), [allMatches, entity]);
 
   const { data: stagedProjects = [] } = useQuery({
     queryKey: ["market-staged-projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("market_staged_projects" as any)
-        .select(
-          "id,name,source_slug,source_url,developer_name,city,area,status,is_offplan,excluded_reason,review_decision,jbj_project_id,publish_status,published_at,publish_error",
-        )
-        .order("name")
-        .limit(3000);
-      if (error) throw error;
-      return (data || []) as unknown as StagedProject[];
-    },
+    queryFn: () =>
+      fetchAllRows<StagedProject>(
+        "market_staged_projects",
+        "id,name,source_slug,source_url,developer_name,city,area,status,is_offplan,excluded_reason,review_decision,jbj_project_id,publish_status,published_at,publish_error",
+      ),
   });
 
   const { data: stagedDevelopers = [] } = useQuery({
     queryKey: ["market-staged-developers"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("market_staged_developers" as any)
-        .select("id,name,source_slug,source_url,headquarters,total_projects,review_decision,jbj_developer_id,publish_status,published_at,publish_error")
-        .order("name")
-        .limit(2000);
-      if (error) throw error;
-      return (data || []) as unknown as StagedDeveloper[];
-    },
+    queryFn: () =>
+      fetchAllRows<StagedDeveloper>(
+        "market_staged_developers",
+        "id,name,source_slug,source_url,headquarters,total_projects,review_decision,jbj_developer_id,publish_status,published_at,publish_error",
+      ),
   });
 
   // Live JBJ records, used to resolve "our own link" for every staged row.
   const { data: liveProjects = [] } = useQuery({
     queryKey: ["market-live-projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("projects").select("id,name,slug").limit(5000);
-      if (error) throw error;
-      return (data || []) as unknown as LiveRef[];
-    },
+    queryFn: () => fetchAllRows<LiveRef>("projects", "id,name,slug"),
   });
 
   const { data: liveDevelopers = [] } = useQuery({
     queryKey: ["market-live-developers"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("developers").select("id,name,slug").limit(5000);
-      if (error) throw error;
-      return (data || []) as unknown as LiveRef[];
-    },
+    queryFn: () => fetchAllRows<LiveRef>("developers", "id,name,slug"),
   });
+
 
   const projectIndex = useMemo(() => {
     const byId = new Map<string, LiveRef>();
@@ -483,8 +483,8 @@ export default function MarketDataImportHub() {
   };
 
   const matchedStagedIds = useMemo(
-    () => new Set(matches.filter((m) => m.entity_type === "project").map((m) => m.staged_project_id)),
-    [matches],
+    () => new Set(allMatches.filter((m) => m.entity_type === "project").map((m) => m.staged_project_id)),
+    [allMatches],
   );
 
   const newProjects = useMemo(
@@ -519,7 +519,7 @@ export default function MarketDataImportHub() {
     const newProj = offplan.filter((p) => !matchedStagedIds.has(p.id));
     const mergedProj = offplan.filter((p) => matchedStagedIds.has(p.id));
     const matchedDevIds = new Set(
-      matches.filter((m) => m.entity_type === "developer").map((m) => m.staged_developer_id),
+      allMatches.filter((m) => m.entity_type === "developer").map((m) => m.staged_developer_id),
     );
     const mergedDevs = stagedDevelopers.filter((d) => matchedDevIds.has(d.id));
 
@@ -531,7 +531,7 @@ export default function MarketDataImportHub() {
       mergedProjects: { found: mergedProj.length, published: pub(mergedProj) },
       mergedDevelopers: { found: mergedDevs.length, published: pub(mergedDevs) },
     };
-  }, [stagedProjects, stagedDevelopers, matches, matchedStagedIds]);
+  }, [stagedProjects, stagedDevelopers, allMatches, matchedStagedIds]);
 
 
   const decide = async (id: string, decision: string) => {
@@ -544,7 +544,7 @@ export default function MarketDataImportHub() {
       return;
     }
     toast.success(`Marked as ${decision.replace("_", " ")}`);
-    qc.invalidateQueries({ queryKey: ["market-review-matches", entity] });
+    qc.invalidateQueries({ queryKey: ["market-review-matches-all"] });
   };
 
   const bulkDecideMatches = async (decision: string) => {
@@ -559,7 +559,7 @@ export default function MarketDataImportHub() {
     if (error) return toast.error("Bulk update failed");
     toast.success(`${ids.length} card${ids.length === 1 ? "" : "s"} marked as ${decision.replace("_", " ")}`);
     setSelected(new Set());
-    qc.invalidateQueries({ queryKey: ["market-review-matches", entity] });
+    qc.invalidateQueries({ queryKey: ["market-review-matches-all"] });
   };
 
   /**
@@ -702,28 +702,28 @@ export default function MarketDataImportHub() {
         />
         <StatCard
           label="Developers auto-merged"
-          value={String(stats.developer_matches_auto_merged ?? "—")}
+          value={String(progress.mergedDevelopers.found)}
           hint={`${stats.developer_fields_filled ?? 0} empty fields filled`}
           progress={progress.mergedDevelopers}
           onClick={() => { setEntity("developer"); setTab("matches"); }}
         />
         <StatCard
           label="Projects auto-merged"
-          value={String(stats.project_exact_matches_auto_merged ?? "—")}
+          value={String(progress.mergedProjects.found)}
           hint={`${stats.project_fields_filled ?? 0} empty fields filled`}
           progress={progress.mergedProjects}
           onClick={() => { setEntity("project"); setTab("matches"); }}
         />
         <StatCard
           label="New projects"
-          value={String(newProjects.length || stats.new_projects_awaiting_approval || 0)}
+          value={String(progress.newProjects.found)}
           hint="awaiting your approval"
           progress={progress.newProjects}
           onClick={() => setTab("new")}
         />
         <StatCard
           label="New developers"
-          value={String(stats.new_developers ?? newDevelopers.length)}
+          value={String(progress.newDevelopers.found)}
           hint="awaiting your approval"
           progress={progress.newDevelopers}
           onClick={() => setTab("newDevelopers")}
