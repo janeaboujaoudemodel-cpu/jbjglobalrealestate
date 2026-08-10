@@ -702,14 +702,14 @@ export default function MarketDataImportHub() {
         />
         <StatCard
           label="Developers auto-merged"
-          value={String(stats.developer_matches_auto_merged ?? "—")}
+          value={String(progress.mergedDevelopers.found)}
           hint={`${stats.developer_fields_filled ?? 0} empty fields filled`}
           progress={progress.mergedDevelopers}
           onClick={() => { setEntity("developer"); setTab("matches"); }}
         />
         <StatCard
           label="Projects auto-merged"
-          value={String(stats.project_exact_matches_auto_merged ?? "—")}
+          value={String(progress.mergedProjects.found)}
           hint={`${stats.project_fields_filled ?? 0} empty fields filled`}
           progress={progress.mergedProjects}
           onClick={() => { setEntity("project"); setTab("matches"); }}
