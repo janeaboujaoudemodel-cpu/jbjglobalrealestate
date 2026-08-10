@@ -75,6 +75,89 @@ function firstUrl(value: unknown): string | null {
   return null;
 }
 
+/** Every image url in a staged media blob, in source order, de-duplicated. */
+function allUrls(value: unknown): string[] {
+  const raw =
+    value && typeof value === "object" && !Array.isArray(value)
+      ? ((value as Record<string, unknown>).images ?? (value as Record<string, unknown>).gallery ?? [])
+      : value;
+  const arr = Array.isArray(raw) ? raw : [];
+  const out: string[] = [];
+  for (const item of arr) {
+    const url =
+      typeof item === "string"
+        ? item
+        : item && typeof item === "object"
+          ? ((item as Record<string, unknown>).url ??
+             (item as Record<string, unknown>).src ??
+             (item as Record<string, unknown>).image_url)
+          : null;
+    if (typeof url === "string" && /^https?:\/\//.test(url) && !out.includes(url)) out.push(url);
+  }
+  return out;
+}
+
+const titleCase = (s: string) =>
+  s.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim().replace(/^./, (c) => c.toUpperCase());
+
+/** Woven amenities arrive grouped ({indoor:[...], outdoor:[...]}) or flat. */
+function amenityLabels(value: unknown): string[] {
+  const out: string[] = [];
+  const push = (v: unknown) => {
+    if (typeof v === "string" && v.trim()) {
+      const label = titleCase(v);
+      if (!out.includes(label)) out.push(label);
+    }
+  };
+  if (Array.isArray(value)) value.forEach(push);
+  else if (value && typeof value === "object")
+    for (const group of Object.values(value as Record<string, unknown>))
+      Array.isArray(group) ? group.forEach(push) : push(group);
+  return out;
+}
+
+/** [{name, distance_minutes}] -> [{name, minutes}] for the location panel. */
+function landmarks(value: unknown): { name: string; minutes: number | null }[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => {
+      const o = (item || {}) as Record<string, unknown>;
+      const name = typeof o.name === "string" ? o.name : null;
+      const minutes = Number(o.distance_minutes ?? o.minutes);
+      return name ? { name, minutes: Number.isFinite(minutes) ? minutes : null } : null;
+    })
+    .filter(Boolean) as { name: string; minutes: number | null }[];
+}
+
+/** First payment plan -> "20 / 40 / 40" label + structured milestone breakdown. */
+function paymentPlan(value: unknown) {
+  const plan = Array.isArray(value) ? (value[0] as Record<string, unknown> | undefined) : undefined;
+  if (!plan) return { label: null as string | null, breakdown: null as unknown };
+  const stages = [
+    { milestone: "Down payment", percentage: Number(plan.startPayment ?? plan.start_payment) },
+    { milestone: "During Construction", percentage: Number(plan.interimPayment ?? plan.interim_payment) },
+    { milestone: "On Handover", percentage: Number(plan.endPayment ?? plan.end_payment) },
+  ].filter((s) => Number.isFinite(s.percentage) && s.percentage > 0);
+  if (!stages.length) return { label: null, breakdown: null };
+  return { label: stages.map((s) => s.percentage).join(" / "), breakdown: stages };
+}
+
+const USD_TO_AED = 3.6725;
+/** Market prices are quoted in USD; JBJ inventory is AED. */
+function priceAed(amount: unknown, currency: unknown): number | null {
+  const value = Number(amount);
+  if (!Number.isFinite(value) || value <= 0) return null;
+  const cur = String(currency ?? "AED").toUpperCase();
+  return cur === "USD" ? Math.round(value * USD_TO_AED) : Math.round(value);
+}
+
+function specNumber(specs: unknown, key: string): number | null {
+  const o = (specs && typeof specs === "object" ? specs : {}) as Record<string, unknown>;
+  const value = Number(o[key]);
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
