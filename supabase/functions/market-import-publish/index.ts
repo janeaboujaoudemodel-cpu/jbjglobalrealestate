@@ -227,16 +227,21 @@ serve(async (req) => {
             devByName.get(norm(s.name));
 
           const desc = englishText(s.description);
-          const cover = firstUrl(s.gallery);
+          const developerPayload = objectValue(s.payload);
+          const stagedGallery = allUrls(s.gallery);
+          const payloadGallery = allUrls(developerPayload.media);
+          const completeGallery = Array.from(new Set([...stagedGallery, ...payloadGallery]));
+          const developerVideos = Array.from(new Set([...allUrls(s.videos), ...allUrls(objectValue(developerPayload.media).videos)]));
+          const cover = completeGallery[0] ?? firstUrl(s.gallery) ?? firstUrl(developerPayload.media);
           const developerSourceData = {
             aliases: nonEmptyArray(s.aliases),
             awards: nonEmptyArray(s.awards),
-            gallery: nonEmptyArray(s.gallery),
-            videos: nonEmptyArray(s.videos),
+            gallery: completeGallery.length ? completeGallery : null,
+            videos: developerVideos.length ? developerVideos : null,
             rating: s.rating ?? null,
             total_projects: s.total_projects ?? null,
-            portfolio: objectValue(s.payload).portfolio ?? null,
-            statistics: objectValue(s.payload).statistics ?? null,
+            portfolio: developerPayload.portfolio ?? null,
+            statistics: developerPayload.statistics ?? null,
             source_url: s.source_url,
             source_id: s.source_id,
           };
@@ -257,8 +262,8 @@ serve(async (req) => {
                 completed_projects: s.completed_projects,
                 offplan_projects: s.ongoing_projects,
                 total_units_delivered: s.units_delivered,
-                notable_projects: Array.isArray(objectValue(s.payload).portfolio)
-                  ? (objectValue(s.payload).portfolio as unknown[]).map(String).join(", ")
+                notable_projects: Array.isArray(developerPayload.portfolio)
+                  ? (developerPayload.portfolio as unknown[]).map(String).join(", ")
                   : null,
                 public_fields: { market_import: developerSourceData },
                 custom_fields: { market_import: developerSourceData },
@@ -282,8 +287,8 @@ serve(async (req) => {
             if (!live.offplan_projects && s.ongoing_projects) patch.offplan_projects = s.ongoing_projects;
             if (!live.total_units_delivered && s.units_delivered) patch.total_units_delivered = s.units_delivered;
             if (!live.feature_image_url && cover) patch.feature_image_url = cover;
-            if (!live.notable_projects && Array.isArray(objectValue(s.payload).portfolio)) {
-              patch.notable_projects = (objectValue(s.payload).portfolio as unknown[]).map(String).join(", ");
+            if (!live.notable_projects && Array.isArray(developerPayload.portfolio)) {
+              patch.notable_projects = (developerPayload.portfolio as unknown[]).map(String).join(", ");
             }
             const existingPublic = objectValue(live.public_fields);
             const existingCustom = objectValue(live.custom_fields);
