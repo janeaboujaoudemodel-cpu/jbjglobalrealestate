@@ -18,7 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import SearchFallbackContact from "@/components/search/SearchFallbackContact";
 import { EMPTY_SEARCH, searchToParams, type PropertySearch } from "@/lib/propertySearch";
-import { resolveIntentLocally } from "@/lib/searchIntent";
+import { resolveIntentLocally, handOffToChatSupport } from "@/lib/searchIntent";
 import { saveRecentSearch } from "@/lib/searchHistory";
 import { toast } from "sonner";
 
@@ -123,9 +123,12 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
 
         if (await resolveWithAI(q)) return;
 
+        // Nothing matched anywhere: hand the visitor's own sentence to live
+        // chat support. The widget opens with their words already typed and the
+        // advisory desk is alerted at the same time.
         toast.info("Nothing matched — our advisory desk will answer this for you.");
-        setFallbackQuery(q);
-        setFallbackOpen(true);
+        handOffToChatSupport(q, { source: "hero_search", path: window.location.pathname });
+
       } catch (err) {
         console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
         navigate(`/properties?q=${encodeURIComponent(q)}`);
