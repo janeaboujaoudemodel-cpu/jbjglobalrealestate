@@ -736,11 +736,10 @@ const DeveloperDetail = () => {
                     boxShadow: '0 0 15px rgba(184,149,85,0.18), inset 0 1px 2px rgba(255,255,255,0.4)',
                   }}
                 >
-                  <div className="flex items-center gap-2 h-6">
-                    <stat.icon className="w-4 h-4 text-[#1A1A1A] shrink-0" />
+                  <div className="flex items-start gap-2 min-h-6">
+                    <stat.icon className="w-4 h-4 text-[#1A1A1A] shrink-0 mt-0.5" />
                     <span
-                      className="text-[#1A1A1A]/75 text-[11px] font-semibold uppercase tracking-wide leading-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0"
-                      title={stat.label}
+                      className="text-[#1A1A1A]/75 text-[10px] md:text-[11px] font-semibold uppercase tracking-wide leading-snug whitespace-normal break-words min-w-0"
                     >
                       {stat.label}
                     </span>
@@ -796,13 +795,6 @@ const DeveloperDetail = () => {
 
             {/* Identity actions — View all projects + (broker-only) request rep access */}
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Link
-                to={`/properties?developer=${encodeURIComponent(developer.slug || developer.id)}`}
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold tracking-[0.02em] px-4 py-2 text-[#1A1A1A] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#F7F2EA]"
-                style={{ border: '1px solid rgba(6,78,59,0.34)' }}
-              >
-                View all projects by {developer.name}
-              </Link>
               <BrokerRequestAccessButton
                 developerId={developer.id}
                 developerName={developer.name}
