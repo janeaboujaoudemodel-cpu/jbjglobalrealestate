@@ -760,6 +760,25 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         },
       });
 
+      // 2b) Advisory Desk ticket — the owner queue with full identity + transcript
+      try {
+        await supabase.functions.invoke('advisory-desk-request', {
+          body: {
+            query: inquirySummary || messages.filter(m => m.role === 'user').slice(-1)[0]?.content || serviceName,
+            source: 'chat_transfer',
+            pageSource: window.location.pathname,
+            conversationId,
+            transcript,
+            visitorName: fullName || undefined,
+            visitorEmail: userInfo.email || undefined,
+            visitorPhone: userInfo.phone || undefined,
+          },
+        });
+      } catch (deskErr) {
+        console.warn('Advisory desk ticket failed (escalation still processed):', deskErr);
+      }
+
+
       // 3) Save to owner's AI Notes system (best-effort, non-blocking)
       try {
         // Find owner user ID from profiles (crm_role = 'owner')
