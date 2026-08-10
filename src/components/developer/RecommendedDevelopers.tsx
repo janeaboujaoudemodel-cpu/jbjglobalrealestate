@@ -174,9 +174,15 @@ export default function RecommendedDevelopers({
                     <RecommendedDeveloperPhoto urls={cardImages} name={dev.name} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                   </div>
-                    <div className="absolute bottom-0 left-4 z-20 h-12 w-24 translate-y-1/2 rounded-lg border border-white/35 bg-[#042C1C] bg-[linear-gradient(155deg,#064E3B_0%,#042C1C_58%,#000000_100%)] shadow-[0_6px_18px_rgba(0,0,0,0.30)]">
-                      <DeveloperLogo src={getDeveloperLogoUrl(dev) || getKnownDeveloperLogoUrl(dev.name)} name={dev.name} alt={`${dev.name} logo`} variant="bare" size="sm" embedded loading="eager" className="!h-full !w-full !border-0 !bg-transparent !shadow-none !p-2 !rounded-md" />
-                    </div>
+                    <DeveloperLogo
+                      src={getDeveloperLogoUrl(dev) || getKnownDeveloperLogoUrl(dev.name)}
+                      name={dev.name}
+                      alt={`${dev.name} logo`}
+                      variant="bare"
+                      size="sm"
+                      loading="eager"
+                      className="absolute bottom-0 left-4 z-20 !h-12 !w-24 translate-y-1/2 !rounded-lg !p-1.5"
+                    />
                   </div>
 
                   {/* Info */}

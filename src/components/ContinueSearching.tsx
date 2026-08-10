@@ -105,7 +105,7 @@ const ContinueSearching = ({
 
     supabase
       .from("projects")
-      .select("id, name, slug, cover_image_url, developer_name, location, emirate")
+      .select("id, name, slug, cover_image_url, card_image_url, gallery_start_image_url, developer_name, developer:developers(name, logo_url, logo_url_processed)")
       .eq("is_published", true)
       .or("listing_kind.is.null,listing_kind.neq.leasing")
       .not("cover_image_url", "is", null)
@@ -115,17 +115,21 @@ const ContinueSearching = ({
       .then(({ data }) => {
         if (cancelled) return;
         if (!data?.length) return;
-        const mapped: RecentItem[] = data.map((p: any) => ({
-          id: p.id,
-          type: "property" as RecentItemType,
-          name: p.name,
-          slug: p.slug,
-          imageUrl: p.cover_image_url,
-          // Subtitle is ALWAYS the developer identity, never the city — a card
-          // must never read "By Dubai" or show "Dubai" on the emerald plate.
-          subtitle: p.developer_name || "",
-          viewedAt: Date.now(),
-        }));
+        const mapped: RecentItem[] = data.map((p: any) => {
+          const developer = Array.isArray(p.developer) ? p.developer[0] : p.developer;
+          return {
+            id: p.id,
+            type: "property" as RecentItemType,
+            name: p.name,
+            slug: p.slug,
+            imageUrl: p.card_image_url || p.gallery_start_image_url || p.cover_image_url,
+            // The joined developer record is authoritative. Location/emirate are
+            // deliberately unavailable here so they can never become "By Dubai".
+            subtitle: developer?.name || p.developer_name || "",
+            developerLogo: getDeveloperLogoUrl(developer) || undefined,
+            viewedAt: Date.now(),
+          };
+        });
         const seenProjects = new Set<string>();
         setPopularProjects(mapped.filter((project) => {
           const key = getCanonicalProjectKey({ ...project, developerName: project.subtitle });
@@ -167,19 +171,26 @@ const ContinueSearching = ({
           const current = displayItems.find((item) => item.type === "property" && item.slug === project.slug);
           if (!current) continue;
           const developer = Array.isArray(project.developer) ? project.developer[0] : project.developer;
-          patchItem(current.id, "property", {
+          const updates = {
             imageUrl: project.card_image_url || project.gallery_start_image_url || project.cover_image_url || current.imageUrl,
             subtitle: developer?.name || project.developer_name || current.subtitle,
             developerLogo: getDeveloperLogoUrl(developer) || current.developerLogo,
-          });
+          };
+          if (hasUserHistory) {
+            patchItem(current.id, "property", updates);
+          } else {
+            setPopularProjects((items) => items.map((item) =>
+              item.slug === project.slug ? { ...item, ...updates } : item
+            ));
+          }
         }
       });
     return () => { cancelled = true; };
-  }, [displayItems.map((item) => `${item.type}:${item.slug}`).join("|"), patchItem]);
+  }, [displayItems.map((item) => `${item.type}:${item.slug}`).join("|"), hasUserHistory, patchItem]);
 
   const sectionTitle = hasUserHistory
     ? (title || (type === "area" ? "Recently Viewed Areas & Communities" : t("home.continueSearching", "Continue Searching for Your Dream Property")))
-    : "Trending Projects in Dubai";
+    : "Trending Projects";
 
   const isEmpty = displayItems.length === 0;
 
@@ -528,18 +539,16 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           }}
         />
 
-        {/* Top-left: Developer logo, with a name-text badge fallback when no
-            logo exists in the DB (e.g. Wasl). JBJ monogram is the brand mark
-            and is NEVER used as a developer fallback on these cards. */}
+        {/* Top-left: one canonical, fixed-size developer identity plate. */}
         {(showDevLogo || showDevCardLogo) ? (
           <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
             <DeveloperLogo
               src={item.developerLogo}
               name={item.subtitle}
               alt={item.subtitle || item.name || "Developer"}
-              size="micro"
+              size="sm"
               loading="eager"
-              className="!h-11 !w-[88px] rounded-md !p-1.5"
+              className="!h-12 !w-24 !rounded-lg !p-1.5"
               onError={() => setLogoError(true)}
             />
           </div>
@@ -550,9 +559,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
                 variant="nameplate"
                 name={item.subtitle}
                 alt={item.subtitle}
-                size="micro"
+                size="sm"
                 loading="eager"
-                className="!h-11 !w-[88px] rounded-md !p-1.5"
+                className="!h-12 !w-24 !rounded-lg !p-1.5"
               />
             </div>
           )
@@ -577,7 +586,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           {item.subtitle && (
             <span
               data-no-contrast-guard
-              className="allow-white block truncate text-[10.5px] font-semibold uppercase tracking-[0.16em] leading-none mb-1"
+              className="allow-white block text-[10.5px] font-semibold uppercase tracking-[0.16em] leading-tight mb-1 break-words"
               style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}
             >
               {item.type === "property" ? (
@@ -591,7 +600,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             </span>
           )}
           <h3
-            className="allow-white font-extrabold text-[15px] md:text-base leading-tight truncate transition-colors duration-300"
+            className="allow-white font-extrabold text-[15px] md:text-base leading-tight break-words transition-colors duration-300"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",

@@ -325,7 +325,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               websiteUrl={developerWebsiteUrl}
               loading="eager"
               size="md"
-              className="!rounded-lg !p-0"
+              className="!h-[72px] !w-36 !rounded-lg !p-1.5"
             />
           </Link>
         </div>
