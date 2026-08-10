@@ -174,16 +174,32 @@ const EmeraldStyles = () => (
   `}</style>
 );
 
+/** Found in the market source / published live on JBJ / still remaining. */
+type Progress = { found: number; published: number };
+
+const ProgressChips = ({ found, published }: Progress) => {
+  const remaining = Math.max(0, found - published);
+  return (
+    <span className="mt-2 flex flex-wrap items-center gap-1.5">
+      <span className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold">Found {found}</span>
+      <span className="mir-solid rounded-full px-2 py-0.5 text-[10px] font-semibold">Published {published}</span>
+      <span className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold">Remaining {remaining}</span>
+    </span>
+  );
+};
+
 const StatCard = ({
   label,
   value,
   hint,
   onClick,
+  progress,
 }: {
   label: string;
   value: string | number;
   hint?: string;
   onClick?: () => void;
+  progress?: Progress;
 }) => (
   <button
     type="button"
@@ -194,8 +210,10 @@ const StatCard = ({
     <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{label}</p>
     <p className="mt-2 text-2xl font-semibold text-neutral-900">{value}</p>
     {hint ? <p className="mt-1 text-xs text-neutral-500">{hint}</p> : null}
+    {progress ? <ProgressChips {...progress} /> : null}
   </button>
 );
+
 
 
 /** Side-by-side comparison — our live JBJ card vs the market-source card. */
