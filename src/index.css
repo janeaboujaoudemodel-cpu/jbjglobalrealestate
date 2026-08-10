@@ -37613,6 +37613,9 @@ html body #root .jj-shine-cta:hover::after { animation-duration: 1.4s; }
   html body #root .jj-sspan-12 { grid-column: span 12 / span 12 !important; }
   html body #root .jj-sspan-10 { grid-column: span 10 / span 10 !important; }
   html body #root .jj-sspan-13 { grid-column: span 13 / span 13 !important; }
+  html body #root .jj-sspan-11 { grid-column: span 11 / span 11 !important; }
+  html body #root .jj-sspan-14 { grid-column: span 14 / span 14 !important; }
+  html body #root .jj-sspan-15 { grid-column: span 15 / span 15 !important; }
 }
 
 /* ============================================================

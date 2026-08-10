@@ -228,17 +228,21 @@ export default function PropertySearchBar({
   const { areaUnit } = useAreaUnit();
   const cur = currencyFor(f.country);
   const extras = countExtraFilters(f);
-  /* Both rows share the same lg column count so every card edge lines up. */
-  const GRID_KEY = showSort ? "27" : "24";
-  // Row 1 must always total the grid width (24 / 27): purposes(6) + keyword +
-  // optional tiers(4) + currency(3) + utility pair(6).
-  const KEYWORD_SPAN = showSort
-    ? (showTiers ? "jj-sspan-8" : "jj-sspan-12")
-    : (showTiers ? "jj-sspan-5" : "jj-sspan-9");
-  // Row 2 must also total the grid width: area + type(3) + beds(3) + price(3)
-  // + status(3) + optional sort(3) + utility pair.
-  const AREA_SPAN = showSort ? "jj-sspan-5" : "jj-sspan-6";
-  const ROW2_UTILITY_SPAN = showSort ? "jj-sspan-7" : "jj-sspan-6";
+  /* Both rows share the same lg column count so every card edge lines up.
+     Column contract (PASS 281 — one grid, both rows, zero drift):
+       Row 2: area(6) type(3) beds(3) price(3) status(3) [sort(3)] More(3) Show(3)
+       Row 1: purposes(6) keyword(rest) [tiers(3)] currency(3) sqft(3)[+CTA(3)]
+     → purposes sits over "UAE — all areas", keyword ends on the Status edge,
+       tiers sits over Sort, currency over More, sq ft / sq m over "Show N". */
+  const GRID_TOTAL = showSort ? 27 : 24;
+  const GRID_KEY = String(GRID_TOTAL);
+  const UTILITY_COLS = onConsultation ? 6 : 3;
+  const KEYWORD_COLS = GRID_TOTAL - 6 - (showTiers ? 3 : 0) - 3 - UTILITY_COLS;
+  const KEYWORD_SPAN = `jj-sspan-${KEYWORD_COLS}`;
+  const ROW1_UTILITY_SPAN = `jj-sspan-${UTILITY_COLS}`;
+  const AREA_SPAN = "jj-sspan-6";
+  const ROW2_UTILITY_SPAN = "jj-sspan-6";
+  const dividerColor = dark ? "rgba(255,255,255,0.45)" : "rgba(184,149,85,0.62)";
 
   const setAreaUnit = (unit: AreaUnit) => setAreaUnitGlobal(unit);
 
@@ -350,7 +354,13 @@ export default function PropertySearchBar({
             >
               {p.label}
               {index < PURPOSES.length - 1 ? (
-                 <span aria-hidden="true" className="absolute right-0 top-1/2 h-5 w-px -translate-y-1/2 bg-white/45" />
+                 <span
+                   aria-hidden="true"
+                   className="absolute right-0 top-1/2 h-6 w-px -translate-y-1/2 rounded-full"
+                   style={{
+                     background: `linear-gradient(180deg,transparent 0%,${dividerColor} 22%,${dividerColor} 78%,transparent 100%)`,
+                   }}
+                 />
               ) : null}
             </button>
           ))}
@@ -417,7 +427,7 @@ export default function PropertySearchBar({
         </div>
 
         {showTiers && (
-          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-4">
+          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3">
             <Seg
               label={f.developerTier ? (TIER_LABELS[f.developerTier as DeveloperTier] || "Tier") : "All Tiers"}
               active={!!f.developerTier}
@@ -461,13 +471,13 @@ export default function PropertySearchBar({
           <InlineCurrencySelect dark={dark} />
         </div>
 
-        {/* Mobile/tablet: area unit sits beside currency. Desktop keeps the aligned utility pair. */}
+        {/* Mobile/tablet: area unit sits beside currency. Desktop: sq ft / sq m
+            occupies exactly the "Show N" column below (plus the hero CTA). */}
         <div
-          className="contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none jj-sspan-6 min-w-0"
-          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+          className={`contents lg:grid lg:gap-2 lg:col-span-2 lg:order-none ${ROW1_UTILITY_SPAN} min-w-0`}
+          style={{ gridTemplateColumns: onConsultation ? "repeat(2, minmax(0, 1fr))" : "minmax(0, 1fr)" }}
         >
-          {/* Keeps the sq ft / sq m pair in the same column as "Show N" below. */}
-          {!onConsultation ? <div aria-hidden="true" className="hidden lg:block" /> : null}
+
           <div
             className={`order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg`}
             data-search-utility-controls
@@ -500,7 +510,13 @@ export default function PropertySearchBar({
                 >
                   {unit === "sqft" ? "sq ft" : "sq m"}
                   {i === 0 ? (
-                    <span aria-hidden="true" className="absolute right-0 top-1/2 h-5 w-px -translate-y-1/2 bg-white/45" />
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-0 top-1/2 h-6 w-px -translate-y-1/2 rounded-full"
+                      style={{
+                        background: `linear-gradient(180deg,transparent 0%,${dividerColor} 22%,${dividerColor} 78%,transparent 100%)`,
+                      }}
+                    />
                   ) : null}
                 </button>
               );

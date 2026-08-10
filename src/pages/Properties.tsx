@@ -724,9 +724,11 @@ const Properties = () => {
               value={search}
               onChange={setSearch}
               onSubmit={submitSearch}
+              showTiers
               countOverride={showSkeletons ? null : displayedResultCount}
               countNoun="properties"
               typewriterPhrases={[
+                "Search by developer — Emaar, Nakheel, DAMAC…",
                 "Try “Dubai Marina 2 bed under 2M”",
                 "Try “Emaar off-plan handover 2027”",
                 "Try “Business Bay distress deal”",
