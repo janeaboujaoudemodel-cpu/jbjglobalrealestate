@@ -183,19 +183,23 @@ const PremiumBrochureCard = ({
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-between p-0">
-            {/* Full-edge header bar — bigger monogram + wordmark, transparent so photo still shows */}
+            {/* Full-edge header bar — unified pure-white monogram + wordmark on a
+                deeper scrim so the monogram's "B" and divider stay legible. */}
             <div
-              className="w-full flex items-center gap-3 px-4 py-2.5 select-none"
+              className="w-full flex items-center gap-3.5 px-4 py-3 select-none"
               style={{
-                  background: "linear-gradient(180deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.18) 78%, transparent 100%)",
-                backdropFilter: "blur(2px)",
+                background: "linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.42) 72%, transparent 100%)",
+                backdropFilter: "blur(3px)",
               }}
             >
               <img
                 src={jbjMonogram}
                 alt="JBJ"
-                className="h-[72px] w-[72px] object-contain shrink-0"
-                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9))" }}
+                className="h-[92px] w-[92px] object-contain shrink-0"
+                style={{
+                  filter:
+                    "brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.95)) drop-shadow(0 0 1px rgba(0,0,0,0.9))",
+                }}
                 loading="eager"
                 {...({ fetchpriority: "high" } as any)}
                 decoding="sync"
@@ -212,6 +216,7 @@ const PremiumBrochureCard = ({
                 JBJ Global Real Estate
               </span>
             </div>
+
 
             {/* Thinner, more transparent title panel at the bottom — reveals more of the cover photo */}
             <div
