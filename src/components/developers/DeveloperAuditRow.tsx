@@ -10,6 +10,8 @@ interface Props {
   projectCount?: number;
   heroImageUrl?: string;
   heroImageUrls?: string[];
+  /** Owner-only: media gap badges live in the backend Developer Hub, never on the public site. */
+  showAuditFlags?: boolean;
 }
 
 /**
