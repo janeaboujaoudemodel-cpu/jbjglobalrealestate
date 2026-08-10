@@ -165,8 +165,9 @@ export default function WovenImportHub() {
             <Sparkles className="h-5 w-5" aria-hidden /> Woven import preview
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Project-level data only. Resale listings, individual apartments and changing unit inventory are never
-            imported — availability stays “On Request”. Nothing is written live until you decide below.
+            Developer-built projects only — off-plan, ready and sold-out. Resale listings, agency inventory and
+            individual apartments are never imported; availability stays “On Request”. Exact matches were auto-merged
+            into the gaps; everything else waits for your decision.
           </p>
         </div>
         <button
@@ -180,14 +181,15 @@ export default function WovenImportHub() {
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Developers discovered" value={String(stats.total_developers_discovered ?? "—")} />
-        <StatCard label="Off-plan projects" value={String(stats.offplan_projects_discovered ?? "—")} hint={`of ${stats.total_projects_discovered ?? "—"} project pages`} />
-        <StatCard label="New projects" value={String(stats.new_projects ?? "—")} hint="no JBJ equivalent found" />
-        <StatCard label="Merge candidates" value={String(stats.probable_duplicates ?? "—")} hint="need your decision" />
-        <StatCard label="New developers" value={String(stats.new_developers ?? "—")} />
-        <StatCard label="Developer matches" value={String(stats.developer_matches ?? "—")} />
-        <StatCard label="Ignored (not off-plan)" value={String(stats.ignored_not_offplan ?? "—")} hint="ready / sold-out" />
-        <StatCard label="Extraction failures" value={String(stats.extraction_failures ?? "—")} />
+        <StatCard label="Projects in scope" value={String(stats.total_projects_in_scope ?? stats.total_projects_discovered ?? "—")} hint={`incl. ${stats.ready_projects_included ?? 0} ready · ${stats.sold_out_projects_included ?? 0} sold out`} />
+        <StatCard label="Developers auto-merged" value={String(stats.developer_matches_auto_merged ?? "—")} hint={`${stats.developer_fields_filled ?? 0} empty fields filled`} />
+        <StatCard label="Projects auto-merged" value={String(stats.project_exact_matches_auto_merged ?? "—")} hint={`${stats.project_fields_filled ?? 0} empty fields filled`} />
+        <StatCard label="New projects" value={String(stats.new_projects_awaiting_approval ?? stats.new_projects ?? "—")} hint="awaiting your approval" />
+        <StatCard label="New developers" value={String(stats.new_developers ?? "—")} hint="awaiting your approval" />
+        <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} />
+        <StatCard label="New area candidates" value={String(stats.area_candidates_not_in_jbj ?? "—")} hint="not created — your call" />
       </div>
+
 
       <div className="rounded-xl border border-border/60 bg-card p-4">
         <p className="flex items-center gap-2 text-sm font-medium text-foreground">
