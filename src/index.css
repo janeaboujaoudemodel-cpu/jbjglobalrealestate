@@ -30485,7 +30485,7 @@ html body :is([role="menuitem"], [role="option"], [data-radix-collection-item], 
    This is the current terminal contract used for visual validation. */
 html body :is(.jbj-form-shell, [data-form-shell], [role="dialog"]:has(form), .form-panel, .lead-form, .contact-form) {
   box-sizing: border-box !important;
-  padding: clamp(1.25rem, 2.2vw, 2rem) !important;
+  padding: clamp(1.5rem, 3.2vw, 3rem) !important;
   border-width: 1px !important;
   border-color: rgba(184,149,85,0.34) !important;
 }

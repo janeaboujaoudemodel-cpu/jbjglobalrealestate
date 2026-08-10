@@ -159,21 +159,23 @@ const PremiumBrochureCard = ({
             `,
           }}
         >
-          {/* Dynamic project image background */}
+          {/* Dynamic project image background — mild contrast lift keeps the
+              render readable without a bright "flashlight" wash over it. */}
           <div 
             className="absolute inset-0 bg-cover"
-            style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})`, backgroundPosition: "center 44%" }}
+            style={{
+              backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})`,
+              backgroundPosition: "center 44%",
+              filter: "contrast(1.08) saturate(1.06) brightness(0.98)",
+            }}
           />
           
-          {/* Layered scrims — top + bottom — guarantee wordmark and title legibility on any photo */}
-          <div className="absolute inset-x-0 top-0 h-[28%] bg-gradient-to-b from-black/34 via-black/8 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/28 via-black/0 to-transparent" />
-
-          {/* Subtle emerald depth overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#064E3B]/4 via-transparent to-black/3" />
+          {/* Layered scrims — kept light so the building stays visible */}
+          <div className="absolute inset-x-0 top-0 h-[24%] bg-gradient-to-b from-black/24 via-black/5 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/0 to-transparent" />
 
           {/* Spine effect on left - book binding */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/45 via-black/18 to-transparent" />
           <div className="absolute left-2 top-4 bottom-4 w-[2px] bg-[#EFE6D6]/40 rounded-full" />
 
           {/* Clean image frame — no gold border on brochure cover */}
