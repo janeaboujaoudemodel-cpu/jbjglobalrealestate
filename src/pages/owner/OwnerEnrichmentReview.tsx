@@ -55,7 +55,7 @@ function FieldValue({ value }: { value: any }) {
     return (
       <div className="flex flex-wrap gap-1">
         {value.map((v, i) => (
-          <span key={i} className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-900/5 border border-emerald-900/10 text-neutral-800">
+          <span key={i} className="text-[11px] px-2 py-0.5 rounded-full bg-white border border-[rgba(6,78,59,0.25)] text-neutral-800">
             {typeof v === "object" ? JSON.stringify(v) : String(v)}
           </span>
         ))}
@@ -213,14 +213,19 @@ export default function OwnerEnrichmentReview() {
   }), [drafts]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6" data-page="enrichment-review">
+    <div className="max-w-6xl mx-auto p-6" data-page="enrichment-review" data-no-contrast-guard>
+      <style>{`
+        [data-page="enrichment-review"] .er-pill{transition:background .15s,color .15s}
+        [data-page="enrichment-review"] .er-pill:hover{background:#064E3B !important;color:#fff !important;border-color:#064E3B !important}
+        [data-page="enrichment-review"] .er-pill:hover svg{color:#fff !important}
+      `}</style>
       <div className="flex items-center gap-3 mb-2">
         <span
           className="inline-flex h-8 w-8 items-center justify-center rounded-lg"
-          style={EMERALD_PILL}
+          style={{ ...EMERALD_PILL, boxShadow: "0 6px 18px -10px rgba(6,78,59,.7)" }}
           data-no-contrast-guard
         >
-          <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+          <Sparkles className="w-4 h-4" strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
         </span>
         <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">Enrichment Review</h1>
       </div>
@@ -239,8 +244,8 @@ export default function OwnerEnrichmentReview() {
           type="button"
           onClick={() => setFilter("pending")}
           data-no-contrast-guard
-          style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.2)" }}
-          className="px-3 py-1.5 rounded-full text-xs font-semibold"
+          style={filter === "pending" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
+          className="er-pill px-3 py-1.5 rounded-full text-xs font-semibold"
         >
           Pending ({summary.pending})
         </button>
@@ -248,8 +253,8 @@ export default function OwnerEnrichmentReview() {
           type="button"
           onClick={() => setFilter("all")}
           data-no-contrast-guard
-          style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.2)" }}
-          className="px-3 py-1.5 rounded-full text-xs font-semibold"
+          style={filter === "all" ? EMERALD_PILL : { backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
+          className="er-pill px-3 py-1.5 rounded-full text-xs font-semibold"
         >
           All
         </button>
@@ -370,7 +375,7 @@ export default function OwnerEnrichmentReview() {
                       className="rounded-lg border px-3 py-2.5"
                       style={already
                         ? { backgroundColor: "#FFFFFF", borderColor: "rgba(0,0,0,0.08)", borderStyle: "dashed" }
-                        : { backgroundColor: "#F0FDF4", borderColor: "rgba(6,78,59,0.2)" }}
+                        : { backgroundColor: "#FFFFFF", borderColor: "rgba(6,78,59,0.3)" }}
                     >
                       <div className="text-[10px] uppercase tracking-wider font-bold text-emerald-900 mb-1">
                         {humanize(k)}
