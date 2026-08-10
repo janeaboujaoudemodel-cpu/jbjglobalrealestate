@@ -142,11 +142,18 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     fetchUserName();
   }, [user]);
 
+  /**
+   * Identity survives remounts: the persist effect must never write the empty
+   * initial state back over a restored visitor (that used to reset returning
+   * visitors to the welcome step).
+   */
+  const hydratedRef = useRef(false);
+
   // Restore session from localStorage on mount (persistent across sessions)
   useEffect(() => {
+    hydratedRef.current = true;
     const savedStep = sessionStorage.getItem('jbj_chat_step');
     const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
-    console.log('[dbg-restore]', savedStep, savedUserInfo);
     
     // Check if we have saved user data
     if (savedUserInfo) {
@@ -190,6 +197,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   // Persist step and userInfo to localStorage
   useEffect(() => {
+    if (!hydratedRef.current) return;
     sessionStorage.setItem('jbj_chat_step', step);
     sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
   }, [step, userInfo]);
