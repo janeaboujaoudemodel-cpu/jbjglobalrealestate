@@ -483,8 +483,8 @@ export default function MarketDataImportHub() {
   };
 
   const matchedStagedIds = useMemo(
-    () => new Set(matches.filter((m) => m.entity_type === "project").map((m) => m.staged_project_id)),
-    [matches],
+    () => new Set(allMatches.filter((m) => m.entity_type === "project").map((m) => m.staged_project_id)),
+    [allMatches],
   );
 
   const newProjects = useMemo(
@@ -519,7 +519,7 @@ export default function MarketDataImportHub() {
     const newProj = offplan.filter((p) => !matchedStagedIds.has(p.id));
     const mergedProj = offplan.filter((p) => matchedStagedIds.has(p.id));
     const matchedDevIds = new Set(
-      matches.filter((m) => m.entity_type === "developer").map((m) => m.staged_developer_id),
+      allMatches.filter((m) => m.entity_type === "developer").map((m) => m.staged_developer_id),
     );
     const mergedDevs = stagedDevelopers.filter((d) => matchedDevIds.has(d.id));
 
