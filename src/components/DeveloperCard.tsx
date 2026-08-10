@@ -19,7 +19,14 @@ interface DeveloperCardProps {
   heroImageUrls?: string[];
   /** Number of cards rendered per row — the card rescales itself to stay premium. */
   density?: number;
+  /**
+   * LOCKED (no emerald blueprint): a developer without a verified cover photo is
+   * archived out of the public directory and flagged in the owner Developer Hub
+   * alerts. Only owner/backend views may render a card with no photograph.
+   */
+  allowMissingCover?: boolean;
 }
+
 
 /**
  * PASS 280 — DENSITY-ADAPTIVE DEVELOPER CARD (LOCKED)
