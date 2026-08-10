@@ -71,7 +71,21 @@ import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
 
 import { EMPTY_SEARCH, paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
+import { findAreaExact } from "@/lib/areaResolver";
+import { getCountry } from "@/data/geography";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
+
+/**
+ * URL params can carry either geography SLUGS ("dubai-marina", emitted by the
+ * smart search) or DISPLAY NAMES ("Dubai Marina", emitted by the legacy filter
+ * bar). The results engine matches on display names, so every incoming value is
+ * normalised here — otherwise a slug silently applies no filter at all.
+ */
+const toDisplayNames = (values: string[]): string[] =>
+  values
+    .map((v) => findAreaExact(v)?.name ?? v.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()))
+    .filter(Boolean);
+
 const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
 import { CURRENCY_RATES, CURRENCY_SYMBOLS } from "@/hooks/useCurrency";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -230,6 +244,15 @@ const Properties = () => {
     setSearch(next);
     window.dispatchEvent(new CustomEvent("jbj:property-search", { detail: next }));
   }, []);
+
+  /**
+   * Markets we are still onboarding hold no inventory yet. Saying "0 properties"
+   * there reads like a broken search, so those searches show an honest
+   * "coming soon" notice instead.
+   */
+  const selectedCountry = getCountry(search.country);
+  const marketComingSoon = !!selectedCountry && selectedCountry.live === false;
+
   const { data: projects, isLoading } = useProjectsListing();
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
@@ -333,8 +356,13 @@ const Properties = () => {
       priceMin: priceMinParam || "",
       priceMax: priceMaxParam || "",
       bedrooms: searchParams.get('bedrooms')?.split(',').filter(Boolean) || (bedsParam ? [bedsParam] : []),
-      emirates: searchParams.get('emirates')?.split(',').filter(Boolean) || (emirateParam ? [emirateParam] : []),
-      areas: searchParams.get('areas')?.split(',').filter(Boolean) || (areaParam ? [areaParam.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())] : []),
+      emirates: toDisplayNames(searchParams.get('emirates')?.split(',').filter(Boolean) || (emirateParam ? [emirateParam] : [])),
+      areas: toDisplayNames(
+        searchParams.get('areas')?.split(',').filter(Boolean)
+          || searchParams.get('areaSlugs')?.split(',').filter(Boolean)
+          || (areaParam ? [areaParam] : []),
+      ),
+
       developers: searchParams.get('developers')?.split(',').filter(Boolean) || [],
       propertyTypes: searchParams.get('propertyTypes')?.split(',').filter(Boolean) || (typeParam && typeParam !== 'all' ? [typeParam] : []),
       statuses: searchParams.get('statuses')?.split(',').filter(Boolean) || (saleStatusParam && saleStatusParam !== 'all' ? [saleStatusParam] : []),
@@ -408,6 +436,8 @@ const Properties = () => {
       bedsParam || typeParam || priceMinParam || priceMaxParam || sizeMinParam || sizeMaxParam ||
       currencyParam || emirateParam || saleStatusParam || communityIdFromUrl || sortParam || shortcutSortParam ||
       searchParams.get('developers') || searchParams.get('emirates') || searchParams.get('areas') ||
+      searchParams.get('areaSlugs') || searchParams.get('region') ||
+
       searchParams.get('propertyTypes') || searchParams.get('statuses') || searchParams.get('constructionStatuses') ||
       searchParams.get('views') || searchParams.get('paymentPlanMax') || searchParams.get('postHandoverOnly') ||
       searchParams.get('handoverFrom') || searchParams.get('handoverTo') || searchParams.get('category');
@@ -1014,6 +1044,28 @@ const Properties = () => {
                             Browse All Properties
                           </Button>
                         </div>
+                      </>
+                    ) : marketComingSoon ? (
+                      <>
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#064E3B]/30 shadow-[0_0_30px_rgba(6,78,59,0.18)]">
+                          <MapPin className="w-10 h-10 text-[#1A1A1A]" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
+                          {selectedCountry?.name} — Coming Soon
+                        </h3>
+                        <p className="text-[#1A1A1A]/70 mb-6 max-w-lg mx-auto">
+                          We are onboarding inventory in {selectedCountry?.name} right now. Tell our
+                          advisory desk what you are looking for and we will bring you matching
+                          opportunities the moment this market goes live.
+                        </p>
+                        <Button
+                          onClick={() => window.dispatchEvent(new CustomEvent("jbj:open-inquiry"))}
+                          variant="outline"
+                          className="border-[#064E3B]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-11 px-6"
+                        >
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Register my requirement
+                        </Button>
                       </>
                     ) : (
                       <>

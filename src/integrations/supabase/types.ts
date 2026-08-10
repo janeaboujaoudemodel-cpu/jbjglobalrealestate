@@ -34152,6 +34152,45 @@ export type Database = {
         }
         Relationships: []
       }
+      search_area_aliases: {
+        Row: {
+          alias: string
+          alias_norm: string
+          area_name: string
+          area_slug: string
+          country_slug: string | null
+          created_at: string
+          hits: number
+          id: string
+          region_slug: string | null
+          updated_at: string
+        }
+        Insert: {
+          alias: string
+          alias_norm: string
+          area_name: string
+          area_slug: string
+          country_slug?: string | null
+          created_at?: string
+          hits?: number
+          id?: string
+          region_slug?: string | null
+          updated_at?: string
+        }
+        Update: {
+          alias?: string
+          alias_norm?: string
+          area_name?: string
+          area_slug?: string
+          country_slug?: string | null
+          created_at?: string
+          hits?: number
+          id?: string
+          region_slug?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       security_access_audit: {
         Row: {
           action_type: string
@@ -44087,6 +44126,16 @@ export type Database = {
       jbj_url_is_valid_project_photo: {
         Args: { value: string }
         Returns: boolean
+      }
+      learn_area_alias: {
+        Args: {
+          _alias: string
+          _area_name: string
+          _area_slug: string
+          _country_slug?: string
+          _region_slug?: string
+        }
+        Returns: undefined
       }
       link_broker_entity_by_email: { Args: never; Returns: string }
       list_my_broker_oauth_apps: {

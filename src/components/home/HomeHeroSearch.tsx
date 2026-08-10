@@ -17,10 +17,13 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import SearchFallbackContact from "@/components/search/SearchFallbackContact";
+import AreaSuggestionDialog from "@/components/search/AreaSuggestionDialog";
 import { EMPTY_SEARCH, searchToParams, type PropertySearch } from "@/lib/propertySearch";
 import { resolveIntentLocally, handOffToChatSupport } from "@/lib/searchIntent";
+import { resolveArea, learnAreaAlias, areaSearchParams, type ResolvedArea } from "@/lib/areaResolver";
 import { saveRecentSearch } from "@/lib/searchHistory";
 import { toast } from "sonner";
+
 
 const HERO_TYPEWRITER_PHRASES = [
   "Find me a property in Downtown",
@@ -41,6 +44,12 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const [filters, setFilters] = useState<PropertySearch>(EMPTY_SEARCH);
   const [fallbackOpen, setFallbackOpen] = useState(false);
   const [fallbackQuery, setFallbackQuery] = useState("");
+  const [suggestion, setSuggestion] = useState<{
+    typed: string;
+    area: ResolvedArea;
+    purpose: "buy" | "rent";
+  } | null>(null);
+
 
   const resolveWithAI = useCallback(
     async (q: string): Promise<boolean> => {
@@ -114,6 +123,20 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         if (devSlug) return void navigate(`/developer/${devSlug}`);
         if (areaSlug) return void navigate(`/area/${areaSlug}`);
 
+        // Geography resolution: exact name/slug, curated nickname, learned
+        // alias — or a fuzzy suggestion the visitor must confirm
+        // ("Dubai Square Marina" → "Dubai Marina").
+        const geo = await resolveArea(q);
+        if (geo && geo.via !== "fuzzy") {
+          const purpose = next.purpose === "rent" ? "rent" : "buy";
+          navigate(`/properties?${areaSearchParams(geo, { purpose }).toString()}`);
+          return;
+        }
+        if (geo && geo.via === "fuzzy") {
+          setSuggestion({ typed: q, area: geo, purpose: next.purpose === "rent" ? "rent" : "buy" });
+          return;
+        }
+
         const local = resolveIntentLocally(q);
         if (local?.route) {
           toast.success(local.message);
@@ -129,6 +152,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         toast.info("Nothing matched — our advisory desk will answer this for you.");
         handOffToChatSupport(q, { source: "hero_search", path: window.location.pathname });
 
+
+
       } catch (err) {
         console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
         navigate(`/properties?q=${encodeURIComponent(q)}`);
@@ -143,6 +168,25 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
     if (onBookConsultation) onBookConsultation();
     else window.dispatchEvent(new CustomEvent("jbj:open-inquiry"));
   };
+
+  /** Visitor confirmed the suggestion — remember it and route there. */
+  const acceptSuggestion = useCallback(() => {
+    if (!suggestion) return;
+    const { typed, area, purpose } = suggestion;
+    setSuggestion(null);
+    void learnAreaAlias(typed, area);
+    toast.success(`Showing ${area.name}.`);
+    navigate(`/properties?${areaSearchParams(area, { purpose }).toString()}`);
+  }, [navigate, suggestion]);
+
+  /** Visitor said no — hand the original sentence to live chat support. */
+  const rejectSuggestion = useCallback(() => {
+    const typed = suggestion?.typed ?? "";
+    setSuggestion(null);
+    if (!typed) return;
+    toast.info("No problem — our advisory desk will help you find it.");
+    handOffToChatSupport(typed, { source: "hero_search", path: window.location.pathname });
+  }, [suggestion]);
 
   return (
     <motion.div
@@ -161,6 +205,14 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         onSellSelected={() => navigate("/sell")}
       />
       <SearchFallbackContact open={fallbackOpen} onOpenChange={setFallbackOpen} query={fallbackQuery} />
+      <AreaSuggestionDialog
+        open={!!suggestion}
+        typed={suggestion?.typed ?? ""}
+        suggestionName={suggestion?.area.name ?? ""}
+        onConfirm={acceptSuggestion}
+        onReject={rejectSuggestion}
+      />
+
     </motion.div>
   );
 }
