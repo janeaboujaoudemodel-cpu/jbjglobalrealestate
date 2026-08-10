@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, ExternalLink, LogOut, MoreHorizontal, PanelLeft, Search, Crown } from "lucide-react";
 
 import {
   CRM_DEFAULT_SECTION,
+  CRM_OWNER_HUB_MODULES,
   CRM_OWNER_HUB_SECTIONS,
   type CrmModule,
   CRM_PRIMARY_NAV,
@@ -23,6 +24,12 @@ export default function CrmSidebar() {
   const { isOwner } = useOwnerVerification();
   const { signOut } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [shortcutQuery, setShortcutQuery] = useState("");
+  const shortcutMatches = useMemo(() => {
+    const query = shortcutQuery.trim().toLowerCase();
+    if (!query) return [];
+    return CRM_OWNER_HUB_MODULES.filter((module) => module.label.toLowerCase().includes(query)).slice(0, 8);
+  }, [shortcutQuery]);
 
   useEffect(() => {
     document.querySelector(".jc-app")?.setAttribute("data-sidebar-collapsed", collapsed ? "true" : "false");
@@ -126,8 +133,20 @@ export default function CrmSidebar() {
             <span>Owner Backend</span>
             <ChevronDown size={17} />
           </div>
+          <label className="jc-side-search" aria-label="Search JBJ Hub shortcuts">
+            <Search size={17} aria-hidden />
+            <input
+              value={shortcutQuery}
+              onChange={(event) => setShortcutQuery(event.target.value)}
+              placeholder="Search shortcuts"
+            />
+          </label>
           <nav className="jc-team-nav" aria-label="Owner backend modules inside JBJ Hub">
-            {CRM_OWNER_HUB_SECTIONS.map((folder) => {
+            {shortcutQuery.trim() ? (
+              shortcutMatches.length ? shortcutMatches.map((module) => renderHubModule(module)) : (
+                <p className="jc-shortcut-empty">No shortcut found</p>
+              )
+            ) : CRM_OWNER_HUB_SECTIONS.map((folder) => {
               const FolderIcon = folder.icon;
               return (
                 <div className="jc-folder jc-folder--owner" key={folder.label} data-open={folder.defaultOpen ? "true" : "false"}>
