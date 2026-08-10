@@ -22,6 +22,17 @@ type GapRow = {
   is_published: boolean;
 };
 
+type WordmarkRow = {
+  developer_id: string;
+  developer_name: string | null;
+  slug: string | null;
+  logo_url_processed: string | null;
+  logo_source: string | null;
+  wordmark_applied_at: string | null;
+  published_projects: number | null;
+};
+
+
 const REASON_LABEL: Record<string, string> = {
   no_developer_record: "No developer profile",
   developer_has_no_logo: "Developer has no logo",
