@@ -507,6 +507,33 @@ export default function MarketDataImportHub() {
 
   const stats = (run?.stats || {}) as Record<string, number | string>;
 
+  /**
+   * Publish progress per bucket: how many rows the crawl found, how many are already
+   * live on JBJ, and how many still remain to be approved & published.
+   */
+  const progress = useMemo(() => {
+    const pub = (rows: { publish_status?: string | null; jbj_project_id?: string | null; jbj_developer_id?: string | null }[]) =>
+      rows.filter((r) => r.publish_status === "published").length;
+
+    const offplan = stagedProjects.filter((p) => p.is_offplan);
+    const newProj = offplan.filter((p) => !matchedStagedIds.has(p.id));
+    const mergedProj = offplan.filter((p) => matchedStagedIds.has(p.id));
+    const matchedDevIds = new Set(
+      matches.filter((m) => m.entity_type === "developer").map((m) => m.staged_developer_id),
+    );
+    const mergedDevs = stagedDevelopers.filter((d) => matchedDevIds.has(d.id));
+
+    return {
+      developers: { found: stagedDevelopers.length, published: pub(stagedDevelopers) },
+      projects: { found: stagedProjects.length, published: pub(stagedProjects) },
+      newProjects: { found: newProj.length, published: pub(newProj) },
+      newDevelopers: { found: stagedDevelopers.length, published: pub(stagedDevelopers) },
+      mergedProjects: { found: mergedProj.length, published: pub(mergedProj) },
+      mergedDevelopers: { found: mergedDevs.length, published: pub(mergedDevs) },
+    };
+  }, [stagedProjects, stagedDevelopers, matches, matchedStagedIds]);
+
+
   const decide = async (id: string, decision: string) => {
     const { error } = await supabase
       .from("market_review_matches" as any)
