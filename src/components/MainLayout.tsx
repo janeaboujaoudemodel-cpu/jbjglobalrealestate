@@ -182,7 +182,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
 
   const [showAttentionPulse, setShowAttentionPulse] = useState(false);
-  const [popupsReady, setPopupsReady] = useState(!isHomePage);
+  const [popupsReady, setPopupsReady] = useState(
+    () => !isHomePage || (typeof sessionStorage !== "undefined" && !!sessionStorage.getItem("jbj:chat-prefill")),
+  );
 
   useEffect(() => {
     if (isBackOfficeRoute) return;
@@ -203,12 +205,18 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         }, SCROLL_DELAY_MS);
       }
     };
+    // A search hand-off must open live chat INSTANTLY — it never waits for the
+    // homepage scroll/idle gate.
+    const openNow = () => setPopupsReady(true);
+    window.addEventListener('jbj:open-chat-support', openNow as EventListener);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
+      window.removeEventListener('jbj:open-chat-support', openNow as EventListener);
       window.removeEventListener('scroll', handleScroll);
       if (scrollTimer) window.clearTimeout(scrollTimer);
     };
   }, [isHomePage, isBackOfficeRoute]);
+
 
   const handleToggleChat = () => {
     markDailyShown();
