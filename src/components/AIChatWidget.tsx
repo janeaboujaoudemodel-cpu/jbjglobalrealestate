@@ -689,7 +689,26 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, ownerJoined]);
+
+  /**
+   * Known visitor + a handed-off sentence = no onboarding. We open a general
+   * conversation straight away so the message lands in the chat itself.
+   */
+  useEffect(() => {
+    if (!pendingPrefill || isCollapsed) return;
+    if (step === 'chatting' || step === 'agent_joining') return;
+    const knownEmail = userInfo.email || user?.email;
+    if (!knownEmail) return;
+    void handleSelectService('general');
+  }, [pendingPrefill, isCollapsed, step, userInfo.email, user?.email, handleSelectService]);
+
+  /** Send the handed-off sentence automatically once it is in the composer. */
+  useEffect(() => {
+    if (!autoSendPrefill || step !== 'chatting' || !input.trim() || isLoading) return;
+    setAutoSendPrefill(false);
+    void handleSend();
+  }, [autoSendPrefill, step, input, isLoading, handleSend]);
+
 
   // Submit to team - saves full transcript to owner notes + sends email notification
   const handleSubmitToTeam = useCallback(async (inquirySummary?: string) => {
