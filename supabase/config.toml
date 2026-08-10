@@ -629,3 +629,6 @@ verify_jwt = false
 
 [functions.chat-support-notify]
 verify_jwt = false
+
+[functions.market-import-publish]
+verify_jwt = false
