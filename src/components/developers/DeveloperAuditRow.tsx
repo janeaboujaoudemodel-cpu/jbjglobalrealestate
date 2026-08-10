@@ -10,13 +10,15 @@ interface Props {
   projectCount?: number;
   heroImageUrl?: string;
   heroImageUrls?: string[];
+  /** Owner-only: media gap badges live in the backend Developer Hub, never on the public site. */
+  showAuditFlags?: boolean;
 }
 
 /**
  * Dense single-line directory row used by the owner list view so missing
  * logos and missing cover photography can be scanned quickly.
  */
-const DeveloperAuditRow = ({ developer, projectCount = 0, heroImageUrl, heroImageUrls = [] }: Props) => {
+const DeveloperAuditRow = ({ developer, projectCount = 0, heroImageUrl, heroImageUrls = [], showAuditFlags = false }: Props) => {
   const logoUrl = getDeveloperLogoUrl(developer) || getKnownDeveloperLogoUrl(developer.name);
   const cover = [
     getVerifiedDeveloperFlagship(developer.name, developer.slug),
@@ -68,12 +70,12 @@ const DeveloperAuditRow = ({ developer, projectCount = 0, heroImageUrl, heroImag
       </span>
 
       <span className="col-span-2 flex items-center justify-end gap-2">
-        {!logoUrl ? (
+        {showAuditFlags && !logoUrl ? (
           <span className="rounded-md bg-[#7C2D12] text-white text-[10px] font-bold uppercase tracking-[0.1em] px-2 py-1">
             No logo
           </span>
         ) : null}
-        {!cover ? (
+        {showAuditFlags && !cover ? (
           <span className="rounded-md bg-[#4C1D95] text-white text-[10px] font-bold uppercase tracking-[0.1em] px-2 py-1">
             No photo
           </span>
