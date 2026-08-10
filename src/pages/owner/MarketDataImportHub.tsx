@@ -127,18 +127,28 @@ const PublishCell = ({
   status,
   at,
   error,
+  onPublish,
+  busy,
 }: {
   status?: string | null;
   at?: string | null;
   error?: string | null;
+  onPublish?: () => void;
+  busy?: boolean;
 }) => {
   const state = status || "not_published";
   const label = state === "published" ? "Published live" : state === "failed" ? "Publish failed" : "Not published";
   return (
     <span className="inline-flex flex-col gap-0.5">
-      <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${state === "published" ? "mir-solid" : "mir-pill"}`}>
+      <button
+        type="button"
+        disabled={busy || state === "published"}
+        onClick={onPublish}
+        title={state === "published" ? "This record is published live" : "Approve and publish this record"}
+        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
+      >
         {label}
-      </span>
+      </button>
       {state === "published" && at ? (
         <span className="text-[10px] text-neutral-500">{new Date(at).toLocaleDateString()}</span>
       ) : null}
@@ -200,13 +210,13 @@ async function fetchAllRows<T>(table: string, columns: string, orderBy = "name")
 
 type Progress = { found: number; published: number };
 
-const ProgressChips = ({ found, published }: Progress) => {
+const ProgressChips = ({ found, published, onFilter }: Progress & { onFilter?: (filter: "all" | "published" | "not_published") => void }) => {
   const remaining = Math.max(0, found - published);
   return (
     <span className="mt-2 flex flex-wrap items-center gap-1.5">
-      <span className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold">Found {found}</span>
-      <span className="mir-solid rounded-full px-2 py-0.5 text-[10px] font-semibold">Published {published}</span>
-      <span className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold">Remaining {remaining}</span>
+      <button type="button" className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold" onClick={(event) => { event.stopPropagation(); onFilter?.("all"); }}>Found {found}</button>
+      <button type="button" className="mir-solid rounded-full px-2 py-0.5 text-[10px] font-semibold" onClick={(event) => { event.stopPropagation(); onFilter?.("published"); }}>Published {published}</button>
+      <button type="button" className="mir-pill rounded-full px-2 py-0.5 text-[10px] font-semibold" onClick={(event) => { event.stopPropagation(); onFilter?.("not_published"); }}>Remaining {remaining}</button>
     </span>
   );
 };
@@ -217,12 +227,14 @@ const StatCard = ({
   hint,
   onClick,
   progress,
+  onProgressFilter,
 }: {
   label: string;
   value: string | number;
   hint?: string;
   onClick?: () => void;
   progress?: Progress;
+  onProgressFilter?: (filter: "all" | "published" | "not_published") => void;
 }) => (
   <button
     type="button"
@@ -233,7 +245,7 @@ const StatCard = ({
     <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{label}</p>
     <p className="mt-2 text-2xl font-semibold text-neutral-900">{value}</p>
     {hint ? <p className="mt-1 text-xs text-neutral-500">{hint}</p> : null}
-    {progress ? <ProgressChips {...progress} /> : null}
+    {progress ? <ProgressChips {...progress} onFilter={onProgressFilter} /> : null}
   </button>
 );
 
@@ -394,6 +406,8 @@ export default function MarketDataImportHub() {
   const [openDiff, setOpenDiff] = useState<Record<string, boolean>>({});
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [rowBusy, setRowBusy] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "not_published" | "approved" | "pending" | "rejected">("all");
   const [matchLimit, setMatchLimit] = useState(100);
 
   useEffect(() => setSelected(new Set()), [tab, entity]);
@@ -487,17 +501,24 @@ export default function MarketDataImportHub() {
     [allMatches],
   );
 
+  const matchesStatusFilter = (row: { publish_status?: string | null; review_decision?: string | null }) => {
+    if (statusFilter === "all") return true;
+    if (statusFilter === "published") return row.publish_status === "published";
+    if (statusFilter === "not_published") return row.publish_status !== "published";
+    return (row.review_decision || "pending") === statusFilter;
+  };
+
   const newProjects = useMemo(
     () =>
       stagedProjects.filter(
-        (p) => p.is_offplan && !matchedStagedIds.has(p.id) && (!q || p.name.toLowerCase().includes(q.toLowerCase())),
+        (p) => p.is_offplan && !matchedStagedIds.has(p.id) && matchesStatusFilter(p) && (!q || p.name.toLowerCase().includes(q.toLowerCase())),
       ),
-    [stagedProjects, matchedStagedIds, q],
+    [stagedProjects, matchedStagedIds, q, statusFilter],
   );
 
   const newDevelopers = useMemo(
-    () => stagedDevelopers.filter((d) => !q || d.name.toLowerCase().includes(q.toLowerCase())),
-    [stagedDevelopers, q],
+    () => stagedDevelopers.filter((d) => matchesStatusFilter(d) && (!q || d.name.toLowerCase().includes(q.toLowerCase()))),
+    [stagedDevelopers, q, statusFilter],
   );
 
   const visibleMatches = useMemo(
@@ -574,6 +595,35 @@ export default function MarketDataImportHub() {
     });
     if (error) throw error;
     return data as { published: number; failed: number };
+  };
+
+  const updateSingleReview = async (kind: "project" | "developer", id: string, decision: "approved" | "rejected" | "pending") => {
+    setRowBusy(id);
+    try {
+      if (decision === "approved") {
+        const result = await publishApproved(kind, [id]);
+        if (!result.published) throw new Error("The record was not published");
+        toast.success(`${kind === "project" ? "Project" : "Developer"} approved and published live`);
+      } else {
+        const table = kind === "project" ? "market_staged_projects" : "market_staged_developers";
+        const { error } = await supabase.from(table as any).update({ review_decision: decision, reviewed_at: new Date().toISOString() }).eq("id", id);
+        if (error) throw error;
+        toast.success(`Review set to ${decision}`);
+      }
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: [kind === "project" ? "market-staged-projects" : "market-staged-developers"] }),
+        qc.invalidateQueries({ queryKey: [kind === "project" ? "market-live-projects" : "market-live-developers"] }),
+      ]);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not update this record");
+    } finally {
+      setRowBusy(null);
+    }
+  };
+
+  const openBucket = (nextTab: "new" | "newDevelopers", filter: typeof statusFilter = "all") => {
+    setStatusFilter(filter);
+    setTab(nextTab);
   };
 
   const bulkStaged = async (kind: "project" | "developer", decision: "approved" | "rejected" | "pending") => {
@@ -691,14 +741,16 @@ export default function MarketDataImportHub() {
           label="Developers discovered"
           value={String(stats.total_developers_discovered ?? stagedDevelopers.length)}
           progress={progress.developers}
-          onClick={() => setTab("newDevelopers")}
+          onClick={() => openBucket("newDevelopers")}
+          onProgressFilter={(filter) => openBucket("newDevelopers", filter)}
         />
         <StatCard
           label="Projects in scope"
           value={String(stats.total_projects_in_scope ?? stats.total_projects_discovered ?? stagedProjects.length)}
           hint={`incl. ${stats.ready_projects_included ?? 0} ready · ${stats.sold_out_projects_included ?? 0} sold out`}
           progress={progress.projects}
-          onClick={() => setTab("new")}
+          onClick={() => openBucket("new")}
+          onProgressFilter={(filter) => openBucket("new", filter)}
         />
         <StatCard
           label="Developers auto-merged"
@@ -719,14 +771,16 @@ export default function MarketDataImportHub() {
           value={String(progress.newProjects.found)}
           hint="awaiting your approval"
           progress={progress.newProjects}
-          onClick={() => setTab("new")}
+          onClick={() => openBucket("new")}
+          onProgressFilter={(filter) => openBucket("new", filter)}
         />
         <StatCard
           label="New developers"
           value={String(progress.newDevelopers.found)}
           hint="awaiting your approval"
           progress={progress.newDevelopers}
-          onClick={() => setTab("newDevelopers")}
+          onClick={() => openBucket("newDevelopers")}
+          onProgressFilter={(filter) => openBucket("newDevelopers", filter)}
         />
 
         <StatCard label="Areas matched" value={String(stats.areas_matched ?? "—")} hint={`${stats.areas_geo_filled ?? 0} got map coordinates`} onClick={() => { setEntity("project"); setTab("matches"); }} />
@@ -780,6 +834,16 @@ export default function MarketDataImportHub() {
           </div>
         ) : null}
       </div>
+
+      {(tab === "new" || tab === "newDevelopers") ? (
+        <div className="flex flex-wrap items-center gap-2" aria-label="Status filters">
+          {(["all", "published", "not_published", "approved", "pending", "rejected"] as const).map((filter) => (
+            <button key={filter} type="button" onClick={() => setStatusFilter(filter)} className={`mir-pill rounded-full px-3 py-1.5 text-xs font-semibold ${statusFilter === filter ? "mir-pill-active" : ""}`}>
+              {filter === "all" ? "All records" : filter === "not_published" ? "Not published" : filter.replace("_", " ").replace(/^./, (letter) => letter.toUpperCase())}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       {tab === "summary" ? (
         <div className="mir-card rounded-xl p-5 text-sm text-neutral-600">
@@ -968,11 +1032,11 @@ export default function MarketDataImportHub() {
                       <td className="px-4 py-3 text-neutral-600">{[p.area, p.city].filter(Boolean).join(", ") || "—"}</td>
                       <td className="px-4 py-3 text-neutral-600">{p.status || "—"}</td>
                       <td className="px-4 py-3">
-                        <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${p.review_decision && p.review_decision !== "pending" ? "mir-solid" : "mir-pill"}`}>
-                          {p.review_decision || "pending"}
-                        </span>
+                        <select aria-label={`Review status for ${p.name}`} disabled={rowBusy === p.id} value={p.review_decision || "pending"} onChange={(event) => updateSingleReview("project", p.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full px-2.5 py-1 text-[11px] font-semibold">
+                          <option value="pending">Pending</option><option value="approved">Approved & publish</option><option value="rejected">Rejected</option>
+                        </select>
                       </td>
-                      <td className="px-4 py-3"><PublishCell status={p.publish_status} at={p.published_at} error={p.publish_error} /></td>
+                      <td className="px-4 py-3"><PublishCell status={p.publish_status} at={p.published_at} error={p.publish_error} busy={rowBusy === p.id} onPublish={() => updateSingleReview("project", p.id, "approved")} /></td>
                       <td className="px-4 py-3">
                         <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />
@@ -1045,11 +1109,11 @@ export default function MarketDataImportHub() {
                       <td className="px-4 py-3 text-neutral-600">{formatHeadquarters(d.headquarters)}</td>
                       <td className="px-4 py-3 text-neutral-600">{d.total_projects ?? "—"}</td>
                       <td className="px-4 py-3">
-                        <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${d.review_decision && d.review_decision !== "pending" ? "mir-solid" : "mir-pill"}`}>
-                          {d.review_decision || "pending"}
-                        </span>
+                        <select aria-label={`Review status for ${d.name}`} disabled={rowBusy === d.id} value={d.review_decision || "pending"} onChange={(event) => updateSingleReview("developer", d.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full px-2.5 py-1 text-[11px] font-semibold">
+                          <option value="pending">Pending</option><option value="approved">Approved & publish</option><option value="rejected">Rejected</option>
+                        </select>
                       </td>
-                      <td className="px-4 py-3"><PublishCell status={d.publish_status} at={d.published_at} error={d.publish_error} /></td>
+                      <td className="px-4 py-3"><PublishCell status={d.publish_status} at={d.published_at} error={d.publish_error} busy={rowBusy === d.id} onPublish={() => updateSingleReview("developer", d.id, "approved")} /></td>
                       <td className="px-4 py-3">
                         <a href={d.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />

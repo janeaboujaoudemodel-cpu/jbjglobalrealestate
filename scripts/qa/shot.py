@@ -21,6 +21,8 @@ Usage:
 """
 import argparse
 import asyncio
+import json
+import os
 import sys
 
 from playwright.async_api import async_playwright
@@ -35,6 +37,22 @@ async def capture(path: str, out: str, selector: str | None, width: int, height:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(viewport={"width": width, "height": height})
         page = await context.new_page()
+
+        # Restore Lovable's injected owner session for protected-route proof.
+        cookies_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON")
+        if cookies_json:
+            cookies = json.loads(cookies_json)
+            for cookie in cookies:
+                cookie["url"] = BASE
+            await context.add_cookies(cookies)
+        storage_key = os.environ.get("LOVABLE_BROWSER_SUPABASE_STORAGE_KEY")
+        session_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_SESSION_JSON")
+        if storage_key and session_json:
+            await page.goto(BASE, wait_until="domcontentloaded", timeout=120_000)
+            await page.evaluate(
+                "([key, value]) => window.localStorage.setItem(key, value)",
+                [storage_key, session_json],
+            )
 
         # 1. Warm the route (cold Vite transform) — ignore what we see here.
         try:
