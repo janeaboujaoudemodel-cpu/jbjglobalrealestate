@@ -36,11 +36,11 @@ export function getCorsHeaders(req: Request): Record<string, string> {
 // ============================================================================
 
 export const APPROVED_CONTACT = {
-  phone: "+974 15 15 015",
+  phone: "+971 54 15 15 015",
   email: "contact@JBJ.ae",
   privacyEmail: "privacy@JBJ.ae",
   website: "jbj.ae",
-  whatsapp: "+9741515015",
+  whatsapp: "+971541515015",
   companyName: "JBJ Global Real Estate",
   companyFull: "JBJ Global Real Estate L.L.C S.O.C.",
   founder: "Jane Bou Jaoude",

@@ -14,7 +14,7 @@ interface ShareButtonProps {
   projectSlug: string;
 }
 
-const WHATSAPP_NUMBER = "+97156591100";
+const WHATSAPP_NUMBER = "+971541515015";
 
 const ShareButton = ({ projectName, projectSlug }: ShareButtonProps) => {
   const [copied, setCopied] = useState(false);

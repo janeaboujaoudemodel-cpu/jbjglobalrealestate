@@ -147,7 +147,7 @@ function generateReportHtml(brokerStats: BrokerStats[], date: string, capacityAl
       </p>
       <p style="color: #888; font-size: 12px; margin: 10px 0 0 0;">
         <a href="mailto:contact@JBJ.ae" style="color: #D4AF37; text-decoration: none;">contact@JBJ.ae</a> | 
-        <a href="tel:+9741515015" style="color: #D4AF37; text-decoration: none;">+974 15 15 015</a>
+        <a href="tel:+971541515015" style="color: #D4AF37; text-decoration: none;">+971 54 15 15 015</a>
       </p>
     </div>
   </div>

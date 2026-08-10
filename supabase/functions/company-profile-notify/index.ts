@@ -59,6 +59,37 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     const link = `${APP_URL}/owner/crm/jbj/owner-profile-requests?request=${reqRow.id}`;
+
+    // In-app bell alert for every owner / admin
+    try {
+      const { data: staff } = await admin
+        .from("user_roles")
+        .select("user_id, role")
+        .in("role", ["owner", "admin"]);
+      const ids = Array.from(new Set((staff || []).map((s: any) => s.user_id))).filter(Boolean);
+      if (ids.length) {
+        await admin.from("notifications").insert(
+          ids.map((uid: string) => ({
+            user_id: uid,
+            title: `Company profile requested — ${dev?.name || "developer"}`,
+            body: `${reqRow.requester_name || "A visitor"}${reqRow.requester_email ? ` (${reqRow.requester_email})` : ""} requested the company profile. Open to attach the PDF and send it.`,
+            notification_type: "company_profile_request",
+            action_url: `/owner/crm/jbj/owner-profile-requests?request=${reqRow.id}`,
+            metadata: {
+              request_id: reqRow.id,
+              developer_id: reqRow.developer_id,
+              developer_name: dev?.name || null,
+              requester_email: reqRow.requester_email,
+              requester_phone: reqRow.requester_phone,
+            },
+          })),
+        );
+      }
+    } catch (alertErr) {
+      console.error("owner bell alert failed", alertErr);
+    }
+
+
     const html = `
 <div style="font-family:Arial,Helvetica,sans-serif;background:#ffffff;padding:24px;">
   <div style="max-width:560px;margin:0 auto;border:1px solid #EFE6D6;border-radius:12px;overflow:hidden;">

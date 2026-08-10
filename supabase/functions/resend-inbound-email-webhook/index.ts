@@ -234,7 +234,7 @@ serve(async (req: Request): Promise<Response> => {
       <tr><td style="font-size:22px;font-weight:600;color:#1A1A1A;padding-bottom:18px;line-height:1.3;">Thank you${safeName} — we've received your message.</td></tr>
       <tr><td style="font-size:14px;line-height:1.7;color:#1A1A1A;padding-bottom:24px;">
         We've received your email regarding <strong>${safeSubject}</strong> and a member of our team will get back to you shortly.<br/><br/>
-        For anything urgent, please call <a href="tel:+9741515015" style="color:#1A1A1A;font-weight:600;">+974 15 15 015</a>.
+        For anything urgent, please call <a href="tel:+971541515015" style="color:#1A1A1A;font-weight:600;">+971 54 15 15 015</a>.
       </td></tr>
       <tr><td style="padding-top:8px;border-top:1px solid #B89555;font-size:12px;color:#1A1A1A;opacity:.6;line-height:1.6;">
         With appreciation,<br/><strong>The JBJ Team</strong><br/>

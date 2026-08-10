@@ -257,7 +257,7 @@ END:VCARD`;
     {
       icon: Phone,
       title: "Phone",
-      value: "+971-5659-11000",
+      value: "+971 54 15 15 015",
       action: 'phone-actions',
       iconColor: "text-[#1A1A1A]",
       titleColor: "text-[#1A1A1A]",

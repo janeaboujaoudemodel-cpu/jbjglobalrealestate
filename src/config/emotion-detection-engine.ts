@@ -513,7 +513,7 @@ export function isOffHours(): boolean {
 
 export function getOffHoursResponse(urgency: UrgencyLevel): string {
   if (urgency === 'critical') {
-    return 'Thank you for your urgent message. Our team has been alerted and will respond immediately. For critical emergencies, please call +974 15 15 015.';
+    return 'Thank you for your urgent message. Our team has been alerted and will respond immediately. For critical emergencies, please call +971 54 15 15 015.';
   }
   
   return 'Thank you for your message. Our team is currently offline, but I\'ve marked this as important. You\'ll receive a response first thing tomorrow morning.\n\nKind regards,\nJBJ Global Real Estate';

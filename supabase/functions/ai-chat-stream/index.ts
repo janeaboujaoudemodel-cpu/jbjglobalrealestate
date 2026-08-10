@@ -85,7 +85,7 @@ async function checkRateLimit(supabaseAdmin: any, rateKey: string): Promise<bool
 }
 
 const APPROVED_CONTACT_INFO = {
-  phone: '+974 15 15 015',
+  phone: '+971 54 15 15 015',
   email: 'contact@JBJ.ae',
 };
 
@@ -101,7 +101,7 @@ function sanitizeContactInfo(text: string): string {
   phonePatterns.forEach(pattern => {
     sanitized = sanitized.replace(pattern, (match) => {
       const normalized = match.replace(/[\s\-]/g, '');
-      if (normalized === '+9741515015') return match;
+      if (normalized === '+971541515015') return match;
       return APPROVED_CONTACT_INFO.phone;
     });
   });

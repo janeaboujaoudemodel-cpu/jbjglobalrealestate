@@ -38,7 +38,7 @@ interface PropertyReportModalProps {
   };
 }
 
-const WHATSAPP_NUMBER = "9741515015";
+const WHATSAPP_NUMBER = "971541515015";
 const JJ_EMAIL = "Contact@JBJ.ae";
 
 const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModalProps) => {
