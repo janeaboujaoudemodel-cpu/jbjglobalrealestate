@@ -33,6 +33,7 @@ const BodySchema = z.object({
   conversationId: z.string().uuid().optional(),
   transcript: z.string().max(20000).optional(),
   visitorName: z.string().max(120).optional(),
+  visitorEmail: z.string().email().max(200).optional(),
   visitorPhone: z.string().max(40).optional(),
 });
 
