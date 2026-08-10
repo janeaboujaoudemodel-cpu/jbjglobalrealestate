@@ -412,66 +412,43 @@ export default function MarketDataImportHub() {
     },
   });
 
-  const { data: matches = [], isFetching, refetch } = useQuery({
-    queryKey: ["market-review-matches", entity],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("market_review_matches" as any)
-        .select("*")
-        .eq("entity_type", entity)
-        .order("confidence", { ascending: false })
-        .limit(2000);
-      if (error) throw error;
-      return (data || []) as unknown as MatchRow[];
-    },
+  // All matches, both entities, fully paginated so the counters are exact.
+  const { data: allMatches = [], isFetching, refetch } = useQuery({
+    queryKey: ["market-review-matches-all"],
+    queryFn: () => fetchAllRows<MatchRow>("market_review_matches", "*", "confidence"),
   });
+
+  const matches = useMemo(() => allMatches.filter((m) => m.entity_type === entity), [allMatches, entity]);
 
   const { data: stagedProjects = [] } = useQuery({
     queryKey: ["market-staged-projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("market_staged_projects" as any)
-        .select(
-          "id,name,source_slug,source_url,developer_name,city,area,status,is_offplan,excluded_reason,review_decision,jbj_project_id,publish_status,published_at,publish_error",
-        )
-        .order("name")
-        .limit(3000);
-      if (error) throw error;
-      return (data || []) as unknown as StagedProject[];
-    },
+    queryFn: () =>
+      fetchAllRows<StagedProject>(
+        "market_staged_projects",
+        "id,name,source_slug,source_url,developer_name,city,area,status,is_offplan,excluded_reason,review_decision,jbj_project_id,publish_status,published_at,publish_error",
+      ),
   });
 
   const { data: stagedDevelopers = [] } = useQuery({
     queryKey: ["market-staged-developers"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("market_staged_developers" as any)
-        .select("id,name,source_slug,source_url,headquarters,total_projects,review_decision,jbj_developer_id,publish_status,published_at,publish_error")
-        .order("name")
-        .limit(2000);
-      if (error) throw error;
-      return (data || []) as unknown as StagedDeveloper[];
-    },
+    queryFn: () =>
+      fetchAllRows<StagedDeveloper>(
+        "market_staged_developers",
+        "id,name,source_slug,source_url,headquarters,total_projects,review_decision,jbj_developer_id,publish_status,published_at,publish_error",
+      ),
   });
 
   // Live JBJ records, used to resolve "our own link" for every staged row.
   const { data: liveProjects = [] } = useQuery({
     queryKey: ["market-live-projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("projects").select("id,name,slug").limit(5000);
-      if (error) throw error;
-      return (data || []) as unknown as LiveRef[];
-    },
+    queryFn: () => fetchAllRows<LiveRef>("projects", "id,name,slug"),
   });
 
   const { data: liveDevelopers = [] } = useQuery({
     queryKey: ["market-live-developers"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("developers").select("id,name,slug").limit(5000);
-      if (error) throw error;
-      return (data || []) as unknown as LiveRef[];
-    },
+    queryFn: () => fetchAllRows<LiveRef>("developers", "id,name,slug"),
   });
+
 
   const projectIndex = useMemo(() => {
     const byId = new Map<string, LiveRef>();
