@@ -358,7 +358,6 @@ serve(async (req) => {
           const videoUrls = allUrls(s.videos ?? objectValue(s.media).videos ?? payload.media);
           const storeys = s.storeys ?? specNumber(specs, "storeys");
           const totalUnits = s.total_units ?? specNumber(specs, "total_units");
-          const availableUnits = specNumber(specs, "available_units");
           const builtArea = s.built_area_sqft ?? specNumber(specs, "built_area_sqft");
           const plotArea = s.plot_size_sqft ?? specNumber(specs, "plot_size_sqft");
           const yieldPct = Number(invest.estimated_rental_yield_percent);
@@ -378,7 +377,8 @@ serve(async (req) => {
           // Everything the market source knows, mapped onto JBJ detail fields.
           const detail: Record<string, unknown> = {
             total_units: totalUnits ?? null,
-            available_units: availableUnits,
+            // LOCKED: source availability counts are unit-level inventory and
+            // must never be imported. Public availability remains On Request.
             floors: storeys ?? null,
             number_of_stories: storeys ?? null,
             building_count: specNumber(payload, "tower_count"),
