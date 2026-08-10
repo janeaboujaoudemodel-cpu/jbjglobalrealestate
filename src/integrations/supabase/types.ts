@@ -6033,6 +6033,13 @@ export type Database = {
             foreignKeyName: "client_investors_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "client_investors_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -14678,6 +14685,13 @@ export type Database = {
             foreignKeyName: "developer_project_submissions_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "developer_project_submissions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -16196,6 +16210,13 @@ export type Database = {
           whatsapp_group_url?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "developers_focus_project_id_fkey"
+            columns: ["focus_project_id"]
+            isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
           {
             foreignKeyName: "developers_focus_project_id_fkey"
             columns: ["focus_project_id"]
@@ -18701,6 +18722,13 @@ export type Database = {
             foreignKeyName: "enrichment_scan_log_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "enrichment_scan_log_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -20399,6 +20427,13 @@ export type Database = {
             foreignKeyName: "favorites_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "favorites_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -20897,6 +20932,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "home_featured_projects_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
           {
             foreignKeyName: "home_featured_projects_project_id_fkey"
             columns: ["project_id"]
@@ -26026,6 +26068,13 @@ export type Database = {
             foreignKeyName: "listing_enrichment_suggestions_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "listing_enrichment_suggestions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -30419,6 +30468,13 @@ export type Database = {
             foreignKeyName: "pending_project_imports_matched_project_id_fkey"
             columns: ["matched_project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "pending_project_imports_matched_project_id_fkey"
+            columns: ["matched_project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -31335,6 +31391,13 @@ export type Database = {
             foreignKeyName: "project_documents_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -31379,6 +31442,13 @@ export type Database = {
           project_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
           {
             foreignKeyName: "project_images_project_id_fkey"
             columns: ["project_id"]
@@ -31527,6 +31597,13 @@ export type Database = {
             foreignKeyName: "project_sync_status_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_sync_status_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -31571,6 +31648,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "project_translations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
           {
             foreignKeyName: "project_translations_project_id_fkey"
             columns: ["project_id"]
@@ -31626,6 +31710,13 @@ export type Database = {
             foreignKeyName: "project_videos_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_videos_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -31667,6 +31758,8 @@ export type Database = {
           deleted_at: string | null
           description: string | null
           detail_fetched_at: string | null
+          developer_gap_flagged_at: string | null
+          developer_gap_reason: string | null
           developer_id: string | null
           developer_name: string | null
           down_payment_percent: number | null
@@ -31788,6 +31881,8 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           detail_fetched_at?: string | null
+          developer_gap_flagged_at?: string | null
+          developer_gap_reason?: string | null
           developer_id?: string | null
           developer_name?: string | null
           down_payment_percent?: number | null
@@ -31909,6 +32004,8 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           detail_fetched_at?: string | null
+          developer_gap_flagged_at?: string | null
+          developer_gap_reason?: string | null
           developer_id?: string | null
           developer_name?: string | null
           down_payment_percent?: number | null
@@ -32023,6 +32120,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_merged_into_project_id_fkey"
+            columns: ["merged_into_project_id"]
+            isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
           },
           {
             foreignKeyName: "projects_merged_into_project_id_fkey"
@@ -34722,6 +34826,13 @@ export type Database = {
             foreignKeyName: "shortlists_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "shortlists_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -36510,6 +36621,13 @@ export type Database = {
             foreignKeyName: "team_projects_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "team_projects_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
@@ -37653,6 +37771,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "unit_comparisons_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_developer_gaps"
+            referencedColumns: ["project_id"]
+          },
           {
             foreignKeyName: "unit_comparisons_project_id_fkey"
             columns: ["project_id"]
@@ -41905,6 +42030,28 @@ export type Database = {
           user_role: string | null
         }
         Relationships: []
+      }
+      project_developer_gaps: {
+        Row: {
+          developer_gap_flagged_at: string | null
+          developer_gap_reason: string | null
+          developer_id: string | null
+          developer_name: string | null
+          developer_website: string | null
+          is_published: boolean | null
+          project_id: string | null
+          project_name: string | null
+          slug: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       project_duplicate_groups: {
         Row: {
