@@ -65,13 +65,11 @@ export default function ConnectAgent() {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-14 sm:px-6">
-      <Helmet>
-        <title>Connect an AI Assistant | JBJ Global Real Estate</title>
-        <meta
-          name="description"
-          content="Step-by-step instructions to connect ChatGPT, Claude, Claude Code, or any MCP client to JBJ Global Real Estate."
-        />
-      </Helmet>
+      <PageMeta
+        title="Connect an AI Assistant | JBJ Global Real Estate"
+        description="Step-by-step instructions to connect ChatGPT, Claude, Claude Code, or any MCP client to JBJ Global Real Estate."
+      />
+
 
       <header className="mb-10">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Agent integrations</p>
