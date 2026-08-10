@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
     const { data: ticket, error: insErr } = await svc
       .from("advisory_desk_requests")
       .insert({
-        user_id: user.id,
+        user_id: user?.id ?? null,
         visitor_name: name,
         visitor_email: email,
         visitor_phone: phone || null,
