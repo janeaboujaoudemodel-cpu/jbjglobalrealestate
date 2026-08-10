@@ -117,6 +117,7 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Agent Integrations (MCP)", icon: Plug, path: "/owner/agent-integrations" },
       { label: "Locations", icon: MapPin, path: "/owner/jbj-hub?tab=areas" },
      { label: "Data Gaps", icon: AlertTriangle, path: "/owner/data-gaps" },
+     { label: "Market Data Import", icon: DatabaseZap, path: "/owner/crm/jbj/owner-market-import" },
      { label: "AI Enrichment Review", icon: Sparkles, path: "/owner/enrichment-review" },
     ],
   },
