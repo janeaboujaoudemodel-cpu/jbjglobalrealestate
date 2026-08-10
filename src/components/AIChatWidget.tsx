@@ -146,6 +146,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   useEffect(() => {
     const savedStep = sessionStorage.getItem('jbj_chat_step');
     const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
+    console.log('[dbg-restore]', savedStep, savedUserInfo);
     
     // Check if we have saved user data
     if (savedUserInfo) {
