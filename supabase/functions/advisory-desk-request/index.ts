@@ -144,7 +144,7 @@ Deno.serve(async (req) => {
       ["What they searched", b.query],
       ["Where from", b.source || "chat_escalation"],
       ["Page", b.pageSource || "—"],
-      ["Account ID", user.id],
+      ["Account ID", user?.id ?? "guest (not signed in)"],
       ["Conversation", b.conversationId || "—"],
     ];
 
