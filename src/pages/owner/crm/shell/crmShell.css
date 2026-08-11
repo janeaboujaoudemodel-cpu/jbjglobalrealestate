@@ -4968,19 +4968,19 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
    3. -webkit-text-fill-color is set with every colour, otherwise
       public champagne locks keep repainting the ink dark.
    ============================================================ */
-.jc-app .jc-content [role="tab"][data-state="active"],
-.jc-app .jc-content [role="tab"][aria-selected="true"],
-.jc-app .jc-content [role="tab"][data-state="active"] *,
-.jc-app .jc-content [role="tab"][aria-selected="true"] * {
+html body .jc-app .jc-content [role="tab"][data-state="active"],
+html body .jc-app .jc-content [role="tab"][aria-selected="true"],
+html body .jc-app .jc-content [role="tab"][data-state="active"] *,
+html body .jc-app .jc-content [role="tab"][aria-selected="true"] * {
   -webkit-text-fill-color: #FFFFFF !important;
 }
-.jc-app .jc-content [role="tab"]:not([data-state="active"]):not([aria-selected="true"]),
-.jc-app .jc-content [role="tab"]:not([data-state="active"]):not([aria-selected="true"]) * {
+html body .jc-app .jc-content [role="tab"]:not([data-state="active"]):not([aria-selected="true"]),
+html body .jc-app .jc-content [role="tab"]:not([data-state="active"]):not([aria-selected="true"]) * {
   -webkit-text-fill-color: #064E3B !important;
 }
 
 /* 1 — emerald / dark surfaces keep white ink */
-.jc-app .jc-content :is(
+html body .jc-app .jc-content :is(
   [class*="jj-emerald-ombre"],
   [class*="bg-[#064E3B]"],
   [class*="bg-[#042c1c]"],
@@ -4991,7 +4991,7 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-.jc-app .jc-content :is(
+html body .jc-app .jc-content :is(
   [class*="jj-emerald-ombre"],
   [class*="bg-[#064E3B]"],
   [class*="bg-[#042c1c]"],
@@ -5002,22 +5002,22 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-.jc-app .jc-content :is(
+html body .jc-app .jc-content :is(
   [class*="jj-emerald-ombre"],
   [class*="bg-[#064E3B]"],
   [class*="bg-emerald-900"],
   [data-surface="emerald"]
 ) svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 /* Champagne chips deliberately placed on emerald keep their ink. */
-.jc-app .jc-content [class*="bg-[#EFE6D6]"],
-.jc-app .jc-content [class*="bg-[#EFE6D6]"] *,
-.jc-app .jc-content [class*="bg-[#F7F2EA]"] :where(code, kbd) {
+html body .jc-app .jc-content [class*="bg-[#EFE6D6]"],
+html body .jc-app .jc-content [class*="bg-[#EFE6D6]"] *,
+html body .jc-app .jc-content [class*="bg-[#F7F2EA]"] :where(code, kbd) {
   color: #0F1A16 !important;
   -webkit-text-fill-color: #0F1A16 !important;
 }
 
 /* 2 — champagne page surfaces become backend white */
-.jc-app .jc-content :is(
+html body .jc-app .jc-content :is(
   [class*="bg-[#FDFBF7]"],
   [class*="bg-[#F7F2EA]"]
 ):not([class*="bg-[#EFE6D6]"]) {
