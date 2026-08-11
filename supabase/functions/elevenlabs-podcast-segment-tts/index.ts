@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
 import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -211,8 +212,8 @@ serve(async (req) => {
     }
 
     // Not cached - generate new audio
-    const key1 = Deno.env.get("ELEVENLABS_API_KEY_1") || "";
-    const key2 = Deno.env.get("ELEVENLABS_API_KEY") || "";
+    const key1 = resolveElevenLabsKey() || "";
+    const key2 = resolveElevenLabsKey() || "";
     const keys = [key1, key2].filter(Boolean);
 
     if (!keys.length) {

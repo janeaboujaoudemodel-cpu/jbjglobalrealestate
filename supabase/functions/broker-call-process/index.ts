@@ -4,6 +4,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -56,7 +57,7 @@ serve(async (req) => {
     const mimeType = audioFile.type || inferAudioMime(callRow.recording_url) || "audio/webm";
 
     // Transcribe with ElevenLabs Scribe first, then Lovable AI fallback.
-    const ELEVEN = Deno.env.get("ELEVENLABS_API_KEY");
+    const ELEVEN = resolveElevenLabsKey();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     let transcriptText = "";
     let segments: any[] = [];

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { encode as base64Encode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -41,7 +42,7 @@ serve(async (req) => {
       testMaxChars?: number;
     };
 
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY_1") || Deno.env.get("ELEVENLABS_API_KEY");
+    const ELEVENLABS_API_KEY = resolveElevenLabsKey() || resolveElevenLabsKey();
     
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ElevenLabs API key not configured");

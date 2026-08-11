@@ -2,6 +2,7 @@
 // Accepts a multipart/form-data upload (field name `audio`) and returns
 // `{ text }` transcribed via ElevenLabs Scribe.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -68,7 +69,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
+    const apiKey = resolveElevenLabsKey();
     if (!apiKey) {
       return new Response(
         JSON.stringify({ error: "ELEVENLABS_API_KEY not configured" }),

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -73,8 +74,8 @@ serve(async (req) => {
 
     // Try both possible keys: the manually-set one and the connector-managed one.
     const candidateKeys = [
-      Deno.env.get("ELEVENLABS_API_KEY"),
-      Deno.env.get("ELEVENLABS_API_KEY_1"),
+      resolveElevenLabsKey(),
+      resolveElevenLabsKey(),
     ].filter((k): k is string => !!k && k.length > 0);
 
 
