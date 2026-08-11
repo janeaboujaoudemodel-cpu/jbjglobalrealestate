@@ -32,6 +32,11 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
   const isVisible = inView && mediaAllowed;
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const posterSources = useMemo(
+    () => buildResponsiveImage(poster, { widths: HERO_IMAGE_WIDTHS, sizes: HERO_IMAGE_SIZES, quality: 72 }),
+    [poster],
+  );
+
 
   // Only start loading video when container is in viewport (skipped if eager)
   useEffect(() => {
