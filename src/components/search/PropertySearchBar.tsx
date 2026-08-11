@@ -731,18 +731,29 @@ export default function PropertySearchBar({
              data-surface="emerald"
              data-search-segment
              data-no-contrast-guard
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg text-[13px] lg:text-[11px] font-semibold px-1 leading-tight tracking-tight text-center"
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg font-semibold px-1 leading-[1.1] tracking-tight text-center flex flex-col items-center justify-center"
             style={{
               backgroundImage: EMERALD_PAIR,
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              whiteSpace: "normal",
-              wordBreak: "normal",
-              overflowWrap: "break-word",
+              whiteSpace: "nowrap",
+              wordBreak: "keep-all",
             }}
           >
-            {count == null ? "Search" : `Show ${count.toLocaleString()} ${countNoun}`}
+            {count == null ? (
+              <span className="text-[13px] lg:text-[12px]">Search</span>
+            ) : (
+              <>
+                <span className="text-[13px] lg:text-[13px] whitespace-nowrap">
+                  Show {count.toLocaleString()}
+                </span>
+                <span className="text-[10px] lg:text-[10px] opacity-90 whitespace-nowrap">
+                  {countNoun}
+                </span>
+              </>
+            )}
           </button>
+
         </div>
       </div>
 
