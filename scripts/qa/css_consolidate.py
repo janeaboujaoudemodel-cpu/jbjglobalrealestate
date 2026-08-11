@@ -145,12 +145,44 @@ def p2_dedupe_not(items, stats):
     return items
 
 
+def safe_split_selector(sel: str):
+    """Split a selector list on TOP-LEVEL commas only.
+
+    A naive `sel.split(",")` corrupts selectors that carry a comma inside a
+    string or a function, e.g. `[style*="rgba(6,78,59)"]` or `:is(a, b)` —
+    that produced an unclosed-bracket PostCSS failure once, so this splitter
+    tracks quotes, brackets and parentheses.
+    """
+    out, buf, depth, quote = [], [], 0, None
+    for ch in sel:
+        if quote:
+            buf.append(ch)
+            if ch == quote:
+                quote = None
+            continue
+        if ch in "\"'":
+            quote = ch
+            buf.append(ch)
+            continue
+        if ch in "([":
+            depth += 1
+        elif ch in ")]":
+            depth = max(0, depth - 1)
+        if ch == "," and depth == 0:
+            out.append("".join(buf))
+            buf = []
+            continue
+        buf.append(ch)
+    out.append("".join(buf))
+    return out
+
+
 def p3_dedupe_parts(items, stats):
     for idx, it in enumerate(items):
         if it[0] != "rule" or "," not in it[1]:
             continue
         lead, sel = lead_and_sel(it[1])
-        parts = sel.split(",")
+        parts = safe_split_selector(sel)
         seen, keep = set(), []
         for p in parts:
             key = re.sub(r"\s+", " ", p).strip()
