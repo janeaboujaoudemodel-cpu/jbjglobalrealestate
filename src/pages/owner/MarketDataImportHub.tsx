@@ -1084,9 +1084,10 @@ export default function MarketDataImportHub() {
                           {selected.has(p.id) ? <Check className="h-3.5 w-3.5" aria-hidden /> : null}
                         </button>
                       </td>
-                      <td className="max-w-[240px] whitespace-normal break-normal px-4 py-3 text-neutral-900">{p.name}</td>
-                      <td className="max-w-[220px] whitespace-normal break-normal px-4 py-3 text-neutral-600">{p.developer_name || "—"}</td>
-                      <td className="max-w-[220px] whitespace-normal break-normal px-4 py-3 text-neutral-600">{[p.area, p.city].filter(Boolean).join(", ") || "—"}</td>
+                      <td className="px-4 py-3 text-neutral-900"><div className="max-w-[240px] whitespace-normal break-normal">{p.name}</div></td>
+                      <td className="px-4 py-3 text-neutral-600"><div className="max-w-[220px] whitespace-normal break-normal">{p.developer_name || "—"}</div></td>
+                      <td className="px-4 py-3 text-neutral-600"><div className="max-w-[220px] whitespace-normal break-normal">{[p.area, p.city].filter(Boolean).join(", ") || "—"}</div></td>
+
                       <td className="px-4 py-3 text-neutral-600">{p.status || "—"}</td>
 
 
