@@ -767,8 +767,9 @@ export default function MarketDataImportHub() {
           value={String(stats.total_projects_in_scope ?? stats.total_projects_discovered ?? stagedProjects.length)}
           hint={`incl. ${stats.ready_projects_included ?? 0} ready · ${stats.sold_out_projects_included ?? 0} sold out`}
           progress={progress.projects}
-          onClick={() => openBucket("new")}
-          onProgressFilter={(filter) => openBucket("new", filter)}
+          onClick={() => openBucket("new", "all", "all")}
+          onProgressFilter={(filter) => openBucket("new", filter, "all")}
+
         />
         <StatCard
           label="Developers auto-merged"
