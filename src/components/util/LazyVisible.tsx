@@ -68,11 +68,20 @@ export default function LazyVisible({
     return () => io.disconnect();
   }, [visible, rootMargin]);
 
+  // LAYOUT NEUTRALITY (LOCKED): once mounted the children are rendered with NO
+  // wrapper element, exactly as they were before the performance pass. A
+  // persistent wrapper became a direct child of `.jj-fullbleed-band` /
+  // `.jj-section-strap` and absorbed the global page gutter, which double-inset
+  // every full-bleed homepage section (visual regression). The reserve is only
+  // needed while pending, and mounting happens far off-screen (rootMargin), so
+  // dropping it after mount costs no CLS.
+  if (visible) return <>{children}</>;
+
   return (
     <div
       ref={ref}
-      className={`jj-lv ${className}`}
-      data-lv-state={visible ? "mounted" : "pending"}
+      className={`jj-lv jj-bleed-allow ${className}`}
+      data-lv-state="pending"
       data-lv-release={release ? "1" : undefined}
       style={
         {
@@ -80,9 +89,8 @@ export default function LazyVisible({
           "--lv-hm": `${minHeightMobile ?? minHeight}px`,
         } as React.CSSProperties
       }
-      aria-hidden={visible ? undefined : true}
-    >
-      {visible ? children : null}
-    </div>
+      aria-hidden
+    />
   );
 }
+
