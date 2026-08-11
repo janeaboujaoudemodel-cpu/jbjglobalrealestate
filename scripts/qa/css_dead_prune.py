@@ -34,6 +34,30 @@ def strip_nots(s):
         prev, s = s, NOT_RE.sub('', s)
     return s
 
+def split_top(sel):
+    """Split a selector list on top-level commas only.
+    Commas inside strings, [], () are never split points."""
+    parts, buf, depth, q = [], [], 0, None
+    i = 0
+    while i < len(sel):
+        c = sel[i]
+        if q:
+            buf.append(c)
+            if c == '\\' and i + 1 < len(sel):
+                buf.append(sel[i+1]); i += 2; continue
+            if c == q: q = None
+            i += 1; continue
+        if c in '"\'':
+            q = c; buf.append(c); i += 1; continue
+        if c in '([': depth += 1
+        elif c in ')]': depth -= 1
+        if c == ',' and depth <= 0:
+            parts.append(''.join(buf)); buf = []; i += 1; continue
+        buf.append(c); i += 1
+    parts.append(''.join(buf))
+    return parts
+
+
 def main(apply=False):
     blob = codebase_blob()
     def used(c):
