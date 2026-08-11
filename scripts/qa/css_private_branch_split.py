@@ -99,13 +99,12 @@ def main() -> int:
             if not priv:
                 walk(n.children, wrappers)
                 continue
-            body = n.body_text() if hasattr(n, "body_text") else n.raw_body()
+            body = "".join(c.render() for c in n.children)
             moved.append((wrappers, ",\n".join(priv), body))
             stats["branches"] += len(priv)
             if pub:
                 stats["split"] += 1
-                n.selector = ",\n".join(pub)
-                n.dirty = True
+                n.prelude = ",\n".join(pub) + " "
             else:
                 stats["whole"] += 1
                 n.dead = True
