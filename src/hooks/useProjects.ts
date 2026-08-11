@@ -727,18 +727,36 @@ export function useProjectsListing() {
 
       const PAGE_SIZE = 1000;
       const MAX_PAGES = 10; // bounded upper limit (10k rows)
-      const all: unknown[] = [];
-      for (let page = 0; page < MAX_PAGES; page++) {
+      const fetchPage = async (page: number) => {
         const from = page * PAGE_SIZE;
-        const to = from + PAGE_SIZE - 1;
         const { data, error } = await baseQuery()
           .order("created_at", { ascending: false })
-          .range(from, to);
+          .range(from, from + PAGE_SIZE - 1);
         if (error) throw error;
-        const rows = data ?? [];
-        all.push(...rows);
-        if (rows.length < PAGE_SIZE) break;
+        return data ?? [];
+      };
+
+      // Page 0 first (it is what the grid paints from), then the remaining
+      // pages in parallel batches. The previous strictly-sequential loop paid
+      // a full round-trip of latency per 1000 rows before anything rendered.
+      const all: unknown[] = [];
+      const first = await fetchPage(0);
+      all.push(...first);
+      if (first.length === PAGE_SIZE) {
+        let next = 1;
+        while (next < MAX_PAGES) {
+          const batch = [next, next + 1, next + 2].filter((p) => p < MAX_PAGES);
+          const results = await Promise.all(batch.map(fetchPage));
+          let exhausted = false;
+          for (const rows of results) {
+            all.push(...rows);
+            if (rows.length < PAGE_SIZE) exhausted = true;
+          }
+          if (exhausted) break;
+          next += batch.length;
+        }
       }
+
 
       // The database eligibility predicate is the catalogue contract. Do not
       // silently remove eligible rows because an image is missing or because
