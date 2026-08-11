@@ -1,4 +1,6 @@
 import type { ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import { areaMatches } from "@/utils/areaMatch";
+
 
 /**
  * Apply ShortcutFilterState to any project array.
