@@ -189,9 +189,10 @@ export default function AreaIncludeExclude({
                 {a.name}
               </span>
               <span
-                data-surface={on ? "emerald" : undefined}
+                data-surface={on && mode === "include" ? "emerald" : undefined}
                 data-emerald={on && mode === "include" ? "true" : undefined}
                 data-on-dark={on ? "true" : undefined}
+
                 className="w-5 h-5 rounded-[6px] flex items-center justify-center shrink-0"
                 style={
                   on
