@@ -310,7 +310,15 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 { icon: Building2, label: "Developer", value: draft.developer || "Not linked" },
-                { icon: MapPin, label: "Location", value: [draft.area, draft.city].filter(Boolean).join(", ") || "Not stated" },
+                {
+                  icon: MapPin,
+                  label: "Location",
+                  value:
+                    [draft.area, draft.city, "UAE"]
+                      .filter((v, i, arr): v is string => !!v && arr.findIndex((x) => (x || "").toLowerCase() === (v || "").toLowerCase()) === i)
+                      .join(", ") || "Not stated",
+                },
+
                 { icon: CalendarClock, label: "Status", value: draft.status || "Not stated" },
                 { icon: Building2, label: "Inventory", value: draft.totalUnits ? `${draft.totalUnits} units` : "Not stated" },
               ].map((fact) => (
