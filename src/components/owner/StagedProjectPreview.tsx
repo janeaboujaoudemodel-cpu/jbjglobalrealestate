@@ -140,35 +140,89 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
         .eq("id", stagedId as string)
         .maybeSingle();
       if (error) throw error;
-      return (row || null) as Record<string, any> | null;
+      const staged = (row || null) as Record<string, any> | null;
+      if (!staged) return { staged: null, live: null, liveImages: [] as string[] };
+
+      // MERGED RESULT (LOCKED): the preview must show the FINAL JBJ page — our own
+      // record wins on every field it already holds, the market source only fills
+      // the gaps. Never show the raw source as if it were the outcome.
+      const liveId = firstString(staged.jbj_project_id);
+      if (!liveId) return { staged, live: null, liveImages: [] as string[] };
+      const [{ data: live }, { data: imgs }] = await Promise.all([
+        supabase.from("projects").select("*").eq("id", liveId).maybeSingle(),
+        supabase
+          .from("project_images")
+          .select("image_url, display_order")
+          .eq("project_id", liveId)
+          .order("display_order", { ascending: true })
+          .limit(24),
+      ]);
+      const liveImages = (imgs ?? [])
+        .map((i: any) => i?.image_url)
+        .filter((u: any): u is string => typeof u === "string" && !!u);
+      return { staged, live: (live || null) as Record<string, any> | null, liveImages };
     },
   });
 
   const draft = useMemo(() => {
-    const r = (data || {}) as Record<string, any>;
+    const r = (data?.staged || {}) as Record<string, any>;
     const p = (r.payload || {}) as Record<string, any>;
-    const gallery = imageUrls(r);
-    const cover = firstString(r.cover_image, r.cover_url, p.cover_image, gallery[0]);
-    const totalUnits = firstNumber(r.total_units, r.units, p.total_units, p.units);
+    const l = (data?.live || {}) as Record<string, any>;
+    const liveImages = data?.liveImages ?? [];
+    const sourceGallery = imageUrls(r);
+    const gallery = [...liveImages, ...sourceGallery.filter((u) => !liveImages.includes(u))];
+    const cover =
+      firstString(l.cover_image_url, l.card_image_url) ||
+      firstString(r.cover_image, r.cover_url, p.cover_image, gallery[0]);
+    const totalUnits = firstNumber(l.total_units, r.total_units, r.units, p.total_units, p.units);
+    const area = firstString(l.area_name, r.area, p.area);
+    const city = firstString(l.location, l.emirate, r.city, p.city);
     return {
-      name: firstString(r.name, p.name) || "Untitled project",
-      developer: firstString(r.developer_name, p.developer_name),
-      area: firstString(r.area, p.area),
-      city: firstString(r.city, p.city),
-      status: statusLabel(firstString(r.status, p.status)),
-      handover: handoverLabel(firstString(r.handover, r.completion_date, p.handover, p.completion)),
-      priceFrom: firstString(r.price_from_label, p.price_from_label, r.starting_price, p.starting_price),
-      bedrooms: firstString(r.bedrooms_label, r.bedrooms, p.bedrooms),
-      paymentPlan: firstString(r.payment_plan, p.payment_plan),
-      description: firstString(r.description, r.overview, p.description, p.overview),
-      amenities: humanList(r.amenities ?? p.amenities, 12),
-      usps: humanList(r.usps ?? r.highlights ?? p.highlights, 6),
+      name: firstString(l.name, r.name, p.name) || "Untitled project",
+      developer: firstString(l.developer_name, r.developer_name, p.developer_name),
+      area,
+      city,
+      status: statusLabel(firstString(l.status_label, l.status, r.status, p.status)),
+      handover: handoverLabel(
+        firstString(l.handover_date, l.expected_completion, r.handover, r.completion_date, p.handover, p.completion),
+      ),
+      priceFrom:
+        firstString(
+          l.price_from ? `From AED ${Number(l.price_from).toLocaleString()}` : null,
+          r.price_from_label,
+          p.price_from_label,
+          r.starting_price,
+          p.starting_price,
+        ),
+      bedrooms: firstString(
+        l.bedrooms_min != null
+          ? `${l.bedrooms_min === 0 ? "Studio" : `${l.bedrooms_min} BR`}${l.bedrooms_max && l.bedrooms_max !== l.bedrooms_min ? ` - ${l.bedrooms_max} BR` : ""}`
+          : null,
+        r.bedrooms_label,
+        r.bedrooms,
+        p.bedrooms,
+      ),
+      paymentPlan: firstString(l.payment_plan, r.payment_plan, p.payment_plan),
+      description: firstString(l.description, r.description, r.overview, p.description, p.overview),
+      amenities: humanList(
+        (Array.isArray(l.amenities) && l.amenities.length ? l.amenities : null) ?? r.amenities ?? p.amenities,
+        12,
+      ),
+      usps: humanList(
+        (Array.isArray(l.usp_bullets) && l.usp_bullets.length ? l.usp_bullets : null) ??
+          r.usps ??
+          r.highlights ??
+          p.highlights,
+        6,
+      ),
 
       totalUnits,
       cover,
       gallery,
       sourceUrl: firstString(r.source_url),
       liveId: firstString(r.jbj_project_id),
+      liveSlug: firstString(l.slug),
+      isLive: !!l.is_published,
     };
   }, [data]);
 
@@ -181,6 +235,7 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
     if (!draft.totalUnits) list.push("No total unit count");
     return list;
   }, [draft]);
+
 
   if (!stagedId) return null;
 
@@ -202,9 +257,22 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
         <div className="flex items-center justify-between gap-4 px-6 py-4" style={{ background: EMERALD }}>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
-              {draft.liveId ? "Live on JBJ Global Real Estate — staged update" : "Draft — not on JBJ yet"}
+              {draft.liveId
+                ? "Merged JBJ result — how the page reads after publish"
+                : "Draft JBJ page — not on JBJ yet"}
             </p>
             <h2 className="mt-1 text-xl font-semibold text-white">{draft.name}</h2>
+            {draft.liveSlug ? (
+              <a
+                href={`/project/${draft.liveSlug}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mt-1 inline-block text-xs font-semibold text-white/85 underline"
+              >
+                Open the current JBJ page
+              </a>
+            ) : null}
+
           </div>
           <button
             type="button"
@@ -242,7 +310,15 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 { icon: Building2, label: "Developer", value: draft.developer || "Not linked" },
-                { icon: MapPin, label: "Location", value: [draft.area, draft.city].filter(Boolean).join(", ") || "Not stated" },
+                {
+                  icon: MapPin,
+                  label: "Location",
+                  value:
+                    [draft.area, draft.city, "UAE"]
+                      .filter((v, i, arr): v is string => !!v && arr.findIndex((x) => (x || "").toLowerCase() === (v || "").toLowerCase()) === i)
+                      .join(", ") || "Not stated",
+                },
+
                 { icon: CalendarClock, label: "Status", value: draft.status || "Not stated" },
                 { icon: Building2, label: "Inventory", value: draft.totalUnits ? `${draft.totalUnits} units` : "Not stated" },
               ].map((fact) => (
