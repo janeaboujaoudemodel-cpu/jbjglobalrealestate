@@ -12,6 +12,15 @@ import abDevelopersTransparent from "@/assets/developer-logos/ab-developers-whit
 import agPropertiesWhite from "@/assets/developer-logos/ag-properties-white.png";
 import dubaiSouthWhite from "@/assets/developer-logos/dubai-south-white.png.asset.json";
 import agVerifiedWhite from "@/assets/developer-logos/verified-local/ag-white.png";
+import { buildResponsiveImage } from "@/lib/responsiveImage";
+
+// PERF: logo plates are never wider than 176 CSS px (w-44). Storage-hosted
+// artwork was previously served at full authoring size (up to 2000px) for a
+// 176px box, which is where the developer directory's multi-MB image payload
+// came from. Request only the widths the plate can actually use. Small logos
+// are never upscaled: the transform only ever caps width.
+const LOGO_PLATE_WIDTHS = [176, 352];
+const LOGO_PLATE_SIZES = "176px";
 
 const isOpaqueRaster = (url?: string | null) => !!url && /\.(jpe?g)(\?|$)/i.test(url);
 
@@ -190,6 +199,25 @@ export function DeveloperLogo({
       : (curatedLogo ?? (isValidDeveloperLogoUrl(src) ? src : fallbackLogo));
 
 
+  // Every curated asset above is shipped pre-knocked-out to pure white, so it
+  // must render as-is (no invert, no screen blend). The same holds for the
+  // locked `white-v1` pipeline assets stored in the database.
+  const isCuratedWhiteArtwork =
+    !!verifiedWhiteLogo ||
+    isDubaiSouth ||
+    isAgProperties ||
+    isAbDevelopers ||
+    isLockedWhiteLogoAsset(resolvedSrc);
+
+  // PERF: the alpha probe downloads the artwork a SECOND time and runs
+  // getImageData on the main thread. Its result is only consulted by
+  // getLogoPaintStyle for unaudited artwork — curated/locked white knockouts
+  // and the gold identity plate ignore it entirely. Probing them doubled the
+  // request count and image bytes of the developer directory (measured 4.9 MB
+  // desktop) and added main-thread decode work per card, so those paths now
+  // skip the probe completely. Paint behaviour is unchanged.
+  const skipPaintProbe = isCuratedWhiteArtwork || !!dataKeepGold;
+
   const [paintMode, setPaintMode] = useState<"silhouette" | "screen" | null>(() =>
     getCachedLogoPaintMode(resolvedSrc as string | null),
   );
@@ -197,7 +225,7 @@ export function DeveloperLogo({
   useEffect(() => {
     setError(false);
     setImageLoaded(false);
-    if (!resolvedSrc || typeof resolvedSrc !== "string") {
+    if (!resolvedSrc || typeof resolvedSrc !== "string" || skipPaintProbe) {
       setPaintMode(null);
       return;
     }
@@ -211,17 +239,9 @@ export function DeveloperLogo({
     return () => {
       alive = false;
     };
-  }, [resolvedSrc]);
+  }, [resolvedSrc, skipPaintProbe]);
 
-  // Every curated asset above is shipped pre-knocked-out to pure white, so it
-  // must render as-is (no invert, no screen blend). The same holds for the
-  // locked `white-v1` pipeline assets stored in the database.
-  const isCuratedWhiteArtwork =
-    !!verifiedWhiteLogo ||
-    isDubaiSouth ||
-    isAgProperties ||
-    isAbDevelopers ||
-    isLockedWhiteLogoAsset(resolvedSrc);
+
 
 
   // Never reject a real logo merely because its source canvas is opaque. That
@@ -259,7 +279,15 @@ export function DeveloperLogo({
   };
 
 
-  const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
+  const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => {
+    // Only Supabase Storage / Unsplash URLs get a real transform; every other
+    // host is returned untouched (see src/lib/responsiveImage.ts).
+    const responsive = buildResponsiveImage(url, {
+      widths: LOGO_PLATE_WIDTHS,
+      sizes: LOGO_PLATE_SIZES,
+      quality: 82,
+    });
+    return (
     <div
       className={cn(
         containerClass,
@@ -274,7 +302,9 @@ export function DeveloperLogo({
       data-logo-loaded={imageLoaded ? "true" : "false"}
     >
       <img
-        src={url}
+        src={responsive?.src ?? url}
+        srcSet={responsive?.srcSet}
+        sizes={responsive?.srcSet ? LOGO_PLATE_SIZES : undefined}
         alt={alt}
         loading={loading}
         decoding="async"
@@ -322,7 +352,8 @@ export function DeveloperLogo({
 
       />
     </div>
-  );
+    );
+  };
 
   // ── Nameplate variant — if no valid logo exists, show the approved icon fallback ──
   if (variant === "nameplate") {
