@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { ThemeModeToggle } from "@/components/ThemeModeToggle";
+
 import {
   LayoutDashboard, BarChart3, Inbox, ClipboardList, StickyNote, Bell,
   Heart, SlidersHorizontal, Settings, LogOut, ChevronRight, User, Palette,
@@ -248,6 +250,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           <Row to="/developers-portal/company-registration" icon={Palette} label="Brand Profile" />
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
+        <ThemeModeToggle variant="menu" />
 
         <div className="h-px mx-2 my-1" aria-hidden="true" style={{ background: MENU_DIVIDER }} />
         <Row to="/favorites" icon={Heart} label="Favorites" />

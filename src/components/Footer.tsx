@@ -17,6 +17,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
+import { ThemeModeToggle } from "@/components/ThemeModeToggle";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 
@@ -553,6 +554,11 @@ const Footer = () => {
               <div className="relative">
                 <FooterCurrencyUnit />
               </div>
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
+              <div className="relative">
+                <ThemeModeToggle variant="footer" />
+              </div>
+
             </div>
           </div>
         </div>

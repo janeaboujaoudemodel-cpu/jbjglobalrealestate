@@ -13,6 +13,7 @@ import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
 import { FounderVisibilityProvider } from "@/contexts/FounderVisibilityContext";
 import { UserModeProvider } from "@/contexts/UserModeContext";
+import { ThemeModeProvider } from "@/contexts/ThemeModeContext";
 import { PodcastVisibilityProvider } from "@/contexts/PodcastVisibilityContext";
 import { ConsVisibilityProvider } from "@/contexts/ConsVisibilityContext";
 import { TeamPageVisibilityProvider } from "@/contexts/TeamPageVisibilityContext";
@@ -140,6 +141,7 @@ const App = () => {
             
             <AuthProvider>
             <BrandPaletteProvider>
+              <ThemeModeProvider>
               <UserModeProvider>
               <FounderVisibilityProvider>
                 <PodcastVisibilityProvider>
@@ -181,6 +183,7 @@ const App = () => {
               </PodcastVisibilityProvider>
             </FounderVisibilityProvider>
             </UserModeProvider>
+              </ThemeModeProvider>
             </BrandPaletteProvider>
             </AuthProvider>
           </BrowserRouter>
