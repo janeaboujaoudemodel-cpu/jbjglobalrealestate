@@ -34244,3 +34244,28 @@ html body #root [data-branded-email-launcher-card="true"] [data-branded-email-la
     transform: none !important;
   }
 }
+
+/* ------------------------------------------------------------------
+   PERF: off-screen card skipping (measured)
+   Grid pages mount a full page of cards (24 projects / 24 developers).
+   content-visibility lets the browser skip style, layout and paint for
+   the cards that are not near the viewport, while keeping them in the
+   DOM for SEO, in-page search, favourites and anchor links.
+   contain-intrinsic-size reserves the real card height so scrollbar
+   geometry and CLS stay identical.
+------------------------------------------------------------------ */
+[data-projects-shell] > * {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 460px;
+}
+[data-developer-grid] > * {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+@media print {
+  [data-projects-shell] > *,
+  [data-developer-grid] > * {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+}

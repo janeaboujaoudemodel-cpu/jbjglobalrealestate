@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
@@ -234,6 +234,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     <div
       data-surface="champagne"
       data-area-project-card="true"
+      data-project-card="true"
       role="link"
       tabIndex={0}
       onClick={openProject}
@@ -611,4 +612,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   );
 };
 
-export default ProjectCard;
+/**
+ * Memoized: grid pages (properties, home, area, developer detail) re-render on
+ * every filter/currency tick. Cards are pure w.r.t. their props, so bailing out
+ * here removes hundreds of avoidable subtree renders (and their style recalcs).
+ */
+export default memo(ProjectCard);

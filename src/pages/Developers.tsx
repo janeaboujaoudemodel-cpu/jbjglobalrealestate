@@ -409,6 +409,7 @@ const Developers = () => {
 
                 {view === "list" ? (
                   <div
+                    data-developer-grid
                     className="grid gap-3 px-3 sm:px-4"
                     style={{ gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))` }}
                   >
@@ -425,6 +426,7 @@ const Developers = () => {
                   </div>
                 ) : (
                   <div
+                    data-developer-grid
                     className="grid items-stretch"
                     style={{
                       gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))`,

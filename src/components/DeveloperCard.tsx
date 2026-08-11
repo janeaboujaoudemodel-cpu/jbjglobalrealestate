@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import {memo, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Building2, Layers, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -182,7 +182,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
 
   return (
 
-    <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
+    <Link to={`/developer/${developer.slug}`} data-developer-card="true" className="block h-full [perspective:1200px]">
       <motion.div
         whileHover={{ y: -8, scale: 1.015, boxShadow: "0 26px 54px -14px rgba(0,0,0,0.36), 0 14px 28px -12px rgba(6,78,59,0.34)" }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
@@ -322,5 +322,5 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   );
 };
 
-export default DeveloperCard;
+export default memo(DeveloperCard);
 
