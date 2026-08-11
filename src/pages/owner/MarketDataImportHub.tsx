@@ -633,10 +633,16 @@ export default function MarketDataImportHub() {
     }
   };
 
-  const openBucket = (nextTab: "new" | "newDevelopers", filter: typeof statusFilter = "all") => {
+  const openBucket = (
+    nextTab: "new" | "newDevelopers",
+    filter: typeof statusFilter = "all",
+    scope: "new" | "all" = "new",
+  ) => {
     setStatusFilter(filter);
+    if (nextTab === "new") setProjectScope(scope);
     setTab(nextTab);
   };
+
 
   const bulkStaged = async (kind: "project" | "developer", decision: "approved" | "rejected" | "pending") => {
     const ids = Array.from(selected);
