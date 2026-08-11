@@ -104,7 +104,10 @@ export default function AgentIntegrations() {
               <h1 className="mt-1 text-3xl md:text-4xl font-black text-white tracking-tight">
                 JBJ MCP Server
               </h1>
-              <p className="mt-2 text-sm text-white/85 max-w-2xl">
+              <p
+                className="mt-2 text-sm max-w-2xl"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.9 }}
+              >
                 Plug JBJ Global Real Estate into any Model Context Protocol client
                 — Claude, ChatGPT, Cursor, Lovable, or your own agent — with one
                 URL. External agents can search projects, fetch project detail,
@@ -150,10 +153,10 @@ export default function AgentIntegrations() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="claude">
-            <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30">
-              <TabsTrigger value="claude">Claude Desktop</TabsTrigger>
-              <TabsTrigger value="cursor">Cursor</TabsTrigger>
-              <TabsTrigger value="raw">Raw JSON</TabsTrigger>
+            <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-0 w-full !justify-start">
+              <TabsTrigger value="claude" className="owner-hub-pill">Claude Desktop</TabsTrigger>
+              <TabsTrigger value="cursor" className="owner-hub-pill">Cursor</TabsTrigger>
+              <TabsTrigger value="raw" className="owner-hub-pill">Raw JSON</TabsTrigger>
             </TabsList>
 
             <TabsContent value="claude" className="space-y-3 pt-3">
