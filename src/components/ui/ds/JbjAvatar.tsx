@@ -84,12 +84,19 @@ export function NotificationBadge({ count, floating = false, className, ...props
       data-emerald-ok
       data-no-contrast-guard
       className={cn(
-        "allow-white inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none !text-white ![color:#FFFFFF] ![-webkit-text-fill-color:#FFFFFF] shadow-[0_8px_18px_-9px_rgba(0,0,0,0.8)]",
-        floating && "absolute -right-1 -top-1 z-[3]",
+        "allow-white inline-flex h-[20px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none !text-white ![color:#FFFFFF] ![-webkit-text-fill-color:#FFFFFF] shadow-[0_6px_14px_-8px_rgba(0,0,0,0.85)]",
+        floating && "absolute right-0 top-0 z-[6] translate-x-[35%] -translate-y-[35%]",
         className,
       )}
       {...props}
-      style={{ ...props.style, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+      style={{
+        background: "linear-gradient(135deg, #E11D48 0%, #B0122F 100%)",
+        boxShadow: "0 0 0 2px rgba(255,255,255,0.92)",
+        ...props.style,
+        color: "#FFFFFF",
+        WebkitTextFillColor: "#FFFFFF",
+      }}
+
     >
       <span ref={inkRef} data-emerald-ok data-no-contrast-guard className="text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
         {count > 9 ? "9+" : count}
