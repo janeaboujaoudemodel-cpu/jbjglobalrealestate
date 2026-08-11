@@ -367,8 +367,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] [role="progressbar"] {
           background: rgba(255,255,255,0.12) !important;
         }
-        [data-interior-design-ai] [role="progressbar"] >
-      <PageScope token="interior-ai" /> div {
+        [data-interior-design-ai] [role="progressbar"] > div {
           background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%)) !important;
         }
         [data-interior-design-ai] svg {
