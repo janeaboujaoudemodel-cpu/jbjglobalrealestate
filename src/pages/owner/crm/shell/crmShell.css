@@ -4959,3 +4959,68 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   color: #064E3B !important;
 }
 .jc-app .jc-content [role="tab"]:not([data-state="active"]) * { color: #064E3B !important; }
+
+/* ============================================================
+   PASS 284 — BACKEND SURFACE CONTRACT (LOCKED)
+   Inside the back office content area:
+   1. Emerald / dark surfaces ALWAYS carry white ink + white icons.
+   2. Champagne page surfaces become backend white cards.
+   3. -webkit-text-fill-color is set with every colour, otherwise
+      public champagne locks keep repainting the ink dark.
+   ============================================================ */
+.jc-app .jc-content [role="tab"][data-state="active"],
+.jc-app .jc-content [role="tab"][aria-selected="true"],
+.jc-app .jc-content [role="tab"][data-state="active"] *,
+.jc-app .jc-content [role="tab"][aria-selected="true"] * {
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-content [role="tab"]:not([data-state="active"]):not([aria-selected="true"]),
+.jc-app .jc-content [role="tab"]:not([data-state="active"]):not([aria-selected="true"]) * {
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+/* 1 — emerald / dark surfaces keep white ink */
+.jc-app .jc-content :is(
+  [class*="jj-emerald-ombre"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#0F1A16]"],
+  [class*="bg-emerald-900"],
+  [data-surface="emerald"]
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-content :is(
+  [class*="jj-emerald-ombre"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#0F1A16]"],
+  [class*="bg-emerald-900"],
+  [data-surface="emerald"]
+) :where(h1, h2, h3, h4, p, span, li, div, label, strong, em, code) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-content :is(
+  [class*="jj-emerald-ombre"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-emerald-900"],
+  [data-surface="emerald"]
+) svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+/* Champagne chips deliberately placed on emerald keep their ink. */
+.jc-app .jc-content [class*="bg-[#EFE6D6]"],
+.jc-app .jc-content [class*="bg-[#EFE6D6]"] *,
+.jc-app .jc-content [class*="bg-[#F7F2EA]"] :where(code, kbd) {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+}
+
+/* 2 — champagne page surfaces become backend white */
+.jc-app .jc-content :is(
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"]
+):not([class*="bg-[#EFE6D6]"]) {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
