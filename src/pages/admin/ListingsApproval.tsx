@@ -13,7 +13,7 @@ interface ProjectRow {
   name: string | null;
   slug: string | null;
   developer_name: string | null;
-  city: string | null;
+  emirate: string | null;
   community: string | null;
   is_published: boolean | null;
   cover_image_url: string | null;
@@ -36,7 +36,7 @@ type MediaStatus = "complete" | "gallery-only" | "missing";
 type Tab = "needs-photo" | "pending" | "approved";
 
 const PROJECT_COLUMNS =
-  "id,name,slug,developer_name,city,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at,community:communities(name)";
+  "id,name,slug,developer_name,emirate,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at,community:communities(name)";
 
 /**
  * Page through EVERY project row. The previous `.limit(500)` made this page
@@ -155,7 +155,7 @@ const ListingsApproval = () => {
     const q = search.trim().toLowerCase();
     return projects.filter((p) => {
       if (!q) return true;
-      return [p.name, p.developer_name, p.city, p.community]
+      return [p.name, p.developer_name, p.emirate, p.community]
         .filter(Boolean)
         .some((v) => v!.toLowerCase().includes(q));
     });
@@ -223,7 +223,7 @@ const ListingsApproval = () => {
             )}
           </div>
           <div className="text-sm text-[#475569]">
-            {[p.developer_name, p.community, p.city].filter(Boolean).join(" • ")}
+            {[p.developer_name, p.community, p.emirate].filter(Boolean).join(" • ")}
           </div>
           <div className="text-xs text-[#64748B] mt-1">
             Gallery: {p.gallery_count ?? 0} image{(p.gallery_count ?? 0) === 1 ? "" : "s"} · Docs: {p.documents_count ?? 0}
@@ -301,7 +301,7 @@ const ListingsApproval = () => {
         <div className="relative flex-1 min-w-[220px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#064E3B]/60" />
           <Input
-            placeholder="Search by name, developer, city…"
+            placeholder="Search by name, developer, emirate…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
