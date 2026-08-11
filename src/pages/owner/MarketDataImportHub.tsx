@@ -149,7 +149,7 @@ const PublishCell = ({
         disabled={busy || state === "published"}
         onClick={onPublish}
         title={state === "published" ? "This record is published live" : "Approve and publish this record"}
-        className={`whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
+        className={`!whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
       >
         {label}
       </button>
@@ -334,7 +334,7 @@ function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | nul
           {title}
         </span>
         {href ? (
-          <a href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 text-xs">
+          <a href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap text-xs">
             {hrefLabel} <ExternalLink className="h-3 w-3" aria-hidden />
           </a>
         ) : (
@@ -960,7 +960,7 @@ export default function MarketDataImportHub() {
                       </p>
                       <p className="mt-1 flex flex-wrap items-center gap-3 text-xs">
                         {jbjHref ? (
-                          <a href={jbjHref} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                          <a href={jbjHref} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             JBJ page <ExternalLink className="h-3 w-3" aria-hidden />
                           </a>
                         ) : (
@@ -1099,12 +1099,12 @@ export default function MarketDataImportHub() {
                       <td className="px-4 py-3"><PublishCell status={p.publish_status} at={p.published_at} error={p.publish_error} busy={rowBusy === p.id} onPublish={() => updateSingleReview("project", p.id, "approved")} /></td>
                       <td className="px-4 py-3">
                         {jbj ? (
-                          <a href={`${jbj.href}?jbj_preview=1`} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                          <a href={`${jbj.href}?jbj_preview=1`} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             Preview <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
                           /* PASS 292 — rows that are not on JBJ yet still render as a draft. */
-                          <button type="button" onClick={() => setPreviewStagedId(p.id)} className="mir-link inline-flex items-center gap-1">
+                          <button type="button" onClick={() => setPreviewStagedId(p.id)} className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             Draft <Eye className="h-3.5 w-3.5" aria-hidden />
                           </button>
                         )}
@@ -1112,13 +1112,13 @@ export default function MarketDataImportHub() {
 
 
                       <td className="px-4 py-3">
-                        <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                        <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                         </a>
                       </td>
                       <td className="px-4 py-3">
                         {jbj ? (
-                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             JBJ listing <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
@@ -1189,13 +1189,13 @@ export default function MarketDataImportHub() {
                       </td>
                       <td className="px-4 py-3"><PublishCell status={d.publish_status} at={d.published_at} error={d.publish_error} busy={rowBusy === d.id} onPublish={() => updateSingleReview("developer", d.id, "approved")} /></td>
                       <td className="px-4 py-3">
-                        <a href={d.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                        <a href={d.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                         </a>
                       </td>
                       <td className="px-4 py-3">
                         {jbj ? (
-                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             JBJ profile <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
