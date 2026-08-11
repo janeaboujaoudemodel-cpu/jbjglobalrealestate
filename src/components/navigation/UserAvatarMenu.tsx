@@ -248,6 +248,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           <Row to="/developers-portal/company-registration" icon={Palette} label="Brand Profile" />
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
+        <ThemeModeToggle variant="menu" />
 
         <div className="h-px mx-2 my-1" aria-hidden="true" style={{ background: MENU_DIVIDER }} />
         <Row to="/favorites" icon={Heart} label="Favorites" />

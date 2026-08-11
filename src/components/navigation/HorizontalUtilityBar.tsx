@@ -4,6 +4,7 @@ import { Search, SlidersHorizontal, Heart } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import { ThemeModeToggle } from "@/components/ThemeModeToggle";
 
 import { useAuth } from "@/contexts/AuthContext";
 import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
@@ -202,6 +203,9 @@ export default function HorizontalUtilityBar() {
               { value: "sqm", label: "sq m", "aria-label": "Square meters" },
             ]}
           />
+
+          {/* Sun / Moon theme */}
+          <ThemeModeToggle variant="header" />
 
           {/* Currency — flag + AED */}
           <CurrencySwitcher variant="flag" />
