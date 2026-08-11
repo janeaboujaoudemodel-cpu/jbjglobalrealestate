@@ -34338,6 +34338,15 @@ html body #root [data-branded-email-launcher-card="true"] [data-branded-email-la
   content-visibility: auto;
   contain-intrinsic-size: auto 400px;
 }
+/* STAGED-RENDER FIX: the first two rows are above the fold on every viewport.
+   Skipping their style/layout/paint made the grid visibly assemble card by
+   card. They are always painted; the skipping win is kept for the rest. */
+[data-projects-shell] > *:nth-child(-n + 8),
+[data-developer-grid] > *:nth-child(-n + 8) {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+
 @media print {
   [data-projects-shell] > *,
   [data-developer-grid] > * {
