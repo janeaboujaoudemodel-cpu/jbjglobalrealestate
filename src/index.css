@@ -16462,6 +16462,41 @@ html body[data-homepage] #root .jj-home-hero .jj-home-hero-stack {
 }
 
 /* =====================================================================
+   CLS FIX — HERO GEOMETRY MUST NOT WAIT FOR `body[data-homepage]`
+   The homepage hero padding/height above was only applied once React set
+   the `data-homepage` attribute on <body>. Until then the generic
+   `.jj-hero-fullscreen` padding-top (6–8rem) applied, so every hero child
+   jumped when hydration landed (measured LIVE: 0.038 desktop / 0.084
+   mobile CLS, the largest remaining shift on `/`). The same geometry is
+   now expressed with a class-only selector so it is correct on the very
+   first paint.
+   ===================================================================== */
+html body #root .jj-home-hero.jj-hero-fullscreen {
+  height: 100svh !important;
+  min-height: 100svh !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+@supports (height: 100dvh) {
+  html body #root .jj-home-hero.jj-hero-fullscreen {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
+}
+
+html body #root .jj-home-hero .jj-home-hero-content {
+  min-height: 100% !important;
+  padding-top: clamp(5.25rem, 12vh, 8rem) !important;
+  padding-bottom: clamp(1.25rem, 4vh, 2.5rem) !important;
+}
+
+html body #root .jj-home-hero .jj-home-hero-stack {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* =====================================================================
    PASS 59 — DESKTOP SCROLL ROOT LOCK
    The browser document (HTML) is the only vertical page scroller. Do not let
    PageShell's Tailwind `overflow-x-hidden` compute into `overflow-y:auto`,

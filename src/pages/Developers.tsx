@@ -10,6 +10,7 @@ import DeveloperCard from "@/components/DeveloperCard";
 import { dedupeDevelopers } from "@/utils/developerDedupe";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import LazyVisible from "@/components/util/LazyVisible";
 import { Button } from "@/components/ui/button";
 import { useEffectiveOwner } from "@/hooks/useEffectiveOwner";
 import DeveloperDirectoryViewControls, { type DirectoryViewMode, type DirectoryAuditFilter } from "@/components/developers/DeveloperDirectoryViewControls";
@@ -490,8 +491,13 @@ const Developers = () => {
           </div>
         </section>
 
-        {/* DLD Market Intelligence */}
-        <DLDMarketWidget />
+        {/* DLD Market Intelligence — mounted only when it scrolls close to the
+            viewport. Mounting it eagerly meant the developer grid resolving
+            above it pushed the (already painted) widget down, which was the
+            single largest LIVE layout shift on /developers (0.159). */}
+        <LazyVisible minHeight={640} minHeightMobile={900} rootMargin="900px" release>
+          <DLDMarketWidget />
+        </LazyVisible>
       </div>
       <MIPreFooterCard
         title="Launching a new development?"
