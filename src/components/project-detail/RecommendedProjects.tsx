@@ -164,7 +164,7 @@ export default function RecommendedProjects({
   if (recommendedProjects.length === 0) return null;
 
   return (
-    <section className="py-10 sm:py-12 rounded-3xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/15 shadow-sm overflow-hidden">
+    <section className="jj-surface-pearl py-10 sm:py-12 rounded-3xl border border-[#B89555]/20 shadow-sm overflow-hidden">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -212,30 +212,16 @@ export default function RecommendedProjects({
               <Link
                 key={project.id}
                 to={`/project/${project.slug}`}
-                className="group relative overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:border-[#B89555]/60 transition-all shadow-sm flex flex-col h-full"
+                className="jj-card-pearl group relative rounded-2xl border border-[#B89555]/35 hover:border-[#B89555]/70 transition-all flex flex-col h-full"
               >
                 {/* Image */}
-                <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0">
+                <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0 rounded-t-2xl">
                   <SafeImage
                     src={(project as any).cover_image_url || project.images?.[0]?.image_url}
                     alt={project.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="eager"
                   />
-
-                  {/* Canonical seam plate — compact because recommendation cards are smaller. */}
-                  <div className="absolute bottom-0 left-4 z-20 translate-y-1/2">
-                    <DeveloperLogo
-                      src={devLogo}
-                      alt={project.developer?.name || "Developer"}
-                      name={project.developer?.name}
-                      websiteUrl={devWebsite}
-                      variant="bare"
-                      size="sm"
-                      loading="eager"
-                      className="!h-10 !w-20 !p-2"
-                    />
-                  </div>
 
                   {/* Sale Status — BOTTOM-RIGHT — champagne+gold treatment (no orange/red/emerald fills) */}
                   <div className="absolute bottom-3 right-3 z-20">
@@ -251,8 +237,24 @@ export default function RecommendedProjects({
                   </div>
                 </div>
 
+                {/* Canonical seam plate — rendered OUTSIDE the clipped image box so
+                    the plate is never cut in half and always sits ABOVE the card
+                    layer (PASS 297 seam-plate lock). */}
+                <div className="relative z-30 -mt-6 mb-1 px-4">
+                  <DeveloperLogo
+                    src={devLogo}
+                    alt={project.developer?.name || "Developer"}
+                    name={project.developer?.name}
+                    websiteUrl={devWebsite}
+                    variant="bare"
+                    size="sm"
+                    loading="eager"
+                    className="!h-12 !w-24 !p-2 shadow-[0_12px_28px_-14px_rgba(4,44,28,0.7)]"
+                  />
+                </div>
+
                 {/* Content — flex-col flex-1 so it fills remaining card height */}
-                <div className="p-4 pt-8 flex flex-col flex-1">
+                <div className="p-4 pt-2 flex flex-col flex-1">
                   <h3 className="text-lg font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors whitespace-normal break-words leading-tight mb-1">
                     {project.name}
                   </h3>
