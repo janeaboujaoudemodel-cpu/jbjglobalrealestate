@@ -856,13 +856,36 @@ export default function MarketDataImportHub() {
 
       {(tab === "new" || tab === "newDevelopers") ? (
         <div className="flex flex-wrap items-center gap-2" aria-label="Status filters">
+          {/* PASS 289 — every status pill toggles: clicking the active pill clears it. */}
           {(["all", "published", "not_published", "approved", "pending", "rejected"] as const).map((filter) => (
-            <button key={filter} type="button" onClick={() => setStatusFilter(filter)} className={`mir-pill rounded-full px-3 py-1.5 text-xs font-semibold ${statusFilter === filter ? "mir-pill-active" : ""}`}>
+            <button
+              key={filter}
+              type="button"
+              aria-pressed={statusFilter === filter}
+              onClick={() => setStatusFilter((current) => (current === filter ? "all" : filter))}
+              className={`mir-pill whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold ${statusFilter === filter ? "mir-pill-active" : ""}`}
+            >
               {filter === "all" ? "All records" : filter === "not_published" ? "Not published" : filter.replace("_", " ").replace(/^./, (letter) => letter.toUpperCase())}
             </button>
           ))}
+          {tab === "new" ? (
+            <span className="ml-auto inline-flex items-center gap-2">
+              {(["new", "all"] as const).map((scope) => (
+                <button
+                  key={scope}
+                  type="button"
+                  aria-pressed={projectScope === scope}
+                  onClick={() => setProjectScope(scope)}
+                  className={`mir-pill whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold ${projectScope === scope ? "mir-pill-active" : ""}`}
+                >
+                  {scope === "new" ? "New only" : "All projects in scope"}
+                </button>
+              ))}
+            </span>
+          ) : null}
         </div>
       ) : null}
+
 
       {tab === "summary" ? (
         <div className="mir-card rounded-xl p-5 text-sm text-neutral-600">
