@@ -1608,7 +1608,7 @@ function ProjectDetailLayoutInner({
         }`}
       >
         {/* Row 1: project search/filter pills only. */}
-        <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2 transition-all duration-300">
+        <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="border-b border-[#B89555]/20 px-2 h-[var(--jj-bar-h,56px)] flex items-center transition-all duration-300" style={{ background: 'var(--jj-pearl-band)' }}>
           <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide [&_button]:min-h-11 [&_button]:px-4 [&_input]:min-h-11 [&_[role=combobox]]:min-h-11" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
             <FilterShortcutBar
               variant="light"
