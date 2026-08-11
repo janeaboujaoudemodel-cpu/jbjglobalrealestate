@@ -152,7 +152,7 @@ export default function AgentIntegrations() {
 
       <SectionCard icon={<Wrench className="w-4 h-4" />} title="Client configuration">
         <Tabs defaultValue="claude">
-          <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-4">
+          <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-4 w-full !justify-start gap-2">
             <TabsTrigger value="claude" className="owner-hub-pill">
               Claude Desktop
             </TabsTrigger>
