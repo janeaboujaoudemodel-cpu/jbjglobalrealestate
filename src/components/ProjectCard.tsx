@@ -261,37 +261,36 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         data-no-contrast-guard
         data-card-actions-overlay=""
       >
-        {showFavorite && (
-          <div className="pointer-events-auto">
-            <FavoriteButton projectId={project.id} size="md" />
-          </div>
-        )}
+        {/* PERF: the pointer-events wrappers were pure DOM — the class now
+            rides on the controls themselves (identical layout, 2 fewer nodes). */}
+        {showFavorite && <FavoriteButton projectId={project.id} size="md" className="pointer-events-auto" />}
         {showBadgeButton && (
-          <div className="pointer-events-auto">
-            <ShortlistBadgeButton
-              projectId={project.id}
-              size="md"
-              showBadgeIndicator={false}
-              className="justify-end"
-            />
-          </div>
+          <ShortlistBadgeButton
+            projectId={project.id}
+            size="md"
+            showBadgeIndicator={false}
+            className="justify-end pointer-events-auto"
+          />
         )}
       </div>
 
 
       {/* Owner edit affordance — tucked under the actions stack so it never
-          overlays the shortlist button. Owners only. */}
-      <div className="absolute top-3 right-3 z-30 flex flex-col items-end gap-2" data-no-contrast-guard>
-        <OwnerCardEditMenu
-          projectId={project.id}
-          slug={project.slug}
-          saleStatus={project.status_label}
-          showSaleStatus={(project as any).show_sale_status}
-          projectName={project.name}
-          driveUrl={(project as any).google_drive_url}
-          className="mt-[110px]"
-        />
-      </div>
+          overlays the shortlist button. Owners only (wrapper is not rendered
+          for visitors, so public cards carry no empty positioning div). */}
+      {isOwner && (
+        <div className="absolute top-3 right-3 z-30 flex flex-col items-end gap-2" data-no-contrast-guard>
+          <OwnerCardEditMenu
+            projectId={project.id}
+            slug={project.slug}
+            saleStatus={project.status_label}
+            showSaleStatus={(project as any).show_sale_status}
+            projectName={project.name}
+            driveUrl={(project as any).google_drive_url}
+            className="mt-[110px]"
+          />
+        </div>
+      )}
 
       {/* Owner-controlled listing labels (Distress / Hot / Trending / Featured /
           Signature / VIP). Anchored bottom-RIGHT of the photo so the locked
@@ -303,6 +302,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           </div>
         </div>
       )}
+
+
 
       {/* LOCKED: card top-left is developer identity only — never property-type labels.
           Reelly-style position: the plate straddles the photo/content seam (half on

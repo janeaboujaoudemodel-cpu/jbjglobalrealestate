@@ -38,13 +38,10 @@ import OwnerLeadNotificationListener from "@/components/OwnerLeadNotificationLis
 
 // ── Route Groups ──
 import { StandaloneRoutes } from "@/routes/StandaloneRoutes";
-import { OwnerRoutes } from "@/routes/OwnerRoutes";
 import { PublicRoutes } from "@/routes/PublicRoutes";
 import { AIToolRoutes } from "@/routes/AIToolRoutes";
-import { AdminRoutes } from "@/routes/AdminRoutes";
-import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
-import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
-import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
+import { usePrivateRouteTrees } from "@/routes/usePrivateRouteTrees";
+
 import SiteAccessGate from "@/components/gate/SiteAccessGate";
 import PremiumPromptRoot from "@/components/premium/PremiumPromptRoot";
 
@@ -70,6 +67,47 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+/**
+ * PERF: back-office route trees (Owner / Admin / Toolkit / Developer Hub /
+ * Developers Portal) are code-split out of the entry chunk and only imported
+ * when the URL points at one of their prefixes. Paths, guards and shells are
+ * unchanged; while the chunk is in flight the matching prefix shows the normal
+ * page loader instead of the public 404.
+ */
+const AppRoutes = () => {
+  const { segment, trees } = usePrivateRouteTrees();
+  const loadingPrivate = Boolean(segment) && !trees;
+
+  return (
+    <Routes>
+      {/* ── Standalone Routes (no shell) ── */}
+      <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
+        {StandaloneRoutes()}
+      </Route>
+
+      {/* ── Back-office / portal trees (lazy) ── */}
+      {trees ? trees.PrivateShellRoutes() : null}
+      {loadingPrivate && <Route path={`/${segment}/*`} element={<PageLoader />} />}
+      {loadingPrivate && <Route path={`/${segment}`} element={<PageLoader />} />}
+
+      {/* ── Main Layout Routes (header + footer shell) ── */}
+      <Route element={<MainLayoutWrapper />}>
+        <Route element={<Suspense fallback={<InlinePageLoader />}><Outlet /></Suspense>}>
+          {/* Public pages: properties, guides, services, company, user */}
+          {PublicRoutes()}
+
+          {/* AI tool pages */}
+          {AIToolRoutes()}
+
+          {/* Admin, owner-guarded and toolkit pages (lazy) */}
+          {trees ? trees.PrivateMainRoutes() : null}
+        </Route>
+      </Route>
+    </Routes>
+  );
+};
+
 
 const App = () => {
   useEffect(() => {
@@ -124,41 +162,8 @@ const App = () => {
                    
             {/* BrandIntroSplash disabled until further notice */}
             <SiteAccessGate>
-            <Routes>
-              {/* ── Standalone Routes (no shell) ── */}
-              <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
-                {StandaloneRoutes()}
-              </Route>
+            <AppRoutes />
 
-              {/* ── Owner Command Center (dedicated shell) ── */}
-              <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
-                {OwnerRoutes()}
-              </Route>
-
-              {/* ── Developers Portal (standalone shell) — REPLACES /developer-hub + /developer-hub-admin ── */}
-              {DevelopersPortalRoutes()}
-
-              {/* ── Legacy Developer Hub (kept for backward compatibility; portal redirects win when both match) ── */}
-              {DeveloperHubRoutes()}
-              
-              
-              {/* ── Main Layout Routes (header + footer shell) ── */}
-              <Route element={<MainLayoutWrapper />}>
-                <Route element={<Suspense fallback={<InlinePageLoader />}><Outlet /></Suspense>}>
-                  {/* Public pages: properties, guides, services, company, user */}
-                  {PublicRoutes()}
-
-                  {/* AI tool pages */}
-                  {AIToolRoutes()}
-
-                  {/* Admin & owner-guarded pages */}
-                  {AdminRoutes()}
-
-                  {/* Toolkit & creative suite */}
-                  {ToolkitRoutes()}
-                </Route>
-              </Route>
-            </Routes>
             </SiteAccessGate>
             <PremiumPromptRoot />
 
