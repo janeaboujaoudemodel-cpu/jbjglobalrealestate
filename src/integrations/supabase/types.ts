@@ -44914,6 +44914,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      jbj_caller_is_privileged: { Args: never; Returns: boolean }
       jbj_classify_inbound_reply: {
         Args: { _body: string; _from: string; _subject: string }
         Returns: string
