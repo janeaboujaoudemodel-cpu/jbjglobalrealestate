@@ -95,8 +95,7 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
                 on={p.slug !== "sell" && f.purpose === p.slug}
                 onClick={() => {
                   if (p.slug === "sell") {
-                    if (onSellSelected) onSellSelected();
-                    else window.location.assign("/sell");
+                    onSellSelected?.();
                     return;
                   }
                   set({ purpose: p.slug });

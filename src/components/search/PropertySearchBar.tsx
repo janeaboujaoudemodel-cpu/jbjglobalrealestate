@@ -13,6 +13,7 @@ import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpDown, ChevronDown, Crown, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
+import { useNavigate } from "react-router-dom";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -215,6 +216,12 @@ export default function PropertySearchBar({
     if (value) setInternal(value);
   }, [value]);
 
+  const navigate = useNavigate();
+  const goSell = () => {
+    if (onSellSelected) onSellSelected();
+    else navigate("/list-property?purpose=sale&mode=manual");
+  };
+
   const set = (patch: Partial<PropertySearch>) => {
     const next = sanitizeSearchForPurpose({ ...f, ...patch });
     setInternal(next);
@@ -337,8 +344,7 @@ export default function PropertySearchBar({
               onClick={() => {
                 if (p.slug === "sell") {
                   // Sell is an intent, never a filter: go straight to listing.
-                  if (onSellSelected) onSellSelected();
-                  else window.location.assign("/sell");
+                  goSell();
                   return;
                 }
                 set({ purpose: p.slug });
@@ -843,8 +849,7 @@ export default function PropertySearchBar({
             }}
             onSellSelected={() => {
               setMoreOpen(false);
-              if (onSellSelected) onSellSelected();
-              else window.location.assign("/sell");
+              goSell();
             }}
           />
         </DialogContent>
