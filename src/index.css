@@ -1712,11 +1712,7 @@ All colors MUST be HSL.
 /* Metallic animated gold — used by the active sq ft/sq m pill and the
    developer logo box inside the project detail page ONLY. Never use on
    listing cards or generic chrome. */
-@keyframes jj-metal-sheen {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+
 .jj-metallic-active {
   background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%) !important;
   background-size: 220% 220% !important;
@@ -9930,10 +9926,7 @@ html body [data-jj-utility-bar] button[aria-label="Account menu"]:hover {
   border: 1.5px solid rgba(255,255,255,0.45) !important;
   box-shadow: 0 0 0 1px rgba(4,120,87,0.55), 0 8px 18px -12px rgba(6,78,59,0.85) !important;
 }
-html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-}
+
 html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child > span.relative {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -13336,34 +13329,8 @@ html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus,
 
 /* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
    Must remain after all inactive-sidebar black repaint rules. */
-html body [data-chrome="sidebar"] [data-emerald-icon-surface],
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:hover,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus-visible,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:active,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:disabled {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"],
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"] *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
-}
+
+
 
 /* ABSOLUTE FINAL LOCK — sidebar emerald icon tiles.
    This fixes the visually highlighted issue: row text can be black on champagne,
@@ -13808,46 +13775,8 @@ html body :is(
 /* 🔒 TRUE EOF LOCK — official dark emerald icon tiles only.
    Cause: older sidebar rules used #047857/#10b981 and white rings/shadows,
    making tiles visually read as light green. */
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-),
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-):is(:hover, :focus, :focus-visible, :active, :disabled) {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  background-blend-mode: normal !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-) :is(svg, [class*="lucide"], [data-lucide]),
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-) :is(svg, [class*="lucide"], [data-lucide]) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: none !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
-}
+
+
 
 /* Selector-specific sidebar lock — beats older [data-sidebar-section] > div rules. */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
@@ -13898,91 +13827,15 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [
    Older sidebar passes used lighter #047857/#10b981 stops and white rings,
    which made the icons read as green-filled. This end-of-file lock removes
    the light treatment and forces the canonical ombre everywhere. */
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-),
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-):is(:hover, :focus, :focus-visible, :active, :disabled) {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  background-blend-mode: normal !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-) :is(svg, [class*="lucide"], [data-lucide]),
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-) :is(svg, [class*="lucide"], [data-lucide]) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: none !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
-}
+
+
 
 /* 🔒 ABSOLUTE LAST RULE — no light-green sidebar/icon-tile fills.
    Cause fixed: older rules and collapsed-sidebar inline styles used white
    rings/shadows plus lighter #047857/#10b981 stops, so screenshots read as
    green-filled instead of official dark emerald. */
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-),
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-):is(:hover, :focus, :focus-visible, :active, :disabled) {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  background-blend-mode: normal !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-) :is(svg, [class*="lucide"], [data-lucide]),
-html body :is(
-  [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile.is-active,
-  [data-icon-tile][data-icon-tile-tone="emerald"],
-  .jj-icon-tile-emerald
-) :is(svg, [class*="lucide"], [data-lucide]) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: none !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
-}
+
+
 
 /* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
    Must remain after all inactive-sidebar black repaint rules. */
@@ -24425,11 +24278,7 @@ html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] 
   box-shadow: none !important;
 }
 
-html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"]:hover,
-html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item]:hover {
-  background: rgba(255,255,255,0.12) !important;
-  background-image: none !important;
-}
+
 
 /* PASS 159 — Property Map premium emerald control contract.
    All map action controls, active segments, active map-type buttons, and
@@ -25437,9 +25286,7 @@ html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] {
   color: #1A1A1A !important;
   border-color: rgba(184,149,85,0.28) !important;
 }
-html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] {
-  background: #EFE6D6 !important;
-}
+
 html body #root [data-brand-emerald-page] [data-surface="champagne"] :where(h1,h2,h3,h4,h5,h6,p,span,li,label,dt,dd,small,strong,em),
 html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] :where(h1,h2,h3,h4,h5,h6,p,span,li,label,dt,dd,small,strong,em) {
   color: #1A1A1A !important;
@@ -30435,17 +30282,7 @@ html body :is([role="checkbox"], button[role="checkbox"]) :is(svg, path, polylin
   stroke-width: 3.25px !important;
 }
 
-html body input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 2px;
-  width: 6px;
-  height: 10px;
-  border: solid #FFFFFF;
-  border-width: 0 3px 3px 0;
-  transform: rotate(45deg);
-}
+
 
 html body :is(label, .form-checkbox-row, [data-checkbox-row], .items-start:has([role="checkbox"]), .items-start:has(input[type="checkbox"])) {
   -webkit-tap-highlight-color: transparent !important;
@@ -31935,18 +31772,7 @@ html body [data-sidebar-collapse-control] {
   overflow: visible !important;
   white-space: nowrap !important;
 }
-html body [data-signout-action] > span,
-html body [data-signout-action] > span *,
-html body [data-signout-label],
-html body [data-sidebar-collapse-control] > span,
-html body [data-sidebar-collapse-control] > span * {
-  white-space: nowrap !important;
-  overflow-wrap: normal !important;
-  word-break: keep-all !important;
-  overflow: visible !important;
-  text-overflow: clip !important;
-  max-width: none !important;
-}
+
 
 /* Sidebar footer CTAs (Sign Out · Collapse) — restore full height so the label
    is fully readable in the EXPANDED sidebar. Scoped with :has() so it does NOT
