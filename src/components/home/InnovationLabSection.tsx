@@ -205,7 +205,7 @@ export default function InnovationLabSection() {
           {/* ---------- Narrative rail ---------- */}
           <div className="order-2 space-y-8 lg:order-1">
             <div className="space-y-3">
-              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#B89555]">The JBJ method</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">The JBJ method</p>
               <h2 className="font-serif text-3xl leading-[1.08] text-[#042c1c] md:text-5xl">
                 How we build
                 <br />a property decision
