@@ -64,10 +64,11 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-[120000] bg-[#1A1A1A]/60 duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
+      "fixed inset-0 bg-[#1A1A1A]/60 duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
       className,
     )}
     {...props}
+    style={{ ...(props.style || {}), zIndex: 120000 }}
   />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
@@ -105,12 +106,16 @@ const DialogContent = React.forwardRef<
         ref={ref}
         data-surface="light"
         className={cn(
-          "fixed left-[50%] top-[50%] z-[120001] grid w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#064E3B]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
+          "fixed left-[50%] top-[50%] grid w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#064E3B]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
           className,
         )}
+        /* Stacking is enforced inline so a consumer utility class (e.g. `z-[80]`)
+           can never park the panel underneath the 60% scrim — that was the
+           "faded / blurry filter modal" bug. */
         onPointerDownOutside={handlePointerDownOutside}
         onInteractOutside={handleInteractOutside}
         {...props}
+        style={{ ...((props as { style?: React.CSSProperties }).style || {}), zIndex: 120001 }}
       >
         {children}
         <DialogPrimitive.Close aria-label="Close" className={cn(
