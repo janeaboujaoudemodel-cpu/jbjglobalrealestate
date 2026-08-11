@@ -286,7 +286,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
             alt={`${developer.name} logo`}
             websiteUrl={(developer as { website_url?: string | null }).website_url}
             needsInvert={(developer as { logo_needs_invert?: boolean | null }).logo_needs_invert}
-            loading="eager"
+            loading={isEager ? "eager" : "lazy"}
             size={density >= 7 ? "sm" : density >= 5 ? "sm" : "md"}
             className="!h-full !w-full !p-0 !rounded-lg"
           />
