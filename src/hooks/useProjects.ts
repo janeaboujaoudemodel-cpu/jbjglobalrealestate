@@ -511,10 +511,13 @@ export function useTrendingAreas() {
 export function useProjectsCount() {
   return useQuery({
     queryKey: ["projects-count"],
-    staleTime: 30 * 1000,
+    staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
-    refetchInterval: 60 * 1000,
-    refetchOnWindowFocus: true,
+    // Freshness comes from the realtime `projects` subscription in
+    // useProjectsListing (it invalidates this key). Polling every 60s only
+    // added main-thread work and network chatter on every open tab.
+    refetchOnWindowFocus: false,
+
     queryFn: async () => {
       const { count, error } = await supabase
         .from("projects")
@@ -686,10 +689,15 @@ export function useProjectsListing() {
 
   return useQuery({
     queryKey: ["projects-listing"],
-    staleTime: 30 * 1000,
+    // The catalogue is ~1k rows with joins (multi-MB JSON). It used to be
+    // re-fetched every 60s and on every window focus, which re-parsed and
+    // re-rendered the whole grid and produced long main-thread tasks.
+    // Realtime `postgres_changes` above already invalidates this key the
+    // instant a project changes, so polling is pure overhead.
+    staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
-    refetchInterval: 60 * 1000,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
+
     queryFn: async () => {
       const LISTING_COLUMNS = `
         id, name, slug, description, location, price_from, price_to,
@@ -719,18 +727,36 @@ export function useProjectsListing() {
 
       const PAGE_SIZE = 1000;
       const MAX_PAGES = 10; // bounded upper limit (10k rows)
-      const all: unknown[] = [];
-      for (let page = 0; page < MAX_PAGES; page++) {
+      const fetchPage = async (page: number) => {
         const from = page * PAGE_SIZE;
-        const to = from + PAGE_SIZE - 1;
         const { data, error } = await baseQuery()
           .order("created_at", { ascending: false })
-          .range(from, to);
+          .range(from, from + PAGE_SIZE - 1);
         if (error) throw error;
-        const rows = data ?? [];
-        all.push(...rows);
-        if (rows.length < PAGE_SIZE) break;
+        return data ?? [];
+      };
+
+      // Page 0 first (it is what the grid paints from), then the remaining
+      // pages in parallel batches. The previous strictly-sequential loop paid
+      // a full round-trip of latency per 1000 rows before anything rendered.
+      const all: unknown[] = [];
+      const first = await fetchPage(0);
+      all.push(...first);
+      if (first.length === PAGE_SIZE) {
+        let next = 1;
+        while (next < MAX_PAGES) {
+          const batch = [next, next + 1, next + 2].filter((p) => p < MAX_PAGES);
+          const results = await Promise.all(batch.map(fetchPage));
+          let exhausted = false;
+          for (const rows of results) {
+            all.push(...rows);
+            if (rows.length < PAGE_SIZE) exhausted = true;
+          }
+          if (exhausted) break;
+          next += batch.length;
+        }
       }
+
 
       // The database eligibility predicate is the catalogue contract. Do not
       // silently remove eligible rows because an image is missing or because
