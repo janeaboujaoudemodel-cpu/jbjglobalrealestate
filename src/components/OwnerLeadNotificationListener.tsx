@@ -39,6 +39,10 @@ export default function OwnerLeadNotificationListener() {
     };
 
     const poll = async () => {
+      // Realtime already delivers new leads instantly; this poll is only a
+      // safety net, so skip it entirely while the tab is hidden and run it at
+      // a calm cadence instead of every 15s.
+      if (document.visibilityState === "hidden") return;
       const { data } = await supabase
         .from("notifications")
         .select("id,title,body,notification_type,action_url,created_at")
@@ -51,7 +55,8 @@ export default function OwnerLeadNotificationListener() {
     };
 
     void poll();
-    const interval = window.setInterval(poll, 15000);
+    const interval = window.setInterval(poll, 90000);
+
 
     const channel = supabase
       .channel(`owner-new-leads-${user.id}`)
