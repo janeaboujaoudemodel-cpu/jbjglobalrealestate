@@ -125,8 +125,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
     ))];
   }, [heroImageUrl, heroImageUrls, officialFlagship, developerFeatureImage, developerLogoUrl, normalizedName, normalizedSlug]);
   const [heroIndex, setHeroIndex] = useState(0);
+  const [heroLoaded, setHeroLoaded] = useState(false);
   useEffect(() => setHeroIndex(0), [developer.id]);
   const cardHeroImageUrl = candidates[heroIndex];
+  useEffect(() => setHeroLoaded(false), [cardHeroImageUrl]);
+  const heroSources = useMemo(
+    () => buildResponsiveImage(cardHeroImageUrl, { widths: CARD_IMAGE_WIDTHS, sizes: CARD_IMAGE_SIZES }),
+    [cardHeroImageUrl],
+  );
+
   const hasHero = !!cardHeroImageUrl;
   // LOCKED (no cropped text): never render an ellipsis. The blurb is trimmed on
   // a word boundary so the two-line slot always holds a complete phrase.
