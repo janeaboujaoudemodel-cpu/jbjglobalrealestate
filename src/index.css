@@ -434,8 +434,8 @@ html body #root .owner-dashboard-shell [data-chat-compact-action] * {
   z-index: 1;
 }
 
-.animated-border::before { content: none; display: none; }
-.animated-border-thick::before { content: none; display: none; }
+.animated-border::before,
+.animated-border-thick::before{ content: none; display: none; }
 
 
 @tailwind base;
@@ -787,19 +787,10 @@ html body [data-ai-analyzer-select-content] [role="option"][data-highlighted] {
 [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body,
 [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body *,
 [data-studio-workspace] [data-document-page="true"] .jbj-doc-body,
-[data-studio-workspace] [data-document-page="true"] .jbj-doc-body * {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  text-shadow: none !important;
-}
-
-[data-document-studio-overlay] [data-document-page="true"] :is(footer, footer *, .jbj-doc-footer, .jbj-doc-footer *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  text-shadow: none !important;
-}
+[data-studio-workspace] [data-document-page="true"] .jbj-doc-body *,
+[data-document-studio-overlay] [data-document-page="true"] :is(footer, footer *, .jbj-doc-footer, .jbj-doc-footer *),
 [data-document-studio-overlay] :is([class~="bg-[#FDFBF7]"], [class*=" bg-[#FDFBF7]/"], [class^="bg-[#FDFBF7]/"], [class~="bg-[#F7F2EA]"], [class*=" bg-[#F7F2EA]/"], [class^="bg-[#F7F2EA]/"], [class*="bg-white"], [style*="background:#FDFBF7"], [style*="background: #FDFBF7"], [style*="background:#F7F2EA"], [style*="background: #F7F2EA"])
-  :is(.text-white, .text-white\/70, .text-white\/80, .text-white\/90, [class*="text-white"], label, input, textarea, select) {
+  :is(.text-white, .text-white\/70, .text-white\/80, .text-white\/90, [class*="text-white"], label, input, textarea, select){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
@@ -1573,11 +1564,8 @@ All colors MUST be HSL.
  * legacy pages stay readable without per-page migration.
  * Homepage hero (no .jj-hero-compact) is untouched.
  * ============================================================ */
-.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class*="text-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
-  color: #F7F2EA;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
-}
-.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class~="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class*="text-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *),
+.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class~="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *){
   color: #F7F2EA;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
 }
@@ -4270,11 +4258,8 @@ html.project-detail-page header > div:first-child {
   background: transparent !important;
 }
 
-html.project-detail-page[style*="--header-bg-opacity: 1"] header {
-  background: linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.99) 50%, rgba(0,0,0,1) 100%) !important;
-}
-
-html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-child {
+html.project-detail-page[style*="--header-bg-opacity: 1"] header,
+html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-child{
   background: linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.99) 50%, rgba(0,0,0,1) 100%) !important;
 }
 
@@ -4313,17 +4298,11 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 /* ============================================================
  * LEAFLET MAP ATTRIBUTION HIDE (Premium UI)
  * ============================================================ */
-.leaflet-control-attribution {
-  display: none !important;
-}
-
-.leaflet-container a.leaflet-control-attribution {
-  display: none !important;
-}
-
+.leaflet-control-attribution,
+.leaflet-container a.leaflet-control-attribution,
 /* Hide Esri attribution text */
 .leaflet-control-attribution span,
-.leaflet-control-attribution a {
+.leaflet-control-attribution a{
   display: none !important;
 }
 
@@ -4592,15 +4571,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .bg-price-orange [data-price],
 .bg-price-orange .jj-price,
 .bg-price-orange .price-display,
-.bg-price-orange .price-value {
-  color: #ffffff;
-}
-
+.bg-price-orange .price-value,
 /* Inside dark heroes, the solid pill stays white-on-orange too */
 [data-surface="dark"] [data-price-badge].bg-price-orange,
 [data-surface="dark"] [data-price-badge].bg-price-orange *,
 .dark [data-price-badge].bg-price-orange,
-.dark [data-price-badge].bg-price-orange * {
+.dark [data-price-badge].bg-price-orange *{
   color: #ffffff;
 }
 
@@ -4680,11 +4656,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
    - Auto-disable backdrop-filter when nested inside another blurred ancestor
    ============================================================ */
 [data-no-backdrop-blur],
-[data-no-backdrop-blur] * {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
+[data-no-backdrop-blur] *,
 /* Kill nested backdrop-blur stacking (child blur inside blurred parent = muddy text) */
 .backdrop-blur-sm .backdrop-blur-sm,
 .backdrop-blur-sm .backdrop-blur,
@@ -4698,7 +4670,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .backdrop-blur-lg .backdrop-blur-sm,
 .backdrop-blur-lg .backdrop-blur,
 .backdrop-blur-xl .backdrop-blur-sm,
-.backdrop-blur-xl .backdrop-blur {
+.backdrop-blur-xl .backdrop-blur{
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -5009,13 +4981,10 @@ a[class*="bg-red-"] :is(span, svg, p, div) {
 button[class*="from-red-"]:hover,
 button[class*="bg-red-"]:hover,
 a[class*="from-red-"]:hover,
-a[class*="bg-red-"]:hover {
-  color: #FFFFFF;
-}
-
+a[class*="bg-red-"]:hover,
 /* Cookie banner: Manage Preferences (dark ink button) — readable on hover */
 .cookie-banner button[class~="bg-[#1A1A1A]"],
-[data-chrome="cookie-banner"] button[class~="bg-[#1A1A1A]"] {
+[data-chrome="cookie-banner"] button[class~="bg-[#1A1A1A]"]{
   color: #FFFFFF;
 }
 .cookie-banner button[class~="bg-[#1A1A1A]"]:hover,
@@ -5796,16 +5765,13 @@ hr[data-gold-hairline],
   .border-\[\#9ca3af\], .border-\[\#9CA3AF\],
   .border-\[\#e2e8f0\], .border-\[\#E2E8F0\],
   .border-\[\#cbd5e1\], .border-\[\#CBD5E1\]
-):not([data-surface="dark"]):not([data-no-contrast-guard]) {
-  border-color: rgba(184, 149, 85, 0.40) !important;
-}
-
+):not([data-surface="dark"]):not([data-no-contrast-guard]),
 /* 5. Default Tailwind `border` (1px solid currentColor fallback) on
  *    elements with no explicit border-color and on a light surface →
  *    faded gold. Avoids the gray hairline you get from `border` alone. */
 :root:not(.dark)
   :where(div, section, article, aside, header, footer, nav, main, ul, ol, li, button, a, span, label)
-  .border:not([class*="border-"]):not([data-no-contrast-guard]) {
+  .border:not([class*="border-"]):not([data-no-contrast-guard]){
   border-color: rgba(184, 149, 85, 0.40) !important;
 }
 
@@ -6430,17 +6396,11 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 [data-surface="ink"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
 [data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
-[data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
-  color: hsl(var(--jj-on-dark)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
-  stroke: hsl(var(--jj-on-dark)) !important;
-  opacity: 1;
-}
-
+[data-photo-copy-lock] :where(span, svg, [class*="lucide"]),
 /* `data-allow-dark-cta` is only permission, not a paint rule. It may keep
    white foregrounds only when the same element is an actual dark own-surface. */
 [data-allow-dark-cta]:is(.jj-cta-dark, .jj-navy-cta, [data-cta="dark"], [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, [class~="bg-[#0A0A0A]"], [class*=" bg-[#0A0A0A]/"], [class^="bg-[#0A0A0A]/"], [class~="bg-[#1A1A1A]"], [class*=" bg-[#1A1A1A]/"], [class^="bg-[#1A1A1A]/"], [class*="bg-black"]),
-[data-allow-dark-cta]:is(.jj-cta-dark, .jj-navy-cta, [data-cta="dark"], [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, [class~="bg-[#0A0A0A]"], [class*=" bg-[#0A0A0A]/"], [class^="bg-[#0A0A0A]/"], [class~="bg-[#1A1A1A]"], [class*=" bg-[#1A1A1A]/"], [class^="bg-[#1A1A1A]/"], [class*="bg-black"]) :where(span, svg, [class*="lucide"]) {
+[data-allow-dark-cta]:is(.jj-cta-dark, .jj-navy-cta, [data-cta="dark"], [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, [class~="bg-[#0A0A0A]"], [class*=" bg-[#0A0A0A]/"], [class^="bg-[#0A0A0A]/"], [class~="bg-[#1A1A1A]"], [class*=" bg-[#1A1A1A]/"], [class^="bg-[#1A1A1A]/"], [class*="bg-black"]) :where(span, svg, [class*="lucide"]){
   color: hsl(var(--jj-on-dark)) !important;
   -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
   stroke: hsl(var(--jj-on-dark)) !important;
@@ -6792,26 +6752,19 @@ html body :is(
 /* FINAL SIDEBAR LOCK — expanded section titles gold; expanded sub-items ink with gold icons. */
 html body [data-sidebar-section],
 html body [data-sidebar-section] [data-sidebar-section-label],
-html body [data-sidebar-section] [data-sidebar-section-icon] {
-  color: #B89555 !important;
-  -webkit-text-fill-color: #B89555 !important;
-  stroke: #B89555 !important;
-}
+html body [data-sidebar-section] [data-sidebar-section-icon],
 html body button[data-sidebar-section].group:hover,
 html body button[data-sidebar-section].group:hover [data-sidebar-section-label],
 html body button[data-sidebar-section].group:hover [data-sidebar-section-icon],
-html body button[data-sidebar-section].group:hover svg {
+html body button[data-sidebar-section].group:hover svg{
   color: #B89555 !important;
   -webkit-text-fill-color: #B89555 !important;
   stroke: #B89555 !important;
 }
 html body [data-sidebar-subitem],
-html body [data-sidebar-subitem] [data-sidebar-subitem-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
+html body [data-sidebar-subitem] [data-sidebar-subitem-label],
 html body a[data-sidebar-subitem].group,
-html body a[data-sidebar-subitem].group [data-sidebar-subitem-label] {
+html body a[data-sidebar-subitem].group [data-sidebar-subitem-label]{
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -9175,12 +9128,8 @@ html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
 html body input[type="range"][data-mortgage-slider="Compare rate"] {
   background-image: linear-gradient(90deg, #064E3B 0%, #042c1c 100%) !important;
 }
-html body input[type="range"][data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
-  background: #FFFFFF !important;
-  border: 0 !important;
-  box-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
-}
-html body input[type="range"][data-mortgage-slider="Compare rate"]::-moz-range-thumb {
+html body input[type="range"][data-mortgage-slider="Compare rate"]::-webkit-slider-thumb,
+html body input[type="range"][data-mortgage-slider="Compare rate"]::-moz-range-thumb{
   background: #FFFFFF !important;
   border: 0 !important;
   box-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
@@ -9189,19 +9138,14 @@ html body input[type="range"][data-mortgage-slider="Compare rate"]::-moz-range-t
 /* Page-nav arrow (triple chevron) — guarantee white glyph on emerald,
    regardless of which contrast guard runs. */
 html body button[data-jj-page-nav-arrow],
-html body button[data-jj-page-nav-arrow] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
+html body button[data-jj-page-nav-arrow] *,
 /* Contact card tiles inside the "Ready to Get Started" block — force white
    text + white icon on emerald metallic at all states. Kills any guard
    that would flip these to ink. */
 html body .jj-emerald-metallic,
 html body .jj-emerald-metallic *,
 html body .jj-emerald-metallic :is(p, span, a, svg, [class*="lucide"]),
-html body .jj-emerald-metallic :is(p, span, a, svg, [class*="lucide"]) * {
+html body .jj-emerald-metallic :is(p, span, a, svg, [class*="lucide"]) *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -9634,14 +9578,11 @@ html body [data-service-photo-copy] * {
    ════════════════════════════════════════════════════════════════ */
 
 /* 1) Horizontal header — champagne to match the sidebar */
-html body [data-jj-utility-bar] {
-  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
-  background-color: #F7F2EA !important;
-}
+html body [data-jj-utility-bar],
 /* keep the gold hairline at the header bottom — leave PASS 15/18 rules alone */
 
 /* 2) Footer — champagne band, EMERALD text/links/dots */
-html body footer[data-jj-minimal-footer] {
+html body footer[data-jj-minimal-footer]{
   background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
   background-color: #F7F2EA !important;
 }
@@ -10466,18 +10407,13 @@ html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] {
 html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"] *,
 html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] *,
 html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"] :is(svg, [class*="lucide"]),
-html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] :is(svg, [class*="lucide"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
+html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] :is(svg, [class*="lucide"]),
 html body section#ready-to-get-started .jj-emerald-card,
 html body section#ready-to-get-started .jj-emerald-card *,
 html body section#ready-to-get-started .jj-emerald-metallic,
 html body section#ready-to-get-started .jj-emerald-metallic *,
 html body section#ready-to-get-started .jj-emerald-metallic :is(svg, [class*="lucide"]),
-html body section#ready-to-get-started .jj-emerald-metallic :is(svg, [class*="lucide"]) * {
+html body section#ready-to-get-started .jj-emerald-metallic :is(svg, [class*="lucide"]) *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -11358,16 +11294,11 @@ html body :is(
   .jj-bg-emerald,
   [data-emerald],
   [data-jj-emerald]
-):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
+):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active) *,
 html body :is(.jj-area-status-chip, .jj-area-explore-pill),
 html body :is(.jj-area-status-chip, .jj-area-explore-pill) *,
 html body :is(.jj-area-status-chip, .jj-area-explore-pill):is(:hover, :focus, :focus-visible, :active),
-html body :is(.jj-area-status-chip, .jj-area-explore-pill):is(:hover, :focus, :focus-visible, :active) * {
+html body :is(.jj-area-status-chip, .jj-area-explore-pill):is(:hover, :focus, :focus-visible, :active) *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -11769,14 +11700,8 @@ html body input.mortgage-range-input {
   --mortgage-range-thumb: radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%) !important;
   --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50) !important;
 }
-html body input.mortgage-range-input::-webkit-slider-runnable-track {
-  height: 8px !important;
-  border-radius: 9999px !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-}
-html body input.mortgage-range-input::-moz-range-track {
+html body input.mortgage-range-input::-webkit-slider-runnable-track,
+html body input.mortgage-range-input::-moz-range-track{
   height: 8px !important;
   border-radius: 9999px !important;
   background: transparent !important;
@@ -11904,15 +11829,8 @@ html body input.mortgage-range-input {
   --mortgage-range-thumb: #FFFFFF !important;
   --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 0 18px rgba(6,78,59,0.68), 0 4px 14px rgba(4,44,28,0.42) !important;
 }
-html body input.mortgage-range-input::-webkit-slider-thumb {
-  width: 24px !important;
-  height: 24px !important;
-  border: 0 !important;
-  border-radius: 9999px !important;
-  background: var(--mortgage-range-thumb) !important;
-  box-shadow: var(--mortgage-range-thumb-shadow) !important;
-}
-html body input.mortgage-range-input::-moz-range-thumb {
+html body input.mortgage-range-input::-webkit-slider-thumb,
+html body input.mortgage-range-input::-moz-range-thumb{
   width: 24px !important;
   height: 24px !important;
   border: 0 !important;
@@ -14096,13 +14014,9 @@ html body section.jj-project-hero a:hover { text-decoration: underline !importan
 
 /* 3) Generate Presentation card — force readable white on dark surface */
 html body .jj-card-inner [data-allow-dark-cta],
-html body .jj-card-inner [data-allow-dark-cta] *:not([data-allow-ink]):not([data-allow-ink] *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
+html body .jj-card-inner [data-allow-dark-cta] *:not([data-allow-ink]):not([data-allow-ink] *),
 /* Generate Presentation card — pure white text lock */
-html body button[data-hero-dark] :is(div, span, p) {
+html body button[data-hero-dark] :is(div, span, p){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -14114,15 +14028,11 @@ html body button[data-hero-dark] [data-allow-ink] * {
 }
 
 /* Final lock: presentation button text always white at runtime */
-html body button[data-hero-dark] > div.relative.z-10.text-center > div {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
+html body button[data-hero-dark] > div.relative.z-10.text-center > div,
 /* SUPER-LATE override: presentation button text — beat all earlier ink locks */
 html body button[data-hero-dark][data-no-contrast-guard] *,
 html body button[data-hero-dark][data-no-contrast-guard] *::before,
-html body button[data-hero-dark][data-no-contrast-guard] *::after {
+html body button[data-hero-dark][data-no-contrast-guard] *::after{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -14325,8 +14235,8 @@ html body :is(button, a, input, select, textarea, [role="tab"], [role="button"])
 
 /* --- 4) Progress / range tracks default to champagne with emerald fill --- */
 html body progress:not([data-no-contrast-guard])::-webkit-progress-bar { background: #EFE6D6 !important; }
-html body progress:not([data-no-contrast-guard])::-webkit-progress-value { background: #064E3B !important; }
-html body progress:not([data-no-contrast-guard])::-moz-progress-bar { background: #064E3B !important; }
+html body progress:not([data-no-contrast-guard])::-webkit-progress-value,
+html body progress:not([data-no-contrast-guard])::-moz-progress-bar{ background: #064E3B !important; }
 html body [role="progressbar"]:not([data-no-contrast-guard]) > [data-state] {
   background-color: #064E3B !important;
 }
@@ -14373,10 +14283,7 @@ html body :is(
   [style*="background-color:#064E3B" i],
   [style*="background:#064E3B" i],
   [style*="background: #064E3B" i]
-):not([data-no-contrast-guard]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+):not([data-no-contrast-guard]),
 html body :is(
   .jj-cta-primary,
   [data-cta="primary"],
@@ -14395,7 +14302,7 @@ html body :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"]
-):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active) {
+):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -15372,11 +15279,9 @@ html body #root :is(.jj-favorite-trigger, [data-card-action]) svg[fill="none"] :
   fill: none !important;
 }
 html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] svg,
-html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg {
-  fill: #FFFFFF !important;
-}
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg,
 html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] svg :where(path, line, polyline, polygon, rect, circle, ellipse),
-html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg :where(path, line, polyline, polygon, rect, circle, ellipse) {
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg :where(path, line, polyline, polygon, rect, circle, ellipse){
   fill: #FFFFFF !important;
 }
 
@@ -15863,15 +15768,8 @@ html body #root main.jj-main-shell .jj-fullbleed-band {
 
 
 
-html body #root main.jj-main-shell :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track) {
-  width: 100% !important;
-  max-width: min(var(--jj-global-container-max), 100%) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  box-sizing: border-box !important;
-}
-
-html body #root main.jj-main-shell :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+html body #root main.jj-main-shell :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track),
+html body #root main.jj-main-shell :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]){
   width: 100% !important;
   max-width: min(var(--jj-global-container-max), 100%) !important;
   margin-left: auto !important;
@@ -15953,16 +15851,11 @@ html body #root main.jj-main-shell :is(.jj-hero-frame, .jj-project-hero, .jj-sec
    and also render its own ContentTrack internally. The outer track owns the page
    grid; all nested tracks must fill it without adding another horizontal gutter. */
 html body #root main.jj-main-shell .jj-section-strap > :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track)
-  :is(.jj-content-track, .jj-project-shell, .jj-track, .container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
-  max-width: 100% !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
+  :is(.jj-content-track, .jj-project-shell, .jj-track, .container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]),
 /* Same normalization for standalone/admin/portal shells that do not use
    MainLayout's fixed-sidebar <main> but still render shared section straps. */
 html body #root :is(main, .jj-page-shell) .jj-section-strap > :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track)
-  :is(.jj-content-track, .jj-project-shell, .jj-track, .container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+  :is(.jj-content-track, .jj-project-shell, .jj-track, .container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]){
   max-width: 100% !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -17431,15 +17324,8 @@ html body input.mortgage-range-input {
     0 2px 6px rgba(4,44,28,0.35),
     0 0 14px rgba(6,78,59,0.45) !important;
 }
-html body input.mortgage-range-input::-webkit-slider-thumb {
-  background: #FFFFFF !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.85),
-    0 2px 6px rgba(4,44,28,0.35),
-    0 0 14px rgba(6,78,59,0.45) !important;
-  cursor: grab !important;
-}
-html body input.mortgage-range-input::-moz-range-thumb {
+html body input.mortgage-range-input::-webkit-slider-thumb,
+html body input.mortgage-range-input::-moz-range-thumb{
   background: #FFFFFF !important;
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.85),
@@ -19555,19 +19441,13 @@ html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item] [data-jbj
    ===================================================================== */
 html body #root [data-surface="champagne"]:not([data-no-contrast-guard]),
 html body #root [data-surface="light"]:not([data-no-contrast-guard]),
-html body #root [data-surface="mop"]:not([data-no-contrast-guard]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
+html body #root [data-surface="mop"]:not([data-no-contrast-guard]),
 html body #root [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not(button):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
 html body #root [data-surface="light"]    :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not(button):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
-html body #root [data-surface="mop"]      :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not(button):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
+html body #root [data-surface="mop"]      :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not(button):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
 html body #root [data-surface="champagne"] span:not([data-emerald="true"]):not([data-emerald="true"] *):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
 html body #root [data-surface="light"]    span:not([data-emerald="true"]):not([data-emerald="true"] *):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
-html body #root [data-surface="mop"]      span:not([data-emerald="true"]):not([data-emerald="true"] *):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *) {
+html body #root [data-surface="mop"]      span:not([data-emerald="true"]):not([data-emerald="true"] *):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]):not(button *):not([data-no-contrast-guard] *):not(.allow-white *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -19707,21 +19587,11 @@ html body #root [data-careers-job-card] :is(
   [data-careers-icon="department"] *,
   [data-careers-icon="location"],
   [data-careers-icon="location"] *
-) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  stroke-opacity: 1 !important;
-  fill: none !important;
-  opacity: 1 !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-}
-
+),
 /* PASS 92 — enforce readable black career card icons and rows on champagne cards.
    This specifically overrides late emerald/white closures that were repainting
    Briefcase/MapPin/Award strokes white on the positions list. */
-html body #root [data-careers-job-card] :is([data-careers-ink-row], [data-careers-ink-row] *, [data-careers-ink-icon], [data-careers-ink-icon] *) {
+html body #root [data-careers-job-card] :is([data-careers-ink-row], [data-careers-ink-row] *, [data-careers-ink-icon], [data-careers-ink-icon] *){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -19961,13 +19831,9 @@ html body [data-mode-switcher-root="true"] [data-mode-trigger="header"] .mode-sw
 
 /* (1) Card CTA — force white ink on the emerald metallic tile */
 html body a.jj-emerald-metallic[data-emerald-ok="button"],
-html body a.jj-emerald-metallic[data-emerald-ok="button"] :is(span, svg, path, p, strong, em) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
+html body a.jj-emerald-metallic[data-emerald-ok="button"] :is(span, svg, path, p, strong, em),
 html body a.jj-emerald-metallic[data-emerald-ok="button"]:hover,
-html body a.jj-emerald-metallic[data-emerald-ok="button"]:hover :is(span, svg, path) {
+html body a.jj-emerald-metallic[data-emerald-ok="button"]:hover :is(span, svg, path){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -20670,17 +20536,10 @@ html body :is(
 /* PASS 108 — Header emerald controls are also emerald own-surfaces.
    Sidebar rail tiles are emerald only when active/collapse-control. */
 html body :is(.jj-header-premium-control, .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock),
-html body :is(.jj-header-premium-control, .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock) :is(*, span, p, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-header-emerald-white-lock-child) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  stroke-opacity: 1 !important;
-  opacity: 1 !important;
-}
-
+html body :is(.jj-header-premium-control, .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock) :is(*, span, p, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-header-emerald-white-lock-child),
 /* PASS 109 — Unbreak primary emerald CTA descendants even inside legacy light panels. */
 html body :is([data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta):not(#jj-cta-white-lock-a):not(#jj-cta-white-lock-b):not(#jj-cta-white-lock-c),
-html body :is([data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta):not(#jj-cta-white-lock-a):not(#jj-cta-white-lock-b):not(#jj-cta-white-lock-c) :is(*, span, p, strong, em, b, i, small, label, div, a, button, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-cta-white-lock-child-a):not(#jj-cta-white-lock-child-b):not(#jj-cta-white-lock-child-c) {
+html body :is([data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta):not(#jj-cta-white-lock-a):not(#jj-cta-white-lock-b):not(#jj-cta-white-lock-c) :is(*, span, p, strong, em, b, i, small, label, div, a, button, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-cta-white-lock-child-a):not(#jj-cta-white-lock-child-b):not(#jj-cta-white-lock-child-c){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -20802,13 +20661,10 @@ html body .jj-hover-emerald[data-active="true"] [data-icon-tile] svg {
    ============================================================ */
 html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:hover,
 html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:focus-visible,
-html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"],
 html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:hover :is(span, p, h1, h2, h3, h4, h5, h6, a, li, label, strong, em, small, b, div, button),
 html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:focus-visible :is(span, p, h1, h2, h3, h4, h5, h6, a, li, label, strong, em, small, b, div, button),
-html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] :is(span, p, h1, h2, h3, h4, h5, h6, a, li, label, strong, em, small, b, div, button) {
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] :is(span, p, h1, h2, h3, h4, h5, h6, a, li, label, strong, em, small, b, div, button){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -20889,18 +20745,7 @@ html body [data-investor-vault-banner][data-investor-vault-banner] :is(span,p,sm
    high specificity. This ID-weighted selector is intentionally scoped only
    to the emerald vault banner so its title/body can never render ink/black. */
 html body #root [data-investor-vault-banner][data-investor-vault-banner][data-investor-vault-banner]:not(#jj-vault-white-a):not(#jj-vault-white-b):not(#jj-vault-white-c),
-html body #root [data-investor-vault-banner][data-investor-vault-banner][data-investor-vault-banner]:not(#jj-vault-white-a):not(#jj-vault-white-b):not(#jj-vault-white-c) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#jj-vault-white-child-a):not(#jj-vault-white-child-b):not(#jj-vault-white-child-c) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  stroke-opacity: 1 !important;
-  opacity: 1 !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-  text-shadow: none !important;
-}
-
+html body #root [data-investor-vault-banner][data-investor-vault-banner][data-investor-vault-banner]:not(#jj-vault-white-a):not(#jj-vault-white-b):not(#jj-vault-white-c) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#jj-vault-white-child-a):not(#jj-vault-white-child-b):not(#jj-vault-white-child-c),
 /* PASS 115 — GLOBAL EMERALD OWN-SURFACE WHITE CONTRACT.
    Fixes the root cause: emerald components placed inside champagne/light
    parents were inheriting later ink locks. If an element itself declares an
@@ -20993,7 +20838,7 @@ html body #root :is(
   [class~="bg-[#047857]"], [class*=" bg-[#047857]/"], [class^="bg-[#047857]/"],
   [class~="bg-[#065F46]"], [class*=" bg-[#065F46]/"], [class^="bg-[#065F46]/"],
   [class~="bg-[#022C22]"], [class*=" bg-[#022C22]/"], [class^="bg-[#022C22]/"]
-):not(#jj-global-emerald-own-a):not(#jj-global-emerald-own-b):not(#jj-global-emerald-own-c):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-allow-ink]) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,li,dt,dd,th,td,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#jj-global-emerald-own-child-a):not(#jj-global-emerald-own-child-b):not(#jj-global-emerald-own-child-c) {
+):not(#jj-global-emerald-own-a):not(#jj-global-emerald-own-b):not(#jj-global-emerald-own-c):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-allow-ink]) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,li,dt,dd,th,td,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#jj-global-emerald-own-child-a):not(#jj-global-emerald-own-child-b):not(#jj-global-emerald-own-child-c){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-fill-color: #FFFFFF !important;
@@ -21055,18 +20900,18 @@ html body .jj-investor-tab.jj-investor-tab:not(.is-active):not(:hover):not(:focu
    whose own inline style explicitly requests ink. It restores the
    author's intent without touching any genuine emerald-on-dark CTA.
    ============================================================ */
-html body :where([data-no-contrast-guard], .allow-white)[style*="#1A1A1A" i]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
-html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26, 26, 26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
-html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
-html body :where([data-no-contrast-guard], .allow-white)[style*="#0A0A0A" i]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) {
+html body :where([data-no-contrast-guard], .allow-white)[style*="#1A1A1A" i]:not(#jj-ink-honour),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26, 26, 26)"]:not(#jj-ink-honour),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]:not(#jj-ink-honour),
+html body :where([data-no-contrast-guard], .allow-white)[style*="#0A0A0A" i]:not(#jj-ink-honour) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-fill-color: #1A1A1A !important;
 }
 
-html body :where([data-no-contrast-guard], .allow-white)[style*="#1A1A1A" i]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g),
-html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26, 26, 26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g),
-html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+html body :where([data-no-contrast-guard], .allow-white)[style*="#1A1A1A" i]:not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26, 26, 26)"]:not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]:not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -21077,8 +20922,8 @@ html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]
    computed color of the SELECT element itself. Make sure data-no-contrast-guard
    selects on light backgrounds always paint ink, regardless of any global
    `.allow-white` force-white rule above. */
-html body select[data-no-contrast-guard]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
-html body select[data-no-contrast-guard]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) option {
+html body select[data-no-contrast-guard]:not(#jj-ink-honour),
+html body select[data-no-contrast-guard]:not(#jj-ink-honour) option {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -21130,19 +20975,14 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
    (e.g. Support Ticket Hub / My Tickets). Keep the contrast white while
    preserving the intended outlined glyph shape.
    ════════════════════════════════════════════════════════════════ */
-html body #root [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock),
-html body #root [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock),
-html body [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock),
-html body [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: none !important;
-  opacity: 1 !important;
-}
-html body #root [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
-html body #root [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
-html body [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
-html body [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g) {
+html body #root [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock),
+html body #root [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock),
+html body [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock),
+html body [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock),
+html body #root [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
+html body #root [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
+html body [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
+html body [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g){
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
@@ -21417,13 +21257,13 @@ html body :is(
   .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\],
   .bg-black, .bg-neutral-900, .bg-neutral-950,
   .bg-zinc-900, .bg-zinc-950, .bg-slate-900, .bg-slate-950
-):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock),
+):not(#jj-dark-bg-lock),
 html body :is(
   .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\],
   .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\],
   .bg-black, .bg-neutral-900, .bg-neutral-950,
   .bg-zinc-900, .bg-zinc-950, .bg-slate-900, .bg-slate-950
-):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock) :is(span, p, strong, em, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path) {
+):not(#jj-dark-bg-lock) :is(span, p, strong, em, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-fill-color: #FFFFFF !important;
@@ -21435,14 +21275,14 @@ html body :is(
   .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\],
   .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\],
   .bg-black
-):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock) :is(svg, [class*="lucide"]) {
+):not(#jj-dark-bg-lock) :is(svg, [class*="lucide"]) {
   fill: none !important;
 }
 
 /* Avatar fallback initials on emerald primary background. */
 html body span[data-radix-collection-item],
-html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-lock),
-html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-lock) > * {
+html body .bg-primary:not(#jj-avatar-lock),
+html body .bg-primary:not(#jj-avatar-lock) > * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -21457,14 +21297,14 @@ html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-l
 :where(html) body :is(
   .text-blue-50,.text-blue-100,.text-blue-200,.text-blue-300,.text-blue-400,
   .text-blue-500,.text-blue-600,.text-blue-700,.text-blue-800,.text-blue-900
-):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+):not([data-allow-blue]):not(#jj-blue-lock) {
   color: var(--emerald-1, #064E3B) !important;
   -webkit-text-fill-color: var(--emerald-1, #064E3B) !important;
 }
 :where(html) body :is(
   .text-blue-50,.text-blue-100,.text-blue-200,.text-blue-300,.text-blue-400,
   .text-blue-500,.text-blue-600,.text-blue-700,.text-blue-800,.text-blue-900
-):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) :is(svg,[class*="lucide"],path) {
+):not([data-allow-blue]):not(#jj-blue-lock) :is(svg,[class*="lucide"],path) {
   stroke: var(--emerald-1, #064E3B) !important;
 }
 :where(html) body :is(
@@ -21472,7 +21312,7 @@ html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-l
   .bg-blue-500,.bg-blue-600,.bg-blue-700,.bg-blue-800,.bg-blue-900,
   .hover\:bg-blue-50:hover,.hover\:bg-blue-100:hover,.hover\:bg-blue-500:hover,
   .hover\:bg-blue-600:hover,.hover\:bg-blue-700:hover
-):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+):not([data-allow-blue]):not(#jj-blue-lock) {
   background-color: var(--emerald-1, #064E3B) !important;
   color: #FFFFFF !important;
 }
@@ -21481,25 +21321,25 @@ html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-l
   [class*="bg-blue-500/1"],[class*="bg-blue-500/2"],[class*="bg-blue-500/3"],
   [class*="bg-blue-600/1"],[class*="bg-blue-600/2"],
   [class*="bg-blue-100"]
-):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+):not([data-allow-blue]):not(#jj-blue-lock) {
   background-color: rgba(6, 78, 59, 0.10) !important;
   color: var(--emerald-1, #064E3B) !important;
 }
 :where(html) body :is(
   [class*="border-blue-"]
-):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+):not([data-allow-blue]):not(#jj-blue-lock) {
   border-color: rgba(6, 78, 59, 0.32) !important;
 }
 :where(html) body :is(
   .ring-blue-500,.ring-blue-600,.focus\:ring-blue-500:focus,.focus\:ring-blue-600:focus,
   .focus-visible\:ring-blue-500:focus-visible,.focus-visible\:ring-blue-600:focus-visible
-):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+):not([data-allow-blue]):not(#jj-blue-lock) {
   --tw-ring-color: var(--emerald-1, #064E3B) !important;
 }
 /* Gradients written with from-blue-* / to-blue-* — flatten to emerald. */
 :where(html) body :is(
   [class*="from-blue-"],[class*="to-blue-"],[class*="via-blue-"]
-):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+):not([data-allow-blue]):not(#jj-blue-lock) {
   --tw-gradient-from: var(--emerald-1, #064E3B) !important;
   --tw-gradient-to:   var(--emerald-2, #0F6E55) !important;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
@@ -21608,14 +21448,10 @@ html body #root [data-careers-job-card][data-surface="champagne"]:not(#pass125-a
   stroke: #1A1A1A !important;
 }
 /* Global champagne ink — also boosted to outrank emerald-descendant cascade */
-html body #root [data-surface="champagne"]:not(#pass125g-a):not(#pass125g-b):not(#pass125g-c):not(#pass125g-d):not(#pass125g-e):not(#pass125g-f):not(#pass125g-g):not(#pass125g-h):not(#pass125g-i):not(#pass125g-j) :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b,figcaption):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-surface="emerald"]):not([data-emerald-icon-surface]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
+html body #root [data-surface="champagne"]:not(#pass125g-a):not(#pass125g-b):not(#pass125g-c):not(#pass125g-d):not(#pass125g-e):not(#pass125g-f):not(#pass125g-g):not(#pass125g-h):not(#pass125g-i):not(#pass125g-j) :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b,figcaption):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-surface="emerald"]):not([data-emerald-icon-surface]),
 /* Global champagne-on-emerald rescue — any card explicitly tagged
    data-surface="champagne" must render ink regardless of ancestor emerald. */
-html body #root [data-surface="champagne"]:not([data-careers-job-card]) :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b,figcaption):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.allow-white *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+html body #root [data-surface="champagne"]:not([data-careers-job-card]) :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b,figcaption):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.allow-white *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -21948,14 +21784,10 @@ html body #root [data-insights-page] :is(h1, h2, h3, h4, h5, h6):not([data-no-co
 }
 
 html body #root [data-insights-page] [data-hero-dark] :is(h1, h2, h3, h4, h5, h6, p, span, a, li),
-html body #root [data-insights-page] [data-hero-dark] :is(h1, h2, h3, h4, h5, h6, p, span, a, li) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
+html body #root [data-insights-page] [data-hero-dark] :is(h1, h2, h3, h4, h5, h6, p, span, a, li) *,
 /* 4 — Emerald CTA contract: white foreground always */
 html body #root [data-insights-page] :is(.jj-pill-emerald-metallic, .jj-cta-emerald),
-html body #root [data-insights-page] :is(.jj-pill-emerald-metallic, .jj-cta-emerald) * {
+html body #root [data-insights-page] :is(.jj-pill-emerald-metallic, .jj-cta-emerald) *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -22637,14 +22469,9 @@ html body #root .mi-tab-emerald[aria-selected="true"]:not(#mi-141a):not(#mi-141b
   -webkit-text-fill-color: #1A1A1A !important;
 }
 html body #root .mi-tab-emerald[data-state="active"]:not(#mi-141a):not(#mi-141b):not(#mi-141c):not(#mi-141d):not(#mi-141e):not(#mi-141f):not(#mi-141g):not(#mi-141h):not(#mi-141i):not(#mi-141j):not(#mi-141k):not(#mi-141l):not(#mi-141m):not(#mi-141n):not(#mi-141o) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#mi-141aa):not(#mi-141bb):not(#mi-141cc):not(#mi-141dd):not(#mi-141ee):not(#mi-141ff):not(#mi-141gg):not(#mi-141hh):not(#mi-141ii):not(#mi-141jj):not(#mi-141kk):not(#mi-141ll):not(#mi-141mm):not(#mi-141nn):not(#mi-141oo),
-html body #root .mi-tab-emerald[aria-selected="true"]:not(#mi-141a):not(#mi-141b):not(#mi-141c):not(#mi-141d):not(#mi-141e):not(#mi-141f):not(#mi-141g):not(#mi-141h):not(#mi-141i):not(#mi-141j):not(#mi-141k):not(#mi-141l):not(#mi-141m):not(#mi-141n):not(#mi-141o) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#mi-141aa):not(#mi-141bb):not(#mi-141cc):not(#mi-141dd):not(#mi-141ee):not(#mi-141ff):not(#mi-141gg):not(#mi-141hh):not(#mi-141ii):not(#mi-141jj):not(#mi-141kk):not(#mi-141ll):not(#mi-141mm):not(#mi-141nn):not(#mi-141oo) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-
+html body #root .mi-tab-emerald[aria-selected="true"]:not(#mi-141a):not(#mi-141b):not(#mi-141c):not(#mi-141d):not(#mi-141e):not(#mi-141f):not(#mi-141g):not(#mi-141h):not(#mi-141i):not(#mi-141j):not(#mi-141k):not(#mi-141l):not(#mi-141m):not(#mi-141n):not(#mi-141o) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#mi-141aa):not(#mi-141bb):not(#mi-141cc):not(#mi-141dd):not(#mi-141ee):not(#mi-141ff):not(#mi-141gg):not(#mi-141hh):not(#mi-141ii):not(#mi-141jj):not(#mi-141kk):not(#mi-141ll):not(#mi-141mm):not(#mi-141nn):not(#mi-141oo),
 html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):not(#mi-gold-d):not(#mi-gold-e):not(#mi-gold-f):not(#mi-gold-g):not(#mi-gold-h):not(#mi-gold-i):not(#mi-gold-j),
-html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):not(#mi-gold-d):not(#mi-gold-e):not(#mi-gold-f):not(#mi-gold-g):not(#mi-gold-h):not(#mi-gold-i):not(#mi-gold-j) :is(span,svg,[class*="lucide"],path,line,polyline,circle,rect) {
+html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):not(#mi-gold-d):not(#mi-gold-e):not(#mi-gold-f):not(#mi-gold-g):not(#mi-gold-h):not(#mi-gold-i):not(#mi-gold-j) :is(span,svg,[class*="lucide"],path,line,polyline,circle,rect){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -22973,17 +22800,9 @@ html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-
 html body [data-filter-price-mode][data-filter-price-mode][data-jj-segmented-trigger][role="tab"][data-state="active"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c),
 html body [data-filter-price-mode][data-filter-price-mode][data-jj-segmented-trigger][role="tab"][aria-selected="true"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c),
 html body [data-mode-select-pill][data-mode-select-pill][data-surface="emerald"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c),
-html body [data-account-role-label][data-account-role-label][data-surface="emerald"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
+html body [data-account-role-label][data-account-role-label][data-surface="emerald"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c),
 html body [data-mode-select-pill][data-mode-select-pill][data-surface="emerald"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label),
-html body [data-account-role-label][data-account-role-label][data-surface="emerald"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label) {
+html body [data-account-role-label][data-account-role-label][data-surface="emerald"]:not(#jj-final-white-a):not(#jj-final-white-b):not(#jj-final-white-c) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-fill-color: #FFFFFF !important;
@@ -23449,19 +23268,12 @@ html body #root .owner-dashboard-shell [data-backend-portal="owner-crm"] :is(td,
    rules. Champagne controls keep emerald ink; emerald ombré controls keep pure
    white text/icons. */
 html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"],
-html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink),
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:not(#jj-list-prop-ink),
 html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"] :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline),
-html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink) :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:not(#jj-list-prop-ink) :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline),
 html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="active"],
 html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="active"] :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline),
-html body #root [data-list-property-page] [data-allow-dark-cta]:not(.jj-listing-pill[data-listing-pill="inactive"]):not(.jj-listing-pill[data-listing-pill="inactive"] *) :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline) {
+html body #root [data-list-property-page] [data-allow-dark-cta]:not(.jj-listing-pill[data-listing-pill="inactive"]):not(.jj-listing-pill[data-listing-pill="inactive"] *) :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-fill-color: #FFFFFF !important;
@@ -23623,10 +23435,7 @@ html body [data-tool-emerald] [class*="bg-card"] :is(h1,h2,h3,h4,h5,h6,p,label,s
 html body [data-tool-emerald] [class*="bg-muted"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
 html body [data-tool-emerald] [class*="bg-secondary"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
 html body [data-tool-emerald] [class*="bg-popover"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
-html body [data-tool-emerald] [class*="bg-accent"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+html body [data-tool-emerald] [class*="bg-accent"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
 /* Text tokens that would render dark on emerald */
 html body [data-tool-emerald] [class*="text-card-foreground"],
 html body [data-tool-emerald] [class*="text-foreground"],
@@ -23640,7 +23449,7 @@ html body [data-tool-emerald] [class*="text-stone-9"],
 html body [data-tool-emerald] [class*="text-slate-9"],
 html body [data-tool-emerald] [class*="text-gray-9"],
 html body [data-tool-emerald] [class*="text-zinc-9"],
-html body [data-tool-emerald] [class*="1A1A1A"] {
+html body [data-tool-emerald] [class*="1A1A1A"]{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -25528,16 +25337,12 @@ html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"]:is(:h
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"]:is(:hover, :focus-visible) :is(span, svg, path, circle, rect, line, polyline, polygon) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
+html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"]:is(:hover, :focus-visible) :is(span, svg, path, circle, rect, line, polyline, polygon),
 /* END PASS 168 */
 
 /* PASS 169 — AI HUB FAQ CLOSED STATE: title + chevron must be pure black on normal load */
 html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"],
-html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"] :is(span, svg, path, circle, rect, line, polyline, polygon) {
+html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"] :is(span, svg, path, circle, rect, line, polyline, polygon){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -30072,12 +29877,7 @@ html body:not([data-ai-tools-scope="true"]) :is(
   [style*="background" i][style*="#064e3b" i],
   [style*="background" i][style*="#042C1C" i],
   [style*="background" i][style*="#042c1c" i]
-):not([data-preserve-surface]):not([data-jbj-preserve-surface]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]),
 html body:not([data-ai-tools-scope="true"]) :is(
   .jj-emerald-action,
   .jj-surface-emerald,
@@ -30124,7 +29924,7 @@ html body:not([data-ai-tools-scope="true"]) :is(
     [data-surface="page"], [data-surface="page"] *,
     .surface-light, .surface-light *, .surface-champagne, .surface-champagne *,
     .jj-card-inner, .jj-card-inner *, .jj-layer-2, .jj-layer-2 *
-  )) {
+  )){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
@@ -30564,13 +30364,7 @@ html body:not([data-ai-tools-scope="true"]) :is(
 
 html body:not([data-ai-tools-scope="true"]) :is(
   [data-mode-switcher-panel="true"]
-) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(input, textarea, [data-mode-active-pill], [data-mode-active-pill] *)) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: currentColor !important;
-  opacity: 1 !important;
-}
-
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(input, textarea, [data-mode-active-pill], [data-mode-active-pill] *)),
 /* [data-filter-dropdown] filter pill popovers are champagne+gold — see
    filter-pill dropdown rules earlier in this file. Do NOT re-tint them here. */
 
@@ -30582,7 +30376,7 @@ html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not(
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not([data-currency-row]):not(:has([data-currency-row])) *,
 html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child,
 html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child *,
-html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown]):not([data-state="checked"]):not([data-state="active"]) {
+html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown]):not([data-state="checked"]):not([data-state="active"]){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
@@ -30863,18 +30657,12 @@ html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode
 
 /* Currency non-active rows ink */
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content][data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
-html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content][data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) :is(p, span, div, svg, path, small, strong) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content][data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) :is(p, span, div, svg, path, small, strong),
 /* PASS 230e — ID-prefixed win over all previous white-ink rules for mode/currency */
 html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]),
 html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) *,
 html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child,
-html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child * {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child *{
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -30931,14 +30719,11 @@ html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-w
    Site-wide dropdown standard. AI tools excluded via scope.
    ============================================================ */
 
-html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) {
-  color: #1A1A1A !important;
-}
-
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]),
 /* All descendant text defaults to ink black */
 html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(
   h1, h2, h3, h4, p, span, div, label, button, a, li, small, strong, em
-) {
+){
   color: #1A1A1A !important;
 }
 
@@ -31156,25 +30941,11 @@ html body [data-global-search-modal] .jj-hover-emerald:is(:hover,:focus,:focus-v
 /* PASS 246 — terminal specificity win for hover foregrounds.
    Beats earlier broad `text-white/allow-white -> ink` conversion rules. */
 html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [role="dialog"][data-advanced-filter-panel="true"][data-advanced-filter-panel="true"] [data-filter-option-row="true"][data-filter-option-row="true"][data-filter-option-row="true"]:is(:hover,:focus,:focus-visible),
-html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [role="dialog"][data-advanced-filter-panel="true"][data-advanced-filter-panel="true"] [data-filter-option-row="true"][data-filter-option-row="true"][data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
-  background-color: #064E3B !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
+html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [role="dialog"][data-advanced-filter-panel="true"][data-advanced-filter-panel="true"] [data-filter-option-row="true"][data-filter-option-row="true"][data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle),
 html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row]:is(:hover,:focus,:focus-visible,[data-highlighted]),
-html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row]:is(:hover,:focus,:focus-visible,[data-highlighted]) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
-  background-color: #064E3B !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
+html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row]:is(:hover,:focus,:focus-visible,[data-highlighted]) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle),
 html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [data-global-search-modal][data-global-search-modal] .jj-hover-emerald.jj-hover-emerald:is(:hover,:focus,:focus-visible),
-html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [data-global-search-modal][data-global-search-modal] .jj-hover-emerald.jj-hover-emerald:is(:hover,:focus,:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
+html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [data-global-search-modal][data-global-search-modal] .jj-hover-emerald.jj-hover-emerald:is(:hover,:focus,:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle){
   background-color: #064E3B !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   color: #FFFFFF !important;
@@ -31864,15 +31635,9 @@ html body [data-ticket-hub-tabs] [data-ticket-hub-tab][data-state="active"] :is(
 /* Kill global "icon tile" frames around lucide Search/Plus/Inbox glyphs
    whenever they sit inside a tab trigger — no white/gold square behind
    the glyph, ever. */
-html body :is([role="tab"], [role="tablist"] button) :is(svg, [class*="lucide"]) {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-}
+html body :is([role="tab"], [role="tablist"] button) :is(svg, [class*="lucide"]),
 html body :is([role="tab"], [role="tablist"] button) > span:has(> svg),
-html body :is([role="tab"], [role="tablist"] button) > div:has(> svg) {
+html body :is([role="tab"], [role="tablist"] button) > div:has(> svg){
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -33575,13 +33340,7 @@ html body #root :is(
   [data-icon-tile-tone="emerald"],
   [data-emerald-icon-surface],
   .jj-icon-tile-emerald
-) :where(*, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
+) :where(*, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]),
 html body #root :where(.owner-dashboard-shell, [data-backend-portal]) :is(
   button[class~="bg-[#064E3B]"], [class*=" bg-[#064E3B]/"], [class^="bg-[#064E3B]/"],
   button[class~="from-[#064E3B]"], [class*=" from-[#064E3B]/"], [class^="from-[#064E3B]/"],
@@ -33607,7 +33366,7 @@ html body #root :where(.owner-dashboard-shell, [data-backend-portal]) :is(
   .jj-pill-emerald-metallic,
   .jj-cta-emerald,
   [data-surface="emerald"]
-) :where(*, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+) :where(*, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -33782,7 +33541,7 @@ html body :where(
    Uses triple-id specificity trick to outrank prior !important
    passes without changing the cascade order elsewhere.
    ============================================================ */
-html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:not(#crm-lock):not(#crm-lock):not(#crm-lock),
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:not(#crm-lock),
 html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="false"] {
   background: #FDFBF7 !important;
   background-color: #FDFBF7 !important;
@@ -33817,7 +33576,7 @@ html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="ta
 }
 
 /* Active tabs — emerald ombre, pure white ink/icons/badges */
-html body [data-crm-tabs-lock] button[role="tab"][aria-selected="true"]:not(#crm-lock):not(#crm-lock):not(#crm-lock),
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="true"]:not(#crm-lock),
 html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="true"] {
   background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
   background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
@@ -34275,15 +34034,10 @@ html body #root [data-project-sticky-nav="true"] [data-surface="emerald"] {
   -webkit-text-fill-color: #FFFFFF !important;
 }
 html body #root [data-project-sticky-nav="true"] [data-surface="emerald"] *,
-html body #root [data-project-sticky-nav="true"] [data-surface="emerald"] svg {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
+html body #root [data-project-sticky-nav="true"] [data-surface="emerald"] svg,
 /* Payment-plan emerald labels must never inherit ink from light-card rules. */
 html body #root [data-payment-progress-bar] [data-emerald="true"],
-html body #root [data-payment-progress-bar] [data-emerald="true"] * {
+html body #root [data-payment-progress-bar] [data-emerald="true"] *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -34324,13 +34078,9 @@ html body #root .jj-map-popup-card {
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-html body #root .jj-map-popup-card :is(a, button, p, div, span) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
+html body #root .jj-map-popup-card :is(a, button, p, div, span),
 html body #root .jj-map-popup-card [data-price-badge],
-html body #root .jj-map-popup-card [data-price-badge] * {
+html body #root .jj-map-popup-card [data-price-badge] *{
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -34356,14 +34106,9 @@ html body #root [data-nearby-map-tabs="true"] .jj-map-filter-toggle span:first-c
 }
 
 html body #root [data-project-payment-tabs] [data-state="active"],
-html body #root [data-project-payment-tabs] [data-state="active"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
+html body #root [data-project-payment-tabs] [data-state="active"] *,
 html body #root [data-section="payment"] [data-icon-circle="true"],
-html body #root [data-section="payment"] [data-icon-circle="true"] * {
+html body #root [data-section="payment"] [data-icon-circle="true"] *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -34483,14 +34228,11 @@ html body #root :is([data-project-sticky-nav="true"], [data-scoped-sticky-nav]) 
   button[data-filter-selected="true"],
   [data-surface="emerald"],
   [data-emerald-action="true"]
-) {
-  border-radius: 10px !important;
-}
-
+),
 html body #root :is([data-project-sticky-nav="true"], [data-scoped-sticky-nav]) :is(
   .jj-filter-search-pill input,
   .filter-search-pill-input
-) {
+){
   border-radius: 10px !important;
 }
 
@@ -35383,10 +35125,7 @@ html body #root [data-category-shell-body] :is(
   .jj-hero-fullscreen,
   .jj-services-hero,
   .jj-about-emerald-hero
-) {
-  display: none !important;
-}
-
+),
 html body #root [data-category-shell-body] :is(
   [data-mi-toc],
   [data-guide-toc],
@@ -35394,7 +35133,7 @@ html body #root [data-category-shell-body] :is(
   [data-premium-navigator],
   .faq-floating-sidebar,
   .guide-floating-sidebar
-) {
+){
   display: none !important;
 }
 
@@ -35718,14 +35457,9 @@ html body [data-radix-accordion-root] > [data-radix-accordion-item] + [data-radi
 [data-jbj-signup] [role="combobox"]:focus,
 [data-jbj-signup] [role="combobox"]:focus-visible,
 .jbj-signup-dropdown input:focus,
-.jbj-signup-dropdown button:focus-visible {
-  outline: none !important;
-  border-color: #064E3B !important;
-  box-shadow: 0 0 0 3px rgba(6, 78, 59, 0.20) !important;
-}
-
+.jbj-signup-dropdown button:focus-visible,
 /* PhoneInput selector focus ring uses focus-within */
-[data-jbj-signup] .PhoneInputCountry:focus-within {
+[data-jbj-signup] .PhoneInputCountry:focus-within{
   outline: none !important;
   border-color: #064E3B !important;
   box-shadow: 0 0 0 3px rgba(6, 78, 59, 0.20) !important;
@@ -36023,7 +35757,7 @@ html body #root :is(
 /* About page — allow inline background-image on opted-in media tiles.
    Overrides the insights-hub bg-image:none guard on rounded/bordered divs.
    Component sets --about-media-src to the resolved URL. */
-html body#body #root [data-insights-page] [data-allow-bg][data-no-section-frame][class*="rounded-2xl"][class*="border"]:not(#\9):not(#\9):not(#\9):not(#\9):not(#\9) {
+html body#body #root [data-insights-page] [data-allow-bg][data-no-section-frame][class*="rounded-2xl"][class*="border"]:not(#\9) {
   background-image:
     linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 100%),
     var(--about-media-src) !important;
@@ -36301,14 +36035,11 @@ html body #root [data-area-detail-page="true"] [data-surface="champagne"] .group
   border-color: #B89555 !important;
 }
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] [data-card-price-payment-row],
-html body #root [data-area-detail-page="true"] [data-surface="champagne"] [data-card-price-payment-row] * {
-  color: #0A0A0A !important;
-  -webkit-text-fill-color: #0A0A0A !important;
-}
+html body #root [data-area-detail-page="true"] [data-surface="champagne"] [data-card-price-payment-row] *,
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne h4,
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne .truncate,
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne span,
-html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne p {
+html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne p{
   color: #0A0A0A !important;
   -webkit-text-fill-color: #0A0A0A !important;
 }
@@ -36573,17 +36304,11 @@ html body #root [data-branded-email-panel="true"] [data-branded-email-send="true
 }
 
 html body #root [data-branded-email-panel="true"] [data-branded-email-test-action="true"],
-html body #root [data-branded-email-panel="true"] [data-branded-email-test-action="true"] * {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-  stroke: #064E3B !important;
-  opacity: 1 !important;
-}
-
+html body #root [data-branded-email-panel="true"] [data-branded-email-test-action="true"] *,
 html body #root [data-branded-email-panel="true"] .branded-email-test-button,
 html body #root [data-branded-email-panel="true"] .branded-email-test-button .branded-email-test-label,
 html body #root [data-branded-email-panel="true"] .branded-email-test-button .branded-email-test-icon,
-html body #root [data-branded-email-panel="true"] .branded-email-test-button :is(svg, path, line, polyline) {
+html body #root [data-branded-email-panel="true"] .branded-email-test-button :is(svg, path, line, polyline){
   color: #064E3B !important;
   -webkit-text-fill-color: #064E3B !important;
   stroke: #064E3B !important;
@@ -36952,12 +36677,12 @@ html body #root [data-branded-email-dashboard="true"] [data-jbj-campaign-action=
    FAQ rows are stateful own-surfaces nested inside bright Insights cards.
    This deliberately follows every generic light/dark guard: closed rows are
    ink on champagne; open rows and their chevrons are white on emerald. */
-html body #root .jj-faq-item[data-state="closed"]:not(#jj-faq-state):not(#jj-faq-state):not(#jj-faq-state) :is(.jj-faq-trigger, .jj-faq-content) {
+html body #root .jj-faq-item[data-state="closed"]:not(#jj-faq-state) :is(.jj-faq-trigger, .jj-faq-content) {
   color: var(--jj-insights-ink) !important;
   -webkit-text-fill-color: var(--jj-insights-ink) !important;
 }
-html body #root .jj-faq-item[data-state="open"]:not(#jj-faq-state):not(#jj-faq-state):not(#jj-faq-state) :is(.jj-faq-trigger, .jj-faq-content),
-html body #root .jj-faq-item[data-state="open"]:not(#jj-faq-state):not(#jj-faq-state):not(#jj-faq-state) .jj-faq-trigger svg {
+html body #root .jj-faq-item[data-state="open"]:not(#jj-faq-state) :is(.jj-faq-trigger, .jj-faq-content),
+html body #root .jj-faq-item[data-state="open"]:not(#jj-faq-state) .jj-faq-trigger svg {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -37180,12 +36905,8 @@ html body #root :is([data-surface="light"], [data-surface="champagne"], [data-le
 }
 
 html body #root :is([data-surface="light"], [data-surface="champagne"], [data-legal-section-card])
-  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,label,button,input,textarea,select,div):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-emerald="true"]):not([data-emerald="true"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-html body #root [data-search-dropdown] :is(input, textarea, select, button) {
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,label,button,input,textarea,select,div):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-emerald="true"]):not([data-emerald="true"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *),
+html body #root [data-search-dropdown] :is(input, textarea, select, button){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -37338,12 +37059,9 @@ html body #root [style*="background-color: #064E3B"],
 html body #root [style*="background:#064e3b"],
 html body #root [style*="background: #064e3b"],
 html body #root [style*="background-color:#064e3b"],
-html body #root [style*="background-color: #064e3b"] {
-  background-color: transparent !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
-}
+html body #root [style*="background-color: #064e3b"],
 html body #root [class*="hover:bg-[#064E3B]"]:hover,
-html body #root [class*="hover:bg-[#064e3b]"]:hover {
+html body #root [class*="hover:bg-[#064e3b]"]:hover{
   background-color: transparent !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
 }
@@ -37574,17 +37292,11 @@ html body #root button[data-listings-tab="inactive"]:is(:hover, :focus-visible) 
   opacity: 0.82 !important;
 }
 html body #root button[data-listings-tab],
-html body #root button[data-listings-tab] :where(*) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
+html body #root button[data-listings-tab] :where(*),
 /* Radix menus are portaled under body (outside #root), so the emerald account
    identity requires a portal-level white-ink lock. */
 html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity],
-html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity] :where(*) {
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity] :where(*){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -37651,14 +37363,11 @@ a.jj-gold-link:hover {
 html body [style*="rgb(6, 78, 59)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
 html body [style*="rgb(4, 44, 28)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
 html body [style*="#064E3B" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
-html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
 html body [style*="rgb(6, 78, 59)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
 html body [style*="rgb(4, 44, 28)"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
 html body [style*="#064E3B" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a),
-html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a) {
+html body [style*="#042c1c" i]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(span, small, strong, em, b, label, p, h1, h2, h3, h4, h5, h6, button, a){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -38030,14 +37739,10 @@ html body #root [data-filter-clean="true"] .jj-filter-rail > button[class][class
 html body #root [data-filter-bar-gold] .jj-filter-rail > button[class][class],
 html body #root [data-filter-bar-gold] .jj-filter-rail > button[class][class] *,
 html body #root .jj-filter-rail > button[class][class],
-html body #root .jj-filter-rail > button[class][class] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
+html body #root .jj-filter-rail > button[class][class] *,
 /* Catalog active filters are emerald surfaces and always use white ink. */
 html body #root [data-property-search-bar] [data-active-filter-summary] button,
-html body #root [data-property-search-bar] [data-active-filter-summary] button * {
+html body #root [data-property-search-bar] [data-active-filter-summary] button *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
