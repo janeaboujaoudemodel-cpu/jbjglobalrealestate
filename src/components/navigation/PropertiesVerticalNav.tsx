@@ -4,7 +4,7 @@ import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 
 // Utility Components
-import GlobalSearchModal from "@/components/GlobalSearchModal";
+import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 

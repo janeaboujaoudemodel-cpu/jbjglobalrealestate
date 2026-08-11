@@ -1,3 +1,4 @@
+import { en } from '@/translations/en';
 // Client-side translation engine: in-memory + IndexedDB cache, debounced batch
 // network calls to the translate-batch edge function. Exposes a single
 // `translateClient(text, targetLang, domain)` returning either the cached
@@ -247,7 +248,8 @@ export async function prewarmChromeDictionary(lang: Language): Promise<void> {
   if (prewarmed.has(lang)) return;
   prewarmed.add(lang);
   try {
-    const { en } = await import('@/translations/en');
+    // `en` is the base dictionary and is already in the entry graph via
+    // LanguageContext, so a dynamic import here only defeated code splitting.
     const flatten = (obj: any, out: string[] = []): string[] => {
       for (const v of Object.values(obj ?? {})) {
         if (typeof v === 'string') out.push(v);
