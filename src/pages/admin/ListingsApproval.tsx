@@ -4,10 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
-import { CheckCircle2, Clock, ImageOff, ImageIcon, Search, ExternalLink, AlertTriangle } from "lucide-react";
+import { CheckCircle2, Clock, ImageOff, ImageIcon, Search, ExternalLink, AlertTriangle, ClipboardList, Inbox } from "lucide-react";
 import { toast } from "sonner";
+import OwnerHubPage from "@/pages/owner/crm/shell/OwnerHubPage";
 
 interface ProjectRow {
   id: string;
@@ -34,6 +33,45 @@ interface ProjectRow {
 }
 
 type MediaStatus = "complete" | "gallery-only" | "missing";
+type Tab = "needs-photo" | "pending" | "approved";
+
+const PROJECT_COLUMNS =
+  "id,name,slug,developer_name,city,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at,community:communities(name)";
+
+/**
+ * Page through EVERY project row. The previous `.limit(500)` made this page
+ * disagree with the Owner Panel "Pending Approvals" tile — the tile counted
+ * server-side while the page only ever saw the 500 most recently updated rows.
+ */
+async function fetchAllProjects(): Promise<any[]> {
+  const PAGE = 1000;
+  const out: any[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from("projects")
+      .select(PROJECT_COLUMNS)
+      .order("updated_at", { ascending: false })
+      .range(from, from + PAGE - 1);
+    if (error) throw error;
+    out.push(...(data || []));
+    if (!data || data.length < PAGE) break;
+  }
+  return out;
+}
+
+async function fetchAllChildIds(table: "project_images" | "project_documents"): Promise<Record<string, number>> {
+  const PAGE = 1000;
+  const counts: Record<string, number> = {};
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase.from(table).select("project_id").range(from, from + PAGE - 1);
+    if (error) throw error;
+    (data || []).forEach((row: any) => {
+      if (row.project_id) counts[row.project_id] = (counts[row.project_id] || 0) + 1;
+    });
+    if (!data || data.length < PAGE) break;
+  }
+  return counts;
+}
 
 const getMediaStatus = (p: ProjectRow): MediaStatus => {
   const hasCover = !!(p.cover_image_url && p.cover_image_url.trim());
@@ -79,40 +117,29 @@ const MediaStatusBadge = ({ status }: { status: MediaStatus }) => {
 
 const ListingsApproval = () => {
   const [projects, setProjects] = useState<ProjectRow[]>([]);
+  const [importCount, setImportCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [tab, setTab] = useState<"needs-photo" | "pending" | "approved">("needs-photo");
+  const [tab, setTab] = useState<Tab>("needs-photo");
 
   const load = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("id,name,slug,developer_name,city,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at,community:communities(name)")
-        .order("updated_at", { ascending: false })
-        .limit(500);
-      if (error) throw error;
-
-      const ids = (data || []).map((p: any) => p.id);
-      let counts: Record<string, number> = {};
-      if (ids.length > 0) {
-        const [{ data: imgs }, { data: docs }] = await Promise.all([
-          supabase.from("project_images").select("project_id").in("project_id", ids),
-          supabase.from("project_documents").select("project_id").in("project_id", ids),
-        ]);
-        (imgs || []).forEach((row: any) => {
-          counts[row.project_id] = (counts[row.project_id] || 0) + 1;
-        });
-        (docs || []).forEach((row: any) => {
-          counts[`doc:${row.project_id}`] = (counts[`doc:${row.project_id}`] || 0) + 1;
-        });
-      }
-      setProjects((data || []).map((p: any) => ({
-        ...p,
-        community: p.community?.name ?? null,
-        gallery_count: counts[p.id] || 0,
-        documents_count: counts[`doc:${p.id}`] || 0,
-      })));
+      const [rows, imgCounts, docCounts, imports] = await Promise.all([
+        fetchAllProjects(),
+        fetchAllChildIds("project_images"),
+        fetchAllChildIds("project_documents"),
+        supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      ]);
+      setImportCount(imports.count || 0);
+      setProjects(
+        rows.map((p: any) => ({
+          ...p,
+          community: p.community?.name ?? null,
+          gallery_count: imgCounts[p.id] || 0,
+          documents_count: docCounts[p.id] || 0,
+        })),
+      );
     } catch (e: any) {
       toast.error(e.message || "Failed to load listings");
     } finally {
@@ -139,16 +166,19 @@ const ListingsApproval = () => {
   const pending = filtered.filter((p) => !p.is_published && getMediaStatus(p) !== "missing");
   const ready = pending.filter((p) => getReadinessBlockers(p).length === 0);
 
+  // Owner Panel tile parity: pending imports + unpublished listings with no cover.
+  const unpublishedNoCover = projects.filter(
+    (p) => !p.is_published && !(p.cover_image_url && p.cover_image_url.trim()),
+  ).length;
+  const tileTotal = importCount + unpublishedNoCover;
+
   const approve = async (p: ProjectRow) => {
     const blockers = getReadinessBlockers(p);
     if (blockers.length > 0) {
       toast.error(`Cannot approve: missing ${blockers.join(", ")}`);
       return;
     }
-    const { error } = await supabase
-      .from("projects")
-      .update({ is_published: true })
-      .eq("id", p.id);
+    const { error } = await supabase.from("projects").update({ is_published: true }).eq("id", p.id);
     if (error) toast.error(error.message);
     else {
       toast.success(`${p.name} approved`);
@@ -157,10 +187,7 @@ const ListingsApproval = () => {
   };
 
   const unpublish = async (p: ProjectRow) => {
-    const { error } = await supabase
-      .from("projects")
-      .update({ is_published: false })
-      .eq("id", p.id);
+    const { error } = await supabase.from("projects").update({ is_published: false }).eq("id", p.id);
     if (error) toast.error(error.message);
     else {
       toast.success(`${p.name} moved to Pending`);
@@ -173,21 +200,17 @@ const ListingsApproval = () => {
     const thumb = p.cover_image_url || p.card_image_url;
     const blockers = getReadinessBlockers(p);
     return (
-      <Card
-        key={p.id}
-        data-surface="champagne"
-        className="flex items-center gap-4 p-4 border border-[#B89555]/40"
-      >
-        <div className="h-16 w-24 rounded-lg overflow-hidden bg-[#EFE6D6] flex items-center justify-center flex-shrink-0">
+      <div key={p.id} className="owner-hub-card flex items-center gap-4 flex-wrap">
+        <div className="h-16 w-24 rounded-lg overflow-hidden bg-[#F1F5F4] flex items-center justify-center flex-shrink-0">
           {thumb ? (
-            <img src={thumb} alt="" className="h-full w-full object-cover"  loading="lazy" decoding="async" />
+            <img src={thumb} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
           ) : (
-            <ImageOff className="h-6 w-6 text-[#1A1A1A]/50" />
+            <ImageOff className="h-6 w-6 text-[#064E3B]/50" />
           )}
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-[220px]">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="font-semibold text-[#1A1A1A] truncate">{p.name || "Untitled"}</h3>
+            <h3 className="font-semibold text-[#0F172A]">{p.name || "Untitled"}</h3>
             <MediaStatusBadge status={status} />
             {p.is_published ? (
               <Badge className="bg-[#B89555] text-white border-0 gap-1">
@@ -199,18 +222,18 @@ const ListingsApproval = () => {
               </Badge>
             )}
           </div>
-          <div className="text-sm text-[#1A1A1A]/70 truncate">
+          <div className="text-sm text-[#475569]">
             {[p.developer_name, p.community, p.city].filter(Boolean).join(" • ")}
           </div>
-          <div className="text-xs text-[#1A1A1A]/60 mt-1">
+          <div className="text-xs text-[#64748B] mt-1">
             Gallery: {p.gallery_count ?? 0} image{(p.gallery_count ?? 0) === 1 ? "" : "s"} · Docs: {p.documents_count ?? 0}
             {blockers.length > 0 && <span> · Missing: {blockers.join(", ")}</span>}
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
           {p.slug && (
             <Button asChild variant="outline" size="sm">
-              <Link to={`/projects/${p.slug}`} target="_blank">
+              <Link to={`/project/${p.slug}`} target="_blank" rel="noreferrer">
                 <ExternalLink className="h-4 w-4" />
               </Link>
             </Button>
@@ -220,102 +243,97 @@ const ListingsApproval = () => {
               Unpublish
             </Button>
           ) : (
-            <Button
-              size="sm"
-              variant="gold"
-              disabled={blockers.length > 0}
-              onClick={() => approve(p)}
-            >
+            <Button size="sm" variant="gold" disabled={blockers.length > 0} onClick={() => approve(p)}>
               Approve
             </Button>
           )}
         </div>
-      </Card>
+      </div>
     );
   };
 
+  const rows = tab === "needs-photo" ? needsPhoto : tab === "pending" ? pending : approved;
+  const emptyCopy =
+    tab === "needs-photo"
+      ? "All listings have at least one photo. 🎉"
+      : tab === "pending"
+        ? "No listings pending approval."
+        : "No approved listings yet.";
+
+  const pills: { key: Tab; label: string; icon: typeof ImageOff }[] = [
+    { key: "needs-photo", label: `Needs Photo (${needsPhoto.length})`, icon: ImageOff },
+    { key: "pending", label: `Pending / Ready (${ready.length}/${pending.length})`, icon: Clock },
+    { key: "approved", label: `Approved (${approved.length})`, icon: CheckCircle2 },
+  ];
+
   return (
-    <div data-surface="page" className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto">
-        <header className="mb-6">
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">Listings Approval</h1>
-          <p className="text-[#1A1A1A]/70 mt-1">
-            Review approved and pending listings with clear media status indicators.
-          </p>
-        </header>
-
-        <div className="mb-4 flex items-center gap-3">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
-            <Input
-              placeholder="Search by name, developer, city…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-            />
+    <OwnerHubPage
+      eyebrow="Listings"
+      title="Listings Approval"
+      subtitle="Review approved and pending listings with clear media status indicators. Counts below match the Owner Panel Pending Approvals tile."
+      icon={ClipboardList}
+      insights={[
+        { label: "Pending approvals (tile)", value: tileTotal, delta: `${importCount} imports + ${unpublishedNoCover} listings without a cover` },
+        { label: "Needs photo", value: needsPhoto.length },
+        { label: "Pending listings", value: pending.length, delta: `${ready.length} ready to approve` },
+        { label: "Approved & live", value: approved.length },
+      ]}
+      actions={
+        <Button variant="outline" onClick={load} disabled={loading}>
+          {loading ? "Loading…" : "Refresh"}
+        </Button>
+      }
+    >
+      {importCount > 0 && (
+        <div className="owner-hub-card flex items-start gap-3">
+          <Inbox className="h-5 w-5 text-[#064E3B] flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-[#0F172A]">
+            <strong>{importCount}</strong> imported project{importCount === 1 ? "" : "s"} still awaiting review.{" "}
+            <Link className="text-[#064E3B] underline" to="/owner/crm/jbj/owner-market-import">
+              Open Market Import Review
+            </Link>
+            .
           </div>
-          <Button variant="outline" onClick={load} disabled={loading}>
-            {loading ? "Loading…" : "Refresh"}
-          </Button>
         </div>
+      )}
 
-        {needsPhoto.length > 0 && (
-          <Card
-            data-surface="champagne"
-            className="mb-4 p-4 border border-red-600/40 flex items-start gap-3"
-          >
-            <ImageOff className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-[#1A1A1A]">
-              <strong>{needsPhoto.length}</strong> listing{needsPhoto.length === 1 ? "" : "s"} hidden from the public site because {needsPhoto.length === 1 ? "it has" : "they have"} no photo. Review them in the <em>Needs Photo</em> tab and add media before approval.
-            </div>
-          </Card>
-        )}
-
-        <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
-          <TabsList>
-            <TabsTrigger value="needs-photo" className="gap-2">
-              <ImageOff className="h-4 w-4" /> Needs Photo ({needsPhoto.length})
-            </TabsTrigger>
-            <TabsTrigger value="pending" className="gap-2">
-              <Clock className="h-4 w-4" /> Pending / Ready ({ready.length}/{pending.length})
-            </TabsTrigger>
-            <TabsTrigger value="approved" className="gap-2">
-              <CheckCircle2 className="h-4 w-4" /> Approved ({approved.length})
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="needs-photo" className="mt-4 space-y-3">
-            {needsPhoto.length === 0 ? (
-              <Card data-surface="champagne" className="p-8 text-center text-[#1A1A1A]/70">
-                {loading ? "Loading…" : "All listings have at least one photo. 🎉"}
-              </Card>
-            ) : (
-              needsPhoto.map(renderRow)
-            )}
-          </TabsContent>
-
-          <TabsContent value="pending" className="mt-4 space-y-3">
-            {pending.length === 0 ? (
-              <Card data-surface="champagne" className="p-8 text-center text-[#1A1A1A]/70">
-                {loading ? "Loading…" : "No listings pending approval."}
-              </Card>
-            ) : (
-              pending.map(renderRow)
-            )}
-          </TabsContent>
-
-          <TabsContent value="approved" className="mt-4 space-y-3">
-            {approved.length === 0 ? (
-              <Card data-surface="champagne" className="p-8 text-center text-[#1A1A1A]/70">
-                {loading ? "Loading…" : "No approved listings yet."}
-              </Card>
-            ) : (
-              approved.map(renderRow)
-            )}
-          </TabsContent>
-        </Tabs>
+      <div className="mb-4 flex items-center gap-3 flex-wrap">
+        <div className="relative flex-1 min-w-[220px] max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#064E3B]/60" />
+          <Input
+            placeholder="Search by name, developer, city…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
+        </div>
       </div>
-    </div>
+
+      <div className="owner-hub-pills" role="tablist" aria-label="Listing approval buckets">
+        {pills.map(({ key, label, icon: Icon }) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={tab === key}
+            data-active={tab === key}
+            className="owner-hub-pill"
+            onClick={() => setTab(key)}
+          >
+            <Icon className="h-4 w-4" />
+            <span>{label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-3">
+        {rows.length === 0 ? (
+          <div className="owner-hub-card text-center text-[#475569] py-8">{loading ? "Loading…" : emptyCopy}</div>
+        ) : (
+          rows.map(renderRow)
+        )}
+      </div>
+    </OwnerHubPage>
   );
 };
 
