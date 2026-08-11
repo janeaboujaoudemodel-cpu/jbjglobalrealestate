@@ -37464,6 +37464,24 @@ export type Database = {
         }
         Relationships: []
       }
+      tmp_sec_probe: {
+        Row: {
+          result: string | null
+          step: string | null
+          ts: string | null
+        }
+        Insert: {
+          result?: string | null
+          step?: string | null
+          ts?: string | null
+        }
+        Update: {
+          result?: string | null
+          step?: string | null
+          ts?: string | null
+        }
+        Relationships: []
+      }
       toolkit_jobs: {
         Row: {
           created_at: string
