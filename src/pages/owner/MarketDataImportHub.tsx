@@ -1083,10 +1083,11 @@ export default function MarketDataImportHub() {
                           {selected.has(p.id) ? <Check className="h-3.5 w-3.5" aria-hidden /> : null}
                         </button>
                       </td>
-                      <td className="px-4 py-3 text-neutral-900">{p.name}</td>
-                      <td className="px-4 py-3 text-neutral-600">{p.developer_name || "—"}</td>
-                      <td className="px-4 py-3 text-neutral-600">{[p.area, p.city].filter(Boolean).join(", ") || "—"}</td>
-                      <td className="px-4 py-3 text-neutral-600">{p.status || "—"}</td>
+                      <td className="whitespace-normal break-words px-4 py-3 text-neutral-900">{p.name}</td>
+                      <td className="whitespace-normal break-words px-4 py-3 text-neutral-600">{p.developer_name || "—"}</td>
+                      <td className="whitespace-normal break-words px-4 py-3 text-neutral-600">{[p.area, p.city].filter(Boolean).join(", ") || "—"}</td>
+                      <td className="whitespace-normal px-4 py-3 text-neutral-600">{p.status || "—"}</td>
+
                       <td className="px-4 py-3">
                         <select aria-label={`Review status for ${p.name}`} disabled={rowBusy === p.id} value={p.review_decision || "pending"} onChange={(event) => updateSingleReview("project", p.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full px-2.5 py-1 text-[11px] font-semibold">
                           <option value="pending">Pending</option><option value="approved">Approved & publish</option><option value="rejected">Rejected</option>
