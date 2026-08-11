@@ -834,19 +834,19 @@
   .jc-header__title, .jc-search, .jc-search input, .jc-icon-btn, .jc-grid-btn,
   .jc-teamspace__title, .jc-teamspace__badge, .jc-side-link, .jc-team-item,
   .jc-folder__label, .jc-side-search, .jc-side-search input
-) {
+):not(.jc-popover):not(.jc-popover *):not(.jc-icon-btn__badge) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
 }
 
-.jc-app :is(.jc-header, .jc-rail) :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+.jc-app :is(.jc-header, .jc-rail) :is(svg, path, circle, rect, line, polyline, polygon, ellipse):not(.jc-popover *) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
 
-.jc-app :is(.jc-header, .jc-rail) svg {
+.jc-app :is(.jc-header, .jc-rail) svg:not(.jc-popover *) {
   stroke-width: 2.15px !important;
   filter: drop-shadow(0 1px 0 rgba(0,0,0,0.35));
 }
@@ -856,6 +856,54 @@
   -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
   opacity: 1 !important;
 }
+
+/* PASS 290 — BACKEND ALERT DROPDOWN CONTRAST (LOCKED)
+   Popovers rendered inside the emerald header are white surfaces: their ink is
+   emerald/graphite, never the inherited white chrome ink. Emerald-filled chips
+   and icon tiles keep white glyphs. */
+.jc-app .jc-header .jc-popover,
+.jc-app .jc-header .jc-popover :is(h1,h2,h3,h4,p,span,label,li,div,button,a) {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+  opacity: 1 !important;
+}
+.jc-app .jc-header .jc-popover :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: currentColor !important;
+  stroke: currentColor !important;
+  filter: none !important;
+  stroke-width: 2px !important;
+}
+.jc-app .jc-header .jc-popover .jc-notif__row-sub { color: #43524C !important; -webkit-text-fill-color: #43524C !important; }
+.jc-app .jc-header .jc-popover .jc-notif__row-time,
+.jc-app .jc-header .jc-popover .jc-notif__empty { color: #6B7A74 !important; -webkit-text-fill-color: #6B7A74 !important; }
+.jc-app .jc-header .jc-popover :is(.jc-notif__title, .jc-notif__row-title) { color: #05221A !important; -webkit-text-fill-color: #05221A !important; font-weight: 700 !important; }
+.jc-app .jc-header .jc-popover .jc-notif__mark,
+.jc-app .jc-header .jc-popover .jc-notif__view { color: #064E3B !important; -webkit-text-fill-color: #064E3B !important; font-weight: 600 !important; }
+/* Emerald / tone-filled chips inside the popover keep white ink */
+.jc-app .jc-header .jc-popover :is(.jc-notif__count, .jc-notif__icon),
+.jc-app .jc-header .jc-popover :is(.jc-notif__count, .jc-notif__icon) :is(span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+.jc-app .jc-header .jc-popover .jc-notif__tab.is-active {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 62%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+.jc-app .jc-header .jc-popover .jc-notif__count {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 62%, #000000 100%) !important;
+}
+.jc-app .jc-header .jc-popover .jc-notif__icon--meeting { background: #064E3B !important; }
+.jc-app .jc-header .jc-popover .jc-notif__dot { background: #064E3B !important; }
+/* Alert rows read left-to-right; header centring never leaks into the panel. */
+.jc-app .jc-header .jc-popover,
+.jc-app .jc-header .jc-popover :is(div, span, li, button, a, p) { text-align: left !important; }
+.jc-app .jc-header .jc-popover :is(.jc-notif__count, .jc-notif__icon, .jc-notif__tab) { text-align: center !important; }
+.jc-app .jc-header .jc-popover .jc-notif__row { align-items: flex-start !important; }
+
+
 
 .jc-header {
   color: #FFFFFF !important;
@@ -4285,30 +4333,41 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   flex: 0 0 auto !important;
 }
 
-/* Header notification badge — sit outside the bell, never over it. */
+/* PASS 291 — BACKEND HEADER ALERT BADGE (LOCKED)
+   The alert count is a true circle that sits fully inside the header band,
+   never clipped by the header edge and never overlapping the bell glyph. */
+.jc-app .jc-header__actions,
 .jc-app .jc-popover-anchor,
 .jc-app .jc-icon-btn {
   overflow: visible !important;
 }
 .jc-app .jc-icon-btn { position: relative !important; }
 .jc-app .jc-icon-btn__badge {
-  top: -7px !important;
-  right: -7px !important;
-  min-width: 19px !important;
+  position: absolute !important;
+  top: -2px !important;
+  right: -2px !important;
+  min-width: 18px !important;
   width: auto !important;
-  height: 19px !important;
-  min-height: 19px !important;
+  height: 18px !important;
+  min-height: 18px !important;
   padding: 0 5px !important;
+  border-radius: 999px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
   line-height: 1 !important;
-  z-index: 4 !important;
-  border: 2px solid #032A1E !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.28) !important;
+  z-index: 6 !important;
+  background: linear-gradient(135deg, #E11D48 0%, #A80F2C 100%) !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.92), 0 2px 6px rgba(0,0,0,0.35) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
 }
+
 
 /* PASS 156 — screenshot follow-up: search overlay lives inside the header,
    so it must explicitly opt out of header white-ink chrome locks. */

@@ -13,6 +13,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import StagedProjectPreview from "@/components/owner/StagedProjectPreview";
+
 import {
   AlertTriangle,
   Building2,
@@ -21,6 +23,8 @@ import {
   ChevronDown,
   ChevronUp,
   ExternalLink,
+  Eye,
+
   Layers,
   RefreshCw,
   Search,
@@ -409,6 +413,9 @@ export default function MarketDataImportHub() {
   const [rowBusy, setRowBusy] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "not_published" | "approved" | "pending" | "rejected">("all");
   const [projectScope, setProjectScope] = useState<"new" | "all">("new");
+  /** PASS 292 — staged row shown as a pre-publish draft (owner-only). */
+  const [previewStagedId, setPreviewStagedId] = useState<string | null>(null);
+
   const [matchLimit, setMatchLimit] = useState(100);
 
 
@@ -1088,9 +1095,13 @@ export default function MarketDataImportHub() {
                             Preview page <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
-                          <span className="text-xs text-neutral-400">Preview after approval</span>
+                          /* PASS 292 — rows that are not on JBJ yet still render as a draft. */
+                          <button type="button" onClick={() => setPreviewStagedId(p.id)} className="mir-link inline-flex items-center gap-1">
+                            Preview draft <Eye className="h-3.5 w-3.5" aria-hidden />
+                          </button>
                         )}
                       </td>
+
 
                       <td className="px-4 py-3">
                         <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
@@ -1192,6 +1203,9 @@ export default function MarketDataImportHub() {
           </div>
         </div>
       ) : null}
+
+      <StagedProjectPreview stagedId={previewStagedId} onClose={() => setPreviewStagedId(null)} />
     </div>
+
   );
 }
