@@ -23,6 +23,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 import { SEOHead } from "@/components/SEOHead";
+import PageScope from "@/components/util/PageScope";
 
 // Data arrays
 const designStyles = [
@@ -279,6 +280,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       className="allow-white relative w-full min-h-screen overflow-hidden"
       style={{ background: "linear-gradient(180deg, #031F17 0%, #021610 42%, #000000 100%)", color: "#FFFFFF" }}
     >
+      <PageScope token="interior-ai" />
       <style>{`
         [data-interior-design-ai],
         [data-interior-design-ai] :is(h1,h2,h3,h4,p,span,label,small,strong,button,textarea,input,div):not([class*="bg-clip-text"]) {

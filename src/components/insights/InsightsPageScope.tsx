@@ -27,6 +27,7 @@ import {
   Users,
 } from "lucide-react";
 import MIPageShell, { type MIShellTocItem } from "@/components/shell/MIPageShell";
+import PageScope from "@/components/util/PageScope";
 
 /**
  * InsightsPageScope
@@ -249,6 +250,7 @@ export function InsightsPageScope({ children }: { children: ReactNode }) {
   if (shellConfig) {
     return (
       <div data-insights-page className="contents">
+      <PageScope token="insights" />
         <MIPageShell
           heroTitle={shellConfig.title}
           heroDescription={shellConfig.description}
@@ -272,6 +274,7 @@ export function InsightsPageScope({ children }: { children: ReactNode }) {
 
   return (
     <div data-insights-page className="contents">
+      <PageScope token="insights" />
       {children}
     </div>
   );

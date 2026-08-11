@@ -40,6 +40,7 @@ import RiskScoreGauge from "@/components/compare/RiskScoreGauge";
 import CompareAccessGate from "@/components/compare/units/CompareAccessGate";
 import { formatPriceShort } from "@/lib/formatPrice";
 import { formatBedroomRange } from "@/utils/formatBedroomRange";
+import PageScope from "@/components/util/PageScope";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
@@ -808,6 +809,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
   return (
     <section data-compare-page data-on-dark="true" className="min-h-screen" style={{ background: PAGE_DARK, backgroundColor: "#021611" }}>
+      <PageScope token="compare" />
       {/* =============== HERO — EMERALD OMBRÉ =============== */}
       <div
         data-compare-hero

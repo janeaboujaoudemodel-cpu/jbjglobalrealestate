@@ -26,6 +26,7 @@ import {
   writeMatchmakerSession,
   clearMatchmakerSession,
 } from "@/hooks/useMatchmakerSession";
+import PageScope from "@/components/util/PageScope";
 // Payment removed — quiz is fully free, no API/credits consumed
 
 
@@ -1167,6 +1168,7 @@ const Quiz = () => {
         className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col"
         style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}
       >
+      <PageScope token="aihf" />
         <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-white/20" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)" }}>
@@ -1323,6 +1325,7 @@ const Quiz = () => {
   if (showForm) {
     return (
       <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
+      <PageScope token="aihf" />
         <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-white/20 bg-[#041610]">
@@ -1474,6 +1477,7 @@ const Quiz = () => {
         canonicalPath="/ai-home-finder"
       />
       <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
+      <PageScope token="aihf" />
       <style>{AIHF_STYLE}</style>
       {/* Header — pushed below fixed site header (88–128px) */}
       <div className="aihf-hero relative z-10" style={{ paddingTop: "calc(var(--responsive-header-height, 96px) + 24px)" }}>
