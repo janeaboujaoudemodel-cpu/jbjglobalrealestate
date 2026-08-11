@@ -60,5 +60,13 @@ export default function DeferredSection({
   }, [shown]);
 
   if (shown) return <>{children}</>;
-  return <div ref={ref} className={className} style={{ minHeight }} aria-hidden="true" />;
+  return (
+    <div
+      ref={ref}
+      className={`jj-bleed-allow ${className ?? ""}`}
+      style={{ minHeight, padding: 0 }}
+      aria-hidden="true"
+    />
+  );
+
 }

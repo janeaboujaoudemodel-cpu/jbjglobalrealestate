@@ -4032,10 +4032,15 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .jj-lv {
   width: 100%;
   min-height: var(--lv-h, 0px);
+  /* Layout neutral: the reserve shell must never inherit or add page gutter,
+     otherwise full-bleed bands get double-inset. */
+  padding: 0 !important;
+  margin: 0;
 }
 .jj-lv[data-lv-state="mounted"][data-lv-release="1"] {
   min-height: 0;
 }
+
 @media (max-width: 767px) {
   .jj-lv {
     min-height: var(--lv-hm, var(--lv-h, 0px));
@@ -34333,6 +34338,15 @@ html body #root [data-branded-email-launcher-card="true"] [data-branded-email-la
   content-visibility: auto;
   contain-intrinsic-size: auto 400px;
 }
+/* STAGED-RENDER FIX: the first two rows are above the fold on every viewport.
+   Skipping their style/layout/paint made the grid visibly assemble card by
+   card. They are always painted; the skipping win is kept for the rest. */
+[data-projects-shell] > *:nth-child(-n + 8),
+[data-developer-grid] > *:nth-child(-n + 8) {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+
 @media print {
   [data-projects-shell] > *,
   [data-developer-grid] > * {

@@ -104,11 +104,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
   const tierKey = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const tierLabel = TIER_LABELS[tierKey];
 
-  // The directory paginates to 24 cards, so every visible cover belongs to the
-  // current viewport workload. Lazy-loading the lower rows left large beige
-  // fields in screenshots and during normal scrolling; eagerly decode the
-  // complete page instead of presenting the card before its media.
+  // Above-the-fold covers (first two rows at any density) are fetched eagerly at
+  // high priority so visible cards and their photos appear together. The rest
+  // still load eagerly (no beige fields while scrolling) but at low priority so
+  // they never compete with the visible row for bandwidth.
   const isEager = index < 24;
+  const isPriority = index < 8;
+
   const normalizedSlug = (developer.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const normalizedName = (developer.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   const officialFlagship = getVerifiedDeveloperFlagship(developer.name, developer.slug);
@@ -216,7 +218,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                 width={928}
                 height={557}
                 loading={isEager ? "eager" : "lazy"}
-                {...({ fetchpriority: isEager ? "high" : "low" } as any)}
+                {...({ fetchpriority: isPriority ? "high" : "low" } as any)}
                 referrerPolicy="no-referrer"
                 decoding="async"
                 data-media-state={heroLoaded ? "ready" : "loading"}
