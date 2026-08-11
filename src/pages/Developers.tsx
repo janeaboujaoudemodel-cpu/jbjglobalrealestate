@@ -20,6 +20,7 @@ import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/de
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
+import { useEffectiveColumns } from "@/hooks/useEffectiveColumns";
 const developersHeroVideo = developersHeroVideoAsset.url;
 
 const Developers = () => {
@@ -37,21 +38,11 @@ const Developers = () => {
   const [columns, setColumns] = useState(4);
   const [perPage, setPerPage] = useState(24);
   const [auditFilter, setAuditFilter] = useState<DirectoryAuditFilter>("all");
-  const [viewportWidth, setViewportWidth] = useState(
-    typeof window === "undefined" ? 1440 : window.innerWidth,
-  );
-  useEffect(() => {
-    const onResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-  const effectiveColumns = viewportWidth < 640
-    ? 1
-    : viewportWidth < 900
-      ? Math.min(2, columns)
-      : viewportWidth < 1200
-        ? Math.min(4, columns)
-        : Math.min(columns, 8);
+  // Density bucket comes from matchMedia (breakpoint crossings only) so no
+  // window.innerWidth read happens during render and the 48 memoized cards do
+  // not rerender while the window is resized.
+  const effectiveColumns = useEffectiveColumns(columns);
+
 
   const ITEMS_PER_PAGE = perPage === 0 ? 100000 : perPage;
 
@@ -410,8 +401,8 @@ const Developers = () => {
                 {view === "list" ? (
                   <div
                     data-developer-grid
-                    className="grid gap-3 px-3 sm:px-4"
-                    style={{ gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))` }}
+                    data-cols={columns}
+                    className="jj-dev-grid jj-dev-grid--list px-3 sm:px-4"
                   >
                     {paginatedDevelopers.map((developer) => (
                       <DeveloperAuditRow
@@ -427,11 +418,8 @@ const Developers = () => {
                 ) : (
                   <div
                     data-developer-grid
-                    className="grid items-stretch"
-                    style={{
-                      gridTemplateColumns: `repeat(${effectiveColumns}, minmax(0,1fr))`,
-                      gap: effectiveColumns >= 6 ? "0.75rem" : "1.5rem",
-                    }}
+                    data-cols={columns}
+                    className="jj-dev-grid items-stretch"
                   >
                     {paginatedDevelopers.map((developer, idx) => (
                       <DeveloperCard

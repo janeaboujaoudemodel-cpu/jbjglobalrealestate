@@ -392,7 +392,7 @@ const Index = () => {
       {/* EXPLORE OUR SERVICES — separator section between Partners marquee and the
           Get Verified / Mode Portal pair, with generous breathing room above and below. */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto pt-16 pb-16 md:pt-20 md:pb-20">
-        <LazyVisible minHeight={500}>
+        <LazyVisible minHeight={720} minHeightMobile={672}>
           <Suspense fallback={<SectionLoader />}>
             <ExploreServicesCard />
           </Suspense>
@@ -401,7 +401,7 @@ const Index = () => {
 
       {/* HOW WE BUILD — scroll-driven 3D assembly of the JBJ method */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto">
-        <LazyVisible minHeight={600}>
+        <LazyVisible minHeight={696} minHeightMobile={1100}>
           <Suspense fallback={<SectionLoader />}>
             <InnovationLabSection />
           </Suspense>
@@ -410,7 +410,7 @@ const Index = () => {
 
       {/* HOW WE BUILD — animated 3D blueprint tower of the JBJ operating model */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto pb-16 md:pb-20">
-        <LazyVisible minHeight={520}>
+        <LazyVisible minHeight={674} minHeightMobile={1085}>
           <Suspense fallback={<SectionLoader />}>
             <HowWeBuildSection />
           </Suspense>
@@ -431,7 +431,7 @@ const Index = () => {
       </div>
       {/* FEATURED LISTINGS — full-bleed band */}
       <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
-        <LazyVisible minHeight={500}>
+        <LazyVisible minHeight={1500} minHeightMobile={900} rootMargin="2000px">
           <Suspense fallback={<SectionLoader />}>
             <FeaturedListings />
           </Suspense>
@@ -440,7 +440,7 @@ const Index = () => {
 
       {/* CONTINUE SEARCHING — full-bleed band */}
       <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
-        <LazyVisible minHeight={400}>
+        <LazyVisible minHeight={448} minHeightMobile={426} rootMargin="2000px">
           <Suspense fallback={<SectionLoader />}>
             <ContinueSearching type="property" />
           </Suspense>
@@ -450,7 +450,7 @@ const Index = () => {
 
       {/* RESALE PROPERTIES */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={500}>
+        <LazyVisible minHeight={0} rootMargin="2400px">
           <Suspense fallback={<SectionLoader />}>
             <ResalePropertiesSection />
           </Suspense>
@@ -459,7 +459,7 @@ const Index = () => {
 
       {/* OVERSEAS INVESTORS — full-bleed edge-to-edge (post-sidebar) */}
       <div className="jj-fullbleed-band cv-auto" data-fullbleed-band>
-        <LazyVisible minHeight={300}>
+        <LazyVisible minHeight={325} minHeightMobile={404}>
           <Suspense fallback={<SectionLoader />}>
             <OverseasInvestorsBanner />
           </Suspense>
@@ -484,7 +484,7 @@ const Index = () => {
 
       {/* TOOLKIT SHOWCASE CARD */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={400}>
+        <LazyVisible minHeight={831} minHeightMobile={772}>
           <Suspense fallback={<SectionLoader />}>
             <ToolkitShowcaseCard />
           </Suspense>
@@ -493,7 +493,7 @@ const Index = () => {
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={400}>
+        <LazyVisible minHeight={733} minHeightMobile={1185}>
           <div className="jj-premium-shell">
             <span aria-hidden className="jj-premium-shell__c-bl" />
             <span aria-hidden className="jj-premium-shell__c-br" />
@@ -505,7 +505,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={420} rootMargin="1200px">
+        <LazyVisible minHeight={1767} minHeightMobile={2850} rootMargin="1200px">
           <div className="jj-premium-shell" style={{ contain: "layout paint" }}>
             <span aria-hidden className="jj-premium-shell__c-bl" />
             <span aria-hidden className="jj-premium-shell__c-br" />
@@ -546,7 +546,7 @@ const Index = () => {
 
       <PodcastVisibilityGate>
         <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-          <LazyVisible minHeight={400}>
+          <LazyVisible minHeight={700} minHeightMobile={1390} rootMargin="2400px">
             <Suspense fallback={<SectionLoader />}>
               <JBJPodcastSection />
             </Suspense>
@@ -556,7 +556,7 @@ const Index = () => {
 
       {/* TOP AREAS IN DUBAI */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={400}>
+        <LazyVisible minHeight={696} minHeightMobile={1392}>
           <Suspense fallback={<SectionLoader />}>
             <AreasWeCover />
           </Suspense>
@@ -566,7 +566,7 @@ const Index = () => {
       {/* READY TO GET STARTED — restored under Top Areas */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
 
-        <LazyVisible minHeight={300}>
+        <LazyVisible minHeight={777} minHeightMobile={988}>
           <Suspense fallback={<SectionLoader />}>
             <CTABand />
           </Suspense>

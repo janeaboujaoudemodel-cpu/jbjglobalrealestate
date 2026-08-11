@@ -4026,6 +4026,77 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   contain-intrinsic-size: none !important;
 }
 
+/* ── CLS contract: LazyVisible reserved shells ──────────────────────────────
+   The reserve is retained after mount so a lazily mounted section can never
+   collapse and yank the page upward. Calibrated per breakpoint in Index.tsx. */
+.jj-lv {
+  width: 100%;
+  min-height: var(--lv-h, 0px);
+}
+.jj-lv[data-lv-state="mounted"][data-lv-release="1"] {
+  min-height: 0;
+}
+@media (max-width: 767px) {
+  .jj-lv {
+    min-height: var(--lv-hm, var(--lv-h, 0px));
+  }
+}
+
+/* ── /developers grid: CSS-only responsive column buckets ───────────────────
+   Replaces per-pixel window.innerWidth reads + inline gridTemplateColumns
+   (48 card rerenders + ~3.7s mobile layout). Density options 1..8 preserved. */
+.jj-dev-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+@media (min-width: 640px) {
+  .jj-dev-grid[data-cols="2"],
+  .jj-dev-grid[data-cols="3"],
+  .jj-dev-grid[data-cols="4"],
+  .jj-dev-grid[data-cols="5"],
+  .jj-dev-grid[data-cols="6"],
+  .jj-dev-grid[data-cols="7"],
+  .jj-dev-grid[data-cols="8"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 900px) {
+  .jj-dev-grid[data-cols="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .jj-dev-grid[data-cols="4"],
+  .jj-dev-grid[data-cols="5"],
+  .jj-dev-grid[data-cols="6"],
+  .jj-dev-grid[data-cols="7"],
+  .jj-dev-grid[data-cols="8"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .jj-dev-grid[data-cols="5"] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .jj-dev-grid[data-cols="6"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .jj-dev-grid[data-cols="7"] {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .jj-dev-grid[data-cols="8"] {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+  .jj-dev-grid[data-cols="6"],
+  .jj-dev-grid[data-cols="7"],
+  .jj-dev-grid[data-cols="8"] {
+    gap: 0.75rem;
+  }
+}
+.jj-dev-grid.jj-dev-grid--list {
+  gap: 0.75rem;
+}
+
+
 /* ── GPU-promote large blur decorative elements to prevent repaint during scroll ── */
 [class*="blur-[80px]"],
 [class*="blur-[100px]"],
