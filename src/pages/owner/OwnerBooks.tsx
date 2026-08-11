@@ -361,7 +361,7 @@ export default function OwnerBooks() {
                       <div className="book-3d__frame">
                         <div className="book-3d__title">{b.title}</div>
                         <div className="book-3d__rule" />
-                        <div className="book-3d__author">JBJ Global</div>
+                        <div className="book-3d__author">JBJ Global Real Estate</div>
                       </div>
                       <div className="book-3d__spineEdge" />
                       <div className="book-3d__gloss" />

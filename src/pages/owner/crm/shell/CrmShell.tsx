@@ -32,6 +32,31 @@ export default function CrmShell() {
     return () => document.body.removeAttribute("data-jbj-backend");
   }, []);
 
+  // PASS 287 — publish the CONTENT-AREA box (white centre panel only, no
+  // sidebar, no header) so backend dialogs centre inside it instead of the
+  // viewport. Re-measures on resize and on sidebar collapse/expand.
+  useEffect(() => {
+    const main = document.querySelector(".jc-app .jc-content") as HTMLElement | null;
+    if (!main) return;
+    const publish = () => {
+      const r = main.getBoundingClientRect();
+      const s = document.documentElement.style;
+      s.setProperty("--jc-content-left", `${Math.round(r.left)}px`);
+      s.setProperty("--jc-content-width", `${Math.round(r.width)}px`);
+      s.setProperty("--jc-content-top", `${Math.round(r.top)}px`);
+      s.setProperty("--jc-content-height", `${Math.round(window.innerHeight - r.top)}px`);
+    };
+    publish();
+    const ro = new ResizeObserver(publish);
+    ro.observe(main);
+    ro.observe(document.body);
+    window.addEventListener("resize", publish);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", publish);
+    };
+  }, []);
+
   // One-time purge of any leftover Zoho / mirror cache keys from prior builds.
   useEffect(() => {
     try {
@@ -40,6 +65,7 @@ export default function CrmShell() {
         .forEach((k) => localStorage.removeItem(k));
     } catch { /* ignore */ }
   }, []);
+
 
   return (
     <div className="jc-app" data-no-contrast-guard>

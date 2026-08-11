@@ -1,9 +1,17 @@
 import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Copy, Check, ExternalLink, Plug, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  Copy,
+  Check,
+  ExternalLink,
+  Plug,
+  ShieldCheck,
+  Sparkles,
+  Server,
+  Wrench,
+} from "lucide-react";
 import { toast } from "sonner";
 import manifest from "../../../.lovable/mcp/manifest.json";
 
@@ -11,250 +19,234 @@ const PROJECT_REF =
   (import.meta.env.VITE_SUPABASE_PROJECT_ID as string | undefined) ??
   "mdafrewypkkrildjgtey";
 
-// Prefer the app's public custom domain if the site is served under one, so
-// integrators paste a JBJ-branded URL rather than the raw functions host.
 const MCP_URL = `https://${PROJECT_REF}.supabase.co${manifest.path}`;
+
+const CONFIG = { mcpServers: { "jbj-global-real-estate": { url: MCP_URL } } };
 
 function CopyBlock({ label, value }: { label: string; value: string }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    toast.success(`${label} copied`);
-    setTimeout(() => setCopied(false), 1500);
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      toast.success(`${label} copied`);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast.error("Clipboard unavailable — select the text and copy manually");
+    }
   };
   return (
-    <div className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-[#B89555]/25">
-        <span className="text-[11px] font-black uppercase tracking-[0.18em] text-[#1A1A1A]/70">
+    <div className="rounded-xl border border-[#064E3B]/15 bg-white overflow-hidden">
+      <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-[#064E3B]/12 bg-[#F6FAF8]">
+        <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#064E3B]">
           {label}
         </span>
         <Button
           size="sm"
-          variant="outline"
+          type="button"
           onClick={copy}
-          className="h-7 px-2 text-xs"
+          className="owner-hub-pill h-8 !px-3 !py-0 text-xs"
         >
           {copied ? (
             <>
-              <Check className="w-3 h-3 mr-1" /> Copied
+              <Check className="w-3.5 h-3.5" /> Copied
             </>
           ) : (
             <>
-              <Copy className="w-3 h-3 mr-1" /> Copy
+              <Copy className="w-3.5 h-3.5" /> Copy
             </>
           )}
         </Button>
       </div>
-      <pre className="text-xs text-[#1A1A1A] p-3 overflow-auto whitespace-pre-wrap break-all font-mono">
+      <pre className="text-xs text-[#0F1A16] p-4 overflow-auto whitespace-pre-wrap break-all font-mono leading-relaxed">
         {value}
       </pre>
     </div>
   );
 }
 
+function SectionCard({
+  icon,
+  title,
+  action,
+  children,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <Card className="border border-[#064E3B]/12 bg-white rounded-2xl shadow-[0_1px_2px_rgba(6,78,59,0.05)]">
+      <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0 pb-3 border-b border-[#064E3B]/10">
+        <CardTitle className="flex items-center gap-2.5 text-base font-semibold text-[#0F1A16]">
+          <span
+            data-surface="emerald"
+            className="w-8 h-8 rounded-lg bg-[image:var(--jj-emerald-ombre)] flex items-center justify-center shrink-0"
+          >
+            {icon}
+          </span>
+          {title}
+        </CardTitle>
+        {action}
+      </CardHeader>
+      <CardContent className="pt-5">{children}</CardContent>
+    </Card>
+  );
+}
+
 export default function AgentIntegrations() {
-  const claudeConfig = useMemo(
-    () =>
-      JSON.stringify(
-        {
-          mcpServers: {
-            "jbj-global": {
-              url: MCP_URL,
-            },
-          },
-        },
-        null,
-        2,
-      ),
-    [],
-  );
-
-  const cursorConfig = useMemo(
-    () =>
-      JSON.stringify(
-        {
-          mcpServers: {
-            "jbj-global": {
-              url: MCP_URL,
-            },
-          },
-        },
-        null,
-        2,
-      ),
-    [],
-  );
-
-  const tools = (manifest as any).mcp?.tools ?? [];
+  const configJson = useMemo(() => JSON.stringify(CONFIG, null, 2), []);
+  const tools = ((manifest as any).mcp?.tools ?? []) as any[];
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
-      {/* Hero */}
-      <Card className="overflow-hidden border border-[#B89555]/35 rounded-2xl">
-        <div className="bg-[image:var(--jj-emerald-ombre)] px-6 py-8 border-b border-[#B89555]/45">
-          <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-              <Plug className="w-7 h-7 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-[#EFE6D6] font-black">
-                Agent Integrations
-              </p>
-              <h1 className="mt-1 text-3xl md:text-4xl font-black text-white tracking-tight">
-                JBJ MCP Server
-              </h1>
-              <p
-                className="mt-2 text-sm max-w-2xl"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.9 }}
-              >
-                Plug JBJ Global Real Estate into any Model Context Protocol client
-                — Claude, ChatGPT, Cursor, Lovable, or your own agent — with one
-                URL. External agents can search projects, fetch project detail,
-                and browse the developer directory on your behalf, secured by
-                Lovable Cloud OAuth.
-              </p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 text-[10px] font-black uppercase tracking-wide">
-                  <ShieldCheck className="w-3 h-3 mr-1" /> OAuth-secured
-                </Badge>
-                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 text-[10px] font-black uppercase tracking-wide">
-                  <Sparkles className="w-3 h-3 mr-1" /> {tools.length} tools live
-                </Badge>
-              </div>
+    <div className="max-w-5xl mx-auto p-6 space-y-5">
+      {/* Hero — emerald pair gradient, every glyph inside is pure white. */}
+      <div
+        data-surface="emerald"
+        data-jbj-hero="emerald"
+        className="rounded-2xl overflow-hidden bg-[image:var(--jj-emerald-ombre)] px-7 py-8"
+      >
+        <div className="flex items-start gap-5">
+          <div className="w-14 h-14 rounded-2xl bg-white/12 border border-white/25 flex items-center justify-center shrink-0">
+            <Plug className="w-7 h-7" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] uppercase tracking-[0.24em] font-bold opacity-80">
+              Agent Integrations
+            </p>
+            <h1
+              className="mt-1.5 text-3xl md:text-4xl font-normal tracking-tight"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              JBJ MCP Server
+            </h1>
+            <p className="mt-2.5 text-sm leading-relaxed max-w-2xl opacity-90">
+              Plug JBJ Global Real Estate into any Model Context Protocol client
+              — Claude, ChatGPT, Cursor, Lovable, or your own agent — with one
+              URL. External agents can search projects, fetch project detail and
+              browse the developer directory on your behalf, secured by OAuth.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-5">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em]">
+                <ShieldCheck className="w-3.5 h-3.5" /> OAuth-secured
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em]">
+                <Sparkles className="w-3.5 h-3.5" /> {tools.length} tools live
+              </span>
             </div>
           </div>
         </div>
-      </Card>
+      </div>
 
-      {/* Endpoint */}
-      <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
-        <CardHeader>
-          <CardTitle className="text-base text-[#1A1A1A]">
-            Server endpoint
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
+      <SectionCard icon={<Server className="w-4 h-4" />} title="Server endpoint">
+        <div className="space-y-3">
           <CopyBlock label="MCP URL" value={MCP_URL} />
-          <p className="text-xs text-[#1A1A1A]/70">
-            First connection triggers a browser sign-in against Lovable Cloud.
-            The agent stores the returned OAuth token and re-uses it for every
-            subsequent tool call — no long-lived API key to rotate.
+          <p className="text-xs text-[#4B5D55] leading-relaxed">
+            First connection triggers a browser sign-in. The agent stores the
+            returned OAuth token and re-uses it for every subsequent tool call —
+            no long-lived API key to rotate.
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
 
-      {/* Client configs */}
-      <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
-        <CardHeader>
-          <CardTitle className="text-base text-[#1A1A1A]">
-            Client configuration
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="claude">
-            <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-0 w-full !justify-start">
-              <TabsTrigger value="claude" className="owner-hub-pill">Claude Desktop</TabsTrigger>
-              <TabsTrigger value="cursor" className="owner-hub-pill">Cursor</TabsTrigger>
-              <TabsTrigger value="raw" className="owner-hub-pill">Raw JSON</TabsTrigger>
-            </TabsList>
+      <SectionCard icon={<Wrench className="w-4 h-4" />} title="Client configuration">
+        <Tabs defaultValue="claude">
+          <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-4">
+            <TabsTrigger value="claude" className="owner-hub-pill">
+              Claude Desktop
+            </TabsTrigger>
+            <TabsTrigger value="cursor" className="owner-hub-pill">
+              Cursor
+            </TabsTrigger>
+            <TabsTrigger value="raw" className="owner-hub-pill">
+              Raw JSON
+            </TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="claude" className="space-y-3 pt-3">
-              <p className="text-sm text-[#1A1A1A]/80">
-                Add this to <code className="bg-[#EFE6D6] px-1.5 py-0.5 rounded text-[11px]">~/Library/Application Support/Claude/claude_desktop_config.json</code>{" "}
-                (macOS) or <code className="bg-[#EFE6D6] px-1.5 py-0.5 rounded text-[11px]">%APPDATA%\Claude\claude_desktop_config.json</code>{" "}
-                (Windows), then restart Claude.
-              </p>
-              <CopyBlock label="claude_desktop_config.json" value={claudeConfig} />
-            </TabsContent>
+          <TabsContent value="claude" className="space-y-3 mt-0">
+            <p className="text-sm text-[#4B5D55] leading-relaxed">
+              Add this to{" "}
+              <code className="rounded bg-[#F6FAF8] border border-[#064E3B]/12 px-1.5 py-0.5 text-[11px] text-[#064E3B]">
+                ~/Library/Application Support/Claude/claude_desktop_config.json
+              </code>{" "}
+              (macOS) or{" "}
+              <code className="rounded bg-[#F6FAF8] border border-[#064E3B]/12 px-1.5 py-0.5 text-[11px] text-[#064E3B]">
+                %APPDATA%\Claude\claude_desktop_config.json
+              </code>{" "}
+              (Windows), then restart Claude.
+            </p>
+            <CopyBlock label="claude_desktop_config.json" value={configJson} />
+          </TabsContent>
 
-            <TabsContent value="cursor" className="space-y-3 pt-3">
-              <p className="text-sm text-[#1A1A1A]/80">
-                Open Cursor settings → <span className="font-semibold">MCP</span> →
-                <span className="font-semibold"> Add new global MCP server</span> and paste:
-              </p>
-              <CopyBlock label="MCP config" value={cursorConfig} />
-            </TabsContent>
+          <TabsContent value="cursor" className="space-y-3 mt-0">
+            <p className="text-sm text-[#4B5D55] leading-relaxed">
+              Open Cursor settings → <strong className="text-[#0F1A16]">MCP</strong> →{" "}
+              <strong className="text-[#0F1A16]">Add new global MCP server</strong>{" "}
+              and paste:
+            </p>
+            <CopyBlock label="MCP config" value={configJson} />
+          </TabsContent>
 
-            <TabsContent value="raw" className="pt-3">
-              <CopyBlock
-                label="mcp.json"
-                value={JSON.stringify(
-                  { mcpServers: { "jbj-global": { url: MCP_URL } } },
-                  null,
-                  2,
-                )}
-              />
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+          <TabsContent value="raw" className="mt-0">
+            <CopyBlock label="mcp.json" value={configJson} />
+          </TabsContent>
+        </Tabs>
+      </SectionCard>
 
-      {/* Tools */}
-      <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-base text-[#1A1A1A]">
-            Exposed tools ({tools.length})
-          </CardTitle>
+      <SectionCard
+        icon={<Sparkles className="w-4 h-4" />}
+        title={`Exposed tools (${tools.length})`}
+        action={
           <a
             href="https://modelcontextprotocol.io/introduction"
             target="_blank"
             rel="noreferrer"
-            className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-1 underline"
+            className="text-xs text-[#064E3B] hover:underline inline-flex items-center gap-1"
           >
             MCP docs <ExternalLink className="w-3 h-3" />
           </a>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {tools.map((t: any) => (
+        }
+      >
+        <div className="space-y-3">
+          {tools.map((t) => (
             <div
               key={t.name}
-              className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-4"
+              className="rounded-xl border border-[#064E3B]/12 bg-[#F6FAF8] p-4"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-black text-[#1A1A1A]">
-                      {t.title || t.name}
-                    </h3>
-                    <code className="text-[11px] font-mono bg-[#EFE6D6] text-[#1A1A1A]/80 px-1.5 py-0.5 rounded">
-                      {t.name}
-                    </code>
-                    {t.annotations?.readOnlyHint && (
-                      <Badge className="bg-emerald-50 text-emerald-900 border border-emerald-200 text-[9px] font-black uppercase tracking-wider">
-                        read-only
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-xs text-[#1A1A1A]/80 mt-1.5 leading-relaxed">
-                    {t.description}
-                  </p>
-                  {t.inputSchema?.properties && (
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {Object.keys(t.inputSchema.properties).map((p: string) => (
-                        <span
-                          key={p}
-                          className="text-[10px] font-mono bg-white text-[#1A1A1A]/70 px-1.5 py-0.5 rounded border border-[#B89555]/30"
-                        >
-                          {p}
-                          {t.inputSchema.required?.includes(p) ? "*" : ""}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-sm font-semibold text-[#0F1A16]">
+                  {t.title || t.name}
+                </h3>
+                <code className="text-[11px] font-mono bg-white border border-[#064E3B]/12 text-[#064E3B] px-1.5 py-0.5 rounded">
+                  {t.name}
+                </code>
+                {t.annotations?.readOnlyHint && (
+                  <span className="text-[9px] font-bold uppercase tracking-[0.12em] rounded-full border border-[#064E3B]/20 bg-white px-2 py-0.5 text-[#064E3B]">
+                    read-only
+                  </span>
+                )}
               </div>
+              <p className="text-xs text-[#4B5D55] mt-2 leading-relaxed">
+                {t.description}
+              </p>
+              {t.inputSchema?.properties && (
+                <div className="mt-2.5 flex flex-wrap gap-1.5">
+                  {Object.keys(t.inputSchema.properties).map((p) => (
+                    <span
+                      key={p}
+                      className="text-[10px] font-mono bg-white text-[#4B5D55] px-1.5 py-0.5 rounded border border-[#064E3B]/12"
+                    >
+                      {p}
+                      {t.inputSchema.required?.includes(p) ? "*" : ""}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
-        </CardContent>
-      </Card>
-
-      <p className="text-xs text-[#1A1A1A]/60 text-center">
-        Add new tools by dropping a file in{" "}
-        <code>src/lib/mcp/tools/</code> and registering it in{" "}
-        <code>src/lib/mcp/index.ts</code> — the MCP edge function and this
-        page pick them up automatically on rebuild.
-      </p>
+        </div>
+      </SectionCard>
     </div>
   );
 }

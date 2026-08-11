@@ -140,7 +140,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
         sendSecondaryEmail({
           primaryChannel: "chat",
           recipientEmail,
-          subject: `Message from ${me?.name || 'JBJ Global'} — ${new Date().toLocaleDateString()}`,
+          subject: `Message from ${me?.name || 'JBJ Global Real Estate'} — ${new Date().toLocaleDateString()}`,
           body: msgContent,
           alsoSendSecondary: true,
           recipientName: selectedEmployeeData.name,
