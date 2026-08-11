@@ -238,10 +238,14 @@ const ExploreServicesCard = () => {
               src={service.bgImage} 
               alt={service.title}
               className="w-full h-full object-cover"
-              loading={idx < 3 ? "eager" : "lazy"}
-              fetchPriority={idx < 3 ? "high" : "low"}
+              // BANDWIDTH: only the visible slide is eager/high. Loading three
+              // full-bleed slides at high priority starved the hero and card
+              // images on first paint.
+              loading={idx === currentIndex ? "eager" : "lazy"}
+              fetchPriority={idx === currentIndex ? "high" : "low"}
               decoding="async"
             />
+
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
           </div>
         ))}

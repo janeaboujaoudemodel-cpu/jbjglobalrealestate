@@ -45,7 +45,7 @@ function resolveAppAssetUrl(src?: string): string | undefined {
 }
 
 export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
-  ({ fallbackSrc, onError, loggerComponent, loggerContext, fetchPriority: explicitFetchPriority, ...props }, ref) => {
+  ({ fallbackSrc, onError, onLoad, loggerComponent, loggerContext, fetchPriority: explicitFetchPriority, ...props }, ref) => {
     const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
     const resolvedFallback = resolveAppAssetUrl(fallbackSrc);
     const component = loggerComponent || "SafeImage";
@@ -73,8 +73,11 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
             if (resolvedFallback && img.src !== resolvedFallback) {
               img.src = resolvedFallback;
             }
+            return;
           }
+          onLoad?.(e);
         }}
+
         onError={(e) => {
           const failedSrc = e.currentTarget.src;
           logImageFailure({ src: failedSrc, component, reason: "onerror", context: baseContext });
