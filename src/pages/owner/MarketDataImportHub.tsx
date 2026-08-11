@@ -1132,7 +1132,7 @@ export default function MarketDataImportHub() {
             ]}
           />
           <div className="mir-card overflow-x-auto rounded-xl">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[1100px] text-sm [&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
               <thead className="mir-solid text-left text-xs uppercase tracking-wider">
                 <tr>
                   <th className="px-3 py-3 w-10"> </th>
