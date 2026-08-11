@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+"""Split PRIVATE-surface rules out of the global entry stylesheet.
+
+Attribution rule (sound, not heuristic):
+  A selector BRANCH is private when it contains at least one class or
+  data-attribute token that appears ONLY in private source files
+  (owner / admin / CRM / portals / document-studio / back-office).
+  Such a token must exist in the DOM for the branch to match, therefore the
+  branch can never match on a public route.
+
+  A RULE is moved only when EVERY branch of its selector list is private.
+
+Usage:
+  python3 scripts/qa/css_private_split.py --report
+  python3 scripts/qa/css_private_split.py --apply
+"""
+from __future__ import annotations
+import os, re, sys, glob
+
+sys.path.insert(0, os.path.dirname(__file__))
+from cssparse import parse, serialize, Block, Raw, split_selector_list  # noqa
+
+ENTRY = "src/index.css"
+OUT = "src/styles/private-surfaces.css"
+
+PRIVATE_PATH_RE = re.compile(
+    r"(^|/)(owner|owner-webdev|owner-overrides|crm|admin|backend|back-office|"
+    r"broker-portal|developer-portal|developers-portal|developer-hub|"
+    r"document-studio|documentstudio|investor-dashboard|portal)(/|$)|"
+    r"(Owner|Crm|CRM|Admin|Backend|Portal|DocumentStudio|WebDev)[A-Z0-9_]?[\w-]*\.(tsx|ts|css)$",
+    re.I,
+)
+
+CLASS_RE = re.compile(r"\.(-?[_a-zA-Z][\w-]*)")
+ATTR_RE = re.compile(r"\[\s*([\w-]+)")
+
+# tokens that are never a reliable privacy signal
+GENERIC_ATTR = {
+    "class", "id", "style", "type", "role", "href", "src", "hidden", "disabled",
+    "aria-label", "aria-hidden", "aria-expanded", "aria-selected", "aria-current",
+    "data-state", "data-side", "data-slot", "data-orientation", "data-disabled",
+    "data-highlighted", "data-selected", "data-value", "data-theme", "dir", "lang",
+}
+
+
+def is_private_file(path: str) -> bool:
+    return bool(PRIVATE_PATH_RE.search(path))
+
+
+def collect_sources():
+    pub, priv = [], []
+    for root, _d, files in os.walk("src"):
+        for f in files:
+            if not f.endswith((".tsx", ".ts", ".jsx", ".js", ".css", ".html")):
+                continue
+            p = os.path.join(root, f)
+            if p.endswith("index.css"):
+                continue
+            (priv if is_private_file(p) else pub).append(p)
+    for pat in ("index.html", "public/**/*.html", "public/**/*.svg", "tailwind.config.*"):
+        pub.extend(glob.glob(pat, recursive=True))
+    return pub, priv
+
+
+def read(paths):
+    out = []
+    for p in paths:
+        try:
+            out.append(open(p, errors="ignore").read())
+        except Exception:
+            pass
+    return "\n".join(out)
+
+
+def token_index(blob: str):
+    classes = set(re.findall(r"[\w-]+", blob))
+    return classes
+
+
+def main():
+    apply = "--apply" in sys.argv
+    pub_files, priv_files = collect_sources()
+    pub_blob, priv_blob = read(pub_files), read(priv_files)
+    pub_tok, priv_tok = token_index(pub_blob), token_index(priv_blob)
+
+    # Only namespaced, unmistakably back-office tokens are accepted as privacy
+    # triggers. Generic tokens (Tailwind utilities, px values, shared jj-*
+    # primitives) can be produced dynamically and are never trusted.
+    TRIGGER_RE = re.compile(
+        r"^(data-(owner|backend|admin|crm|studio|document|branded|relationships|"
+        r"inbox|recommendation|campaign|enrichment|listings|upload|project-upload|"
+        r"sidebar|back-to-portal|ai-listing|citi-lock|cal-|empty-state|source-examples|"
+        r"recipient|jbj-campaign)|owner-|jc-|rh-|crm-|jbj-doc)",
+        re.I,
+    )
+
+    def tok_private(t: str) -> bool:
+        return bool(TRIGGER_RE.match(t)) and t in priv_tok and t not in pub_tok
+
+    text = open(ENTRY).read()
+    nodes = parse(text)
+
+    moved: list[tuple[list[str], Block]] = []   # (at-rule wrapper preludes, rule)
+    stats = {"total": 0, "moved": 0}
+
+    def branch_private(branch: str) -> bool:
+        toks = set(CLASS_RE.findall(branch))
+        toks |= {a for a in ATTR_RE.findall(branch) if a not in GENERIC_ATTR}
+        return any(tok_private(t) for t in toks)
+
+    def walk(children, wrappers):
+        for n in children:
+            if not isinstance(n, Block):
+                continue
+            if n.at_rule:
+                p = n.prelude.strip()
+                if p.startswith(("@media", "@supports", "@container")):
+                    walk(n.children, wrappers + [n.prelude])
+                continue
+            stats["total"] += 1
+            branches = [b.strip() for b in split_selector_list(n.selector) if b.strip()]
+            if branches and all(branch_private(b) for b in branches):
+                n.dead = True
+                stats["moved"] += 1
+                moved.append((wrappers, n))
+            else:
+                walk(n.children, wrappers)
+
+    walk(nodes, [])
+
+    print(f"style rules scanned: {stats['total']}  private-only: {stats['moved']}")
+    if not moved:
+        return
+
+    # build extracted stylesheet, grouped by wrapper chain
+    chunks: list[str] = [
+        "/* AUTO-GENERATED by scripts/qa/css_private_split.py\n"
+        "   Private-surface rules (owner / CRM / portals / document studio).\n"
+        "   Loaded lazily by src/components/util/PrivateSurfaceStyles.tsx so public\n"
+        "   routes never parse or retain these rules in the CSSOM. */\n"
+    ]
+    last: list[str] | None = None
+    for wrappers, rule in moved:
+        body = f"{rule.prelude}{{{''.join(c.render() for c in rule.children)}}}"
+        for w in wrappers:
+            body = f"{w.strip()}{{{body}}}"
+        chunks.append(body)
+    out_css = "\n".join(chunks) + "\n"
+
+    orig_bytes = len(text)
+    new_css = serialize(nodes)
+    print(f"index.css: {orig_bytes} -> {len(new_css)} bytes  (-{orig_bytes-len(new_css)})")
+    print(f"extracted: {len(out_css)} bytes")
+
+    if apply:
+        os.makedirs(os.path.dirname(OUT), exist_ok=True)
+        open(OUT, "w").write(out_css)
+        open(ENTRY, "w").write(new_css)
+        print("applied.")
+    else:
+        open("/tmp/private-surfaces.preview.css", "w").write(out_css)
+        print("dry run -> /tmp/private-surfaces.preview.css")
+
+
+if __name__ == "__main__":
+    main()

@@ -51,6 +51,7 @@ import PremiumPromptRoot from "@/components/premium/PremiumPromptRoot";
 
 // Owner-only + post-paint extras (lazy, idle-mounted — never blocks FCP)
 import DeferredAppExtras from "@/components/util/DeferredAppExtras";
+import PrivateSurfaceStyles from "@/components/util/PrivateSurfaceStyles";
 // Runtime contrast repaint removed: contrast is owned 100% by static CSS in
 // src/index.css. Re-introducing any JS repaint here will re-introduce
 // the platform-wide hover/scroll flicker and global CTA color regressions.
@@ -116,6 +117,8 @@ const App = () => {
                   <CanonicalAndHreflang />
                   {/* Owner-only + analytics extras — lazy, idle-mounted */}
                   <DeferredAppExtras />
+                  {/* Back-office CSS: fetched only on private routes */}
+                  <PrivateSurfaceStyles />
                   {/* Runtime contrast repaint intentionally removed — see import comment */}
 
                    
