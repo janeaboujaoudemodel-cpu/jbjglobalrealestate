@@ -8,6 +8,7 @@ import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { getDeveloperTier, TIER_LABELS } from "@/utils/developerTier";
 import { getDeveloperLogoUrl, getKnownDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
+import { buildResponsiveImage, CARD_IMAGE_SIZES, CARD_IMAGE_WIDTHS } from "@/lib/responsiveImage";
 import type { Developer } from "@/hooks/useProjects";
 
 
