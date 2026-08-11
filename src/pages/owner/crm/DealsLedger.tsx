@@ -188,7 +188,7 @@ export default function DealsLedger() {
         {/* PASS 281 — backend pill primitive: active = emerald pair gradient
             + pure white ink; inactive = white + emerald ink. Never black on
             emerald, never a scale-on-hover. */}
-        <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-0">
+        <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-0 w-full !justify-start">
           <TabsTrigger value="citi_developers" className="owner-hub-pill">
             CITI Developers
           </TabsTrigger>
