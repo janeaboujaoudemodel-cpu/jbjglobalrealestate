@@ -257,9 +257,22 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
         <div className="flex items-center justify-between gap-4 px-6 py-4" style={{ background: EMERALD }}>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
-              {draft.liveId ? "Live on JBJ Global Real Estate — staged update" : "Draft — not on JBJ yet"}
+              {draft.liveId
+                ? "Merged JBJ result — how the page reads after publish"
+                : "Draft JBJ page — not on JBJ yet"}
             </p>
             <h2 className="mt-1 text-xl font-semibold text-white">{draft.name}</h2>
+            {draft.liveSlug ? (
+              <a
+                href={`/project/${draft.liveSlug}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mt-1 inline-block text-xs font-semibold text-white/85 underline"
+              >
+                Open the current JBJ page
+              </a>
+            ) : null}
+
           </div>
           <button
             type="button"
