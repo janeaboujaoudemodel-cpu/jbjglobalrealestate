@@ -212,9 +212,7 @@ serve(async (req) => {
     }
 
     // Not cached - generate new audio
-    const key1 = resolveElevenLabsKey() || "";
-    const key2 = resolveElevenLabsKey() || "";
-    const keys = [key1, key2].filter(Boolean);
+    const keys = [resolveElevenLabsKey()].filter(Boolean);
 
     if (!keys.length) {
       throw { status: 500, message: "ElevenLabs API key not configured" } satisfies HttpError;

@@ -72,11 +72,9 @@ serve(async (req) => {
       );
     }
 
-    // Try both possible keys: the manually-set one and the connector-managed one.
-    const candidateKeys = [
-      resolveElevenLabsKey(),
-      resolveElevenLabsKey(),
-    ].filter((k): k is string => !!k && k.length > 0);
+    // resolveElevenLabsKey() already picks the valid 'sk_' credential from
+    // either the manual or the connector-managed secret.
+    const candidateKeys = [resolveElevenLabsKey()];
 
 
     const ELEVENLABS_AGENT_ID = Deno.env.get("ELEVENLABS_AGENT_ID");
