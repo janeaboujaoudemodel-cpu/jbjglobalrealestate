@@ -4452,8 +4452,7 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
       because the tokens themselves switch). The block below documents intent
       and acts as a safety net for any tile that hard-codes a light bg in dark mode. */
 .dark [class*="bg-white"] .lucide,
-.dark [class~="bg-[#F7F2EA]"] .lucide,
-.dark [class~="bg-[#F7F2EA]"] .lucide {
+.dark [class~="bg-[#F7F2EA]"] .lucide{
   color: hsl(0 0% 7%); /* dark ink on stubbornly-light surface */
 }
 /* Broad dark-ancestor icon repaint removed. CTA primitives now own dark icon contrast. */
@@ -4529,7 +4528,11 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
 .icon-tile[data-surface="navy"]:active .lucide,
 .icon-tile[data-surface="ink"]:active .lucide,
 [data-icon-tile][data-surface="navy"]:active .lucide,
-[data-icon-tile][data-surface="ink"]:active .lucide {
+[data-icon-tile][data-surface="ink"]:active .lucide,
+.icon-tile[data-surface="navy"]:focus-visible .lucide,
+.icon-tile[data-surface="ink"]:focus-visible .lucide,
+[data-icon-tile][data-surface="navy"]:focus-visible .lucide,
+[data-icon-tile][data-surface="ink"]:focus-visible .lucide{
   color: hsl(var(--jj-on-dark)) !important;
   stroke: hsl(var(--jj-on-dark)) !important;
 }
@@ -4542,13 +4545,6 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
 }
 .icon-tile:focus-visible .lucide {
   color: hsl(var(--foreground));
-}
-.icon-tile[data-surface="navy"]:focus-visible .lucide,
-.icon-tile[data-surface="ink"]:focus-visible .lucide,
-[data-icon-tile][data-surface="navy"]:focus-visible .lucide,
-[data-icon-tile][data-surface="ink"]:focus-visible .lucide {
-  color: hsl(var(--jj-on-dark)) !important;
-  stroke: hsl(var(--jj-on-dark)) !important;
 }
 
 /* DISABLED */
@@ -5044,7 +5040,6 @@ nav button[data-allow-dark-cta][aria-pressed="true"] *,
 /* 8. Keep gold for hairline borders, focus rings, and small text accents. */
 [class*="border-[#B89555]"],
 [class*="ring-[#B89555]"],
-[class*="border-[#B89555]"],
 [class*="ring-gold"],
 [class*="text-[#B89555]"],
 [class*="text-[#1A1A1A]"] {
@@ -5367,7 +5362,16 @@ hr[data-gold-hairline],
 
 /* 1b. Background opacity variants (e.g. bg-gray-200/50, bg-muted/40) */
 :root:not(.dark) :where([class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-stone-"], [class*="bg-muted/"])
-:not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gray-6"]):not([class*="bg-gray-7"]):not([class*="bg-gray-8"]):not([class*="bg-gray-9"]):not([class*="bg-neutral-6"]):not([class*="bg-neutral-7"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([class*="bg-slate-6"]):not([class*="bg-slate-7"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-zinc-6"]):not([class*="bg-zinc-7"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-stone-6"]):not([class*="bg-stone-7"]):not([class*="bg-stone-8"]):not([class*="bg-stone-9"]):not([class*="bg-gradient"]) {
+:not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gray-6"]):not([class*="bg-gray-7"]):not([class*="bg-gray-8"]):not([class*="bg-gray-9"]):not([class*="bg-neutral-6"]):not([class*="bg-neutral-7"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([class*="bg-slate-6"]):not([class*="bg-slate-7"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-zinc-6"]):not([class*="bg-zinc-7"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-stone-6"]):not([class*="bg-stone-7"]):not([class*="bg-stone-8"]):not([class*="bg-stone-9"]):not([class*="bg-gradient"]),
+:root:not(.dark) :where(
+  .bg-\[\#e5e7eb\], .bg-\[\#E5E7EB\],
+  .bg-\[\#d1d5db\], .bg-\[\#D1D5DB\],
+  .bg-\[\#f3f4f6\], .bg-\[\#F3F4F6\],
+  .bg-\[\#f9fafb\], .bg-\[\#F9FAFB\],
+  .bg-\[\#e2e8f0\], .bg-\[\#E2E8F0\],
+  .bg-\[\#cbd5e1\], .bg-\[\#CBD5E1\],
+  .bg-\[\#f5f5f5\], .bg-\[\#F5F5F5\]
+):not([data-surface="dark"]):not([data-no-contrast-guard]){
   background-color: #F7F2EA !important;
 }
 
@@ -5398,17 +5402,7 @@ hr[data-gold-hairline],
 /* 4. Common raw hex gray literals used via arbitrary-value classes
  *    (bg-[#e5e7eb], border-[#d1d5db], etc.). Backgrounds → champagne,
  *    borders → faded gold. Light-mode only. */
-:root:not(.dark) :where(
-  .bg-\[\#e5e7eb\], .bg-\[\#E5E7EB\],
-  .bg-\[\#d1d5db\], .bg-\[\#D1D5DB\],
-  .bg-\[\#f3f4f6\], .bg-\[\#F3F4F6\],
-  .bg-\[\#f9fafb\], .bg-\[\#F9FAFB\],
-  .bg-\[\#e2e8f0\], .bg-\[\#E2E8F0\],
-  .bg-\[\#cbd5e1\], .bg-\[\#CBD5E1\],
-  .bg-\[\#f5f5f5\], .bg-\[\#F5F5F5\]
-):not([data-surface="dark"]):not([data-no-contrast-guard]) {
-  background-color: #F7F2EA !important;
-}
+
 :root:not(.dark) :where(
   .border-\[\#e5e7eb\], .border-\[\#E5E7EB\],
   .border-\[\#d1d5db\], .border-\[\#D1D5DB\],
@@ -6521,16 +6515,7 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   min-height: 100vh !important;
 }
 [data-tool-frame].jbj-tool-frame-border::before,
-[data-tool-frame].jbj-tool-shell-border::before {
-  display: none !important;
-}
-input#propertyName.property-measurement-name-input,
-input#propertyName.property-measurement-name-input::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-  text-shadow: none !important;
-}
+[data-tool-frame].jbj-tool-shell-border::before,
 html[data-tool-fullscreen="true"] [data-global-header],
 html[data-tool-fullscreen="true"] [data-global-vertical-nav],
 html[data-tool-fullscreen="true"] [data-chrome="header"],
@@ -6542,8 +6527,15 @@ html[data-tool-fullscreen="true"] aside[data-app-sidebar],
 html[data-tool-fullscreen="true"] .jbj-app-header,
 html[data-tool-fullscreen="true"] .jbj-app-sidebar,
 html[data-tool-fullscreen="true"] [data-support-launcher],
-html[data-tool-fullscreen="true"] [data-web-developer-dock] {
+html[data-tool-fullscreen="true"] [data-web-developer-dock]{
   display: none !important;
+}
+input#propertyName.property-measurement-name-input,
+input#propertyName.property-measurement-name-input::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
 }
 html[data-tool-fullscreen="true"],
 html[data-tool-fullscreen="true"] body {
@@ -7815,7 +7807,9 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem] > span:first-child {
   transition: background-image 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
+html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon] *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -7828,12 +7822,6 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover > span:first-chil
   background-image: var(--jj-emerald-ombre) !important;
   box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 0 16px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
   transform: translateY(-1px);
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 
 /* Sidebar highlight rows (AI Home Finder, List Your Property,
@@ -7864,7 +7852,9 @@ html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]
 html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] *,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] *,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/join"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] * {
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] *,
+html body span.jj-pill-emerald,
+html body span.jj-pill-emerald *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -7884,12 +7874,7 @@ html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]
    card honours the white-on-emerald lock (the `<span>` rendering
    was being recolored by the white-on-light contrast guard).
    ──────────────────────────────────────────────────────────────── */
-html body span.jj-pill-emerald,
-html body span.jj-pill-emerald * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
+
 html body span.jj-pill-emerald :is(svg, .lucide),
 html body span.jj-pill-emerald :is(svg, .lucide) * {
   color: #FFFFFF !important;
@@ -8084,7 +8069,8 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] {
 }
 
 /* Gold left-border on expanded section column */
-[data-sidebar-emerald] .border-l { border-left-color: rgba(184, 149, 85, 0.45) !important; }
+[data-sidebar-emerald] .border-l,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l{ border-left-color: rgba(184, 149, 85, 0.45) !important; }
 
 
 /* Emerald gradient utility (reuse) */
@@ -8261,7 +8247,9 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticke
   background-color: #FFFFFF !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg {
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg,
+html body [data-jj-utility-bar] button[style*="#B89555"],
+html body [data-jj-utility-bar] svg[style*="#B89555"]{
   color: #047857 !important;
   stroke: #047857 !important;
 }
@@ -8273,11 +8261,7 @@ html body [data-jj-utility-bar] {
 }
 
 /* Horizontal utility-bar icons / buttons — emerald replaces gold accents */
-html body [data-jj-utility-bar] button[style*="#B89555"],
-html body [data-jj-utility-bar] svg[style*="#B89555"] {
-  color: #047857 !important;
-  stroke: #047857 !important;
-}
+
 
 /* Filter bar shell — mother-of-pearl + emerald hairline */
 html body [data-jj-filter-bar] {
@@ -8343,9 +8327,7 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::afte
   background: linear-gradient(90deg, transparent 0%, #B89555 50%, transparent 100%) !important;
 }
 /* Gold left-border on expanded subitem column */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l {
-  border-left-color: rgba(184, 149, 85, 0.45) !important;
-}
+
 
 /* ── Section header — IDLE (no [data-active]) ─────────────
    Transparent, ink-emerald label, emerald-tile icon. Matches
@@ -8416,7 +8398,8 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][
 }
 
 /* Kill underline pseudo on section labels — clean look */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] [data-sidebar-section-label]::after {
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] [data-sidebar-section-label]::after,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label]::after{
   display: none !important;
 }
 
@@ -8459,9 +8442,7 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highligh
   -webkit-text-fill-color: #064E3B !important;
 }
 /* Suppress any leftover gold underline pseudo on highlight labels */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label]::after {
-  display: none !important;
-}
+
 
 /* ── Pulse dot when section closed but has active child → emerald */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] span.animate-pulse {
@@ -8720,7 +8701,9 @@ html body .jj-tab-active-metallic::after {
 html body [data-photo-copy-lock] h3,
 html body [data-photo-copy-lock] p,
 html body [data-photo-copy-lock] a,
-html body [data-photo-copy-lock] a * {
+html body [data-photo-copy-lock] a *,
+html body [data-service-photo-copy],
+html body [data-service-photo-copy] *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9) !important;
@@ -8728,12 +8711,6 @@ html body [data-photo-copy-lock] a * {
 html body [data-photo-copy-lock] a {
   background-image: linear-gradient(135deg, #075B45 0%, #064E3B 52%, #032419 100%) !important;
   border-color: rgba(255,255,255,0.28) !important;
-}
-html body [data-service-photo-copy],
-html body [data-service-photo-copy] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-shadow: 0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9) !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -9191,17 +9168,14 @@ html body [data-jj-utility-bar] :is(
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-html body [data-jj-utility-bar] [data-jj-utility-pill] button {
+html body [data-jj-utility-bar] [data-jj-utility-pill] button,
+html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child > span.relative{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
-}
-html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child > span.relative {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
@@ -9305,7 +9279,35 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-.jj-sqtoggle:hover {
+.jj-sqtoggle:hover,
+html body :is(
+  [style*="--jj-emerald-ombre"],
+  [style*="emerald-ombre"],
+  [style*="064E3B"],
+  [style*="047857"],
+  [data-emerald="true"],
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-loop-block,
+  .jj-tab-active-metallic
+),
+html body :is(
+  [style*="--jj-emerald-ombre"],
+  [style*="emerald-ombre"],
+  [data-emerald="true"],
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-loop-block,
+  .jj-tab-active-metallic
+) :is(span, p, h1, h2, h3, h4, h5, h6, label, small, strong, em, a, button){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -9335,37 +9337,7 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
 /* Universal lock: any element painted with emerald-ombre via inline
    style, gradient class, or surface attribute MUST render its own
    text + descendant icons as solid white, in all interaction states. */
-html body :is(
-  [style*="--jj-emerald-ombre"],
-  [style*="emerald-ombre"],
-  [style*="064E3B"],
-  [style*="047857"],
-  [data-emerald="true"],
-  .bg-emerald-600,
-  .bg-emerald-700,
-  .bg-emerald-800,
-  .bg-emerald-900,
-  .jj-emerald-card,
-  .jj-emerald-metallic,
-  .jj-loop-block,
-  .jj-tab-active-metallic
-),
-html body :is(
-  [style*="--jj-emerald-ombre"],
-  [style*="emerald-ombre"],
-  [data-emerald="true"],
-  .bg-emerald-600,
-  .bg-emerald-700,
-  .bg-emerald-800,
-  .bg-emerald-900,
-  .jj-emerald-card,
-  .jj-emerald-metallic,
-  .jj-loop-block,
-  .jj-tab-active-metallic
-) :is(span, p, h1, h2, h3, h4, h5, h6, label, small, strong, em, a, button) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+
 html body :is(
   [style*="--jj-emerald-ombre"],
   [style*="emerald-ombre"],
@@ -10582,7 +10554,9 @@ html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .j
 }
 
 html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .jj-area-explore-pill)::before,
-html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .jj-area-explore-pill)::after {
+html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .jj-area-explore-pill)::after,
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary::before,
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary::after{
   content: none !important;
   display: none !important;
 }
@@ -10660,12 +10634,6 @@ html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary:is(
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary::before,
-html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary::after {
-  content: none !important;
-  display: none !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -10876,7 +10844,10 @@ html body .jj-dual-cta-primary:is(:hover,:focus-visible) {
 html body .jj-dual-cta-secondary,
 html body .jj-dual-cta-secondary:is(:hover,:focus,:focus-visible,:active),
 html body .jj-dual-cta-secondary *,
-html body .jj-dual-cta-secondary:is(:hover,:focus,:focus-visible,:active) * {
+html body .jj-dual-cta-secondary:is(:hover,:focus,:focus-visible,:active) *,
+html body :is(.jj-title-emerald, .jj-icon-emerald),
+html body a[href="/guides"],
+html body a[href="/guides"] *{
   color: #064E3B !important;
   -webkit-text-fill-color: #064E3B !important;
   stroke: #064E3B !important;
@@ -10908,13 +10879,6 @@ html body input.mortgage-range-input::-moz-range-thumb{
   border-radius: 9999px !important;
   background: var(--mortgage-range-thumb) !important;
   box-shadow: var(--mortgage-range-thumb-shadow) !important;
-}
-html body :is(.jj-title-emerald, .jj-icon-emerald),
-html body a[href="/guides"],
-html body a[href="/guides"] * {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-  stroke: #064E3B !important;
 }
 
 /* PASS 46e — final-tier override: extra-specific selector to beat every
@@ -11310,7 +11274,10 @@ button:hover [data-icon-tile][data-tone="gold"] svg,
 
 /* --- Single-select dropdown: hide any leftover indicator box --- */
 [role="option"]:not([data-multi="true"]) > span:first-child:empty,
-[role="menuitem"]:not([data-multi="true"]) > span:first-child:empty {
+[role="menuitem"]:not([data-multi="true"]) > span:first-child:empty,
+html body [role="option"] > span:first-child:empty,
+html body [role="menuitem"] > span:first-child:empty,
+html body [cmdk-item] > span:first-child:empty{
   display: none !important;
 }
 
@@ -11409,12 +11376,6 @@ html body [data-radix-popper-content-wrapper] :is([role="option"], [role="menuit
   background-color: var(--emerald-soft-bg) !important;
   color: var(--emerald-1) !important;
   -webkit-text-fill-color: var(--emerald-1) !important;
-}
-
-html body [role="option"] > span:first-child:empty,
-html body [role="menuitem"] > span:first-child:empty,
-html body [cmdk-item] > span:first-child:empty {
-  display: none !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -12150,7 +12111,11 @@ html body :is(
   [class^="bg-green-"], [class*=" bg-green-"],
   [class^="bg-emerald-"], [class*=" bg-emerald-"],
   [class^="bg-teal-"], [class*=" bg-teal-"]
-):not([data-no-contrast-guard]) :is(svg, .lucide, path, circle, rect, line, polyline, polygon, span, p, strong, small, label, div) {
+):not([data-no-contrast-guard]) :is(svg, .lucide, path, circle, rect, line, polyline, polygon, span, p, strong, small, label, div),
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -12163,15 +12128,6 @@ html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus,
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
-}
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
 }
 
 /* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
@@ -12453,7 +12409,11 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]),
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label],
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon] * {
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon] *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-label],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon] *{
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -12475,14 +12435,6 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"
   border: 1px solid rgba(255,255,255,0.20) !important;
   box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   transform: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon] * {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
 }
 
 /* ── 4. ACTIVE row treatment (canonical emerald-ombre, white FG) ── */
@@ -12591,7 +12543,13 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > spa
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child:is(:hover, :focus, :focus-visible, :active),
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight] > span:first-child:is(:hover, :focus, :focus-visible, :active),
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child:is(:hover, :focus, :focus-visible, :active),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child:is(:hover, :focus, :focus-visible, :active) {
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child:is(:hover, :focus, :focus-visible, :active),
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]) > div:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]):hover > div:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]):hover > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]):hover > span:first-child{
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
@@ -12614,19 +12572,7 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > spa
 }
 
 /* Highest-specificity duplicate to beat earlier :not([data-active]) light-green stops. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]) > div:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]):hover > div:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]):hover > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]):hover > span:first-child {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  filter: none !important;
-}
+
 
 /* 🔒 ABSOLUTE LAST RULE — official dark emerald icon tiles only.
    Older sidebar passes used lighter #047857/#10b981 stops and white rings,
@@ -17927,7 +17873,8 @@ html body #root [data-careers-job-card] :is([data-careers-ink-row], [data-career
   mix-blend-mode: normal !important;
 }
 
-html body #root [data-careers-position-search-wrap] {
+html body #root [data-careers-position-search-wrap],
+html body [data-mode-switcher-root="true"] [data-mode-trigger="header"] .mode-switcher-trigger-label{
   display: block !important;
 }
 
@@ -18107,9 +18054,7 @@ html body [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [da
 }
 
 /* PASS 96 — mobile Mode trigger fit: keep the shared control visible inside the compact menu action row. */
-html body [data-mode-switcher-root="true"] [data-mode-trigger="header"] .mode-switcher-trigger-label {
-  display: block !important;
-}
+
 
 @media (max-width: 639px) {
   html body [data-mode-switcher-root="true"] [data-mode-trigger="header"] {
@@ -18511,7 +18456,10 @@ html body :is(
     [class~="text-zinc-900"],
     [class~="text-slate-900"],
     [class~="text-gray-900"]
-  ):not(#jj-dark-white-lock-child):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  ):not(#jj-dark-white-lock-child):not([data-no-contrast-guard]):not([data-no-contrast-guard] *),
+html body .jj-hover-emerald:hover,
+html body .jj-hover-emerald:focus-visible,
+html body .jj-hover-emerald[data-active="true"]{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -18545,12 +18493,7 @@ html body :is(
    MUST flip to pure white, beating champagne ancestor locks
    (PASS 89/91-93/102/104) regardless of inherited classes.
    ============================================================ */
-html body .jj-hover-emerald:hover,
-html body .jj-hover-emerald:focus-visible,
-html body .jj-hover-emerald[data-active="true"] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+
 html body .jj-hover-emerald:hover *,
 html body .jj-hover-emerald:focus-visible *,
 html body .jj-hover-emerald[data-active="true"] * {
@@ -19058,7 +19001,12 @@ html body #root [data-eyebrow][data-eyebrow][data-eyebrow][data-eyebrow][data-ey
   .bg-zinc-950,
   .bg-slate-900,
   .bg-slate-950
-):not([data-no-contrast-guard]) :is(span, p, h1, h2, h3, h4, h5, h6, a, button, li, label, svg, [data-lucide]) {
+):not([data-no-contrast-guard]) :is(span, p, h1, h2, h3, h4, h5, h6, a, button, li, label, svg, [data-lucide]),
+#root .bg-primary > span,
+#root [data-radix-avatar-fallback].bg-primary,
+#root span.bg-primary,
+#root .bg-\[\#0A0A0A\] *, #root .bg-\[\#1A1A1A\] *,
+#root .bg-\[\#0a0a0a\] *, #root .bg-\[\#1a1a1a\] *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -19071,12 +19019,7 @@ html body #root [data-eyebrow][data-eyebrow][data-eyebrow][data-eyebrow][data-ey
 }
 
 /* Avatar primary (emerald) — initials must be white */
-#root .bg-primary > span,
-#root [data-radix-avatar-fallback].bg-primary,
-#root span.bg-primary {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+
 
 /* Re-assert arbitrary dark Tailwind utilities so they materialize even when
    Tailwind's JIT didn't generate them (file outside content scan, etc.). */
@@ -19086,11 +19029,6 @@ html body #root [data-eyebrow][data-eyebrow][data-eyebrow][data-eyebrow][data-ey
 #root .bg-\[\#1a1a1a\] { background-color: #1A1A1A !important; }
 #root .hover\:bg-\[\#2A2A2A\]:hover,
 #root .hover\:bg-\[\#2a2a2a\]:hover { background-color: #2A2A2A !important; }
-#root .bg-\[\#0A0A0A\] *, #root .bg-\[\#1A1A1A\] *,
-#root .bg-\[\#0a0a0a\] *, #root .bg-\[\#1a1a1a\] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
 
 /* ============================================================
    PASS 121 — TRIPLE-ID FINAL DARK-BG WHITE-INK LOCK
@@ -20575,7 +20513,9 @@ html body [data-access-denied-page][data-surface="emerald"] {
 }
 
 html body [data-access-denied-page][data-surface="emerald"],
-html body [data-access-denied-page][data-surface="emerald"] :is(h1, h2, h3, h4, p, span, small, strong, em, b, li, button, svg, .lucide):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([style*="color: #064E3B"]):not([style*="color:#064E3B"]) {
+html body [data-access-denied-page][data-surface="emerald"] :is(h1, h2, h3, h4, p, span, small, strong, em, b, li, button, svg, .lucide):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([style*="color: #064E3B"]):not([style*="color:#064E3B"]),
+html body [data-mode-card="true"][data-mode-row="active"],
+html body [data-mode-card="true"][data-mode-row="active"] :is(p, span, svg, .lucide):not([data-mode-active-pill]):not([data-mode-active-pill] *){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-fill-color: #FFFFFF !important;
@@ -20586,15 +20526,6 @@ html body [data-access-denied-page][data-surface="emerald"] :is(h1, h2, h3, h4, 
 html body .mode-switcher-equal-card {
   min-height: 92px !important;
   height: 92px !important;
-}
-
-html body [data-mode-card="true"][data-mode-row="active"],
-html body [data-mode-card="true"][data-mode-row="active"] :is(p, span, svg, .lucide):not([data-mode-active-pill]):not([data-mode-active-pill] *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
 }
 
 /* PASS 143 — BACKEND SIDEBAR + ICON CONTRAST RESTORE
@@ -21348,9 +21279,7 @@ html body #root [data-compare-mode-toggle][data-compare-mode-toggle] [data-compa
 
 /* PASS 156 — Property Comparison final emerald contract. */
 html body[data-page-scope~="compare"] #root .jj-main-shell,
-html body[data-page-scope~="compare"] #root .jj-main-shell,
-html body[data-page-scope~="compare"] #root .jj-footer-shell,
-html body[data-page-scope~="compare"] #root .jj-footer-shell {
+html body[data-page-scope~="compare"] #root .jj-footer-shell{
   background: linear-gradient(135deg, #053D2F 0%, #031F18 52%, #010806 100%) !important;
   margin-top: 0 !important;
   border-top: 0 !important;
@@ -21472,7 +21401,11 @@ html body #root [data-ai-tools-disclaimer] :is(a,button):hover {
   border-color: transparent !important;
 }
 
-html body #root [data-compare-hero] {
+html body #root [data-compare-hero],
+html body #root [data-compare-page],
+html body #root [data-compare-ai-shell],
+html body[data-page-scope~="compare"] #root .jj-main-shell,
+html body[data-page-scope~="compare"] #root .jj-footer-shell{
   background: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
   background-image: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
 }
@@ -21484,13 +21417,7 @@ html body #root [data-compare-hero] {
 /* PASS 157 — hard lock the Compare hierarchy after global light/dark guards.
    Page = dark emerald, wrapper = champagne, all internal cards/fields = emerald,
    emerald card text/icons = pure white, dropdown highlight only on hover. */
-html body #root [data-compare-page],
-html body #root [data-compare-ai-shell],
-html body[data-page-scope~="compare"] #root .jj-main-shell,
-html body[data-page-scope~="compare"] #root .jj-footer-shell {
-  background: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
-  background-image: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
-}
+
 
 
 
@@ -21899,7 +21826,9 @@ html body #root :where([data-map-page], [data-map-shell]) .jj-map-count-pill * {
 
 html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"], .jj-map-details-button, .jj-map-stat-tile, .jj-map-card-close, .jj-map-panel-close, .jj-map-square-control, .jj-map-status-badge, .jj-map-card-mini-badge),
 html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"], .jj-map-details-button, .jj-map-stat-tile, .jj-map-card-close, .jj-map-panel-close, .jj-map-square-control, .jj-map-status-badge, .jj-map-card-mini-badge) *,
-html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"], .jj-map-details-button, .jj-map-stat-tile, .jj-map-card-close, .jj-map-panel-close, .jj-map-square-control, .jj-map-status-badge, .jj-map-card-mini-badge) :is(svg,path,line,rect,circle,polyline,polygon) {
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"], .jj-map-details-button, .jj-map-stat-tile, .jj-map-card-close, .jj-map-panel-close, .jj-map-square-control, .jj-map-status-badge, .jj-map-card-mini-badge) :is(svg,path,line,rect,circle,polyline,polygon),
+html body #root [data-map-list-panel],
+html body #root [data-map-list-panel] :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -21911,13 +21840,6 @@ html body #root [data-map-list-panel] {
   border-radius: 20px !important;
   box-shadow: 0 30px 70px -36px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.12) !important;
   backdrop-filter: blur(18px) saturate(1.12) !important;
-}
-
-html body #root [data-map-list-panel],
-html body #root [data-map-list-panel] :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 
 html body #root [data-map-list-panel] .jj-map-search-input {
@@ -22647,7 +22569,10 @@ html body #root main.jj-main-shell [data-service-page="property-management"] [da
   padding-right: max(24px, env(safe-area-inset-right)) !important;
 }
 html body #root [data-service-page="property-management"] [data-service-emerald-control],
-html body #root [data-service-page="property-management"] [data-service-emerald-control] :is(span, svg, path, circle, rect, line, polyline, polygon) {
+html body #root [data-service-page="property-management"] [data-service-emerald-control] :is(span, svg, path, circle, rect, line, polyline, polygon),
+html body #root #ai-hub-faq [data-radix-collection-item][data-state="open"],
+html body #root #ai-hub-faq button[data-state="open"],
+html body #root #ai-hub-faq button[data-state="open"] :is(span, svg, path, circle, rect, line, polyline, polygon){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -22708,13 +22633,7 @@ html body #root :where(
 /* PASS 167 — AI HUB FAQ / EMERALD HERO CONTRAST LOCK
    Open emerald accordion bars must be pure white; closed hover stays champagne,
    never the active emerald pill color. */
-html body #root #ai-hub-faq [data-radix-collection-item][data-state="open"],
-html body #root #ai-hub-faq button[data-state="open"],
-html body #root #ai-hub-faq button[data-state="open"] :is(span, svg, path, circle, rect, line, polyline, polygon) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
+
 html body #root #ai-hub-faq button[data-state="open"] {
   background: #064E3B !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #04231A 58%, #010806 100%) !important;
@@ -22774,7 +22693,9 @@ html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"] :is(s
 
 /* PASS 170 — MEDIA HERO LOCK: no decorative circle overlays; hero title/subtitle stay white */
 html body #root .jj-hero-fullscreen > [class*="rounded-full"][class*="blur"],
-html body #root [data-hero-dark] > [class*="rounded-full"][class*="blur"] {
+html body #root [data-hero-dark] > [class*="rounded-full"][class*="blur"],
+html body #root [data-category-shell] [data-category-shell-body]
+  > :is(section, div):first-child:is([data-hero-dark], [data-guide-hero], [data-faq-hero], [data-neon-page], .jj-hero-fullscreen, .jj-hero-neon){
   display: none !important;
 }
 html body #root .jj-hero-fullscreen :is(h1, p).allow-white,
@@ -22823,10 +22744,7 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]
    Legacy page heroes remain mounted for code safety but are visually removed so
    wrapped Insights/Guides/Services/Company/Legal/Help pages do not double-render
    or push content into a broken/blank stacked layout. */
-html body #root [data-category-shell] [data-category-shell-body]
-  > :is(section, div):first-child:is([data-hero-dark], [data-guide-hero], [data-faq-hero], [data-neon-page], .jj-hero-fullscreen, .jj-hero-neon) {
-  display: none !important;
-}
+
 
 
 
@@ -23289,7 +23207,10 @@ html body [data-chrome="sidebar"] :is(a,button)[data-sidebar-subitem][aria-curre
 html body #root main.jj-main-shell,
 html body #root main.jj-main-shell [data-insights-page],
 html body #root [data-insights-page] > div,
-html body #root [data-insights-page] :is([data-mi-page], [data-guides-page], [data-faq-page], [data-marketing-page], [data-brand-emerald-page], [data-neon-page]) {
+html body #root [data-insights-page] :is([data-mi-page], [data-guides-page], [data-faq-page], [data-marketing-page], [data-brand-emerald-page], [data-neon-page]),
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero]) :is([class~="bg-[#1A1A1A]"], [class*=" bg-[#1A1A1A]/"], [class^="bg-[#1A1A1A]/"], [class*="bg-black"], [class*="from-black"], [class*="via-black"], [class*="via-zinc"], [class*="to-black"]):not([data-surface="emerald"]):not([data-emerald="true"]):not([data-ink-emerald]),
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero])[class~="bg-[#1A1A1A]"], [class*=" bg-[#1A1A1A]/"], [class^="bg-[#1A1A1A]/"],
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero])[class*="bg-black"]{
   background: #F7F2EA !important;
   background-image: none !important;
 }
@@ -23311,12 +23232,7 @@ html body #root [data-insights-page] :is([data-mi-page], [data-guides-page], [da
 /* Champagne is the main content layer. Kill black bands on all scoped branches. */
 
 
-html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero]) :is([class~="bg-[#1A1A1A]"], [class*=" bg-[#1A1A1A]/"], [class^="bg-[#1A1A1A]/"], [class*="bg-black"], [class*="from-black"], [class*="via-black"], [class*="via-zinc"], [class*="to-black"]):not([data-surface="emerald"]):not([data-emerald="true"]):not([data-ink-emerald]),
-html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero])[class~="bg-[#1A1A1A]"], [class*=" bg-[#1A1A1A]/"], [class^="bg-[#1A1A1A]/"],
-html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero])[class*="bg-black"] {
-  background: #F7F2EA !important;
-  background-image: none !important;
-}
+
 
 
 
@@ -25587,17 +25503,7 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] 
 }
 
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,[role="menuitem"]):not(:where([data-emerald-action], [data-emerald-action] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, .jj-emerald-action, .jj-emerald-action *, [data-surface="emerald"], [data-surface="emerald"] *, .allow-white, .allow-white *)),
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(svg,.lucide,path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-emerald-action], [data-emerald-action] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, .jj-emerald-action, .jj-emerald-action *, [data-surface="emerald"], [data-surface="emerald"] *, .allow-white, .allow-white *)) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-/* Light/champagne/gold/mother-of-pearl surfaces: never allow white ink.
-   Emerald descendants are excluded so icon tiles/active pills remain white. */
-
-
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(svg,.lucide,path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-emerald-action], [data-emerald-action] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, .jj-emerald-action, .jj-emerald-action *, [data-surface="emerald"], [data-surface="emerald"] *, .allow-white, .allow-white *)),
 html body:not([data-ai-tools-scope="true"]) :is(
   .surface-champagne,
   .surface-gold,
@@ -25623,12 +25529,18 @@ html body:not([data-ai-tools-scope="true"]) :is(
     [data-emerald-action] *, [data-emerald="true"] *, .jj-emerald-action *, .jj-surface-emerald *,
     .jj-cta-emerald *, .jj-pill-emerald *, .jj-pill-emerald-metallic *, .jj-header-premium-control *
   [style*="rgb(6, 78, 59)"], [style*="rgb(6, 78, 59)"] *, [style*="rgb(4, 44, 28)"], [style*="rgb(4, 44, 28)"] *, [style*="#064E3B" i], [style*="#064E3B" i] *, [style*="#042c1c" i], [style*="#042c1c" i] *, [class~="bg-[#064E3B]"], [class~="bg-[#064E3B]"] *, [class~="bg-[#042c1c]"], [class~="bg-[#042c1c]"] *,   /* generic emerald-pair background contract */
-  )) {
+  )){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* Light/champagne/gold/mother-of-pearl surfaces: never allow white ink.
+   Emerald descendants are excluded so icon tiles/active pills remain white. */
+
+
+
 
 /* Emerald/dark/ink surfaces: never allow black or faded ink. This intentionally
    includes header controls, project-map controls, owner document visibility
@@ -26067,7 +25979,8 @@ html body :is([data-icon-circle="true"], .jj-icon-circle-lock, .jj-floating-acti
    When OFF, every owner pencil is hidden site-wide on this page. When ON,
    they all reappear in-place. Buttons opt in with `data-owner-pencil`.
    ========================================================================== */
-html[data-project-edit-mode="off"] [data-owner-pencil] {
+html[data-project-edit-mode="off"] [data-owner-pencil],
+html body :is([data-emerald-ok="checkbox"], [data-radix-checkbox-root]):not([data-state="checked"]) :is(svg,path,polyline,line){
   display: none !important;
 }
 
@@ -26246,10 +26159,6 @@ html body :is(input[type="checkbox"], [data-emerald-ok="checkbox"], [data-radix-
   border-color: rgba(184,149,85,0.78) !important;
 }
 
-html body :is([data-emerald-ok="checkbox"], [data-radix-checkbox-root]):not([data-state="checked"]) :is(svg,path,polyline,line) {
-  display: none !important;
-}
-
 html body #root [data-dld-split-bar] {
   align-items: stretch !important;
 }
@@ -26389,12 +26298,16 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][
   opacity: 1 !important;
 }
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]) svg,
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]) svg path {
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]) svg path,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg path{
   fill: none !important;
 }
 /* Hover on idle mode card → emerald with white text (matches account menu) */
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]),
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) :is(p, span, small, strong, em, b, div, label, svg, path, circle, rect, line, polyline, polygon) {
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) :is(p, span, small, strong, em, b, div, label, svg, path, circle, rect, line, polyline, polygon),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row]:is(:hover, :focus, [data-highlighted], [data-state="checked"]) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row][data-currency-active="true"] :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -26412,12 +26325,6 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-color: #064E3B !important;
   border-color: rgba(6,78,59,0.55) !important;
-}
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row]:is(:hover, :focus, [data-highlighted], [data-state="checked"]) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div),
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row][data-currency-active="true"] :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 
 /* PASS 230d — nuclear ink override for idle mode/currency rows */
@@ -26453,10 +26360,6 @@ html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-w
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   opacity: 1 !important;
-}
-html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg,
-html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg path {
-  fill: none !important;
 }
 html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) {
   background: transparent !important;
@@ -27486,8 +27389,7 @@ html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="
 /* Force any nested white/emerald text back to dark ink so labels read
    on the champagne surface. Excludes emerald-surface CTAs (primary buttons
    marked [data-emerald-ok] or living inside pill-active surfaces). */
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force),
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force) * {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force), html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force) * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -27497,15 +27399,12 @@ html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="
   stroke: #1A1A1A !important;
 }
 /* Value chip (e.g. "100%") — soft gold pill. */
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] .bg-white\/7,
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] .bg-white {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] .bg-white\/7, html body [data-filter-dropdown="true"][data-surface] .bg-white {
   background: rgba(255, 255, 255, 0.75) !important;
   border-color: rgba(184, 149, 85, 0.55) !important;
 }
 /* Text inputs inside the dropdown — champagne fill + gold hairline. */
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="text"],
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="search"],
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="number"] {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="text"], html body [data-filter-dropdown="true"][data-surface] input[type="search"], html body [data-filter-dropdown="true"][data-surface] input[type="number"] {
   background: rgba(255, 255, 255, 0.85) !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
@@ -27524,16 +27423,14 @@ html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="
 html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]) {
   border-radius: 10px !important;
 }
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child,
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child, html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   border: 1px solid rgba(6, 78, 59, 0.85) !important;
   box-shadow: 0 6px 18px -8px rgba(6, 78, 59, 0.55), inset 0 1px 0 rgba(255,255,255,0.10) !important;
 }
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child *,
-html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 * {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child *, html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -27873,7 +27770,7 @@ html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-
   text-shadow: none !important;
   opacity: 1 !important;
 }
-html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(.filter-primary-action,.filter-primary-action *,button.jj-pill-emerald-metallic:not([role="tab"]),button.jj-pill-emerald-metallic:not([role="tab"]) *) {
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(.filter-primary-action,.filter-primary-action *,button.jj-pill-emerald-metallic,button.jj-pill-emerald-metallic:not([role="tab"]) *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -27908,7 +27805,7 @@ html body [data-chrome="sidebar"] nav > div.px-3 {
   }
 }
 
-html body [data-filter-dropdown="true"] :is(.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic:not([role="tab"]),button.jj-pill-emerald-metallic:not([role="tab"]) *,[data-filter-selected="true"],[data-filter-selected="true"] *) {
+html body [data-filter-dropdown="true"] :is(.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic,button.jj-pill-emerald-metallic:not([role="tab"]) *,[data-filter-selected="true"],[data-filter-selected="true"] *) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   border-color: transparent !important;
@@ -27965,7 +27862,7 @@ html body [data-filter-dropdown="true"] > div:not(.filter-emerald-action):not(.j
   text-shadow: none !important;
   opacity: 1 !important;
 }
-html body [data-filter-dropdown="true"] :is(.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic:not([role="tab"]),button.jj-pill-emerald-metallic:not([role="tab"]) *,[data-filter-selected="true"],[data-filter-selected="true"] *) {
+html body [data-filter-dropdown="true"] :is(.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic,button.jj-pill-emerald-metallic:not([role="tab"]) *,[data-filter-selected="true"],[data-filter-selected="true"] *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -27999,7 +27896,7 @@ html body [data-filter-dropdown="true"][data-filter-dropdown="true"][data-surfac
   text-shadow: none !important;
   opacity: 1 !important;
 }
-html body [data-filter-dropdown="true"][data-filter-dropdown="true"][data-surface="champagne"] :is(.filter-primary-action,.filter-primary-action *,.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic:not([role="tab"]),button.jj-pill-emerald-metallic:not([role="tab"]) *) {
+html body [data-filter-dropdown="true"][data-filter-dropdown="true"][data-surface="champagne"] :is(.filter-primary-action,.filter-primary-action *,.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic,button.jj-pill-emerald-metallic:not([role="tab"]) *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -28914,21 +28811,7 @@ html body #root button.jj-filter-pill-fast,
 html body #root button.jj-filter-pill-fast *,
 html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast,
 html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast *,
-html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, .lucide) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-shadow: none !important;
-  opacity: 1 !important;
-}
-html body #root .jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, .lucide),
-html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, .lucide) {
-  stroke: #FFFFFF !important;
-  fill: none !important;
-}
-
-/* Extend the same white-ink lock to every emerald surface primitive on
-   backend / listing pages so tags, cards, tiles, chips, and metric badges
-   stay legible. Only inks that would otherwise render dark on emerald. */
+html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, .lucide),
 html body #root :is(
   .jj-pill-emerald-metallic,
   .jj-emerald-metallic,
@@ -28958,12 +28841,22 @@ html body #root :is(
   [data-surface="emerald"],
   [data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
-) :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, path, line, rect, circle, polyline, polygon, .lucide) {
+) :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, path, line, rect, circle, polyline, polygon, .lucide){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: none !important;
   opacity: 1 !important;
 }
+html body #root .jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, .lucide),
+html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, .lucide) {
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+/* Extend the same white-ink lock to every emerald surface primitive on
+   backend / listing pages so tags, cards, tiles, chips, and metric badges
+   stay legible. Only inks that would otherwise render dark on emerald. */
+
 html body #root :is(
   .jj-pill-emerald-metallic,
   .jj-emerald-metallic,
@@ -29338,7 +29231,11 @@ html body #root .jj-map-popup-card [data-price-badge] *{
 }
 
 html body #root .jj-map-filter-toggle[data-active="true"],
-html body #root .jj-map-filter-toggle[data-active="true"] * {
+html body #root .jj-map-filter-toggle[data-active="true"] *,
+html body #root [data-project-payment-tabs] [data-state="active"],
+html body #root [data-project-payment-tabs] [data-state="active"] *,
+html body #root [data-section="payment"] [data-icon-circle="true"],
+html body #root [data-section="payment"] [data-icon-circle="true"] *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -29355,15 +29252,6 @@ html body #root [data-nearby-map-tabs="true"] .jj-map-filter-toggle span:first-c
   white-space: normal !important;
   line-height: 1.15 !important;
   text-overflow: clip !important;
-}
-
-html body #root [data-project-payment-tabs] [data-state="active"],
-html body #root [data-project-payment-tabs] [data-state="active"] *,
-html body #root [data-section="payment"] [data-icon-circle="true"],
-html body #root [data-section="payment"] [data-icon-circle="true"] *{
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 
 /* =========================================================================
@@ -30477,8 +30365,7 @@ html body [data-jbj-signup] button.rounded-full[class~="bg-[#064E3B]"], [class*=
 }
 
 /* Escalate specificity above the global champagne-chip gradient guard (#root prefix). */
-html body #root [data-jbj-signup] button.rounded-full[class~="bg-[#F7F2EA]"], [class*=" bg-[#F7F2EA]/"], [class^="bg-[#F7F2EA]/"],
-html body #root [data-jbj-signup] button.rounded-full[class~="bg-[#F7F2EA]"], [class*=" bg-[#F7F2EA]/"], [class^="bg-[#F7F2EA]/"]:hover {
+html body #root [data-jbj-signup] button.rounded-full[class~="bg-[#F7F2EA]"], [class*=" bg-[#F7F2EA]/"], [class^="bg-[#F7F2EA]/"], [class^="bg-[#F7F2EA]/"]:hover {
   background-image: none !important;
   background: #F7F2EA !important;
   color: #1A1A1A !important;
@@ -30827,7 +30714,8 @@ html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] :is(butt
 }
 
 html body #root [data-area-hero],
-html body #root [data-area-hero] :where(h1,h2,h3,h4,p,span,a,button,div,small,strong,svg,path,line,rect,circle,polyline,polygon) {
+html body #root [data-area-hero] :where(h1,h2,h3,h4,p,span,a,button,div,small,strong,svg,path,line,rect,circle,polyline,polygon),
+html body #root [data-area-ai-section] [data-ai-emerald-card] :where(h1,h2,h3,h4,h5,h6,p,span,div,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -30849,12 +30737,6 @@ html body #root [data-area-ai-section] [data-ai-emerald-card] {
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   border: 1px solid rgba(255,255,255,0.16) !important;
   box-shadow: 0 24px 58px -34px rgba(0,0,0,0.86), inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-
-html body #root [data-area-ai-section] [data-ai-emerald-card] :where(h1,h2,h3,h4,h5,h6,p,span,div,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 
 html body #root [data-area-ai-section] :where(.recharts-cartesian-axis-tick text, .recharts-text, .recharts-label) {
@@ -30940,7 +30822,12 @@ html body #root [data-area-detail-page] [data-dld-market-widget] :is(.bg-\[\#F7F
   border-color: rgba(255,255,255,0.16) !important;
 }
 
-html body #root [data-area-detail-page] [data-dld-market-widget] :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,small,strong,em,b,button,div,svg,path,circle,rect,line,polyline,polygon) {
+html body #root [data-area-detail-page] [data-dld-market-widget] :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,small,strong,em,b,button,div,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-area-detail-page] [data-map-shell] .custom-marker > div,
+html body #root [data-area-detail-page] [data-map-shell] .custom-marker > div *,
+html body #root [data-area-detail-page] [data-map-shell] :is(.jj-map-enable-chip, .jj-map-layer-button, .jj-map-square-control, .jj-map-marker-pill),
+html body #root [data-area-detail-page] [data-map-shell] :is(.jj-map-enable-chip, .jj-map-layer-button, .jj-map-square-control, .jj-map-marker-pill) *,
+html body #root [data-area-detail-page] #similar-areas :where(h3,h4,p,span,a,svg,path){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -30954,23 +30841,8 @@ html body #root [data-area-detail-page] [data-dld-market-widget] .jj-market-emer
   background: rgba(255,255,255,0.10) !important;
 }
 
-html body #root [data-area-detail-page] [data-map-shell] .custom-marker > div,
-html body #root [data-area-detail-page] [data-map-shell] .custom-marker > div *,
-html body #root [data-area-detail-page] [data-map-shell] :is(.jj-map-enable-chip, .jj-map-layer-button, .jj-map-square-control, .jj-map-marker-pill),
-html body #root [data-area-detail-page] [data-map-shell] :is(.jj-map-enable-chip, .jj-map-layer-button, .jj-map-square-control, .jj-map-marker-pill) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
 html body #root [data-area-detail-page] #similar-areas a {
   border: 0 !important;
-}
-
-html body #root [data-area-detail-page] #similar-areas :where(h3,h4,p,span,a,svg,path) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 
 html body #root [data-area-detail-page] #similar-areas [data-explore-more-heading] {
@@ -30995,7 +30867,8 @@ html body #root [data-area-detail-page] #similar-areas [data-explore-more-headin
  * button, map pill/enable chip pure white, backgrounds champagne.
  * ============================================================ */
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne,
-html body #root [data-area-detail-page="true"] [data-surface="champagne"] .group.rounded-2xl {
+html body #root [data-area-detail-page="true"] [data-surface="champagne"] .group.rounded-2xl,
+html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne .border-t{
   border-color: #B89555 !important;
 }
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] [data-card-price-payment-row],
@@ -31008,9 +30881,7 @@ html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surfa
   -webkit-text-fill-color: #0A0A0A !important;
 }
 /* Hairlines inside project card = gold */
-html body #root [data-area-detail-page="true"] [data-surface="champagne"] .surface-champagne .border-t {
-  border-color: #B89555 !important;
-}
+
 
 /* View All Projects PearlButton — force emerald metallic w/ pure white text + arrow */
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] a[href^="/properties?area="],
@@ -31073,7 +30944,8 @@ html body #root [data-area-detail-page="true"] #area-about [data-area-about-stat
 }
 
 html body #root [data-area-detail-page="true"] #area-projects [data-area-project-card="true"],
-html body #root [data-area-detail-page="true"] #area-projects [data-area-project-card="true"].surface-champagne {
+html body #root [data-area-detail-page="true"] #area-projects [data-area-project-card="true"].surface-champagne,
+html body #root [data-area-detail-page="true"] #area-projects [data-area-project-card="true"] .border-t{
   border-color: #B89555 !important;
 }
 
@@ -31082,10 +30954,6 @@ html body #root [data-area-detail-page="true"] #area-projects [data-area-project
   color: #0A0A0A !important;
   -webkit-text-fill-color: #0A0A0A !important;
   opacity: 1 !important;
-}
-
-html body #root [data-area-detail-page="true"] #area-projects [data-area-project-card="true"] .border-t {
-  border-color: #B89555 !important;
 }
 
 html body #root [data-area-detail-page="true"] #area-projects a[data-area-view-all-projects="true"],
@@ -31891,7 +31759,9 @@ html body #root button[data-listings-tab] :where(*),
 /* Radix menus are portaled under body (outside #root), so the emerald account
    identity requires a portal-level white-ink lock. */
 html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity],
-html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity] :where(*){
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-tone="emerald"] [data-account-menu-identity] :where(*),
+html body #root [data-list-property-page] [data-listing-start-cta],
+html body #root [data-list-property-page] [data-listing-start-cta] :is(span, svg, .lucide, path, line, polyline){
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -31904,13 +31774,7 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-a
 
 /* Start CTA on the choice cards is a WHITE pill — text/icons must stay emerald
    ink, never inherit the page-wide white text lock (white-on-white). */
-html body #root [data-list-property-page] [data-listing-start-cta],
-html body #root [data-list-property-page] [data-listing-start-cta] :is(span, svg, .lucide, path, line, polyline) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
+
 
 /* ─────────────────────────────────────────────────────────────
    PASS 263 — GOLD ANIMATED BRAND LINK
@@ -32331,7 +32195,11 @@ html body #root .jj-filter-rail > button[class][class],
 html body #root .jj-filter-rail > button[class][class] *,
 /* Catalog active filters are emerald surfaces and always use white ink. */
 html body #root [data-property-search-bar] [data-active-filter-summary] button,
-html body #root [data-property-search-bar] [data-active-filter-summary] button *{
+html body #root [data-property-search-bar] [data-active-filter-summary] button *,
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"],
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"] *,
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"] span[class][class],
+html body #root [data-jbj-method="true"] [data-ink-emerald="true"] svg[class][class]{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -32346,13 +32214,7 @@ html body #root .jj-filter-rail > div[class][class].jj-filter-search-pill {
 /* ── PASS 276 — JBJ method isometric plates: white ink lock on emerald plates ──
    The champagne page ink guard was repainting plate text to #1A1A1A on the
    emerald/ink plates. These plates are emerald-filled, so ink must be white. */
-html body #root [data-jbj-method="true"] [data-ink-emerald="true"],
-html body #root [data-jbj-method="true"] [data-ink-emerald="true"] *,
-html body #root [data-jbj-method="true"] [data-ink-emerald="true"] span[class][class],
-html body #root [data-jbj-method="true"] [data-ink-emerald="true"] svg[class][class] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
+
 html body #root [data-jbj-method="true"] [data-ink-emerald="true"] svg {
   stroke: #FFFFFF !important;
 }
