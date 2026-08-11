@@ -689,10 +689,15 @@ export function useProjectsListing() {
 
   return useQuery({
     queryKey: ["projects-listing"],
-    staleTime: 30 * 1000,
+    // The catalogue is ~1k rows with joins (multi-MB JSON). It used to be
+    // re-fetched every 60s and on every window focus, which re-parsed and
+    // re-rendered the whole grid and produced long main-thread tasks.
+    // Realtime `postgres_changes` above already invalidates this key the
+    // instant a project changes, so polling is pure overhead.
+    staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
-    refetchInterval: 60 * 1000,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
+
     queryFn: async () => {
       const LISTING_COLUMNS = `
         id, name, slug, description, location, price_from, price_to,
