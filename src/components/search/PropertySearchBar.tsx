@@ -28,8 +28,9 @@ import {
   BEDS,
   CATEGORY_TYPES,
   EMPTY_SEARCH,
-  PROJECT_STATUSES,
   PURPOSES,
+  sanitizeSearchForPurpose,
+  statusOptionsFor,
   SORT_OPTIONS,
   compactPrice,
   countExtraFilters,
@@ -214,7 +215,7 @@ export default function PropertySearchBar({
   }, [value]);
 
   const set = (patch: Partial<PropertySearch>) => {
-    const next = { ...f, ...patch };
+    const next = sanitizeSearchForPurpose({ ...f, ...patch });
     setInternal(next);
     onChange?.(next);
   };
@@ -334,8 +335,9 @@ export default function PropertySearchBar({
               data-surface={f.purpose === p.slug ? "emerald" : undefined}
               onClick={() => {
                 if (p.slug === "sell") {
-                  set({ purpose: p.slug });
-                  onSellSelected?.();
+                  // Sell is an intent, never a filter: go straight to listing.
+                  if (onSellSelected) onSellSelected();
+                  else window.location.assign("/sell");
                   return;
                 }
                 set({ purpose: p.slug });
@@ -653,7 +655,7 @@ export default function PropertySearchBar({
 
         <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark} spanClass="order-8 lg:order-none jj-sspan-3">
           <div className="p-3 flex flex-wrap gap-1.5">
-            {PROJECT_STATUSES.map((s) => (
+            {statusOptionsFor(f.purpose).map((s) => (
               <Chip
                 key={s.slug}
                 on={f.statuses.includes(s.slug)}
