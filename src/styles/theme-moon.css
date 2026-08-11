@@ -1,0 +1,179 @@
+/**
+ * theme-moon.css — the MOON (night) theme inversion layer.
+ *
+ * Loaded LAZILY by ThemeModeContext, only while the user is in Moon mode, so
+ * Sun-mode visitors never pay its style-recalculation cost.
+ *
+ * Reverse logic vs. the champagne day theme:
+ *   PRIMARY   = emerald → black pair gradient (#064E3B → #042c1c → #000)
+ *   CONTENT   = pure white text + white icons on every emerald surface
+ *   SECONDARY = champagne/gold, ALWAYS with black ink and black icons on top
+ *
+ * Everything is scoped to
+ *   html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+ * so the owner's locked back-office routes keep their fixed emerald CRM skin.
+ */
+
+:root {
+  --jbj-moon-emerald: #064e3b;
+  --jbj-moon-emerald-deep: #042c1c;
+  --jbj-moon-pair: linear-gradient(160deg, #064e3b 0%, #042c1c 55%, #000000 100%);
+  --jbj-moon-surface: #06231a;
+  --jbj-moon-surface-raised: #082d21;
+  --jbj-moon-hairline: rgba(255, 255, 255, 0.14);
+  --jbj-moon-gold: #b89555;
+}
+
+/* ── 1. Semantic design tokens ───────────────────────────────────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) {
+  --background: 160 62% 8%;
+  --foreground: 0 0% 100%;
+  --card: 160 55% 10%;
+  --card-foreground: 0 0% 100%;
+  --popover: 160 55% 10%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 162 85% 16%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 38 39% 53%;
+  --secondary-foreground: 0 0% 6%;
+  --muted: 160 30% 14%;
+  --muted-foreground: 0 0% 82%;
+  --accent: 38 39% 53%;
+  --accent-foreground: 0 0% 6%;
+  --border: 160 25% 20%;
+  --input: 160 25% 20%;
+  --ring: 38 39% 53%;
+  color-scheme: dark;
+}
+
+/* ── 2. Page canvas ──────────────────────────────────────────────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body {
+  background: #04150f;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+/* ── 3. Champagne surfaces → emerald pair gradient ───────────────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#FDFBF7]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#FFFDF9]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#F7F2EA]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#F2EBDC]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#EFE6D6]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#FAF7F0]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#FFFFFF]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class~="bg-white"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-cream"] {
+  background-color: var(--jbj-moon-surface) !important;
+  background-image: var(--jbj-moon-pair) !important;
+  color: #ffffff;
+}
+
+/* Inline-styled champagne panels */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [style*="#FDFBF7"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [style*="#F7F2EA"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [style*="#F2EBDC"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [style*="#EFE6D6"] {
+  background-color: var(--jbj-moon-surface) !important;
+  background-image: var(--jbj-moon-pair) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ── 4. Black/graphite ink → pure white ──────────────────────────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="text-[#1A1A1A]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="text-[#0F172A]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="text-[#111"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="text-[#000"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class~="text-black"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class~="text-foreground"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="text-[#064E3B]"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="text-[#1A1A1A]"] .lucide,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="text-[#064E3B]"] .lucide {
+  color: #ffffff;
+  stroke: #ffffff;
+}
+
+/* ── 5. Hairlines & borders ──────────────────────────────────────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="border-[#EFE6D6]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="border-[#F2EBDC]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="border-[#E5E7EB]"] {
+  border-color: var(--jbj-moon-hairline) !important;
+}
+
+/* ── 6. Champagne accent stays champagne — but always with BLACK ink ─────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#B89555]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#D4AF37]"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#C9A961]"] {
+  color: #0a0a0a !important;
+  -webkit-text-fill-color: #0a0a0a !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#B89555]"] .lucide,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [class*="bg-[#D4AF37]"] .lucide {
+  color: #0a0a0a;
+  stroke: #0a0a0a;
+}
+
+/* ── 7. Form controls ────────────────────────────────────────────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) input,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) select,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) textarea {
+  background-color: var(--jbj-moon-surface-raised) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: var(--jbj-moon-hairline) !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) input::placeholder,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) textarea::placeholder {
+  color: rgba(255, 255, 255, 0.55) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* ── 8. Floating layers (menus, dialogs, popovers) ───────────────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [role="menu"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [role="listbox"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [role="dialog"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [data-radix-popper-content-wrapper] > * {
+  background-color: var(--jbj-moon-surface) !important;
+  background-image: var(--jbj-moon-pair) !important;
+  color: #ffffff !important;
+  border-color: var(--jbj-moon-hairline) !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [role="menu"] *,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [role="listbox"] * {
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+/* ── 9. Contrast guard: never white-on-white, never black-on-black ───────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [data-jbj-surface="emerald"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [data-jbj-surface="emerald"] * {
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [data-jbj-surface="champagne"],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) [data-jbj-surface="champagne"] * {
+  color: #0a0a0a;
+  -webkit-text-fill-color: #0a0a0a;
+}
+
+/* Opt-out hook for anything that must keep its own palette (logos, photos,
+   brand plates, charts). */
+html[data-jbj-theme="moon"] [data-jbj-theme-exempt],
+html[data-jbj-theme="moon"] [data-jbj-theme-exempt] * {
+  background-image: revert-layer;
+  color: revert-layer;
+  -webkit-text-fill-color: revert-layer;
+}
+
+/* Media never gets tinted */
+html[data-jbj-theme="moon"] img,
+html[data-jbj-theme="moon"] video,
+html[data-jbj-theme="moon"] canvas,
+html[data-jbj-theme="moon"] svg[data-logo] {
+  background-image: none !important;
+}
