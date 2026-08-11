@@ -207,7 +207,11 @@ html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-j
 
 /* 10. Clipped-gradient labels -> solid white ink */
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-section-label],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-section-label] *,
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-subitem-label],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-subitem-label] *,
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [class*="bg-clip-text"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [class*="text-transparent"],
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-surface="emerald"] [class*="bg-clip-text"],
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-emerald] [class*="bg-clip-text"] {
   background-image: none !important;

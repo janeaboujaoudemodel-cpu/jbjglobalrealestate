@@ -173,7 +173,10 @@ out.append(f"""/* 9. Emerald surfaces keep white ink; media is never re-tinted *
 # 10. Gradient-clipped labels (background-clip:text) would vanish on an emerald
 # surface, so in Moon mode they render as solid white ink instead.
 out.append(f"""/* 10. Clipped-gradient labels -> solid white ink */
-{sel(['[data-sidebar-section-label]', '[data-sidebar-subitem-label]',
+{sel(['[data-sidebar-section-label]', '[data-sidebar-section-label] *',
+      '[data-sidebar-subitem-label]', '[data-sidebar-subitem-label] *',
+      '[data-chrome="sidebar"] [class*="bg-clip-text"]',
+      '[data-chrome="sidebar"] [class*="text-transparent"]',
       '[data-surface="emerald"] [class*="bg-clip-text"]',
       '[data-sidebar-emerald] [class*="bg-clip-text"]'])} {{
   background-image: none !important;
