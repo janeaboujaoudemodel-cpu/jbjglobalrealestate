@@ -1608,7 +1608,7 @@ function ProjectDetailLayoutInner({
         }`}
       >
         {/* Row 1: project search/filter pills only. */}
-        <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2 transition-all duration-300">
+        <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="border-b border-[#B89555]/20 px-2 h-[var(--jj-bar-h,56px)] flex items-center transition-all duration-300" style={{ background: 'var(--jj-pearl-band)' }}>
           <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide [&_button]:min-h-11 [&_button]:px-4 [&_input]:min-h-11 [&_[role=combobox]]:min-h-11" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
             <FilterShortcutBar
               variant="light"
@@ -1621,11 +1621,15 @@ function ProjectDetailLayoutInner({
           </div>
         </div>
 
-        {/* Row 2: project section tabs only. */}
-        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+        {/* Row 2: project section tabs only.
+            PASS 297 — BAR HEIGHT LOCK: every chrome bar (utility bar, sidebar
+            header, project sub-nav) is exactly 56px so the stack reads as one
+            premium rail. Background is mother-of-pearl, never dark beige. */}
+        <div className="border-b border-[#B89555]/45 shadow-[0_6px_18px_-10px_rgba(184,149,85,0.35)]" style={{ background: 'var(--jj-pearl-band)' }}>
           <div className="jj-content-track">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-              <div className="flex w-max min-w-full items-center gap-1 py-2.5">
+              <div className="flex w-max min-w-full items-center gap-1 h-[var(--jj-bar-h,56px)]">
+
                 {stickyProjectTabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -1671,7 +1675,7 @@ function ProjectDetailLayoutInner({
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="jj-section-champagne jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <section className="jj-section-champagne jj-project-band jj-fullbleed-band" style={{ background: 'var(--jj-pearl-band)' }}>
         <div className="jj-project-shell py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
 
 
@@ -2548,7 +2552,7 @@ function ProjectDetailLayoutInner({
 
       {/* Recommended Projects — seamless champagne bg continuation */}
       <SectionDividerGoldFullBleed />
-      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'var(--jj-pearl-band)' }}>
       <div className="jj-project-shell">
       <DeferredSection minHeight={520}>
       <RecommendedProjects

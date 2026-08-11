@@ -32572,3 +32572,30 @@ html body #root:not(#\9) button:is(.mir-pill, .mir-solid, [data-status-pill]) {
   min-width: max-content !important;
   white-space: nowrap !important;
 }
+
+/* ============================================================
+   PASS 297 — MOTHER-OF-PEARL SURFACE + BAR HEIGHT LOCK
+   The dark beige band (#EDE0C8 → #D8C7A6) is retired. Public
+   surfaces use a pearlescent champagne wash; every chrome bar
+   (utility bar, sidebar header, project sub-nav) is 56px tall.
+   ============================================================ */
+:root {
+  --jj-bar-h: 56px;
+  --jj-pearl-band:
+    radial-gradient(1200px 420px at 18% -10%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(900px 360px at 88% 110%, rgba(244,227,168,0.28) 0%, rgba(244,227,168,0) 62%),
+    linear-gradient(135deg, #FFFDFA 0%, #FCF8F1 38%, #F8F2E7 68%, #FFFDF8 100%);
+  --jj-pearl-card:
+    linear-gradient(160deg, #FFFFFF 0%, #FFFCF6 44%, #FBF6EC 100%);
+}
+html body #root .jj-surface-pearl { background: var(--jj-pearl-band); }
+html body #root .jj-card-pearl {
+  background: var(--jj-pearl-card);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 40px -28px rgba(4,44,28,0.28);
+}
+
+/* Developer name gold must stay READABLE — the light sheen stop is darkened
+   so the wordmark never disappears against pearl/champagne surfaces. */
+html:root body #root [data-developer-gold].developer-name-gold {
+  text-shadow: none;
+}
