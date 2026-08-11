@@ -201,21 +201,40 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
           {hasHero ? (
             <>
               <img
-                src={cardHeroImageUrl}
+                src={heroSources?.src ?? cardHeroImageUrl}
+                srcSet={heroSources?.srcSet}
+                sizes={heroSources?.srcSet ? CARD_IMAGE_SIZES : undefined}
                 alt={`${developer.name} featured project`}
+                width={928}
+                height={557}
                 loading={isEager ? "eager" : "lazy"}
+                {...({ fetchpriority: isEager ? "high" : "low" } as any)}
                 referrerPolicy="no-referrer"
                 decoding="async"
+                data-media-state={heroLoaded ? "ready" : "loading"}
+                style={
+                  heroLoaded
+                    ? undefined
+                    : {
+                        backgroundImage:
+                          "linear-gradient(135deg,#FDFBF7 0%,#F3EBDD 45%,#EFE6D6 100%)",
+                        backgroundSize: "cover",
+                      }
+                }
                 onError={() => setHeroIndex((current) =>
                   current + 1 < candidates.length ? current + 1 : candidates.length,
                 )}
                 onLoad={(event) => {
                   const image = event.currentTarget;
+                  setHeroLoaded(true);
                   // Premium quality gate: skip low-resolution artwork, but
                   // only when a further candidate actually exists — never
                   // downgrade a card to the blueprint field for sharpness.
+                  // NOTE: when a responsive srcset is in play the browser may
+                  // legitimately pick a 320w variant on mobile, so the
+                  // resolution gate only applies to non-responsive sources.
                   const tooSmall = image.naturalWidth < 40 || image.naturalHeight < 40;
-                  const lowRes = image.naturalWidth < 600;
+                  const lowRes = !heroSources?.srcSet && image.naturalWidth < 600;
                   if (tooSmall || lowRes) {
                     setHeroIndex((current) =>
                       current + 1 < candidates.length ? current + 1 : current,
@@ -224,6 +243,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                 }}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
               />
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
               {/* LOCKED: the developer logo is never dropped when a signature
                   project photo is used as the card hero. It always rides on the
