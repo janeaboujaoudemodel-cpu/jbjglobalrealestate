@@ -123,7 +123,7 @@ def p2_dedupe_not(items, stats):
             continue
         lead, sel = lead_and_sel(it[1])
         parts = []
-        for part in sel.split(","):
+        for part in safe_split_selector(sel):
             toks = re.split(r"(\s+|>|\+|~)", part)
             new_toks = []
             for t in toks:
