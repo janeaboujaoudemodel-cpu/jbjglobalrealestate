@@ -350,16 +350,27 @@ const Developers = () => {
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-0">{/* Edge-to-edge container */}
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {[...Array(8)].map((_, i) => (
-                  <div 
-                    key={i} 
-                    className="h-[280px] rounded-xl bg-[#04241C]/50 animate-pulse"
-                    style={{ border: '2px solid rgba(255,255,255,0.12)' }}
-                  />
-                ))}
-              </div>
+              /* CLS (LOCKED): the skeleton must reserve the SETTLED geometry of
+                 the real directory — same grid class, same column count, one
+                 tile per page slot at the measured card height (383px), plus the
+                 view-controls rail. The old 8x280px placeholder was ~590px tall
+                 while the resolved grid is ~2419px, so every section below it
+                 (the DLD market widget) was pushed down on data arrival — the
+                 single largest LIVE /developers layout shift (0.159). */
+              <>
+                <div className="h-[72px]" aria-hidden="true" />
+                <div data-developer-grid data-cols={columns} className="jj-dev-grid items-stretch">
+                  {[...Array(perPage === 0 ? 24 : perPage)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-[383px] rounded-xl bg-[#04241C]/50 animate-pulse"
+                      style={{ border: '2px solid rgba(255,255,255,0.12)' }}
+                    />
+                  ))}
+                </div>
+              </>
             ) : filteredDevelopers.length === 0 ? (
+
               <div className="text-center py-20 border border-dashed border-[#064E3B]/25 rounded-xl bg-premium-card/50">
                 <Building2 className="w-20 h-20 text-[#1A1A1A]/70 mx-auto mb-6" />
                 <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
