@@ -408,7 +408,9 @@ export default function MarketDataImportHub() {
   const [bulkBusy, setBulkBusy] = useState(false);
   const [rowBusy, setRowBusy] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "not_published" | "approved" | "pending" | "rejected">("all");
+  const [projectScope, setProjectScope] = useState<"new" | "all">("new");
   const [matchLimit, setMatchLimit] = useState(100);
+
 
   useEffect(() => setSelected(new Set()), [tab, entity]);
 
