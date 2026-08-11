@@ -98,6 +98,15 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
   // Independent indices: the inline carousel must NOT move when the user browses
   // the fullscreen gallery, and vice-versa.
   const [pageIndex, setPageIndex] = useState(0);
+  /**
+   * Thumbnail strip windowing: galleries carry 40+ photos and rendering every
+   * thumbnail up-front cost DOM nodes, layout and image decodes for slides that
+   * are scrolled far off-screen. We render a window and grow it as the user
+   * scrolls the strip or advances the active slide. `images` itself is untouched,
+   * so "Download All Photos" and fullscreen still use the full set.
+   */
+  const THUMB_WINDOW_STEP = 12;
+  const [thumbLimit, setThumbLimit] = useState(THUMB_WINDOW_STEP);
   const [fsIndex, setFsIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [failedUrls, setFailedUrls] = useState<Set<string>>(new Set());
@@ -142,6 +151,12 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
   const total = images.length;
   const hasMultiple = total > 1;
   const safePageIndex = total > 0 ? Math.min(pageIndex, total - 1) : 0;
+  useEffect(() => {
+    // keep the active slide inside the rendered thumbnail window
+    if (safePageIndex + 2 >= thumbLimit) {
+      setThumbLimit((n) => Math.min(total, Math.max(n, safePageIndex + 2 + THUMB_WINDOW_STEP)));
+    }
+  }, [safePageIndex, thumbLimit, total]);
   const safeFsIndex = total > 0 ? Math.min(fsIndex, total - 1) : 0;
   const activePageImage = images[safePageIndex];
   const activeFsImage = images[safeFsIndex];
@@ -405,8 +420,16 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                 <span>Download All Photos</span>
               </button>
             </div>
-            <div className="flex gap-2 overflow-x-auto overscroll-x-contain pb-2 snap-x snap-mandatory [scrollbar-width:thin]">
-              {images.map((image, index) => {
+            <div
+              className="flex gap-2 overflow-x-auto overscroll-x-contain pb-2 snap-x snap-mandatory [scrollbar-width:thin]"
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 240) {
+                  setThumbLimit((n) => Math.min(total, n + THUMB_WINDOW_STEP));
+                }
+              }}
+            >
+              {images.slice(0, thumbLimit).map((image, index) => {
                 return (
                   <button
                     key={image.id}
