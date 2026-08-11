@@ -50,7 +50,7 @@ def main(apply=False):
         if it[0] != 'rule':
             out.append(it); continue
         lead, sel = lead_and_sel(it[1])
-        parts = sel.split(',')
+        parts = split_top(sel)
         keep = []
         for p in parts:
             dead = False
