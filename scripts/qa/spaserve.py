@@ -1,6 +1,6 @@
 import sys,os
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-ROOT=sys.argv[1]; PORT=int(sys.argv[2])
+ROOT=os.path.abspath(sys.argv[1]); PORT=int(sys.argv[2])
 class H(SimpleHTTPRequestHandler):
     def translate_path(self,path):
         p=super().translate_path(path.split('?')[0])
