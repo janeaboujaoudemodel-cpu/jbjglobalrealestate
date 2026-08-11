@@ -81,8 +81,8 @@ export function buildResponsiveImage(
   }
 
   return {
-    src: storageVariant(url, largest, quality),
-    srcSet: widths.map((w) => `${storageVariant(url, w, quality)} ${w}w`).join(", "),
+    src: variant(url, largest, quality),
+    srcSet: widths.map((w) => `${variant(url, w, quality)} ${w}w`).join(", "),
     sizes: options.sizes,
   };
 }
