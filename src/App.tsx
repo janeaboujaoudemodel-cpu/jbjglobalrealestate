@@ -157,6 +157,9 @@ const App = () => {
                   <DeferredAppExtras />
                   {/* Back-office CSS: fetched only on private routes */}
                   <PrivateSurfaceStyles />
+                  {/* Insights / compare CSS: fetched only on those routes */}
+                  <RouteSurfaceStyles />
+
                   {/* Runtime contrast repaint intentionally removed — see import comment */}
 
                    
