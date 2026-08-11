@@ -85,7 +85,7 @@ export function NotificationBadge({ count, floating = false, className, ...props
       data-no-contrast-guard
       className={cn(
         "allow-white inline-flex h-[20px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none !text-white ![color:#FFFFFF] ![-webkit-text-fill-color:#FFFFFF] shadow-[0_6px_14px_-8px_rgba(0,0,0,0.85)]",
-        floating && "absolute right-0 top-0 z-[6] translate-x-[35%] -translate-y-[35%]",
+        floating && "absolute right-0 top-0 z-[6] translate-x-[30%]",
         className,
       )}
       {...props}
