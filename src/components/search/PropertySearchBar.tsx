@@ -823,7 +823,7 @@ export default function PropertySearchBar({
         <DialogContent
            data-surface="light"
            data-search-dropdown
-          className="max-w-[min(96vw,44rem)] p-0 gap-0 z-[80]"
+          className="max-w-[min(96vw,44rem)] p-0 gap-0 top-[calc(50%+1.75rem)] max-h-[calc(100dvh-8rem)] overflow-y-auto"
           style={{ background: "#FFFFFF", border: "1px solid rgba(184,149,85,0.35)", color: "#1A1A1A" }}
         >
           <div className="px-4 pt-4">
