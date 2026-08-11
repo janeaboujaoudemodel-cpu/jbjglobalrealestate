@@ -13,6 +13,7 @@ import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpDown, ChevronDown, Crown, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
+import { useNavigate } from "react-router-dom";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -30,6 +31,8 @@ import {
   EMPTY_SEARCH,
   PROJECT_STATUSES,
   PURPOSES,
+  sanitizeSearchForPurpose,
+  statusOptionsFor,
   SORT_OPTIONS,
   compactPrice,
   countExtraFilters,
@@ -213,8 +216,14 @@ export default function PropertySearchBar({
     if (value) setInternal(value);
   }, [value]);
 
+  const navigate = useNavigate();
+  const goSell = () => {
+    if (onSellSelected) onSellSelected();
+    else navigate("/list-property?purpose=sale&mode=manual");
+  };
+
   const set = (patch: Partial<PropertySearch>) => {
-    const next = { ...f, ...patch };
+    const next = sanitizeSearchForPurpose({ ...f, ...patch });
     setInternal(next);
     onChange?.(next);
   };
@@ -334,8 +343,8 @@ export default function PropertySearchBar({
               data-surface={f.purpose === p.slug ? "emerald" : undefined}
               onClick={() => {
                 if (p.slug === "sell") {
-                  set({ purpose: p.slug });
-                  onSellSelected?.();
+                  // Sell is an intent, never a filter: go straight to listing.
+                  goSell();
                   return;
                 }
                 set({ purpose: p.slug });
@@ -653,7 +662,7 @@ export default function PropertySearchBar({
 
         <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark} spanClass="order-8 lg:order-none jj-sspan-3">
           <div className="p-3 flex flex-wrap gap-1.5">
-            {PROJECT_STATUSES.map((s) => (
+            {statusOptionsFor(f.purpose).map((s) => (
               <Chip
                 key={s.slug}
                 on={f.statuses.includes(s.slug)}
@@ -838,6 +847,10 @@ export default function PropertySearchBar({
               setMoreOpen(false);
               requestAnimationFrame(() => onSubmit(applied));
             }}
+            onSellSelected={() => {
+              setMoreOpen(false);
+              goSell();
+            }}
           />
         </DialogContent>
       </Dialog>
@@ -849,10 +862,12 @@ function MoreFiltersBody({
   draft,
   setDraft,
   onApply,
+  onSellSelected,
 }: {
   draft: PropertySearch;
   setDraft: (v: PropertySearch) => void;
   onApply: (v: PropertySearch) => void;
+  onSellSelected?: () => void;
 }) {
   const { count } = usePropertyCount(draft);
   return (
@@ -862,6 +877,7 @@ function MoreFiltersBody({
       count={count}
       onReset={() => setDraft({ ...EMPTY_SEARCH, purpose: draft.purpose, country: draft.country })}
       onApply={() => onApply(draft)}
+      onSellSelected={onSellSelected}
     />
   );
 }

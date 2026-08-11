@@ -14,8 +14,10 @@ import {
   FURNISHINGS,
   LISTING_LABELS,
   PAYMENT_OPTIONS,
-  PROJECT_STATUSES,
   PURPOSES,
+  sanitizeSearchForPurpose,
+  statusOptionsFor,
+  supportsOffPlanAxes,
   RENT_PERIODS,
   currencyFor,
   type PropertySearch,
@@ -70,10 +72,13 @@ interface Props {
   count?: number | null;
   onApply?: () => void;
   onReset?: () => void;
+  /** Called when the visitor picks "Sell" — the host closes and routes to /sell. */
+  onSellSelected?: () => void;
 }
 
-export default function PropertyFilterScreen({ value: f, onChange, count, onApply, onReset }: Props) {
-  const set = (patch: Partial<PropertySearch>) => onChange({ ...f, ...patch });
+export default function PropertyFilterScreen({ value: f, onChange, count, onApply, onReset, onSellSelected }: Props) {
+  const set = (patch: Partial<PropertySearch>) => onChange(sanitizeSearchForPurpose({ ...f, ...patch }));
+  const offPlanAxes = supportsOffPlanAxes(f.purpose);
   const toggleIn = <T extends string>(arr: T[], v: T): T[] =>
     arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
   const cur = currencyFor(f.country);
@@ -85,7 +90,17 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
         <Section title="Purpose">
           <div className="flex flex-wrap gap-1.5">
             {PURPOSES.map((p) => (
-              <Chip key={p.slug} on={f.purpose === p.slug} onClick={() => set({ purpose: p.slug })}>
+              <Chip
+                key={p.slug}
+                on={p.slug !== "sell" && f.purpose === p.slug}
+                onClick={() => {
+                  if (p.slug === "sell") {
+                    onSellSelected?.();
+                    return;
+                  }
+                  set({ purpose: p.slug });
+                }}
+              >
                 {p.label}
               </Chip>
             ))}
@@ -101,9 +116,9 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
           )}
         </Section>
 
-        <Section title="Project status (multi-select)">
+        <Section title={offPlanAxes ? "Project status (multi-select)" : "Availability"}>
           <div className="flex flex-wrap gap-1.5">
-            {PROJECT_STATUSES.map((s) => (
+            {statusOptionsFor(f.purpose).map((s) => (
               <Chip
                 key={s.slug}
                 on={f.statuses.includes(s.slug)}
@@ -115,6 +130,7 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
           </div>
         </Section>
 
+        {offPlanAxes ? (
         <Section title="Completion by">
           <div className="flex flex-wrap gap-1.5">
             <Chip on={!f.completionTo} onClick={() => set({ completionTo: null })}>
@@ -127,7 +143,11 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
             ))}
           </div>
         </Section>
+        ) : null}
 
+
+
+        {offPlanAxes ? (
         <Section title="Payment">
           <div className="flex flex-wrap gap-1.5">
             {PAYMENT_OPTIONS.map((p) => (
@@ -137,6 +157,7 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
             ))}
           </div>
         </Section>
+        ) : null}
 
         <Section title="Property type">
           <div className="grid grid-cols-2 gap-1 p-1 rounded-xl mb-2" style={{ background: "#F2EBDC" }}>

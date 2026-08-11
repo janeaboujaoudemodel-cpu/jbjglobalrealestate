@@ -212,6 +212,41 @@ export const EMPTY_SEARCH: PropertySearch = {
   q: "",
 };
 
+/* --------------------------------------------- purpose-aware taxonomy (LOCKED)
+
+   RENT is a ready-stock market: a tenant can never rent an off-plan unit, a
+   resale, a distress deal or a payment plan. Those axes belong to SALE only.
+   SELL is not a filter at all — it is an intent to list a property, so the UI
+   must route the visitor to the listing flow instead of running a search. */
+
+export const SALE_ONLY_STATUSES: ProjectStatus[] = [
+  "off-plan",
+  "resale",
+  "distress",
+  "nearing-completion",
+];
+
+/** Status chips that make sense for the active purpose. */
+export const statusOptionsFor = (purpose: Purpose) =>
+  purpose === "rent"
+    ? PROJECT_STATUSES.filter((s) => !SALE_ONLY_STATUSES.includes(s.slug))
+    : PROJECT_STATUSES;
+
+/** True when the off-plan axes (status pipeline, handover, payment plan) apply. */
+export const supportsOffPlanAxes = (purpose: Purpose) => purpose !== "rent";
+
+/** Drops any filter that is impossible for the chosen purpose. */
+export function sanitizeSearchForPurpose(f: PropertySearch): PropertySearch {
+  if (supportsOffPlanAxes(f.purpose)) return f;
+  return {
+    ...f,
+    statuses: f.statuses.filter((s) => !SALE_ONLY_STATUSES.includes(s)),
+    completionTo: null,
+    payment: "any",
+    rentPeriod: f.rentPeriod ?? "yearly",
+  };
+}
+
 export const currencyFor = (country?: string | null) => COUNTRY_CURRENCY[country ?? ""] ?? "AED";
 
 /* -------------------------------------------------------------------- codec */
