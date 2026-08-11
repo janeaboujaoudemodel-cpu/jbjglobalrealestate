@@ -144,6 +144,9 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
             ))}
           </div>
         </Section>
+        ) : null}
+
+
 
         {offPlanAxes ? (
         <Section title="Payment">
