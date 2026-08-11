@@ -184,8 +184,9 @@ const ExploreServicesExpander = () => {
       <div key={active.id} data-photo-copy-lock data-surface="dark" className="relative h-[420px] md:h-[520px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center animate-fade-in"
-          style={{ backgroundImage: `url(${active.image})` }}
+          style={{ backgroundImage: `url(${active.image})`, backgroundColor: "#042c1c" }}
         />
+
         {/* Soft bottom fade only — no heavy left wall, image stays crisp */}
         <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
 

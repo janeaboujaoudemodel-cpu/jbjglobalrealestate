@@ -68,16 +68,21 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = tru
 
   return (
     <div ref={containerRef} className={`absolute inset-0 bg-[#1A1A1A] ${className}`}>
-      {/* Poster image — shown immediately */}
+      {/* Poster image — shown immediately. Responsive: mobile must not pull a
+          1920px poster for a 390px viewport. Only the eager (LCP) instance is
+          fetched at high priority. */}
       <img
-        src={poster}
+        src={posterSources?.src ?? poster}
+        srcSet={posterSources?.srcSet}
+        sizes={posterSources?.srcSet ? HERO_IMAGE_SIZES : undefined}
         alt=""
         aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ opacity }}
-        loading="eager"
-        {...({ fetchpriority: "high" } as any)}
+        loading={eager ? "eager" : "lazy"}
+        {...({ fetchpriority: eager ? "high" : "low" } as any)}
        decoding="async" />
+
 
       {/* Video — fades in over poster when ready */}
       {isVisible && (
