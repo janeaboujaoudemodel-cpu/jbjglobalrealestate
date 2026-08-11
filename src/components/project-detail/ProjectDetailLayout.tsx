@@ -1675,7 +1675,7 @@ function ProjectDetailLayoutInner({
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="jj-section-champagne jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <section className="jj-section-champagne jj-project-band jj-fullbleed-band" style={{ background: 'var(--jj-pearl-band)' }}>
         <div className="jj-project-shell py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
 
 
@@ -2552,7 +2552,7 @@ function ProjectDetailLayoutInner({
 
       {/* Recommended Projects — seamless champagne bg continuation */}
       <SectionDividerGoldFullBleed />
-      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'var(--jj-pearl-band)' }}>
       <div className="jj-project-shell">
       <DeferredSection minHeight={520}>
       <RecommendedProjects
