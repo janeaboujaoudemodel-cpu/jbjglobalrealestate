@@ -508,13 +508,23 @@ export default function MarketDataImportHub() {
     return (row.review_decision || "pending") === statusFilter;
   };
 
+  /**
+   * PASS 289 — SCOPE TRUTH. "New only" = staged rows with no JBJ match; "All in scope"
+   * = every off-plan project the crawl found, so the table count can be reconciled
+   * against the "Projects in scope" tile instead of silently showing the new subset.
+   */
   const newProjects = useMemo(
     () =>
       stagedProjects.filter(
-        (p) => p.is_offplan && !matchedStagedIds.has(p.id) && matchesStatusFilter(p) && (!q || p.name.toLowerCase().includes(q.toLowerCase())),
+        (p) =>
+          p.is_offplan &&
+          (projectScope === "all" || !matchedStagedIds.has(p.id)) &&
+          matchesStatusFilter(p) &&
+          (!q || p.name.toLowerCase().includes(q.toLowerCase())),
       ),
-    [stagedProjects, matchedStagedIds, q, statusFilter],
+    [stagedProjects, matchedStagedIds, q, statusFilter, projectScope],
   );
+
 
   const newDevelopers = useMemo(
     () => stagedDevelopers.filter((d) => matchesStatusFilter(d) && (!q || d.name.toLowerCase().includes(q.toLowerCase()))),
