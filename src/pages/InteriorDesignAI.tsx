@@ -23,6 +23,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 import { SEOHead } from "@/components/SEOHead";
+import PageScope from "@/components/util/PageScope";
 
 // Data arrays
 const designStyles = [
@@ -279,6 +280,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       className="allow-white relative w-full min-h-screen overflow-hidden"
       style={{ background: "linear-gradient(180deg, #031F17 0%, #021610 42%, #000000 100%)", color: "#FFFFFF" }}
     >
+      <PageScope token="interior-ai" />
       <style>{`
         [data-interior-design-ai],
         [data-interior-design-ai] :is(h1,h2,h3,h4,p,span,label,small,strong,button,textarea,input,div):not([class*="bg-clip-text"]) {
@@ -327,7 +329,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           -webkit-text-fill-color: #FFFFFF !important;
           border: 1px solid rgba(1,8,6,0.72) !important;
         }
-        [data-interior-design-ai] .id-primary > * {
+        [data-interior-design-ai] .id-primary >
+      <PageScope token="interior-ai" /> * {
           background-image: none !important;
           background: transparent !important;
         }
@@ -365,7 +368,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] [role="progressbar"] {
           background: rgba(255,255,255,0.12) !important;
         }
-        [data-interior-design-ai] [role="progressbar"] > div {
+        [data-interior-design-ai] [role="progressbar"] >
+      <PageScope token="interior-ai" /> div {
           background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%)) !important;
         }
         [data-interior-design-ai] svg {

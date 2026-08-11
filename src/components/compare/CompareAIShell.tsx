@@ -6,6 +6,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
+import PageScope from "@/components/util/PageScope";
 
 export const COMPARE_AI_PALETTE = {
   page: "#010806",
@@ -66,6 +67,7 @@ export default function CompareAIShell({ children }: CompareAIShellProps) {
       className="relative min-h-screen overflow-hidden"
       style={{ background: COMPARE_AI_PALETTE.gradient, color: COMPARE_AI_PALETTE.ink }}
     >
+      <PageScope token="compare" />
       {/* Subtle emerald ambient blobs — purely decorative */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {blob(720, { x: "-10%", y: "-15%" }, 22, 0, 0.08)}
