@@ -88,6 +88,7 @@ const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const PropertyMap = lazy(() => import("@/pages/PropertyMap"));
 const ListingAdmin = lazy(() => import("@/pages/ListingAdmin"));
+const ListingsApproval = lazy(() => import("@/pages/admin/ListingsApproval"));
 const ModeHub = lazy(() => import("@/pages/ModeHub"));
 const FoundersNotesPanel = lazy(() => import("@/components/founders-assistant/FoundersNotesPanel"));
 const BrandAssetsDashboard = lazy(() => import("@/pages/owner/BrandAssetsDashboard"));
@@ -251,6 +252,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-featured-projects" element={<HomeFeaturedProjectsManager />} />
     <Route path="owner-property-map" element={<PropertyMap />} />
     <Route path="owner-listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
+    <Route path="owner-listings-approval" element={<ListingAdminGuard><ListingsApproval /></ListingAdminGuard>} />
     <Route path="owner-inbox" element={<OwnerInbox />} />
     <Route path="owner-team-chat" element={<TeamChat />} />
     <Route path="owner-relationships" element={<CRMRelationships />} />

@@ -32600,3 +32600,60 @@ html body #root [data-branded-email-launcher-card="true"] [data-branded-email-la
     contain-intrinsic-size: none;
   }
 }
+
+/* ============================================================
+   PASS 282 — MODAL SCRIM LOCK (LOCKED)
+   A dialog overlay is a SCRIM, never a surface. Champagne page
+   rules were repainting it opaque, so opening "Add deal" looked
+   like a brand-new blank champagne screen with no backend
+   sidebar behind it. The scrim must always stay translucent ink
+   so the shell (front-end or back-end) remains visible behind.
+   ============================================================ */
+html body [data-radix-dialog-overlay],
+html body [data-radix-alert-dialog-overlay],
+html body [role="dialog"] + [data-radix-dialog-overlay],
+html body div[data-state="open"].fixed.inset-0[class*="bg-[#1A1A1A]"],
+html body div[data-state="closed"].fixed.inset-0[class*="bg-[#1A1A1A]"] {
+  background: rgba(10, 15, 13, 0.62) !important;
+  background-color: rgba(10, 15, 13, 0.62) !important;
+  background-image: none !important;
+  backdrop-filter: blur(2px);
+}
+
+/* ============================================================
+   PASS 283 — BACKEND PORTAL SURFACE (LOCKED)
+   While the owner is inside the back office (body[data-jbj-backend]),
+   every portalled dialog / sheet / menu uses the backend surface
+   (white card + emerald ink), never the public champagne surface,
+   and never black text on an emerald fill.
+   ============================================================ */
+html body[data-jbj-backend="true"] [role="dialog"]:not([data-radix-dialog-overlay]),
+html body[data-jbj-backend="true"] [role="alertdialog"] {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  border-color: rgba(6, 78, 59, 0.14) !important;
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
+}
+html body[data-jbj-backend="true"] [role="dialog"] :where(h1, h2, h3, label, p, span, div, td, th) {
+  color: #0F172A;
+  -webkit-text-fill-color: #0F172A;
+}
+html body[data-jbj-backend="true"] [role="dialog"] :where(input, textarea, select, [role="combobox"]) {
+  background: #FFFFFF !important;
+  border-color: rgba(6, 78, 59, 0.18) !important;
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
+}
+/* Emerald-filled controls inside backend portals keep white ink. */
+html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[class*="#064E3B"],
+html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[data-state="active"],
+html body[data-jbj-backend="true"] [role="dialog"] .jj-surface-emerald {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[class*="#064E3B"] svg,
+html body[data-jbj-backend="true"] [role="dialog"] .jj-surface-emerald svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}

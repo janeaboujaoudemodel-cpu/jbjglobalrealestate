@@ -23,6 +23,15 @@ export default function CrmShell() {
     }
   }, [user?.email, mode, setMode]);
 
+  // Flag the document so portalled overlays (dialogs, sheets, popovers)
+  // inherit the BACKEND white/emerald surface instead of the public
+  // champagne surface. Portals render outside .jc-app, so an ancestor
+  // selector cannot reach them.
+  useEffect(() => {
+    document.body.setAttribute("data-jbj-backend", "true");
+    return () => document.body.removeAttribute("data-jbj-backend");
+  }, []);
+
   // One-time purge of any leftover Zoho / mirror cache keys from prior builds.
   useEffect(() => {
     try {
