@@ -511,10 +511,13 @@ export function useTrendingAreas() {
 export function useProjectsCount() {
   return useQuery({
     queryKey: ["projects-count"],
-    staleTime: 30 * 1000,
+    staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
-    refetchInterval: 60 * 1000,
-    refetchOnWindowFocus: true,
+    // Freshness comes from the realtime `projects` subscription in
+    // useProjectsListing (it invalidates this key). Polling every 60s only
+    // added main-thread work and network chatter on every open tab.
+    refetchOnWindowFocus: false,
+
     queryFn: async () => {
       const { count, error } = await supabase
         .from("projects")
