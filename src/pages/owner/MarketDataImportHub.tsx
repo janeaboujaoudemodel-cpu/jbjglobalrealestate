@@ -149,7 +149,8 @@ const PublishCell = ({
         disabled={busy || state === "published"}
         onClick={onPublish}
         title={state === "published" ? "This record is published live" : "Approve and publish this record"}
-        className={`!whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
+        data-status-pill="true"
+        className={`!whitespace-nowrap rounded-full px-3 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
       >
         {label}
       </button>
@@ -1092,7 +1093,7 @@ export default function MarketDataImportHub() {
 
 
                       <td className="px-4 py-3">
-                        <select aria-label={`Review status for ${p.name}`} disabled={rowBusy === p.id} value={p.review_decision || "pending"} onChange={(event) => updateSingleReview("project", p.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full px-2.5 py-1 text-[11px] font-semibold">
+                        <select aria-label={`Review status for ${p.name}`} disabled={rowBusy === p.id} value={p.review_decision || "pending"} onChange={(event) => updateSingleReview("project", p.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full pl-3 pr-8 py-1 text-[11px] font-semibold !whitespace-nowrap">
                           <option value="pending">Pending</option><option value="approved">Approved & publish</option><option value="rejected">Rejected</option>
                         </select>
                       </td>
@@ -1183,7 +1184,7 @@ export default function MarketDataImportHub() {
                       <td className="px-4 py-3 text-neutral-600">{formatHeadquarters(d.headquarters)}</td>
                       <td className="px-4 py-3 text-neutral-600">{d.total_projects ?? "—"}</td>
                       <td className="px-4 py-3">
-                        <select aria-label={`Review status for ${d.name}`} disabled={rowBusy === d.id} value={d.review_decision || "pending"} onChange={(event) => updateSingleReview("developer", d.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full px-2.5 py-1 text-[11px] font-semibold">
+                        <select aria-label={`Review status for ${d.name}`} disabled={rowBusy === d.id} value={d.review_decision || "pending"} onChange={(event) => updateSingleReview("developer", d.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full pl-3 pr-8 py-1 text-[11px] font-semibold !whitespace-nowrap">
                           <option value="pending">Pending</option><option value="approved">Approved & publish</option><option value="rejected">Rejected</option>
                         </select>
                       </td>

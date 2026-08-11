@@ -253,8 +253,13 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const inputClass = `${filterInput} h-10 rounded-xl font-medium`;
   const dropdownPanel =
     "mt-2 rounded-xl border border-[#B89555]/45 bg-white p-3 shadow-[0_14px_35px_-24px_rgba(26,26,26,0.35)]";
+  // One row geometry for every option in every dropdown of this panel: fixed
+  // 44px height so hover highlights are identical, and the tick box always sits
+  // on the same left rail. Labels wrap inside the row instead of growing it.
   const optionRow =
-    "group flex items-center gap-3 w-full min-h-11 rounded-md px-3 py-2 text-left transition-none overflow-visible text-[#1A1A1A]";
+    "group flex items-center gap-2.5 w-full h-11 rounded-md px-3 py-0 text-left transition-none overflow-hidden text-[#1A1A1A]";
+  const optionLabel =
+    "text-sm text-[#1A1A1A] group-hover:text-white group-focus:text-white text-left leading-[1.15] line-clamp-2";
   const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
 
   const PANEL_WIDTH = 768;
@@ -384,12 +389,12 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={optionRow}
                       >
                         <div className={cn(
-                          "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                          "w-[18px] h-[18px] rounded-[5px] border flex items-center justify-center flex-shrink-0 self-center",
                           countrySlug === c.slug ? selectedBox : "border-[#B89555]/60 bg-white"
                         )}>
-                          {countrySlug === c.slug && <Check className="w-3 h-3 text-white" />}
+                          {countrySlug === c.slug && <Check className="w-3.5 h-3.5" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
                         </div>
-                        <span className="text-sm text-[#1A1A1A] group-hover:text-white group-focus:text-white">
+                        <span className={optionLabel}>
                           {c.name}
                         </span>
                         {!c.live && (
@@ -439,12 +444,12 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           className={optionRow}
                         >
                           <div className={cn(
-                            "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                            "w-[18px] h-[18px] rounded-[5px] border flex items-center justify-center flex-shrink-0 self-center",
                             isSelected ? selectedBox : "border-[#B89555]/60 bg-white"
                           )}>
-                            {isSelected && <Check className="w-3 h-3 text-white" />}
+                            {isSelected && <Check className="w-3.5 h-3.5" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
                           </div>
-                          <span className="text-sm text-[#1A1A1A] group-hover:text-white group-focus:text-white">{em.label}</span>
+                          <span className={optionLabel}>{em.label}</span>
                         </button>
                       );
                     })}
@@ -498,12 +503,12 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                                   className={optionRow}
                                 >
                                   <div className={cn(
-                                    "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                                    "w-[18px] h-[18px] rounded-[5px] border flex items-center justify-center flex-shrink-0 self-center",
                                      isSelected ? selectedBox : "border-[#B89555]/60 bg-white"
                                   )}>
-                                    {isSelected && <Check className="w-3 h-3 text-white" />}
+                                    {isSelected && <Check className="w-3.5 h-3.5" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
                                   </div>
-                                  <span className="text-sm text-[#1A1A1A] group-hover:text-white group-focus:text-white text-left">{areaName}</span>
+                                  <span className={optionLabel}>{areaName}</span>
                                 </button>
                               );
                             })}
@@ -549,10 +554,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           className={optionRow}
                         >
                           <div className={cn(
-                            "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                            "w-[18px] h-[18px] rounded-[5px] border flex items-center justify-center flex-shrink-0 self-center",
                               isSelected ? selectedBox : "border-[#B89555]/60 bg-white"
                           )}>
-                            {isSelected && <Check className="w-3 h-3 text-white" />}
+                            {isSelected && <Check className="w-3.5 h-3.5" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
                           </div>
                           <DeveloperLogo
                             src={dev.logo_url}

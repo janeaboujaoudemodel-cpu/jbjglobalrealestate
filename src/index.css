@@ -32660,3 +32660,53 @@ html body[data-jbj-backend="true"] [role="dialog"] .jj-surface-emerald svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ────────────────────────────────────────────────────────────────
+   PASS 293 — NO WORD SPLIT (LOCKED)
+
+   A word is never allowed to break across lines. Back-office rules in
+   private-surfaces.css set `overflow-wrap: anywhere !important` on every
+   text node inside CRM cards, which shattered short labels like
+   "Not published" into "Not / publish / ed". The `:not(#\9)` hook raises
+   this guard above those rules (2 ids beats 1 id + classes) so it wins
+   from a single place, on public and private surfaces alike.
+   ──────────────────────────────────────────────────────────────── */
+html body #root:not(#\9) :is(
+  button,
+  a[role="button"],
+  [role="button"],
+  [role="tab"],
+  [role="option"],
+  label,
+  summary,
+  th,
+  [data-pill],
+  [data-status-pill],
+  [data-chip]
+),
+html body #root:not(#\9) :is(
+  button,
+  a[role="button"],
+  [role="button"],
+  [role="tab"],
+  [role="option"],
+  label,
+  summary,
+  th,
+  [data-pill],
+  [data-status-pill],
+  [data-chip]
+) :is(span, strong, em, small, b, i, div, p, time) {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  text-orientation: mixed !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* Pills/status chips must be at least as wide as their own text. */
+html body #root:not(#\9) :is([data-pill], [data-status-pill], [data-chip]),
+html body #root:not(#\9) button:is(.mir-pill, .mir-solid, [data-status-pill]) {
+  min-width: max-content !important;
+  white-space: nowrap !important;
+}

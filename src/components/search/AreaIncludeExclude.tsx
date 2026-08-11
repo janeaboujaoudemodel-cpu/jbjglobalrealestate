@@ -12,6 +12,8 @@ import HoverScrollRow from "@/components/ui/HoverScrollRow";
 import { getAreas, getRegions, hasRegionStep, GEO_COUNTRIES } from "@/data/geography";
 
 const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
+/** Exclude is never emerald: emerald means "include". */
+const RED_PAIR = "linear-gradient(135deg,#DC2626 0%,#B91C1C 55%,#7F1D1D 100%)";
 
 /** One shape + one size for every pill in this panel. */
 const PILL = "h-9 px-4 rounded-full text-xs font-semibold inline-flex items-center justify-center whitespace-nowrap";
@@ -158,7 +160,7 @@ export default function AreaIncludeExclude({
               mode === m
                 ? m === "include"
                   ? { backgroundImage: EMERALD_PAIR, color: "#FFF" }
-                  : { background: "#7F1D1D", color: "#FFF" }
+                  : { backgroundImage: RED_PAIR, color: "#FFF" }
                 : { color: "#1A1A1A" }
             }
           >
@@ -179,21 +181,24 @@ export default function AreaIncludeExclude({
               key={a.slug}
               type="button"
               onClick={() => toggle(a.slug)}
-              className="w-full flex items-center justify-between gap-2 px-2 py-2.5 rounded-lg text-sm text-left hover:bg-[#F7F2EA]"
+              className={`w-full h-11 flex items-center justify-between gap-2 px-2 rounded-lg text-sm text-left ${
+                mode === "exclude" ? "hover:bg-[#FBEAEA]" : "hover:bg-[#F7F2EA]"
+              }`}
             >
-              <span className="truncate" style={{ color: exc ? "#7F1D1D" : "#1A1A1A" }}>
+              <span className="leading-[1.15] line-clamp-2" style={{ color: exc ? "#B91C1C" : "#1A1A1A" }}>
                 {a.name}
               </span>
               <span
-                data-surface={on ? "emerald" : undefined}
+                data-surface={on && mode === "include" ? "emerald" : undefined}
                 data-emerald={on && mode === "include" ? "true" : undefined}
                 data-on-dark={on ? "true" : undefined}
+
                 className="w-5 h-5 rounded-[6px] flex items-center justify-center shrink-0"
                 style={
                   on
                     ? mode === "include"
                       ? { backgroundImage: EMERALD_PAIR }
-                      : { background: "#7F1D1D" }
+                      : { backgroundImage: RED_PAIR, border: "1px solid #7F1D1D" }
                     : { border: "1px solid rgba(26,26,26,0.3)" }
                 }
               >
