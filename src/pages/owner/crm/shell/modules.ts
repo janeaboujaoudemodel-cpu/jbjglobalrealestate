@@ -283,6 +283,7 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
       { slug: "owner-featured-projects", label: "Featured Projects", icon: Sparkles },
       { slug: "owner-property-map", label: "Property Map", icon: Map },
       { slug: "owner-listing-admin", label: "Listings Admin", icon: ClipboardList },
+      { slug: "owner-listings-approval", label: "Listings Approval", icon: ClipboardList },
     ],
   },
   {
