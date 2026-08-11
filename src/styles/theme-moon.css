@@ -98,7 +98,8 @@ html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-j
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root .jj-utility-shell,
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root .jj-champagne-surface,
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] > *,
-html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] > * > * {
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] > * > *,
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-emerald] {
   background-color: var(--jbj-moon-surface) !important;
   background-image: var(--jbj-moon-pair) !important;
 }
@@ -202,4 +203,14 @@ html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-j
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-developer-logo-plate],
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jbj-theme-exempt] {
   background-image: none !important;
+}
+
+/* 10. Clipped-gradient labels -> solid white ink */
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-section-label],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-subitem-label],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-surface="emerald"] [class*="bg-clip-text"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-sidebar-emerald] [class*="bg-clip-text"] {
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }

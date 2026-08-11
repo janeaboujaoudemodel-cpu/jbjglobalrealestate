@@ -85,7 +85,8 @@ for t in CHAMPAGNE:
     surfaces += [f'[class*="bg-[{t}]"]', f'[class*="from-[{t}]"]', f'[class*="via-[{t}]"]',
                  f'[class*="to-[{t}]"]', f'[style*="{t}"]', f'[style*="{t.lower()}"]']
 surfaces += ['[class~="bg-white"]', '.jj-main-shell', '.jj-utility-shell', '.jj-champagne-surface',
-             '[data-chrome="sidebar"] > *', '[data-chrome="sidebar"] > * > *']
+             '[data-chrome="sidebar"] > *', '[data-chrome="sidebar"] > * > *',
+             '[data-sidebar-emerald]']
 out.append(f"""/* 3. Champagne surfaces -> emerald pair gradient */
 {sel(surfaces)} {{
   background-color: var(--jbj-moon-surface) !important;
@@ -166,6 +167,18 @@ out.append(f"""/* 9. Emerald surfaces keep white ink; media is never re-tinted *
 }}
 {sel(["img", "video", "canvas", "picture", "[data-developer-logo-plate]", "[data-jbj-theme-exempt]"])} {{
   background-image: none !important;
+}}
+""")
+
+# 10. Gradient-clipped labels (background-clip:text) would vanish on an emerald
+# surface, so in Moon mode they render as solid white ink instead.
+out.append(f"""/* 10. Clipped-gradient labels -> solid white ink */
+{sel(['[data-sidebar-section-label]', '[data-sidebar-subitem-label]',
+      '[data-surface="emerald"] [class*="bg-clip-text"]',
+      '[data-sidebar-emerald] [class*="bg-clip-text"]'])} {{
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }}
 """)
 
