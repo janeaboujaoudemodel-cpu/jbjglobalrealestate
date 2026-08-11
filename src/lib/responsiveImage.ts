@@ -26,11 +26,32 @@ export interface ResponsiveImage {
   sizes?: string;
 }
 
-function isTransformable(url: string): boolean {
-  return url.includes(STORAGE_OBJECT_PATH) || url.includes(STORAGE_RENDER_PATH);
+/** Unsplash serves any width via `w` / `q`, so it is safe to resize. */
+function isUnsplash(url: string): boolean {
+  return url.includes("images.unsplash.com");
 }
 
-function storageVariant(url: string, width: number, quality: number): string {
+function isTransformable(url: string): boolean {
+  return (
+    url.includes(STORAGE_OBJECT_PATH) || url.includes(STORAGE_RENDER_PATH) || isUnsplash(url)
+  );
+}
+
+function unsplashVariant(url: string, width: number, quality: number): string {
+  try {
+    const u = new URL(url);
+    u.searchParams.set("w", String(width));
+    u.searchParams.set("q", String(quality));
+    u.searchParams.set("auto", "format");
+    u.searchParams.delete("h");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+function variant(url: string, width: number, quality: number): string {
+  if (isUnsplash(url)) return unsplashVariant(url, width, quality);
   const base = url
     .replace(STORAGE_OBJECT_PATH, STORAGE_RENDER_PATH)
     .replace(SIZE_PARAMS, "")
@@ -38,6 +59,7 @@ function storageVariant(url: string, width: number, quality: number): string {
   const joiner = base.includes("?") ? "&" : "?";
   return `${base}${joiner}width=${width}&quality=${quality}`;
 }
+
 
 /**
  * Build `{ src, srcSet, sizes }` for an image that will be rendered at roughly
