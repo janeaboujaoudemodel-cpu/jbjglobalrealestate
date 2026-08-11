@@ -1621,11 +1621,15 @@ function ProjectDetailLayoutInner({
           </div>
         </div>
 
-        {/* Row 2: project section tabs only. */}
-        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+        {/* Row 2: project section tabs only.
+            PASS 297 — BAR HEIGHT LOCK: every chrome bar (utility bar, sidebar
+            header, project sub-nav) is exactly 56px so the stack reads as one
+            premium rail. Background is mother-of-pearl, never dark beige. */}
+        <div className="border-b border-[#B89555]/45 shadow-[0_6px_18px_-10px_rgba(184,149,85,0.35)]" style={{ background: 'var(--jj-pearl-band)' }}>
           <div className="jj-content-track">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-              <div className="flex w-max min-w-full items-center gap-1 py-2.5">
+              <div className="flex w-max min-w-full items-center gap-1 h-[var(--jj-bar-h,56px)]">
+
                 {stickyProjectTabs.map((tab) => (
                   <button
                     key={tab.id}
