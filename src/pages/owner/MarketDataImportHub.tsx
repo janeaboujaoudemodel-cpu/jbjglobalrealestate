@@ -1051,21 +1051,22 @@ export default function MarketDataImportHub() {
               PASS 289 — action columns never wrap; the three long text columns wrap between
               words (never mid-word, never truncated) so all ten columns fit the workspace.
             */}
-            <table className="w-full min-w-[1160px] table-fixed text-sm [&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
+            <table className="w-full min-w-[1240px] text-sm [&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
               <thead className="mir-solid text-left text-xs uppercase tracking-wider">
                 <tr>
                   <th className="w-10 px-3 py-3"> </th>
-                  <th className="w-[17%] px-4 py-3">Project</th>
-                  <th className="w-[15%] px-4 py-3">Developer</th>
-                  <th className="w-[16%] px-4 py-3">Location</th>
-                  <th className="w-[9%] px-4 py-3">Status</th>
-                  <th className="w-[11%] px-4 py-3">Review</th>
-                  <th className="w-[11%] px-4 py-3">Live status</th>
-                  <th className="w-[8%] px-4 py-3">Preview</th>
-                  <th className="w-[7%] px-4 py-3">Source</th>
-                  <th className="w-[9%] px-4 py-3">JBJ</th>
+                  <th className="px-4 py-3">Project</th>
+                  <th className="px-4 py-3">Developer</th>
+                  <th className="px-4 py-3">Location</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Review</th>
+                  <th className="px-4 py-3">Live status</th>
+                  <th className="px-4 py-3">Preview</th>
+                  <th className="px-4 py-3">Source</th>
+                  <th className="px-4 py-3">JBJ</th>
                 </tr>
               </thead>
+
 
 
               <tbody>
