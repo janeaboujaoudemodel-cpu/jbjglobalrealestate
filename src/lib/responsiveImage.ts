@@ -57,8 +57,14 @@ function variant(url: string, width: number, quality: number): string {
     .replace(SIZE_PARAMS, "")
     .replace(/[?&]+$/, "");
   const joiner = base.includes("?") ? "&" : "?";
-  return `${base}${joiner}width=${width}&quality=${quality}`;
+  // `resize=contain` is REQUIRED. Supabase's default transform mode is `cover`,
+  // and with only `width` supplied it keeps the ORIGINAL height — so a 296x59
+  // developer wordmark requested at width=176 came back as a 176x59 centre CROP
+  // ("EMAAR" rendered as "MAA"). `contain` scales proportionally (176x35) and
+  // never clips, which the No-Cropped-Text standard requires.
+  return `${base}${joiner}width=${width}&resize=contain&quality=${quality}`;
 }
+
 
 
 /**
