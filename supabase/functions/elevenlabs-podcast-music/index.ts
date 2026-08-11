@@ -67,7 +67,7 @@ serve(async (req) => {
 
     // Generate new music via ElevenLabs Music API
     const apiKey =
-      resolveElevenLabsKey() || resolveElevenLabsKey();
+      resolveElevenLabsKey();
     if (!apiKey) {
       return new Response(
         JSON.stringify({ success: false, error: "ElevenLabs API key not configured" }),

@@ -14,7 +14,7 @@ serve(async (req) => {
   try {
     // Prefer the connector-managed key; fall back to the legacy manual secret
     const ELEVENLABS_API_KEY =
-      resolveElevenLabsKey() ?? resolveElevenLabsKey();
+      resolveElevenLabsKey();
 
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ElevenLabs API key not configured");

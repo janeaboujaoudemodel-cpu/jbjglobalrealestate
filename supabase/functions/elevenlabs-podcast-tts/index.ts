@@ -42,7 +42,7 @@ serve(async (req) => {
       testMaxChars?: number;
     };
 
-    const ELEVENLABS_API_KEY = resolveElevenLabsKey() || resolveElevenLabsKey();
+    const ELEVENLABS_API_KEY = resolveElevenLabsKey();
     
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ElevenLabs API key not configured");

@@ -71,7 +71,6 @@ async function resolveAgentId(key: string, configured: string): Promise<{ agentI
 function getKey(): string | null {
   return (
     resolveElevenLabsKey() ||
-    resolveElevenLabsKey() ||
     null
   );
 }
