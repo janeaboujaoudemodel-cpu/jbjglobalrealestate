@@ -218,7 +218,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl, 
                 width={928}
                 height={557}
                 loading={isEager ? "eager" : "lazy"}
-                {...({ fetchpriority: isEager ? "high" : "low" } as any)}
+                {...({ fetchpriority: isPriority ? "high" : "low" } as any)}
                 referrerPolicy="no-referrer"
                 decoding="async"
                 data-media-state={heroLoaded ? "ready" : "loading"}
