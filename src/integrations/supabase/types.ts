@@ -37464,6 +37464,24 @@ export type Database = {
         }
         Relationships: []
       }
+      tmp_sec_probe: {
+        Row: {
+          result: string | null
+          step: string | null
+          ts: string | null
+        }
+        Insert: {
+          result?: string | null
+          step?: string | null
+          ts?: string | null
+        }
+        Update: {
+          result?: string | null
+          step?: string | null
+          ts?: string | null
+        }
+        Relationships: []
+      }
       toolkit_jobs: {
         Row: {
           created_at: string
@@ -44914,6 +44932,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      jbj_caller_is_privileged: { Args: never; Returns: boolean }
       jbj_classify_inbound_reply: {
         Args: { _body: string; _from: string; _subject: string }
         Returns: string
