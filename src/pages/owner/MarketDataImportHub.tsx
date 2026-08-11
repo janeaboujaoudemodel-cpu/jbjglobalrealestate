@@ -408,7 +408,9 @@ export default function MarketDataImportHub() {
   const [bulkBusy, setBulkBusy] = useState(false);
   const [rowBusy, setRowBusy] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "not_published" | "approved" | "pending" | "rejected">("all");
+  const [projectScope, setProjectScope] = useState<"new" | "all">("new");
   const [matchLimit, setMatchLimit] = useState(100);
+
 
   useEffect(() => setSelected(new Set()), [tab, entity]);
 
@@ -508,13 +510,23 @@ export default function MarketDataImportHub() {
     return (row.review_decision || "pending") === statusFilter;
   };
 
+  /**
+   * PASS 289 — SCOPE TRUTH. "New only" = staged rows with no JBJ match; "All in scope"
+   * = every off-plan project the crawl found, so the table count can be reconciled
+   * against the "Projects in scope" tile instead of silently showing the new subset.
+   */
   const newProjects = useMemo(
     () =>
       stagedProjects.filter(
-        (p) => p.is_offplan && !matchedStagedIds.has(p.id) && matchesStatusFilter(p) && (!q || p.name.toLowerCase().includes(q.toLowerCase())),
+        (p) =>
+          p.is_offplan &&
+          (projectScope === "all" || !matchedStagedIds.has(p.id)) &&
+          matchesStatusFilter(p) &&
+          (!q || p.name.toLowerCase().includes(q.toLowerCase())),
       ),
-    [stagedProjects, matchedStagedIds, q, statusFilter],
+    [stagedProjects, matchedStagedIds, q, statusFilter, projectScope],
   );
+
 
   const newDevelopers = useMemo(
     () => stagedDevelopers.filter((d) => matchesStatusFilter(d) && (!q || d.name.toLowerCase().includes(q.toLowerCase()))),
@@ -621,10 +633,16 @@ export default function MarketDataImportHub() {
     }
   };
 
-  const openBucket = (nextTab: "new" | "newDevelopers", filter: typeof statusFilter = "all") => {
+  const openBucket = (
+    nextTab: "new" | "newDevelopers",
+    filter: typeof statusFilter = "all",
+    scope: "new" | "all" = "new",
+  ) => {
     setStatusFilter(filter);
+    if (nextTab === "new") setProjectScope(scope);
     setTab(nextTab);
   };
+
 
   const bulkStaged = async (kind: "project" | "developer", decision: "approved" | "rejected" | "pending") => {
     const ids = Array.from(selected);
@@ -749,8 +767,9 @@ export default function MarketDataImportHub() {
           value={String(stats.total_projects_in_scope ?? stats.total_projects_discovered ?? stagedProjects.length)}
           hint={`incl. ${stats.ready_projects_included ?? 0} ready · ${stats.sold_out_projects_included ?? 0} sold out`}
           progress={progress.projects}
-          onClick={() => openBucket("new")}
-          onProgressFilter={(filter) => openBucket("new", filter)}
+          onClick={() => openBucket("new", "all", "all")}
+          onProgressFilter={(filter) => openBucket("new", filter, "all")}
+
         />
         <StatCard
           label="Developers auto-merged"
@@ -837,13 +856,36 @@ export default function MarketDataImportHub() {
 
       {(tab === "new" || tab === "newDevelopers") ? (
         <div className="flex flex-wrap items-center gap-2" aria-label="Status filters">
+          {/* PASS 289 — every status pill toggles: clicking the active pill clears it. */}
           {(["all", "published", "not_published", "approved", "pending", "rejected"] as const).map((filter) => (
-            <button key={filter} type="button" onClick={() => setStatusFilter(filter)} className={`mir-pill rounded-full px-3 py-1.5 text-xs font-semibold ${statusFilter === filter ? "mir-pill-active" : ""}`}>
+            <button
+              key={filter}
+              type="button"
+              aria-pressed={statusFilter === filter}
+              onClick={() => setStatusFilter((current) => (current === filter ? "all" : filter))}
+              className={`mir-pill whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold ${statusFilter === filter ? "mir-pill-active" : ""}`}
+            >
               {filter === "all" ? "All records" : filter === "not_published" ? "Not published" : filter.replace("_", " ").replace(/^./, (letter) => letter.toUpperCase())}
             </button>
           ))}
+          {tab === "new" ? (
+            <span className="ml-auto inline-flex items-center gap-2">
+              {(["new", "all"] as const).map((scope) => (
+                <button
+                  key={scope}
+                  type="button"
+                  aria-pressed={projectScope === scope}
+                  onClick={() => setProjectScope(scope)}
+                  className={`mir-pill whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold ${projectScope === scope ? "mir-pill-active" : ""}`}
+                >
+                  {scope === "new" ? "New only" : "All projects in scope"}
+                </button>
+              ))}
+            </span>
+          ) : null}
         </div>
       ) : null}
+
 
       {tab === "summary" ? (
         <div className="mir-card rounded-xl p-5 text-sm text-neutral-600">
@@ -998,7 +1040,8 @@ export default function MarketDataImportHub() {
             ]}
           />
           <div className="mir-card overflow-x-auto rounded-xl">
-            <table className="w-full text-sm">
+            {/* PASS 289 — no column may wrap a word vertically: fixed min width + nowrap cells. */}
+            <table className="w-full min-w-[1280px] text-sm [&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
               <thead className="mir-solid text-left text-xs uppercase tracking-wider">
                 <tr>
                   <th className="px-3 py-3 w-10"> </th>
@@ -1008,10 +1051,12 @@ export default function MarketDataImportHub() {
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Review</th>
                   <th className="px-4 py-3">Live status</th>
+                  <th className="px-4 py-3">Preview</th>
                   <th className="px-4 py-3">Source</th>
                   <th className="px-4 py-3">JBJ</th>
                 </tr>
               </thead>
+
               <tbody>
                 {newProjects.map((p) => {
                   const jbj = resolveProjectLink(p);
@@ -1037,6 +1082,16 @@ export default function MarketDataImportHub() {
                         </select>
                       </td>
                       <td className="px-4 py-3"><PublishCell status={p.publish_status} at={p.published_at} error={p.publish_error} busy={rowBusy === p.id} onPublish={() => updateSingleReview("project", p.id, "approved")} /></td>
+                      <td className="px-4 py-3">
+                        {jbj ? (
+                          <a href={`${jbj.href}?jbj_preview=1`} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                            Preview page <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                          </a>
+                        ) : (
+                          <span className="text-xs text-neutral-400">Preview after approval</span>
+                        )}
+                      </td>
+
                       <td className="px-4 py-3">
                         <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />
@@ -1077,7 +1132,7 @@ export default function MarketDataImportHub() {
             ]}
           />
           <div className="mir-card overflow-x-auto rounded-xl">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[1100px] text-sm [&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
               <thead className="mir-solid text-left text-xs uppercase tracking-wider">
                 <tr>
                   <th className="px-3 py-3 w-10"> </th>

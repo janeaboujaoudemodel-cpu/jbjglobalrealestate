@@ -5024,3 +5024,143 @@ html body .jc-app .jc-content :is(
   background-color: #FFFFFF !important;
   background-image: none !important;
 }
+
+/* ============================================================
+   PASS 285 — BACKEND INK OVERRIDE (LOCKED, FINAL CASCADE)
+   Root cause of every "black text on emerald" report in the back
+   office: public champagne locks are written as
+   `html body #root :is(...)` — an ID selector — so they outrank
+   every previous backend rule no matter how many !importants it
+   carried. This block re-states the backend contract with the
+   same ID weight plus the backend scope, so it always wins.
+   Never lower the specificity of these selectors.
+   ============================================================ */
+
+/* Emerald / dark surfaces inside the back office: white ink + white icons. */
+html body #root .jc-app .jc-content :is(
+  [class*="jj-emerald-ombre"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#0F1A16]"],
+  [class*="bg-emerald-900"],
+  [data-surface="emerald"],
+  [data-jbj-hero="emerald"]
+),
+html body #root .jc-app .jc-content :is(
+  [class*="jj-emerald-ombre"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#0F1A16]"],
+  [class*="bg-emerald-900"],
+  [data-surface="emerald"],
+  [data-jbj-hero="emerald"]
+) :is(h1, h2, h3, h4, h5, h6, p, span, li, div, label, strong, em, code, a, small, dt, dd) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root .jc-app .jc-content :is(
+  [class*="jj-emerald-ombre"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#0F1A16]"],
+  [class*="bg-emerald-900"],
+  [data-surface="emerald"],
+  [data-jbj-hero="emerald"]
+) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Champagne chips deliberately dropped on emerald keep their dark ink. */
+html body #root .jc-app .jc-content [data-ink="dark"],
+html body #root .jc-app .jc-content [data-ink="dark"] :is(span, strong, code, p, div),
+html body #root .jc-app .jc-content [class*="bg-[#EFE6D6]"],
+html body #root .jc-app .jc-content [class*="bg-[#EFE6D6]"] :is(span, strong, code, p, div) {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+}
+html body #root .jc-app .jc-content [data-ink="dark"] svg,
+html body #root .jc-app .jc-content [class*="bg-[#EFE6D6]"] svg {
+  color: #0F1A16 !important;
+  stroke: #0F1A16 !important;
+}
+
+/* Backend pill primitive — final word on ink. */
+html body #root .jc-app .jc-content .owner-hub-pill,
+html body #root .jc-app .jc-content .owner-hub-pill :is(span, strong, div) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+html body #root .jc-app .jc-content .owner-hub-pill svg {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+html body #root .jc-app .jc-content .owner-hub-pill:is([data-active="true"], [aria-selected="true"], [data-state="active"]),
+html body #root .jc-app .jc-content .owner-hub-pill:is([data-active="true"], [aria-selected="true"], [data-state="active"]) :is(span, strong, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root .jc-app .jc-content .owner-hub-pill:is([data-active="true"], [aria-selected="true"], [data-state="active"]) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Radix tab lists in the back office follow the same contract. */
+html body #root .jc-app .jc-content [role="tab"][data-state="active"],
+html body #root .jc-app .jc-content [role="tab"][data-state="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root .jc-app .jc-content [role="tab"]:not([data-state="active"]),
+html body #root .jc-app .jc-content [role="tab"]:not([data-state="active"]) * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+/* ------------------------------------------------------------
+   PASS 286 — BACKEND SEGMENTED HEADER (LOCKED)
+   One joined control (looks like a header strip), equal-width
+   segments, active = emerald pair gradient + white ink,
+   inactive = white + emerald ink. Used for role/portfolio
+   switches such as CITI Developers / JBJ Global Real Estate.
+   ------------------------------------------------------------ */
+.owner-hub-segment {
+  display: inline-flex;
+  align-items: stretch;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 14px;
+  border: 1px solid rgba(6, 78, 59, 0.20);
+  background: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(6, 78, 59, 0.06);
+  max-width: 100%;
+  overflow: hidden;
+}
+.owner-hub-segment > .owner-hub-pill {
+  flex: 1 1 0;
+  min-width: 190px;
+  justify-content: center;
+  border-radius: 10px;
+  border-color: transparent;
+  background: transparent;
+  padding: 10px 18px;
+  font-size: 13.5px;
+  white-space: normal;
+  text-align: center;
+}
+html body #root .jc-app .jc-content .owner-hub-segment > .owner-hub-pill:not([data-state="active"]):hover {
+  background: rgba(6, 78, 59, 0.06) !important;
+}
+
+/* ------------------------------------------------------------
+   PASS 287 — BACKEND MODAL CENTRING (LOCKED)
+   A backend dialog is centred inside the WHITE CONTENT AREA
+   only — never the whole viewport. The vertical sidebar and the
+   horizontal header are excluded from the maths, whether the
+   sidebar is open or collapsed.
+   ------------------------------------------------------------ */
+html body[data-jbj-backend="true"] [role="dialog"][data-state="open"]:not([data-jbj-viewport-centered]) {
+  left: calc(var(--jc-content-left, 0px) + (var(--jc-content-width, 100vw) / 2)) !important;
+  top: calc(var(--jc-content-top, 0px) + (var(--jc-content-height, 100vh) / 2)) !important;
+  max-height: calc(var(--jc-content-height, 100vh) - 48px) !important;
+  overflow-y: auto !important;
+}

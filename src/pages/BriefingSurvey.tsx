@@ -64,7 +64,7 @@ export default function BriefingSurvey() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
       <div className="w-full max-w-lg bg-white border border-[#B89555]/40 rounded-xl p-8 shadow-[0_10px_40px_-12px_rgba(184,149,85,0.25)]">
-        <div className="text-[11px] tracking-[0.22em] uppercase text-[#B89555] mb-3">JBJ Global — Briefing survey</div>
+        <div className="text-[11px] tracking-[0.22em] uppercase text-[#B89555] mb-3">JBJ Global Real Estate — Briefing survey</div>
         {loading ? (
           <div className="py-10 flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-[#B89555]" /></div>
         ) : error ? (

@@ -360,7 +360,7 @@ const MarketReport = () => {
                 style={{ color: "rgba(26,26,26,0.78)", WebkitTextFillColor: "rgba(26,26,26,0.78)" }}
               >
                 An educational, founder-led overview designed around government-led sources and
-                structured decision frameworks — created exclusively for clients of JBJ Global
+                structured decision frameworks — created exclusively for clients of JBJ Global Real Estate
                 Real Estate.
               </p>
 

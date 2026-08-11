@@ -139,7 +139,7 @@ export default function Signup() {
       if (signInErr) throw signInErr;
 
       void logAnalytics("signup_completed", { category });
-      toast.success("Welcome to JBJ Global");
+      toast.success("Welcome to JBJ Global Real Estate");
       navigate("/", { replace: true });
     } catch (err) {
       toast.error((err as Error).message);

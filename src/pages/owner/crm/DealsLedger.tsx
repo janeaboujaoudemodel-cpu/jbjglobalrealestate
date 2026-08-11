@@ -1,6 +1,6 @@
 /**
  * DealsLedger — "My Deals"
- * Two tabs: CITI Developers (sales rep role) and JBJ Global (brokerage role).
+ * Two tabs: CITI Developers (sales rep role) and JBJ Global Real Estate (brokerage role).
  * Each row = client, project, developer, brokerage/broker, deal value,
  * commission %, auto commission amount, status, close date.
  * Insights strip: MoM revenue, MoM commission, YTD totals, avg deal size,
@@ -169,7 +169,7 @@ export default function DealsLedger() {
             My Deals
           </h1>
           <p className="text-sm text-[#4B5D55]">
-            Personal ledger — CITI Developers (sales rep) and JBJ Global
+            Personal ledger — CITI Developers (sales rep) and JBJ Global Real Estate
             (brokerage) revenue &amp; commission.
           </p>
         </div>
@@ -185,17 +185,18 @@ export default function DealsLedger() {
         value={portfolio}
         onValueChange={(v) => setPortfolio(v as Portfolio)}
       >
-        {/* PASS 281 — backend pill primitive: active = emerald pair gradient
-            + pure white ink; inactive = white + emerald ink. Never black on
-            emerald, never a scale-on-hover. */}
-        <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-0 w-full !justify-start">
+        {/* PASS 286 — one joined segmented header. Equal-width segments,
+            active = emerald pair gradient + white ink, inactive = white +
+            emerald ink. Never black on emerald, never scale-on-hover. */}
+        <TabsList className="owner-hub-segment bg-transparent h-auto mb-0">
           <TabsTrigger value="citi_developers" className="owner-hub-pill">
             CITI Developers
           </TabsTrigger>
           <TabsTrigger value="jbj_global" className="owner-hub-pill">
-            JBJ Global
+            JBJ Global Real Estate
           </TabsTrigger>
         </TabsList>
+
 
 
         <TabsContent value={portfolio} className="mt-4 space-y-5">
@@ -442,7 +443,7 @@ function NewDealDialog({
               </SelectTrigger>
               <SelectContent className="bg-white">
                 <SelectItem value="citi_developers">CITI Developers</SelectItem>
-                <SelectItem value="jbj_global">JBJ Global</SelectItem>
+                <SelectItem value="jbj_global">JBJ Global Real Estate</SelectItem>
               </SelectContent>
             </Select>
           </Field>

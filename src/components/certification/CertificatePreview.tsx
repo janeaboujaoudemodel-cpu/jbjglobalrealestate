@@ -201,7 +201,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                 className="mb-5 text-[13px] sm:text-sm font-semibold uppercase tracking-[0.34em]"
                 style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
               >
-                JBJ Global Broker Academy
+                JBJ Global Real Estate Broker Academy
               </div>
 
 

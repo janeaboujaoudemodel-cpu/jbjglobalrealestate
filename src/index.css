@@ -31541,7 +31541,10 @@ html body #root header[data-header-surface] :where(.jj-header-premium-control, .
    A component's declared surface owns both its paint and foreground. This
    prevents broad page-theme selectors from converting light legal cards and
    search dropdowns into emerald while leaving their ink dark. */
-html body #root :is([data-surface="light"], [data-surface="champagne"], [data-legal-section-card]) {
+/* PASS 288 — BACKEND EXCLUSION (LOCKED). The public champagne/light ink lock
+   must never reach inside the backend shell (.jc-app); backend surfaces are
+   governed exclusively by crmShell.css. */
+html body #root :is([data-surface="light"], [data-surface="champagne"], [data-legal-section-card]):not(.jc-app):not(.jc-app *) {
   background: #FDFBF7 !important;
   background-image: none !important;
   color: #1A1A1A !important;
@@ -31549,8 +31552,8 @@ html body #root :is([data-surface="light"], [data-surface="champagne"], [data-le
 }
 
 html body #root :is([data-surface="light"], [data-surface="champagne"], [data-legal-section-card])
-  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,label,button,input,textarea,select,div):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-emerald="true"]):not([data-emerald="true"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *),
-html body #root [data-search-dropdown] :is(input, textarea, select, button){
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,label,button,input,textarea,select,div):not(.jc-app):not(.jc-app *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-emerald="true"]):not([data-emerald="true"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *),
+html body #root [data-search-dropdown] :is(input, textarea, select, button):not(.jc-app *){
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }

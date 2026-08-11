@@ -238,7 +238,7 @@ const agencyTiers: Tier[] = [
       "Custom agency page inside JBJ",
       "Co-branded launches with developers",
       "Advanced analytics & attribution",
-      "Priority hiring pipeline into JBJ Global",
+      "Priority hiring pipeline into JBJ Global Real Estate",
     ],
   },
   {
@@ -249,7 +249,7 @@ const agencyTiers: Tier[] = [
     features: [
       "Everything in Brokerage",
       "Multi-branch CRM & role permissions",
-      "Executive partnership with JBJ Global",
+      "Executive partnership with JBJ Global Real Estate",
       "Enterprise SLA & onboarding program",
       "Featured on JBJ agency directory",
     ],
@@ -1012,7 +1012,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
           <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/62">For Brokers</span>
           <h2 className="mt-2 font-serif text-3xl leading-tight !text-white sm:text-[34px]">Become a JBJ Certified Broker.</h2>
           <p className="mt-3 max-w-lg text-[13px] leading-relaxed !text-white/72">
-            A recognised credential for licensed and aspiring UAE agents — mentorship, materials and a direct pathway into JBJ Global.
+            A recognised credential for licensed and aspiring UAE agents — mentorship, materials and a direct pathway into JBJ Global Real Estate.
           </p>
 
           <ul className="mt-5 grid gap-3">
