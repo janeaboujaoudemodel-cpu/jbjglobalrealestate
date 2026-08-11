@@ -185,20 +185,18 @@ export default function DealsLedger() {
         value={portfolio}
         onValueChange={(v) => setPortfolio(v as Portfolio)}
       >
-        <TabsList className="bg-white border border-emerald-900/15">
-          <TabsTrigger
-            value="citi_developers"
-            className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white"
-          >
+        {/* PASS 281 — backend pill primitive: active = emerald pair gradient
+            + pure white ink; inactive = white + emerald ink. Never black on
+            emerald, never a scale-on-hover. */}
+        <TabsList className="owner-hub-pills bg-transparent border-0 p-0 h-auto mb-0">
+          <TabsTrigger value="citi_developers" className="owner-hub-pill">
             CITI Developers
           </TabsTrigger>
-          <TabsTrigger
-            value="jbj_global"
-            className="data-[state=active]:bg-[#064E3B] data-[state=active]:text-white"
-          >
+          <TabsTrigger value="jbj_global" className="owner-hub-pill">
             JBJ Global
           </TabsTrigger>
         </TabsList>
+
 
         <TabsContent value={portfolio} className="mt-4 space-y-5">
           {/* Insights strip */}
