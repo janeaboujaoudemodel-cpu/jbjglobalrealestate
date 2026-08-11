@@ -43,17 +43,17 @@ export function ThemeModeToggle({
         aria-label={label}
         title={label}
         className={cn(
-          "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide",
-          "border border-white/20 text-white transition-colors hover:border-[#B89555]/60",
+          "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] font-bold",
+          "border border-current/40 transition-colors hover:border-[#B89555]",
           className,
         )}
-        style={{ WebkitTextFillColor: "#FFFFFF" }}
       >
-        <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        <Icon className="w-3.5 h-3.5" />
         <span>{isMoon ? "Day" : "Night"}</span>
       </button>
     );
   }
+
 
   // menu row (account dropdown)
   return (
