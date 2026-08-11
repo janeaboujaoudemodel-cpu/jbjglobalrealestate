@@ -4032,10 +4032,15 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .jj-lv {
   width: 100%;
   min-height: var(--lv-h, 0px);
+  /* Layout neutral: the reserve shell must never inherit or add page gutter,
+     otherwise full-bleed bands get double-inset. */
+  padding: 0 !important;
+  margin: 0;
 }
 .jj-lv[data-lv-state="mounted"][data-lv-release="1"] {
   min-height: 0;
 }
+
 @media (max-width: 767px) {
   .jj-lv {
     min-height: var(--lv-hm, var(--lv-h, 0px));
