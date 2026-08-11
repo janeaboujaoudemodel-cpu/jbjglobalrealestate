@@ -841,6 +841,11 @@ export default function PropertySearchBar({
               setMoreOpen(false);
               requestAnimationFrame(() => onSubmit(applied));
             }}
+            onSellSelected={() => {
+              setMoreOpen(false);
+              if (onSellSelected) onSellSelected();
+              else window.location.assign("/sell");
+            }}
           />
         </DialogContent>
       </Dialog>
@@ -852,10 +857,12 @@ function MoreFiltersBody({
   draft,
   setDraft,
   onApply,
+  onSellSelected,
 }: {
   draft: PropertySearch;
   setDraft: (v: PropertySearch) => void;
   onApply: (v: PropertySearch) => void;
+  onSellSelected?: () => void;
 }) {
   const { count } = usePropertyCount(draft);
   return (
@@ -865,6 +872,7 @@ function MoreFiltersBody({
       count={count}
       onReset={() => setDraft({ ...EMPTY_SEARCH, purpose: draft.purpose, country: draft.country })}
       onApply={() => onApply(draft)}
+      onSellSelected={onSellSelected}
     />
   );
 }
