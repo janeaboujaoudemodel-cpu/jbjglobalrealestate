@@ -385,14 +385,18 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   const cardRef = useRef<HTMLDivElement>(null);
   const fetchAttempted = useRef(false);
 
-  // Self-heal: fetch missing developer logo — ALWAYS prefer a row that has a
-  // non-null logo_url (some developers like Emaar exist as multiple slugs,
-  // not all of which carry the logo).
+  // Self-heal + REVALIDATE (LOCKED): the strip persists items in localStorage,
+  // so a logo captured months ago (e.g. Grovy's retired circular mark) used to
+  // stick forever because the old code only fetched when the field was EMPTY.
+  // We now always resolve the canonical logo by developer name (session-cached,
+  // one request per developer) and patch whenever it differs from the stored
+  // URL, so replacing artwork in the backend propagates immediately.
   useEffect(() => {
-    if (item.type !== "property" || item.developerLogo || !item.subtitle) return;
+    if (item.type !== "property" || !item.subtitle) return;
     let alive = true;
     resolveDeveloperLogoByName(item.subtitle).then((logoUrl) => {
-      if (alive && logoUrl) {
+      if (alive && logoUrl && logoUrl !== item.developerLogo) {
+        setLogoError(false);
         patchItem(item.id, item.type, { developerLogo: logoUrl });
       }
     });
@@ -400,6 +404,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
       alive = false;
     };
   }, [item.id, item.type, item.developerLogo, item.subtitle, patchItem]);
+
 
   // Helper: fetch cover image from DB (once per mount)
   const fetchCoverImage = useCallback(() => {
