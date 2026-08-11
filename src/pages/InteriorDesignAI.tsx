@@ -329,8 +329,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           -webkit-text-fill-color: #FFFFFF !important;
           border: 1px solid rgba(1,8,6,0.72) !important;
         }
-        [data-interior-design-ai] .id-primary >
-      <PageScope token="interior-ai" /> * {
+        [data-interior-design-ai] .id-primary > * {
           background-image: none !important;
           background: transparent !important;
         }
