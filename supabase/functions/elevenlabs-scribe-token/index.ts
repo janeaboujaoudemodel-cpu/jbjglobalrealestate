@@ -11,6 +11,7 @@
 
 import { corsHeaders, requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
 import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -31,7 +32,7 @@ Deno.serve(async (req) => {
     );
     if (rl.response) return rl.response;
 
-    const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
+    const apiKey = resolveElevenLabsKey();
     if (!apiKey) {
       return new Response(
         JSON.stringify({ error: "ELEVENLABS_API_KEY not configured" }),

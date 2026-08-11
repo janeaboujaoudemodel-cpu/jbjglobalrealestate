@@ -1,6 +1,7 @@
 // GET/PATCH ElevenLabs Conversational AI agent config (prompt, voice, language, first message)
 // Owner-only.
 import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -69,8 +70,7 @@ async function resolveAgentId(key: string, configured: string): Promise<{ agentI
 
 function getKey(): string | null {
   return (
-    Deno.env.get("ELEVENLABS_API_KEY") ||
-    Deno.env.get("ELEVENLABS_API_KEY_1") ||
+    resolveElevenLabsKey() ||
     null
   );
 }

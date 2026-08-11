@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -66,7 +67,7 @@ serve(async (req) => {
 
     // Generate new music via ElevenLabs Music API
     const apiKey =
-      Deno.env.get("ELEVENLABS_API_KEY_1") || Deno.env.get("ELEVENLABS_API_KEY");
+      resolveElevenLabsKey();
     if (!apiKey) {
       return new Response(
         JSON.stringify({ success: false, error: "ElevenLabs API key not configured" }),
