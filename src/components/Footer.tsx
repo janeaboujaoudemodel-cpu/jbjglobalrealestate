@@ -553,6 +553,11 @@ const Footer = () => {
               <div className="relative">
                 <FooterCurrencyUnit />
               </div>
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
+              <div className="relative">
+                <ThemeModeToggle variant="footer" />
+              </div>
+
             </div>
           </div>
         </div>
