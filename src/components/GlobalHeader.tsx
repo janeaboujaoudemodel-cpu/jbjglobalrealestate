@@ -34,7 +34,7 @@ import { UserAvatarPremium } from "@/components/account/UserAvatarPremium";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import ModeSwitcher from "@/components/ModeSwitcher";
-const GlobalSearchModal = lazy(() => import("@/components/GlobalSearchModal"));
+import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
 import { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";

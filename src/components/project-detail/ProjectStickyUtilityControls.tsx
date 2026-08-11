@@ -4,7 +4,7 @@ import { Heart, Search, SlidersHorizontal } from "lucide-react";
 
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import ModeSwitcher from "@/components/ModeSwitcher";
-import GlobalSearchModal from "@/components/GlobalSearchModal";
+import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { HeaderControl, HeaderSegmented } from "@/components/ui/ds/HeaderControl";

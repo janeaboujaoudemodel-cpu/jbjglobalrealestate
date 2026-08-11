@@ -51,7 +51,7 @@ import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
-import { exportPdf, exportDocx, exportPng, printDocument, preloadExportLibraries, DocumentMarks } from "./export/exporters";
+import { exportPdf, exportDocx, exportPng, printDocument, preloadExportLibraries, buildPrintableHtml, DocumentMarks } from "./export/exporters";
 import { useApplicant, getActiveApplicant } from "@/contexts/ApplicantContext";
 import {
   applicantFromFields,
@@ -2222,7 +2222,6 @@ function StudioShell({
     if (!to) { toast.error("Enter a recipient email"); return; }
     setSending(true);
     try {
-      const { buildPrintableHtml } = await import("./export/exporters");
       const fullHtml = buildPrintableHtml(currentBody, marks);
       const { data, error } = await supabase.functions.invoke("email-send-gateway", {
         body: {

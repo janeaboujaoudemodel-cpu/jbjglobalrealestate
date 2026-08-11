@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 
 import { useAuth } from "@/contexts/AuthContext";
-import GlobalSearchModal from "@/components/GlobalSearchModal";
+import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
 const AdvancedFilterPanel = lazy(() => import("@/components/filters/AdvancedFilterPanel"));
 import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";

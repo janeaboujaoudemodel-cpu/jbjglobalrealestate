@@ -23,7 +23,7 @@ import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
-import GlobalSearchModal from "@/components/GlobalSearchModal";
+import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { useFeaturedDevelopers } from "@/hooks/useProjects";
