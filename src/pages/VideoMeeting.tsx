@@ -554,10 +554,10 @@ const VideoMeeting = () => {
     setMeetingEndedBy(userName || 'Host');
     setShowMeetingEndedDialog(true);
     
-    // Log the meeting end
+    // Log the meeting end (participant-side event, never attributed to the assistant)
     logChat({
       session_id: roomId,
-      role: 'assistant',
+      role: 'user',
       message: 'Meeting ended by host',
       source: 'video_meeting'
     });
