@@ -176,6 +176,8 @@ out.append(f"""/* 10. Clipped-gradient labels -> solid white ink */
 {sel(['[data-sidebar-section-label]', '[data-sidebar-section-label] *',
       '[data-sidebar-subitem-label]', '[data-sidebar-subitem-label] *',
       '[data-chrome="sidebar"] [class*="bg-clip-text"]',
+      '[data-chrome="sidebar"] button span',
+      '[data-chrome="sidebar"] a span',
       '[data-chrome="sidebar"] [class*="text-transparent"]',
       '[data-surface="emerald"] [class*="bg-clip-text"]',
       '[data-sidebar-emerald] [class*="bg-clip-text"]'])} {{
