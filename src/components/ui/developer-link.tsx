@@ -43,13 +43,13 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
     const el = goldRef.current;
     if (!el) return;
     const apply = () => {
-      el.style.setProperty('background-image', 'linear-gradient(90deg, #B89555 0%, #F4E3A8 28%, #B89555 55%, #F4E3A8 82%, #B89555 100%)', 'important');
-      el.style.setProperty('background-size', '260% 100%', 'important');
+      el.style.setProperty('background-image', 'linear-gradient(90deg, #7A5A1E 0%, #A98338 22%, #C9A66B 34%, #A98338 48%, #7A5A1E 70%, #A98338 88%, #7A5A1E 100%)', 'important');
+      el.style.setProperty('background-size', '220% 100%', 'important');
       el.style.setProperty('-webkit-background-clip', 'text', 'important');
       el.style.setProperty('background-clip', 'text', 'important');
       el.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
       el.style.setProperty('color', 'transparent', 'important');
-      el.style.setProperty('animation', 'jj-gold-link-sheen 4.5s ease-in-out infinite', 'important');
+      el.style.setProperty('animation', 'jj-gold-link-sheen 6.5s ease-in-out infinite', 'important');
     };
     apply();
     const t = window.setTimeout(apply, 400);
