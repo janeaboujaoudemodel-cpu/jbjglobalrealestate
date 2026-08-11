@@ -28,6 +28,7 @@ import {
   BEDS,
   CATEGORY_TYPES,
   EMPTY_SEARCH,
+  PROJECT_STATUSES,
   PURPOSES,
   sanitizeSearchForPurpose,
   statusOptionsFor,
