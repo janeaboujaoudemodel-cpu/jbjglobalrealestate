@@ -1099,12 +1099,12 @@ export default function MarketDataImportHub() {
                       <td className="px-4 py-3">
                         {jbj ? (
                           <a href={`${jbj.href}?jbj_preview=1`} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
-                            Preview page <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                            Preview <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
                           /* PASS 292 — rows that are not on JBJ yet still render as a draft. */
                           <button type="button" onClick={() => setPreviewStagedId(p.id)} className="mir-link inline-flex items-center gap-1">
-                            Preview draft <Eye className="h-3.5 w-3.5" aria-hidden />
+                            Draft <Eye className="h-3.5 w-3.5" aria-hidden />
                           </button>
                         )}
                       </td>
