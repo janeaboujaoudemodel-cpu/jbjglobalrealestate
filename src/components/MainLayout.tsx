@@ -24,6 +24,7 @@ import HorizontalUtilityBar from "@/components/navigation/HorizontalUtilityBar";
 import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useIdleOrInteraction } from "@/hooks/useIdleOrInteraction";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { useAntiCapture } from "@/hooks/useAntiCapture";
@@ -132,12 +133,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   }, [isMobile]);
   const [layoutDebugSnapshot, setLayoutDebugSnapshot] = useState<ServiceLayoutSnapshot | null>(null);
   // Defer non-critical shell components briefly so homepage/sidebar/search paint first.
-  const [shellReady, setShellReady] = useState(false);
-
-  useEffect(() => {
-    const t = window.setTimeout(() => setShellReady(true), 250);
-    return () => window.clearTimeout(t);
-  }, []);
+  // Non-critical global widgets mount on idle OR on the first interaction —
+  // keeps them out of the startup script budget with no perceived delay.
+  const shellReady = useIdleOrInteraction(1200);
+  const widgetsReady = useIdleOrInteraction(2500);
 
   useEffect(() => {
     if (isDetailPage) {
@@ -347,8 +346,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </Suspense>
       )}
       {/* Page navigation arrows — visible only when chat is closed */}
-      {!usesStandalonePortalChrome && <Suspense fallback={null}><PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} /></Suspense>}
-      {!usesStandalonePortalChrome && (!isHomePage || popupsReady) && (
+      {!usesStandalonePortalChrome && widgetsReady && <Suspense fallback={null}><PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} /></Suspense>}
+      {!usesStandalonePortalChrome && (widgetsReady || popupsReady) && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget
             isCollapsed={effectiveCollapsed}
@@ -374,16 +373,20 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           ))}
         </div>
       )}
-      <Suspense fallback={null}>
-        <AuditorFeedbackButton />
-      </Suspense>
-      <Suspense fallback={null}>
-        <GuidedTour
-          isOpen={showTour}
-          onClose={() => { completeTour(); setShowTour(false); }}
-        />
-      </Suspense>
-      {!usesStandalonePortalChrome && (
+      {widgetsReady && (
+        <Suspense fallback={null}>
+          <AuditorFeedbackButton />
+        </Suspense>
+      )}
+      {(widgetsReady || showTour) && (
+        <Suspense fallback={null}>
+          <GuidedTour
+            isOpen={showTour}
+            onClose={() => { completeTour(); setShowTour(false); }}
+          />
+        </Suspense>
+      )}
+      {!usesStandalonePortalChrome && widgetsReady && (
         <Suspense fallback={null}>
           <CompleteProfilePrompt />
         </Suspense>
