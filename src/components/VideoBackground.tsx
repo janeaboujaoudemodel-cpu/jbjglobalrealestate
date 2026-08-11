@@ -6,8 +6,10 @@
  * to only load video when visible (saves bandwidth on mobile).
  */
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { useDeferredMedia } from "@/hooks/useDeferredMedia";
+import { buildResponsiveImage, HERO_IMAGE_SIZES, HERO_IMAGE_WIDTHS } from "@/lib/responsiveImage";
+
 
 interface VideoBackgroundProps {
   /** Video source URL or imported asset */
