@@ -13,6 +13,7 @@ import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 import { useMarketReport } from "./useMarketReport";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
+import PageScope from "@/components/util/PageScope";
 
 /**
  * Market Report — white-page premium book rebuild.
@@ -49,6 +50,7 @@ const MarketReport = () => {
       data-marketing-page
       className="min-h-screen bg-white text-[#1A1A1A]"
     >
+      <PageScope token="insights" />
       {/* Thank You Modal — champagne card, ink text, emerald tick */}
       {showThankYou && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/55 backdrop-blur-sm px-4">
