@@ -173,13 +173,15 @@ export function applyShortcutFilters<T extends Record<string, any>>(
     });
   }
 
-  // Areas
+  // Areas — spelling-tolerant so canonical area names still match imported
+  // project rows ("Siniya Island" vs "Siniyah Island", "Al Rawdah" vs "Al Raudah").
   if (sf.areas && sf.areas.length > 0) {
     result = result.filter(p => {
-      const area = (p.area_name || p.district || p.location || '').toLowerCase();
-      return sf.areas.some(a => area.toLowerCase().includes(a.toLowerCase()));
+      const candidates = [p.area_name, p.district, p.location, p.area, p.sub_community];
+      return sf.areas.some(a => candidates.some(c => areaMatches(c as string, a)));
     });
   }
+
 
   // Developers
   if (sf.developers && sf.developers.length > 0) {
