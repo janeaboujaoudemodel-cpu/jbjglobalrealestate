@@ -149,7 +149,7 @@ const PublishCell = ({
         disabled={busy || state === "published"}
         onClick={onPublish}
         title={state === "published" ? "This record is published live" : "Approve and publish this record"}
-        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
+        className={`whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
       >
         {label}
       </button>
