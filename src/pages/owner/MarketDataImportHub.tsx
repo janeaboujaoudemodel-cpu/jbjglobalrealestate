@@ -149,7 +149,7 @@ const PublishCell = ({
         disabled={busy || state === "published"}
         onClick={onPublish}
         title={state === "published" ? "This record is published live" : "Approve and publish this record"}
-        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
+        className={`!whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold disabled:cursor-default ${state === "published" ? "mir-solid" : "mir-pill"}`}
       >
         {label}
       </button>
@@ -334,7 +334,7 @@ function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | nul
           {title}
         </span>
         {href ? (
-          <a href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 text-xs">
+          <a href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap text-xs">
             {hrefLabel} <ExternalLink className="h-3 w-3" aria-hidden />
           </a>
         ) : (
@@ -960,7 +960,7 @@ export default function MarketDataImportHub() {
                       </p>
                       <p className="mt-1 flex flex-wrap items-center gap-3 text-xs">
                         {jbjHref ? (
-                          <a href={jbjHref} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                          <a href={jbjHref} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             JBJ page <ExternalLink className="h-3 w-3" aria-hidden />
                           </a>
                         ) : (
@@ -1047,11 +1047,14 @@ export default function MarketDataImportHub() {
             ]}
           />
           <div className="mir-card overflow-x-auto rounded-xl">
-            {/* PASS 289 — no column may wrap a word vertically: fixed min width + nowrap cells. */}
-            <table className="w-full min-w-[1280px] text-sm [&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
+            {/*
+              PASS 289 — action columns never wrap; the three long text columns wrap between
+              words (never mid-word, never truncated) so all ten columns fit the workspace.
+            */}
+            <table className="w-full min-w-[1240px] text-sm [&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
               <thead className="mir-solid text-left text-xs uppercase tracking-wider">
                 <tr>
-                  <th className="px-3 py-3 w-10"> </th>
+                  <th className="w-10 px-3 py-3"> </th>
                   <th className="px-4 py-3">Project</th>
                   <th className="px-4 py-3">Developer</th>
                   <th className="px-4 py-3">Location</th>
@@ -1063,6 +1066,8 @@ export default function MarketDataImportHub() {
                   <th className="px-4 py-3">JBJ</th>
                 </tr>
               </thead>
+
+
 
               <tbody>
                 {newProjects.map((p) => {
@@ -1079,10 +1084,13 @@ export default function MarketDataImportHub() {
                           {selected.has(p.id) ? <Check className="h-3.5 w-3.5" aria-hidden /> : null}
                         </button>
                       </td>
-                      <td className="px-4 py-3 text-neutral-900">{p.name}</td>
-                      <td className="px-4 py-3 text-neutral-600">{p.developer_name || "—"}</td>
-                      <td className="px-4 py-3 text-neutral-600">{[p.area, p.city].filter(Boolean).join(", ") || "—"}</td>
+                      <td className="px-4 py-3 text-neutral-900"><div className="max-w-[240px] whitespace-normal break-normal">{p.name}</div></td>
+                      <td className="px-4 py-3 text-neutral-600"><div className="max-w-[220px] whitespace-normal break-normal">{p.developer_name || "—"}</div></td>
+                      <td className="px-4 py-3 text-neutral-600"><div className="max-w-[220px] whitespace-normal break-normal">{[p.area, p.city].filter(Boolean).join(", ") || "—"}</div></td>
+
                       <td className="px-4 py-3 text-neutral-600">{p.status || "—"}</td>
+
+
                       <td className="px-4 py-3">
                         <select aria-label={`Review status for ${p.name}`} disabled={rowBusy === p.id} value={p.review_decision || "pending"} onChange={(event) => updateSingleReview("project", p.id, event.target.value as "approved" | "rejected" | "pending")} className="mir-pill rounded-full px-2.5 py-1 text-[11px] font-semibold">
                           <option value="pending">Pending</option><option value="approved">Approved & publish</option><option value="rejected">Rejected</option>
@@ -1091,26 +1099,26 @@ export default function MarketDataImportHub() {
                       <td className="px-4 py-3"><PublishCell status={p.publish_status} at={p.published_at} error={p.publish_error} busy={rowBusy === p.id} onPublish={() => updateSingleReview("project", p.id, "approved")} /></td>
                       <td className="px-4 py-3">
                         {jbj ? (
-                          <a href={`${jbj.href}?jbj_preview=1`} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
-                            Preview page <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                          <a href={`${jbj.href}?jbj_preview=1`} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
+                            Preview <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
                           /* PASS 292 — rows that are not on JBJ yet still render as a draft. */
-                          <button type="button" onClick={() => setPreviewStagedId(p.id)} className="mir-link inline-flex items-center gap-1">
-                            Preview draft <Eye className="h-3.5 w-3.5" aria-hidden />
+                          <button type="button" onClick={() => setPreviewStagedId(p.id)} className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
+                            Draft <Eye className="h-3.5 w-3.5" aria-hidden />
                           </button>
                         )}
                       </td>
 
 
                       <td className="px-4 py-3">
-                        <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                        <a href={p.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                         </a>
                       </td>
                       <td className="px-4 py-3">
                         {jbj ? (
-                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             JBJ listing <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
@@ -1181,13 +1189,13 @@ export default function MarketDataImportHub() {
                       </td>
                       <td className="px-4 py-3"><PublishCell status={d.publish_status} at={d.published_at} error={d.publish_error} busy={rowBusy === d.id} onPublish={() => updateSingleReview("developer", d.id, "approved")} /></td>
                       <td className="px-4 py-3">
-                        <a href={d.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                        <a href={d.source_url} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                           Source <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                         </a>
                       </td>
                       <td className="px-4 py-3">
                         {jbj ? (
-                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1">
+                          <a href={jbj.href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap">
                             JBJ profile <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                           </a>
                         ) : (
