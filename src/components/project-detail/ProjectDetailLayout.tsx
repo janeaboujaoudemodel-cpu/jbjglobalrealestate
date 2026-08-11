@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react";
+import DeferredSection from "@/components/util/DeferredSection";
 
 import { Link } from "react-router-dom";
 import {
@@ -2402,18 +2403,21 @@ function ProjectDetailLayoutInner({
            {mortgageEligible ? (
            <div ref={mortgageRef} className="mb-14 scroll-mt-32">
               <div className="jj-card-inner p-0 overflow-hidden">
+                <DeferredSection minHeight={520}>
                 <MortgageCalculator
                   defaultPrice={project.price_from ?? 2000000}
                   compact={false}
                   context={{ projectName: project.name, location: project.location || undefined }}
                   showAssistant
                 />
+                </DeferredSection>
               </div>
             </div>
             ) : null}
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
            <div ref={aiRef} id="ai" className="mb-10 md:mb-12 scroll-mt-40">
+              <DeferredSection minHeight={560}>
               <ProjectAIAnalyzer
                 projectName={project.name}
                 areaName={project.area_name || project.location || "UAE"}
@@ -2424,13 +2428,16 @@ function ProjectDetailLayoutInner({
                 amenities={project.amenities ?? undefined}
                 emirate={project.emirate}
               />
+              </DeferredSection>
             </div>
 
            {/* BUYER NATIONALITY INSIGHTS — project + area */}
-           <BuyerNationalityInsights
-             projectName={project.name}
-             areaName={project.area_name || project.location || null}
-           />
+           <DeferredSection minHeight={480}>
+             <BuyerNationalityInsights
+               projectName={project.name}
+               areaName={project.area_name || project.location || null}
+             />
+           </DeferredSection>
 
            {/* MORE FROM THIS DEVELOPER — moved down into its own band directly above
                Dubai Market Intelligence (see below). Placeholder kept for git history. */}
@@ -2442,6 +2449,7 @@ function ProjectDetailLayoutInner({
            {(project.roi_estimate || project.rental_yield_estimate) && (
              <div ref={investmentRef} id="investment" className="mb-10 md:mb-12 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="investment" initial={project as any} /></div>
+               <DeferredSection minHeight={360}>
                <InvestmentMetricsSection
                  roiEstimate={project.roi_estimate}
                  rentalYieldEstimate={project.rental_yield_estimate}
@@ -2449,6 +2457,7 @@ function ProjectDetailLayoutInner({
                  projectName={project.name}
                  onContactClick={() => { setCaptureDocType("brochure"); setCaptureDocUrl(undefined); setLeadCaptureOpen(true); }}
                />
+               </DeferredSection>
              </div>
            )}
 
@@ -2497,12 +2506,14 @@ function ProjectDetailLayoutInner({
         data-section="register-interest"
       >
         <div className="jj-project-shell py-12 md:py-16">
+          <DeferredSection minHeight={620}>
           <ConsultationRequestForm
             title={`Register Interest in ${project.name}`}
             subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
             projectId={project.id}
             projectName={project.name}
           />
+          </DeferredSection>
         </div>
       </div>
 
@@ -2520,7 +2531,7 @@ function ProjectDetailLayoutInner({
       <SectionDividerGoldFullBleed />
       <div className="bg-[#FDFBF7] jj-project-band jj-fullbleed-band">
         <div className="jj-project-shell">
-          <CallToActionSection projectName={project.name} projectId={project.id} />
+          <DeferredSection minHeight={380}><CallToActionSection projectName={project.name} projectId={project.id} /></DeferredSection>
         </div>
       </div>
 
@@ -2528,12 +2539,14 @@ function ProjectDetailLayoutInner({
       <SectionDividerGoldFullBleed />
       <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
       <div className="jj-project-shell">
+      <DeferredSection minHeight={520}>
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}
         currentLocation={project.location}
         currentEmirate={(project as any).emirate || null}
       />
+      </DeferredSection>
       </div>
       </div>
 
@@ -2543,19 +2556,21 @@ function ProjectDetailLayoutInner({
       <SectionDividerGoldFullBleed />
       <div className="pt-10 md:pt-14 pb-6 md:pb-8 jj-project-band jj-fullbleed-band bg-[#FDFBF7]">
         <div className="jj-project-shell">
+          <DeferredSection minHeight={420}>
           <MoreFromDeveloperStrip
             currentProjectId={project.id}
             developerId={project.developer?.id ?? (project as any).developer_id ?? null}
             developerName={project.developer?.name ?? (project as any).developer_name ?? null}
             developerSlug={project.developer?.slug ?? null}
           />
+          </DeferredSection>
         </div>
       </div>
 
       {/* DUBAI MARKET INTELLIGENCE — after developer portfolio strip */}
       <div className="jj-project-nested-band mb-10 md:mb-12">
         <SectionDividerGoldFullBleed />
-        <DLDMarketWidget />
+        <DeferredSection minHeight={560}><DLDMarketWidget /></DeferredSection>
         <SectionDividerGoldFullBleed />
       </div>
 
