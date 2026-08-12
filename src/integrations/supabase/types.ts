@@ -23444,6 +23444,668 @@ export type Database = {
         }
         Relationships: []
       }
+      inbox_accounts: {
+        Row: {
+          awaiting_reply_count: number
+          category_counts: Json
+          created_at: string
+          display_name: string | null
+          draft_count: number
+          email_address: string
+          id: string
+          last_sync_error: string | null
+          last_sync_status: string | null
+          last_synced_at: string | null
+          provider: string
+          secret_ref: string | null
+          status: string
+          unread_count: number
+          updated_at: string
+        }
+        Insert: {
+          awaiting_reply_count?: number
+          category_counts?: Json
+          created_at?: string
+          display_name?: string | null
+          draft_count?: number
+          email_address: string
+          id?: string
+          last_sync_error?: string | null
+          last_sync_status?: string | null
+          last_synced_at?: string | null
+          provider: string
+          secret_ref?: string | null
+          status?: string
+          unread_count?: number
+          updated_at?: string
+        }
+        Update: {
+          awaiting_reply_count?: number
+          category_counts?: Json
+          created_at?: string
+          display_name?: string | null
+          draft_count?: number
+          email_address?: string
+          id?: string
+          last_sync_error?: string | null
+          last_sync_status?: string | null
+          last_synced_at?: string | null
+          provider?: string
+          secret_ref?: string | null
+          status?: string
+          unread_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inbox_activity_log: {
+        Row: {
+          account_id: string | null
+          actor: string | null
+          created_at: string
+          detail: Json
+          email_id: string | null
+          event_type: string
+          id: string
+          message: string | null
+          status: string
+        }
+        Insert: {
+          account_id?: string | null
+          actor?: string | null
+          created_at?: string
+          detail?: Json
+          email_id?: string | null
+          event_type: string
+          id?: string
+          message?: string | null
+          status?: string
+        }
+        Update: {
+          account_id?: string | null
+          actor?: string | null
+          created_at?: string
+          detail?: Json
+          email_id?: string | null
+          event_type?: string
+          id?: string
+          message?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbox_activity_log_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inbox_activity_log_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_emails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inbox_ai_brain: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string | null
+          email_id: string | null
+          id: string
+          source: string
+          tags: string[]
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string | null
+          email_id?: string | null
+          id?: string
+          source?: string
+          tags?: string[]
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          email_id?: string | null
+          id?: string
+          source?: string
+          tags?: string[]
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbox_ai_brain_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_emails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inbox_auto_ack: {
+        Row: {
+          account_id: string | null
+          body_template: string | null
+          created_at: string
+          enabled: boolean
+          id: string
+          match_type: string
+          pattern: string | null
+          quiet_hours_end: number | null
+          quiet_hours_start: number | null
+          sent_count: number
+          subject_template: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string | null
+          body_template?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          match_type?: string
+          pattern?: string | null
+          quiet_hours_end?: number | null
+          quiet_hours_start?: number | null
+          sent_count?: number
+          subject_template?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string | null
+          body_template?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          match_type?: string
+          pattern?: string | null
+          quiet_hours_end?: number | null
+          quiet_hours_start?: number | null
+          sent_count?: number
+          subject_template?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbox_auto_ack_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inbox_cleanup_rules: {
+        Row: {
+          action: string
+          affected_count: number
+          created_at: string
+          id: string
+          last_run_at: string | null
+          match_type: string
+          name: string
+          older_than_days: number | null
+          pattern: string
+          paused: boolean
+          updated_at: string
+        }
+        Insert: {
+          action?: string
+          affected_count?: number
+          created_at?: string
+          id?: string
+          last_run_at?: string | null
+          match_type?: string
+          name: string
+          older_than_days?: number | null
+          pattern: string
+          paused?: boolean
+          updated_at?: string
+        }
+        Update: {
+          action?: string
+          affected_count?: number
+          created_at?: string
+          id?: string
+          last_run_at?: string | null
+          match_type?: string
+          name?: string
+          older_than_days?: number | null
+          pattern?: string
+          paused?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inbox_drafts: {
+        Row: {
+          account_id: string | null
+          approved: boolean
+          body_html: string | null
+          body_text: string | null
+          cc_email: string | null
+          created_at: string
+          email_id: string | null
+          generated_by: string | null
+          id: string
+          mode: string
+          sent_at: string | null
+          subject: string | null
+          to_email: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string | null
+          approved?: boolean
+          body_html?: string | null
+          body_text?: string | null
+          cc_email?: string | null
+          created_at?: string
+          email_id?: string | null
+          generated_by?: string | null
+          id?: string
+          mode?: string
+          sent_at?: string | null
+          subject?: string | null
+          to_email?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string | null
+          approved?: boolean
+          body_html?: string | null
+          body_text?: string | null
+          cc_email?: string | null
+          created_at?: string
+          email_id?: string | null
+          generated_by?: string | null
+          id?: string
+          mode?: string
+          sent_at?: string | null
+          subject?: string | null
+          to_email?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbox_drafts_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inbox_drafts_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_emails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inbox_emails: {
+        Row: {
+          account_id: string | null
+          action_needed: string | null
+          category: string | null
+          category_reason: string | null
+          cc_email: string | null
+          created_at: string
+          deleted_at: string | null
+          division: string | null
+          folder: string
+          from_email: string | null
+          from_name: string | null
+          gmail_id: string
+          has_attachments: boolean
+          id: string
+          is_ignored: boolean
+          is_responded: boolean
+          is_starred: boolean
+          is_unread: boolean
+          labels: string[]
+          priority: string | null
+          provider: string
+          provider_folder: string | null
+          provider_labels: string[]
+          received_at: string
+          snippet: string | null
+          status_since: string
+          subject: string | null
+          summary: string | null
+          thread_id: string | null
+          to_email: string | null
+          updated_at: string
+          web_link: string | null
+        }
+        Insert: {
+          account_id?: string | null
+          action_needed?: string | null
+          category?: string | null
+          category_reason?: string | null
+          cc_email?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          division?: string | null
+          folder?: string
+          from_email?: string | null
+          from_name?: string | null
+          gmail_id: string
+          has_attachments?: boolean
+          id?: string
+          is_ignored?: boolean
+          is_responded?: boolean
+          is_starred?: boolean
+          is_unread?: boolean
+          labels?: string[]
+          priority?: string | null
+          provider?: string
+          provider_folder?: string | null
+          provider_labels?: string[]
+          received_at?: string
+          snippet?: string | null
+          status_since?: string
+          subject?: string | null
+          summary?: string | null
+          thread_id?: string | null
+          to_email?: string | null
+          updated_at?: string
+          web_link?: string | null
+        }
+        Update: {
+          account_id?: string | null
+          action_needed?: string | null
+          category?: string | null
+          category_reason?: string | null
+          cc_email?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          division?: string | null
+          folder?: string
+          from_email?: string | null
+          from_name?: string | null
+          gmail_id?: string
+          has_attachments?: boolean
+          id?: string
+          is_ignored?: boolean
+          is_responded?: boolean
+          is_starred?: boolean
+          is_unread?: boolean
+          labels?: string[]
+          priority?: string | null
+          provider?: string
+          provider_folder?: string | null
+          provider_labels?: string[]
+          received_at?: string
+          snippet?: string | null
+          status_since?: string
+          subject?: string | null
+          summary?: string | null
+          thread_id?: string | null
+          to_email?: string | null
+          updated_at?: string
+          web_link?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbox_emails_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inbox_ignore_rules: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          hit_count: number
+          id: string
+          learned: boolean
+          match_type: string
+          pattern: string
+          paused: boolean
+          reason: string | null
+          scope: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          hit_count?: number
+          id?: string
+          learned?: boolean
+          match_type?: string
+          pattern: string
+          paused?: boolean
+          reason?: string | null
+          scope?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          hit_count?: number
+          id?: string
+          learned?: boolean
+          match_type?: string
+          pattern?: string
+          paused?: boolean
+          reason?: string | null
+          scope?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inbox_notification_events: {
+        Row: {
+          account_id: string | null
+          body: string | null
+          created_at: string
+          email_id: string | null
+          event_type: string
+          id: string
+          payload: Json
+          read_at: string | null
+          title: string | null
+        }
+        Insert: {
+          account_id?: string | null
+          body?: string | null
+          created_at?: string
+          email_id?: string | null
+          event_type: string
+          id?: string
+          payload?: Json
+          read_at?: string | null
+          title?: string | null
+        }
+        Update: {
+          account_id?: string | null
+          body?: string | null
+          created_at?: string
+          email_id?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          read_at?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbox_notification_events_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inbox_notification_events_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_emails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inbox_notification_prefs: {
+        Row: {
+          created_at: string
+          digest_hour: number
+          email_digest: boolean
+          id: string
+          notify_label_change: boolean
+          notify_new_mail: boolean
+          notify_sla_breach: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          digest_hour?: number
+          email_digest?: boolean
+          id?: string
+          notify_label_change?: boolean
+          notify_new_mail?: boolean
+          notify_sla_breach?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          digest_hour?: number
+          email_digest?: boolean
+          id?: string
+          notify_label_change?: boolean
+          notify_new_mail?: boolean
+          notify_sla_breach?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      inbox_saved_searches: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          query: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          query?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          query?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inbox_sla_rules: {
+        Row: {
+          active: boolean
+          created_at: string
+          due_hours: number
+          id: string
+          label: string
+          updated_at: string
+          warn_hours: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          due_hours?: number
+          id?: string
+          label: string
+          updated_at?: string
+          warn_hours?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          due_hours?: number
+          id?: string
+          label?: string
+          updated_at?: string
+          warn_hours?: number
+        }
+        Relationships: []
+      }
+      inbox_sync_state: {
+        Row: {
+          account_id: string | null
+          created_at: string
+          cursor_token: string | null
+          folder: string | null
+          history_id: string | null
+          id: string
+          imported_count: number
+          last_error: string | null
+          last_run_at: string | null
+          last_status: string | null
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string | null
+          created_at?: string
+          cursor_token?: string | null
+          folder?: string | null
+          history_id?: string | null
+          id?: string
+          imported_count?: number
+          last_error?: string | null
+          last_run_at?: string | null
+          last_status?: string | null
+          provider: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string | null
+          created_at?: string
+          cursor_token?: string | null
+          folder?: string | null
+          history_id?: string | null
+          id?: string
+          imported_count?: number
+          last_error?: string | null
+          last_run_at?: string | null
+          last_status?: string | null
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbox_sync_state_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "inbox_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inquiries: {
         Row: {
           admin_notes: string | null
@@ -44843,6 +45505,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      inbox_is_admin: { Args: never; Returns: boolean }
       increment_shared_card_views: {
         Args: { card_token: string }
         Returns: undefined
