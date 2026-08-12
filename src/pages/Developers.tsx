@@ -145,20 +145,9 @@ const Developers = () => {
     } else if ((search.sort as string) === "most_projects") {
       filtered.sort((a, b) => (mergedStats.counts[b.id] || 0) - (mergedStats.counts[a.id] || 0));
     } else {
-      filtered.sort((a, b) => {
-        const aSlug = a.slug?.toLowerCase() || "";
-        const bSlug = b.slug?.toLowerCase() || "";
-        const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
-        const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
-        if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
-        if (aIdx >= 0) return -1;
-        if (bIdx >= 0) return 1;
-        const aRank = a.rank && a.rank > 0 ? a.rank : 999;
-        const bRank = b.rank && b.rank > 0 ? b.rank : 999;
-        const rankDiff = aRank - bRank;
-        if (rankDiff !== 0) return rankDiff;
-        return a.name.localeCompare(b.name);
-      });
+      // PASS 298 — curated elite order → tier → rank → name. A new or unknown
+      // developer can never be pushed above Emaar / Omniyat / Sobha / Nakheel.
+      filtered.sort(compareDevelopersByPriority);
     }
     
     return filtered;
