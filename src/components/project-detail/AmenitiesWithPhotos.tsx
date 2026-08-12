@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { findLibraryAmenityPhoto } from "@/lib/amenityPhotoLibrary";
 import {
   Dumbbell, Waves, TreePine, Car, Shield, Wifi, Utensils, Baby, Dog, Sun,
   Wind, Building, Users, Heart, Coffee, ShoppingBag, Sparkles, Gamepad2,
