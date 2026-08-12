@@ -397,7 +397,7 @@ Deno.serve(async (req) => {
           .select()
           .maybeSingle();
 
-        results.push({ provider, pulled, pushed, error: lastError, state: saved });
+        results.push({ provider, pulled, pushed, push_candidates: candidates, error: lastError, state: saved });
       }
 
       return json({ ok: true, results });
