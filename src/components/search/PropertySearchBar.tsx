@@ -48,7 +48,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1 h-11 lg:h-16 px-1.5 lg:px-2 rounded-lg text-[12.5px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-hidden shadow-none";
+  "flex items-center justify-between gap-1 h-11 lg:h-16 px-1.5 lg:px-2 rounded-lg text-[12.5px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-visible shadow-none";
 
 function Seg({
   label,
@@ -91,7 +91,7 @@ function Seg({
           <span className="flex flex-1 items-center gap-1.5 min-w-0">
             <span className="shrink-0 inline-flex items-center">{icon}</span>
             <span
-              className="min-w-0 truncate leading-none"
+              className="min-w-0 leading-none"
               style={{
                 color: active ? ink : muted,
                 WebkitTextFillColor: active ? ink : muted,
@@ -395,7 +395,7 @@ export default function PropertySearchBar({
         </div>
 
         <div
-          className={`order-10 relative flex items-center gap-2 h-12 lg:h-16 px-3 lg:px-3.5 rounded-lg min-w-0 col-span-2 lg:order-none lg:col-span-1 shadow-none ${KEYWORD_SPAN}`}
+          className={`order-2 relative flex items-center gap-2 h-12 lg:h-16 px-3 lg:px-3.5 rounded-lg min-w-0 col-span-2 lg:order-none lg:col-span-1 shadow-none ${KEYWORD_SPAN}`}
           data-surface={dark ? "dark" : "light"}
           data-search-segment
           style={{
@@ -457,7 +457,7 @@ export default function PropertySearchBar({
         {/* PASS 298 — tiers moved to row 2 (under "Sell") as a multi-select
             include/exclude segment. No duplicated tier control in row 1. */}
         <div
-          className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
+          className="order-10 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
           data-search-utility-controls
           data-surface={dark ? "dark" : "light"}
           style={{
@@ -478,7 +478,7 @@ export default function PropertySearchBar({
         >
 
           <div
-            className={`order-3 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg`}
+            className={`order-10 lg:order-none flex h-10 lg:h-16 w-full justify-self-stretch min-w-0 items-stretch overflow-hidden rounded-lg`}
             data-search-utility-controls
             data-surface={dark ? "dark" : "light"}
             style={{
@@ -814,7 +814,7 @@ export default function PropertySearchBar({
           >
             <span className="flex items-center gap-2 min-w-0">
               <SlidersHorizontal className="w-3.5 h-3.5 shrink-0 opacity-70" />
-              <span className="truncate" style={{ whiteSpace: "nowrap" }}>
+              <span style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
             </span>
