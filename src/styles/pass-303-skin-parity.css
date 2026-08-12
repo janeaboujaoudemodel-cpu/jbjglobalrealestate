@@ -69,6 +69,17 @@ html:not([data-jbj-backend-lock="1"]) body #root
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
+/* Final specificity lock against legacy Sun selectors that recolor collapsed
+   glyphs after the rail has already been established as an emerald surface. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] .jj-side-tile :is(svg, path),
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] .jj-side-tile :is(svg, path) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
 
 html:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] img[alt="JBJ"] {
   filter: brightness(0) invert(1) !important;
@@ -239,9 +250,10 @@ html body #root [data-chrome="sidebar"] :is(
     overflow-x: visible !important;
   }
   html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] img[alt="JBJ"] {
-    width: 44px !important;
-    height: 44px !important;
+    width: 30px !important;
+    height: 42px !important;
     max-width: none !important;
+    object-fit: contain !important;
   }
   html body.jj-vertical-nav-collapsed #root .jj-side-tile {
     width: 32px !important;
