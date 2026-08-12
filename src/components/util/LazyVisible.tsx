@@ -55,7 +55,7 @@ export default function LazyVisible({
     // Safety net: IntersectionObserver can remain silent when this placeholder
     // is first measured inside a transitioning/previously hidden ancestor.
     // Never leave a real section as a permanent empty reserved panel.
-    const fallbackTimer = window.setTimeout(() => setVisible(true), 4000);
+    const fallbackTimer = window.setTimeout(() => setVisible(true), 2000);
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
