@@ -323,12 +323,8 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
     height: 0 !important;
     min-height: 0 !important;
     overflow: visible !important;
-    pointer-events: none !important;
   }
-  html body #root [data-chrome="header"] > header :is([data-tour-target="mobile-menu"], [data-jj-drawer-panel], [data-jj-drawer-backdrop], [data-jj-guide-card], [role="dialog"]),
-  html body #root [data-chrome="header"] > header :is([data-jj-drawer-panel], [data-jj-drawer-backdrop], [role="dialog"]) * {
-    pointer-events: auto !important;
-  }
+
   /* Floating hamburger plate so the mark stays legible over any hero. */
   html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] {
     position: fixed !important;
