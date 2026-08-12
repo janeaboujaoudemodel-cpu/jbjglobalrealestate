@@ -39,6 +39,14 @@ html body #root [data-jj-drawer-panel] .jj-drawer-row span {
   overflow: visible;
   text-overflow: clip;
 }
+html[data-jbj-theme="sun"] body #root [data-jj-drawer-panel] [data-jj-drawer-tile] [data-jj-quick-icon],
+html[data-jbj-theme="sun"] body #root [data-jj-drawer-panel] [data-jj-drawer-tile] [data-jj-quick-icon] * {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+html body #root [data-jj-drawer-panel] .jj-drawer-footer .jj-drawer-row {
+  min-height: 38px;
+}
 html body #root [data-jj-drawer-panel] .jj-drawer-sub {
   border-left: 1px solid rgba(6, 78, 59, 0.28);
 }
@@ -56,7 +64,7 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
 }
 html[data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
   [data-jj-drawer-panel][data-jj-mobile-drawer]
-  :is(a, button, span, p, strong, small, label, svg, svg *, path):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  :is(a, button, span, p, strong, small, label, svg, svg *, path):not([data-jj-quick-icon]):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
   color: #0A0A0A !important;
   -webkit-text-fill-color: #0A0A0A !important;
   stroke: currentColor !important;
@@ -361,6 +369,22 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
   }
+}
+
+/* Drawer finish — premium Sun quick actions and a shared value column for
+   Language / Currency / Owner view. */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel]
+  [data-jj-drawer-tile] :is([data-jj-quick-icon], [data-jj-quick-icon] *) {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-currency button {
+  width: 64px !important;
+  min-width: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  justify-content: flex-start !important;
 }
 
 /* 2. Sun guide card ink — beat the dark-surface white-ink inheritance. */
