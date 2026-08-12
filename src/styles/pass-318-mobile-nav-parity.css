@@ -304,3 +304,51 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
   align-self: center !important;
   line-height: 1 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 320 — MOBILE: DRAWER-ONLY NAV + SUN GUIDE INK
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* 1. The mobile horizontal header band is retired. Phones and tablets get
+      the approved vertical drawer only — the header keeps a single floating
+      hamburger control and paints nothing. */
+@media (max-width: 1023.98px) {
+  html body #root [data-chrome="header"] > header {
+    background: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom-color: transparent !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    pointer-events: none !important;
+  }
+  html body #root [data-chrome="header"] > header [data-tour-target="mobile-menu"] {
+    pointer-events: auto !important;
+  }
+  /* Floating hamburger plate so the mark stays legible over any hero. */
+  html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] {
+    position: fixed !important;
+    top: 12px !important;
+    right: 12px !important;
+    z-index: 10440 !important;
+    border-radius: 9999px !important;
+    background-image: var(--jj-emerald-ombre) !important;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28) !important;
+  }
+  html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] :is(.jj-hamburger-bar, .jj-hamburger-close) {
+    background-color: #FFFFFF !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+}
+
+/* 2. Sun guide card ink — beat the dark-surface white-ink inheritance. */
+html[data-jbj-theme="sun"] body div#root [data-jj-guide-card]:not(#jj320-a):not(#jj320-b):not(#jj320-c):not(#jj320-d):not(#jj320-e):not(#jj320-f)
+  :is(h3, p, span, strong, a, svg, svg *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
