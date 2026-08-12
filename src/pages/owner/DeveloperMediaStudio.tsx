@@ -139,7 +139,7 @@ export default function DeveloperMediaStudio() {
     setBusyId(dev.id);
     try {
       const next = { ...dev, ...patch };
-      const payload: Record<string, unknown> = { ...patch };
+      const payload: Partial<DevRow> & { logo_status?: string; needs_real_logo?: boolean } = { ...patch };
       // Completing the media set republishes the profile automatically — an
       // archived developer must never stay hidden once it has real artwork.
       if (coverOf(next) && dev.is_hidden) payload.is_hidden = false;
