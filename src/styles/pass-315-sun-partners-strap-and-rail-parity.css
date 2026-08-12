@@ -139,3 +139,17 @@ html[data-jbj-theme="moon"] body #root [data-partners-marquee] [data-partners-he
   background-image: linear-gradient(90deg, #032015 0%, #064E3B 50%, #032015 100%) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
+
+/* Strip emerald wins in Sun over the champagne long-surface rules. */
+html[data-jbj-theme="sun"] body #root
+  [data-partners-marquee][data-partners-marquee]
+  [data-partners-strip][data-partners-strip][data-emerald-surface="true"],
+html[data-jbj-theme="moon"] body #root
+  [data-partners-marquee][data-partners-marquee]
+  [data-partners-strip][data-partners-strip][data-emerald-surface="true"] {
+  background-color: #042c1c !important;
+  background-image: linear-gradient(160deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+}
+html[data-jbj-theme="sun"] body #root [data-partners-marquee] [data-partners-strip] .jj-partner-mark img {
+  filter: brightness(0) invert(1) !important;
+}
