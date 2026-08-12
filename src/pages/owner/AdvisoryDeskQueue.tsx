@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
   Mail, Phone, User, Loader2, Send, CheckCircle2, Clock, MessageCircle, RefreshCw, Search,
+  ShieldAlert, ShieldCheck,
 } from "lucide-react";
 
 interface TicketRow {
@@ -28,6 +29,11 @@ interface TicketRow {
   status: string;
   created_at: string;
   handled_at: string | null;
+  /** PASS 299 — member = identity verified from their signed-in account.
+      guest = escalated from the public site, details self-declared. */
+  visitor_kind: string | null;
+  /** portal = came from a gated (login-required) page. public = open website. */
+  origin_surface: string | null;
 }
 
 type Channel = "email" | "whatsapp" | "both";
@@ -46,7 +52,7 @@ export default function AdvisoryDeskQueue() {
       const { data, error } = await supabase
         .from("advisory_desk_requests")
         .select(
-          "id, user_id, visitor_name, visitor_email, visitor_phone, query, source, page_source, transcript, status, created_at, handled_at",
+          "id, user_id, visitor_name, visitor_email, visitor_phone, query, source, page_source, transcript, status, created_at, handled_at, visitor_kind, origin_surface",
         )
         .order("created_at", { ascending: false })
         .limit(200);
@@ -112,10 +118,22 @@ export default function AdvisoryDeskQueue() {
           {tickets.map((t) => {
             const active = t.id === selectedId;
             return (
-              <button
+              /* PASS 299 — the CRM shell forces `button { display:flex }`, which
+                 collapsed these ticket cards into one overlapping row. A
+                 role=button div keeps the block layout intact. */
+              <div
                 key={t.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => setParams({ request: t.id })}
-                className={`w-full rounded-xl border p-4 text-left transition-colors ${
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setParams({ request: t.id });
+                  }
+                }}
+                style={{ display: "block" }}
+                className={`w-full cursor-pointer rounded-xl border p-4 text-left transition-colors ${
                   active ? "jj-surface-emerald text-white border-transparent" : "border-border bg-card hover:border-primary/40"
                 }`}
               >
@@ -132,10 +150,38 @@ export default function AdvisoryDeskQueue() {
                   {t.visitor_email} {t.visitor_phone ? `· ${t.visitor_phone}` : ""}
                 </p>
                 <p className={`mt-2 text-sm ${active ? "text-white" : "text-foreground/90"}`}>{t.query}</p>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <span
+                    data-no-contrast-guard
+                    className="jj-nowrap inline-flex items-center gap-1 rounded-full px-2 py-[3px] text-[10px] font-semibold uppercase tracking-[0.1em]"
+                    style={
+                      t.visitor_kind === "guest"
+                        ? { background: "#FFFFFF", color: "#8A5A00", border: "1px solid rgba(138,90,0,0.35)" }
+                        : {
+                            backgroundImage: "linear-gradient(180deg,#064E3B 0%,#042c1c 55%,#000 100%)",
+                            color: "#FFFFFF",
+                            WebkitTextFillColor: "#FFFFFF",
+                          }
+                    }
+                  >
+                    {t.visitor_kind === "guest" ? (
+                      <>
+                        <ShieldAlert className="h-3 w-3" /> Guest · unverified
+                      </>
+                    ) : (
+                      <>
+                        <ShieldCheck className="h-3 w-3" /> Member · verified
+                      </>
+                    )}
+                  </span>
+                  <span className={`jj-nowrap text-[10px] uppercase tracking-[0.1em] ${active ? "text-white/70" : "text-muted-foreground"}`}>
+                    {t.origin_surface === "portal" ? "Gated portal" : "Public site"}
+                  </span>
+                </div>
                 <p className={`mt-2 text-[11px] ${active ? "text-white/70" : "text-muted-foreground"}`}>
                   {new Date(t.created_at).toLocaleString()} · {t.source || "chat"}
                 </p>
-              </button>
+              </div>
             );
           })}
         </div>
@@ -158,6 +204,16 @@ export default function AdvisoryDeskQueue() {
                 </p>
                 <p className="flex items-center gap-2 text-sm text-foreground">
                   <Search className="h-4 w-4 text-muted-foreground" /> {selected.page_source || "—"}
+                </p>
+                <p className="flex items-center gap-2 text-sm text-foreground sm:col-span-2">
+                  {selected.visitor_kind === "guest" ? (
+                    <ShieldAlert className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <ShieldCheck className="h-4 w-4 text-muted-foreground" />
+                  )}
+                  {selected.visitor_kind === "guest"
+                    ? "Guest from the public website — contact details are self-declared, verify before acting."
+                    : "Signed-in member — identity verified from their JBJ account."}
                 </p>
               </div>
 

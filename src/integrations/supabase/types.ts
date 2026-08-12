@@ -382,6 +382,7 @@ export type Database = {
           handled_at: string | null
           handled_by: string | null
           id: string
+          origin_surface: string
           page_source: string | null
           preferred_channel: string | null
           query: string
@@ -391,6 +392,7 @@ export type Database = {
           updated_at: string
           user_id: string | null
           visitor_email: string | null
+          visitor_kind: string
           visitor_name: string | null
           visitor_phone: string | null
         }
@@ -400,6 +402,7 @@ export type Database = {
           handled_at?: string | null
           handled_by?: string | null
           id?: string
+          origin_surface?: string
           page_source?: string | null
           preferred_channel?: string | null
           query: string
@@ -409,6 +412,7 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
           visitor_email?: string | null
+          visitor_kind?: string
           visitor_name?: string | null
           visitor_phone?: string | null
         }
@@ -418,6 +422,7 @@ export type Database = {
           handled_at?: string | null
           handled_by?: string | null
           id?: string
+          origin_surface?: string
           page_source?: string | null
           preferred_channel?: string | null
           query?: string
@@ -427,6 +432,7 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
           visitor_email?: string | null
+          visitor_kind?: string
           visitor_name?: string | null
           visitor_phone?: string | null
         }

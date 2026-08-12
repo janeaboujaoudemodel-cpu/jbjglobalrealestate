@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useCallback, forwardRef } from 're
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { isGatedRoute } from '@/lib/gatedSurface';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -770,7 +771,14 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         },
       });
 
-      // 2b) Advisory Desk ticket — the owner queue with full identity + transcript
+      /* 2b) Advisory Desk ticket — the owner queue with full identity + transcript.
+         PASS 299: inside the gated portal the visitor is always signed in, so a
+         session is mandatory there. On the public site a guest may escalate and
+         the backend flags the ticket as unverified. */
+      const gatedSurface = isGatedRoute(window.location.pathname);
+      if (gatedSurface && !user) {
+        toast.error('Please sign in again — your session expired, so we could not open the ticket.');
+      } else {
       try {
         await supabase.functions.invoke('advisory-desk-request', {
           body: {
@@ -779,6 +787,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
             pageSource: window.location.pathname,
             conversationId,
             transcript,
+            // Only fallbacks — when signed in, the backend takes identity from the JWT.
             visitorName: fullName || undefined,
             visitorEmail: userInfo.email || undefined,
             visitorPhone: userInfo.phone || undefined,
@@ -786,6 +795,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         });
       } catch (deskErr) {
         console.warn('Advisory desk ticket failed (escalation still processed):', deskErr);
+      }
       }
 
 
@@ -853,7 +863,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       console.error('Error submitting to team:', error);
       toast.error('Failed to submit. Please try again.');
     }
-  }, [conversationId, userInfo, selectedService, messages]);
+  }, [conversationId, userInfo, selectedService, messages, user]);
 
   // Handle rating submission
   const handleSubmitRating = async (rating: number, feedback: string) => {

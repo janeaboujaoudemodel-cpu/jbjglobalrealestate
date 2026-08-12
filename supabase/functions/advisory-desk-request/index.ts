@@ -1,10 +1,19 @@
 /**
- * advisory-desk-request — a signed-in visitor asks JBJ (a human) to take over
- * from live chat, or their search could not be answered by the assistant.
+ * advisory-desk-request — a visitor asks JBJ (a human) to take over from live
+ * chat, or their search could not be answered by the assistant.
  *
- * Requires a valid session: the visitor's identity (id, email) is taken from
- * the JWT, never from the request body, so the owner alert can never contain a
- * fabricated or anonymous visitor.
+ * TWO LEGITIMATE ORIGINS (PASS 299 — GATED VS PUBLIC ESCALATION, LOCKED):
+ *
+ *  1. PORTAL (gated) — the page the request came from is behind a login wall.
+ *     Reaching chat/search there is impossible without a session, so a session
+ *     is MANDATORY here. Identity (id, email) is taken from the JWT and the
+ *     request body can never override it. A gated page with no session is a
+ *     spoof attempt and is rejected with 401 auth_required.
+ *
+ *  2. PUBLIC — the marketing site outside the gate (home, project pages,
+ *     developers, contact...). A guest may legitimately escalate here, so the
+ *     contact details the widget collected are accepted and the ticket is
+ *     flagged visitor_kind = 'guest' so the owner sees it is unverified.
  *
  * Creates the ticket in public.advisory_desk_requests, emails the owner the
  * full visitor card with reply-by-email and reply-on-WhatsApp shortcuts, and
@@ -36,6 +45,45 @@ const BodySchema = z.object({
   visitorEmail: z.string().email().max(200).optional(),
   visitorPhone: z.string().max(40).optional(),
 });
+
+/**
+ * Route prefixes that live behind a login wall. Anything that starts with one
+ * of these can only be reached by a signed-in account, so an escalation coming
+ * from there without a session is never legitimate.
+ */
+const GATED_PREFIXES = [
+  "/owner",
+  "/admin",
+  "/crm",
+  "/broker",
+  "/broker-portal",
+  "/agent",
+  "/developer-portal",
+  "/dashboard",
+  "/account",
+  "/my-",
+  "/portal",
+  "/investor",
+  "/client",
+  "/saved",
+  "/shortlist",
+];
+
+const pathOf = (pageSource?: string | null) => {
+  const raw = (pageSource || "").trim();
+  if (!raw) return "";
+  try {
+    return new URL(raw, "https://www.jbj.ae").pathname.toLowerCase();
+  } catch {
+    return raw.toLowerCase();
+  }
+};
+
+const isGatedPath = (pageSource?: string | null) => {
+  const path = pathOf(pageSource);
+  if (!path) return false;
+  return GATED_PREFIXES.some((p) => path === p || path.startsWith(`${p}/`) || path.startsWith(p));
+};
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -78,13 +126,33 @@ Deno.serve(async (req) => {
       user = data.user as typeof user;
     }
 
+    // Where did this come from? A gated page means the visitor MUST be signed
+    // in — that is the whole point of the gate. We refuse to mint a ticket for
+    // an "anonymous" visitor on a page no anonymous visitor can reach.
+    const gated = isGatedPath(b.pageSource);
+    if (gated && !user) {
+      console.warn("[advisory-desk-request] gated page without a session", {
+        page: pathOf(b.pageSource),
+      });
+      return json({ error: "auth_required", surface: "portal" }, 401);
+    }
+
+    const originSurface: "portal" | "public" = gated ? "portal" : "public";
+    const visitorKind: "member" | "guest" = user ? "member" : "guest";
+
     const meta = (user?.user_metadata ?? {}) as Record<string, unknown>;
-    let name =
-      b.visitorName ||
-      (typeof meta.full_name === "string" ? meta.full_name : "") ||
-      (typeof meta.name === "string" ? meta.name : "");
-    let phone = b.visitorPhone || (typeof meta.phone === "string" ? meta.phone : "");
-    let email = user?.email || b.visitorEmail || "";
+    // Signed in: the account is the source of truth and the body may only fill
+    // blanks. Guest: the widget-collected details are all we have.
+    let name = user
+      ? (typeof meta.full_name === "string" ? meta.full_name : "") ||
+        (typeof meta.name === "string" ? meta.name : "") ||
+        b.visitorName ||
+        ""
+      : b.visitorName || "";
+    let phone = user
+      ? (typeof meta.phone === "string" ? meta.phone : "") || b.visitorPhone || ""
+      : b.visitorPhone || "";
+    let email = user?.email || (user ? "" : b.visitorEmail || "");
 
     if (user) {
       try {
@@ -100,7 +168,8 @@ Deno.serve(async (req) => {
       }
     }
 
-    if (!email) return json({ error: "identity_required" }, 401);
+    // A guest ticket still needs a way to answer it: email is the minimum.
+    if (!email) return json({ error: "identity_required", surface: originSurface }, 401);
     if (!name) name = email.split("@")[0];
 
 
@@ -113,6 +182,8 @@ Deno.serve(async (req) => {
         visitor_phone: phone || null,
         query: b.query,
         source: b.source || "chat_escalation",
+        visitor_kind: visitorKind,
+        origin_surface: originSurface,
         page_source: b.pageSource || null,
         conversation_id: b.conversationId || null,
         transcript: b.transcript || null,
@@ -144,6 +215,13 @@ Deno.serve(async (req) => {
       ["What they searched", b.query],
       ["Where from", b.source || "chat_escalation"],
       ["Page", b.pageSource || "—"],
+      [
+        "Visitor type",
+        user
+          ? "Signed-in member (identity verified from their account)"
+          : "Guest from the public site (details self-declared, unverified)",
+      ],
+      ["Origin", originSurface === "portal" ? "Gated portal (login required)" : "Public website"],
       ["Account ID", user?.id ?? "guest (not signed in)"],
       ["Conversation", b.conversationId || "—"],
     ];
@@ -186,7 +264,7 @@ Deno.serve(async (req) => {
     const sent = await sendViaResend({
       from: FROM,
       to: OWNER_ALERT_RECIPIENTS,
-      subject: `🔔 Advisory Desk: ${name} needs an answer`,
+      subject: `🔔 Advisory Desk${visitorKind === "guest" ? " (guest)" : ""}: ${name} needs an answer`,
       html: wrapEmailHtml({ innerHtml, preheader: `${name}: ${b.query.slice(0, 90)}` }),
       reply_to: email ? [email] : undefined,
       tags: [{ name: "type", value: "advisory_desk_request" }],
@@ -221,7 +299,13 @@ Deno.serve(async (req) => {
       console.error("[advisory-desk-request] bell notification failed", e);
     }
 
-    return json({ ok: true, requestId: ticket.id, emailed: sent.ok });
+    return json({
+      ok: true,
+      requestId: ticket.id,
+      emailed: sent.ok,
+      visitorKind,
+      originSurface,
+    });
   } catch (err) {
     console.error("[advisory-desk-request] failed", err);
     return json({ error: "unexpected_error" }, 500);
