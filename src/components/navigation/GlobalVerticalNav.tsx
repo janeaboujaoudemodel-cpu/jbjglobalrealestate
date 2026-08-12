@@ -3,7 +3,7 @@ import "./vertical-nav-refined.css";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
-  Lightbulb, ChevronRight, ChevronLeft, ChevronDown, PanelLeftClose, Search, User, Settings, Castle, FileText,
+  Lightbulb, PanelLeftClose, Search, User, Settings, Castle, FileText,
   DollarSign, TrendingUp, ClipboardCheck, Shield, Sparkles, Bot, Video, Image,
   Mic, Stamp, CreditCard, Palette, Pen, Award, Globe, Brain, MessageSquare,
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
@@ -698,24 +698,9 @@ export default function GlobalVerticalNav() {
     setActiveMegaMenu(null);
   }, [hoverExpanded, pinnedOpen]);
 
-  /**
-   * Sign-out safety guard. When the rail auto-expands on hover, the freshly
-   * revealed Sign Out pill can land under a cursor that was aiming at the
-   * collapse/expand control. Any click within 1.2s of a hover-driven expand is
-   * treated as a mis-click and asks for a deliberate second click instead of
-   * kicking the user out.
-   */
-  const [signOutArmed, setSignOutArmed] = useState(false);
   const handleSignOut = useCallback(() => {
-    const justHoverExpanded = hoverExpanded && Date.now() - hoverExpandedAtRef.current < 1200;
-    if (justHoverExpanded && !signOutArmed) {
-      setSignOutArmed(true);
-      window.setTimeout(() => setSignOutArmed(false), 4000);
-      return;
-    }
-    setSignOutArmed(false);
     supabase.auth.signOut();
-  }, [hoverExpanded, signOutArmed]);
+  }, []);
 
   useEffect(() => {
     if (!navRevealed) {
@@ -1003,7 +988,6 @@ export default function GlobalVerticalNav() {
                     >
                       <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`} />
                       <span className="flex-1">{entry.name}</span>
-                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     </Link>
                   );
                 })}
@@ -1022,7 +1006,6 @@ export default function GlobalVerticalNav() {
                 >
                   <Eye className="w-4 h-4 flex-shrink-0" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   <span className="flex-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{viewAllLabel}</span>
-                  <ChevronRight className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 </Link>
                 {!isDev && (
                   <Link
@@ -1032,7 +1015,6 @@ export default function GlobalVerticalNav() {
                   >
                     <BookOpen className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                     <span className="flex-1">Read Area Guides</span>
-                    <ChevronRight className="w-3 h-3 text-[#1A1A1A]/70 flex-shrink-0" />
                   </Link>
                 )}
               </div>
@@ -1093,7 +1075,6 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                   >
                     <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`} />
                     <span className="flex-1">{link.label}</span>
-                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                   </Link>
                 );
               })}
@@ -1176,8 +1157,6 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                   iconData={{ 'data-sidebar-highlight-icon': true, 'data-no-contrast-guard': true }}
                   labelClassName="flex-1 text-left relative inline-block transition-colors duration-200"
                   labelStyle={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
-                  trailing={hasMega ? <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : undefined} /> : undefined}
-                  trailingClassName="ml-0"
                 />
 
 
@@ -1223,15 +1202,6 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       background: 'none',
                       backgroundImage: 'none',
                     }}
-                    trailing={(
-                      <>
-                        <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                        {!isOpen && hasActiveChild && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#064E3B] animate-pulse" />
-                        )}
-                      </>
-                    )}
-                    trailingClassName="ml-0"
                   />
 
 
@@ -1355,6 +1325,51 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                         );
                         });
                       })()}
+                      {sectionKey === 'MY ACCOUNT' && (
+                        <>
+                          {session && (
+                            <SidebarItem
+                              preserveVisual
+                              asButton
+                              icon={LogOut}
+                              label="Sign Out"
+                              onClick={handleSignOut}
+                              data-sidebar-account-action
+                              className="group flex items-center gap-2.5 px-2.5 min-h-9 rounded-lg text-[13.5px] font-medium transition-all duration-150 hover:bg-[#1A1A1A]/[0.045]"
+                              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                              iconWrapperClassName="w-[24px] h-[24px] overflow-visible flex items-center justify-center shrink-0"
+                              iconClassName="w-[18px] h-[18px] overflow-visible"
+                              iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF', overflow: 'visible' }}
+                              labelClassName="flex-1 text-left"
+                              labelStyle={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                            />
+                          )}
+                          <SidebarItem
+                            preserveVisual
+                            asButton
+                            icon={PanelLeftClose}
+                            label={hoverExpanded ? "Keep Sidebar Open" : "Collapse Sidebar"}
+                            onClick={() => {
+                              if (hoverExpanded) {
+                                setPinnedOpen(true);
+                                setHoverExpanded(false);
+                                try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+                                return;
+                              }
+                              toggleCollapse();
+                            }}
+                            data-sidebar-account-action
+                            data-sidebar-collapse-control
+                            className="group flex items-center gap-2.5 px-2.5 min-h-9 rounded-lg text-[13.5px] font-medium transition-all duration-150 hover:bg-[#1A1A1A]/[0.045]"
+                            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                            iconWrapperClassName="w-[24px] h-[24px] overflow-visible flex items-center justify-center shrink-0"
+                            iconClassName="w-[18px] h-[18px] overflow-visible"
+                            iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF', overflow: 'visible' }}
+                            labelClassName="flex-1 text-left"
+                            labelStyle={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1365,8 +1380,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         </div>
       </nav>
 
-      {/* ━━━ BOTTOM — Sign Out + Collapse only (premium, elegant) ━━━
-          Contact & Support live in the HELP & SUPPORT nav section above. */}
+      {/* Theme control only. Account and sidebar actions live safely inside
+          MY ACCOUNT so hover expansion can never place Sign Out under a click. */}
       <div className="jj-rail-footer-block flex-shrink-0">
         <div
           className="jj-rail-footer-rule h-px mb-1 mt-0"
@@ -1378,57 +1393,6 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         />
         <div className="jj-rail-footer-inner px-3 pt-2 pb-2">
           <ThemeModeToggle variant="menu" className="jj-sidebar-theme-toggle mb-2 border border-current/20" />
-          {/* Compact horizontal pills — icon + label side-by-side so labels stay
-              readable at short viewports without being clipped. */}
-          <div className="grid grid-cols-2 gap-2">
-            {session ? (
-              <button
-                data-signout-action
-                data-no-contrast-guard
-                data-sidebar-auth-control
-                onClick={handleSignOut}
-                title={signOutArmed ? "Click again to confirm sign out" : "Sign Out"}
-                aria-label={signOutArmed ? "Confirm sign out" : "Sign Out"}
-                className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
-                style={{ borderWidth: 0, height: '42px', minHeight: '42px', background: 'transparent', boxShadow: 'none' }}
-              >
-                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" strokeWidth={2.4} style={{ color: railInk, stroke: railInk }} />
-                <span data-signout-label className="whitespace-nowrap" style={{ color: railInk, WebkitTextFillColor: railInk, whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>{signOutArmed ? "Confirm?" : "Sign Out"}</span>
-              </button>
-            ) : (
-              <Link
-                to="/auth"
-                data-no-contrast-guard
-                data-on-dark
-                data-sidebar-auth-control
-                className="allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
-                style={{
-                  color: '#FFFFFF',
-                  borderWidth: 0,
-                  height: '42px',
-                  minHeight: '42px',
-                  background: 'transparent',
-                  boxShadow: 'none',
-                }}
-              >
-                <User className="allow-white w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <span className="allow-white whitespace-nowrap" style={{ color: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign In</span>
-              </Link>
-            )}
-
-            {/* Collapse — emerald filled with white glyph + label */}
-            <button
-              data-sidebar-collapse-control
-              data-no-contrast-guard
-              onClick={toggleCollapse}
-              aria-label="Collapse navigation"
-              className="allow-white group flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
-              style={{ background: 'transparent', borderWidth: 0, boxShadow: 'none' }}
-            >
-              <PanelLeftClose className="w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: railInk, stroke: railInk }} />
-              <span className="whitespace-nowrap" style={{ color: railInk, WebkitTextFillColor: railInk, whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Collapse</span>
-            </button>
-          </div>
         </div>
       </div>
 
@@ -1531,7 +1495,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               );
             })}
 
-            {/* Push the 4 bottom icons (Contact · Support · Sign Out · Expand)
+            {/* Push the bottom Contact and Support icons
                 all the way down to the footer of the collapsed rail. */}
             <div className="flex-1 min-h-[6px]" />
 
@@ -1575,74 +1539,6 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               </Tooltip>
 
 
-              {session ? (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      data-signout-action
-                      onClick={handleSignOut}
-                      data-no-contrast-guard
-                      data-sidebar-auth-control
-                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 flex items-center justify-center"
-                    >
-                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon" strokeWidth={2.15} style={{ color: railInk, stroke: railInk }} />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
-                </Tooltip>
-              ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      to="/auth"
-                      data-no-contrast-guard
-                      data-sidebar-auth-control
-                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 flex items-center justify-center"
-                    >
-                      <User className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
-                </Tooltip>
-              )}
-            </div>
-
-            {/* Expand button pins the full sidebar; Collapse restores hover mode. */}
-            <div className="w-full flex justify-center mt-[2px] mb-1">
-            <TooltipProvider delayDuration={0} skipDelayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    data-sidebar-collapse-control
-                    data-on-dark
-                    data-allow-dark-cta
-                    data-tour-target="sidebar-expand"
-                    onClick={() => {
-                      setShowExpandPulse(false);
-                      try {
-                        sessionStorage.setItem('jj_sidebar_expand_seen_session', '1');
-                        localStorage.setItem('jj_sidebar_expand_seen', '1');
-                      } catch {}
-                      toggleCollapse();
-                    }}
-                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-9 h-9 flex items-center justify-center"
-                    aria-label="Expand navigation"
-                  >
-                    {/* Soft teaching pulse only — no extra visible border */}
-                    {collapsed && showExpandPulse && (
-                      <span
-                        aria-hidden
-                        className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
-                      />
-                    )}
-                    <PanelLeftClose className="allow-white w-4 h-4 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2.15} style={{ color: railInk, stroke: railInk }} />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
-                  Expand navigation
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
             </div>
             </div>
 

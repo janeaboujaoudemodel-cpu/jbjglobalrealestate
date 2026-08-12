@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { ChevronRight, Handshake, TrendingUp, Building2, Crown } from "lucide-react";
+import { Handshake, TrendingUp, Building2, Crown } from "lucide-react";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { isOwnerBackendEmail } from "@/config/ownerEmails";
@@ -104,9 +104,6 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         >
           {cfg.label}
         </span>
-        <ChevronRight
-          className="w-4 h-4 flex-shrink-0 opacity-60"
-        />
       </Link>
     </div>
   );
