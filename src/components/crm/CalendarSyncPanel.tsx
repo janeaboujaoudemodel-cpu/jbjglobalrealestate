@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { RefreshCw, CalendarCheck, ArrowDownToLine, ArrowUpFromLine, AlertTriangle } from "lucide-react";
+import { RefreshCw, CalendarCheck, ArrowDownToLine, ArrowUpFromLine, AlertTriangle, Mail } from "lucide-react";
 
 type ProviderId = "google_calendar" | "microsoft_outlook";
 type SyncState = { is_enabled: boolean; push_enabled: boolean; pull_enabled: boolean; last_pull_at: string | null; last_push_at: string | null; events_pulled: number; events_pushed: number; last_error: string | null } | null;
