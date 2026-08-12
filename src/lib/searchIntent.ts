@@ -10,7 +10,6 @@
  *   sentence to chat support so the conversation continues instead of dead-ending.
  */
 
-import { GEO_COUNTRIES } from "@/data/geography";
 import { AREA_ENTRIES } from "@/lib/areaResolver";
 import { supabase } from "@/integrations/supabase/client";
 

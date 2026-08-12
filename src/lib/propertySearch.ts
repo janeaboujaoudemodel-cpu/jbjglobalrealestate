@@ -15,6 +15,26 @@
  */
 
 import { getAreas, getRegions, COUNTRY_CURRENCY } from "@/data/geography";
+import { AREA_ENTRIES, findAreaExact } from "@/lib/areaResolver";
+
+/**
+ * Incoming geography can be a SLUG ("dubai-marina", smart search) or a DISPLAY
+ * NAME ("Dubai Marina", legacy filter bar). Both are normalised to slugs here,
+ * otherwise the value silently matched nothing.
+ */
+const toAreaSlugs = (values: string[]): string[] =>
+  values
+    .map((v) => findAreaExact(v)?.slug ?? v.toLowerCase().trim().replace(/\s+/g, "-"))
+    .filter(Boolean);
+
+/** Country/region implied by the first resolvable area or region slug. */
+const geoOf = (slugs: string[]) => {
+  for (const s of slugs) {
+    const hit = AREA_ENTRIES.find((e) => e.slug === s);
+    if (hit) return { country: hit.countrySlug, region: hit.isRegion ? hit.slug : hit.regionSlug };
+  }
+  return null;
+};
 
 /* ------------------------------------------------------------------ taxonomy */
 
@@ -342,6 +362,14 @@ export function searchToParams(f: PropertySearch): URLSearchParams {
 
 export function paramsToSearch(p: URLSearchParams): PropertySearch {
   const purposeRaw = p.get("purpose") ?? p.get("intent") ?? p.get("transaction");
+  // Accept slugs (?areaSlugs=) and display names (?areas=) alike, then infer
+  // the country from the place itself so a non-UAE query is never pinned to UAE.
+  const areasInclude = toAreaSlugs([
+    ...list(p.get("areaSlugs")),
+    ...list(p.get("areas")),
+  ]).filter((v, i, a) => a.indexOf(v) === i);
+  const impliedGeo = geoOf([...areasInclude, ...(p.get("region") ? [p.get("region")!] : [])]);
+  const countrySlug = p.get("country") ?? impliedGeo?.country ?? EMPTY_SEARCH.country;
   const purpose: Purpose =
     purposeRaw === "rent" || purposeRaw === "sell" ? purposeRaw : "buy";
 
@@ -376,9 +404,9 @@ export function paramsToSearch(p: URLSearchParams): PropertySearch {
       : "yearly") as RentPeriod,
     sizeMin: num(p.get("sizeMin")),
     sizeMax: num(p.get("sizeMax")),
-    country: p.get("country") ?? EMPTY_SEARCH.country,
-    region: p.get("region"),
-    areasInclude: list(p.get("areaSlugs")),
+    country: countrySlug,
+    region: p.get("region") ?? impliedGeo?.region ?? null,
+    areasInclude: areasInclude,
     developerTier: p.get("tier"),
     areasExclude: list(p.get("excludeAreas")),
     furnishing:
