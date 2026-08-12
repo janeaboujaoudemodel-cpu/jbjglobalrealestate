@@ -270,6 +270,7 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
       { slug: "owner-developer-access", label: "Access Requests", icon: Shield },
       { slug: "owner-developer-profiles", label: "Developer Profiles", icon: RefreshCw },
       { slug: "owner-missing-logos", label: "Missing Logos", icon: ImageOff },
+      { slug: "owner-developer-media", label: "Media Studio", icon: ImageOff },
       { slug: "owner-profile-requests", label: "Profile Requests", icon: FileText },
       { slug: "owner-drive-extractions", label: "Drive Extractions", icon: Inbox },
     ],
