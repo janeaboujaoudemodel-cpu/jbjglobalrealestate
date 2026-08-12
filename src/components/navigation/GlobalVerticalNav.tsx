@@ -856,8 +856,8 @@ export default function GlobalVerticalNav() {
       : (sectionKey ? "text-[#1A1A1A] font-medium" : "text-[#1A1A1A]");
   };
 
-  const getIconTileClass = (_item?: NavItem) =>
-    'bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.65),inset_0_1px_0_rgba(255,255,255,0.18)]';
+  // PASS 303: no plates/rings behind sidebar icons — icons only, both states.
+  const getIconTileClass = (_item?: NavItem) => 'bg-transparent border-0 shadow-none';
 
 
   const getIconStyle = () => 'text-white';
@@ -1111,9 +1111,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                   aria-current={highlightActive ? 'page' : undefined}
                   className={`group flex items-center gap-3 px-3 min-h-11 text-[14px] transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
-                  iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true, 'data-surface': 'emerald' }}
-                  iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
-                  iconClassName="w-3.5 h-3.5 transition-colors"
+                  iconWrapperData={{ 'data-sidebar-highlight-tile': true }}
+                  iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
+                  iconClassName="w-[18px] h-[18px] transition-colors"
                   iconStrokeWidth={2.25}
                   iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                   iconData={{ 'data-sidebar-highlight-icon': true, 'data-no-contrast-guard': true }}
@@ -1152,9 +1152,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                     className="w-full flex items-center gap-3 px-3 min-h-11 text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-xl"
-                    iconWrapperData={{ 'data-emerald-icon-surface': true, 'data-surface': 'emerald' }}
-                    iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${getIconTileClass()}`}
-                    iconClassName="w-3.5 h-3.5 transition-colors"
+                    iconWrapperData={{ 'data-sidebar-section-icon-tile': true }}
+                    iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-colors ${getIconTileClass()}`}
+                    iconClassName="w-[18px] h-[18px] transition-colors"
                     iconStrokeWidth={2.25}
                     iconData={{ 'data-sidebar-section-icon': true }}
                     iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
@@ -1201,9 +1201,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                             style={viewAllActive
                               ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                               : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                            iconWrapperData={{ 'data-emerald-icon-surface': true }}
-                            iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}
-                            iconClassName="w-4 h-4"
+                            iconWrapperData={{ 'data-sidebar-subitem-icon-tile': true }}
+                            iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}
+                            iconClassName="w-[18px] h-[18px]"
                             iconStrokeWidth={2.1}
                             iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                             labelData={{ 'data-sidebar-subitem-label': true }}
@@ -1281,9 +1281,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                               style={subitemActive
                                 ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                                 : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                              iconWrapperData={{ 'data-emerald-icon-surface': true }}
-                              iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
-                              iconClassName="w-3.5 h-3.5 transition-colors"
+                              iconWrapperData={{ 'data-sidebar-subitem-icon-tile': true }}
+                              iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
+                              iconClassName="w-[18px] h-[18px] transition-colors"
                               iconStrokeWidth={2.25}
                               iconData={{ 'data-sidebar-subitem-icon': true }}
                               iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
@@ -1436,7 +1436,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                    className={`jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                    className={`jj-side-tile group w-9 h-9 flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
                       <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
@@ -1470,7 +1470,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                       className={`jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                       className={`jj-side-tile group w-9 h-9 flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
                       <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </button>
@@ -1495,7 +1495,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                     className="jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center"
+                     className="jj-side-tile group w-9 h-9 flex items-center justify-center"
                   >
                     <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
@@ -1508,7 +1508,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                     className="jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center"
+                     className="jj-side-tile group w-9 h-9 flex items-center justify-center"
                   >
                     <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
@@ -1525,7 +1525,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
                       data-sidebar-auth-control
-                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 rounded-lg flex items-center justify-center"
+                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 flex items-center justify-center"
                     >
                        <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon" strokeWidth={2.15} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </button>
@@ -1539,7 +1539,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       to="/auth"
                       data-no-contrast-guard
                       data-sidebar-auth-control
-                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 rounded-lg flex items-center justify-center"
+                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 flex items-center justify-center"
                     >
                       <User className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
@@ -1566,7 +1566,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-9 h-9 rounded-lg flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-9 h-9 flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}

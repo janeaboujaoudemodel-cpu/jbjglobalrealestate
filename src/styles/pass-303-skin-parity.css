@@ -1,0 +1,227 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 303 — SKIN PARITY (LOCKED)
+
+   1) SUN = CHAMPAGNE CHROME. In Sun the vertical sidebar matches the
+      horizontal header exactly (champagne gradient) and every label,
+      icon and monogram on it is BLACK ink. Never emerald rail on Sun.
+   2) MOON = APPROVED EMERALD OMBRE. Sidebar, header, mobile drawer and
+      the partners strap all use the approved pair gradient
+      (#064E3B -> #042c1c -> #000) — never a bright/flat green.
+   3) NO ICON PLATES. No rectangle/tile/ring around any sidebar icon,
+      collapsed or expanded — icons only.
+   4) MARKER PARITY. Every sidebar icon is the same size, the same ink
+      and carries the same padding/gap.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Approved emerald pair — weighted dark so it never reads as green. */
+  --jj-emerald-approved: linear-gradient(180deg, #064E3B 0%, #042c1c 38%, #000000 100%);
+  --jj-emerald-approved-h: linear-gradient(90deg, #064E3B 0%, #042c1c 42%, #000000 100%);
+  --jj-emerald-approved-d: linear-gradient(135deg, #064E3B 0%, #042c1c 40%, #000000 100%);
+  --jj-champagne-chrome: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%);
+  --jj-champagne-chrome-h: linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%);
+}
+
+/* ── 3. No plates behind sidebar icons (both skins, both states) ───── */
+html body #root [data-chrome="sidebar"] :is(
+  [data-sidebar-highlight-tile],
+  [data-sidebar-section-icon-tile],
+  [data-sidebar-subitem-icon-tile]
+),
+html body #root [data-jj-mobile-drawer] :is([data-sidebar-highlight-tile]) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+
+/* ── 4. Marker parity — same size, same padding for every icon ─────── */
+html body #root [data-chrome="sidebar"] :is(
+  [data-sidebar-highlight-icon],
+  [data-sidebar-section-icon],
+  [data-sidebar-subitem-icon]
+) {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto !important;
+  stroke-width: 2 !important;
+}
+
+/* ═══════════ SUN — champagne chrome, black ink ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
+  background: var(--jj-champagne-chrome) !important;
+  background-image: var(--jj-champagne-chrome) !important;
+  color: #1A1A1A !important;
+  box-shadow: none !important;
+}
+
+/* Sun ink: black text + black icons on the champagne rail … */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald]
+  :is(a, button, span, p, strong, small, label, svg, path) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+/* … except anything sitting on an emerald active pill, which stays white. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald]
+  :is([data-active="true"], [aria-current="page"]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald]
+  :is([data-active="true"], [aria-current="page"])
+  :is(span, p, strong, small, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Sun monogram + wordmark: black knockout on champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] img[alt="JBJ"] {
+  filter: brightness(0) !important;
+}
+
+/* Sun hairlines on champagne are emerald, never white. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] :is(hr, [aria-hidden="true"].h-px) {
+  background: rgba(6, 78, 59, 0.18) !important;
+  background-image: none !important;
+  border-color: rgba(6, 78, 59, 0.18) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] :is(a, button):hover {
+  background-color: rgba(6, 78, 59, 0.06) !important;
+}
+
+/* ═══════════ MOON — approved emerald ombre only ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] > div > div > div {
+  background: var(--jj-emerald-approved) !important;
+  background-image: var(--jj-emerald-approved) !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-jj-utility-bar],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-jj-mobile-drawer] {
+  background: var(--jj-emerald-approved-h) !important;
+  background-image: var(--jj-emerald-approved-h) !important;
+}
+
+/* Partners strap — approved gradient on both skins. */
+html body #root [data-emerald-surface="true"].w-full {
+  background-color: #042c1c !important;
+  background-image: var(--jj-emerald-approved-d) !important;
+}
+
+/* ── SUN — collapsed rail (jj-side-tile) takes black ink on champagne ── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile svg,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile svg * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile:hover {
+  background: rgba(6, 78, 59, 0.08) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile.is-active {
+  background: rgba(6, 78, 59, 0.12) !important;
+}
+/* Sun collapsed rail hairline is emerald, not white. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-sidebar-emerald] [aria-hidden="true"].h-px {
+  background: rgba(6, 78, 59, 0.2) !important;
+  background-image: none !important;
+}
+/* Sun collapsed/expanded rail border. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-sidebar-emerald] {
+  border-color: rgba(6, 78, 59, 0.16) !important;
+}
+/* Sun: emerald action buttons (Sign In / Sign Out / Collapse) keep the
+   approved gradient with pure white glyphs — that is the only emerald
+   allowed on the champagne rail. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-sidebar-emerald] :is([data-sidebar-collapse-control], [data-sidebar-auth-control]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-sidebar-emerald] :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) :is(span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-sidebar-emerald] :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) {
+  background-image: var(--jj-emerald-approved-d) !important;
+}
+
+/* Icons only — no plate behind any collapsed-rail tile, on EITHER skin. */
+html body #root [data-sidebar-emerald] .jj-side-tile:not(.is-active),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile:not(.is-active),
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile:not(.is-active) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile.is-active {
+  background: rgba(6, 78, 59, 0.12) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile.is-active {
+  background: rgba(255, 255, 255, 0.14) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* ── 3b. Kill every icon plate on sidebar rows (both skins, both states) ── */
+html body #root [data-chrome="sidebar"] :is(
+  [data-sidebar-section], [data-sidebar-subitem], [data-sidebar-highlight]
+) > div:first-child,
+html body #root [data-chrome="sidebar"] :is(
+  [data-sidebar-section], [data-sidebar-subitem], [data-sidebar-highlight]
+):hover > div:first-child,
+html body #root [data-chrome="sidebar"] :is(
+  [data-sidebar-section], [data-sidebar-subitem], [data-sidebar-highlight]
+)[data-active="true"] > div:first-child {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Mode-portal icon tile: icon only, no plate. */
+html body #root [data-chrome="sidebar"] [data-sidebar-mode-icon-tile],
+html body #root [data-chrome="sidebar"] [data-sidebar-section-icon-tile],
+html body #root [data-chrome="sidebar"] [data-sidebar-subitem-icon-tile],
+html body #root [data-chrome="sidebar"] [data-sidebar-highlight-tile] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Any residual emerald-gradient icon square inside the rail. */
+html body #root [data-chrome="sidebar"] span[class*="bg-[image:var(--jj-emerald-ombre)]"],
+html body #root [data-chrome="sidebar"] span[class*="rounded-lg"][class*="bg-["] {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
