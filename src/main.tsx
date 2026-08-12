@@ -21,6 +21,8 @@ import"./styles/pass-315-sun-partners-strap-and-rail-parity.css";
 import"./styles/pass-316-sun-champagne-tab-and-centered-strap.css";
 import"./styles/pass-317-sun-rail-footer-black-ink.css";
 import"./styles/pass-318-mobile-nav-parity.css";
+import"./styles/pass-324-phone-header-identity.css";
+
 
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";

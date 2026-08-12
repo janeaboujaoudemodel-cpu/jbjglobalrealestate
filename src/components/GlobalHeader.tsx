@@ -868,40 +868,35 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         </div>
 
 
-          {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
-          {shouldUseMobileHeader && (
+          {/* MOBILE HEADER: touch devices OR when desktop can't fit.
+              While the drawer is open the drawer owns its own close control —
+              the header trigger is unmounted so it can never split the band. */}
+          {shouldUseMobileHeader && !mobileMenuOpen && (
             <div className="ml-auto flex items-center gap-2 shrink-0">
               {/* Mobile Menu Trigger — clean surface-aware mark, no decorative gradient. */}
               <button
                 type="button"
                 className="inline-flex h-11 w-11 min-h-11 min-w-11 items-center justify-center appearance-none bg-transparent border-0 p-0 focus:outline-none shrink-0 group"
-                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-label="Open menu"
                 data-tour-target="mobile-menu"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                onClick={() => setMobileMenuOpen(true)}
               >
-                {mobileMenuOpen ? (
-                  <span
-                    className="jj-hamburger-close text-2xl font-light leading-none"
-                  >
-                    ✕
-                  </span>
-                ) : (
-                  <span
-                    aria-hidden="true"
-                    data-jbj-allow-shrink
-                    className="jj-hamburger flex flex-col items-center justify-center gap-[6px] transition-transform duration-300 group-active:scale-95"
-                  >
-                    {[0, 1, 2].map((i) => (
-                      <span
-                        key={i}
-                        className="jj-hamburger-bar block rounded-full"
-                      />
-                    ))}
-                  </span>
-                )}
+                <span
+                  aria-hidden="true"
+                  data-jbj-allow-shrink
+                  className="jj-hamburger flex flex-col items-center justify-center gap-[6px] transition-transform duration-300 group-active:scale-95"
+                >
+                  {[0, 1, 2].map((i) => (
+                    <span
+                      key={i}
+                      className="jj-hamburger-bar block rounded-full"
+                    />
+                  ))}
+                </span>
               </button>
             </div>
           )}
+
 
           {/* MOBILE / TABLET NAVIGATION — PASS 318: same nav source, sections and
               Sun/Moon surfaces as the desktop vertical rail. */}
