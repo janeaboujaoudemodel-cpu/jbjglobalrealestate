@@ -153,12 +153,8 @@ async function notifyOwnersAboutLead(supabase: any, params: {
     metadata: { source: params.source, page_source: params.pageSource, context: params.context },
   });
 
-  const { data: profiles } = await supabase
-    .from("profiles")
-    .select("email")
-    .in("id", ownerIds);
-  const ownerEmails = Array.from(new Set((profiles ?? []).map((p: any) => String(p.email || "").toLowerCase()).filter(Boolean)));
-  const notifyEmails = ownerEmails.length ? ownerEmails : ["contact@jbj.ae"];
+  // Confidential website-lead alerts have one locked owner destination.
+  const notifyEmails = ["infoo.jane@gmail.com"];
   const resendKey = Deno.env.get("RESEND_API_KEY");
   if (!resendKey) return;
 

@@ -38,31 +38,30 @@ const SVG = {
 
 // ─── Dividers ───
 function sectionDivider(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0 12px;"><tr><td style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,transparent);"></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0 12px;"><tr><td style="height:1px;background:#D7E2DD;"></td></tr></table>`;
 }
 
 export function goldDivider(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 20px;"><tr><td style="height:3px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);"></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 20px;"><tr><td style="height:1px;background:#B8CCC3;"></td></tr></table>`;
 }
 
 export function arabicDivider(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:30px 0 14px;"><tr><td style="border-top:2px solid #C8A76655;"></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 14px;"><tr><td style="border-top:1px solid #D7E2DD;"></td></tr></table>`;
 }
 
 // ─── Header ───
 export function sharedHeader(departmentLabel: string): string {
-  return `<tr><td style="background:#000;padding:28px 28px 24px;text-align:center;border-radius:18px 18px 0 0;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;"><tr><td align="center">${monogramSvg(128)}</td></tr></table>
-<p style="color:#C8A766;margin:10px 0 0;font-size:13px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
-</td></tr>
-<tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 26px;text-align:center;border-radius:0;">
-<p style="font-size:20px;font-weight:700;color:#fff;margin:0;letter-spacing:1px;">${departmentLabel}</p>
+  return `<tr><td style="background:#042C1C;background-image:linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%);padding:22px 24px 20px;text-align:center;border-radius:12px 12px 0 0;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;"><tr><td align="center">${monogramSvg(92)}</td></tr></table>
+<p style="color:#FFFFFF;margin:8px 0 0;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:14px 0 12px;"><tr><td style="height:1px;background:rgba(255,255,255,.48);"></td></tr></table>
+<p style="font-size:18px;font-weight:700;color:#FFFFFF;margin:0;">${departmentLabel}</p>
 </td></tr>`;
 }
 
 // ─── Badges ───
 export function monogramBadge(size = 52): string {
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border:1px solid #C8A766;border-radius:${size}px;background:#000;text-align:center;vertical-align:middle;overflow:hidden;">${monogramSvg(Math.round(size * 0.94))}</td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border:1px solid #D7E2DD;border-radius:${size}px;background:#042C1C;text-align:center;vertical-align:middle;overflow:hidden;">${monogramSvg(Math.round(size * 0.94))}</td></tr></table>`;
 }
 
 export function profilePhotoBadge(photoUrl: string, size = 52): string {
@@ -209,20 +208,19 @@ function socialLinksFooter(): string {
 }
 
 export function sharedFooterHtml(): string {
-  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;border-radius:0 0 18px 18px;"><tr><td style="padding:34px 18px 34px;text-align:center;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
-<p style="color:#C8A766;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 14px;">Connect with us on social media</p>
+  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#042C1C;background-image:linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%);border-radius:0 0 12px 12px;"><tr><td style="padding:26px 18px;text-align:center;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="border-top:1px solid rgba(255,255,255,.35);"></td></tr></table>
+<p style="color:#FFFFFF;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 14px;">Connect with us</p>
 ${socialLinksFooter()}
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:4px auto 14px;"><tr>
-<td style="padding:0 8px;"><a href="${SITE_URL}/unsubscribe" style="color:#C8A766;font-size:12px;text-decoration:underline;">Unsubscribe</a></td>
-<td style="color:#666;font-size:12px;">|</td>
-<td style="padding:0 8px;"><a href="${SITE_URL}/email-preferences" style="color:#C8A766;font-size:12px;text-decoration:underline;">Manage Preferences</a></td>
-<td style="color:#666;font-size:12px;">|</td>
-<td style="padding:0 8px;"><a href="mailto:CONTACT@JBJ.AE" style="color:#C8A766;font-size:12px;text-decoration:underline;">Contact Us</a></td>
+<td style="padding:0 8px;"><a href="${SITE_URL}/unsubscribe" style="color:#FFFFFF;font-size:12px;text-decoration:underline;">Unsubscribe</a></td>
+<td style="color:#FFFFFF;font-size:12px;">|</td>
+<td style="padding:0 8px;"><a href="${SITE_URL}/email-preferences" style="color:#FFFFFF;font-size:12px;text-decoration:underline;">Preferences</a></td>
+<td style="color:#FFFFFF;font-size:12px;">|</td>
+<td style="padding:0 8px;"><a href="mailto:CONTACT@JBJ.AE" style="color:#FFFFFF;font-size:12px;text-decoration:underline;">Contact</a></td>
 </tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;"><tr><td style="border-top:1px solid #2f2f2f;"></td></tr></table>
-<p style="color:#C8A766;font-size:11px;margin:0 0 4px;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
-<p style="color:#9ca3af;font-size:11px;margin:0;">Dubai, United Arab Emirates</p>
+<p style="color:#FFFFFF;font-size:11px;margin:0 0 4px;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+<p style="color:#D7E2DD;font-size:11px;margin:0;">Dubai, United Arab Emirates</p>
 </td></tr></table></td></tr>`;
 }
 
@@ -343,6 +341,6 @@ ${signOffHtml(teamName)}
 // ─── Email Shell ───
 // 🔒 LOCKED: Outer shell with rounded wrapper, header rounded top, footer rounded bottom
 export function emailShell(departmentLabel: string, bodyContent: string): string {
-  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F7F2EA,#F0EBE0,#EFE6D6);border-radius:18px;overflow:hidden;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
+  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:20px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:18px 10px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#FFFFFF;border:1px solid #D7E2DD;border-radius:12px;overflow:hidden;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
   return minifyHtml(raw);
 }

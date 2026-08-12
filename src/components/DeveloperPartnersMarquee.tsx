@@ -85,6 +85,7 @@ const DeveloperPartnersMarquee = () => {
         size="md"
         embedded
         loading={index < 6 && isFirst ? "eager" : "lazy"}
+        className="!h-12 !w-28 shrink-0 !rounded-none !border-0 !bg-transparent !p-0 !shadow-none [&_img]:!h-12 [&_img]:!w-28 [&_img]:!object-contain"
       />
     </Link>
   );
@@ -119,6 +120,7 @@ const DeveloperPartnersMarquee = () => {
             <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-white [-webkit-text-fill-color:#ffffff]">
               {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
             </p>
+            <span aria-hidden className="mx-auto mt-3 block h-px w-24 bg-primary-foreground/55" />
           </ContentTrack>
         </div>
 
@@ -127,11 +129,11 @@ const DeveloperPartnersMarquee = () => {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div style={marqueeStyle} className="items-center">
-            <div ref={loopRef} className="flex items-center gap-8">
+          <div style={marqueeStyle} className="h-14 items-center">
+            <div ref={loopRef} className="flex h-14 items-center gap-8">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, true))}
             </div>
-            <div aria-hidden className="flex items-center gap-8 pl-8">
+            <div aria-hidden className="flex h-14 items-center gap-8 pl-8">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, false))}
             </div>
           </div>

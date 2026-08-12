@@ -157,7 +157,7 @@ async function processAllProjects(jobId: string, supabaseUrl: string, supabaseKe
     const { data: ownerProfile } = await supabase
       .from("profiles")
       .select("id")
-      .eq("email", "janeaboujaoudenails@gmail.com")
+      .eq("email", "infoo.jane@gmail.com")
       .maybeSingle();
     const ownerUserId = ownerProfile?.id;
 

@@ -23,8 +23,8 @@ export function wrapEmailHtml(input: EmailShellInput): string {
   const {
     innerHtml,
     preheader = "",
-    brandColor = "#B89555",
-    bgPage = "#FDFBF7",
+    brandColor = "#B8CCC3",
+    bgPage = "#FFFFFF",
     bgCard = "#FFFFFF",
     textColor = "#1A1A1A",
   } = input;
@@ -58,8 +58,9 @@ a{color:${textColor};text-decoration:underline;}
 <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;color:transparent;">${safePreheader}</div>
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:${bgPage};">
 <tr><td align="center" style="padding:24px 12px;">
-<table role="presentation" class="container" width="600" cellspacing="0" cellpadding="0" border="0" style="width:600px;max-width:600px;background:${bgCard};border:1px solid ${brandColor}33;border-collapse:separate;">
-<tr><td class="px" style="padding:32px 40px;font-family:${FONT_STACK};font-size:15px;line-height:1.6;color:${textColor};">
+<table role="presentation" class="container" width="600" cellspacing="0" cellpadding="0" border="0" style="width:600px;max-width:600px;background:${bgCard};border:1px solid ${brandColor};border-collapse:separate;">
+<tr><td style="background:#042C1C;background-image:linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%);padding:20px 24px;text-align:center;color:#FFFFFF;font-family:${FONT_STACK};"><img src="https://www.jbj.ae/jbj-monogram-light-on-dark.png" width="80" height="80" alt="JBJ" style="display:block;width:80px;height:80px;object-fit:contain;margin:0 auto 6px;"><div style="font-size:12px;font-weight:700;letter-spacing:2px;color:#FFFFFF;">JBJ GLOBAL REAL ESTATE</div></td></tr>
+<tr><td class="px" style="padding:28px 36px;font-family:${FONT_STACK};font-size:15px;line-height:1.6;color:${textColor};">
 ${innerHtml}
 </td></tr>
 </table>

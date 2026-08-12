@@ -5,6 +5,7 @@
 import { useEffect, useState, useCallback } from "react";
 
 const KEY = "jbj.concierge_verified";
+const CHANGE_EVENT = "jbj:concierge-verification-change";
 const MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 
 export type VerifiedSupport = {
@@ -39,18 +40,25 @@ export function useConciergeVerification() {
       if (e.key === KEY) setVerified(read());
     };
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    const onSameTabChange = () => setVerified(read());
+    window.addEventListener(CHANGE_EVENT, onSameTabChange);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener(CHANGE_EVENT, onSameTabChange);
+    };
   }, []);
 
   const save = useCallback((v: Omit<VerifiedSupport, "verifiedAt">) => {
     const payload: VerifiedSupport = { ...v, verifiedAt: Date.now() };
     localStorage.setItem(KEY, JSON.stringify(payload));
     setVerified(payload);
+    window.dispatchEvent(new Event(CHANGE_EVENT));
   }, []);
 
   const clear = useCallback(() => {
     localStorage.removeItem(KEY);
     setVerified(null);
+    window.dispatchEvent(new Event(CHANGE_EVENT));
   }, []);
 
   return { verified, save, clear, isVerified: !!verified };

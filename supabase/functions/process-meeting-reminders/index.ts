@@ -11,12 +11,13 @@
  */
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 import { renderBrandedEmail, SITE_URL, htmlEscape } from "../_shared/booking-email.ts";
+import { OWNER_ALERT_EMAIL } from "../_shared/owner-alerts.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") || "";
 
-const OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
+const OWNER_EMAIL = OWNER_ALERT_EMAIL;
 const FROM_ADDRESS = "JBJ GLOBAL REAL ESTATE <bookings@jbj.ae>";
 const REPLY_TO = "contact@jbj.ae";
 
@@ -169,7 +170,7 @@ Deno.serve(async (req) => {
     const subjectVisitor = `Reminder · ${ev.title} in ${humanOffset(offset)}`;
     const subjectOwner   = `Reminder · ${htmlEscape(meta.attendee_name || "guest")} in ${humanOffset(offset)}`;
 
-    const ownerRecipient = meta.owner_email || OWNER_EMAIL;
+    const ownerRecipient = OWNER_EMAIL;
     const ownerSameAsAttendee = ownerRecipient.trim().toLowerCase() === attendee.trim().toLowerCase();
     const [v, o] = await Promise.all([
       sendEmail(attendee, subjectVisitor, visitorHtml),

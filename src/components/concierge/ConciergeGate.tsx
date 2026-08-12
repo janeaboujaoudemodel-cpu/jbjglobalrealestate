@@ -11,6 +11,7 @@ import { z } from "zod";
 import { getCountries, getCountryCallingCode } from "react-phone-number-input";
 import countryLabels from "react-phone-number-input/locale/en.json";
 import { supabase } from "@/integrations/supabase/client";
+import { FunctionsHttpError } from "@supabase/supabase-js";
 import { useConciergeVerification } from "@/hooks/useConciergeVerification";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
@@ -36,6 +37,18 @@ const detailsSchema = z.object({
 });
 
 type Step = "details" | "otp";
+
+async function functionErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof FunctionsHttpError) {
+    try {
+      const payload = await error.context.json();
+      if (typeof payload?.error === "string") return payload.error;
+    } catch { /* use the safe fallback */ }
+  }
+  return error instanceof Error && error.message !== "Edge Function returned a non-2xx status code"
+    ? error.message
+    : fallback;
+}
 
 export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }: { onVerified: () => void; channelLabel?: string }) {
   const { save } = useConciergeVerification();
@@ -104,9 +117,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
       setResendCooldown(60);
       if (!silent) toast.success("Code sent — check your inbox");
       return true;
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
-      toast.error(e?.message ?? "Could not send code. Try again.");
+      toast.error(await functionErrorMessage(e, "Could not send code. Try again."));
       return false;
     } finally {
       setSubmitting(false);
@@ -133,15 +146,15 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
       });
       toast.success("Verified — welcome aboard");
       onVerified();
-    } catch (e: any) {
-      toast.error(e?.message ?? "Invalid code. Try again.");
+    } catch (e: unknown) {
+      toast.error(await functionErrorMessage(e, "Invalid or expired code. Try again."));
     } finally {
       setSubmitting(false);
     }
   };
 
   const inputBase =
-    "h-12 w-full min-w-0 px-3 rounded-lg text-[13.5px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 " +
+    "h-11 sm:h-12 w-full min-w-0 px-3 rounded-lg text-[13.5px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 " +
     "bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] focus:bg-[#FDFBF7] outline-none transition";
 
   return (
@@ -321,7 +334,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
             inputMode="numeric"
             maxLength={6}
-            className={inputBase + " text-center tracking-[0.5em] text-[18px] font-semibold"}
+            className={inputBase + " mx-auto max-w-[230px] text-center tracking-[0.28em] text-[17px] font-semibold"}
             autoFocus
           />
           <button
