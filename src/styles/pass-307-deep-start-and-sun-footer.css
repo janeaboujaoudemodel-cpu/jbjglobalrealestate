@@ -92,3 +92,17 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
   :is(footer[data-jj-minimal-footer], footer#site-footer) img[alt*="JBJ"] {
   filter: brightness(0) saturate(0) !important;
 }
+
+/* ═══════════ 5. Sun rail footer controls — black ink (max specificity) ═══════════
+   index.css hard-codes white on .jbj-sidebar-collapse-control / .jj-signout-icon
+   for the emerald skin. In Sun the rail is champagne, so these must be black. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])[data-jbj-theme="sun"][data-jbj-theme="sun"] body div#root
+  :is(.jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action], .jj-side-auth-tile),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])[data-jbj-theme="sun"][data-jbj-theme="sun"] body div#root
+  :is(.jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action], .jj-side-auth-tile)
+  :is(span, svg, svg *, path, .jj-signout-icon, [data-signout-icon], [data-signout-label]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+}
