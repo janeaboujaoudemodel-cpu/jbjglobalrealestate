@@ -196,6 +196,10 @@ const ContinueSearching = ({
 
   const eyebrow = hasUserHistory ? "Recently viewed" : "Editor's picks";
 
+  // PASS 298 — no empty-state section: if the visitor has nothing to continue
+  // from and there are no editor's picks to show, the band is not rendered.
+  if (isEmpty) return null;
+
   return (
     <section className={`jj-bleed-allow jj-fullbleed-band py-10 md:py-14 relative overflow-hidden w-full ${className}`} data-fullbleed-band>
       {/* Premium neutral backdrop — full-bleed edge to edge */}
