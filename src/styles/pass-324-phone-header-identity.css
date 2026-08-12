@@ -1,0 +1,96 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 324 — PHONE HEADER: TRANSPARENT WHITE IDENTITY, HAIRLINE DIVIDER,
+   NO SEAM GAP UNDER THE BAND, DRAWER PREFERENCE POLISH
+   ═══════════════════════════════════════════════════════════════════════
+   Locked behaviour (owner):
+   - On the transparent load state the whole phone identity is PURE WHITE:
+     monogram glyphs and its two divider strokes, company wordmark, hamburger
+     bars. No champagne plate, no gold letters, no halo behind the wordmark.
+   - A single very thin white hairline runs edge to edge under the band, so
+     page content can never appear to cross the chrome.
+   - The band height and the shell header offset are the same number (64px),
+     which removes the pale gap that appeared between the header and heroes.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023.98px) {
+  /* 0. One number for band height and content offset — no seam gap. */
+  :root {
+    --responsive-header-height: 64px;
+  }
+
+  /* 1. Transparent state (page top): white identity in BOTH skins. */
+  html body div#root [data-chrome="header"] > header[data-header-surface="dark"] {
+    background: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.26) !important;
+  }
+
+  /* Monogram: knock the artwork out to pure white (glyphs + divider rules). */
+  html body div#root [data-chrome="header"] > header[data-header-surface="dark"] a[href="/"] img {
+    filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45)) !important;
+  }
+
+  /* Wordmark + tagline: pure white glyphs, no plate, no halo. */
+  html body div#root [data-chrome="header"] > header[data-header-surface="dark"]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* Hamburger: bare white bars over the transparent band (no emerald pill). */
+  html body div#root [data-chrome="header"] > header[data-header-surface="dark"] [data-tour-target="mobile-menu"] {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  html body div#root [data-chrome="header"] > header[data-header-surface="dark"]
+    [data-tour-target="mobile-menu"] .jj-hamburger-bar {
+    background-color: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  /* 2. Content may never appear above/through the chrome. */
+  html body div#root [data-chrome="header"] > header {
+    z-index: 10460 !important;
+  }
+}
+
+/* 3. Drawer preference values — premium gold accents, aligned fields. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-value,
+html body div#root [data-jj-drawer-panel] .jj-drawer-currency [data-inline-currency-trigger],
+html body div#root [data-jj-drawer-panel] .jj-drawer-currency button > span {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row {
+  gap: 0 !important;
+}
+
+/* 4. Drawer brand band — no beige/emerald plate behind the identity, and the
+      wordmark keeps full opacity so no letter can read as faded. */
+html body div#root [data-jj-drawer-panel] [data-sidebar-brand-row="drawer"] {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-wordmark,
+html body div#root [data-jj-drawer-panel] .jj-drawer-wordmark * {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-monogram,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-monogram {
+  filter: brightness(0) invert(1) !important;
+}

@@ -30,6 +30,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import { useCurrency } from "@/hooks/useCurrency";
 import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
 
 import { ModeSwitcher } from "@/components/ModeSwitcher";
@@ -48,6 +49,21 @@ interface MobileNavDrawerProps {
 
 const hrefPath = (href: string) => href.split("?")[0].split("#")[0];
 
+/**
+ * Emoji flags do not render on every device (Windows shows tofu boxes), so the
+ * drawer paints a real flag image derived from the emoji's regional-indicator
+ * codepoints. Falls back to the UK flag when the emoji is not a country pair.
+ */
+const flagSrc = (emoji: string) => {
+  const cps = Array.from(emoji)
+    .map((ch) => ch.codePointAt(0) ?? 0)
+    .filter((cp) => cp >= 0x1f1e6 && cp <= 0x1f1ff)
+    .map((cp) => String.fromCharCode(cp - 0x1f1e6 + 97))
+    .join("");
+  return `https://flagcdn.com/w40/${cps.length === 2 ? cps : "gb"}.png`;
+};
+
+
 export default function MobileNavDrawer({
   open, onClose, onOpenSearch,
 }: MobileNavDrawerProps) {
@@ -57,7 +73,9 @@ export default function MobileNavDrawer({
   const { mode, isBrokerMode, isInvestorMode } = useUserModeContext();
   const { isMoon } = useThemeMode();
   const { language, setLanguage } = useLanguage();
+  const { currency } = useCurrency();
   const activeLang = getLanguageInfo(language);
+
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
   const { allowed: canCompare } = useCompareAccess();
   const { visible: canSeeCardScanner } = useGatedToolAccess("business-card-scanner");
@@ -193,15 +211,16 @@ export default function MobileNavDrawer({
           <img
             src={jbjMonogram}
             alt="JBJ"
-            className="h-[52px] w-[52px] object-contain shrink-0"
+            className="jj-drawer-monogram h-[58px] w-[58px] object-contain shrink-0"
             data-eager
           />
           <span
-            className="jj-drawer-wordmark flex-1 min-w-0 whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] leading-none"
+            className="jj-drawer-wordmark flex-1 min-w-0 whitespace-nowrap text-[12.5px] font-semibold uppercase tracking-[0.06em] leading-none pr-2"
             style={rowStyle}
           >
             JBJ Global Real Estate
           </span>
+
           <button
             type="button"
             aria-label="Close navigation"
@@ -256,26 +275,30 @@ export default function MobileNavDrawer({
 
         {/* Preferences — each label and value is one aligned field. */}
         <div className="jj-drawer-prefs shrink-0 flex flex-col px-3 pb-2">
-          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
-            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
-              <Globe className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
+          <div className="jj-drawer-pref-row flex items-center gap-0 min-h-[46px] px-1">
+            <span className="flex w-[120px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+              <img
+                src={flagSrc(activeLang.flag)}
+                alt=""
+                aria-hidden
+                className="h-[13px] w-[20px] shrink-0 rounded-[2px] object-cover"
+              />
+
               Language
             </span>
-            <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
+            <span className="flex min-w-0 flex-1 items-center" style={rowStyle}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
                     data-no-contrast-guard
-                    className="inline-flex h-9 items-center gap-2 bg-transparent px-0"
-                    style={rowStyle}
+                    className="inline-flex h-9 items-center gap-1.5 bg-transparent px-0"
                     aria-label="Select language"
                   >
-                    <span aria-hidden className="text-[15px] leading-none">{activeLang.flag}</span>
-                    <span className="text-[12.5px] font-bold uppercase leading-none tracking-[0.06em]">
+                    <span className="jj-drawer-pref-value text-[13px] font-bold uppercase leading-none tracking-[0.1em]">
                       {activeLang.code.slice(0, 2).toUpperCase()}
                     </span>
-                    <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70" style={{ color: "currentColor" }} />
+                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="z-[10500] max-h-72 w-56 overflow-y-auto">
@@ -292,17 +315,20 @@ export default function MobileNavDrawer({
 
           </div>
 
-          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
-            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
-              <Coins className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
+          <div className="jj-drawer-pref-row flex items-center gap-0 min-h-[46px] px-1">
+            <span className="flex w-[120px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+              <span aria-hidden className="jj-drawer-pref-value text-[11px] font-bold tracking-[0.06em] w-[20px] text-center leading-none">
+                {currency}
+              </span>
               Currency
             </span>
-            <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
+            <span className="jj-drawer-currency flex min-w-0 flex-1 items-center" style={rowStyle}>
               <span className="inline-flex h-9 min-w-0 items-center">
                 <InlineCurrencySelect dark={isMoon} />
               </span>
             </span>
           </div>
+
 
           {/* Mode is READ-ONLY (PASS 319). Category changes go through the help desk. */}
           <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
