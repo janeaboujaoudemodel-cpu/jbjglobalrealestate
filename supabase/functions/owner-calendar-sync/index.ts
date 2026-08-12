@@ -58,16 +58,19 @@ async function discover(account: Account) {
     };
   }
   const [profile, list] = await Promise.all([
-    gateway(account, "/me?$select=displayName,mail,userPrincipalName"),
-    gateway(account, "/me/calendars?$top=100&$select=id,name,canEdit,isDefaultCalendar"),
+    gateway(account, "/me?$select=displayName,mail,userPrincipalName").catch(() => ({} as any)),
+    gateway(account, "/me/calendars?$top=100&$select=id,name,canEdit,isDefaultCalendar,owner"),
   ]);
-  const email = profile.mail ?? profile.userPrincipalName ?? null;
+  const items = list.value ?? [];
+  const ownerAddress = (items.find((c: any) => c.isDefaultCalendar === true) ?? items[0])?.owner?.address ?? null;
+  const email = profile.mail ?? profile.userPrincipalName ?? ownerAddress ?? null;
   return {
     label: email ?? profile.displayName ?? "Outlook account",
-    email,
-    calendars: (list.value ?? []).map((c: any) => ({ id: String(c.id), name: c.name ?? "Calendar", primary: c.isDefaultCalendar === true, writable: c.canEdit !== false })),
+    email: email ? String(email).toLowerCase() : null,
+    calendars: items.map((c: any) => ({ id: String(c.id), name: c.name ?? "Calendar", primary: c.isDefaultCalendar === true, writable: c.canEdit !== false })),
   };
 }
+
 
 
 function normalizeGoogle(e: any, calendarId: string) {
