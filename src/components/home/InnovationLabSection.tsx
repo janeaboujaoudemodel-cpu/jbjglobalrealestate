@@ -230,11 +230,17 @@ export default function InnovationLabSection() {
                       className="!flex w-full !items-center !justify-start gap-4 rounded-lg px-1 py-2 text-left"
                     >
                       <span
+                        data-jbj-theme-exempt
                         className="relative z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-all"
                         style={
                           on
                             ? { background: "#064E3B", color: "#FFFFFF", boxShadow: "0 0 0 5px rgba(6,78,59,0.14)" }
-                            : { background: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.35)" }
+                            : {
+                                background: "#FFFFFF",
+                                color: "#064E3B",
+                                WebkitTextFillColor: "#064E3B",
+                                border: "1px solid rgba(6,78,59,0.35)",
+                              }
                         }
                       >
                         {s.index}
@@ -242,7 +248,7 @@ export default function InnovationLabSection() {
                       <span className="min-w-0">
                         <span
                           className={`block text-[12px] font-semibold uppercase tracking-[0.12em] text-[#042c1c] transition-opacity md:text-sm ${
-                            on ? "opacity-100" : "opacity-55"
+                            on ? "opacity-100" : "opacity-90"
                           }`}
                         >
                           {s.title}

@@ -110,7 +110,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
     .slice(0, 4);
 
   return (
-    <section data-developer-intelligence className="mt-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/70 shadow-[0_20px_60px_-36px_rgba(184,149,85,0.42)]">
+    <section data-developer-intelligence className="mt-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/25 shadow-[0_20px_60px_-36px_rgba(6,78,59,0.34)]">
         {/* Header — gold champagne with emerald accent text */}
         <div
           data-no-contrast-guard
@@ -153,7 +153,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
             { label: "New launches YTD", value: fmtNumber(launchesThisYear), icon: TrendingUp },
             { label: `Delivered ${lastYear}`, value: fmtNumber(deliveredLastYear), icon: Calendar },
           ].map((item) => (
-            <div key={item.label} className="rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-4">
+            <div key={item.label} className="rounded-xl border border-[#064E3B]/25 bg-[#FDFBF7] p-4">
               <div className="flex items-center gap-2 text-[#064E3B] text-[10px] uppercase tracking-[0.16em] font-bold mb-2">
                 <item.icon className="w-4 h-4" />
                 {item.label}
@@ -164,7 +164,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          <div className="lg:col-span-2 rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-5">
+          <div className="lg:col-span-2 rounded-xl border border-[#064E3B]/25 bg-[#FDFBF7] p-5">
             <div className="flex items-center justify-between gap-3 mb-4">
               <h3 className="text-[#1A1A1A] font-bold text-lg">Competitive Standing</h3>
               <span className="text-[#064E3B] text-xs font-bold">{fmtAED(publishedValueFloor)} price-floor portfolio</span>
@@ -177,14 +177,14 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
                 const width = Math.max(16, Math.min(100, (active / maxActive) * 100));
                 const selected = dev.id === developer.id;
                 return (
-                  <div key={dev.id || dev.name} className="rounded-lg border border-[#B89555]/50 bg-[#F7F2EA] overflow-hidden">
+                  <div key={dev.id || dev.name} className="rounded-lg border border-[#064E3B]/25 bg-[#F7F2EA] overflow-hidden">
                     <div className="relative px-3 py-3">
                       <div className="absolute inset-y-0 left-0" style={{ width: `${width}%`, background: 'rgba(184,149,85,0.18)' }} />
                       <div className="relative flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
                           <span
                             data-no-contrast-guard
-                            className={selected ? "jj-emerald-metallic allow-white text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold" : "w-8 h-8 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] text-[#1A1A1A] flex items-center justify-center text-xs font-bold"}
+                            className={selected ? "jj-emerald-metallic allow-white text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold" : "w-8 h-8 rounded-full border border-[#064E3B]/25 bg-[#FDFBF7] text-[#1A1A1A] flex items-center justify-center text-xs font-bold"}
                             style={selected ? { color: '#FFFFFF' } : undefined}
                           >
                             <span className={selected ? "allow-white" : ""} style={selected ? { color: '#FFFFFF' } : undefined}>{index + 1}</span>
@@ -203,14 +203,14 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-5">
+          <div className="rounded-xl border border-[#064E3B]/25 bg-[#FDFBF7] p-5">
             <div className="flex items-center gap-2 mb-4">
               <MapPin className="w-4 h-4 text-[#064E3B]" />
               <h3 className="text-[#1A1A1A] font-bold text-lg">Top Areas</h3>
             </div>
             <div className="space-y-2">
               {topAreas.length > 0 ? topAreas.map(([area, count], i) => (
-                <div key={area} className="flex items-center justify-between gap-3 rounded-lg border border-[#B89555]/50 bg-[#F7F2EA] px-3 py-2 min-w-0">
+                <div key={area} className="flex items-center justify-between gap-3 rounded-lg border border-[#064E3B]/25 bg-[#F7F2EA] px-3 py-2 min-w-0">
                   <span className="text-[#1A1A1A] text-sm font-semibold truncate min-w-0 flex-1">{i + 1}. {area}</span>
                   <span className="text-[#064E3B] text-xs font-bold whitespace-nowrap shrink-0">{count} {count === 1 ? 'project' : 'projects'}</span>
                 </div>
@@ -583,7 +583,7 @@ const DeveloperDetail = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+          <div className="bg-gradient-to-r from-[hsl(var(--pearl-1))] via-[hsl(var(--pearl-2))] to-[hsl(var(--pearl-3))] border-b border-[#064E3B]/20 shadow-[0_4px_12px_rgba(6,78,59,0.14)]">
             <div className="jj-content-track overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' } as React.CSSProperties}>
               <div className="flex w-max min-w-max items-center gap-1 py-2.5">
                 {developerStickyTabs.map((tab) => (
@@ -613,7 +613,7 @@ const DeveloperDetail = () => {
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--pearl-1))] via-[hsl(var(--pearl-2))] to-[hsl(var(--pearl-3))] border-b border-[#064E3B]/20" />
         )}
         {heroImageUrl ? (
           <>
@@ -730,7 +730,7 @@ const DeveloperDetail = () => {
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-xl border border-[#B89555]/45 p-4 flex flex-col min-h-[118px]"
+                  className="rounded-xl border border-[#064E3B]/25 p-4 flex flex-col min-h-[118px]"
                   style={{
                     background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                     boxShadow: '0 0 15px rgba(184,149,85,0.18), inset 0 1px 2px rgba(255,255,255,0.4)',
@@ -756,7 +756,7 @@ const DeveloperDetail = () => {
             {dedupedPublicFacts.length > 0 && (
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl">
                 {dedupedPublicFacts.map((fact) => (
-                  <div key={fact.label} className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] px-4 py-3">
+                  <div key={fact.label} className="rounded-xl border border-[#064E3B]/25 bg-[#FDFBF7] px-4 py-3">
                     <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#064E3B]">{fact.label}</div>
                     <div className="mt-1 text-sm font-semibold text-[#1A1A1A] break-words">{fact.value}</div>
                   </div>
@@ -765,7 +765,7 @@ const DeveloperDetail = () => {
             )}
 
             {publicExcelDetails.length > 0 && (
-              <div className="mt-5 max-w-5xl rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] p-4">
+              <div className="mt-5 max-w-5xl rounded-xl border border-[#064E3B]/25 bg-[#FDFBF7] p-4">
                 <div className="mb-3 text-[10px] uppercase tracking-[0.18em] font-bold text-[#064E3B]">
                   Excel database details
                 </div>
@@ -773,7 +773,7 @@ const DeveloperDetail = () => {
                   {publicExcelDetails.map(([key, value]) => {
                     const text = fieldToText(value);
                     return (
-                      <div key={key} className="rounded-lg border border-[#B89555]/25 bg-white/65 px-3 py-2">
+                      <div key={key} className="rounded-lg border border-[#064E3B]/25 bg-white/65 px-3 py-2">
                         <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#1A1A1A]/70">
                           {humanizeDeveloperFieldKey(key)}
                         </div>
@@ -888,7 +888,7 @@ const DeveloperDetail = () => {
                 <div className="flex justify-center mt-10">
                   <button
                     onClick={() => setVisibleCount((c) => Math.min(c + 6, filteredProjects.length))}
-                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-150 border border-[#B89555]/70 hover:border-[#B89555] hover:-translate-y-0.5"
+                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-150 border border-[#064E3B]/25 hover:border-[#064E3B]/25 hover:-translate-y-0.5"
                     style={{
                       background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                       boxShadow: '0 4px 20px rgba(184,149,85,0.22)',

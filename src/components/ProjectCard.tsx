@@ -245,12 +245,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         }
       }}
         className={
-        "surface-champagne group relative overflow-hidden rounded-2xl border border-[#B89555]/70 transition-all duration-300 flex flex-col " +
+        "jj-card-emerald-edge surface-champagne group relative overflow-hidden rounded-2xl border transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-        "shadow-[0_18px_55px_rgba(0,0,0,0.16),0_0_18px_rgba(184,149,85,0.16)] hover:border-[#B89555] " +
-        "hover:shadow-[0_26px_75px_rgba(0,0,0,0.20),0_0_26px_rgba(184,149,85,0.28)]"
+        "shadow-[0_18px_55px_rgba(0,0,0,0.16)] " +
+        "hover:shadow-[0_26px_75px_rgba(0,0,0,0.20)]"
       }
-      style={{ borderColor: '#B89555' }}
+
     >
       {/* Top-right project actions — hidden until card hover/focus.
           Row 1: favorite + shortlist. Row 2: badge aligned exactly under shortlist. */}

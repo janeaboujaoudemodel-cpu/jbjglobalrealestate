@@ -9,7 +9,8 @@
  */
 
 :root {
-  --jbj-moon-pair: linear-gradient(160deg, #064E3B 0%, #042c1c 55%, #000000 100%);
+  --jbj-moon-pair: linear-gradient(160deg, #064E3B 0%, #05402F 55%, #042C1C 100%);
+  --jbj-moon-champagne: linear-gradient(160deg, #F7F2EA 0%, #EFE6D6 55%, #E7DCC6 100%);
   --jbj-moon-surface: #06231A;
   --jbj-moon-surface-raised: #082D21;
   --jbj-moon-hairline: rgba(255, 255, 255, 0.14);
@@ -106,7 +107,7 @@ html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-j
 
 /* 4. Ink inversion: everything reads PURE WHITE unless it opts out or sits on
       a champagne surface (rule 6 restores black ink there). */
-html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :not([data-jbj-theme-exempt]):not([class*="bg-clip-text"]):not([class*="text-transparent"]):not([class*="text-[#B89555]"]):not([class*="text-[#D4AF37]"]):not([class*="text-[#C9A961]"]):not(img):not(svg):not(path):not(video):not(canvas) {
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root *:not([data-jbj-theme-exempt]):not([class*="bg-clip-text"]):not([class*="text-transparent"]):not([class*="text-[#B89555]"]):not([class*="text-[#D4AF37]"]):not([class*="text-[#C9A961]"]):not(img):not(svg):not(path):not(video):not(canvas) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -124,8 +125,21 @@ html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-j
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#FAF7F0]"],
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#F5F0E6]"],
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#FFFFFF]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#B89555]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#D4AF37]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#C9A961]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#EFE6D6]"],
 html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#E5E7EB]"],
-html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class~="border-border"] {
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class~="border-border"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#B89555]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#D4AF37]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="border-[#C9A961]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="divide-[#B89555]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [class*="ring-[#B89555]"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [style*="B89555"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [style*="b89555"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [style*="D4AF37"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [style*="d4af37"] {
   border-color: var(--jbj-moon-hairline) !important;
 }
 
@@ -219,4 +233,31 @@ html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-j
   background-image: none !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 11. Reversed pairing: Sun-emerald sections become champagne in Moon */
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jbj-invert="pair"],
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jbj-invert="pair"] > * {
+  background-color: #F2EBDC !important;
+  background-image: var(--jbj-moon-champagne) !important;
+  border-color: rgba(10, 10, 10, 0.14) !important;
+}
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jbj-invert="pair"] *:not([data-jbj-theme-exempt]):not([class*="bg-clip-text"]):not([class*="text-transparent"]):not([class*="text-[#B89555]"]):not([class*="text-[#D4AF37]"]):not([class*="text-[#C9A961]"]):not(img):not(svg):not(path):not(video):not(canvas) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jbj-invert="pair"] .lucide {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}
+
+/* 12. No gold hairline may survive on an emerald surface. */
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-surface="emerald"] *,
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jbj-surface="emerald"] * {
+  --jj-seg-hairline: rgba(255, 255, 255, 0.44);
+  --jj-panel-hairline: rgba(255, 255, 255, 0.28);
+}
+html[data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) {
+  --jj-seg-hairline: rgba(255, 255, 255, 0.44);
+  --jj-panel-hairline: rgba(255, 255, 255, 0.28);
 }

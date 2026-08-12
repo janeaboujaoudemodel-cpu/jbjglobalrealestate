@@ -71,7 +71,7 @@ const DeveloperPartnersMarquee = () => {
     <Link
       key={`${isFirst ? "a" : "b"}-${developer.slug}-${index}`}
       to={`/developer/${developer.slug}`}
-      className="flex-shrink-0 transition-opacity duration-300 hover:opacity-80"
+      className="jj-partner-mark flex-shrink-0 transition-opacity duration-300 hover:opacity-80"
       title={developer.name}
       aria-hidden={isFirst ? undefined : true}
       tabIndex={isFirst ? undefined : -1}
@@ -81,7 +81,7 @@ const DeveloperPartnersMarquee = () => {
         src={developer.logo}
         name={developer.name}
         alt={developer.name}
-        variant="tile"
+        variant="bare"
         size="md"
         loading={index < 6 && isFirst ? "eager" : "lazy"}
       />
@@ -101,6 +101,7 @@ const DeveloperPartnersMarquee = () => {
       className="w-full overflow-hidden bg-[#042c1c] bg-[linear-gradient(160deg,#064E3B_0%,#042c1c_58%,#000000_100%)]"
       data-partners-marquee
       data-emerald-surface="true"
+      data-jbj-invert="pair"
     >
       <style>{`
         @keyframes jbj-emerald-shimmer {
@@ -126,7 +127,7 @@ const DeveloperPartnersMarquee = () => {
       )}
 
       <div className="w-full">
-        <div className="jbj-emerald-shimmer-bg py-5 md:py-6">
+        <div className="jbj-emerald-shimmer-bg py-5 md:py-6" data-jbj-invert="pair">
           <ContentTrack>
             <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-white [-webkit-text-fill-color:#ffffff]">
               {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
@@ -141,6 +142,7 @@ const DeveloperPartnersMarquee = () => {
 
         <div
           className="relative w-full overflow-hidden py-6 md:py-8 bg-[linear-gradient(180deg,#053a29_0%,#042c1c_60%,#000000_100%)]"
+          data-jbj-invert="pair"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
