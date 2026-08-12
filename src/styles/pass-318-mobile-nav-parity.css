@@ -456,3 +456,12 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
   min-height: 0 !important;
   padding: 0 !important;
 }
+
+/* Sun drawer quick tiles: no champagne plate — matches the Moon treatment. */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile],
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
