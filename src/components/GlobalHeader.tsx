@@ -37,6 +37,7 @@ import CurrencySwitcher from "@/components/CurrencySwitcher";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import GlobalSearchModal, { preloadGlobalSearchModal } from "@/components/GlobalSearchModalLazy";
 import { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { useIsTouchLayout } from "@/hooks/use-touch-layout";
@@ -105,6 +106,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       ? "Developer Portal"
       : "Investor Dashboard";
   const location = useLocation();
+  const { mode: headerThemeMode } = useThemeMode();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Mark the drawer row for the current route so it gets the single emerald
@@ -400,9 +402,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Never derive the image, wordmark, and controls from separate booleans.
   // Non-home routes always paint champagne chrome. Only the homepage may use
   // the transparent dark identity over its photographic hero.
-  const headerSurface: "dark" | "light" = homeMobileFiberglassActive || (!shouldUseMobileHeader && isHomeHeroPath && isFullyTransparent)
-    ? "dark"
-    : "light";
+  // PASS 322 — the phone/tablet band is a real skin surface: champagne in Sun,
+  // emerald in Moon. So on mobile the surface follows the skin, never the hero.
+  const headerSurface: "dark" | "light" = shouldUseMobileHeader
+    ? (headerThemeMode === "sun" ? "light" : "dark")
+    : ((!shouldUseMobileHeader && isHomeHeroPath && isFullyTransparent) ? "dark" : "light");
+
   const useLightHeaderIdentity = headerSurface === "dark";
   const champagneFiberglassBackground =
     'linear-gradient(180deg, rgba(247,242,234,0.78) 0%, rgba(239,230,214,0.72) 100%)';

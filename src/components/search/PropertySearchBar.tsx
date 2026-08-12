@@ -527,7 +527,7 @@ export default function PropertySearchBar({
                   aria-pressed={on}
                   data-no-contrast-guard
                   data-surface={on ? "emerald" : undefined}
-                  className="relative min-w-0 flex-1 flex items-center justify-center text-[11.5px] lg:text-sm font-semibold leading-none tracking-[0.04em] whitespace-nowrap transition-colors duration-200"
+                  className="relative min-w-0 flex-1 flex items-center justify-center text-center text-[11.5px] lg:text-sm font-semibold leading-none tracking-[0.04em] whitespace-nowrap transition-colors duration-200 py-0 self-stretch"
                   style={{
                     backgroundImage: on ? EMERALD_PAIR : undefined,
                     background: on ? undefined : "transparent",
@@ -797,7 +797,7 @@ export default function PropertySearchBar({
              data-surface="emerald"
              data-search-segment
              data-no-contrast-guard
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-11 lg:h-16 w-full min-w-0 rounded-lg font-semibold px-2 py-1.5 leading-[1.05] tracking-tight text-center flex flex-col items-center justify-center gap-[1px] overflow-hidden"
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-11 lg:h-16 w-full min-w-0 rounded-lg font-semibold px-3 py-0 leading-none tracking-tight text-center flex flex-row items-center justify-center gap-1 overflow-hidden"
             style={{
               backgroundImage: EMERALD_PAIR,
               color: "#FFFFFF",
@@ -807,17 +807,13 @@ export default function PropertySearchBar({
             }}
           >
             {count == null ? (
-              <span className="text-[14px] lg:text-[12px] font-semibold">Search</span>
+              <span className="text-[13px] lg:text-[12px] font-semibold leading-none">Search</span>
             ) : (
-              <>
-                <span className="text-[14px] lg:text-[12.5px] whitespace-nowrap">
-                  Show {count.toLocaleString()}
-                </span>
-                <span className="text-[10.5px] lg:text-[9.5px] opacity-90 whitespace-nowrap">
-                  {countNoun}
-                </span>
-              </>
+              <span className="text-[13px] lg:text-[12px] font-semibold leading-none whitespace-nowrap">
+                Show {count.toLocaleString()} {countNoun}
+              </span>
             )}
+
           </button>
 
         </div>
