@@ -13,7 +13,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  LogOut, User, Search, HelpCircle, Headphones, Heart, Ticket, X,
+  ChevronDown, LogOut, User, Search, HelpCircle, Headphones, Heart, Ticket, X,
   Globe, Coins, Lock,
 } from "lucide-react";
 
@@ -25,7 +25,10 @@ import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { useGatedToolAccess } from "@/hooks/useGatedToolAccess";
 import { supabase } from "@/integrations/supabase/client";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage, SUPPORTED_LANGUAGES, getLanguageInfo } from "@/contexts/LanguageContext";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
 
@@ -54,6 +57,8 @@ export default function MobileNavDrawer({
   const { isOwner } = useUserRole();
   const { mode, isBrokerMode, isInvestorMode } = useUserModeContext();
   const { isMoon } = useThemeMode();
+  const { language, setLanguage } = useLanguage();
+  const activeLang = getLanguageInfo(language);
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
   const { allowed: canCompare } = useCompareAccess();
   const { visible: canSeeCardScanner } = useGatedToolAccess("business-card-scanner");
