@@ -36,6 +36,7 @@ import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 import SidebarModePortalBlock from "@/components/navigation/SidebarModePortalBlock";
 import { SidebarItem } from "@/components/ui/ds/SidebarItem";
 import ThemeModeToggle from "@/components/ThemeModeToggle";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
@@ -544,6 +545,7 @@ export default function GlobalVerticalNav() {
   const { session } = useAuth();
   const { isInvestor, isOwner } = useUserRole();
   const { mode, isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
+  const { isMoon } = useThemeMode();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [, setMobileOpen] = useState(false);
@@ -893,11 +895,7 @@ export default function GlobalVerticalNav() {
   // PASS 307: the rail is champagne in Sun and emerald in Moon, so the inline
   // ink must follow the skin — index.css hard-codes white for the emerald skin
   // inside a cascade layer, which no unlayered override can beat.
-  const railInk = typeof document !== 'undefined'
-    && document.documentElement.getAttribute('data-jbj-theme') === 'sun'
-    && document.documentElement.getAttribute('data-jbj-backend-lock') !== '1'
-    ? '#1A1A1A'
-    : '#FFFFFF';
+  const railInk = isMoon ? '#FFFFFF' : '#1A1A1A';
 
   const getSidebarIconStyle = (onEmerald: boolean): React.CSSProperties => ({
     color: onEmerald ? railInk : '#1A1A1A',
