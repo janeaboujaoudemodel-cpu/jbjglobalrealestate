@@ -218,7 +218,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-overview" element={<OwnerDashboardOverview />} />
     <Route path="owner-jbj-hub" element={<JbjHub />} />
     <Route path="owner-documents-forms" element={<DocumentsFormsHub />} />
-    <Route path="owner-unified-crm" element={<UnifiedCRM />} />
+    <Route path="owner-unified-crm" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="owner-crm-workspace" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="owner-data-hub" element={<DataHub />} />
     <Route path="owner-brokerages" element={<BrokeragePortal />} />
@@ -342,7 +342,7 @@ export const OwnerRoutes = () => (
     <Route path="e-signature/:id" element={<LegacyOwnerEnvelopeDetail />} />
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
-    <Route path="crm" element={<UnifiedCRM />} />
+    <Route path="crm" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="crm/zoho" element={<Navigate to="/owner/crm/jbj" replace />} />
     {/* /owner/crm/jbj is mounted OUTSIDE this shell — see top of OwnerRoutes for the standalone route. */}
 
