@@ -11,7 +11,7 @@
  */
 import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, Building2, Check, ChevronDown, Crown, MapPin, Minus, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, Check, ChevronDown, Crown, MapPin, Minus, Search, SlidersHorizontal, X } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useNavigate } from "react-router-dom";
 
@@ -569,7 +569,6 @@ export default function PropertySearchBar({
             active={!!(f.developersInclude.length || f.developersExclude.length)}
             dark={dark}
             wide
-            icon={<Building2 className="w-4 h-4 opacity-70" />}
           >
             <DeveloperIncludeExclude
               include={f.developersInclude}
@@ -585,7 +584,6 @@ export default function PropertySearchBar({
             active={!!(f.tiersInclude.length || f.tiersExclude.length)}
             dark={dark}
             wide
-            icon={<Crown className="w-4 h-4 opacity-70" />}
           >
             <div className="w-[240px] max-w-[88vw] p-2">
               {(f.tiersInclude.length || f.tiersExclude.length) ? (
