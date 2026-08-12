@@ -73,21 +73,16 @@ html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-footer-b
   gap: 0 !important;
 }
 
-/* ═══════════ 3. No white/champagne band under the header (Moon) ═══════════ */
-html[data-jbj-theme="moon"] body,
-html[data-jbj-theme="moon"] body #root,
-html[data-jbj-theme="moon"] body #root > div,
-html[data-jbj-theme="moon"] body #root main,
-html[data-jbj-theme="moon"] body #root [data-home-page],
-html[data-jbj-theme="moon"] body #root .jj-page-shell,
-html[data-jbj-theme="moon"] body #root .jj-main-shell,
-html[data-jbj-theme="moon"] body #root .jj-page-shell > div[class*="min-h-screen"],
-html[data-jbj-theme="moon"] body #root [data-page-shell] {
-  background-color: #000000 !important;
+/* ═══════════ 3. No white seam under the header (Moon) ═══════════
+   Moon keeps its designed light canvas for content, but the strip directly
+   beneath the utility header must never flash a pale band before the hero
+   paints — the seam stays chrome-dark. */
+html[data-jbj-theme="moon"] body #root [data-chrome="header"] {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
 }
-/* Any light band a lazy section leaves behind under the header goes black. */
-html[data-jbj-theme="moon"] body #root [data-home-page] > div:first-child {
-  background-color: #000000 !important;
+html[data-jbj-theme="moon"] body #root main.jj-main-shell > *:first-child,
+html[data-jbj-theme="moon"] body #root main.jj-main-shell > div:first-child > *:first-child {
+  background-color: transparent !important;
 }
 
 /* ═══════════ 4. Strap emerald on long straps + big cards ═══════════
