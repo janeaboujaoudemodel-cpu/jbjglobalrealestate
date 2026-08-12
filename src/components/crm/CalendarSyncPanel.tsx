@@ -9,26 +9,30 @@ import { RefreshCw, CalendarCheck, ArrowDownToLine, ArrowUpFromLine, AlertTriang
 type ProviderId = "google_calendar" | "microsoft_outlook";
 type SyncState = { is_enabled: boolean; push_enabled: boolean; pull_enabled: boolean; last_pull_at: string | null; last_push_at: string | null; events_pulled: number; events_pushed: number; last_error: string | null } | null;
 type CalendarTarget = { id: string; name: string; primary: boolean; writable: boolean; state: SyncState };
-type AccountStatus = { provider: ProviderId; account_key: string; connected: boolean; account: string | null; calendars: CalendarTarget[]; error?: string };
+type AccountStatus = { provider: ProviderId; account_key: string; slot?: string; connected: boolean; account: string | null; email?: string | null; calendars: CalendarTarget[]; error?: string };
+type Mailbox = { email_address: string; provider: string; status: string; last_synced_at: string | null; last_sync_status: string | null };
 
 const LABEL: Record<ProviderId, string> = { google_calendar: "Google Calendar", microsoft_outlook: "Outlook Calendar" };
+const EXPECTED_MAILBOXES = ["contact@jbj.ae", "helpdesk@jbj.ae"];
 
 export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void }) {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<AccountStatus[]>([]);
+  const [mailboxes, setMailboxes] = useState<Mailbox[]>([]);
   const call = useCallback(async (body: Record<string, unknown>) => {
     const { data, error } = await supabase.functions.invoke("owner-calendar-sync", { body });
     if (error) throw new Error(error.message);
     if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
-    return data as { accounts?: AccountStatus[]; results?: Array<{ pulled?: number; pushed?: number; error?: string }> };
+    return data as { accounts?: AccountStatus[]; mailboxes?: Mailbox[]; results?: Array<{ pulled?: number; pushed?: number; error?: string }> };
   }, []);
   const load = useCallback(async () => {
-    try { const data = await call({ action: "status" }); setAccounts(data.accounts ?? []); }
+    try { const data = await call({ action: "status" }); setAccounts(data.accounts ?? []); setMailboxes(data.mailboxes ?? []); }
     catch (e) { toast.error((e as Error).message); }
     finally { setLoading(false); }
   }, [call]);
   useEffect(() => { void load(); }, [load]);
+
 
   const update = async (account: AccountStatus, calendar: CalendarTarget, patch: Record<string, boolean>) => {
     try {
