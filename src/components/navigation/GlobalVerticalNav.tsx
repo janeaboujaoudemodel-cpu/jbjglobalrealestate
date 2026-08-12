@@ -1357,7 +1357,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           aria-hidden="true"
         />
         <div className="px-3 pt-2 pb-2">
-          <ThemeModeToggle variant="menu" className="mb-2 border border-current/20 bg-transparent" />
+          <ThemeModeToggle variant="menu" className="jj-sidebar-theme-toggle mb-2 border border-current/20" />
           {/* Compact horizontal pills — icon + label side-by-side so labels stay
               readable at short viewports without being clipped. */}
           <div className="grid grid-cols-2 gap-2">
@@ -1372,8 +1372,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
                 style={{ borderWidth: 0, height: '42px', minHeight: '42px', background: 'transparent', boxShadow: 'none' }}
               >
-                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" strokeWidth={2.4} />
-                <span data-signout-label className="whitespace-nowrap" style={{ whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
+                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" strokeWidth={2.4} style={{ color: railInk, stroke: railInk }} />
+                <span data-signout-label className="whitespace-nowrap" style={{ color: railInk, WebkitTextFillColor: railInk, whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
               </button>
             ) : (
               <Link
@@ -1405,8 +1405,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               className="allow-white group flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
               style={{ background: 'transparent', borderWidth: 0, boxShadow: 'none' }}
             >
-              <PanelLeftClose className="w-4 h-4 shrink-0" strokeWidth={2.2} />
-              <span className="whitespace-nowrap" style={{ whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Collapse</span>
+              <PanelLeftClose className="w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: railInk, stroke: railInk }} />
+              <span className="whitespace-nowrap" style={{ color: railInk, WebkitTextFillColor: railInk, whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Collapse</span>
             </button>
           </div>
         </div>

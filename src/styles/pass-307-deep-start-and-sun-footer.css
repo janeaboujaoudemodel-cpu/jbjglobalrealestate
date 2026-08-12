@@ -123,3 +123,21 @@ html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-bra
   background-color: #032015 !important;
   background-image: none !important;
 }
+
+/* Premium in-sidebar theme selector: emerald-black, compact, legible in both skins. */
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle {
+  background: var(--jj-long-emerald-h) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  padding: 4px !important;
+}
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle button,
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle button * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle button[aria-pressed="true"] {
+  background: rgba(255,255,255,0.18) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28) !important;
+}
