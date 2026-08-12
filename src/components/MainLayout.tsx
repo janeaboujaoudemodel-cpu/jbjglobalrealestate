@@ -316,7 +316,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main data-company-legal-page={isCompanyLegalPage ? "true" : undefined} className={`jj-main-shell w-full max-w-full overflow-x-hidden bg-[#F7F2EA] min-h-screen transition-[margin-left,width,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "jj-main-shell--standalone" : ""} ${needsHeaderSpacing && !isHomePage ? "pt-20 lg:pt-[56px]" : "pt-0"}`}>
+        <main data-company-legal-page={isCompanyLegalPage ? "true" : undefined} className={`jj-main-shell w-full max-w-full overflow-x-hidden bg-[#F7F2EA] min-h-screen transition-[margin-left,width] duration-100 ease-out ${usesStandalonePortalChrome ? "jj-main-shell--standalone" : ""} ${needsHeaderSpacing && !isHomePage ? "pt-20 lg:pt-[56px]" : "pt-0"}`}>
           <div data-content-gutter="1" className="w-full max-w-full">
 
 
