@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { forwardRef, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -67,13 +67,14 @@ interface MortgageRangeProps {
   onChange: (value: number) => void;
 }
 
-const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
+const MortgageRange = forwardRef<HTMLInputElement, MortgageRangeProps>(({ value, min, max, step, ariaLabel, isNavy, onChange }, ref) => {
   const progress = getRangePercent(value, min, max);
   const fill = "linear-gradient(90deg, #064E3B 0%, #042C1C 58%, #000000 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
 
   return (
     <input
+      ref={ref}
       type="range"
       data-mortgage-slider={ariaLabel}
       data-no-contrast-guard
@@ -97,7 +98,9 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       }
     />
   );
-};
+});
+
+MortgageRange.displayName = "MortgageRange";
 
 const MortgageCalculator = ({
   defaultPrice = 2000000,
