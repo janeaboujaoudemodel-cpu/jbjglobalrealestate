@@ -16,12 +16,13 @@ const EMERALD_OMBRE =
   "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)";
 
 export function ListingModeCards({
-  manualTo = "/broker/listings/new/manual",
-  aiTo = "/broker/listings/new/ai",
+  manualTo = "/list-property?mode=manual",
+  aiTo = "/list-property?mode=ai",
 }: {
   manualTo?: string;
   aiTo?: string;
 }) {
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <ListingModeCard
