@@ -862,10 +862,19 @@ export default function GlobalVerticalNav() {
 
   const getIconStyle = () => 'text-white';
 
+  // PASS 307: the rail is champagne in Sun and emerald in Moon, so the inline
+  // ink must follow the skin — index.css hard-codes white for the emerald skin
+  // inside a cascade layer, which no unlayered override can beat.
+  const railInk = typeof document !== 'undefined'
+    && document.documentElement.getAttribute('data-jbj-theme') === 'sun'
+    && document.documentElement.getAttribute('data-jbj-backend-lock') !== '1'
+    ? '#1A1A1A'
+    : '#FFFFFF';
+
   const getSidebarIconStyle = (onEmerald: boolean): React.CSSProperties => ({
-    color: onEmerald ? '#FFFFFF' : '#1A1A1A',
-    stroke: onEmerald ? '#FFFFFF' : '#1A1A1A',
-    WebkitTextFillColor: onEmerald ? '#FFFFFF' : '#1A1A1A',
+    color: onEmerald ? railInk : '#1A1A1A',
+    stroke: onEmerald ? railInk : '#1A1A1A',
+    WebkitTextFillColor: onEmerald ? railInk : '#1A1A1A',
     opacity: 1,
   });
 
@@ -1520,7 +1529,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       data-sidebar-auth-control
                        className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 flex items-center justify-center"
                     >
-                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon" strokeWidth={2.15} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon" strokeWidth={2.15} style={{ color: railInk, stroke: railInk }} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
@@ -1569,7 +1578,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                         className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
                       />
                     )}
-                    <PanelLeftClose className="allow-white w-4 h-4 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2.15} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                    <PanelLeftClose className="allow-white w-4 h-4 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2.15} style={{ color: railInk, stroke: railInk }} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
