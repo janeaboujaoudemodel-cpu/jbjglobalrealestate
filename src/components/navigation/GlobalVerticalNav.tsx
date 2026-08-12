@@ -904,6 +904,31 @@ export default function GlobalVerticalNav() {
     opacity: 1,
   });
 
+  /* PASS 317 — Sun rail controls (Sign Out / Collapse) must be BLACK ink.
+     index.css forces white inside a cascade layer, so only an !important
+     inline declaration can win. Re-applied whenever the skin changes. */
+  useEffect(() => {
+    const ink = isMoon ? '#FFFFFF' : '#0A0A0A';
+    const apply = () => {
+      const nodes = document.querySelectorAll<HTMLElement>(
+        '[data-chrome="sidebar"] [data-sidebar-account-action], [data-chrome="sidebar"] [data-sidebar-collapse-control], [data-chrome="sidebar"] [data-sidebar-auth-control]'
+      );
+      nodes.forEach((node) => {
+        const paint = (el: HTMLElement) => {
+          el.style.setProperty('color', ink, 'important');
+          el.style.setProperty('-webkit-text-fill-color', ink, 'important');
+          el.style.setProperty('stroke', ink, 'important');
+        };
+        paint(node);
+        node.querySelectorAll<HTMLElement>('span, svg, svg *, path').forEach(paint);
+      });
+    };
+    apply();
+    const id = window.setTimeout(apply, 120);
+    return () => window.clearTimeout(id);
+  }, [isMoon, collapsed, hoverExpanded, openSection, session]);
+
+
   const navHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#0A0A0A]";
   const subNavHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#0A0A0A]";
 
