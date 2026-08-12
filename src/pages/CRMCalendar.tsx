@@ -30,6 +30,7 @@ import {
   isToday, addMonths, subMonths,
 } from "date-fns";
 import CalendarSyncPanel from "@/components/crm/CalendarSyncPanel";
+import CalendarWebsiteApiPanel from "@/components/crm/CalendarWebsiteApiPanel";
 
 interface Reminder {
   /** minutes before start_at */
@@ -332,11 +333,12 @@ const CRMCalendar = () => {
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
         <CalendarSyncPanel onSynced={fetchEvents} />
+        <CalendarWebsiteApiPanel />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
 
           {/* Calendar grid */}
-          <Card className="lg:col-span-2 border-black/10 bg-white">
+          <Card className="min-w-0 border-black/10 bg-white">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-lg font-bold text-[#1A1A1A]">{format(currentMonth, "MMMM yyyy")}</CardTitle>
               <div className="flex gap-2">
@@ -351,7 +353,7 @@ const CRMCalendar = () => {
                   <div key={d} className="text-center text-xs font-semibold text-[#1A1A1A]/70 py-2">{d}</div>
                 ))}
               </div>
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-1 min-w-0">
                 {Array.from({ length: monthStart.getDay() }).map((_, i) => (
                   <div key={`empty-${i}`} className="h-24" />
                 ))}
@@ -365,7 +367,7 @@ const CRMCalendar = () => {
                       data-calendar-day
                       onClick={() => setSelectedDate(day)}
                       onDoubleClick={() => openCreate(day)}
-                      className={`h-24 p-1.5 rounded-lg border transition-all text-left ${
+                      className={`h-24 min-w-0 overflow-hidden p-1.5 rounded-lg border transition-all text-left ${
                         isSelected
                           ? "border-[#064E3B] bg-[#064E3B]/10"
                           : isToday(day)
@@ -381,8 +383,9 @@ const CRMCalendar = () => {
                       <div className="mt-1 space-y-0.5">
                         {dayEvents.slice(0, 2).map((ev) => (
                           <div key={ev.id}
-                               className="text-[10px] leading-tight px-1.5 py-0.5 rounded border truncate bg-[#064E3B] text-white border-[#1A1A1A]">
-                            <span className="font-semibold tabular-nums">{format(new Date(ev.start_at), "HH:mm")}</span> {ev.title}
+                               title={`${format(new Date(ev.start_at), "HH:mm")} ${ev.title}`}
+                               className="flex min-w-0 items-start gap-1 whitespace-normal break-words text-[10px] leading-3 px-1.5 py-1 rounded border bg-[#064E3B] text-white border-[#1A1A1A]">
+                            <span className="shrink-0 font-semibold tabular-nums">{format(new Date(ev.start_at), "HH:mm")}</span><span className="min-w-0">{ev.title}</span>
                           </div>
                         ))}
                         {dayEvents.length > 2 && (
