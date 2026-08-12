@@ -25,6 +25,8 @@ html[data-jbj-theme="sun"] body.jj-vertical-nav-active #root [data-chrome="sideb
   font-size: 10px !important;
   letter-spacing: 0.055em !important;
   line-height: 1 !important;
+  font-weight: 800 !important;
+  font-family: inherit !important;
   white-space: nowrap !important;
 }
 html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row]:not([data-sidebar-brand-row="rail"]) .jj-rail-brand-link {
@@ -40,4 +42,11 @@ html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-eme
   padding-left: 6px !important;
   padding-right: 6px !important;
   padding-top: 16px !important;
+}
+
+/* Lucide's multi-head Company glyph needs visible paint overflow; global SVG
+   containment must not trim its upper stroke in the Moon rail. */
+html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald]
+  #nav-section-company :is([data-jjds-sidebar-icon], [data-sidebar-section-icon], svg) {
+  overflow: visible !important;
 }
