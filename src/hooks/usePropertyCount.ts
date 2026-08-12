@@ -81,6 +81,18 @@ export function usePropertyCount(filters: PropertySearch, debounceMs = 350) {
         }
         if (filters.labels.length) q = q.overlaps("labels", filters.labels);
         if (filters.developer) q = q.ilike("developer_name", `%${filters.developer}%`);
+
+        // PASS 298 — multi-select developer include / exclude.
+        if (filters.developersInclude?.length) {
+          q = q.or(
+            filters.developersInclude
+              .map((d) => `developer_name.ilike.%${d.replace(/[,()]/g, " ")}%`)
+              .join(","),
+          );
+        }
+        for (const d of filters.developersExclude || []) {
+          q = q.not("developer_name", "ilike", `%${d.replace(/[,()]/g, " ")}%`);
+        }
         if (filters.q.trim()) q = q.ilike("name", `%${filters.q.trim()}%`);
 
         const { count: c, error } = await q;
