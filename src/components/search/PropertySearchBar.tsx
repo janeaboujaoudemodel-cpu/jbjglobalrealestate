@@ -740,7 +740,7 @@ export default function PropertySearchBar({
              data-surface="emerald"
              data-search-segment
              data-no-contrast-guard
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg font-semibold px-1 leading-[1.1] tracking-tight text-center flex flex-col items-center justify-center"
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg font-semibold px-2 py-1.5 leading-[1.05] tracking-tight text-center flex flex-col items-center justify-center gap-[1px] overflow-hidden"
             style={{
               backgroundImage: EMERALD_PAIR,
               color: "#FFFFFF",
@@ -753,10 +753,10 @@ export default function PropertySearchBar({
               <span className="text-[13px] lg:text-[12px]">Search</span>
             ) : (
               <>
-                <span className="text-[13px] lg:text-[13px] whitespace-nowrap">
+                <span className="text-[12.5px] lg:text-[12.5px] whitespace-nowrap">
                   Show {count.toLocaleString()}
                 </span>
-                <span className="text-[10px] lg:text-[10px] opacity-90 whitespace-nowrap">
+                <span className="text-[9.5px] lg:text-[9.5px] opacity-90 whitespace-nowrap">
                   {countNoun}
                 </span>
               </>
