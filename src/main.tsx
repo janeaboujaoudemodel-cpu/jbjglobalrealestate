@@ -4,10 +4,25 @@ import App from"./App";
 
 import"./styles/theme-tokens.css";
 import"./index.css";
+import"./styles/theme-moon.css";
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";
 import { installLazyImageEnforcer } from"@/utils/lazyImageEnforcer";
 import { installInteractionCssPruner } from"@/utils/pruneCostlyCssRules";
+
+// Apply the saved skin before React paints. Public Moon mirrors the emerald JBJ
+// Hub shell; owner/admin routes remain on their fixed backend skin.
+if (typeof document !== "undefined") {
+  try {
+    const storedTheme = localStorage.getItem("jbj-theme-mode") === "moon" ? "moon" : "sun";
+    document.documentElement.setAttribute("data-jbj-theme", storedTheme);
+    if (/^\/(owner|crm|admin)(\/|$)/.test(window.location.pathname)) {
+      document.documentElement.setAttribute("data-jbj-backend-lock", "1");
+    }
+  } catch {
+    document.documentElement.setAttribute("data-jbj-theme", "sun");
+  }
+}
 
 // Site-wide guard: every WhatsApp link is normalized to wa.me with sanitized
 // digits.

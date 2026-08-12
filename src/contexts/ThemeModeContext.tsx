@@ -13,8 +13,7 @@
  *    (/owner, /crm, …) never changes — we set `data-jbj-backend-lock="1"` on
  *    <html> for those routes so the moon stylesheet stops matching.
  *
- * The moon stylesheet is imported lazily, so a Sun-mode visitor never pays the
- * style-recalculation cost of the inversion layer.
+ * The Moon stylesheet is loaded at boot and fully scoped, preventing a wrong-theme flash.
  */
 import React, {
   createContext,
@@ -69,8 +68,6 @@ function isOwnerBackendPath(pathname: string) {
   );
 }
 
-let moonSheetLoaded = false;
-
 export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -103,12 +100,6 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (backendLocked) root.setAttribute("data-jbj-backend-lock", "1");
     else root.removeAttribute("data-jbj-backend-lock");
 
-    if (mode === "moon" && !moonSheetLoaded) {
-      moonSheetLoaded = true;
-      import("@/styles/theme-moon.css").catch(() => {
-        moonSheetLoaded = false;
-      });
-    }
   }, [mode, backendLocked]);
 
   const value = useMemo(

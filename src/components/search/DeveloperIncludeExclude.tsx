@@ -41,8 +41,9 @@ export default function DeveloperIncludeExclude({ include, exclude, onChange }: 
             websiteUrl={d.website_url ?? null}
             variant="bare"
             size="micro"
+            picker
             loading="lazy"
-            className="h-6 w-12 shrink-0"
+            className="h-8 w-8 min-h-8 min-w-8 shrink-0 rounded-md p-1"
           />
         ),
       });

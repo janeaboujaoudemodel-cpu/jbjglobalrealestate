@@ -71,7 +71,7 @@ const DeveloperPartnersMarquee = () => {
     <Link
       key={`${isFirst ? "a" : "b"}-${developer.slug}-${index}`}
       to={`/developer/${developer.slug}`}
-      className="jj-partner-mark flex-shrink-0 transition-opacity duration-300 hover:opacity-80"
+      className="jj-partner-mark flex-shrink-0"
       title={developer.name}
       aria-hidden={isFirst ? undefined : true}
       tabIndex={isFirst ? undefined : -1}
@@ -83,6 +83,7 @@ const DeveloperPartnersMarquee = () => {
         alt={developer.name}
         variant="bare"
         size="md"
+        embedded
         loading={index < 6 && isFirst ? "eager" : "lazy"}
       />
     </Link>
@@ -103,20 +104,6 @@ const DeveloperPartnersMarquee = () => {
       data-emerald-surface="true"
       data-jbj-invert="pair"
     >
-      <style>{`
-        @keyframes jbj-emerald-shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-        .jbj-emerald-shimmer-bg {
-          background: linear-gradient(90deg, #042c1c 0%, #064E3B 25%, #0a6b52 50%, #064E3B 75%, #000000 100%);
-          background-size: 200% auto;
-          animation: jbj-emerald-shimmer 10s linear infinite;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .jbj-emerald-shimmer-bg { animation: none; }
-        }
-      `}</style>
       {loopWidth > 0 && (
         <style>{`
           @keyframes marquee-scroll {
@@ -127,7 +114,7 @@ const DeveloperPartnersMarquee = () => {
       )}
 
       <div className="w-full">
-        <div className="jbj-emerald-shimmer-bg py-5 md:py-6" data-jbj-invert="pair">
+        <div className="py-4 md:py-5" data-partners-heading>
           <ContentTrack>
             <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-white [-webkit-text-fill-color:#ffffff]">
               {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
@@ -135,14 +122,8 @@ const DeveloperPartnersMarquee = () => {
           </ContentTrack>
         </div>
 
-        {/* Emerald -> black divider (no shimmer) */}
-        <ContentTrack>
-          <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-        </ContentTrack>
-
         <div
-          className="relative w-full overflow-hidden py-6 md:py-8 bg-[linear-gradient(180deg,#053a29_0%,#042c1c_60%,#000000_100%)]"
-          data-jbj-invert="pair"
+          className="relative w-full overflow-hidden py-5 md:py-6"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
