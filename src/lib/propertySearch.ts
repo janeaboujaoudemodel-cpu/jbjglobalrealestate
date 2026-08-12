@@ -464,6 +464,7 @@ export const compactPrice = (v: number, currency: string) => {
 export function describeSearch(f: PropertySearch): string {
   const bits: string[] = [];
   bits.push(f.purpose === "rent" ? "For rent" : f.purpose === "sell" ? "Sell" : "For sale");
+  if (f.purpose === "rent") bits.push(RENT_PERIODS.find((period) => period.slug === f.rentPeriod)?.label ?? "Yearly");
   if (f.statuses.length)
     bits.push(f.statuses.map((s) => PROJECT_STATUSES.find((x) => x.slug === s)?.label ?? s).join(" / "));
   if (f.types.length) bits.push(f.types.join(" / "));

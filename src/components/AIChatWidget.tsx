@@ -67,6 +67,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [guestToken, setGuestToken] = useState<string | null>(null);
   const [ownerJoined, setOwnerJoined] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
@@ -223,6 +224,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         : [];
       if (restored.length > 0) setMessages(restored);
       if (saved?.conversationId) setConversationId(saved.conversationId);
+      if (saved?.guestToken) setGuestToken(saved.guestToken);
       if (saved?.selectedService) setSelectedService(saved.selectedService);
     } catch (e) {
       console.warn('Failed to restore chat session:', e);
@@ -239,6 +241,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       }
       const payload = {
         conversationId,
+        guestToken,
         selectedService,
         messages: messages.slice(-100).map(m => ({
           id: m.id,
@@ -251,12 +254,13 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     } catch {
       // ignore quota / privacy mode errors
     }
-  }, [messages, conversationId, selectedService]);
+  }, [messages, conversationId, guestToken, selectedService]);
 
   // Clear current chat thread (keeps user identity, drops conversation + messages)
   const clearChat = useCallback(() => {
     setMessages([]);
     setConversationId(null);
+    setGuestToken(null);
     setSelectedService(null);
     setSelectedShortcut(null);
     try { sessionStorage.removeItem('jbj_chat_session_v1'); } catch {}
@@ -397,22 +401,20 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     const pageSource = window.location.pathname;
     
     try {
-      const { data, error } = await supabase
-        .from('chat_conversations')
-        .insert({
-          user_email: userInfo.email,
-          user_name: fullName,
-          user_phone: userInfo.phone,
-          service_type: serviceId,
-          messages: [],
-          status: 'active',
-          page_source: pageSource,
-        })
-        .select('id')
-        .single();
+      const { data, error } = await supabase.functions.invoke('chat-session', {
+        body: {
+          action: 'create',
+          userEmail: userInfo.email,
+          userName: fullName,
+          userPhone: userInfo.phone,
+          serviceType: serviceId,
+          pageSource,
+        },
+      });
 
       if (error) throw error;
       setConversationId(data.id);
+      setGuestToken(data.guestToken);
 
       // Use backend edge function to save lead (bypasses RLS)
       const normalizedEmail = userInfo.email.toLowerCase().trim();
@@ -502,7 +504,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
    * the AI stops auto-answering once a human has joined.
    */
   useEffect(() => {
-    if (!conversationId) return;
+    if (!conversationId || !guestToken) return;
 
     const applyRemote = (row: { owner_joined?: boolean | null; messages?: unknown }) => {
       if (row.owner_joined) setOwnerJoined(true);
@@ -520,24 +522,26 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       });
     };
 
-    const channel = supabase
-      .channel(`visitor-chat-${conversationId}`)
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'chat_conversations', filter: `id=eq.${conversationId}` },
-        (payload) => applyRemote(payload.new as never),
-      )
-      .subscribe();
+    let active = true;
+    const poll = async () => {
+      const { data, error } = await supabase.functions.invoke('chat-session', {
+        body: { action: 'get', conversationId, guestToken },
+      });
+      if (active && !error && data) applyRemote(data);
+    };
+    void poll();
+    const timer = window.setInterval(poll, 3500);
 
     return () => {
-      supabase.removeChannel(channel);
+      active = false;
+      window.clearInterval(timer);
     };
-  }, [conversationId]);
+  }, [conversationId, guestToken]);
 
   // Save messages to database
 
   const saveMessagesToDb = async (newMessages: Message[]) => {
-    if (!conversationId) return;
+    if (!conversationId || !guestToken) return;
     
     try {
       const messagesForDb = newMessages.map(m => ({
@@ -546,13 +550,15 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         timestamp: m.timestamp.toISOString()
       }));
 
-      await supabase
-        .from('chat_conversations')
-        .update({ 
+      const { error } = await supabase.functions.invoke('chat-session', {
+        body: {
+          action: 'update',
+          conversationId,
+          guestToken,
           messages: messagesForDb,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', conversationId);
+        },
+      });
+      if (error) throw error;
     } catch (error) {
       console.error('Error saving messages:', error);
     }
@@ -700,7 +706,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, ownerJoined]);
+  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, guestToken, ownerJoined]);
 
   /**
    * Known visitor + a handed-off sentence = no onboarding. We open a general
@@ -731,10 +737,13 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       const serviceName = SERVICES.find(s => s.id === selectedService)?.label || selectedService || 'General';
       
       // 1) Update conversation and lead status (CRITICAL)
-      await supabase
-        .from('chat_conversations')
-        .update({ status: 'submitted_to_team' })
-        .eq('id', conversationId);
+      await supabase.functions.invoke('chat-session', {
+        body: {
+          action: 'update', conversationId, guestToken,
+          messages: messages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp.toISOString() })),
+          status: 'submitted_to_team',
+        },
+      });
 
       await supabase
         .from('leads')
@@ -863,20 +872,19 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       console.error('Error submitting to team:', error);
       toast.error('Failed to submit. Please try again.');
     }
-  }, [conversationId, userInfo, selectedService, messages, user]);
+  }, [conversationId, guestToken, userInfo, selectedService, messages, user]);
 
   // Handle rating submission
   const handleSubmitRating = async (rating: number, feedback: string) => {
-    if (conversationId && rating > 0) {
+    if (conversationId && guestToken && rating > 0) {
       try {
-        await supabase
-          .from('chat_conversations')
-          .update({ 
-            rating,
-            rating_feedback: feedback || null,
-            status: 'completed'
-          })
-          .eq('id', conversationId);
+        await supabase.functions.invoke('chat-session', {
+          body: {
+            action: 'update', conversationId, guestToken,
+            messages: messages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp.toISOString() })),
+            rating, ratingFeedback: feedback || null, status: 'completed',
+          },
+        });
         
         toast.success('Thank you for your feedback!');
 
@@ -907,17 +915,15 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   // Handle feedback submission (new simplified feedback)
   const handleSubmitFeedback = async (feedback: { type: FeedbackType; rating: number; comment: string }) => {
-    if (conversationId) {
+    if (conversationId && guestToken) {
       try {
-        await supabase
-          .from('chat_conversations')
-          .update({ 
-            feedback_type: feedback.type,
-            rating: feedback.rating,
-            rating_feedback: feedback.comment || null,
-            status: 'completed'
-          })
-          .eq('id', conversationId);
+        await supabase.functions.invoke('chat-session', {
+          body: {
+            action: 'update', conversationId, guestToken,
+            messages: messages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp.toISOString() })),
+            rating: feedback.rating, ratingFeedback: feedback.comment || null, status: 'completed',
+          },
+        });
         
         toast.success('Thank you for your feedback!');
 

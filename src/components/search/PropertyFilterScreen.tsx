@@ -24,8 +24,6 @@ import {
   type SearchCategory,
 } from "@/lib/propertySearch";
 
-const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
-
 function Chip({
   on,
   onClick,
@@ -39,12 +37,8 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
-      className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all"
-      style={
-        on
-          ? { backgroundImage: EMERALD_PAIR, color: "#FFFFFF", border: "1px solid #042c1c" }
-          : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }
-      }
+      data-surface={on ? "emerald" : "pearl"}
+      className={on ? "jj-cta-emerald px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap" : "jj-cta-outline px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"}
     >
       {children}
     </button>
@@ -160,14 +154,14 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
         ) : null}
 
         <Section title="Property type">
-          <div className="grid grid-cols-2 gap-1 p-1 rounded-xl mb-2" style={{ background: "#F2EBDC" }}>
+            <div className="grid grid-cols-2 gap-1 p-1 rounded-xl mb-2 bg-muted">
             {(Object.keys(CATEGORY_TYPES) as SearchCategory[]).map((c) => (
               <button
                 key={c}
                 type="button"
                 onClick={() => set({ category: c, types: [] })}
-                className="h-8 rounded-lg text-xs font-semibold capitalize"
-                style={f.category === c ? { backgroundImage: EMERALD_PAIR, color: "#FFF" } : { color: "#1A1A1A" }}
+                data-surface={f.category === c ? "emerald" : "pearl"}
+                className={`h-8 rounded-lg text-xs font-semibold capitalize ${f.category === c ? "jj-cta-emerald" : "text-foreground"}`}
               >
                 {c}
               </button>
@@ -179,12 +173,8 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
                 key={t}
                 type="button"
                 onClick={() => set({ types: toggleIn(f.types, t) })}
-                className="h-9 rounded-full text-xs font-medium"
-                style={
-                  f.types.includes(t)
-                    ? { backgroundImage: EMERALD_PAIR, color: "#FFF" }
-                    : { background: "#FDFBF7", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }
-                }
+                data-surface={f.types.includes(t) ? "emerald" : "pearl"}
+                className={f.types.includes(t) ? "jj-cta-emerald h-9 rounded-full text-xs font-medium" : "jj-cta-outline h-9 rounded-full text-xs font-medium"}
               >
                 {t}
               </button>
@@ -333,8 +323,8 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
         <button
           type="button"
           onClick={onApply}
-          className="h-10 px-5 rounded-xl text-sm font-semibold text-white"
-          style={{ backgroundImage: EMERALD_PAIR }}
+          data-surface="emerald"
+          className="jj-cta-emerald h-10 px-5 rounded-xl text-sm font-semibold"
         >
           {count == null ? "Apply filters" : `Show ${count.toLocaleString()} propert${count === 1 ? "y" : "ies"}`}
         </button>

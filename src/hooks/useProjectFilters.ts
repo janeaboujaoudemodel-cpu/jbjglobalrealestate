@@ -60,12 +60,8 @@ export function useFilteredProjects(
     if (!projects) return [];
 
     let filtered = projects.filter((project) => {
-      // The catalogue query is sale-only and already excludes records whose
-      // listing_kind is "leasing". Never infer transaction type from marketing
-      // copy: sale projects frequently mention rental yield, which previously
-      // removed valid inventory from the Buy view. Until a rental catalogue is
-      // connected, Rent intentionally returns no projects.
-      if (filters.transactionType === 'rent') return false;
+      // The catalogue hook already scopes inventory by the explicit
+      // `listing_kind` field. Never infer transaction type from marketing copy.
 
       // Search filter
       if (filters.search) {

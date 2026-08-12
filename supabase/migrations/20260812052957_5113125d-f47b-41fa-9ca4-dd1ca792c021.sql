@@ -1,0 +1,1 @@
+REVOKE INSERT ON public.chat_conversations FROM anon;
