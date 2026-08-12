@@ -312,7 +312,7 @@ const CRMCalendar = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-[#B89555]/30 bg-[#FDFBF7] sticky top-0 lg:top-[48px] z-40">
+      <header className="border-b border-black/10 bg-white sticky top-0 lg:top-[48px] z-40">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/owner/crm">
@@ -343,7 +343,7 @@ const CRMCalendar = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* Calendar grid */}
-          <Card className="lg:col-span-2 border-[#B89555]/30 bg-[#FDFBF7]">
+          <Card className="lg:col-span-2 border-black/10 bg-white">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-lg font-bold text-[#1A1A1A]">{format(currentMonth, "MMMM yyyy")}</CardTitle>
               <div className="flex gap-2">
@@ -378,7 +378,7 @@ const CRMCalendar = () => {
                           ? "border-[#B89555]/60 bg-[#F7F2EA] ring-1 ring-[#B89555]/30"
                           : has
                           ? "border-[#B89555]/40 bg-[#EFE6D6]/60 hover:bg-[#EFE6D6]"
-                          : "border-[#B89555]/15 bg-[#FDFBF7] hover:bg-[#F7F2EA]"
+                          : "border-[#B89555]/15 bg-white hover:bg-[#F7F2EA]"
                       }`}
                     >
                       <span className={`text-sm tabular-nums ${isToday(day) ? "font-bold" : "font-medium"} text-[#1A1A1A]`}>
@@ -404,7 +404,7 @@ const CRMCalendar = () => {
           </Card>
 
           {/* Selected day panel */}
-          <Card className="border-[#B89555]/30 bg-[#FDFBF7]">
+          <Card className="border-black/10 bg-white">
             <CardHeader>
               <CardTitle className="text-base font-bold text-[#1A1A1A]">
                 {selectedDate ? format(selectedDate, "EEEE, MMMM d") : "Select a day"}
@@ -429,7 +429,7 @@ const CRMCalendar = () => {
                 selectedEvents.map((ev) => {
                   const meta = (ev.metadata || {}) as EventMeta;
                   return (
-                    <div key={ev.id} className="p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
+                    <div key={ev.id} className="p-3 rounded-lg bg-[#F7F2EA] border border-black/10">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0 flex-1">
                           <p className="font-semibold text-[#1A1A1A] truncate">{ev.title}</p>
@@ -467,7 +467,7 @@ const CRMCalendar = () => {
 
       {/* Add/Edit Event Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg bg-[#FDFBF7] border-[#B89555]/40">
+        <DialogContent className="max-w-lg bg-white border-[#B89555]/40">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <CalendarIcon className="h-5 w-5" />
@@ -504,7 +504,7 @@ const CRMCalendar = () => {
               <Input value={form.location} onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))}
                      placeholder="Office, Dubai Marina, or address…" className="bg-white border-[#B89555]/40" />
             </div>
-            <div className="rounded-lg border border-[#B89555]/30 p-3 space-y-2 bg-[#F7F2EA]/40">
+            <div className="rounded-lg border border-black/10 p-3 space-y-2 bg-[#F7F2EA]/40">
               <p className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5"><User className="h-3.5 w-3.5" /> Attendee</p>
               <div className="grid grid-cols-2 gap-2">
                 <Input placeholder="Name" value={form.attendeeName}
@@ -518,7 +518,7 @@ const CRMCalendar = () => {
                      onChange={(e) => setForm((p) => ({ ...p, attendeeEmail: e.target.value }))}
                      className="bg-white border-[#B89555]/40" />
             </div>
-            <div className="rounded-lg border border-[#B89555]/30 p-3 space-y-2 bg-[#F7F2EA]/40">
+            <div className="rounded-lg border border-black/10 p-3 space-y-2 bg-[#F7F2EA]/40">
               <p className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5"><Bell className="h-3.5 w-3.5" /> Reminders</p>
               <div className="flex flex-wrap gap-1.5">
                 {form.reminders.map((r, i) => (
@@ -533,7 +533,7 @@ const CRMCalendar = () => {
                   <span className="text-xs text-[#1A1A1A]/60">No reminders</span>
                 )}
               </div>
-              <div className="flex flex-wrap gap-1.5 pt-1 border-t border-[#B89555]/20">
+              <div className="flex flex-wrap gap-1.5 pt-1 border-t border-black/10">
                 <span className="text-[11px] text-[#1A1A1A]/60 self-center mr-1">Add:</span>
                 {presetMinutes.filter((m) => !form.reminders.some((r) => r.minutes === m)).map((m) => (
                   <button key={m} onClick={() => addReminder(m)}
