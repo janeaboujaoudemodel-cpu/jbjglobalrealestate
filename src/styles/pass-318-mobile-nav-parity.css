@@ -344,8 +344,13 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28) !important;
   }
-  html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] > * {
-    width: 20px !important;
+  html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] *:not(.jj-hamburger-bar):not(.jj-hamburger-close) {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    width: auto !important;
+    height: auto !important;
     max-width: 20px !important;
   }
   html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] :is(.jj-hamburger-bar, .jj-hamburger-close) {
