@@ -13,12 +13,16 @@ Deno.serve(async (req) => {
 
   const { data: rules } = await admin
     .from("inbox_sla_rules")
-    .select("urgency, hours_to_reply, is_active")
-    .eq("is_active", true);
+    .select("label, due_hours, warn_hours, active")
+    .eq("active", true);
 
   const hoursFor: Record<string, number> = { ...DEFAULTS };
+  const warnRatio: Record<string, number> = {};
   for (const rule of rules ?? []) {
-    if (rule.urgency && rule.hours_to_reply) hoursFor[rule.urgency] = rule.hours_to_reply;
+    if (rule.label && rule.due_hours) {
+      hoursFor[rule.label] = rule.due_hours;
+      if (rule.warn_hours) warnRatio[rule.label] = rule.warn_hours / rule.due_hours;
+    }
   }
 
   const { data: emails } = await admin
@@ -35,7 +39,8 @@ Deno.serve(async (req) => {
   for (const email of emails ?? []) {
     const limit = hoursFor[email.urgency ?? "normal"] ?? 24;
     const ageHours = (Date.now() - new Date(email.received_at).getTime()) / 3600000;
-    const state = ageHours >= limit ? "breached" : ageHours >= limit * 0.75 ? "at_risk" : "on_track";
+    const warnAt = limit * (warnRatio[email.urgency ?? "normal"] ?? 0.75);
+    const state = ageHours >= limit ? "breached" : ageHours >= warnAt ? "at_risk" : "on_track";
     if (state !== email.sla_state) {
       await admin.from("inbox_emails").update({
         sla_state: state,

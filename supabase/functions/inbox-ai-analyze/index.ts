@@ -40,11 +40,15 @@ Deno.serve(async (req) => {
     .maybeSingle();
   if (!email) return jsonResponse({ error: "Email not found" }, 404);
 
-  const { data: brain } = await admin
+  const { data: brainNotes } = await admin
     .from("inbox_ai_brain")
-    .select("guidance, tone, signature")
-    .eq("is_active", true)
-    .maybeSingle();
+    .select("title, content")
+    .order("created_at", { ascending: false })
+    .limit(8);
+  const guidance = (brainNotes ?? [])
+    .map((n) => `${n.title ? `${n.title}: ` : ""}${n.content}`)
+    .join("\n")
+    .slice(0, 4000);
 
   const content = (body.bodyText ?? email.body_text ?? email.snippet ?? "").slice(0, 12000);
 
@@ -58,7 +62,7 @@ Deno.serve(async (req) => {
       system:
         "You triage the inbox of JBJ Global Real Estate, a Dubai real-estate brokerage. " +
         "Classify accurately and write a one-sentence summary. Keep summary under 200 characters. " +
-        (brain?.guidance ? `Business context: ${brain.guidance}` : ""),
+        (guidance ? `Business context:\n${guidance}` : ""),
       prompt:
         `Subject: ${email.subject ?? "(no subject)"}\n` +
         `From: ${email.from_name ?? ""} <${email.from_email ?? ""}>\n\n` +

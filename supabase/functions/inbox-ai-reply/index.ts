@@ -25,11 +25,15 @@ Deno.serve(async (req) => {
     .maybeSingle();
   if (!email) return jsonResponse({ error: "Email not found" }, 404);
 
-  const { data: brain } = await admin
+  const { data: brainNotes } = await admin
     .from("inbox_ai_brain")
-    .select("guidance, tone, signature")
-    .eq("is_active", true)
-    .maybeSingle();
+    .select("title, content")
+    .order("created_at", { ascending: false })
+    .limit(8);
+  const guidance = (brainNotes ?? [])
+    .map((n) => `${n.title ? `${n.title}: ` : ""}${n.content}`)
+    .join("\n")
+    .slice(0, 4000);
 
   const gateway = createLovableAiGatewayProvider(key);
   const model = gateway("google/gemini-3-flash-preview");
@@ -41,9 +45,9 @@ Deno.serve(async (req) => {
         "You draft email replies for JBJ Global Real Estate, a Dubai real-estate brokerage. " +
         "Write a complete, ready-to-send reply in clean HTML paragraphs (no <html> or <body> wrapper). " +
         "Be precise and professional. Never invent prices, availability, or commitments. " +
-        `Tone: ${body.tone ?? brain?.tone ?? "warm, concise, institutional"}. ` +
-        (brain?.guidance ? `Business context: ${brain.guidance} ` : "") +
-        (brain?.signature ? `End with this signature block: ${brain.signature}` : ""),
+        `Tone: ${body.tone ?? "warm, concise, institutional"}. ` +
+        (guidance ? `Business context:\n${guidance}\n` : "") +
+        "Sign off as the JBJ Global Real Estate team.",
       prompt:
         `Reply to this email.${body.instruction ? ` Special instruction: ${body.instruction}` : ""}\n\n` +
         `Subject: ${email.subject ?? "(no subject)"}\n` +
@@ -62,9 +66,9 @@ Deno.serve(async (req) => {
           subject: `Re: ${email.subject ?? ""}`.trim(),
           to_email: email.from_email,
           body_html: html,
-          source: "ai",
-          status: "pending_review",
-          created_by: auth.userId || null,
+          mode: "reply",
+          generated_by: "ai",
+          approved: false,
         },
         { onConflict: "email_id" },
       ).select("id").single();

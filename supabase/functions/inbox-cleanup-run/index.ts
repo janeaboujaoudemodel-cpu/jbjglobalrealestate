@@ -16,8 +16,8 @@ Deno.serve(async (req) => {
 
   const rulesQuery = admin
     .from("inbox_cleanup_rules")
-    .select("id, name, action, older_than_days, match_category, match_from, only_read, is_active")
-    .eq("is_active", true);
+    .select("id, name, action, older_than_days, match_type, pattern, paused")
+    .eq("paused", false);
   if (body.ruleId) rulesQuery.eq("id", body.ruleId);
   const { data: rules } = await rulesQuery;
 
@@ -31,9 +31,9 @@ Deno.serve(async (req) => {
       .lt("received_at", cutoff)
       .in("folder", ["inbox", "spam"])
       .limit(200);
-    if (rule.match_category) query.eq("category", rule.match_category);
-    if (rule.match_from) query.ilike("from_email", `%${rule.match_from}%`);
-    if (rule.only_read) query.eq("is_unread", false);
+    if (rule.match_type === "category" && rule.pattern) query.eq("category", rule.pattern);
+    if (rule.match_type === "sender" && rule.pattern) query.ilike("from_email", `%${rule.pattern}%`);
+    if (rule.match_type === "subject" && rule.pattern) query.ilike("subject", `%${rule.pattern}%`);
 
     const { data: emails } = await query;
     let applied = 0;
@@ -44,6 +44,13 @@ Deno.serve(async (req) => {
         const res = await mirrorAction(admin, email as never, action, auth.userId || null);
         if (res.mirrored) applied++;
       }
+    }
+
+    if (!dryRun) {
+      await admin.from("inbox_cleanup_rules").update({
+        last_run_at: new Date().toISOString(),
+        affected_count: applied,
+      }).eq("id", rule.id);
     }
 
     summary.push({ rule: rule.name ?? rule.id, matched: emails?.length ?? 0, applied });

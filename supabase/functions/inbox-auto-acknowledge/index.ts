@@ -12,8 +12,8 @@ Deno.serve(async (req) => {
 
   const { data: rules } = await admin
     .from("inbox_auto_ack")
-    .select("id, account_id, subject, body_html, match_category, is_active, quiet_hours")
-    .eq("is_active", true);
+    .select("id, account_id, match_type, pattern, subject_template, body_template, enabled, sent_count")
+    .eq("enabled", true);
 
   if (!rules?.length) return jsonResponse({ success: true, sent: 0, reason: "No active auto-ack rules" });
 
@@ -28,7 +28,8 @@ Deno.serve(async (req) => {
       .order("received_at", { ascending: false })
       .limit(25);
     if (rule.account_id) query.eq("account_id", rule.account_id);
-    if (rule.match_category) query.eq("category", rule.match_category);
+    if (rule.match_type === "category" && rule.pattern) query.eq("category", rule.pattern);
+    if (rule.match_type === "sender" && rule.pattern) query.ilike("from_email", `%${rule.pattern}%`);
 
     const { data: emails } = await query;
     for (const email of emails ?? []) {
@@ -40,13 +41,16 @@ Deno.serve(async (req) => {
           secretRef: account.secret_ref,
           from: `${account.display_name ?? account.email_address} <${account.email_address}>`,
           to: email.from_email,
-          subject: rule.subject ?? `Re: ${email.subject ?? ""}`.trim(),
-          html: rule.body_html ?? "<p>Thank you for contacting JBJ Global Real Estate. Our team will respond shortly.</p>",
+          subject: rule.subject_template ?? `Re: ${email.subject ?? ""}`.trim(),
+          html: rule.body_template ?? "<p>Thank you for contacting JBJ Global Real Estate. Our team will respond shortly.</p>",
         });
         await admin.from("inbox_emails").update({
           auto_acked: true,
           auto_acked_at: new Date().toISOString(),
         }).eq("id", email.id);
+        await admin.from("inbox_auto_ack")
+          .update({ sent_count: (rule.sent_count ?? 0) + 1 })
+          .eq("id", rule.id);
         sent++;
       } catch (err) {
         await logInboxActivity(admin, {
