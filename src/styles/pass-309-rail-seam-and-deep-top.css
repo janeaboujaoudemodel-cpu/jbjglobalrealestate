@@ -86,3 +86,14 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div#ro
   stroke: #0A0A0A !important;
   opacity: 1 !important;
 }
+
+/* ═══════════ 5. No gold arch/sliver artifact on the collapsed rail ═══════════ */
+html body #root [data-chrome="sidebar"] .jj-rail-emerald-edge::before,
+html body #root [data-chrome="sidebar"] .jj-rail-emerald-edge::after,
+html body #root [data-chrome="sidebar"] .jj-side-tile::before,
+html body #root [data-chrome="sidebar"] .jj-side-tile::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  animation: none !important;
+}
