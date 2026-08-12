@@ -31,7 +31,7 @@ BASE = "http://localhost:8080"
 READY_FALLBACKS = ["main h1", "h1", "[data-report-page]", "main [data-loaded='1']"]
 
 
-async def capture(path: str, out: str, selector: str | None, width: int, height: int) -> int:
+async def capture(path: str, out: str, selector: str | None, width: int, height: int, scroll_y: int) -> int:
     url = f"{BASE}{path if path.startswith('/') else '/' + path}"
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
@@ -78,6 +78,8 @@ async def capture(path: str, out: str, selector: str | None, width: int, height:
             await page.evaluate("document.fonts && document.fonts.ready")
         except Exception:  # noqa: BLE001
             pass
+        if scroll_y > 0:
+            await page.evaluate("y => window.scrollTo({ top: y, behavior: 'instant' })", scroll_y)
         await page.wait_for_timeout(2500)
 
         text = await page.evaluate("document.querySelector('main')?.innerText?.trim() || document.body.innerText.trim()")
@@ -98,8 +100,9 @@ def main() -> None:
     ap.add_argument("--selector", default=None)
     ap.add_argument("--width", type=int, default=1280)
     ap.add_argument("--height", type=int, default=1800)
+    ap.add_argument("--scroll-y", type=int, default=0)
     args = ap.parse_args()
-    sys.exit(asyncio.run(capture(args.path, args.out, args.selector, args.width, args.height)))
+    sys.exit(asyncio.run(capture(args.path, args.out, args.selector, args.width, args.height, args.scroll_y)))
 
 
 if __name__ == "__main__":
