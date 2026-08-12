@@ -63,3 +63,15 @@ html[data-jbj-theme="sun"][data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data
   -webkit-text-fill-color: #0A0A0A !important;
   stroke: #0A0A0A !important;
 }
+
+/* Sign Out must sit exactly under Collapse / Keep Sidebar Open */
+html body div#root [data-chrome="sidebar"] .jj-rail-footer-inner
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+html body div#root [data-chrome="sidebar"] .jj-rail-footer-inner
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) > span {
+  flex: 1 1 auto !important;
+  text-align: left !important;
+}
