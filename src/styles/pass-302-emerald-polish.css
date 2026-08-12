@@ -200,3 +200,11 @@ html body #root [data-step-circle][data-step-circle][data-step-circle][data-step
   background: #ffffff !important;
   opacity: 1 !important;
 }
+
+html body #root [data-step-circle] svg,
+html body #root [data-step-circle] svg text,
+html body #root [data-step-circle][data-step-circle] svg text {
+  fill: #064e3b !important;
+  stroke: none !important;
+  color: #064e3b !important;
+}
