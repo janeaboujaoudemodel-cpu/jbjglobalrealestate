@@ -32,8 +32,6 @@
     filter: none !important;
   }
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-surface="dark"][data-header-surface],
-  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
     [data-chrome="header"] > header[data-surface][data-header-surface]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline,
         a[href="/"] span, a[href="/"] div, a[href="/"] p, a[href="/"] svg) {
