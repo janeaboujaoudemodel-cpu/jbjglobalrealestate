@@ -66,12 +66,8 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
       { label: "JBJ Hub", icon: Sparkles, path: "/owner/jbj-hub" },
       { label: "Document Studio", icon: FileText, path: "/owner/documents/forms" },
-      {
-        label: "CRM",
-        icon: Users,
-        path: "/owner/crm",
-      },
       { label: "JBJ CRM", icon: Network, path: "/owner/crm/jbj" },
+
     ],
   },
   {

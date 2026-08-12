@@ -341,18 +341,23 @@ Deno.serve(async (req) => {
         }
 
         // ---- PUSH ----
+        // The JBJ calendar is one shared executive calendar: events can be
+        // authored by any owner account, so push is scoped by provider="jbj"
+        // (owner-only route) instead of a single owner_id, and is_cancelled is
+        // matched null-safely (legacy rows were inserted without the flag).
+        let candidates = 0;
         if (state.push_enabled !== false && !lastError) {
           try {
             const { data: locals } = await db
               .from("owner_calendar_events")
               .select("id, title, description, location, start_at, end_at, metadata, attendees, updated_at, last_synced_at")
-              .eq("owner_id", ownerId)
               .eq("provider", "jbj")
-              .eq("is_cancelled", false)
+              .or("is_cancelled.is.null,is_cancelled.eq.false")
               .gte("start_at", from)
               .lte("start_at", to)
               .limit(200);
 
+            candidates = (locals ?? []).length;
             for (const ev of locals ?? []) {
               const meta = (ev.metadata ?? {}) as any;
               const sync = (meta.sync ?? {}) as Record<string, string>;
@@ -374,6 +379,7 @@ Deno.serve(async (req) => {
           }
         }
 
+
         const { data: saved } = await db
           .from("owner_calendar_sync_state")
           .upsert(
@@ -391,7 +397,7 @@ Deno.serve(async (req) => {
           .select()
           .maybeSingle();
 
-        results.push({ provider, pulled, pushed, error: lastError, state: saved });
+        results.push({ provider, pulled, pushed, push_candidates: candidates, error: lastError, state: saved });
       }
 
       return json({ ok: true, results });

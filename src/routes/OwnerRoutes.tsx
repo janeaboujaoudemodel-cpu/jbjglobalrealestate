@@ -218,7 +218,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-overview" element={<OwnerDashboardOverview />} />
     <Route path="owner-jbj-hub" element={<JbjHub />} />
     <Route path="owner-documents-forms" element={<DocumentsFormsHub />} />
-    <Route path="owner-unified-crm" element={<UnifiedCRM />} />
+    <Route path="owner-unified-crm" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="owner-crm-workspace" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="owner-data-hub" element={<DataHub />} />
     <Route path="owner-brokerages" element={<BrokeragePortal />} />
@@ -342,7 +342,7 @@ export const OwnerRoutes = () => (
     <Route path="e-signature/:id" element={<LegacyOwnerEnvelopeDetail />} />
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
-    <Route path="crm" element={<UnifiedCRM />} />
+    <Route path="crm" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="crm/zoho" element={<Navigate to="/owner/crm/jbj" replace />} />
     {/* /owner/crm/jbj is mounted OUTSIDE this shell — see top of OwnerRoutes for the standalone route. */}
 
@@ -354,16 +354,16 @@ export const OwnerRoutes = () => (
     <Route path="hr/employee/:userId" element={<EmployeeProfile />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
     <Route path="crm/sync-errors" element={<CRMSyncDeadLetters />} />
-    <Route path="crm/sync-conflicts" element={<Navigate to="/owner/crm" replace />} />
-    <Route path="crm/leads" element={<Navigate to="/owner/crm?entity=leads&view=all" replace />} />
-    <Route path="crm/tasks" element={<Navigate to="/owner/crm?entity=leads&view=tasks" replace />} />
-    <Route path="crm/calendar" element={<Navigate to="/owner/crm?entity=leads&view=calendar" replace />} />
-    <Route path="crm/notes" element={<Navigate to="/owner/crm?entity=leads&view=notes" replace />} />
-    <Route path="crm/reminders" element={<Navigate to="/owner/crm?entity=leads&view=notifications" replace />} />
-    <Route path="crm/inbox" element={<Navigate to="/owner/crm?entity=leads&view=inbox" replace />} />
-    <Route path="crm/contracts" element={<Navigate to="/owner/crm?entity=leads&view=contracts" replace />} />
-    <Route path="crm/automation" element={<Navigate to="/owner/crm?entity=leads&view=automation" replace />} />
-    <Route path="crm/employees" element={<Navigate to="/owner/crm?entity=employees&view=roster" replace />} />
+    <Route path="crm/sync-conflicts" element={<Navigate to="/owner/crm/jbj/home" replace />} />
+    <Route path="crm/leads" element={<Navigate to="/owner/crm/jbj/leads" replace />} />
+    <Route path="crm/tasks" element={<Navigate to="/owner/crm/jbj/tasks" replace />} />
+    <Route path="crm/calendar" element={<Navigate to="/owner/crm/jbj/calendar" replace />} />
+    <Route path="crm/notes" element={<Navigate to="/owner/crm/jbj/notes" replace />} />
+    <Route path="crm/reminders" element={<Navigate to="/owner/crm/jbj/home" replace />} />
+    <Route path="crm/inbox" element={<Navigate to="/owner/crm/jbj/salesinbox" replace />} />
+    <Route path="crm/contracts" element={<Navigate to="/owner/crm/jbj/documents" replace />} />
+    <Route path="crm/automation" element={<Navigate to="/owner/crm/jbj/automation" replace />} />
+    <Route path="crm/employees" element={<Navigate to="/owner/crm/jbj/owner-brokerages" replace />} />
     <Route path="broker-visits" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerBrokerVisits")))}</Suspense>} />
     <Route path="crm/relationships" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />
     <Route path="crm/relationship-hub" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />
@@ -482,10 +482,10 @@ export const OwnerRoutes = () => (
     <Route path="crm/relationships/activity" element={<Navigate to="/owner/crm/jbj/owner-relationships-activity" replace />} />
     <Route path="crm/relationships/hub" element={<Navigate to="/owner/crm/jbj/owner-relationships-activity" replace />} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/jbj/owner-relationships-activity" replace />} />
-    <Route path="crm/brokers" element={<Navigate to="/owner/crm?entity=brokers&view=directory" replace />} />
+    <Route path="crm/brokers" element={<Navigate to="/owner/crm/jbj/owner-brokerages" replace />} />
     <Route path="crm/integrity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/DataIntegrityCheck")))}</Suspense>} />
-    <Route path="crm/network" element={<Navigate to="/owner/crm?entity=developers&view=registry" replace />} />
-    <Route path="crm/campaigns" element={<Navigate to="/owner/crm?entity=leads&view=campaigns" replace />} />
+    <Route path="crm/network" element={<Navigate to="/owner/crm/jbj/owner-developers" replace />} />
+    <Route path="crm/campaigns" element={<Navigate to="/owner/crm/jbj/campaigns" replace />} />
    <Route path="crm/company/:type/:name" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CompanyHubPage")))}</Suspense>} />
    <Route path="crm/person/:variant/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/PersonHubPage")))}</Suspense>} />
    <Route path="crm/brokers/:brokerId" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokerProfile")))}</Suspense>} />
