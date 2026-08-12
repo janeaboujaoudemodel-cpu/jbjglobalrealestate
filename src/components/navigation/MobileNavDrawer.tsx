@@ -13,7 +13,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  ChevronDown, LogOut, User, Search, HelpCircle, Headphones, Ticket, X,
+  ChevronDown, LogOut, User, Search, HelpCircle, Headphones, Heart, Ticket, X,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -213,8 +213,8 @@ export default function MobileNavDrawer({
           </button>
         </div>
 
-        {/* Quick actions — search, account, language, currency, mode, theme */}
-        <div className="jj-drawer-quick shrink-0 grid grid-cols-5 items-end gap-1 px-2 py-2">
+        {/* Quick actions — three wide targets, no clipped labels */}
+        <div className="jj-drawer-quick shrink-0 grid grid-cols-3 gap-1 px-2 py-2">
           <button
             type="button"
             onClick={() => { onClose(); onOpenSearch?.(); }}
@@ -222,7 +222,7 @@ export default function MobileNavDrawer({
             style={rowStyle}
           >
             <Search className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
-            <span className="text-[9px] font-medium">Search</span>
+            <span className="text-[10px] font-medium">Search</span>
           </button>
           <Link
             to={user ? "/my-account" : "/auth"}
@@ -231,11 +231,33 @@ export default function MobileNavDrawer({
             style={rowStyle}
           >
             <User className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
-            <span className="text-[9px] font-medium">{user ? "Account" : "Sign In"}</span>
+            <span className="text-[10px] font-medium">{user ? "Account" : "Sign In"}</span>
           </Link>
-          <div className="flex items-center justify-center min-h-11"><LanguageSwitcher variant="icon-only" /></div>
-          <div className="flex items-center justify-center min-h-11"><CurrencySwitcher variant="icon-only" /></div>
-          <div className="flex items-center justify-center min-h-11"><ModeSwitcher variant="compact" showForUnselected /></div>
+          <Link
+            to="/shortlist"
+            onClick={onClose}
+            className="flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
+            style={rowStyle}
+          >
+            <Heart className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
+            <span className="text-[10px] font-medium">Shortlist</span>
+          </Link>
+        </div>
+
+        {/* Language, currency and mode get full-width rows so no label is clipped */}
+        <div className="jj-drawer-prefs shrink-0 flex flex-col gap-1 px-3 pb-2">
+          <div className="flex items-center justify-between min-h-11 gap-3">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={rowStyle}>Language</span>
+            <LanguageSwitcher variant="compact" />
+          </div>
+          <div className="flex items-center justify-between min-h-11 gap-3">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={rowStyle}>Currency</span>
+            <CurrencySwitcher variant="default" />
+          </div>
+          <div className="flex items-center justify-between min-h-11 gap-3">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={rowStyle}>Your mode</span>
+            <ModeSwitcher variant="compact" showForUnselected />
+          </div>
         </div>
 
         <span aria-hidden className="jj-drawer-rule h-px mx-3 shrink-0" />
