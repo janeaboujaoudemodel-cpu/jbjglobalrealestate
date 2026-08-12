@@ -772,6 +772,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       data-home-mobile-header={homeMobileFiberglassActive ? "true" : undefined}
       data-mobile-fiberglass={(showMobileFiberglass || homeMobileFiberglassActive) ? "true" : undefined}
       data-header-surface={headerSurface}
+      data-header-scrolled={showSolidBackground ? "true" : "false"}
       data-surface={headerSurface === "dark" ? "dark" : "champagne"}
       data-tour-target="header"
 
