@@ -5780,6 +5780,7 @@ export type Database = {
           agent_behavior_rating: number | null
           created_at: string
           feedback_type: string | null
+          guest_token_hash: string | null
           how_heard_about_us: string | null
           id: string
           identity_verified: boolean
@@ -5811,6 +5812,7 @@ export type Database = {
           agent_behavior_rating?: number | null
           created_at?: string
           feedback_type?: string | null
+          guest_token_hash?: string | null
           how_heard_about_us?: string | null
           id?: string
           identity_verified?: boolean
@@ -5842,6 +5844,7 @@ export type Database = {
           agent_behavior_rating?: number | null
           created_at?: string
           feedback_type?: string | null
+          guest_token_hash?: string | null
           how_heard_about_us?: string | null
           id?: string
           identity_verified?: boolean
