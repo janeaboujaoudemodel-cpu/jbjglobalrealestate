@@ -1332,10 +1332,10 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 title="Sign Out"
                 aria-label="Sign Out"
                 className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
-                style={{ color: '#FFFFFF', borderWidth: 0, height: '42px', minHeight: '42px', background: 'transparent', boxShadow: 'none' }}
+                style={{ borderWidth: 0, height: '42px', minHeight: '42px', background: 'transparent', boxShadow: 'none' }}
               >
-                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" strokeWidth={2.4} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <span data-signout-label className="whitespace-nowrap" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
+                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" strokeWidth={2.4} />
+                <span data-signout-label className="whitespace-nowrap" style={{ whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
               </button>
             ) : (
               <Link
@@ -1343,17 +1343,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 data-no-contrast-guard
                 data-on-dark
                 data-sidebar-auth-control
-                className="jj-emerald-metallic allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
+                className="allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
                 style={{
                   color: '#FFFFFF',
-                  borderColor: '#B89555',
                   borderWidth: 0,
-                  borderRadius: '8px',
                   height: '42px',
                   minHeight: '42px',
-                  background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
-                  backgroundImage: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
-                  boxShadow: '0 4px 12px -4px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
+                  background: 'transparent',
+                  boxShadow: 'none',
                 }}
               >
                 <User className="allow-white w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -1364,23 +1361,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
             {/* Collapse — emerald filled with white glyph + label */}
             <button
               data-sidebar-collapse-control
-              data-on-dark
-              data-allow-dark-cta
+              data-no-contrast-guard
               onClick={toggleCollapse}
               aria-label="Collapse navigation"
-              className="jj-emerald-metallic allow-white group flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
-              style={{
-                color: '#FFFFFF',
-                background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
-                backgroundImage: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
-                borderColor: 'rgba(255,255,255,0.22)',
-                boxShadow: '0 4px 12px -4px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundImage = 'linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundImage = 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)'; }}
+              className="allow-white group flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
+              style={{ background: 'transparent', borderWidth: 0, boxShadow: 'none' }}
             >
-              <PanelLeftClose className="allow-white w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-              <span className="allow-white whitespace-nowrap" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Collapse</span>
+              <PanelLeftClose className="w-4 h-4 shrink-0" strokeWidth={2.2} />
+              <span className="whitespace-nowrap" style={{ whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Collapse</span>
             </button>
           </div>
         </div>
@@ -1397,7 +1385,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[42px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground">
+        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[59px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
           <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
             <Link to="/">

@@ -7,6 +7,7 @@ import"./index.css";
 import"./styles/theme-moon.css";
 import"./styles/pass-302-emerald-polish.css";
 import"./styles/pass-303-skin-parity.css";
+import"./styles/pass-305-sun-champagne-parity.css";
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";
 import { installLazyImageEnforcer } from"@/utils/lazyImageEnforcer";

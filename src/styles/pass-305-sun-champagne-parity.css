@@ -1,0 +1,213 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 305 — SUN CHAMPAGNE PARITY & DEEP-START LONG SURFACES (LOCKED)
+
+   1) SUN = GOLD CHAMPAGNE CHROME. Vertical sidebar, horizontal utility
+      bar, mobile drawer and the developer marquee all wear the champagne
+      gradient with pure BLACK ink in Sun. Emerald chrome is Moon-only.
+   2) MOON = APPROVED EMERALD OMBRE with pure white ink (unchanged), but
+      long surfaces START DARKER — never a bright green top edge.
+   3) NO SHARP SEAM under the brand/monogram band — the header shares the
+      rail surface with no divider, ring or shadow.
+   4) PREMIUM RAIL FOOTER — Sign Out / Collapse are plain words with a
+      hairline divider above, never filled buttons, in BOTH skins.
+   5) COLLAPSED RAIL = 59px (40% bigger than 42px).
+   6) ANIMATED RAIL EDGE = dark emerald → black only, never bright green.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Long surfaces (rail, header, marquee): already-deep start, no bright top. */
+  --jj-long-emerald-v: linear-gradient(180deg, #04382a 0%, #032015 46%, #000000 100%);
+  --jj-long-emerald-h: linear-gradient(90deg, #04382a 0%, #032015 50%, #000000 100%);
+  --jj-long-emerald-d: linear-gradient(160deg, #04382a 0%, #032015 52%, #000000 100%);
+  --jj-champagne-long-v: linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-champagne-long-h: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-champagne-long-d: linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+}
+
+/* ═══════════ 1. SUN — champagne chrome, black ink ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] > div > div > div {
+  background-color: #F7F1E4 !important;
+  background: var(--jj-champagne-long-v) !important;
+  background-image: var(--jj-champagne-long-v) !important;
+  box-shadow: none !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-jj-utility-bar],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-jj-mobile-drawer] {
+  background-color: #F7F1E4 !important;
+  background: var(--jj-champagne-long-h) !important;
+  background-image: var(--jj-champagne-long-h) !important;
+  box-shadow: none !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-emerald-surface="true"].w-full {
+  background-color: #F7F1E4 !important;
+  background: var(--jj-champagne-long-d) !important;
+  background-image: var(--jj-champagne-long-d) !important;
+}
+
+/* Sun ink: pure black on every champagne chrome surface. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-chrome="sidebar"] [data-sidebar-emerald], [data-jj-utility-bar], [data-jj-mobile-drawer], [data-partners-marquee])
+  :is(a, button, span, p, strong, small, label, svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] .jj-side-tile :is(svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald]
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald]
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) :is(span, svg, path) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+/* Footer controls live in both the rail and the mobile drawer — ink both. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) :is(span, svg, path, [data-signout-label], [data-signout-icon]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+/* Sun monogram + partner logos are black knockouts on champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] img[alt="JBJ"],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] .jj-partner-mark img {
+  filter: brightness(0) saturate(0) !important;
+}
+/* Sun hairlines inside chrome are emerald-tinted, never white. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-chrome="sidebar"] [data-sidebar-emerald], [data-jj-utility-bar]) :is(hr, [aria-hidden="true"].h-px) {
+  background: rgba(6, 78, 59, 0.22) !important;
+  background-image: none !important;
+  border-color: rgba(6, 78, 59, 0.22) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] .jj-rail-brand-link:hover,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile:hover {
+  background: rgba(6, 78, 59, 0.07) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .jj-side-tile.is-active {
+  background: rgba(6, 78, 59, 0.10) !important;
+}
+/* Sun rail edge — soft emerald hairline, no animated bright band. */
+html[data-jbj-theme="sun"] body #root .jj-rail-emerald-edge::after {
+  background: linear-gradient(180deg, rgba(6,78,59,0.28) 0%, rgba(6,78,59,0.16) 50%, rgba(6,78,59,0.28) 100%) !important;
+  animation: none !important;
+  width: 1px !important;
+}
+
+/* ═══════════ 2. MOON — deep-start emerald on long surfaces ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] > div > div > div {
+  background: var(--jj-long-emerald-v) !important;
+  background-image: var(--jj-long-emerald-v) !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jj-utility-bar],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jj-mobile-drawer] {
+  background: var(--jj-long-emerald-h) !important;
+  background-image: var(--jj-long-emerald-h) !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee],
+html body #root [data-emerald-surface="true"].w-full[data-partners-marquee] {
+  background-color: #032015 !important;
+  background: var(--jj-long-emerald-d) !important;
+  background-image: var(--jj-long-emerald-d) !important;
+  border-block-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* ═══════════ 3. No sharp seam under the brand band ═══════════ */
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row],
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row] *,
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row] + * {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row]::after,
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row]::before {
+  display: none !important;
+  content: none !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row] {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* ═══════════ 4. Premium rail footer — words, not buttons ═══════════ */
+html body #root [data-chrome="sidebar"]
+  :is([data-sidebar-auth-control], [data-sidebar-collapse-control]) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  letter-spacing: 0.06em !important;
+}
+html body #root [data-chrome="sidebar"]
+  :is([data-sidebar-auth-control], [data-sidebar-collapse-control]):hover {
+  background: transparent !important;
+  opacity: 0.78 !important;
+}
+
+/* ═══════════ 5. Collapsed rail = 59px ═══════════ */
+@media (min-width: 1024px) {
+  body.jj-vertical-nav-collapsed {
+    --jj-shell-sidebar-w: 59px !important;
+    --jj-shell-main-w: calc(100vw - 59px) !important;
+  }
+  html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] [data-sidebar-emerald] {
+    width: 59px !important;
+    min-width: 59px !important;
+  }
+  html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] img[alt="JBJ"] {
+    width: 46px !important;
+    height: 50px !important;
+  }
+  html body.jj-vertical-nav-collapsed #root .jj-side-tile {
+    width: 46px !important;
+    height: 42px !important;
+  }
+  html body.jj-vertical-nav-collapsed #root main.jj-main-shell > :not(.jj-home-hero):not([data-partners-marquee]) {
+    scroll-margin-left: 28px;
+  }
+}
+
+/* ═══════════ 6. Animated rail edge — dark emerald → black only ═══════════ */
+html[data-jbj-theme="moon"] body #root .jj-rail-emerald-edge::after {
+  background: linear-gradient(180deg, #04382a 0%, #000000 26%, #04382a 52%, #000000 78%, #04382a 100%) !important;
+  background-size: 100% 200% !important;
+  opacity: 0.95 !important;
+}
+
+/* Footer control ink per skin — Moon = pure white, Sun = pure black. */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]),
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) :is(span, svg, path, [data-signout-label], [data-signout-icon]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Sun marquee heading + divider read black on champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-heading] :is(p, span, h2, h3),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] [data-partners-heading] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+/* Partners heading ink follows the skin (no hardcoded white in markup). */
+html[data-jbj-theme="sun"] body #root .jj-partners-heading-ink {
+  color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important;
+}
+html[data-jbj-theme="moon"] body #root .jj-partners-heading-ink {
+  color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
+}
+html[data-jbj-theme="sun"] body #root [data-partners-heading] span[aria-hidden] {
+  background: rgba(6,78,59,0.35) !important;
+}
