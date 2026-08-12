@@ -118,10 +118,22 @@ export default function AdvisoryDeskQueue() {
           {tickets.map((t) => {
             const active = t.id === selectedId;
             return (
-              <button
+              /* PASS 299 — the CRM shell forces `button { display:flex }`, which
+                 collapsed these ticket cards into one overlapping row. A
+                 role=button div keeps the block layout intact. */
+              <div
                 key={t.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => setParams({ request: t.id })}
-                className={`w-full rounded-xl border p-4 text-left transition-colors ${
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setParams({ request: t.id });
+                  }
+                }}
+                style={{ display: "block" }}
+                className={`w-full cursor-pointer rounded-xl border p-4 text-left transition-colors ${
                   active ? "jj-surface-emerald text-white border-transparent" : "border-border bg-card hover:border-primary/40"
                 }`}
               >
@@ -169,7 +181,7 @@ export default function AdvisoryDeskQueue() {
                 <p className={`mt-2 text-[11px] ${active ? "text-white/70" : "text-muted-foreground"}`}>
                   {new Date(t.created_at).toLocaleString()} · {t.source || "chat"}
                 </p>
-              </button>
+              </div>
             );
           })}
         </div>
