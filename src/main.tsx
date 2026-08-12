@@ -13,6 +13,7 @@ import"./styles/pass-307-deep-start-and-sun-footer.css";
 import"./styles/pass-308-footer-parity-strap-emerald.css";
 import"./styles/pass-309-rail-seam-and-deep-top.css";
 import"./styles/pass-310-deep-rail-and-seam-lock.css";
+import"./styles/pass-311-photo-card-white-ink.css";
 
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";

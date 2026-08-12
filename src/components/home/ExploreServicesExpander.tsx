@@ -147,12 +147,12 @@ const ExploreServicesExpander = () => {
               style={
                 isActive
                   ? {
-                      color: "#0A0A0A",
-                      WebkitTextFillColor: "#0A0A0A",
-                      backgroundImage: "none",
-                      backgroundColor: "#FFFFFF",
+                      color: "#FFFFFF",
+                      WebkitTextFillColor: "#FFFFFF",
+                      backgroundImage: "linear-gradient(180deg, #075B44 0%, #05412f 55%, #032015 100%)",
+                      backgroundColor: "#043524",
                       boxShadow:
-                        "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -2px 0 rgba(10,10,10,0.18)",
+                        "inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -3px 0 rgba(201,168,106,0.95)",
                     }
                   : { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
               }
@@ -162,12 +162,12 @@ const ExploreServicesExpander = () => {
               } ${s.available === false ? "opacity-80" : ""}`}
             >
               <Icon
-                className={`w-4 h-4 ${isActive ? "" : "allow-white"}`}
-                style={isActive ? { color: "#0A0A0A", stroke: "#0A0A0A" } : { color: "#FFFFFF", stroke: "#FFFFFF" }}
+                className="w-4 h-4 allow-white"
+                style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
               />
               <span
-                className={isActive ? "" : "allow-white"}
-                style={isActive ? { color: "#0A0A0A", WebkitTextFillColor: "#0A0A0A" } : { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                className="allow-white"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >{s.title}</span>
             </button>
           );
