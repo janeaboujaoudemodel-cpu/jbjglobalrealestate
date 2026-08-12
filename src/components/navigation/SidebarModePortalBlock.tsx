@@ -70,7 +70,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
   }
 
   return (
-    <div className="pt-0 pb-1" data-sidebar-mode-portal-shell>
+    <div className="pt-0 pb-0" data-sidebar-mode-portal-shell>
       <Link
         to={cfg.href}
         data-no-contrast-guard
