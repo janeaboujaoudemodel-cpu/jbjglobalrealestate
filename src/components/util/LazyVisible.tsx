@@ -52,10 +52,17 @@ export default function LazyVisible({
       setVisible(true);
       return;
     }
-    // Safety net: IntersectionObserver can remain silent when this placeholder
-    // is first measured inside a transitioning/previously hidden ancestor.
-    // Never leave a real section as a permanent empty reserved panel.
-    const fallbackTimer = window.setTimeout(() => setVisible(true), 2000);
+    // Mount immediately when already inside the generous preload corridor.
+    // Waiting for the observer's next delivery left visible homepage bands as
+    // blank reserved panels on slower devices.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight + 1200 && rect.bottom > -1200) {
+      setVisible(true);
+      return;
+    }
+    // Keep a short safety net for elements initially measured in a hidden or
+    // transitioning ancestor, without imposing the old two-second blank gap.
+    const fallbackTimer = window.setTimeout(() => setVisible(true), 300);
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {

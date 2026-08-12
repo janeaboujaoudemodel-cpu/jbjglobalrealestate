@@ -34,7 +34,7 @@ import { UserAvatarPremium } from "@/components/account/UserAvatarPremium";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import ModeSwitcher from "@/components/ModeSwitcher";
-import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
+import GlobalSearchModal, { preloadGlobalSearchModal } from "@/components/GlobalSearchModalLazy";
 import { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
@@ -59,6 +59,18 @@ const MegaMenuInsights = lazy(() => import("@/components/header/MegaMenuInsights
 // MegaMenuSearch removed — search opens GlobalSearchModal directly
 const MegaMenuLanguage = lazy(() => import("@/components/header/MegaMenuLanguage"));
 const MegaMenuAccount = lazy(() => import("@/components/header/MegaMenuAccount"));
+
+const preloadHeaderMenus = () => Promise.allSettled([
+  import("@/components/header/MegaMenuBuy"),
+  import("@/components/header/MegaMenuSell"),
+  import("@/components/header/MegaMenuRent"),
+  import("@/components/header/MegaMenuProjects"),
+  import("@/components/header/MegaMenuDevelopers"),
+  import("@/components/header/MegaMenuAreas"),
+  import("@/components/header/MegaMenuInsights"),
+  import("@/components/header/MegaMenuLanguage"),
+  import("@/components/header/MegaMenuAccount"),
+]);
 
 
 /** Suspense wrapper so on-demand menu chunks never blank the header. */
@@ -116,6 +128,22 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const isTouchLayout = useIsTouchLayout();
   const { data: alertCounts } = useUserAlerts();
   const totalUserAlerts = alertCounts?.totalNotificationAlerts || 0;
+
+  // Warm interaction-only chunks after first paint. The first dropdown/search
+  // interaction should reveal UI immediately rather than wait on a cold chunk.
+  useEffect(() => {
+    const warm = () => {
+      void preloadHeaderMenus();
+      preloadGlobalSearchModal();
+    };
+    const idleWindow = window as Window & { requestIdleCallback?: (cb: () => void, options?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
+    if (idleWindow.requestIdleCallback) {
+      const id = idleWindow.requestIdleCallback(warm, { timeout: 1200 });
+      return () => idleWindow.cancelIdleCallback?.(id);
+    }
+    const id = window.setTimeout(warm, 250);
+    return () => window.clearTimeout(id);
+  }, []);
 
   // Listen for filter-bar-fixed class on body to hide header
   useEffect(() => {

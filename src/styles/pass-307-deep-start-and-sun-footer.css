@@ -18,11 +18,11 @@
 :root,
 html[data-jbj-theme],
 html[data-jbj-theme] body {
-  --jj-long-emerald-v: linear-gradient(180deg, #032015 0%, #021b12 42%, #000000 100%);
-  --jj-long-emerald-h: linear-gradient(90deg, #032015 0%, #021b12 46%, #000000 100%);
-  --jj-long-emerald-d: linear-gradient(160deg, #032015 0%, #021b12 46%, #000000 100%);
+  --jj-long-emerald-v: linear-gradient(180deg, #064E3B 0%, #032c20 36%, #000000 100%);
+  --jj-long-emerald-h: linear-gradient(90deg, #032015 0%, #064E3B 62%, #021b12 82%, #000000 100%);
+  --jj-long-emerald-d: linear-gradient(145deg, #064E3B 0%, #032c20 44%, #000000 100%);
   /* Cards/bands that used the bright emerald ink gradient. */
-  --gradient-ink: linear-gradient(135deg, #032015 0%, #021b12 46%, #000000 100%);
+  --gradient-ink: linear-gradient(135deg, #064E3B 0%, #032c20 46%, #000000 100%);
 }
 
 /* Bright emerald block fills behind the ink gradient (headers of the
@@ -105,4 +105,49 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])[data-jbj-theme="sun"
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   fill: none !important;
+}
+
+/* Sun rail portal and account controls use black ink on champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"]
+  :is([data-sidebar-mode-portal], [data-sidebar-mode-portal] *, [role="group"][aria-label="Theme"], [role="group"][aria-label="Theme"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* Preserve the requested deep monogram band while lifting the rail below it. */
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-emerald] {
+  background-image: var(--jj-long-emerald-v) !important;
+}
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-brand-row] {
+  background-color: #032015 !important;
+  background-image: none !important;
+}
+
+/* Premium in-sidebar theme selector: emerald-black, compact, legible in both skins. */
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle {
+  background: var(--jj-long-emerald-h) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  padding: 4px !important;
+}
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle button,
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle button * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle button[aria-pressed="true"] {
+  background: rgba(255,255,255,0.18) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28) !important;
+}
+
+/* Final Sun footer lock: outrank the legacy global emerald-own-surface rule. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root
+  [data-chrome="sidebar"] [data-sidebar-collapse-control]:has(> span) > :is(span, svg, svg *),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root
+  [data-chrome="sidebar"] [data-signout-action] > :is(span, svg, svg *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
 }

@@ -61,9 +61,8 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
           className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
         >
           <Icon
-            className="w-4 h-4 allow-white"
+            className="w-4 h-4"
             strokeWidth={2.1}
-            style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
           />
         </span>
       </Link>
@@ -96,23 +95,17 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
           className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
         >
           <Icon
-            className="w-4 h-4 allow-white"
+            className="w-4 h-4"
             strokeWidth={2.1}
-            style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
           />
         </span>
         <span
           className="flex-1 min-w-0 text-left text-[11px] uppercase tracking-[0.08em] leading-[1.15] font-extrabold whitespace-normal break-words [overflow-wrap:anywhere]"
-          style={{
-            color: "#FFFFFF",
-            WebkitTextFillColor: "#FFFFFF",
-          }}
         >
           {cfg.label}
         </span>
         <ChevronRight
           className="w-4 h-4 flex-shrink-0 opacity-60"
-          style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
         />
       </Link>
     </div>
