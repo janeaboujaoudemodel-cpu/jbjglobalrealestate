@@ -109,3 +109,14 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [role="ta
   -webkit-text-fill-color: #0A0A0A !important;
   stroke: #0A0A0A !important;
 }
+
+/* ═══════════ 6. Sun rail footer ink = black ═══════════
+   Sign In / Sign Out and the Expand/Collapse control in the champagne rail
+   are always black ink — never gold, never white. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] :is([data-sidebar-auth-control], [data-sidebar-collapse-control], [data-signout-action]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] :is([data-sidebar-auth-control], [data-sidebar-collapse-control], [data-signout-action]) :is(span, svg, svg *, path) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  opacity: 1 !important;
+}
