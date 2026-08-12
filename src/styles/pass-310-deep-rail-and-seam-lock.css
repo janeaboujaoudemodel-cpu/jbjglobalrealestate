@@ -1,0 +1,73 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 310 — DEEP-TOP RAIL (WINNING SPECIFICITY) + NO WHITE SEAM
+
+   Two pending items from earlier passes were still not landing:
+
+   1) DEEP-TOP EMERALD RAIL. Pass-309 set the deep-top gradient, but
+      `pass-305` carries a higher-specificity rule
+      (`html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) …`)
+      that repainted the rail with `--jj-long-emerald-v` (bright #064E3B
+      at the very top). The rail is re-declared here with a selector that
+      outranks every earlier rule, in both collapsed and expanded states.
+
+   2) NO WHITE SEAM UNDER THE HEADER. In Moon the page canvas is light
+      (#F5F7F6), so any frame where the homepage hero media has not
+      painted yet exposes a pale strip directly beneath the 56px utility
+      bar. The first 160px of the homepage shell is now emerald, so the
+      seam can only ever read as chrome — never white.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Rail — darkest at the top, slight mid lift, black bottom ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]):not([data-x])
+  body div#root div[data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald],
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"]):not([data-x])
+  body div#root div[data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] {
+  background-color: #01120b !important;
+  background: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #02180f 14%,
+    #043524 46%,
+    #02170f 74%,
+    #000000 100%
+  ) !important;
+  background-image: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #02180f 14%,
+    #043524 46%,
+    #02170f 74%,
+    #000000 100%
+  ) !important;
+}
+
+/* Brand band stays the deepest tone, full bleed, one surface. */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]):not([data-x])
+  body div#root div[data-chrome="sidebar"] [data-sidebar-brand-row][data-sidebar-brand-row],
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"]):not([data-x])
+  body div#root div[data-chrome="sidebar"] [data-sidebar-brand-row][data-sidebar-brand-row] {
+  background-color: #01120b !important;
+  background: linear-gradient(180deg, #01120b 0%, #02180f 100%) !important;
+  background-image: linear-gradient(180deg, #01120b 0%, #02180f 100%) !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+}
+
+/* ═══════════ 2. Homepage seam under the header is chrome, never white ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body[data-homepage="true"] #root main.jj-main-shell,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body[data-homepage="true"] #root main.jj-main-shell > div > .jj-page-shell {
+  background: linear-gradient(
+    180deg,
+    #01120b 0px,
+    #02180f 160px,
+    var(--jbj-moon-canvas, #F5F7F6) 160px
+  ) !important;
+  background-image: linear-gradient(
+    180deg,
+    #01120b 0px,
+    #02180f 160px,
+    var(--jbj-moon-canvas, #F5F7F6) 160px
+  ) !important;
+}
