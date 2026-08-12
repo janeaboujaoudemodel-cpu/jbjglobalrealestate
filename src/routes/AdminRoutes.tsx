@@ -15,6 +15,7 @@ const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const AdminCRM = lazy(() => import("@/pages/AdminCRM"));
 const AdminChatDashboard = lazy(() => import("@/pages/admin/AdminChatDashboard"));
+const AdminInbox = lazy(() => import("@/pages/admin/AdminInbox"));
 const AdminIntelligence = lazy(() => import("@/pages/admin/AdminIntelligence"));
 const InquiryManagementHub = lazy(() => import("@/pages/admin/InquiryManagementHub"));
 const AdminOnboarding = lazy(() => import("@/pages/AdminOnboarding"));
@@ -210,6 +211,7 @@ export const AdminRoutes = () => (
 
 
     {/* ── Communication & Productivity ── */}
+    <Route path="/admin/inbox" element={<OwnerGuard><AdminInbox /></OwnerGuard>} />
     <Route path="/company-comm" element={<Navigate to="/owner/inbox" replace />} />
     <Route path="/email-client" element={<Navigate to="/owner/inbox" replace />} />
     <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />
