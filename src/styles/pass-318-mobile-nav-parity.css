@@ -20,7 +20,6 @@
 html body #root [data-chrome="header"] { position: relative; z-index: 10400; }
 html body #root [data-chrome="header"] header { z-index: 10400 !important; }
 html body #root .jj-drawer-layer { z-index: 10450; }
-html body > .jj-drawer-layer { z-index: 2147483000; }
 
 /* ═══════════ 2. Panel geometry ═══════════ */
 html body #root [data-jj-drawer-panel] {
@@ -39,6 +38,14 @@ html body #root [data-jj-drawer-panel] .jj-drawer-row span {
   white-space: normal;
   overflow: visible;
   text-overflow: clip;
+}
+html[data-jbj-theme="sun"] body #root [data-jj-drawer-panel] [data-jj-drawer-tile] [data-jj-quick-icon],
+html[data-jbj-theme="sun"] body #root [data-jj-drawer-panel] [data-jj-drawer-tile] [data-jj-quick-icon] * {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+html body #root [data-jj-drawer-panel] .jj-drawer-footer .jj-drawer-row {
+  min-height: 38px;
 }
 html body #root [data-jj-drawer-panel] .jj-drawer-sub {
   border-left: 1px solid rgba(6, 78, 59, 0.28);
