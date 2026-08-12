@@ -41,16 +41,19 @@ const getAmenityIcon = (amenity: string) => {
 };
 
 const findRealPhoto = (amenity: string, amenityImages?: Record<string, string> | null): string | null => {
-  if (!amenityImages) return null;
-  if (amenityImages[amenity]) return amenityImages[amenity];
-  const lower = amenity.toLowerCase();
-  for (const [key, url] of Object.entries(amenityImages)) {
-    if (key.toLowerCase() === lower) return url;
+  if (amenityImages) {
+    if (amenityImages[amenity]) return amenityImages[amenity];
+    const lower = amenity.toLowerCase();
+    for (const [key, url] of Object.entries(amenityImages)) {
+      if (key.toLowerCase() === lower) return url;
+    }
+    for (const [key, url] of Object.entries(amenityImages)) {
+      if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) return url;
+    }
   }
-  for (const [key, url] of Object.entries(amenityImages)) {
-    if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) return url;
-  }
-  return null;
+  // PASS 298 — fall back to the shared in-brand amenity library so cards are
+  // never rendered empty when the owner has not uploaded a photo yet.
+  return findLibraryAmenityPhoto(amenity);
 };
 
 const paginateAmenities = (amenities: string[], pageSize: number, amenityImages?: Record<string, string> | null) => {
@@ -82,9 +85,24 @@ const paginateAmenities = (amenities: string[], pageSize: number, amenityImages?
 
 export default function AmenitiesWithPhotos({ amenities, amenityImages, className = "", pageSize = 15 }: AmenitiesWithPhotosProps) {
   const [page, setPage] = useState(0);
+
+  /* Photo-bearing amenities always sit at the top; everything without imagery
+     is collapsed into a compact "what's included" tick list underneath so the
+     grid never shows empty cards. */
+  const { withPhotos, withoutPhotos } = useMemo(() => {
+    const list = amenities || [];
+    const withPhotos: string[] = [];
+    const withoutPhotos: string[] = [];
+    list.forEach((amenity) => {
+      if (findRealPhoto(amenity, amenityImages)) withPhotos.push(amenity);
+      else withoutPhotos.push(amenity);
+    });
+    return { withPhotos, withoutPhotos };
+  }, [amenities, amenityImages]);
+
   const pages = useMemo(
-    () => paginateAmenities(amenities || [], pageSize, amenityImages),
-    [amenities, pageSize, amenityImages],
+    () => paginateAmenities(withPhotos, pageSize, amenityImages),
+    [withPhotos, pageSize, amenityImages],
   );
   const totalPages = Math.max(1, pages.length);
   const currentPage = Math.min(page, totalPages - 1);
