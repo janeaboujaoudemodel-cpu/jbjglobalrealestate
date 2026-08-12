@@ -32601,3 +32601,25 @@ html body #root .jj-card-pearl {
 html:root body #root [data-developer-gold].developer-name-gold {
   text-shadow: none;
 }
+
+/* PASS 300 — ACTIVE FILTER CHIP TRUTH (LOCKED)
+   Active filter chips ("2 areas · −1 ×") are compact 28px pills whose label is
+   never clipped: no inherited 44px touch min-height stretching them into ovals,
+   no overflow clipping, no wrapping. Applies on every breakpoint. */
+html body #root [data-active-filter-chip] {
+  min-height: 0 !important;
+  height: 1.75rem !important;
+  min-width: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  line-height: 1 !important;
+  text-overflow: clip !important;
+}
+html body #root [data-active-filter-chip] > * {
+  overflow: visible !important;
+  white-space: nowrap !important;
+}
