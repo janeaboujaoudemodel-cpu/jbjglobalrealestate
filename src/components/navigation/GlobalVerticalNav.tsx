@@ -3,7 +3,7 @@ import "./vertical-nav-refined.css";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
-  Lightbulb, PanelLeftClose, Search, User, Settings, Castle, FileText,
+  Lightbulb, PanelLeftClose, PanelLeftOpen, Search, User, Settings, Castle, FileText,
   DollarSign, TrendingUp, ClipboardCheck, Shield, Sparkles, Bot, Video, Image,
   Mic, Stamp, CreditCard, Palette, Pen, Award, Globe, Brain, MessageSquare,
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
@@ -1373,8 +1373,10 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         </div>
       </nav>
 
-      {/* Theme control only. Account and sidebar actions live safely inside
-          MY ACCOUNT so hover expansion can never place Sign Out under a click. */}
+      {/* Footer: theme toggle + persistent Collapse and Sign Out controls.
+          Both controls sit in the SAME vertical slots as their collapsed-rail
+          counterparts, so a hover-expansion can never move Sign Out under a
+          click that was aimed at Collapse. */}
       <div className="jj-rail-footer-block flex-shrink-0">
         <div
           className="jj-rail-footer-rule h-px mb-1 mt-0"
@@ -1386,8 +1388,41 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         />
         <div className="jj-rail-footer-inner px-3 pt-2 pb-2">
           <ThemeModeToggle variant="menu" className="jj-sidebar-theme-toggle mb-2 border border-current/20" />
+          <button
+            type="button"
+            data-sidebar-collapse-control
+            data-no-contrast-guard
+            onClick={() => {
+              if (hoverExpanded) {
+                setPinnedOpen(true);
+                setHoverExpanded(false);
+                try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+                return;
+              }
+              toggleCollapse();
+            }}
+            className="w-full flex items-center gap-2.5 px-2.5 h-9 rounded-lg text-[13px] font-medium transition-colors duration-150 hover:bg-white/10"
+            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+          >
+            <PanelLeftClose className="w-[18px] h-[18px] shrink-0" style={{ color: 'currentColor' }} />
+            <span className="flex-1 text-left">{hoverExpanded ? 'Keep Sidebar Open' : 'Collapse Sidebar'}</span>
+          </button>
+          {session && (
+            <button
+              type="button"
+              data-sidebar-auth-control
+              data-no-contrast-guard
+              onClick={handleSignOut}
+              className="mt-1 w-full flex items-center gap-2.5 px-2.5 h-9 rounded-lg text-[13px] font-medium transition-colors duration-150 hover:bg-white/10"
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+            >
+              <LogOut data-signout-icon className="w-[18px] h-[18px] shrink-0" style={{ color: 'currentColor' }} />
+              <span data-signout-label className="flex-1 text-left">Sign Out</span>
+            </button>
+          )}
         </div>
       </div>
+
 
     </div>
   );
@@ -1396,8 +1431,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
     <>
       {/* Desktop sidebar — slides in after reveal */}
       <div
-        className={`h-full transition-[transform,opacity] duration-100 ease-out ${navRevealed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
-        style={{ willChange: 'transform, opacity' }}
+        className="h-full"
+        style={{ contain: 'layout paint style' }}
         onMouseEnter={handleSidebarEnter}
         onMouseLeave={handleSidebarLeave}
       >
@@ -1530,6 +1565,41 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
               </Tooltip>
+
+              {/* Persistent Collapse/Expand + Sign Out in the collapsed rail —
+                  same order and slots as the expanded footer. */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    data-sidebar-collapse-control
+                    data-no-contrast-guard
+                    onClick={toggleCollapse}
+                    className="jj-side-tile group w-9 h-9 flex items-center justify-center"
+                  >
+                    <PanelLeftOpen className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Expand Sidebar</TooltipContent>
+              </Tooltip>
+              {session && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      data-sidebar-auth-control
+                      data-no-contrast-guard
+                      onClick={handleSignOut}
+                      className="jj-side-tile group w-9 h-9 flex items-center justify-center"
+                    >
+                      <LogOut data-signout-icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
+                </Tooltip>
+              )}
+
+
 
 
             </div>

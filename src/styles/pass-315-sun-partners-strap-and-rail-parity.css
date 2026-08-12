@@ -1,0 +1,115 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PASS 315 — SUN PARTNERS HEADING (CHAMPAGNE) + RAIL GEOMETRY PARITY
+   1. Sun: the "Partners with Dubai's leading developers" band is champagne
+      gold with black ink again. The logo marquee below it stays the emerald
+      pair gradient with white knockout marks in BOTH skins.
+   2. Heading typography, band height and marquee padding/logo size are
+      byte-identical in Sun and Moon — only colour differs.
+   3. Expanded rail geometry (monogram, wordmark, page column padding) is
+      forced identical in Sun and Moon.
+   Loaded last so it wins over passes 303/305/307/308.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Marquee strip: emerald pair in BOTH skins ── */
+html[data-jbj-theme] body #root [data-partners-marquee],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-emerald-surface="true"].w-full[data-partners-marquee] {
+  background-color: #042c1c !important;
+  background-image: linear-gradient(160deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-block: 0 !important;
+}
+
+/* White knockout marks in both skins (undo Sun black filter) */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] .jj-partner-mark img,
+html[data-jbj-theme="moon"] body #root [data-partners-marquee] .jj-partner-mark img {
+  filter: brightness(0) invert(1) !important;
+}
+
+/* ── 2. Sun heading band: champagne gold with black ink ── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] [data-partners-heading] {
+  background-color: #F7F1E4 !important;
+  background-image: var(--jj-champagne-long-h, linear-gradient(90deg, #F7F1E4 0%, #EFE3CB 50%, #F7F1E4 100%)) !important;
+  border-bottom: 1px solid rgba(6, 78, 59, 0.18) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] [data-partners-heading] :is(p, span) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+/* Moon heading band ink stays white on emerald */
+html[data-jbj-theme="moon"] body #root [data-partners-marquee] [data-partners-heading] :is(p, span) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* ── 3. Identical geometry in both skins ── */
+html[data-jbj-theme] body #root [data-partners-marquee] [data-partners-heading] {
+  min-height: 64px !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+html[data-jbj-theme] body #root [data-partners-marquee] [data-partners-heading] p {
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+}
+html[data-jbj-theme] body #root [data-partners-marquee] .jj-partner-mark,
+html[data-jbj-theme] body #root [data-partners-marquee] .jj-partner-mark img {
+  width: 112px !important;
+  min-width: 112px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+}
+
+/* ── 4. Expanded rail: Sun/Moon geometry parity ── */
+html[data-jbj-theme="sun"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row]:not([data-sidebar-brand-row="rail"]) img[alt="JBJ"],
+html[data-jbj-theme="moon"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row]:not([data-sidebar-brand-row="rail"]) img[alt="JBJ"] {
+  width: 52px !important;
+  height: 52px !important;
+  max-height: 52px !important;
+  align-self: center !important;
+}
+html[data-jbj-theme="sun"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row]:not([data-sidebar-brand-row="rail"]) .jj-rail-brand-link,
+html[data-jbj-theme="moon"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row]:not([data-sidebar-brand-row="rail"]) .jj-rail-brand-link {
+  padding-right: 18px !important;
+  padding-left: 12px !important;
+  gap: 10px !important;
+}
+html[data-jbj-theme="sun"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-wordmark],
+html[data-jbj-theme="moon"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-wordmark] {
+  font-size: 10px !important;
+  letter-spacing: 0.055em !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+html[data-jbj-theme="sun"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] nav,
+html[data-jbj-theme="moon"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] nav {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+html[data-jbj-theme="sun"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] nav > div:first-child,
+html[data-jbj-theme="moon"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] nav > div:first-child {
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  padding-top: 16px !important;
+}
+
+/* ── 5. Instant rail toggle — no slide/fade lag on open or close ── */
+html body #root [data-chrome="sidebar"] > div {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Sun heading ink wins over the shared emerald-surface white ink rules. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] [data-partners-heading] p.jj-partners-heading-ink,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee][data-emerald-surface="true"] [data-partners-heading] :is(p, span, p.jj-partners-heading-ink) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
