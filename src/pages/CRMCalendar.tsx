@@ -362,6 +362,7 @@ const CRMCalendar = () => {
                   return (
                     <button
                       key={day.toISOString()}
+                      data-calendar-day
                       onClick={() => setSelectedDate(day)}
                       onDoubleClick={() => openCreate(day)}
                       className={`h-24 p-1.5 rounded-lg border transition-all text-left ${
@@ -371,7 +372,7 @@ const CRMCalendar = () => {
                           ? "border-[#064E3B]/50 bg-black/[0.03] ring-1 ring-[#064E3B]/30"
                           : has
                           ? "border-black/12 bg-[#064E3B]/5 hover:bg-[#064E3B]/10"
-                          : "border-black/8 bg-white hover:bg-black/[0.03]"
+                          : "border-black/8 bg-card hover:bg-muted/40"
                       }`}
                     >
                       <span className={`text-sm tabular-nums ${isToday(day) ? "font-bold" : "font-medium"} text-[#1A1A1A]`}>
