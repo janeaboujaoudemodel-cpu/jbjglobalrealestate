@@ -29965,6 +29965,48 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_calendar_api_clients: {
+        Row: {
+          allowed_origins: string[]
+          created_at: string
+          id: string
+          is_active: boolean
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          owner_id: string
+          permissions: string[]
+          revoked_at: string | null
+        }
+        Insert: {
+          allowed_origins?: string[]
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name: string
+          owner_id: string
+          permissions?: string[]
+          revoked_at?: string | null
+        }
+        Update: {
+          allowed_origins?: string[]
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          owner_id?: string
+          permissions?: string[]
+          revoked_at?: string | null
+        }
+        Relationships: []
+      }
       owner_calendar_events: {
         Row: {
           all_day: boolean
@@ -29972,6 +30014,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           end_at: string
+          external_account_key: string | null
           external_calendar_id: string | null
           external_id: string | null
           external_updated_at: string | null
@@ -29994,6 +30037,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           end_at: string
+          external_account_key?: string | null
           external_calendar_id?: string | null
           external_id?: string | null
           external_updated_at?: string | null
@@ -30016,6 +30060,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           end_at?: string
+          external_account_key?: string | null
           external_calendar_id?: string | null
           external_id?: string | null
           external_updated_at?: string | null
@@ -30036,7 +30081,9 @@ export type Database = {
       }
       owner_calendar_sync_state: {
         Row: {
-          calendar_id: string | null
+          account_key: string
+          account_label: string | null
+          calendar_id: string
           created_at: string
           events_pulled: number
           events_pushed: number
@@ -30053,7 +30100,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          calendar_id?: string | null
+          account_key?: string
+          account_label?: string | null
+          calendar_id?: string
           created_at?: string
           events_pulled?: number
           events_pushed?: number
@@ -30070,7 +30119,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          calendar_id?: string | null
+          account_key?: string
+          account_label?: string | null
+          calendar_id?: string
           created_at?: string
           events_pulled?: number
           events_pushed?: number
