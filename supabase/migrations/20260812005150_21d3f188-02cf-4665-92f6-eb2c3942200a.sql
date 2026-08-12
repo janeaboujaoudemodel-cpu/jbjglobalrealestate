@@ -1,0 +1,2 @@
+delete from public.advisory_desk_replies where request_id in (select id from public.advisory_desk_requests where source in ('e2e_test','qa_test'));
+delete from public.advisory_desk_requests where source in ('e2e_test','qa_test');
