@@ -341,23 +341,37 @@ function MediaRow({
   return (
     <li className="rounded-2xl border border-border bg-card p-3 md:p-4">
       <div className="flex flex-wrap items-start gap-4">
-        {/* Cover thumbnail — emerald plate only as the empty-state frame here in
-            the back office; the public site never renders this state. */}
+        {/* Cover thumbnail. A stored URL that no longer resolves counts as a
+            broken cover, not as a published one — the owner must see that. */}
         <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
-          {cover ? (
-            <img src={cover} alt={`${dev.name ?? "Developer"} cover`} loading="lazy" className="h-full w-full object-cover" />
+          {cover && !coverBroken ? (
+            <img
+              src={cover}
+              alt={`${dev.name ?? "Developer"} cover`}
+              loading="lazy"
+              onError={() => setCoverBroken(true)}
+              className="h-full w-full object-cover"
+            />
           ) : (
-            <span className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-              No photo
+            <span className="flex h-full w-full items-center justify-center px-1 text-center text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+              {cover ? "Link broken" : "No photo"}
             </span>
           )}
         </div>
 
         <div className="flex h-20 w-32 shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(150deg,#064E3B,#042c1c,#000)] p-2">
-          {logo ? (
-            <img src={logo} alt={`${dev.name ?? "Developer"} logo`} loading="lazy" className="h-full w-full object-contain" />
+          {logo && !logoBroken ? (
+            <img
+              src={logo}
+              alt={`${dev.name ?? "Developer"} logo`}
+              loading="lazy"
+              onError={() => setLogoBroken(true)}
+              className="h-full w-full object-contain"
+            />
           ) : (
-            <span className="text-[10px] font-semibold uppercase tracking-wide text-white">No logo</span>
+            <span className="px-1 text-center text-[10px] font-semibold uppercase tracking-wide text-white">
+              {logo ? "Link broken" : "No logo"}
+            </span>
           )}
         </div>
 
@@ -366,12 +380,13 @@ function MediaRow({
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${
-                cover ? "bg-primary/10 text-primary" : "bg-destructive/10 text-destructive"
+                cover && !coverBroken ? "bg-primary/10 text-primary" : "bg-destructive/10 text-destructive"
               }`}
             >
-              {cover ? <CheckCircle2 className="h-3.5 w-3.5" /> : <ImageOff className="h-3.5 w-3.5" />}
-              {cover ? "Cover photo" : "Cover missing"}
+              {cover && !coverBroken ? <CheckCircle2 className="h-3.5 w-3.5" /> : <ImageOff className="h-3.5 w-3.5" />}
+              {!cover ? "Cover missing" : coverBroken ? "Cover link broken" : "Cover photo"}
             </span>
+
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${
                 real ? "bg-primary/10 text-primary" : "bg-destructive/10 text-destructive"
