@@ -250,8 +250,8 @@ html body #root [data-chrome="sidebar"] :is(
     overflow-x: visible !important;
   }
   html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] img[alt="JBJ"] {
-    width: 40px !important;
-    height: 52px !important;
+    width: 34px !important;
+    height: 40px !important;
     max-width: none !important;
     object-fit: contain !important;
   }
