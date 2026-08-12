@@ -17,10 +17,13 @@
 }
 
 @media (max-width: 1023.98px) {
-  /* 1. FOOTER — champagne shimmer, matching the vertical sidebar surface. */
-  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root footer,
-  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root footer#site-footer,
-  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root footer[data-footer="corporate"] {
+  /* 1. FOOTER — champagne shimmer, matching the vertical sidebar surface.
+        The emerald tint layer from PASS 307 is removed on phone: it was the
+        murky green cast the owner rejected. */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer,
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer[data-jj-minimal-footer],
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer#site-footer,
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer[data-footer="corporate"] {
     background-color: #F4EDDF !important;
     background-image: var(
       --jj-champagne-long-h,
@@ -30,6 +33,7 @@
     animation: jjChampagneShimmer 18s ease-in-out infinite !important;
     border-top: 1px solid rgba(184, 149, 85, 0.34) !important;
   }
+
   /* Inner bands must not paint a competing colour over the shimmer. */
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root footer > div {
     background-color: transparent !important;
