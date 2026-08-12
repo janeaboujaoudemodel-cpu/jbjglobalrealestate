@@ -33,11 +33,10 @@
   grid-row: 1;
   display: flex; align-items: center;
   height: var(--jbjcrm-header-h);
-  background: var(--jbjcrm-metallic-emerald-h) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.10);
-  /* Classic vertical divider between sidebar and header (next to collapse) */
-  border-left: 1px solid rgba(255,255,255,0.22);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.35), inset 0 -1px 0 rgba(255,255,255,0.06), inset 1px 0 0 rgba(0,0,0,0.35);
+  background: var(--jbjcrm-pearl) !important;
+  border-bottom: 1px solid var(--jbjcrm-hairline);
+  border-left: 0;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.05);
   padding: 0 16px 0 24px;
   gap: 18px;
   z-index: 3;
@@ -47,8 +46,8 @@
   font-size: 24px;
   line-height: 1;
   font-weight: 600;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: var(--jbjcrm-graphite) !important;
+  -webkit-text-fill-color: var(--jbjcrm-graphite) !important;
   flex: 1; min-width: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -160,14 +159,9 @@
   font-size: 14px; font-weight: 800; letter-spacing: 0.6px;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  background:
-    radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.22), transparent 55%),
-    linear-gradient(160deg, #064E3B 0%, #032A1E 55%, #032A1E 100%);
-  border: 1px solid rgba(255,255,255,0.32);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.35),
-    inset 0 -1px 0 rgba(0,0,0,0.30),
-    0 2px 4px rgba(0,0,0,0.28);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 .jc-brand-product {
   font-size: 19px;
@@ -221,7 +215,7 @@
 }
 .jc-main-nav {
   padding: 0 0 17px;
-  border-bottom: 1px solid var(--jbjcrm-sidebar-line);
+  border-bottom: 1px solid rgba(255,255,255,0.28);
 }
 .jc-side-link,
 .jc-team-item {
@@ -247,7 +241,7 @@
 .jc-team-item:hover { background: rgba(255,255,255,.07) !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
 .jc-side-link[data-active="true"],
 .jc-team-item[data-active="true"] {
-  background: var(--jbjcrm-emerald-action) !important;
+  background: rgba(255,255,255,0.16) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   border-left: 0 !important;
@@ -255,6 +249,16 @@
 }
 .jc-side-link svg,
 .jc-team-item svg { flex: 0 0 auto; }
+.jc-side-link:hover svg,
+.jc-team-item:hover svg,
+.jc-folder__label:hover svg {
+  animation: jc-nav-icon-hover 420ms ease both;
+}
+@keyframes jc-nav-icon-hover {
+  0% { transform: translateY(0) scale(1); }
+  45% { transform: translateY(-2px) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
+}
 .jc-teamspace { padding-top: 14px; }
 .jc-teamspace__title {
   height: 32px;
@@ -827,13 +831,13 @@
   .jc-widget-row { grid-template-columns: 1fr; }
 }
 
-/* PASS 154 — CRM CHROME CONTRAST PROOF LOCK
-   Header + vertical sidebar are dark emerald→black chrome. Every text run,
+/* PASS 154 — CRM SIDEBAR CONTRAST PROOF LOCK
+   The vertical sidebar is dark emerald→black chrome. Every text run,
    icon, caret, button glyph, dropdown label, and SVG primitive inside chrome
    resolves to pure white, including parent rows that previously computed black
    and leaked through currentColor. */
-.jc-app :is(.jc-header, .jc-rail),
-.jc-app :is(.jc-header, .jc-rail) :is(
+.jc-app .jc-rail,
+.jc-app .jc-rail :is(
   h1, h2, h3, h4, p, span, label, input, button, a, div,
   .jc-brand-row, .jc-brand-product, .jc-brand-caret, .jc-collapse-visual,
   .jc-header__title, .jc-search, .jc-search input, .jc-icon-btn, .jc-grid-btn,
@@ -845,18 +849,18 @@
   opacity: 1 !important;
 }
 
-.jc-app :is(.jc-header, .jc-rail) :is(svg, path, circle, rect, line, polyline, polygon, ellipse):not(.jc-popover *) {
+.jc-app .jc-rail :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
 
-.jc-app :is(.jc-header, .jc-rail) svg:not(.jc-popover *) {
+.jc-app .jc-rail svg {
   stroke-width: 2.15px !important;
   filter: drop-shadow(0 1px 0 rgba(0,0,0,0.35));
 }
 
-.jc-app :is(.jc-header, .jc-rail) input::placeholder {
+.jc-app .jc-rail input::placeholder {
   color: rgba(255,255,255,0.82) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
   opacity: 1 !important;
@@ -911,9 +915,9 @@
 
 
 .jc-header {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-left: 1px solid rgba(255,255,255,0.42) !important;
+  color: var(--jbjcrm-graphite) !important;
+  -webkit-text-fill-color: var(--jbjcrm-graphite) !important;
+  border-left: 0 !important;
 }
 
 .jc-rail,
@@ -923,8 +927,8 @@
 }
 
 .jc-collapse-visual {
-  border-left: 1px solid rgba(255,255,255,0.34) !important;
-  border-radius: 0 6px 6px 0 !important;
+  border-left: 0 !important;
+  border-radius: 6px !important;
 }
 
 .jc-side-link:hover,
@@ -938,8 +942,8 @@
 
 .jc-side-link[data-active="true"],
 .jc-team-item[data-active="true"] {
-  background: rgba(255,255,255,0.24) !important;
-  box-shadow: inset 3px 0 0 #FFFFFF !important;
+  background: rgba(255,255,255,0.18) !important;
+  box-shadow: none !important;
 }
 
 .jc-search,
@@ -997,6 +1001,30 @@
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: 0 0 0 1000px transparent inset !important;
   transition: background-color 999999s ease-in-out 0s !important;
+}
+
+/* White horizontal workspace header (Zoho/Resend rhythm). The emerald brand
+   belongs to the vertical rail; header controls use graphite on pearl. */
+.jc-app .jc-header :is(.jc-header__title,.jc-search,.jc-search__placeholder,.jc-search__kbd,.jc-icon-btn,.jc-grid-btn) {
+  color: var(--jbjcrm-graphite) !important;
+  -webkit-text-fill-color: var(--jbjcrm-graphite) !important;
+}
+.jc-app .jc-header :is(.jc-icon-btn,.jc-grid-btn) :is(svg,path,circle,rect,line,polyline,polygon) {
+  color: var(--jbjcrm-graphite) !important;
+  stroke: var(--jbjcrm-graphite) !important;
+  filter: none !important;
+}
+.jc-app .jc-header .jc-search {
+  background: var(--jbjcrm-search) !important;
+  border-color: var(--jbjcrm-hairline-strong) !important;
+  box-shadow: none !important;
+}
+.jc-app .jc-header .jc-icon-btn[data-solid="true"] {
+  background: var(--jbjcrm-pearl) !important;
+  border-color: var(--jbjcrm-emerald) !important;
+}
+.jc-app .jc-header :is(.jc-icon-btn,.jc-grid-btn):hover {
+  background: var(--jbjcrm-emerald-tint) !important;
 }
 
 /* ============================================================

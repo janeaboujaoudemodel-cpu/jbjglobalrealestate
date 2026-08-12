@@ -50,3 +50,23 @@ html body #root [data-sidebar-emerald] nav > div > div[class*="flex-col"][class*
 }
 html body #root [data-sidebar-emerald] nav [class*="ml-5"] { margin-top: 4px; }
 html body #root [data-sidebar-emerald] nav [class*="ml-5"] > * + * { margin-top: 2px !important; }
+
+/* Shared Resend-like navigation rhythm for Sun and Moon. Visual colors remain
+   theme-owned; only spacing and icon motion are common. */
+html body #root [data-sidebar-emerald] nav {
+  padding-inline: 10px !important;
+}
+html body #root [data-sidebar-emerald] nav :is(a, button) {
+  min-height: 40px;
+}
+html body #root [data-sidebar-emerald] nav :is(a, button):hover svg {
+  animation: jj-sidebar-icon-hover 420ms ease both;
+}
+@keyframes jj-sidebar-icon-hover {
+  0% { transform: translateY(0) scale(1); }
+  45% { transform: translateY(-2px) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root [data-sidebar-emerald] nav :is(a, button):hover svg { animation: none; }
+}

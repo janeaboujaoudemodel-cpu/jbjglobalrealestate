@@ -15,7 +15,11 @@ import { installInteractionCssPruner } from"@/utils/pruneCostlyCssRules";
 if (typeof document !== "undefined") {
   try {
     const storedTheme = localStorage.getItem("jbj-theme-mode") === "moon" ? "moon" : "sun";
-    document.documentElement.setAttribute("data-jbj-theme", storedTheme);
+    const themeLocked = /^\/access(\/|$)/.test(window.location.pathname);
+    document.documentElement.setAttribute("data-jbj-theme", themeLocked ? "sun" : storedTheme);
+    if (themeLocked) {
+      document.documentElement.setAttribute("data-jbj-theme-lock", "original");
+    }
     if (/^\/(owner|crm|admin)(\/|$)/.test(window.location.pathname)) {
       document.documentElement.setAttribute("data-jbj-backend-lock", "1");
     }

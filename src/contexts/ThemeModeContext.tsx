@@ -62,6 +62,9 @@ const OWNER_BACKEND_PREFIXES = [
   "/admin",
 ];
 
+/** Standalone access gate has its own approved visual identity. */
+const THEME_LOCKED_PATHS = ["/access"];
+
 function isOwnerBackendPath(pathname: string) {
   return OWNER_BACKEND_PREFIXES.some(
     (p) => pathname === p || pathname.startsWith(p + "/"),
@@ -93,14 +96,21 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Owner keeps a fixed back end; every other user carries the theme everywhere.
   const backendLocked = isOwner && isOwnerBackendPath(pathname);
+  const themeLocked = THEME_LOCKED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(p + "/"),
+  );
 
   useEffect(() => {
     const root = document.documentElement;
-    root.setAttribute("data-jbj-theme", mode);
+    // Preserve the selected preference while forcing the gated portal to its
+    // original, pre-theme skin. Leaving the gate restores the stored mode.
+    root.setAttribute("data-jbj-theme", themeLocked ? "sun" : mode);
+    if (themeLocked) root.setAttribute("data-jbj-theme-lock", "original");
+    else root.removeAttribute("data-jbj-theme-lock");
     if (backendLocked) root.setAttribute("data-jbj-backend-lock", "1");
     else root.removeAttribute("data-jbj-backend-lock");
 
-  }, [mode, backendLocked]);
+  }, [mode, backendLocked, themeLocked]);
 
   const value = useMemo(
     () => ({ mode, isMoon: mode === "moon", setMode, toggleMode }),
