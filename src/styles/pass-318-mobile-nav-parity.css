@@ -371,6 +371,22 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
   }
 }
 
+/* Drawer finish — premium Sun quick actions and a shared value column for
+   Language / Currency / Owner view. */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel]
+  [data-jj-drawer-tile] :is([data-jj-quick-icon], [data-jj-quick-icon] *) {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-currency button {
+  width: 64px !important;
+  min-width: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  justify-content: flex-start !important;
+}
+
 /* 2. Sun guide card ink — beat the dark-surface white-ink inheritance. */
 html[data-jbj-theme="sun"] body div#root [data-jj-guide-card]:not(#jj320-a):not(#jj320-b):not(#jj320-c):not(#jj320-d):not(#jj320-e):not(#jj320-f)
   :is(h3, p, span, strong, a, svg, svg *) {

@@ -294,7 +294,7 @@ export default function MobileNavDrawer({
                   <button
                     type="button"
                     data-no-contrast-guard
-                    className="inline-flex h-9 items-center gap-1.5 bg-transparent px-0"
+                    className="inline-flex h-9 w-16 min-w-0 items-center justify-start gap-1.5 bg-transparent px-0"
                     aria-label="Select language"
                   >
                     <span className="jj-drawer-pref-value text-[13px] font-bold uppercase leading-none tracking-[0.1em]">
