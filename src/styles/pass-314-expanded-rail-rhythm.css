@@ -1,0 +1,43 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PASS 314 — EXPANDED RAIL: WORDMARK BREATHING ROOM + PAGE COLUMN ALIGNMENT
+   Applies ONLY when the vertical sidebar is expanded (never to the collapsed
+   rail) and identically in Sun and Moon.
+   1. Monogram sits fully inside the 56px brand band (its top/bottom serif
+      ticks never touch the rail edge).
+   2. Wordmark keeps a real inset from the right border in BOTH skins.
+   3. Every nav row starts under the first "J" and ends under the last "J"
+      of the wordmark — pages no longer look pushed forward.
+   4. The page column drops ~0.5cm below the monogram, keeping only a small
+      padding above the Owner/Investor Portal row.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row]:not([data-sidebar-brand-row="rail"]) img[alt="JBJ"] {
+  width: 52px !important;
+  height: 52px !important;
+  max-height: 52px !important;
+  align-self: center !important;
+}
+
+/* Wordmark — identical size/tracking in Sun and Moon, never touching the edge */
+html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-wordmark],
+html[data-jbj-theme="moon"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-wordmark],
+html[data-jbj-theme="sun"] body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-wordmark] {
+  font-size: 10px !important;
+  letter-spacing: 0.055em !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row]:not([data-sidebar-brand-row="rail"]) .jj-rail-brand-link {
+  padding-right: 18px !important;
+}
+
+/* Page column — pulled back to the monogram's left edge, dropped ~0.5cm */
+html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] nav {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+html body.jj-vertical-nav-active #root [data-chrome="sidebar"] [data-sidebar-emerald] nav > div:first-child {
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  padding-top: 16px !important;
+}
