@@ -115,12 +115,12 @@ const DeveloperPartnersMarquee = () => {
       )}
 
       <div className="w-full">
-        <div className="py-4 md:py-5" data-partners-heading>
+        <div className="relative z-10 min-h-[72px] border-b border-white/20 py-4 md:py-5" data-partners-heading>
           <ContentTrack>
             <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-white [-webkit-text-fill-color:#ffffff]">
               {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
             </p>
-            <span aria-hidden className="mx-auto mt-3 block h-px w-24 bg-primary-foreground/55" />
+            <span aria-hidden className="mx-auto mt-3 block h-px w-24 bg-primary-foreground/70" />
           </ContentTrack>
         </div>
 
