@@ -23,8 +23,11 @@ html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav > div > div[c
 html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav [class*="ml-5"] > * + * {
   margin-top: 1px !important;
 }
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav :is(a, button) {
-  min-height: 36px;
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav :is(a, button, [role="button"]) {
+  min-height: 36px !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav [data-sidebar-mode-portal] {
+  min-height: 36px !important;
 }
 
 /* Wordmark never touches the rail's right edge */
