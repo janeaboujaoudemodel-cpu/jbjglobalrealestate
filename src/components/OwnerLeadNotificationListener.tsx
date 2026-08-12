@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,10 +16,20 @@ function playLeadSound() {
 
 export default function OwnerLeadNotificationListener() {
   const { user, isOwner } = useAuth();
+  const { pathname } = useLocation();
   const seenRef = useRef<Set<string>>(new Set());
+  const isOwnerBackendRoute =
+    pathname === "/owner" ||
+    pathname.startsWith("/owner/") ||
+    pathname === "/crm" ||
+    pathname.startsWith("/crm/") ||
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/");
 
   useEffect(() => {
-    if (!user || !isOwner) return;
+    // Client/lead notifications are private CRM data. Never subscribe, poll,
+    // or render them on public, access-gate, or non-owner portal routes.
+    if (!user || !isOwner || !isOwnerBackendRoute) return;
 
     const handleLeadNotification = (row: any) => {
       if (!row || row.notification_type !== "new_lead" || seenRef.current.has(row.id)) return;
@@ -78,7 +89,7 @@ export default function OwnerLeadNotificationListener() {
       window.clearInterval(interval);
       supabase.removeChannel(channel);
     };
-  }, [user, isOwner]);
+  }, [user, isOwner, isOwnerBackendRoute]);
 
   return null;
 }
