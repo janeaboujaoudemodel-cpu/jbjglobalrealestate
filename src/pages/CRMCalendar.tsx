@@ -373,12 +373,12 @@ const CRMCalendar = () => {
                       onDoubleClick={() => openCreate(day)}
                       className={`h-24 p-1.5 rounded-lg border transition-all text-left ${
                         isSelected
-                          ? "border-[#B89555] bg-[#EFE6D6]"
+                          ? "border-[#064E3B] bg-[#064E3B]/10"
                           : isToday(day)
-                          ? "border-[#B89555]/60 bg-[#F7F2EA] ring-1 ring-[#B89555]/30"
+                          ? "border-[#064E3B]/50 bg-black/[0.03] ring-1 ring-[#064E3B]/30"
                           : has
-                          ? "border-[#B89555]/40 bg-[#EFE6D6]/60 hover:bg-[#EFE6D6]"
-                          : "border-[#B89555]/15 bg-white hover:bg-[#F7F2EA]"
+                          ? "border-black/12 bg-[#064E3B]/5 hover:bg-[#064E3B]/10"
+                          : "border-black/8 bg-white hover:bg-black/[0.03]"
                       }`}
                     >
                       <span className={`text-sm tabular-nums ${isToday(day) ? "font-bold" : "font-medium"} text-[#1A1A1A]`}>
@@ -387,7 +387,7 @@ const CRMCalendar = () => {
                       <div className="mt-1 space-y-0.5">
                         {dayEvents.slice(0, 2).map((ev) => (
                           <div key={ev.id}
-                               className="text-[10px] leading-tight px-1.5 py-0.5 rounded border truncate bg-[#1A1A1A] text-[#FDFBF7] border-[#1A1A1A]">
+                               className="text-[10px] leading-tight px-1.5 py-0.5 rounded border truncate bg-[#064E3B] text-white border-[#1A1A1A]">
                             <span className="font-semibold tabular-nums">{format(new Date(ev.start_at), "HH:mm")}</span> {ev.title}
                           </div>
                         ))}
@@ -421,7 +421,7 @@ const CRMCalendar = () => {
                     <CalendarIcon className="h-8 w-8 mx-auto mb-2 text-[#1A1A1A]/60" />
                     <p className="text-sm text-[#1A1A1A]/70">No events on this day</p>
                   </div>
-                  <Button onClick={() => openCreate(selectedDate)} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+                  <Button onClick={() => openCreate(selectedDate)} className="w-full bg-[#064E3B] text-white hover:bg-[#064E3B]/90">
                     <Plus className="h-4 w-4 mr-2" /> Add Event
                   </Button>
                 </div>
@@ -429,7 +429,7 @@ const CRMCalendar = () => {
                 selectedEvents.map((ev) => {
                   const meta = (ev.metadata || {}) as EventMeta;
                   return (
-                    <div key={ev.id} className="p-3 rounded-lg bg-[#F7F2EA] border border-black/10">
+                    <div key={ev.id} className="p-3 rounded-lg bg-black/[0.03] border border-black/10">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0 flex-1">
                           <p className="font-semibold text-[#1A1A1A] truncate">{ev.title}</p>
@@ -442,7 +442,7 @@ const CRMCalendar = () => {
                             </p>
                           )}
                           {meta.attendee_name && (
-                            <Badge variant="outline" className="mt-1 text-[10px] border-[#B89555]/40 text-[#1A1A1A]">
+                            <Badge variant="outline" className="mt-1 text-[10px] border-black/12 text-[#1A1A1A]">
                               {meta.attendee_name}
                             </Badge>
                           )}
@@ -467,7 +467,7 @@ const CRMCalendar = () => {
 
       {/* Add/Edit Event Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg bg-white border-[#B89555]/40">
+        <DialogContent className="max-w-lg bg-white border-black/12">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <CalendarIcon className="h-5 w-5" />
@@ -478,51 +478,51 @@ const CRMCalendar = () => {
             <div>
               <Label className="text-[#1A1A1A]">Subject *</Label>
               <Input value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
-                     placeholder="Meeting with…" className="bg-white border-[#B89555]/40" />
+                     placeholder="Meeting with…" className="bg-white border-black/12" />
             </div>
             <div>
               <Label className="text-[#1A1A1A]">Agenda / Description</Label>
               <Textarea rows={3} value={form.agenda} onChange={(e) => setForm((p) => ({ ...p, agenda: e.target.value }))}
-                        placeholder="What will you be discussing?" className="bg-white border-[#B89555]/40" />
+                        placeholder="What will you be discussing?" className="bg-white border-black/12" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-[#1A1A1A]">Date &amp; time *</Label>
                 <Input type="datetime-local" value={form.start}
                        onChange={(e) => setForm((p) => ({ ...p, start: e.target.value }))}
-                       className="bg-white border-[#B89555]/40" />
+                       className="bg-white border-black/12" />
               </div>
               <div>
                 <Label className="text-[#1A1A1A]">Duration (mins)</Label>
                 <Input type="number" min={15} step={15} value={form.duration}
                        onChange={(e) => setForm((p) => ({ ...p, duration: parseInt(e.target.value) || 60 }))}
-                       className="bg-white border-[#B89555]/40" />
+                       className="bg-white border-black/12" />
               </div>
             </div>
             <div>
               <Label className="text-[#1A1A1A] flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Location</Label>
               <Input value={form.location} onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))}
-                     placeholder="Office, Dubai Marina, or address…" className="bg-white border-[#B89555]/40" />
+                     placeholder="Office, Dubai Marina, or address…" className="bg-white border-black/12" />
             </div>
-            <div className="rounded-lg border border-black/10 p-3 space-y-2 bg-[#F7F2EA]/40">
+            <div className="rounded-lg border border-black/10 p-3 space-y-2 bg-black/[0.03]/40">
               <p className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5"><User className="h-3.5 w-3.5" /> Attendee</p>
               <div className="grid grid-cols-2 gap-2">
                 <Input placeholder="Name" value={form.attendeeName}
                        onChange={(e) => setForm((p) => ({ ...p, attendeeName: e.target.value }))}
-                       className="bg-white border-[#B89555]/40" />
+                       className="bg-white border-black/12" />
                 <Input placeholder="Phone" value={form.attendeePhone}
                        onChange={(e) => setForm((p) => ({ ...p, attendeePhone: e.target.value }))}
-                       className="bg-white border-[#B89555]/40" />
+                       className="bg-white border-black/12" />
               </div>
               <Input placeholder="Email (sends meeting agenda automatically)" value={form.attendeeEmail}
                      onChange={(e) => setForm((p) => ({ ...p, attendeeEmail: e.target.value }))}
-                     className="bg-white border-[#B89555]/40" />
+                     className="bg-white border-black/12" />
             </div>
-            <div className="rounded-lg border border-black/10 p-3 space-y-2 bg-[#F7F2EA]/40">
+            <div className="rounded-lg border border-black/10 p-3 space-y-2 bg-black/[0.03]/40">
               <p className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5"><Bell className="h-3.5 w-3.5" /> Reminders</p>
               <div className="flex flex-wrap gap-1.5">
                 {form.reminders.map((r, i) => (
-                  <span key={i} className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A]">
+                  <span key={i} className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-[#064E3B]/10 border border-black/12 text-[#1A1A1A]">
                     {reminderLabel(r.minutes)}
                     <button onClick={() => removeReminder(i)} className="text-[#1A1A1A]/60 hover:text-red-700">
                       <X className="h-3 w-3" />
@@ -537,7 +537,7 @@ const CRMCalendar = () => {
                 <span className="text-[11px] text-[#1A1A1A]/60 self-center mr-1">Add:</span>
                 {presetMinutes.filter((m) => !form.reminders.some((r) => r.minutes === m)).map((m) => (
                   <button key={m} onClick={() => addReminder(m)}
-                          className="text-[11px] px-2 py-0.5 rounded-full border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
+                          className="text-[11px] px-2 py-0.5 rounded-full border border-black/12 text-[#1A1A1A] hover:bg-[#064E3B]/10">
                     + {reminderLabel(m)}
                   </button>
                 ))}
@@ -552,7 +552,7 @@ const CRMCalendar = () => {
               </Button>
             )}
             <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+            <Button onClick={handleSave} className="bg-[#064E3B] text-white hover:bg-[#064E3B]/90">
               {editingId ? "Save changes" : "Create event"}
             </Button>
           </DialogFooter>
