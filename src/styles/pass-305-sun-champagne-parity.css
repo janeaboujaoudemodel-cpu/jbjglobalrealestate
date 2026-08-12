@@ -191,3 +191,12 @@ html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
+
+/* Sun marquee heading + divider read black on champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-heading] :is(p, span, h2, h3),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] [data-partners-heading] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+}
