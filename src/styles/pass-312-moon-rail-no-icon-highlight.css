@@ -1,0 +1,78 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 312 — MOON RAIL: NO HIGHLIGHT AROUND THE ICONS + LIFTED CENTRE
+
+   1) In Moon (and the default/unset theme) the collapsed rail shows no
+      plate, box, outline or animated edge around the icon column — the
+      glyphs sit directly on the emerald. Sun is untouched.
+   2) The collapsed rail centre was reading almost pure black. The
+      gradient now lifts to a slightly warmer emerald through the middle
+      before returning to black at the bottom, while the very top stays
+      the deepest tone.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Moon: no highlight around/behind the icons ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is(.jj-side-tile, .jj-side-auth-tile, .jj-rail-stack, [data-jjds-sidebar-icon], nav :is(a, button)),
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is(.jj-side-tile, .jj-side-auth-tile, .jj-rail-stack, [data-jjds-sidebar-icon], nav :is(a, button)):hover,
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is(.jj-side-tile, .jj-side-auth-tile, .jj-rail-stack, [data-jjds-sidebar-icon], nav :is(a, button)) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Active row in Moon: no plate either — ink weight only. */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] .jj-side-tile.is-active,
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] .jj-side-tile.is-active {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Kill any animated edge / pseudo-element rail outline in Moon. */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] :is(.jj-rail-emerald-edge, .jj-rail-stack, nav)::before,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] :is(.jj-rail-emerald-edge, .jj-rail-stack, nav)::after,
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] :is(.jj-rail-emerald-edge, .jj-rail-stack, nav)::before,
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] :is(.jj-rail-emerald-edge, .jj-rail-stack, nav)::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  animation: none !important;
+  box-shadow: none !important;
+}
+
+/* ═══════════ 2. Centre of the rail lifts slightly emerald ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]):not([data-y])
+  body div#root div[data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald],
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"]):not([data-y])
+  body div#root div[data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald] {
+  background-color: #01120b !important;
+  background: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #02190f 16%,
+    #063d29 48%,
+    #021a11 76%,
+    #000000 100%
+  ) !important;
+  background-image: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #02190f 16%,
+    #063d29 48%,
+    #021a11 76%,
+    #000000 100%
+  ) !important;
+}
