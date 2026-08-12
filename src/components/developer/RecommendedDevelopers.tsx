@@ -6,6 +6,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getHighResImageUrl } from "@/lib/imageUtils";
+import { developerPriorityWeight, compareDevelopersByPriority } from "@/utils/developerTier";
 import { supabase } from "@/integrations/supabase/client";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
