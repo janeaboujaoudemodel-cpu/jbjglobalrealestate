@@ -324,8 +324,11 @@ const CRMCalendar = () => {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        <CalendarSyncPanel onSynced={loadEvents} />
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
           {/* Calendar grid */}
           <Card className="lg:col-span-2 border-[#B89555]/30 bg-[#FDFBF7]">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
