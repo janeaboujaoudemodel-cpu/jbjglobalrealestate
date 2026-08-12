@@ -18,7 +18,7 @@
 @media (max-width: 1023.98px) {
   /* ── 1a. SUN, PAGE TOP — clean white, black ink ─────────────────────── */
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"] {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"] {
     background-color: #FFFFFF !important;
     background-image: none !important;
     animation: none !important;
@@ -28,11 +28,11 @@
     border-bottom: 1px solid rgba(26, 26, 26, 0.12) !important;
   }
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"] a[href="/"] img {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"] a[href="/"] img {
     filter: brightness(0) saturate(0) !important;
   }
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
@@ -41,9 +41,9 @@
 
   /* ── 1b. MOON, PAGE TOP — transparent, pure white ink ───────────────── */
   html[data-jbj-theme="moon"] body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"],
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"],
   html:not([data-jbj-theme="sun"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"] {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"] {
     background: transparent !important;
     background-color: transparent !important;
     background-image: none !important;
@@ -54,26 +54,26 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.24) !important;
   }
   html[data-jbj-theme="moon"] body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"] a[href="/"] img,
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"] a[href="/"] img,
   html:not([data-jbj-theme="sun"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"] a[href="/"] img {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"] a[href="/"] img {
     filter: brightness(0) invert(1) !important;
   }
   html[data-jbj-theme="moon"] body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline),
   html:not([data-jbj-theme="sun"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     text-shadow: none !important;
   }
   html[data-jbj-theme="moon"] body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     [data-tour-target="mobile-menu"],
   html:not([data-jbj-theme="sun"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     [data-tour-target="mobile-menu"] {
     background: transparent !important;
     background-image: none !important;
@@ -81,10 +81,10 @@
     box-shadow: none !important;
   }
   html[data-jbj-theme="moon"] body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     [data-tour-target="mobile-menu"] .jj-hamburger-bar,
   html:not([data-jbj-theme="sun"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     [data-tour-target="mobile-menu"] .jj-hamburger-bar {
     background-color: #FFFFFF !important;
     box-shadow: none !important;
@@ -92,7 +92,7 @@
 
   /* ── 2. ON SCROLL (both skins) — emerald band, white identity ───────── */
   html:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="true"] {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"] {
     background-color: #032015 !important;
     background-image: linear-gradient(
       90deg,
@@ -109,18 +109,18 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
   }
   html:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="true"] a[href="/"] img {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"] a[href="/"] img {
     filter: brightness(0) invert(1) !important;
   }
   html:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="true"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     text-shadow: none !important;
   }
   html:not([data-jbj-backend-lock="1"]) body div#root
-    [data-chrome="header"] > header[data-header-scrolled="true"]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"]
     [data-tour-target="mobile-menu"] .jj-hamburger-bar {
     background-color: #FFFFFF !important;
   }
