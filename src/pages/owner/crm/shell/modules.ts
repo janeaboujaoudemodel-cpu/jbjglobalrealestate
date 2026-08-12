@@ -243,7 +243,6 @@ export const CRM_OWNER_HUB_SECTIONS: CrmFolder[] = [
       { slug: "owner-overview", label: "Overview", icon: Home },
       { slug: "owner-jbj-hub", label: "JBJ Hub", icon: Sparkles },
       { slug: "owner-documents-forms", label: "Document Studio", icon: FileText },
-      { slug: "owner-unified-crm", label: "CRM Database", icon: Users },
       { slug: "owner-data-hub", label: "Data Hub", icon: Database },
     ],
   },
