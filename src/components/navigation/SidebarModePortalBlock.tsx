@@ -77,7 +77,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}
         aria-current={active ? "page" : undefined}
-        className={`group flex items-center gap-3 px-3 min-h-11 rounded-lg transition-all duration-200 ${
+        className={`group flex items-center gap-3 px-3 min-h-9 rounded-lg transition-all duration-200 ${
           active ? "" : "hover:bg-[#1A1A1A]/[0.045]"
         }`}
         style={

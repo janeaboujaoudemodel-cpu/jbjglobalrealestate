@@ -30,7 +30,7 @@ html body #root [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emeral
 }
 
 /* Consistent rhythm: ~9px between major rows, tighter inside submenus */
-[data-sidebar-emerald] nav > div > div { row-gap: 9px; }
+[data-sidebar-emerald] nav > div > div { row-gap: 2px; }
 [data-sidebar-emerald] nav [class*="ml-5"] > * + * { margin-top: 2px; }
 
 /* ─────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ html body #root [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emeral
    ───────────────────────────────────────────────────────────── */
 html body #root [data-sidebar-emerald] nav > div > div[class*="flex-col"][class*="flex-1"] {
   justify-content: flex-start !important;
-  row-gap: 9px !important;
+  row-gap: 2px !important;
 }
 html body #root [data-sidebar-emerald] nav > div > div[class*="flex-col"][class*="flex-1"] > * {
   flex: 0 0 auto !important;
@@ -57,7 +57,7 @@ html body #root [data-sidebar-emerald] nav {
   padding-inline: 14px !important;
 }
 html body #root [data-sidebar-emerald] nav :is(a, button) {
-  min-height: 40px;
+  min-height: 36px;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   border: 0 !important;

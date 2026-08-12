@@ -1108,7 +1108,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
       <div data-sidebar-emerald className="flex flex-col h-full w-full min-w-0 bg-primary text-primary-foreground">
       {/* ━━━ LOGO HEADER — compact and aligned with the horizontal utility bar ━━━ */}
       <div data-sidebar-brand-row className="jj-rail-brand-band h-[56px] w-full shrink-0 flex flex-row items-stretch bg-transparent text-primary-foreground">
-        <Link to="/" className="jj-rail-brand-link flex w-full items-center gap-2 px-3 transition-colors">
+        <Link to="/" className="jj-rail-brand-link flex w-full items-center gap-2 pl-3 pr-5 transition-colors">
           <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-[58px] h-[58px] object-contain shrink-0 brightness-0 invert" loading="eager" data-eager decoding="async" />
           <div className="min-w-0 mt-1">
             <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap text-primary-foreground">JBJ GLOBAL REAL ESTATE</span>
@@ -1136,7 +1136,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               (highlight hubs AND section accordions) so the sidebar never
               stretches or leaves an uneven gap between AI Home Finder and
               Owner Portal. Do NOT use space-between here. */}
-          <div className="flex flex-col flex-1 min-h-0 gap-2 pt-1">
+          <div className="flex flex-col flex-1 min-h-0 gap-[2px] pt-1">
 
 
 
@@ -1166,7 +1166,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                   data-sidebar-highlight
                   data-active={highlightActive ? 'true' : undefined}
                   aria-current={highlightActive ? 'page' : undefined}
-                  className={`group flex items-center gap-3 px-3 min-h-11 text-[14px] transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
+                  className={`group flex items-center gap-3 px-3 min-h-9 text-[14px] transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
                   iconWrapperData={{ 'data-sidebar-highlight-tile': true }}
                   iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
@@ -1208,7 +1208,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                     data-active={sectionHighlighted ? 'true' : undefined}
                     data-no-contrast-guard
                     style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                    className="w-full flex items-center gap-3 px-3 min-h-11 text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-xl"
+                    className="w-full flex items-center gap-3 px-3 min-h-9 text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-xl"
                     iconWrapperData={{ 'data-sidebar-section-icon-tile': true }}
                     iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-colors ${getIconTileClass()}`}
                     iconClassName="w-[18px] h-[18px] transition-colors"
@@ -1254,7 +1254,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                             data-active={viewAllActive ? 'true' : undefined}
                             aria-current={viewAllActive ? 'page' : undefined}
                             data-no-contrast-guard
-                            className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13px] transition-all duration-150 ${viewAllActive ? 'font-semibold' : 'font-medium hover:bg-[#EFE6D6]/40'}`}
+                            className={`group flex items-center gap-2.5 px-2.5 min-h-9 rounded-lg text-[13px] transition-all duration-150 ${viewAllActive ? 'font-semibold' : 'font-medium hover:bg-[#EFE6D6]/40'}`}
                             style={viewAllActive
                               ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                               : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
@@ -1334,7 +1334,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                               data-active={subitemActive ? 'true' : undefined}
                               aria-current={subitemActive ? 'page' : undefined}
                               data-no-contrast-guard
-                              className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13.5px] transition-all duration-150 ${subitemActive ? 'font-semibold' : 'font-medium hover:bg-[#1A1A1A]/[0.045]'}`}
+                              className={`group flex items-center gap-2.5 px-2.5 min-h-9 rounded-lg text-[13.5px] transition-all duration-150 ${subitemActive ? 'font-semibold' : 'font-medium hover:bg-[#1A1A1A]/[0.045]'}`}
                               style={subitemActive
                                 ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                                 : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
@@ -1608,6 +1608,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
             </div>
 
             {/* Expand button pins the full sidebar; Collapse restores hover mode. */}
+            <div className="w-full flex justify-center mt-[2px] mb-3">
             <TooltipProvider delayDuration={0} skipDelayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -1642,6 +1643,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            </div>
             </div>
 
 

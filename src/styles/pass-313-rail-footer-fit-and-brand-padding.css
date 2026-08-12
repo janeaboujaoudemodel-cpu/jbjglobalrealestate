@@ -1,0 +1,36 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 313 — COLLAPSED RAIL FOOTER FIT + BRAND WORDMARK BREATHING ROOM
+
+   1) The collapsed rail footer had a hard 132px height with centred
+      content, so the Expand button overflowed past the bottom edge and
+      sat flush against (and clipped by) the rail. The block now grows to
+      fit its icons and keeps a real bottom inset.
+   2) Row rhythm in the expanded sidebar is compact and even (Resend-like):
+      one small, identical gap between every page row and sub-row.
+   ═══════════════════════════════════════════════════════════════════ */
+
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-footer-block--rail {
+  height: auto !important;
+  min-height: var(--jj-chrome-footer-h) !important;
+  justify-content: flex-end !important;
+  padding-bottom: 12px !important;
+}
+
+/* Even, compact rhythm between rows and sub-rows */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav > div > div[class*="flex-col"][class*="flex-1"] {
+  row-gap: 2px !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav [class*="ml-5"] > * + * {
+  margin-top: 1px !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav :is(a, button, [role="button"]) {
+  min-height: 36px !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav [data-sidebar-mode-portal] {
+  min-height: 36px !important;
+}
+
+/* Wordmark never touches the rail's right edge */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-brand-link {
+  padding-right: 20px !important;
+}
