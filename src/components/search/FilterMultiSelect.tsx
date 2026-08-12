@@ -135,7 +135,7 @@ export default function FilterMultiSelect({
               return (
                 <div
                   key={opt.value}
-                  className="grid h-10 w-full items-center gap-1.5"
+                  className="grid min-h-10 w-full items-center gap-1.5"
                   style={{ gridTemplateColumns: "minmax(0,1fr) 32px" }}
                 >
                   <button
@@ -143,7 +143,7 @@ export default function FilterMultiSelect({
                     onClick={() => toggle(opt.value, "include")}
                     aria-pressed={on}
                     data-no-contrast-guard
-                    className="flex h-10 min-w-0 items-center gap-2 rounded-md px-2 text-left text-[13px] transition-colors"
+                    className="flex min-h-10 min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] leading-tight transition-colors"
                     style={{
                       backgroundImage: on ? EMERALD_PAIR : undefined,
                       background: on ? undefined : "transparent",
@@ -163,7 +163,7 @@ export default function FilterMultiSelect({
                     </span>
                     {opt.media ? <span className="shrink-0 inline-flex items-center">{opt.media}</span> : null}
                     <span
-                      className="min-w-0 flex-1 truncate"
+                      className="min-w-0 flex-1 whitespace-normal break-words"
                       style={{ textDecoration: off ? "line-through" : undefined }}
                     >
                       {opt.label}
