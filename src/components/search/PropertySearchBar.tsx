@@ -264,7 +264,7 @@ export default function PropertySearchBar({
     if (f.areasExclude.length) return `All except ${f.areasExclude.length}`;
     if (f.region) return getRegions(f.country).find((r) => r.slug === f.region)?.name ?? "Location";
     const c = GEO_COUNTRIES.find((x) => x.slug === f.country);
-    return c ? (c.slug === "uae" ? "UAE — all areas" : c.name) : "Location";
+    return c ? (c.slug === "uae" ? "UAE" : c.name) : "Location";
   }, [f]);
 
   const typeLabel = f.types.length
