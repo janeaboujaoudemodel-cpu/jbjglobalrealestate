@@ -249,30 +249,42 @@ export default function MobileNavDrawer({
           })}
         </div>
 
-        {/* Preferences — one setting per line, label left, control right */}
+        {/* Preferences — label column, hairline divider, then one compact
+            value. No duplicated globe/dollar marks on the right. */}
         <div className="jj-drawer-prefs shrink-0 flex flex-col px-3 pb-2">
-          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
-            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <Globe className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Language
             </span>
-            <LanguageSwitcher variant="compact" />
+            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
+            <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
+              <LanguageSwitcher variant="compact" />
+            </span>
           </div>
-          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
-            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+
+          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <Coins className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Currency
             </span>
-            <CurrencySwitcher variant="default" />
+            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
+            <span className="flex min-w-0 flex-1 items-center pl-1" style={rowStyle}>
+              <span className="inline-flex h-9 min-w-0 items-center">
+                <InlineCurrencySelect dark={isMoon} />
+              </span>
+            </span>
           </div>
+
           {/* Mode is READ-ONLY (PASS 319). Category changes go through the help desk. */}
-          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
-            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <Lock className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Your view
             </span>
-            <span className="flex items-center gap-2 leading-none" style={rowStyle}>
-              <span className="text-[12px] font-bold capitalize leading-none">{mode}</span>
+            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
+            <span className="flex min-w-0 flex-1 items-center justify-between gap-2 pl-3" style={rowStyle}>
+              <span className="text-[12.5px] font-bold capitalize leading-none">{mode}</span>
               <Link
                 to={`/ticket-hub?topic=mode-change&current=${mode}`}
                 onClick={onClose}
@@ -282,9 +294,9 @@ export default function MobileNavDrawer({
                 Change
               </Link>
             </span>
-
           </div>
         </div>
+
 
         <span aria-hidden className="jj-drawer-rule h-px mx-4 shrink-0" />
 
