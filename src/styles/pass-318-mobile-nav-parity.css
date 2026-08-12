@@ -447,3 +447,12 @@ html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer
   0%, 100% { border-color: rgba(255, 255, 255, 0.35); }
   50% { border-color: rgba(255, 255, 255, 0.75); }
 }
+
+/* "Change" link sits on the same baseline as the mode value. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
