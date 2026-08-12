@@ -1,0 +1,165 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 328 — PHONE/TABLET PORTRAIT: CLEAN HEADER, EMERALD SCROLL BAND,
+              CHAMPAGNE HERO FILLS (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   Owner rules encoded here:
+   1. Normal load (page top)
+      · Sun  → clean white band, PURE BLACK monogram / wordmark / tagline,
+               one very thin hairline divider. Never a plate or halo.
+      · Moon → fully transparent band, PURE WHITE monogram / wordmark /
+               tagline / hamburger bars, one very thin white hairline.
+   2. On scroll (both skins) → emerald band, dark at both edges with the
+      emerald lift in the centre. Identity is pure white. No highlight.
+   3. Homepage hero filter bar (portrait phones/tablets, Sun only) →
+      active pills (Buy, sq ft) and the "Show N properties" button are
+      filled with the header champagne band and read in BLACK ink.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023.98px) {
+  /* ── 1a. SUN, PAGE TOP — clean white, black ink ─────────────────────── */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"] {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    animation: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.12) !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"] a[href="/"] img {
+    filter: brightness(0) saturate(0) !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    text-shadow: none !important;
+  }
+
+  /* ── 1b. MOON, PAGE TOP — transparent, pure white ink ───────────────── */
+  html[data-jbj-theme="moon"] body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"],
+  html:not([data-jbj-theme="sun"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    animation: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.24) !important;
+  }
+  html[data-jbj-theme="moon"] body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"] a[href="/"] img,
+  html:not([data-jbj-theme="sun"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"] a[href="/"] img {
+    filter: brightness(0) invert(1) !important;
+  }
+  html[data-jbj-theme="moon"] body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline),
+  html:not([data-jbj-theme="sun"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    text-shadow: none !important;
+  }
+  html[data-jbj-theme="moon"] body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-tour-target="mobile-menu"],
+  html:not([data-jbj-theme="sun"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-tour-target="mobile-menu"] {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  html[data-jbj-theme="moon"] body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-tour-target="mobile-menu"] .jj-hamburger-bar,
+  html:not([data-jbj-theme="sun"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="false"]
+    [data-tour-target="mobile-menu"] .jj-hamburger-bar {
+    background-color: #FFFFFF !important;
+    box-shadow: none !important;
+  }
+
+  /* ── 2. ON SCROLL (both skins) — emerald band, white identity ───────── */
+  html:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="true"] {
+    background-color: #032015 !important;
+    background-image: linear-gradient(
+      90deg,
+      #01120b 0%,
+      #032015 18%,
+      #064E3B 50%,
+      #032015 82%,
+      #01120b 100%
+    ) !important;
+    background-size: 100% 100% !important;
+    animation: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
+  }
+  html:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="true"] a[href="/"] img {
+    filter: brightness(0) invert(1) !important;
+  }
+  html:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="true"]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    text-shadow: none !important;
+  }
+  html:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-scrolled="true"]
+    [data-tour-target="mobile-menu"] .jj-hamburger-bar {
+    background-color: #FFFFFF !important;
+  }
+
+  /* ── 3. NO PLATE / HALO EVER BEHIND THE PHONE IDENTITY ──────────────── */
+  html body div#root [data-chrome="header"] > header
+    :is(a[href="/"], .jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    outline: none !important;
+  }
+}
+
+/* ── 4. HOMEPAGE HERO FILTER BAR — CHAMPAGNE FILLS, BLACK INK (SUN) ──── */
+@media (max-width: 1023.98px) and (orientation: portrait) {
+  html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
+    [data-property-search-bar] :is(button, a)[data-surface="emerald"],
+  html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
+    [data-property-search-bar] :is(button, a)[aria-pressed="true"] {
+    background-color: #C8AD7A !important;
+    background-image: linear-gradient(
+      90deg,
+      #F1E8D6 0%,
+      #E2D2B4 22%,
+      #C8AD7A 50%,
+      #E2D2B4 78%,
+      #F1E8D6 100%
+    ) !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+  }
+  html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
+    [data-property-search-bar] :is(button, a)[data-surface="emerald"] :is(span, svg, path),
+  html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
+    [data-property-search-bar] :is(button, a)[aria-pressed="true"] :is(span, svg, path) {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    stroke: currentColor !important;
+  }
+}
