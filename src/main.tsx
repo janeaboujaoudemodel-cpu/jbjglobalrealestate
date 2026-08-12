@@ -24,6 +24,7 @@ import"./styles/pass-318-mobile-nav-parity.css";
 import"./styles/pass-324-phone-header-identity.css";
 import"./styles/pass-325-phone-champagne-chrome.css";
 import"./styles/pass-326-phone-header-footer-color-match.css";
+import"./styles/pass-328-phone-portrait-chrome-and-hero-fill.css";
 
 
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
