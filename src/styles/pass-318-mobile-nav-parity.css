@@ -1,0 +1,150 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 318 — MOBILE / TABLET NAV PARITY (LOCKED)
+
+   One navigation language on phone, tablet and desktop.
+
+   1. LAYERING. The mobile header and its drawer now sit on a documented
+      top chrome layer, above every page-level sticky bar (search bars,
+      filter rails and section overlays used z-[10000]–z-[10200], which is
+      why the nav disappeared behind content on some pages).
+   2. SUN / MOON PARITY. The drawer inherits the shared
+      `[data-jj-mobile-drawer]` theme hooks (champagne + black ink in Sun,
+      emerald ombré + pure white ink in Moon). This pass locks the ink so
+      no later layer can wash it out, and gives the drawer the rail's
+      geometry: 56px brand band, 44px rows, emerald/gold hairlines.
+   3. TOUCH. Every row and quick action is at least 44px tall, labels wrap
+      instead of clipping, and the panel carries safe-area padding.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Layer scale ═══════════ */
+html body #root [data-chrome="header"] { position: relative; z-index: 10400; }
+html body #root [data-chrome="header"] header { z-index: 10400 !important; }
+html body #root .jj-drawer-layer { z-index: 10450; }
+
+/* ═══════════ 2. Panel geometry ═══════════ */
+html body #root [data-jj-drawer-panel] {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  border-right: 1px solid rgba(6, 78, 59, 0.22);
+}
+html body #root [data-jj-drawer-panel] .jj-drawer-row {
+  min-height: 44px;
+  width: 100%;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent;
+  text-align: left;
+}
+html body #root [data-jj-drawer-panel] .jj-drawer-row span {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+html body #root [data-jj-drawer-panel] .jj-drawer-sub {
+  border-left: 1px solid rgba(6, 78, 59, 0.28);
+}
+html body #root [data-jj-drawer-panel] .jj-drawer-rule {
+  background: rgba(6, 78, 59, 0.22);
+}
+html body #root [data-jj-drawer-panel] nav::-webkit-scrollbar { width: 0; height: 0; }
+
+/* ═══════════ 3. SUN — champagne surface, black ink ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel][data-jj-mobile-drawer] {
+  background-color: #F7F1E4 !important;
+  background: var(--jj-champagne-long-v, linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-image: var(--jj-champagne-long-v, linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+}
+html[data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel][data-jj-mobile-drawer]
+  :is(a, button, span, p, strong, small, label, svg, svg *, path):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+/* Sun monogram is a black knockout on champagne */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel] img[alt="JBJ"] {
+  filter: brightness(0) saturate(0) !important;
+}
+/* Sun active row = champagne gold pill, black ink, no underline */
+html[data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel] .jj-drawer-row[data-active="true"]:not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  background: linear-gradient(180deg, #EFE1BF 0%, #E4D2A8 100%) !important;
+  background-image: linear-gradient(180deg, #EFE1BF 0%, #E4D2A8 100%) !important;
+  box-shadow: none !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel] .jj-drawer-row:active {
+  background: rgba(10, 10, 10, 0.06) !important;
+}
+
+/* ═══════════ 4. MOON — emerald ombré, pure white ink ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel][data-jj-mobile-drawer],
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel][data-jj-mobile-drawer] {
+  background-color: #01120b !important;
+  background: linear-gradient(180deg, #01120b 0%, #04382a 34%, #021610 68%, #000000 100%) !important;
+  background-image: linear-gradient(180deg, #01120b 0%, #04382a 34%, #021610 68%, #000000 100%) !important;
+  border-right-color: rgba(255, 255, 255, 0.10);
+}
+html[data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel][data-jj-mobile-drawer]
+  :is(a, button, span, p, strong, small, label, svg, svg *, path):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel] img[alt="JBJ"] {
+  filter: brightness(0) invert(1) !important;
+}
+html[data-jbj-theme="moon"][data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel] .jj-drawer-row[data-active="true"]:not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-jj-drawer-panel] :is(.jj-drawer-rule, .jj-drawer-sub) {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* ═══════════ 5. Mobile header identity — skin-aware ink, never washed out ═══════════ */
+@media (max-width: 1023px) {
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] header:not([data-header-transparent="true"])
+    :is(.jj-header-wordmark, .jj-header-tagline, .jj-hamburger-close) {
+    color: #0A0A0A !important;
+    -webkit-text-fill-color: #0A0A0A !important;
+  }
+  html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] header
+    :is(.jj-header-wordmark, .jj-header-tagline, .jj-hamburger-close) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+  /* Hamburger target stays a 44px touch box in both skins */
+  html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ═══════════ 6. No stray surface blocks inside the drawer ═══════════
+   Sitewide `data-surface` rules painted a pale card behind expanded
+   sub-lists and behind inactive rows. Only the single active row may
+   carry a fill. */
+html body div#root [data-jj-drawer-panel] :is(.jj-drawer-sub, .jj-drawer-quick, .jj-drawer-prefs, .jj-drawer-footer, nav):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-row:not([data-active="true"]):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}

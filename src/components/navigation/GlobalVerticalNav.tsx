@@ -63,7 +63,7 @@ type MegaMenuKey =
   | 'services' | 'company' | 'legal' | 'guides'
   | 'broker' | 'investor' | 'productivity' | 'account' | 'suites';
 
-interface NavItem {
+export interface NavItem {
   label: string;
   href: string;
   icon: any;
@@ -73,7 +73,7 @@ interface NavItem {
 }
 
 /* ─── NAV ITEMS ─── */
-const NAV_ITEMS: NavItem[] = [
+export const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   
   { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, highlight: true },
@@ -296,7 +296,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AI Governance", href: "/governance/ai", icon: Shield },
 ];
 
-const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
+export const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
   { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, section: "TOOLS" },
   { label: "Property Comparison", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
@@ -485,7 +485,7 @@ import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } fr
 
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = [
+export const SECTION_KEYS = [
   "TOOLS & WORKSPACE",
   "PROPERTIES",
   "INSIGHTS",
@@ -499,10 +499,10 @@ const SECTION_KEYS = [
   "MY ACCOUNT",
   "ADMIN & OWNER",
 ] as const;
-type SectionKey = typeof SECTION_KEYS[number];
+export type SectionKey = typeof SECTION_KEYS[number];
 
 /* ─── Map raw item.section values onto consolidated section keys ─── */
-const SECTION_ALIAS: Record<string, SectionKey> = {
+export const SECTION_ALIAS: Record<string, SectionKey> = {
   "PROPERTIES": "PROPERTIES",
   "TOOLS": "TOOLS & WORKSPACE",
   "PRODUCTIVITY": "TOOLS & WORKSPACE",
@@ -520,7 +520,7 @@ const SECTION_ALIAS: Record<string, SectionKey> = {
 };
 
 /* ─── SECTION ICONS ─── */
-const SECTION_ICONS: Record<SectionKey, any> = {
+export const SECTION_ICONS: Record<SectionKey, any> = {
   "TOOLS & WORKSPACE": Sparkles,
   "PROPERTIES": Building2,
   "INSIGHTS": Lightbulb,
