@@ -98,7 +98,7 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
   };
 
   return (
-    <Card data-surface="emerald" className="border-border/60 overflow-hidden">
+    <Card className="border-border/60 bg-card overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
         <CardTitle className="text-base flex items-center gap-2">
           <CalendarCheck className="h-4 w-4" />
