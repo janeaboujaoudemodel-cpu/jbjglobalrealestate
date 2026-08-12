@@ -113,3 +113,13 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-par
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
 }
+
+/* Ultra-specific Sun ink lock — beats the repeated-attribute emerald-surface
+   white-ink rules that would otherwise paint white on champagne. */
+html[data-jbj-theme="sun"] body #root
+  [data-partners-marquee][data-partners-marquee][data-partners-marquee]
+  [data-partners-heading][data-partners-heading][data-partners-heading]
+  :is(p, span, div)[class][class] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
