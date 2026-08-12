@@ -215,7 +215,7 @@ export default function MobileNavDrawer({
             data-eager
           />
           <span
-            className="jj-drawer-wordmark flex-1 min-w-0 whitespace-nowrap text-[13.5px] font-semibold uppercase tracking-[0.07em] leading-none"
+            className="jj-drawer-wordmark flex-1 min-w-0 whitespace-nowrap text-[12.5px] font-semibold uppercase tracking-[0.06em] leading-none pr-2"
             style={rowStyle}
           >
             JBJ Global Real Estate
