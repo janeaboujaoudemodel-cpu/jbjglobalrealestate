@@ -126,13 +126,17 @@
   }
 
   /* ── 3. NO PLATE / HALO EVER BEHIND THE PHONE IDENTITY ──────────────── */
-  html body div#root [data-chrome="header"] > header
-    :is(a[href="/"], .jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
+  html:not(#jj-p328-h1):not(#jj-p328-h2):not(#jj-p328-h3):not(#jj-p328-h4) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface]
+    :is(a[href="/"], .jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline, .jj-header-tagline *) {
     background: transparent !important;
+    background-color: transparent !important;
     background-image: none !important;
     box-shadow: none !important;
     border: 0 !important;
     outline: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
   }
 }
 
