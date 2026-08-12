@@ -260,8 +260,34 @@ export default function MobileNavDrawer({
             </span>
             <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
             <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
-              <LanguageSwitcher variant="compact" />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    data-no-contrast-guard
+                    className="inline-flex h-9 items-center gap-2 bg-transparent px-0"
+                    style={rowStyle}
+                    aria-label="Select language"
+                  >
+                    <span aria-hidden className="text-[15px] leading-none">{activeLang.flag}</span>
+                    <span className="text-[12.5px] font-bold uppercase leading-none tracking-[0.06em]">
+                      {activeLang.code.slice(0, 2).toUpperCase()}
+                    </span>
+                    <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70" style={{ color: "currentColor" }} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="z-[10500] max-h-72 w-56 overflow-y-auto">
+                  {SUPPORTED_LANGUAGES.map((l) => (
+                    <DropdownMenuItem key={l.code} onClick={() => setLanguage(l.code)} className="gap-2 text-sm">
+                      <span aria-hidden>{l.flag}</span>
+                      <span className="font-semibold uppercase">{l.code.slice(0, 2)}</span>
+                      <span className="truncate opacity-70">{l.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </span>
+
           </div>
 
           <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
