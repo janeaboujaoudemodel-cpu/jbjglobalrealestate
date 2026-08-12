@@ -1150,10 +1150,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                     data-sidebar-section
                     data-active={sectionHighlighted ? 'true' : undefined}
                     data-no-contrast-guard
-                    style={{
-                      color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
-                      WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
-                    }}
+                    style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                     className="w-full flex items-center gap-3 px-3 min-h-11 text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-xl"
                     iconWrapperData={{ 'data-emerald-icon-surface': true, 'data-surface': 'emerald' }}
                     iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${getIconTileClass()}`}
@@ -1164,14 +1161,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                     labelData={{ 'data-sidebar-section-label': true, 'data-no-contrast-guard': true }}
                     labelClassName={`flex-1 text-left relative inline-block whitespace-normal break-normal [word-break:normal] [overflow-wrap:normal] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     labelStyle={{
-                      color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
-                      WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
+                      color: '#FFFFFF',
+                      WebkitTextFillColor: '#FFFFFF',
                       background: 'none',
                       backgroundImage: 'none',
                     }}
                     trailing={(
                       <>
-                        <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
+                        <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                         {!isOpen && hasActiveChild && (
                           <span className="w-1.5 h-1.5 rounded-full bg-[#064E3B] animate-pulse" />
                         )}
@@ -1203,7 +1200,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                             className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13px] transition-all duration-150 ${viewAllActive ? 'font-semibold' : 'font-medium hover:bg-[#EFE6D6]/40'}`}
                             style={viewAllActive
                               ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
-                              : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                              : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                             iconWrapperData={{ 'data-emerald-icon-surface': true }}
                             iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}
                             iconClassName="w-4 h-4"
@@ -1213,7 +1210,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                             labelClassName="flex-1"
                             labelStyle={viewAllActive
                               ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
-                              : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                              : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                           />
                         );
                       })()}
@@ -1283,7 +1280,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                               className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13.5px] transition-all duration-150 ${subitemActive ? 'font-semibold' : 'font-medium hover:bg-[#1A1A1A]/[0.045]'}`}
                               style={subitemActive
                                 ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
-                                : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                                : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                               iconWrapperData={{ 'data-emerald-icon-surface': true }}
                               iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
                               iconClassName="w-3.5 h-3.5 transition-colors"
@@ -1292,7 +1289,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                               iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                               labelData={{ 'data-sidebar-subitem-label': true }}
                               labelClassName="flex-1 relative transition-colors"
-                              labelStyle={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}
+                              labelStyle={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                             />
                             {needsAccountDivider && (
                               <div className="my-1 mx-2 h-px bg-gradient-to-r from-transparent via-[#047857]/45 to-transparent" aria-hidden="true" />
@@ -1318,7 +1315,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           className="h-px mb-1 mt-0"
           style={{
             background:
-              "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0) 92%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0) 8%, rgba(255,255,255,0.72) 50%, rgba(255,255,255,0) 92%, transparent 100%)",
           }}
           aria-hidden="true"
         />
@@ -1335,21 +1332,10 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 title="Sign Out"
                 aria-label="Sign Out"
                 className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
-                style={{
-                  color: '#DC2626',
-                  borderColor: '#B89555',
-                  borderWidth: 0,
-                  borderRadius: '8px',
-                  height: '42px',
-                  minHeight: '42px',
-                  background: 'linear-gradient(135deg, #FDFBF7 0%, #F7EFDF 50%, #EFE3C9 100%)',
-                  boxShadow: '0 2px 8px -3px rgba(220,38,38,0.30), inset 0 1px 0 rgba(255,255,255,0.55)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #FDFBF7 0%, #F7EFDF 50%, #EFE3C9 100%)'; }}
+                style={{ color: '#FFFFFF', borderWidth: 0, height: '42px', minHeight: '42px', background: 'transparent', boxShadow: 'none' }}
               >
-                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" color="#DC2626" stroke="#DC2626" strokeWidth={2.4} style={{ color: '#DC2626', stroke: '#DC2626' }} />
-                <span data-signout-label className="whitespace-nowrap" style={{ color: '#DC2626', WebkitTextFillColor: '#DC2626', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
+                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" strokeWidth={2.4} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                <span data-signout-label className="whitespace-nowrap" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
               </button>
             ) : (
               <Link
@@ -1387,7 +1373,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 color: '#FFFFFF',
                 background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
                 backgroundImage: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
-                borderColor: '#B89555',
+                borderColor: 'rgba(255,255,255,0.22)',
                 boxShadow: '0 4px 12px -4px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
               }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundImage = 'linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%)'; }}
@@ -1411,7 +1397,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-primary text-primary-foreground border-r border-primary-foreground/20">
+        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground border-r border-primary-foreground/20">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
           <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
             <Link to="/">
@@ -1424,18 +1410,18 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
             html body .jj-side-tile,
             html body button.jj-side-tile,
             html body a.jj-side-tile {
-              background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-              background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-              border: 1px solid rgba(255,255,255,0.14) !important;
+              background: transparent !important;
+              background-image: none !important;
+              border: 0 !important;
               color: #FFFFFF !important;
-              box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+              box-shadow: none !important;
               filter: none !important;
-              transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease !important;
+              transition: transform 140ms ease, background-color 140ms ease !important;
             }
             html body .jj-side-tile svg,
             html body .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; fill: none !important; opacity: 1 !important; transition: none !important; }
-            html body .jj-side-tile:hover { border-color: rgba(255,255,255,0.55) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
-            html body .jj-side-tile.is-active { border-color: rgba(255,255,255,0.85) !important; box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(255,255,255,0.45) !important; }
+            html body .jj-side-tile:hover { transform: translateY(-1px) !important; background: rgba(255,255,255,.08) !important; }
+            html body .jj-side-tile.is-active { background: rgba(255,255,255,.14) !important; box-shadow: none !important; }
             html body .jj-side-tile.is-active svg,
             html body .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
@@ -1500,7 +1486,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
 
             {/* Bottom pinned */}
             <div className="flex flex-col items-center gap-1 pt-1 pb-1 w-full">
-              <div className="h-px w-6 mb-1 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" aria-hidden="true" />
+          <div className="h-px w-6 mb-1 bg-gradient-to-r from-transparent via-primary-foreground/70 to-transparent" aria-hidden="true" />
 
 
               <Tooltip>
@@ -1541,10 +1527,10 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       data-sidebar-auth-control
                        className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 rounded-lg flex items-center justify-center"
                     >
-                      <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.15} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon" strokeWidth={2.15} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]" style={{ color: '#DC2626' }}>Sign Out</TooltipContent>
+                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
                 </Tooltip>
               ) : (
                 <Tooltip>
@@ -1602,7 +1588,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[264px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div className="hidden sm:flex w-[264px] flex-shrink-0 h-full relative overscroll-contain border-r border-primary-foreground/20">
           {renderNavContent()}
         </div>
       )}

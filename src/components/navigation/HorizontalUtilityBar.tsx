@@ -128,7 +128,7 @@ export default function HorizontalUtilityBar() {
     <>
       <div
         data-jj-utility-bar
-        className={`jj-utility-shell fixed top-0 right-0 h-[56px] z-[9998] flex items-center transition-[left,height,background-color,transform,opacity] duration-200 ease-out px-4 xl:px-5 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent ${filterBarActive ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
+        className={`jj-utility-shell fixed top-0 right-0 h-[56px] z-[9998] flex items-center transition-[left,height,background-color,transform,opacity] duration-200 ease-out px-4 xl:px-5 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] border-b border-primary-foreground/20 ${filterBarActive ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
       >
 
 

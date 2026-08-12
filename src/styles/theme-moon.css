@@ -123,16 +123,13 @@ html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jj
 }
 
 /* Public Moon content is CRM pearl/mint, never a wall of emerald. */
-html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(section,article)[data-jbj-invert="pair"],
-html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(section,article)[data-surface="emerald"],
-html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(.jj-emerald-card,.jj-champagne-surface):not(button):not(a) {
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(.jj-champagne-surface):not(button):not(a) {
   background: var(--jbj-moon-pearl) !important;
   background-image: none !important;
   color: var(--jbj-moon-ink) !important;
   border-color: var(--jbj-moon-line) !important;
 }
-html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(section,article)[data-jbj-invert="pair"] :is(h1,h2,h3,h4,h5,h6,p,span,a,label,li),
-html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(section,article)[data-surface="emerald"] :is(h1,h2,h3,h4,h5,h6,p,span,a,label,li) {
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root .jj-champagne-surface :is(h1,h2,h3,h4,h5,h6,p,span,a,label,li) {
   color: var(--jbj-moon-ink) !important;
   -webkit-text-fill-color: var(--jbj-moon-ink) !important;
 }
@@ -169,17 +166,18 @@ html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body [data-search-d
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-/* Partner strip flips from Sun emerald to a clean pearl CRM band. */
+/* Partner strip stays the emerald pair in both skins; white marks and ink are
+   the immutable brand treatment rather than a theme-dependent card surface. */
 html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-marquee] {
-  background: var(--jbj-moon-pearl) !important;
-  background-image: none !important;
-  border-block: 1px solid var(--jbj-moon-line) !important;
+  background: var(--jbj-moon-chrome-h) !important;
+  background-image: var(--jbj-moon-chrome-h) !important;
+  border-block: 1px solid var(--jbj-moon-chrome-line) !important;
 }
 html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-partners-heading] p {
-  color: var(--jbj-moon-ink) !important;
-  -webkit-text-fill-color: var(--jbj-moon-ink) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
-html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root .jj-partner-mark img { filter: brightness(0) !important; }
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root .jj-partner-mark img { filter: brightness(0) invert(1) !important; }
 
 /* Emerald chrome never receives champagne/gold borders. */
 html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is([data-chrome="sidebar"],[data-jj-utility-bar],[data-chrome="header"],[data-jj-mobile-drawer]) * {

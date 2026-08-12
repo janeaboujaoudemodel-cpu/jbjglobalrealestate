@@ -99,6 +99,18 @@ html body #root [data-sidebar-emerald] nav button {
   min-height: 40px !important;
   border-radius: 10px !important;
 }
+html body #root [data-sidebar-emerald] [data-jjds-sidebar-icon] {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body #root [data-sidebar-emerald] [data-sidebar-section-label],
+html body #root [data-sidebar-emerald] [data-sidebar-subitem-label],
+html body #root [data-sidebar-emerald] [data-signout-label] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
 html body #root [data-sidebar-emerald] nav a:not([data-active="true"]):not([aria-current="page"]),
 html body #root [data-sidebar-emerald] nav button:not([data-active="true"]):not([aria-expanded="true"]) {
   background: transparent !important;
@@ -189,6 +201,14 @@ html body #root [data-step-circle] ~ * {
 html body #root li > button:has([data-step-circle]) {
   justify-content: flex-start !important;
   text-align: left !important;
+}
+
+/* The unified JBJ Method rail uses emerald ombre for the active marker and
+   pure white ink. It cannot inherit the legacy black-on-white step-chip rule. */
+html body #root [data-method-step="active"] {
+  background: linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 /* Highest-specificity final word for the step circles: the site has several

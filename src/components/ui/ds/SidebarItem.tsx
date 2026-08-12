@@ -180,7 +180,10 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
       "data-jjds-level": level,
       "data-jjds-active": active ? "true" : "false",
       "data-no-contrast-guard": active ? "" : undefined,
-      "data-surface": active ? ("emerald" as const) : ("light" as const),
+      // Inactive rows inherit the semantic surface of their sidebar container.
+      // Labelling them `light` made the global bright-surface contrast guard
+      // force black ink even when the rail itself is emerald.
+      "data-surface": active ? ("emerald" as const) : undefined,
       "aria-label": label,
       title: collapsed ? label : undefined,
     };

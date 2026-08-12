@@ -216,8 +216,8 @@ export default function InnovationLabSection() {
               </p>
             </div>
 
-            <ol className="relative space-y-1">
-              <span className="absolute left-4 top-4 bottom-4 w-px bg-[#064E3B]/20" aria-hidden />
+            <ol className="relative space-y-1 pl-2">
+              <span className="absolute left-6 top-4 bottom-4 w-px bg-[#064E3B]/20" aria-hidden />
               {STAGES.map((s, i) => {
                 const on = i === active;
                 return (
@@ -231,10 +231,11 @@ export default function InnovationLabSection() {
                     >
                       <span
                         data-jbj-theme-exempt
+                        data-method-step={on ? "active" : "idle"}
                         className="relative z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-all"
                         style={
                           on
-                            ? { background: "#064E3B", color: "#FFFFFF", boxShadow: "0 0 0 5px rgba(6,78,59,0.14)" }
+                            ? { background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", boxShadow: "0 0 0 5px rgba(6,78,59,0.14)" }
                             : {
                                 background: "#FFFFFF",
                                 color: "#064E3B",
