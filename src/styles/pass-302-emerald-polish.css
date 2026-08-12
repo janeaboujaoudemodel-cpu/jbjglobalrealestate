@@ -190,3 +190,13 @@ html body #root li > button:has([data-step-circle]) {
   justify-content: flex-start !important;
   text-align: left !important;
 }
+
+/* Highest-specificity final word for the step circles: the site has several
+   `... span { color: #fff !important }` contrast guards that otherwise erase
+   emerald digits sitting on a white chip. */
+html body #root [data-step-circle][data-step-circle][data-step-circle][data-step-circle] {
+  color: #064e3b !important;
+  -webkit-text-fill-color: #064e3b !important;
+  background: #ffffff !important;
+  opacity: 1 !important;
+}
