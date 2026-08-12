@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { isGatedRoute } from "@/lib/gatedSurface";
 import { CONVERSION_HEADLINES, CONVERSION_SUB } from "@/config/premiumActions";
 
 /**
@@ -12,7 +13,7 @@ import { CONVERSION_HEADLINES, CONVERSION_SUB } from "@/config/premiumActions";
 const HIDDEN_PREFIXES = ["/auth", "/access", "/signup", "/welcome", "/reset-password", "/oauth", "/.lovable"];
 
 export default function ConversionBand() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const location = useLocation();
   const [idx, setIdx] = useState(0);
 
@@ -25,7 +26,9 @@ export default function ConversionBand() {
     return () => clearInterval(t);
   }, [user]);
 
-  if (user) return null;
+  // Signed-in members already live inside the gated portal — never up-sell them.
+  if (user || authLoading) return null;
+  if (isGatedRoute(location.pathname)) return null;
   if (HIDDEN_PREFIXES.some((p) => location.pathname.startsWith(p))) return null;
 
   const headline = CONVERSION_HEADLINES[idx];
