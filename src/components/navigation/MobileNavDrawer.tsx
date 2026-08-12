@@ -317,35 +317,27 @@ export default function MobileNavDrawer({
               const items = sectionGroups[sectionKey];
               if (!items || items.length === 0) return null;
               const SectionIcon = SECTION_ICONS[sectionKey];
-              const expanded = openSection === sectionKey;
               return (
                 <div key={sectionKey} className="flex flex-col">
-                  <button
-                    type="button"
-                    aria-expanded={expanded}
-                    onClick={() => setOpenSection((prev) => (prev === sectionKey ? null : sectionKey))}
+                  {/* Every page is always visible — no accordion, no arrows. */}
+                  <div
                     data-jj-drawer-section
                     className="jj-drawer-row flex items-center gap-3 rounded-lg px-3 text-[11px] font-bold uppercase tracking-[0.14em]"
                     style={rowStyle}
                   >
                     <SectionIcon className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
                     <span className="flex-1 text-left">{sectionKey}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 shrink-0 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-                      style={{ color: "currentColor" }}
-                    />
-                  </button>
-                  {expanded && (
-                    <div className="jj-drawer-sub ml-4 pl-2 flex flex-col gap-0.5 py-1">
-                      {items.map((item) => (
-                        <Row key={`${sectionKey}-${item.href}-${item.label}`} item={item} nested />
-                      ))}
-                    </div>
-                  )}
+                  </div>
+                  <div className="jj-drawer-sub ml-4 pl-2 flex flex-col gap-0.5 py-1">
+                    {items.map((item) => (
+                      <Row key={`${sectionKey}-${item.href}-${item.label}`} item={item} nested />
+                    ))}
+                  </div>
                 </div>
               );
             })}
           </div>
+
         </nav>
 
         <span aria-hidden className="jj-drawer-rule h-px mx-3 shrink-0" />
