@@ -9,7 +9,10 @@ import { Suspense, lazy } from "react";
  * All consumers now render THIS component, which is the single dynamic edge —
  * the chunk is fetched only when a user actually opens search.
  */
-const GlobalSearchModal = lazy(() => import("@/components/GlobalSearchModal"));
+const loadGlobalSearchModal = () => import("@/components/GlobalSearchModal");
+const GlobalSearchModal = lazy(loadGlobalSearchModal);
+
+export const preloadGlobalSearchModal = () => void loadGlobalSearchModal();
 
 type Props = {
   isOpen: boolean;

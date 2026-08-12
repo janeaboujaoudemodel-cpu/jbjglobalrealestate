@@ -22,7 +22,7 @@ const COOKIES_POLICY_SNAPSHOT = {
 type CookieConsentAuditPayload = {
   visitor_id: string;
   user_id: string | null;
-  consent_status: "all";
+  consent_status: "all" | "essential";
   preferences: { essential: boolean; analytics: boolean; marketing: boolean };
   user_agent: string;
   accepted_at: string;
@@ -57,10 +57,10 @@ const CookiesConsentBanner = () => {
     }
   }, [shouldShow, isVisible]);
 
-  const handleOkay = async () => {
+  const handleConsent = async (status: "all" | "essential") => {
     const consentData = {
-      status: "all",
-      preferences: { essential: true, analytics: true, marketing: true },
+      status,
+      preferences: { essential: true, analytics: status === "all", marketing: status === "all" },
       timestamp: new Date().toISOString(),
       page_url: window.location.href,
       referrer: document.referrer || null,
@@ -84,7 +84,7 @@ const CookiesConsentBanner = () => {
       const { error } = await cookieConsentTable.insert({
         visitor_id: visitorId,
         user_id: user?.id ?? null,
-        consent_status: 'all',
+        consent_status: status,
         preferences: consentData.preferences,
         user_agent: navigator.userAgent,
         accepted_at: consentData.timestamp,
@@ -132,22 +132,25 @@ const CookiesConsentBanner = () => {
                 We use essential cookies to keep this experience secure and reliable.
               </p>
               <p className="allow-white mt-1 max-w-[52rem] text-[11px] leading-relaxed sm:mt-1.5 sm:text-[13px]" style={{ color: "rgba(255,255,255,0.82)" }}>
-                By selecting Okay, your consent is recorded with date, time, browser and policy version. Read our{" "}
+                Your choice is recorded with date, time, browser and policy version. Read our{" "}
                 <a href="/cookies" className="allow-white font-semibold underline underline-offset-4" style={{ color: "#FFFFFF" }}>Cookies Policy</a>
                 {" "}and{" "}
                 <a href="/privacy" className="allow-white font-semibold underline underline-offset-4" style={{ color: "#FFFFFF" }}>Privacy Policy</a>.
               </p>
             </div>
-            <Button
-              onClick={handleOkay}
-              className="allow-white h-9 w-full flex-none rounded-lg border border-white/40 bg-white/12 px-8 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-white/25 sm:h-11 sm:w-auto sm:px-10 sm:text-[12px]"
-              data-cta="primary"
-              data-surface="emerald"
-              data-no-contrast-guard
-              style={{ color: "#FFFFFF" }}
-            >
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>Okay</span>
-            </Button>
+            <div className="flex w-full flex-none gap-2 sm:w-auto">
+              <Button
+                variant="outline"
+                onClick={() => handleConsent("essential")}
+                className="allow-white h-9 flex-1 rounded-lg border-white/40 bg-transparent px-6 text-[11px] font-semibold uppercase tracking-[0.12em] hover:bg-white/10 sm:h-11 sm:flex-none"
+                data-no-contrast-guard
+                style={{ color: "#FFFFFF" }}
+              >Reject optional</Button>
+              <Button
+                onClick={() => handleConsent("all")}
+                className="h-9 flex-1 rounded-lg border border-white/40 bg-white px-6 text-[11px] font-semibold uppercase tracking-[0.12em] text-primary hover:bg-white/90 sm:h-11 sm:flex-none"
+              >Accept all</Button>
+            </div>
           </div>
         </motion.div>
       )}
