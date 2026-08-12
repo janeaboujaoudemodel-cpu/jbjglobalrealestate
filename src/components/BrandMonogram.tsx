@@ -55,6 +55,7 @@ export function BrandMonogram({
       <img 
         src={logoSrc}
         alt="JBJ Global Real Estate"
+        data-jbj-monogram={isLightIdentity ? "light" : "dark"}
         width={cfg.width}
         height={cfg.height}
         className="object-contain"
@@ -99,6 +100,7 @@ export function BrandMonogramHeader({ className = "" }: { className?: string }) 
       <img 
         src={jbjMonogramLightTransparent}
         alt="JBJ"
+        data-jbj-monogram="light"
         width={48}
         height={48}
         className="object-contain w-12 h-12 md:w-10 md:h-10"

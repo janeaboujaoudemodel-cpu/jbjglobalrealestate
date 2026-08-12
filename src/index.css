@@ -32633,3 +32633,51 @@ html body #root [data-active-filter-chip][data-active-filter-chip]:hover * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* ────────────────────────────────────────────────────────────────
+   PASS 301 — PARTNER MARKS, NO SELECTION BOX IN SEARCH FIELDS
+   1) Developer partner marquee logos: bare artwork, never a plate or
+      border. White knockout on the emerald strip (Sun) and black
+      knockout on the champagne strip (Moon).
+   2) The typewriter placeholder can never be selected, and text
+      selection inside any search field is a soft neutral wash — no
+      emerald rectangle around the typed words.
+   ──────────────────────────────────────────────────────────────── */
+html body .jj-partner-mark,
+html body .jj-partner-mark * {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body .jj-partner-mark img {
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.94;
+}
+html[data-jbj-theme="moon"] body .jj-partner-mark img {
+  filter: brightness(0) !important;
+  opacity: 0.88;
+}
+
+html body .jj-type-caret,
+html body [aria-hidden="true"] .jj-type-caret {
+  user-select: none;
+  -webkit-user-select: none;
+}
+html body input[type="text"]::selection,
+html body input[type="search"]::selection,
+html body input:not([type])::selection {
+  background: rgba(120, 120, 120, 0.22) !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* PASS 301 — monogram ink follows the theme: the dark (black) monogram
+   is knocked out to white whenever the page skin is emerald-night, so it
+   never disappears against the emerald sidebar/header. */
+html[data-jbj-theme="moon"] body [data-jbj-monogram="dark"] {
+  filter: brightness(0) invert(1) !important;
+}
+html body [data-emerald-surface="true"] [data-jbj-monogram="dark"],
+html body [data-chrome="sidebar"] [data-jbj-monogram="dark"] {
+  filter: brightness(0) invert(1) !important;
+}

@@ -21,6 +21,7 @@ import { getRegions } from "@/data/geography";
 import { GEO_COUNTRIES } from "@/data/geography";
 import AreaIncludeExclude from "./AreaIncludeExclude";
 import DeveloperIncludeExclude from "./DeveloperIncludeExclude";
+import FilterMultiSelect from "./FilterMultiSelect";
 import PropertyFilterScreen from "./PropertyFilterScreen";
 import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
@@ -69,8 +70,23 @@ function Seg({
 }) {
   const ink = dark ? "#FFFFFF" : "#1A1A1A";
   const muted = dark ? "rgba(255,255,255,0.92)" : "rgba(26,26,26,0.62)";
+  const [open, setOpen] = useState(false);
+
+  // The panel is anchored to THIS button. Any page scroll dismisses it so it can
+  // never detach and float over the page (PASS 301).
+  useEffect(() => {
+    if (!open) return;
+    const close = () => setOpen(false);
+    window.addEventListener("scroll", close, { passive: true, capture: true });
+    return () => window.removeEventListener("scroll", close, { capture: true } as EventListenerOptions);
+  }, [open]);
+
+  // Long active labels ("Emaar Properties", "My Properties") shrink to fit their
+  // box instead of being cropped. Never split a word.
+  const fit = label.length > 18 ? "10px" : label.length > 13 ? "11px" : undefined;
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button
           type="button"
@@ -82,7 +98,7 @@ function Seg({
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#FFFFFF",
             backdropFilter: dark ? "blur(10px)" : undefined,
-            border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
+            border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "var(--jj-seg-hairline, rgba(184,149,85,0.58))"}`,
             color: ink,
             WebkitTextFillColor: dark ? "#FFFFFF" : undefined,
           }}
@@ -91,7 +107,7 @@ function Seg({
           <span className="flex flex-1 items-center gap-1.5 min-w-0">
             <span className="shrink-0 inline-flex items-center">{icon}</span>
             <span
-              className="min-w-0 leading-none"
+              className="min-w-0 flex-1 leading-none"
               style={{
                 color: active ? ink : muted,
                 WebkitTextFillColor: active ? ink : muted,
@@ -99,6 +115,8 @@ function Seg({
                 wordBreak: "keep-all",
                 overflowWrap: "normal",
                 hyphens: "none",
+                fontSize: fit,
+                textOverflow: "clip",
               }}
             >
 
@@ -110,16 +128,22 @@ function Seg({
       </PopoverTrigger>
       <PopoverContent
         align="start"
+        collisionPadding={12}
         data-surface="light"
         data-search-dropdown
-        className={`${wide ? "w-[min(94vw,30rem)]" : "w-[min(92vw,22rem)]"} p-0 z-[70]`}
-        style={{ background: "#FFFFFF", border: "1px solid rgba(184,149,85,0.35)", color: "#1A1A1A" }}
+        className={`${wide ? "w-auto max-w-[94vw]" : "w-auto max-w-[92vw]"} p-0 z-[70]`}
+        style={{
+          background: "#FFFFFF",
+          border: "1px solid var(--jj-panel-hairline, rgba(184,149,85,0.35))",
+          color: "#1A1A1A",
+        }}
       >
         {children}
       </PopoverContent>
     </Popover>
   );
 }
+
 
 function Chip({
   on,
@@ -585,77 +609,19 @@ export default function PropertySearchBar({
             dark={dark}
             wide
           >
-            <div className="w-[240px] max-w-[88vw] p-2">
-              {(f.tiersInclude.length || f.tiersExclude.length) ? (
-                <button
-                  type="button"
-                  onClick={() => set({ tiersInclude: [], tiersExclude: [] })}
-                  className="mb-2 w-full rounded-md border border-[#064E3B]/25 px-2 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#064E3B]"
-                >
-                  Clear tiers
-                </button>
-              ) : null}
-              {(Object.entries(TIER_LABELS) as [DeveloperTier, string][]).map(([value, label]) => {
-                const on = f.tiersInclude.includes(value);
-                const off = f.tiersExclude.includes(value);
-                return (
-                  <div key={value} className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        set({
-                          tiersInclude: on
-                            ? f.tiersInclude.filter((t) => t !== value)
-                            : [...f.tiersInclude, value],
-                          tiersExclude: f.tiersExclude.filter((t) => t !== value),
-                        })
-                      }
-                      aria-pressed={on}
-                      data-no-contrast-guard
-                      className="flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2 text-left text-[13px]"
-                      style={{
-                        backgroundImage: on ? EMERALD_PAIR : undefined,
-                        color: on ? "#FFFFFF" : off ? "rgba(185,28,28,0.9)" : "#1A1A1A",
-                        WebkitTextFillColor: on ? "#FFFFFF" : undefined,
-                        textDecoration: off ? "line-through" : undefined,
-                      }}
-                    >
-                      <span
-                        className="grid h-4 w-4 shrink-0 place-items-center rounded-[4px] border"
-                        style={{
-                          borderColor: on ? "#FFFFFF" : off ? "#B91C1C" : "rgba(6,78,59,0.4)",
-                          background: on ? "#FFFFFF" : "transparent",
-                        }}
-                      >
-                        {on ? <Check className="h-3 w-3" style={{ color: "#064E3B" }} /> : null}
-                      </span>
-                      <span className="truncate">{label}</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        set({
-                          tiersInclude: f.tiersInclude.filter((t) => t !== value),
-                          tiersExclude: off
-                            ? f.tiersExclude.filter((t) => t !== value)
-                            : [...f.tiersExclude, value],
-                        })
-                      }
-                      aria-label={`Exclude ${label}`}
-                      aria-pressed={off}
-                      data-no-contrast-guard
-                      className="grid h-7 w-7 shrink-0 place-items-center rounded-md border"
-                      style={{
-                        borderColor: off ? "#B91C1C" : "rgba(185,28,28,0.35)",
-                        background: off ? "#B91C1C" : "transparent",
-                      }}
-                    >
-                      <Minus className="h-3.5 w-3.5" style={{ color: off ? "#FFFFFF" : "#B91C1C" }} />
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+            <FilterMultiSelect
+              options={(Object.entries(TIER_LABELS) as [DeveloperTier, string][]).map(([value, label]) => ({
+                value,
+                label,
+              }))}
+              include={f.tiersInclude}
+              exclude={f.tiersExclude}
+              onChange={({ include, exclude }) => set({ tiersInclude: include, tiersExclude: exclude })}
+              emptyLabel="No tiers"
+              clearLabel="Clear tiers"
+              width={280}
+            />
+
           </Seg>
         </div>
 
