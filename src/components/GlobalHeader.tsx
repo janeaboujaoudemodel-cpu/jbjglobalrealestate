@@ -787,27 +787,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       />
 
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
-      {/* At rest over the home dark hero: fully transparent so the Burj
-          video shows through. Light/fiberglass only on other routes. */}
-      <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
-        style={{
-          background: mobileFiberglassBackground,
-          backdropFilter: 'blur(16px) saturate(145%)',
-          WebkitBackdropFilter: 'blur(16px) saturate(145%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)',
-        }}
-        aria-hidden="true"
-      />
+      {/* PASS 320 — the horizontal mobile header band is retired for good.
+          Phones and tablets navigate through the approved vertical drawer,
+          so no surface, no wordmark band and no hairline render below lg. */}
 
-      {/* On scroll OR non-transparent routes: light chrome to match desktop. */}
-      <div
-        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showMobileChampagne && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
-        style={{ background: '#FDFBF7' }}
-        aria-hidden="true"
-      />
-
-      
       {/* Subtle ambient glow at top */}
       <div 
         className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
@@ -815,17 +798,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           background: 'none',
         }}
       />
-      
-      {/* Mobile-only clean hairline under header */}
-      <div
-        aria-hidden="true"
-       className="jj-header-mobile-divider lg:hidden absolute left-0 right-0 bottom-0 h-px pointer-events-none"
-       style={{
-         background: 'rgba(255,255,255,0.85)',
 
-          opacity: 0.55,
-        }}
-      />
 
       
       {/* Header shadow removed — no visible seam between header and page/hero */}
@@ -836,8 +809,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         ref={headerContentRef}
         className="relative z-10 h-full flex items-center justify-between px-[var(--jj-page-gutter)]"
       >
-        {/* LEFT: Premium Brand Logo - LOCKED */}
-        <div className="min-w-0 flex-1 sm:flex-[2]">
+        {/* LEFT: Premium Brand Logo — desktop only (mobile identity lives in the drawer) */}
+        <div className="hidden lg:block min-w-0 flex-1 sm:flex-[2]">
+
           <Link 
             to="/" 
             className="flex items-center gap-2 sm:gap-3 xl:gap-4 min-w-0 group transition-all duration-300"
@@ -891,7 +865,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
           {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
           {shouldUseMobileHeader && (
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="ml-auto flex items-center gap-2 shrink-0">
               {/* Mobile Menu Trigger — clean surface-aware mark, no decorative gradient. */}
               <button
                 type="button"

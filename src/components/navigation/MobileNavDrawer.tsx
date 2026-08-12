@@ -271,17 +271,18 @@ export default function MobileNavDrawer({
               <Lock className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Your view
             </span>
-            <span className="flex items-center gap-2" style={rowStyle}>
-              <span className="text-[12px] font-bold capitalize">{mode}</span>
+            <span className="flex items-center gap-2 leading-none" style={rowStyle}>
+              <span className="text-[12px] font-bold capitalize leading-none">{mode}</span>
               <Link
                 to={`/ticket-hub?topic=mode-change&current=${mode}`}
                 onClick={onClose}
-                className="text-[10px] font-bold uppercase tracking-[0.12em] underline underline-offset-2"
+                className="text-[10px] font-bold uppercase tracking-[0.12em] underline underline-offset-2 leading-none"
                 style={rowStyle}
               >
                 Change
               </Link>
             </span>
+
           </div>
         </div>
 
