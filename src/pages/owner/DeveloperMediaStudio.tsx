@@ -300,6 +300,8 @@ function MediaRow({
   const coverInput = useRef<HTMLInputElement>(null);
   const logoInput = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState<"cover" | "logo" | null>(null);
+  const [coverBroken, setCoverBroken] = useState(false);
+  const [logoBroken, setLogoBroken] = useState(false);
   const cover = coverOf(dev);
   const logo = logoOf(dev);
   const real = hasRealLogo(dev);
