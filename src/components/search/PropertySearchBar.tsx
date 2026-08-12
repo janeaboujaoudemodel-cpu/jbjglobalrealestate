@@ -247,7 +247,7 @@ export default function PropertySearchBar({
   const GRID_TOTAL = showSort ? 27 : 24;
   const GRID_KEY = String(GRID_TOTAL);
   const UTILITY_COLS = onConsultation ? 6 : 3;
-  const KEYWORD_COLS = GRID_TOTAL - 6 - (showTiers ? 3 : 0) - 3 - UTILITY_COLS;
+  const KEYWORD_COLS = GRID_TOTAL - 6 - 3 - UTILITY_COLS;
   const KEYWORD_SPAN = `jj-sspan-${KEYWORD_COLS}`;
   const ROW1_UTILITY_SPAN = `jj-sspan-${UTILITY_COLS}`;
   /* PASS 298 — row 2 opens with three 2-col segments so they sit exactly under
