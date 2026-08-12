@@ -49,6 +49,21 @@ interface MobileNavDrawerProps {
 
 const hrefPath = (href: string) => href.split("?")[0].split("#")[0];
 
+/**
+ * Emoji flags do not render on every device (Windows shows tofu boxes), so the
+ * drawer paints a real flag image derived from the emoji's regional-indicator
+ * codepoints. Falls back to the UK flag when the emoji is not a country pair.
+ */
+const flagSrc = (emoji: string) => {
+  const cps = Array.from(emoji)
+    .map((ch) => ch.codePointAt(0) ?? 0)
+    .filter((cp) => cp >= 0x1f1e6 && cp <= 0x1f1ff)
+    .map((cp) => String.fromCharCode(cp - 0x1f1e6 + 97))
+    .join("");
+  return `https://flagcdn.com/w40/${cps.length === 2 ? cps : "gb"}.png`;
+};
+
+
 export default function MobileNavDrawer({
   open, onClose, onOpenSearch,
 }: MobileNavDrawerProps) {
