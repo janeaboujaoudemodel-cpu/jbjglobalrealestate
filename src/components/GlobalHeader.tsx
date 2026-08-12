@@ -921,7 +921,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       aria-label="App and navigation guide"
                       data-jj-guide-card
                       onClick={(e) => e.stopPropagation()}
-                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-[#064E3B]/30 shadow-2xl"
+                      className="relative max-h-[86vh] w-full max-w-md overflow-y-auto rounded-2xl border border-[#064E3B]/30 p-5 shadow-2xl"
                       style={{ background: '#FFFFFF' }}
                     >
                       <button
@@ -930,39 +930,79 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         data-jj-guide-close
                         className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full transition-colors"
                       >
-                        <span className="text-[#1A1A1A]/70 text-xl">×</span>
+                        <span className="text-xl">×</span>
                       </button>
-                      <div className="flex justify-center mb-4">
-                        <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain"  loading="lazy" decoding="async" />
+
+                      <div className="flex items-center gap-3 pr-10">
+                        <img src={jbjMonogramLightBg} alt="JBJ" className="h-12 w-12 shrink-0 object-contain" loading="lazy" decoding="async" />
+                        <div className="min-w-0">
+                          <h3 className="text-base font-bold leading-tight">Guide &amp; support</h3>
+                          <p className="text-[12px] leading-snug opacity-80">Find a home, explore services, or reach a real adviser.</p>
+                        </div>
                       </div>
-                      <h3 className="text-[#1A1A1A] font-bold text-xl text-center mb-3">
-                        Welcome to JBJ Global Real Estate
-                      </h3>
-                      <p className="text-[#1A1A1A]/70 text-sm text-center mb-6 leading-relaxed">
-                        Navigate our platform with ease. Tap any step below to jump straight there.
-                      </p>
-                      <div className="space-y-3 mb-6">
+
+                      <div className="mt-4 space-y-2">
                         {[
-                          { n: 1, to: '/properties', title: 'Buy & Rent', text: 'Browse properties for sale or rent' },
-                          { n: 2, to: '/services', title: 'Services', text: 'Explore our brokerage services' },
-                          { n: 3, to: '/contact', title: 'Contact', text: 'Reach us via WhatsApp, call, or email' },
+                          { n: 1, to: '/properties', title: 'Buy & rent', text: 'Browse every project and listing' },
+                          { n: 2, to: '/services', title: 'Services', text: 'Brokerage, advisory and management' },
+                          { n: 3, to: '/contact', title: 'Contact', text: 'Talk to our Dubai team' },
                         ].map((row) => (
                           <Link
                             key={row.n}
                             to={row.to}
                             onClick={() => { setShowWalkthrough(false); setMobileMenuOpen(false); }}
                             data-jj-guide-step
-                            className="flex items-start gap-3 text-sm rounded-xl px-2 py-2 -mx-2 transition-colors"
+                            className="flex items-center gap-3 rounded-xl px-2 py-2 text-sm transition-colors"
                           >
-                            <span data-jj-guide-step-badge className="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0">{row.n}</span>
-                            <span className="text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">{row.title}</strong> – {row.text}</span>
+                            <span data-jj-guide-step-badge className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">{row.n}</span>
+                            <span className="min-w-0">
+                              <strong className="block leading-tight">{row.title}</strong>
+                              <span className="block text-[11.5px] leading-tight opacity-75">{row.text}</span>
+                            </span>
                           </Link>
                         ))}
                       </div>
+
+                      {/* Real help, one tap away. */}
+                      <div className="mt-4">
+                        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] opacity-70">Need help now?</p>
+                        <div className="grid grid-cols-2 gap-2">
+                          {[
+                            { label: 'WhatsApp', href: 'https://wa.me/971541515015', external: true },
+                            { label: 'Call us', href: 'tel:+971541515015', external: true },
+                            { label: 'Ticket hub', href: '/ticket-hub', external: false },
+                            { label: 'Support', href: '/support', external: false },
+                          ].map((a) =>
+                            a.external ? (
+                              <a
+                                key={a.label}
+                                href={a.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-jj-guide-step
+                                className="flex h-11 items-center justify-center rounded-xl border border-current/25 px-2 text-[12.5px] font-semibold"
+                              >
+                                {a.label}
+                              </a>
+                            ) : (
+                              <Link
+                                key={a.label}
+                                to={a.href}
+                                onClick={() => { setShowWalkthrough(false); setMobileMenuOpen(false); }}
+                                data-jj-guide-step
+                                className="flex h-11 items-center justify-center rounded-xl border border-current/25 px-2 text-[12.5px] font-semibold"
+                              >
+                                {a.label}
+                              </Link>
+                            ),
+                          )}
+                        </div>
+                      </div>
+
                       <button
                         onClick={() => { localStorage.setItem('jj_mobile_walkthrough_done', 'true'); setShowWalkthrough(false); }}
                         data-no-contrast-guard
-                        className="w-full py-3 font-semibold rounded-xl transition-[filter] hover:brightness-110"
+                        className="mt-4 w-full rounded-xl py-3 font-semibold transition-[filter] hover:brightness-110"
                         style={{
                           backgroundImage: 'linear-gradient(180deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
                           color: '#FFFFFF',
@@ -974,6 +1014,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     </div>
                   </div>
                 )}
+
 
 
 
