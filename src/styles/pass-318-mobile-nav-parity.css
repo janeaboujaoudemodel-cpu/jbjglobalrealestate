@@ -540,9 +540,6 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     height: 52px !important;
     transform: none !important;
   }
-  html body #root [data-chrome="header"] > header[data-header-surface="dark"] a[href="/"] img {
-    transform: scale(2.15) !important;
-  }
   html body #root [data-chrome="header"] > header .jj-header-wordmark {
     font-size: 11.5px !important;
     line-height: 1.15 !important;
