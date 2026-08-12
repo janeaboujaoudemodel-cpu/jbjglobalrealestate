@@ -19,7 +19,7 @@ import {
   Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox, LifeBuoy, Headset,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-cropped.png";
-import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,7 +29,7 @@ import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { useFeaturedDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
@@ -562,10 +562,6 @@ export default function GlobalVerticalNav() {
     catch { return false; }
   });
   const [hoverExpanded, setHoverExpanded] = useState(false);
-  const [showExpandPulse, setShowExpandPulse] = useState(() => {
-    try { return sessionStorage.getItem('jj_sidebar_expand_seen_session') !== '1'; }
-    catch { return true; }
-  });
 
   const isOwnerMode = isOwner && mode === 'owner';
   const showBrokerSurfaces = isBrokerMode;
@@ -682,11 +678,8 @@ export default function GlobalVerticalNav() {
     setMobileOpen(false);
   }, [pinnedOpen]);
 
-  const hoverExpandedAtRef = useRef(0);
-
   const handleSidebarEnter = useCallback(() => {
     if (!collapsed || pinnedOpen) return;
-    hoverExpandedAtRef.current = Date.now();
     setHoverExpanded(true);
     setCollapsed(false);
   }, [collapsed, pinnedOpen]);
