@@ -1,0 +1,65 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 317 — SUN RAIL FOOTER: BLACK INK ALWAYS + ALIGNED CONTROLS (LOCKED)
+   In the champagne (Sun) rail every footer glyph and label — Collapse /
+   Keep Sidebar Open and Sign Out — is black, expanded AND collapsed.
+   Fixes pass-309 §4 which used an impossible `div#root div#root` selector.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-chrome="sidebar"]
+  :is(.jj-rail-footer-block, .jj-rail-footer-block--rail, .jj-rail-footer-inner, .jj-sidebar-footer)
+  :is(a, button, span, kbd, svg, svg *, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-chrome="sidebar"]
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-chrome="sidebar"]
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action])
+  :is(span, svg, svg *, path, [data-signout-icon], [data-signout-label]) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  opacity: 1 !important;
+}
+
+/* Hover tint must stay champagne-safe (no white wash on black ink) */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-chrome="sidebar"]
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]):hover {
+  background: rgba(10, 10, 10, 0.08) !important;
+}
+
+/* Aligned footer controls: identical geometry in both skins */
+html body div#root [data-chrome="sidebar"] .jj-rail-footer-inner
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) {
+  height: 36px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  margin: 0 !important;
+  gap: 10px !important;
+}
+
+/* MY ACCOUNT actions (Sign Out / Collapse Sidebar) — black ink in Sun */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-chrome="sidebar"]
+  [data-sidebar-account-action]:not([data-active="true"]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-chrome="sidebar"]
+  [data-sidebar-account-action]:not([data-active="true"]) :is(span, svg, svg *, path) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}
+
+/* Winning specificity over index.css emerald-ink contract (loaded last) */
+html[data-jbj-theme="sun"][data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"][data-chrome="sidebar"]
+  :is([data-sidebar-account-action], [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action])[data-sidebar-account-action],
+html[data-jbj-theme="sun"][data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"][data-chrome="sidebar"]
+  :is([data-sidebar-account-action], [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action])[data-sidebar-account-action]
+  :is(span, svg, svg *, path),
+html[data-jbj-theme="sun"][data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"][data-chrome="sidebar"] .jj-rail-footer-inner
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]),
+html[data-jbj-theme="sun"][data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"][data-chrome="sidebar"] .jj-rail-footer-inner
+  :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) :is(span, svg, svg *, path) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}

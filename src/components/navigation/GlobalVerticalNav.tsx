@@ -1329,12 +1329,12 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                               onClick={handleSignOut}
                               data-sidebar-account-action
                               className="group flex items-center gap-2.5 px-2.5 min-h-9 rounded-lg text-[13.5px] font-medium transition-all duration-150 hover:bg-[#1A1A1A]/[0.045]"
-                              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                              style={{ color: railInk, WebkitTextFillColor: railInk }}
                               iconWrapperClassName="w-[24px] h-[24px] overflow-visible flex items-center justify-center shrink-0"
                               iconClassName="w-[18px] h-[18px] overflow-visible"
-                              iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF', overflow: 'visible' }}
+                              iconStyle={{ color: railInk, stroke: railInk, overflow: 'visible' }}
                               labelClassName="flex-1 text-left"
-                              labelStyle={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                              labelStyle={{ color: railInk, WebkitTextFillColor: railInk }}
                             />
                           )}
                           <SidebarItem
@@ -1354,12 +1354,12 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                             data-sidebar-account-action
                             data-sidebar-collapse-control
                             className="group flex items-center gap-2.5 px-2.5 min-h-9 rounded-lg text-[13.5px] font-medium transition-all duration-150 hover:bg-[#1A1A1A]/[0.045]"
-                            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                            style={{ color: railInk, WebkitTextFillColor: railInk }}
                             iconWrapperClassName="w-[24px] h-[24px] overflow-visible flex items-center justify-center shrink-0"
                             iconClassName="w-[18px] h-[18px] overflow-visible"
-                            iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF', overflow: 'visible' }}
+                            iconStyle={{ color: railInk, stroke: railInk, overflow: 'visible' }}
                             labelClassName="flex-1 text-left"
-                            labelStyle={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                            labelStyle={{ color: railInk, WebkitTextFillColor: railInk }}
                           />
                         </>
                       )}
@@ -1388,6 +1388,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         />
         <div className="jj-rail-footer-inner px-3 pt-2 pb-2">
           <ThemeModeToggle variant="menu" className="jj-sidebar-theme-toggle mb-2 border border-current/20" />
+          <div className="flex flex-col gap-1">
           <button
             type="button"
             data-sidebar-collapse-control
@@ -1402,7 +1403,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               toggleCollapse();
             }}
             className="w-full flex items-center gap-2.5 px-2.5 h-9 rounded-lg text-[13px] font-medium transition-colors duration-150 hover:bg-white/10"
-            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+            style={{ color: railInk, WebkitTextFillColor: railInk }}
           >
             <PanelLeftClose className="w-[18px] h-[18px] shrink-0" style={{ color: 'currentColor' }} />
             <span className="flex-1 text-left">{hoverExpanded ? 'Keep Sidebar Open' : 'Collapse Sidebar'}</span>
@@ -1413,14 +1414,16 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               data-sidebar-auth-control
               data-no-contrast-guard
               onClick={handleSignOut}
-              className="mt-1 w-full flex items-center gap-2.5 px-2.5 h-9 rounded-lg text-[13px] font-medium transition-colors duration-150 hover:bg-white/10"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+              className="w-full flex items-center gap-2.5 px-2.5 h-9 rounded-lg text-[13px] font-medium transition-colors duration-150 hover:bg-white/10"
+              style={{ color: railInk, WebkitTextFillColor: railInk }}
             >
               <LogOut data-signout-icon className="w-[18px] h-[18px] shrink-0" style={{ color: 'currentColor' }} />
               <span data-signout-label className="flex-1 text-left">Sign Out</span>
             </button>
           )}
+          </div>
         </div>
+
       </div>
 
 
