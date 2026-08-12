@@ -72,6 +72,11 @@ html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-jj
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav :is(a,button,span,p,strong,small,svg) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
 html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald] :is(a,button):not([data-active="true"]):not([aria-current="page"]) {
   background: transparent !important;
   background-image: none !important;
