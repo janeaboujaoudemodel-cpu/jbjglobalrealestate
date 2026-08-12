@@ -130,6 +130,29 @@ Deno.serve(async (req) => {
         const base = { provider: account.provider, account_key: account.accountKey, slot: slotOf(account.accountKey) };
         try {
           const info = await discover(account);
+           const primary = info.calendars.find((calendar: any) => calendar.primary === true);
+           if (primary) {
+             const existing = (states ?? []).find((state: any) => state.provider === account.provider && state.account_key === account.accountKey && state.calendar_id === primary.id);
+             if (!existing || !existing.is_enabled || !existing.pull_enabled || (primary.writable && !existing.push_enabled)) {
+               await db.from("owner_calendar_sync_state").upsert({
+                 owner_id: ownerId,
+                 provider: account.provider,
+                 account_key: account.accountKey,
+                 calendar_id: primary.id,
+                 account_label: info.label,
+                 is_enabled: true,
+                 pull_enabled: true,
+                 push_enabled: primary.writable,
+               }, { onConflict: "owner_id,provider,account_key,calendar_id" });
+               if (existing) {
+                 existing.is_enabled = true;
+                 existing.pull_enabled = true;
+                 existing.push_enabled = primary.writable;
+               } else {
+                 (states ?? []).push({ provider: account.provider, account_key: account.accountKey, calendar_id: primary.id, is_enabled: true, pull_enabled: true, push_enabled: primary.writable });
+               }
+             }
+           }
           result.push({ ...base, connected: true, account: info.label, email: info.email, calendars: info.calendars.map((calendar: any) => ({ ...calendar, state: (states ?? []).find((s: any) => s.provider === account.provider && s.account_key === account.accountKey && s.calendar_id === calendar.id) ?? null })) });
         } catch (e) {
           result.push({ ...base, connected: false, account: null, email: null, calendars: [], error: String((e as Error).message).slice(0, 300) });

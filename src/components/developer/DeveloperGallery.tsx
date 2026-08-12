@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getHighResImageUrl } from "@/lib/imageUtils";
+import { buildResponsiveImage } from "@/lib/responsiveImage";
 import { Images, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 type GalleryItem = { id: string; url: string; caption: string | null };
@@ -9,6 +10,7 @@ type GalleryItem = { id: string; url: string; caption: string | null };
 const DeveloperGallery = ({ developerId, developerName }: { developerId: string; developerName: string }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [broken, setBroken] = useState<Record<string, boolean>>({});
+  const [loaded, setLoaded] = useState<Record<string, boolean>>({});
 
   const { data } = useQuery({
     queryKey: ["developer-public-gallery", developerId],
@@ -19,7 +21,8 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
         .eq("developer_id", developerId)
         .eq("kind", "photo")
         .eq("is_public", true)
-        .order("display_order", { ascending: true });
+        .order("display_order", { ascending: true })
+        .limit(24);
       if (error) throw error;
       return (data || []) as GalleryItem[];
     },
@@ -73,19 +76,31 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
       </div>
 
       <div className="p-4 md:p-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-        {items.map((item, index) => (
+        {items.map((item, index) => {
+          const source = buildResponsiveImage(getHighResImageUrl(item.url), {
+            widths: [360, 640, 960],
+            sizes: "(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw",
+            quality: 78,
+          });
+          return (
           <button
             key={item.id}
             type="button"
             onClick={() => setLightboxIndex(index)}
             className="group flex w-full flex-col items-stretch overflow-hidden rounded-xl border border-[#B89555]/40 bg-white/70 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]"
           >
-            <span className="block w-full aspect-[4/3] shrink-0 overflow-hidden bg-[#F7F2EA]">
+            <span className="relative block w-full aspect-[4/3] shrink-0 overflow-hidden bg-[#F7F2EA]">
+              {!loaded[item.id] && <span className="absolute inset-0 animate-pulse bg-card" aria-hidden="true" />}
               <img
-                src={getHighResImageUrl(item.url)}
+                src={source?.src ?? item.url}
+                srcSet={source?.srcSet}
+                sizes={source?.sizes}
                 alt={item.caption || `${developerName} development`}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading={index < 8 ? "eager" : "lazy"}
+                fetchPriority={index < 4 ? "high" : "auto"}
+                decoding={index < 8 ? "sync" : "async"}
+                className={`h-full w-full object-cover transition-[opacity,transform] duration-300 group-hover:scale-105 ${loaded[item.id] ? "opacity-100" : "opacity-0"}`}
+                onLoad={() => setLoaded((prev) => ({ ...prev, [item.id]: true }))}
                 onError={() => setBroken((prev) => ({ ...prev, [item.id]: true }))}
               />
             </span>
@@ -95,7 +110,8 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
               </span>
             )}
           </button>
-        ))}
+          );
+        })}
       </div>
 
       {active && (
