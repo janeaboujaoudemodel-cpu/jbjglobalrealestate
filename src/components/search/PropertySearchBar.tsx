@@ -105,8 +105,8 @@ function Seg({
           }}
         >
 
-          <span className="flex flex-1 items-center justify-center gap-1.5 min-w-0">
-            <span className="shrink-0 inline-flex items-center">{icon}</span>
+          <span className="grid flex-1 grid-cols-[18px_minmax(0,1fr)_18px] items-center min-w-0">
+            <span className="inline-flex items-center justify-center">{icon}</span>
             <span
               className="min-w-0 leading-none text-center"
               style={{
@@ -123,8 +123,8 @@ function Seg({
 
               {label}
             </span>
+            <ChevronDown className="col-start-3 h-3.5 w-3.5 justify-self-end opacity-70" />
           </span>
-          <ChevronDown className="w-3.5 h-3.5 shrink-0 opacity-70" />
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -783,9 +783,9 @@ export default function PropertySearchBar({
             }}
 
           >
-            <span className="flex items-center gap-2 min-w-0">
-              <SlidersHorizontal className="w-3.5 h-3.5 shrink-0 opacity-70" />
-              <span style={{ whiteSpace: "nowrap" }}>
+            <span className="grid w-full grid-cols-[18px_minmax(0,1fr)_18px] items-center">
+              <SlidersHorizontal className="h-3.5 w-3.5 justify-self-center opacity-70" />
+              <span className="text-center" style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
             </span>
