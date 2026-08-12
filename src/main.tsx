@@ -15,13 +15,22 @@ import { installInteractionCssPruner } from"@/utils/pruneCostlyCssRules";
 // Hub shell; owner/admin routes remain on their fixed backend skin.
 if (typeof document !== "undefined") {
   try {
+    const pathname = window.location.pathname;
     const storedTheme = localStorage.getItem("jbj-theme-mode") === "moon" ? "moon" : "sun";
-    const themeLocked = /^\/access(\/|$)/.test(window.location.pathname);
+    const themeLocked = /^\/access(\/|$)/.test(pathname);
     document.documentElement.setAttribute("data-jbj-theme", themeLocked ? "sun" : storedTheme);
+    // Homepage shell attributes must exist before React's first paint. Adding
+    // them from page/header effects caused the content gutter and transparent
+    // header rules to arrive one frame late, exposing a white strip below the
+    // horizontal chrome in both themes.
+    if (pathname === "/" || pathname === "/index") {
+      document.body.setAttribute("data-homepage", "true");
+      document.body.setAttribute("data-home-hero-state", window.scrollY > 80 ? "scrolled" : "atrest");
+    }
     if (themeLocked) {
       document.documentElement.setAttribute("data-jbj-theme-lock", "original");
     }
-    if (/^\/(owner|crm|admin)(\/|$)/.test(window.location.pathname)) {
+    if (/^\/(owner|crm|admin)(\/|$)/.test(pathname)) {
       document.documentElement.setAttribute("data-jbj-backend-lock", "1");
     }
   } catch {

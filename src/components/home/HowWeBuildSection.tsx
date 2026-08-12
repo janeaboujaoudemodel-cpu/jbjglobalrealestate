@@ -252,6 +252,7 @@ export default function HowWeBuildSection() {
                   >
                     <span
                       data-step-circle={isActive ? "active" : "idle"}
+                      data-step-label={String(LAYERS.length - i).padStart(2, "0")}
                       className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px] font-bold"
                       style={{
                         color: "#064E3B",
@@ -260,17 +261,6 @@ export default function HowWeBuildSection() {
                         opacity: isActive ? 1 : 0.72,
                       }}
                     >
-                      <svg viewBox="0 0 28 28" className="h-full w-full" aria-hidden>
-                        <text
-                          x="14"
-                          y="18.5"
-                          textAnchor="middle"
-                          fill="#064E3B"
-                          style={{ fill: "#064E3B", fontSize: 11, fontWeight: 700 }}
-                        >
-                          {String(LAYERS.length - i).padStart(2, "0")}
-                        </text>
-                      </svg>
                       <span className="sr-only">
                         Step {String(LAYERS.length - i).padStart(2, "0")}
                       </span>
