@@ -1385,13 +1385,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[59px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground">
+        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[59px] flex-shrink-0 flex-col h-full items-center overflow-hidden overflow-x-visible relative text-primary-foreground">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
-          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
-            <Link to="/">
+          <div data-sidebar-brand-row className="jj-rail-brand-band h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
+            <Link to="/" className="jj-rail-brand-link flex w-full items-center justify-center">
               <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-11 h-11 max-w-none object-contain brightness-0 invert" loading="eager" data-eager decoding="async" />
             </Link>
           </div>
+
 
           {/* Section icons — ALWAYS emerald tile with pure white glyph (active = brighter ring) */}
           <style>{`
@@ -1413,7 +1414,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
             html body .jj-side-tile.is-active svg,
             html body .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1.5 w-full">
+          <div className="jj-rail-stack flex-1 flex flex-col items-center pt-1 pb-1 gap-[2px] w-full min-h-0">
             {highlightItems.map((item, i) => {
               const Icon = item.icon;
               const isActive = isRouteActive(item.href);
@@ -1470,10 +1471,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
 
             {/* Push the 4 bottom icons (Contact · Support · Sign Out · Expand)
                 all the way down to the footer of the collapsed rail. */}
-            <div className="flex-1 min-h-4" />
+            <div className="flex-1 min-h-[6px]" />
+
+            {/* Skin-aware divider above the Contact Us (headset) group */}
+            <span aria-hidden className="jj-rail-footer-divider" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-1 pt-1 pb-1 w-full">
+            <div className="flex flex-col items-center gap-[2px] pt-1 pb-1 w-full">
+
           
 
 

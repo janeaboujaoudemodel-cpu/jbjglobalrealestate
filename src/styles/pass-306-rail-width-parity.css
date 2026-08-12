@@ -1,0 +1,115 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 306 — COLLAPSED RAIL WIDTH PARITY, BRAND BAND & SKINNED BACKEND
+
+   1) COLLAPSED RAIL = 59px EVERYWHERE (front end + JBJ Hub back end),
+      identical in Sun and Moon.
+   2) BRAND BAND covers the FULL rail width (edge to edge) behind the
+      monogram, with a soft (non-sharp) bottom fade instead of a border.
+   3) SKIN-AWARE DIVIDER above the Contact Us (headset) group —
+      emerald/gold hairline in Sun, soft white hairline in Moon.
+   4) TIGHT RAIL RHYTHM — collapsed icon rows use the same compact
+      spacing as the back-office rail so the rail never scrolls.
+   5) SUN BACK END = champagne chrome with black ink; Moon back end keeps
+      its current emerald skin untouched.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Collapsed rail = 59px, both skins, both surfaces ═══════════ */
+@media (min-width: 1024px) {
+  html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] [data-sidebar-emerald] {
+    width: 59px !important;
+    min-width: 59px !important;
+  }
+}
+/* JBJ Hub / back-office rail matches the public rail exactly. */
+.jc-app[data-sidebar-collapsed="true"] {
+  grid-template-columns: 59px minmax(0, 1fr) !important;
+}
+.jc-rail[data-collapsed="true"] {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  overflow-x: hidden;
+}
+
+/* ═══════════ 2. Brand band — full width, soft bottom ═══════════ */
+html[data-jbj-theme] body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] div[data-sidebar-brand-row].jj-rail-brand-band:not([hidden]) {
+  width: 100% !important;
+  padding: 0 !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 72%,
+    rgba(255, 255, 255, 0) 100%
+  ) !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+html[data-jbj-theme="sun"] body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] div[data-sidebar-brand-row].jj-rail-brand-band:not([hidden]) {
+
+  background: rgba(6, 78, 59, 0.06) !important;
+  background-image: linear-gradient(
+    180deg,
+    rgba(6, 78, 59, 0.09) 0%,
+    rgba(6, 78, 59, 0.05) 72%,
+    rgba(6, 78, 59, 0) 100%
+  ) !important;
+}
+html body #root [data-chrome="sidebar"] .jj-rail-brand-band .jj-rail-brand-link {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+}
+
+/* ═══════════ 3. Divider above the headset group ═══════════ */
+html body #root [data-chrome="sidebar"] .jj-rail-footer-divider {
+  display: block;
+  width: calc(100% - 12px);
+  height: 1px;
+  margin: 6px auto 5px;
+  flex: 0 0 1px;
+  background: rgba(255, 255, 255, 0.34);
+}
+html[data-jbj-theme="sun"] body #root [data-chrome="sidebar"] .jj-rail-footer-divider {
+  background: rgba(184, 149, 85, 0.55);
+}
+
+/* ═══════════ 4. Compact rail rhythm — no scrolling ═══════════ */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-stack {
+  overflow: hidden !important;
+}
+@media (min-width: 1024px) {
+  html body.jj-vertical-nav-collapsed #root .jj-side-tile {
+    width: 44px !important;
+    height: 34px !important;
+    border-radius: 9px !important;
+  }
+}
+
+/* ═══════════ 5. Sun back end = champagne chrome, black ink ═══════════ */
+html[data-jbj-theme="sun"] body .jc-app {
+  background: #FBF8F1 !important;
+}
+html[data-jbj-theme="sun"] body .jc-app .jc-rail {
+  background: linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%) !important;
+  color: #1A1A1A !important;
+}
+html[data-jbj-theme="sun"] body .jc-app .jc-rail,
+html[data-jbj-theme="sun"] body .jc-app .jc-rail :is(a, button, span, p, strong, small, label, kbd, svg, path) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html[data-jbj-theme="sun"] body .jc-app .jc-rail :is(a, button)[data-active="true"],
+html[data-jbj-theme="sun"] body .jc-app .jc-rail :is(a, button)[aria-current="page"] {
+  background: rgba(6, 78, 59, 0.10) !important;
+}
+html[data-jbj-theme="sun"] body .jc-app .jc-rail :is(hr, .jc-main-nav) {
+  border-color: rgba(6, 78, 59, 0.22) !important;
+}
+html[data-jbj-theme="sun"] body .jc-app .jc-header {
+  background: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%) !important;
+  border-bottom-color: rgba(6, 78, 59, 0.18) !important;
+}
+html[data-jbj-theme="sun"] body .jc-app .jc-rail::-webkit-scrollbar-thumb {
+  background: rgba(6, 78, 59, 0.28) !important;
+}

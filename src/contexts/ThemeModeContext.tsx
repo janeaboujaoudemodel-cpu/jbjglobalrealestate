@@ -94,8 +94,10 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
     [mode, setMode],
   );
 
-  // Owner keeps a fixed back end; every other user carries the theme everywhere.
-  const backendLocked = isOwner && isOwnerBackendPath(pathname);
+  // Owner back end keeps its emerald (Moon) skin as-is; when the owner picks
+  // Sun, the back end follows the champagne front end instead of locking.
+  const backendLocked = isOwner && isOwnerBackendPath(pathname) && mode === "moon";
+
   const themeLocked = THEME_LOCKED_PATHS.some(
     (p) => pathname === p || pathname.startsWith(p + "/"),
   );
