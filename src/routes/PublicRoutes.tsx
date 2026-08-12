@@ -29,7 +29,6 @@ const Developers = lazy(() => import("@/pages/Developers"));
 const DeveloperDetail = lazy(() => import("@/pages/DeveloperDetail"));
 const AreaGuides = lazy(() => import("@/pages/AreaGuides"));
 const AreaDetail = lazy(() => import("@/pages/AreaDetail"));
-const ResaleProperties = lazy(() => import("@/pages/ResaleProperties"));
 const PropertyMap = lazy(() => import("@/pages/PropertyMap"));
 const ListingPortal = lazy(() => import("@/pages/ListingPortal"));
 const ListingPortalSubmit = lazy(() => import("@/pages/ListingPortalSubmit"));

@@ -522,24 +522,26 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       });
     };
 
-    const channel = supabase
-      .channel(`visitor-chat-${conversationId}`)
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'chat_conversations', filter: `id=eq.${conversationId}` },
-        (payload) => applyRemote(payload.new as never),
-      )
-      .subscribe();
+    let active = true;
+    const poll = async () => {
+      const { data, error } = await supabase.functions.invoke('chat-session', {
+        body: { action: 'get', conversationId, guestToken },
+      });
+      if (active && !error && data) applyRemote(data);
+    };
+    void poll();
+    const timer = window.setInterval(poll, 3500);
 
     return () => {
-      supabase.removeChannel(channel);
+      active = false;
+      window.clearInterval(timer);
     };
-  }, [conversationId]);
+  }, [conversationId, guestToken]);
 
   // Save messages to database
 
   const saveMessagesToDb = async (newMessages: Message[]) => {
-    if (!conversationId) return;
+    if (!conversationId || !guestToken) return;
     
     try {
       const messagesForDb = newMessages.map(m => ({
@@ -735,10 +737,13 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       const serviceName = SERVICES.find(s => s.id === selectedService)?.label || selectedService || 'General';
       
       // 1) Update conversation and lead status (CRITICAL)
-      await supabase
-        .from('chat_conversations')
-        .update({ status: 'submitted_to_team' })
-        .eq('id', conversationId);
+      await supabase.functions.invoke('chat-session', {
+        body: {
+          action: 'update', conversationId, guestToken,
+          messages: messages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp.toISOString() })),
+          status: 'submitted_to_team',
+        },
+      });
 
       await supabase
         .from('leads')
@@ -867,20 +872,19 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       console.error('Error submitting to team:', error);
       toast.error('Failed to submit. Please try again.');
     }
-  }, [conversationId, userInfo, selectedService, messages, user]);
+  }, [conversationId, guestToken, userInfo, selectedService, messages, user]);
 
   // Handle rating submission
   const handleSubmitRating = async (rating: number, feedback: string) => {
-    if (conversationId && rating > 0) {
+    if (conversationId && guestToken && rating > 0) {
       try {
-        await supabase
-          .from('chat_conversations')
-          .update({ 
-            rating,
-            rating_feedback: feedback || null,
-            status: 'completed'
-          })
-          .eq('id', conversationId);
+        await supabase.functions.invoke('chat-session', {
+          body: {
+            action: 'update', conversationId, guestToken,
+            messages: messages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp.toISOString() })),
+            rating, ratingFeedback: feedback || null, status: 'completed',
+          },
+        });
         
         toast.success('Thank you for your feedback!');
 
@@ -911,17 +915,15 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   // Handle feedback submission (new simplified feedback)
   const handleSubmitFeedback = async (feedback: { type: FeedbackType; rating: number; comment: string }) => {
-    if (conversationId) {
+    if (conversationId && guestToken) {
       try {
-        await supabase
-          .from('chat_conversations')
-          .update({ 
-            feedback_type: feedback.type,
-            rating: feedback.rating,
-            rating_feedback: feedback.comment || null,
-            status: 'completed'
-          })
-          .eq('id', conversationId);
+        await supabase.functions.invoke('chat-session', {
+          body: {
+            action: 'update', conversationId, guestToken,
+            messages: messages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp.toISOString() })),
+            rating: feedback.rating, ratingFeedback: feedback.comment || null, status: 'completed',
+          },
+        });
         
         toast.success('Thank you for your feedback!');
 

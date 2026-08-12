@@ -18,6 +18,11 @@ const BodySchema = z.discriminatedUnion("action", [
     pageSource: z.string().max(300),
   }),
   z.object({
+    action: z.literal("get"),
+    conversationId: z.string().uuid(),
+    guestToken: z.string().min(40).max(200),
+  }),
+  z.object({
     action: z.literal("update"),
     conversationId: z.string().uuid(),
     guestToken: z.string().min(40).max(200),
@@ -94,6 +99,17 @@ Deno.serve(async (req) => {
     }
 
     const tokenHash = await hash(body.guestToken);
+    if (body.action === "get") {
+      const { data, error } = await db.from("chat_conversations")
+        .select("messages,owner_joined,status")
+        .eq("id", body.conversationId)
+        .eq("guest_token_hash", tokenHash)
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) return json({ error: "conversation_not_found" }, 404);
+      return json(data);
+    }
+
     const patch: Record<string, unknown> = {
       messages: body.messages,
       updated_at: new Date().toISOString(),
