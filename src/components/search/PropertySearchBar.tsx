@@ -276,7 +276,7 @@ export default function PropertySearchBar({
       : `${f.developersInclude.length} developers`
     : f.developersExclude.length
       ? `All except ${f.developersExclude.length}`
-      : "Developers";
+      : "Devs";
 
   const tiersLabel = f.tiersInclude.length
     ? f.tiersInclude.length === 1
