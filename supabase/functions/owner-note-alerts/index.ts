@@ -187,27 +187,18 @@ Deno.serve(async (req) => {
       const withinLimit =
         next && (!note.repeat_until || next <= new Date(note.repeat_until)) ? next : null;
 
+      // Repeating -> move to the next occurrence. One-off -> clear the reminder
+      // so the trigger blanks next_alert_at and it never fires again.
       await db
         .from("owner_notes")
         .update({
           snoozed_until: null,
           last_alerted_at: now.toISOString(),
           alert_count: (note.alert_count ?? 0) + 1,
-          reminder_at: withinLimit ? withinLimit.toISOString() : note.reminder_at,
-          is_done: withinLimit ? false : note.repeat_rule === "none" ? note.is_done : note.is_done,
-          ...(withinLimit ? {} : { next_alert_at: null }),
+          reminder_at: withinLimit ? withinLimit.toISOString() : null,
         })
         .eq("id", note.id)
         .eq("owner_id", ownerId);
-
-      // one-off reminders stop alerting once fired
-      if (!withinLimit) {
-        await db
-          .from("owner_notes")
-          .update({ reminder_at: note.reminder_at, next_alert_at: null })
-          .eq("id", note.id)
-          .eq("owner_id", ownerId);
-      }
 
       fired.push({ id: note.id, title: note.title, channels, next: withinLimit?.toISOString() ?? null });
     }
