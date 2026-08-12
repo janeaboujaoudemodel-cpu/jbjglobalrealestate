@@ -17,7 +17,7 @@
       seam can only ever read as chrome — never white.
    ═══════════════════════════════════════════════════════════════════ */
 
-/* ═══════════ 1. Rail — darkest at the top, slight mid lift, black bottom ═══════════ */
+/* ═══════════ 1. Rail — deep at the top, no bright band behind the icons ═══════════ */
 html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]):not([data-x])
   body div#root div[data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald],
 html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"]):not([data-x])
@@ -26,20 +26,19 @@ html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"]):not([data-x])
   background: linear-gradient(
     180deg,
     #01120b 0%,
-    #02180f 14%,
-    #043524 46%,
-    #02170f 74%,
+    #021610 34%,
+    #010c07 68%,
     #000000 100%
   ) !important;
   background-image: linear-gradient(
     180deg,
     #01120b 0%,
-    #02180f 14%,
-    #043524 46%,
-    #02170f 74%,
+    #021610 34%,
+    #010c07 68%,
     #000000 100%
   ) !important;
 }
+
 
 /* Brand band stays the deepest tone, full bleed, one surface. */
 html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]):not([data-x])
