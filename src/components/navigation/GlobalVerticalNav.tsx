@@ -18,7 +18,7 @@ import {
   Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
   Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox, LifeBuoy, Headset,
 } from "lucide-react";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-transparent.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-cropped.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -1397,11 +1397,11 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground border-r border-primary-foreground/20">
+        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-8 flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground border-r border-primary-foreground/20">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
           <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-[52px] h-[52px] object-contain brightness-0 invert" loading="eager" data-eager decoding="async" />
+              <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-11 h-11 max-w-none object-contain brightness-0 invert" loading="eager" data-eager decoding="async" />
             </Link>
           </div>
 

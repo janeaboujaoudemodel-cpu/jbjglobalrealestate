@@ -104,19 +104,15 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         <span
           className="flex-1 min-w-0 text-left text-[11px] uppercase tracking-[0.08em] leading-[1.15] font-extrabold whitespace-normal break-words [overflow-wrap:anywhere]"
           style={{
-            color: active ? "#FFFFFF" : "#1A1A1A",
-            WebkitTextFillColor: active ? "#FFFFFF" : "#1A1A1A",
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
           }}
         >
           {cfg.label}
         </span>
         <ChevronRight
           className="w-4 h-4 flex-shrink-0 opacity-60"
-          style={
-            active
-              ? { color: "#FFFFFF", stroke: "#FFFFFF" }
-              : { color: "#1A1A1A", stroke: "#1A1A1A" }
-          }
+          style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
         />
       </Link>
     </div>

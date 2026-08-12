@@ -1,15 +1,12 @@
 /* ═══════════════════════════════════════════════════════════════════
    PASS 303 — SKIN PARITY (LOCKED)
 
-   1) SUN = CHAMPAGNE CHROME. In Sun the vertical sidebar matches the
-      horizontal header exactly (champagne gradient) and every label,
-      icon and monogram on it is BLACK ink. Never emerald rail on Sun.
-   2) MOON = APPROVED EMERALD OMBRE. Sidebar, header, mobile drawer and
-      the partners strap all use the approved pair gradient
+   1) BOTH SKINS = APPROVED EMERALD OMBRE CHROME. Sidebar, utility header,
+      mobile drawer and partners strap use the same dark pair gradient
       (#064E3B -> #042c1c -> #000) — never a bright/flat green.
-   3) NO ICON PLATES. No rectangle/tile/ring around any sidebar icon,
+   2) NO ICON PLATES. No rectangle/tile/ring around any sidebar icon,
       collapsed or expanded — icons only.
-   4) MARKER PARITY. Every sidebar icon is the same size, the same ink
+   3) MARKER PARITY. Every sidebar icon is the same size, the same ink
       and carries the same padding/gap.
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -50,55 +47,48 @@ html body #root [data-chrome="sidebar"] :is(
   stroke-width: 2 !important;
 }
 
-/* ═══════════ SUN — champagne chrome, black ink ═══════════ */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-chrome="sidebar"] [data-sidebar-emerald],
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
-  background: var(--jj-champagne-chrome) !important;
-  background-image: var(--jj-champagne-chrome) !important;
-  color: #1A1A1A !important;
+/* ═══════════ PUBLIC CHROME — approved emerald ombre in BOTH modes ═══════════ */
+html:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald],
+html:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child,
+html:not([data-jbj-backend-lock="1"]) body #root [data-jj-utility-bar],
+html:not([data-jbj-backend-lock="1"]) body #root [data-jj-mobile-drawer] {
+  background-color: #042c1c !important;
+  background: var(--jj-emerald-approved-h) !important;
+  background-image: var(--jj-emerald-approved-h) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
   box-shadow: none !important;
 }
-
-/* Sun ink: black text + black icons on the champagne rail … */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-chrome="sidebar"] [data-sidebar-emerald]
-  :is(a, button, span, p, strong, small, label, svg, path) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: currentColor !important;
+html:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald] {
+  background: var(--jj-emerald-approved) !important;
+  background-image: var(--jj-emerald-approved) !important;
 }
-
-/* … except anything sitting on an emerald active pill, which stays white. */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-chrome="sidebar"] [data-sidebar-emerald]
-  :is([data-active="true"], [aria-current="page"]),
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-chrome="sidebar"] [data-sidebar-emerald]
-  :is([data-active="true"], [aria-current="page"])
-  :is(span, p, strong, small, svg, path) {
+html:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-chrome="sidebar"] [data-sidebar-emerald], [data-jj-utility-bar], [data-jj-mobile-drawer])
+  :is(a, button, span, p, strong, small, label, svg, path) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
-
-/* Sun monogram + wordmark: black knockout on champagne. */
+/* Final specificity lock against legacy Sun selectors that recolor collapsed
+   glyphs after the rail has already been established as an emerald surface. */
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-chrome="sidebar"] img[alt="JBJ"] {
-  filter: brightness(0) !important;
+  [data-chrome="sidebar"] [data-sidebar-emerald] .jj-side-tile :is(svg, path),
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] [data-sidebar-emerald] .jj-side-tile :is(svg, path) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
-/* Sun hairlines on champagne are emerald, never white. */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+html:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] img[alt="JBJ"] {
+  filter: brightness(0) invert(1) !important;
+}
+html:not([data-jbj-backend-lock="1"]) body #root
   [data-chrome="sidebar"] [data-sidebar-emerald] :is(hr, [aria-hidden="true"].h-px) {
-  background: rgba(6, 78, 59, 0.18) !important;
+  background: rgba(255, 255, 255, 0.34) !important;
   background-image: none !important;
-  border-color: rgba(6, 78, 59, 0.18) !important;
-}
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-chrome="sidebar"] [data-sidebar-emerald] :is(a, button):hover {
-  background-color: rgba(6, 78, 59, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.34) !important;
 }
 
 /* ═══════════ MOON — approved emerald ombre only ═══════════ */
@@ -123,6 +113,23 @@ html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
 html body #root [data-emerald-surface="true"].w-full {
   background-color: #042c1c !important;
   background-image: var(--jj-emerald-approved-d) !important;
+}
+
+/* Developer market: one white knockout size and one spacing rhythm. */
+html body #root [data-partners-marquee] .jj-partner-mark {
+  width: 112px !important;
+  min-width: 112px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+html body #root [data-partners-marquee] .jj-partner-mark img {
+  width: 112px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
 }
 
 /* ── SUN — collapsed rail (jj-side-tile) takes black ink on champagne ── */
@@ -215,6 +222,46 @@ html body #root [data-chrome="sidebar"] [data-sidebar-highlight-tile] {
   border: 0 !important;
   box-shadow: none !important;
   border-radius: 0 !important;
+}
+
+/* Portal row regression lock: the mode row and the three highlighted portal
+   shortcuts can never grow a secondary square behind their glyphs. */
+html body #root [data-chrome="sidebar"] :is(
+  [data-sidebar-mode-portal], [data-sidebar-highlight]
+) > :first-child {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Compact rail is intentionally almost half the former 56px width. Keep the
+   monogram optically large by allowing it to overhang inside the rail header. */
+@media (min-width: 1024px) {
+  body.jj-vertical-nav-collapsed {
+    --jj-shell-sidebar-w: 32px !important;
+    --jj-shell-main-w: calc(100vw - 32px) !important;
+  }
+  html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] [data-sidebar-emerald] {
+    width: 32px !important;
+    min-width: 32px !important;
+    overflow-x: visible !important;
+  }
+  html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] img[alt="JBJ"] {
+    width: 30px !important;
+    height: 42px !important;
+    max-width: none !important;
+    object-fit: contain !important;
+  }
+  html body.jj-vertical-nav-collapsed #root .jj-side-tile {
+    width: 32px !important;
+    height: 34px !important;
+  }
+  html body.jj-vertical-nav-collapsed #root main.jj-main-shell > :not(.jj-home-hero):not([data-partners-marquee]) {
+    scroll-margin-left: 20px;
+  }
 }
 
 /* Any residual emerald-gradient icon square inside the rail. */
