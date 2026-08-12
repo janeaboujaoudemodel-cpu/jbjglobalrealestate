@@ -50,8 +50,10 @@ async function discover(account: Account) {
       gateway(account, "/calendar/v3/calendars/primary"),
       gateway(account, "/calendar/v3/users/me/calendarList?maxResults=100"),
     ]);
+    const email = typeof profile.id === "string" && profile.id.includes("@") ? profile.id : null;
     return {
-      label: profile.summary ?? profile.id ?? "Google account",
+      label: email ?? profile.summary ?? "Google account",
+      email,
       calendars: (list.items ?? []).map((c: any) => ({ id: String(c.id), name: c.summary ?? c.id, primary: c.primary === true, writable: ["owner", "writer"].includes(c.accessRole) })),
     };
   }
@@ -59,11 +61,14 @@ async function discover(account: Account) {
     gateway(account, "/me?$select=displayName,mail,userPrincipalName"),
     gateway(account, "/me/calendars?$top=100&$select=id,name,canEdit,isDefaultCalendar"),
   ]);
+  const email = profile.mail ?? profile.userPrincipalName ?? null;
   return {
-    label: profile.mail ?? profile.userPrincipalName ?? profile.displayName ?? "Outlook account",
+    label: email ?? profile.displayName ?? "Outlook account",
+    email,
     calendars: (list.value ?? []).map((c: any) => ({ id: String(c.id), name: c.name ?? "Calendar", primary: c.isDefaultCalendar === true, writable: c.canEdit !== false })),
   };
 }
+
 
 function normalizeGoogle(e: any, calendarId: string) {
   const start = e.start?.dateTime ?? (e.start?.date ? `${e.start.date}T00:00:00Z` : null);
@@ -117,16 +122,20 @@ Deno.serve(async (req) => {
     if (action === "status") {
       const { data: states } = await db.from("owner_calendar_sync_state").select("*").eq("owner_id", ownerId);
       const result = [];
+      const slotOf = (accountKey: string) => `Connection ${Number(accountKey.replace("account_", "")) + 1}`;
       for (const account of linked) {
+        const base = { provider: account.provider, account_key: account.accountKey, slot: slotOf(account.accountKey) };
         try {
           const info = await discover(account);
-          result.push({ provider: account.provider, account_key: account.accountKey, connected: true, account: info.label, calendars: info.calendars.map((calendar: any) => ({ ...calendar, state: (states ?? []).find((s: any) => s.provider === account.provider && s.account_key === account.accountKey && s.calendar_id === calendar.id) ?? null })) });
+          result.push({ ...base, connected: true, account: info.label, email: info.email, calendars: info.calendars.map((calendar: any) => ({ ...calendar, state: (states ?? []).find((s: any) => s.provider === account.provider && s.account_key === account.accountKey && s.calendar_id === calendar.id) ?? null })) });
         } catch (e) {
-          result.push({ provider: account.provider, account_key: account.accountKey, connected: false, account: null, calendars: [], error: String((e as Error).message).slice(0, 300) });
+          result.push({ ...base, connected: false, account: null, email: null, calendars: [], error: String((e as Error).message).slice(0, 300) });
         }
       }
-      return json({ ok: true, accounts: result });
+      const { data: mailboxes } = await db.from("inbox_accounts").select("email_address, provider, status, last_synced_at, last_sync_status").order("email_address");
+      return json({ ok: true, accounts: result, mailboxes: mailboxes ?? [] });
     }
+
     if (action === "toggle") {
       const provider = payload.provider as Provider;
       const accountKey = String(payload.account_key ?? "");

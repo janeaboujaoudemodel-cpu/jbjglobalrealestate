@@ -4,31 +4,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { RefreshCw, CalendarCheck, ArrowDownToLine, ArrowUpFromLine, AlertTriangle } from "lucide-react";
+import { RefreshCw, CalendarCheck, ArrowDownToLine, ArrowUpFromLine, AlertTriangle, Mail } from "lucide-react";
 
 type ProviderId = "google_calendar" | "microsoft_outlook";
 type SyncState = { is_enabled: boolean; push_enabled: boolean; pull_enabled: boolean; last_pull_at: string | null; last_push_at: string | null; events_pulled: number; events_pushed: number; last_error: string | null } | null;
 type CalendarTarget = { id: string; name: string; primary: boolean; writable: boolean; state: SyncState };
-type AccountStatus = { provider: ProviderId; account_key: string; connected: boolean; account: string | null; calendars: CalendarTarget[]; error?: string };
+type AccountStatus = { provider: ProviderId; account_key: string; slot?: string; connected: boolean; account: string | null; email?: string | null; calendars: CalendarTarget[]; error?: string };
+type Mailbox = { email_address: string; provider: string; status: string; last_synced_at: string | null; last_sync_status: string | null };
 
 const LABEL: Record<ProviderId, string> = { google_calendar: "Google Calendar", microsoft_outlook: "Outlook Calendar" };
+const EXPECTED_MAILBOXES = ["contact@jbj.ae", "helpdesk@jbj.ae"];
 
 export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void }) {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<AccountStatus[]>([]);
+  const [mailboxes, setMailboxes] = useState<Mailbox[]>([]);
   const call = useCallback(async (body: Record<string, unknown>) => {
     const { data, error } = await supabase.functions.invoke("owner-calendar-sync", { body });
     if (error) throw new Error(error.message);
     if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
-    return data as { accounts?: AccountStatus[]; results?: Array<{ pulled?: number; pushed?: number; error?: string }> };
+    return data as { accounts?: AccountStatus[]; mailboxes?: Mailbox[]; results?: Array<{ pulled?: number; pushed?: number; error?: string }> };
   }, []);
   const load = useCallback(async () => {
-    try { const data = await call({ action: "status" }); setAccounts(data.accounts ?? []); }
+    try { const data = await call({ action: "status" }); setAccounts(data.accounts ?? []); setMailboxes(data.mailboxes ?? []); }
     catch (e) { toast.error((e as Error).message); }
     finally { setLoading(false); }
   }, [call]);
   useEffect(() => { void load(); }, [load]);
+
 
   const update = async (account: AccountStatus, calendar: CalendarTarget, patch: Record<string, boolean>) => {
     try {
@@ -59,7 +63,7 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
       <CardContent className="space-y-4">
         {loading ? <p className="text-sm text-muted-foreground">Checking connected accounts…</p> : accounts.length === 0 ? <p className="text-sm text-muted-foreground">No calendar accounts are linked.</p> : accounts.map((account) => (
           <section key={`${account.provider}:${account.account_key}`} className="rounded-md border border-border/60 p-4 space-y-3">
-            <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><h3 className="font-semibold">{LABEL[account.provider]}</h3><p className="text-xs text-muted-foreground break-words">{account.account ?? "Account access needs attention"}</p></div>{account.connected && <span className="text-xs font-medium text-[color:var(--emerald-1)]">Connected account</span>}</div>
+            <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><h3 className="font-semibold break-words">{account.email ?? account.account ?? `${LABEL[account.provider]} — account not identified`}</h3><p className="text-xs text-muted-foreground break-words">{LABEL[account.provider]}{account.slot ? ` · ${account.slot}` : ""}</p></div><span className={`text-xs font-medium ${account.connected ? "text-[color:var(--emerald-1)]" : "text-destructive"}`}>{account.connected ? "Connected" : "Needs reconnect"}</span></div>
             {account.error && <p className="flex gap-2 text-xs text-destructive"><AlertTriangle className="h-4 w-4 shrink-0" />{account.error}</p>}
             <div className="space-y-2">
               {account.calendars.map((calendar) => {
@@ -75,7 +79,24 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
             </div>
           </section>
         ))}
+        {!loading && (
+          <section className="rounded-md border border-border/60 p-4 space-y-2">
+            <div className="flex items-center gap-2"><Mail className="h-4 w-4" /><h3 className="font-semibold text-sm">Mailboxes</h3></div>
+            <p className="text-xs text-muted-foreground">Which inbox is connected, and which is still missing.</p>
+            {EXPECTED_MAILBOXES.map((address) => {
+              const box = mailboxes.find((m) => m.email_address.toLowerCase() === address);
+              return <div key={address} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/50 p-2.5">
+                <span className="min-w-0 break-words text-sm font-medium">{address}</span>
+                <span className={`text-xs font-medium ${box ? "text-[color:var(--emerald-1)]" : "text-destructive"}`}>{box ? `Connected · ${box.provider}${box.last_synced_at ? ` · last sync ${new Date(box.last_synced_at).toLocaleString()}` : " · never synced"}` : "Not connected yet"}</span>
+              </div>;
+            })}
+            {mailboxes.filter((m) => !EXPECTED_MAILBOXES.includes(m.email_address.toLowerCase())).map((m) => (
+              <div key={m.email_address} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/50 p-2.5"><span className="min-w-0 break-words text-sm font-medium">{m.email_address}</span><span className="text-xs font-medium text-[color:var(--emerald-1)]">Connected · {m.provider}</span></div>
+            ))}
+          </section>
+        )}
       </CardContent>
+
     </Card>
   );
 }
