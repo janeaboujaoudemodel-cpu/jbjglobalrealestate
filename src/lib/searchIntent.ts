@@ -11,6 +11,7 @@
  */
 
 import { GEO_COUNTRIES } from "@/data/geography";
+import { AREA_ENTRIES } from "@/lib/areaResolver";
 import { supabase } from "@/integrations/supabase/client";
 
 
@@ -39,16 +40,33 @@ export interface ResolvedIntent {
   confidence: "high" | "medium" | "low";
 }
 
-const ALL_AREAS = GEO_COUNTRIES.flatMap((c) => [
-  ...(c.areas ?? []),
-  ...(c.regions ?? []).flatMap((r) => [{ slug: r.slug, name: r.name }, ...r.areas]),
-]);
+/**
+ * Every geography entry with its country / region, so a matched place can be
+ * routed with the FULL geo chain. Emitting only `areas=<slug>` pinned every
+ * query to the UAE and applied no filter at all (the results engine matches
+ * display names, not slugs).
+ */
+const ALL_AREAS = AREA_ENTRIES;
 
 const findArea = (text: string) => {
   const t = text.toLowerCase();
   // Longest name first so "Dubai Marina" wins over "Dubai".
   const sorted = [...ALL_AREAS].sort((a, b) => b.name.length - a.name.length);
   return sorted.find((x) => t.includes(x.name.toLowerCase())) ?? null;
+};
+
+/** Writes the complete geo chain (country → region → area, slugs + names). */
+const setGeo = (p: URLSearchParams, area: (typeof ALL_AREAS)[number] | null) => {
+  if (!area) return;
+  p.set("country", area.countrySlug);
+  if (area.isRegion) {
+    p.set("region", area.slug);
+    p.set("emirates", area.name);
+    return;
+  }
+  if (area.regionSlug) p.set("region", area.regionSlug);
+  p.set("areaSlugs", area.slug);
+  p.set("areas", area.name);
 };
 
 const findBeds = (text: string) => {
@@ -115,7 +133,7 @@ export function resolveIntentLocally(raw: string): ResolvedIntent | null {
 
   if (has(t, /\b(off[-\s]?plan|launch|pre[-\s]?launch|new project|handover)\b/)) {
     const p = new URLSearchParams({ intent: "off-plan" });
-    if (area) p.set("areas", area.slug);
+    setGeo(p, area);
     if (beds) p.set("beds", beds);
     return {
       kind: "off-plan",
@@ -130,7 +148,7 @@ export function resolveIntentLocally(raw: string): ResolvedIntent | null {
 
   if (has(t, /\b(rent|rental|renting|for rent|how much is rent)\b/)) {
     const p = new URLSearchParams({ intent: "rent" });
-    if (area) p.set("areas", area.slug);
+    setGeo(p, area);
     if (beds) p.set("beds", beds);
     return {
       kind: "rent",
@@ -145,7 +163,7 @@ export function resolveIntentLocally(raw: string): ResolvedIntent | null {
 
   if (area || beds || has(t, /\b(buy|buying|looking for|invest|apartment|villa|townhouse|penthouse|studio)\b/)) {
     const p = new URLSearchParams({ intent: "buy" });
-    if (area) p.set("areas", area.slug);
+    setGeo(p, area);
     if (beds) p.set("beds", beds);
     if (!area && !beds) p.set("q", q);
     return {
