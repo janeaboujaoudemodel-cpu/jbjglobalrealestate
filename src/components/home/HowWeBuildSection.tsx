@@ -260,7 +260,20 @@ export default function HowWeBuildSection() {
                         opacity: isActive ? 1 : 0.72,
                       }}
                     >
-                      {String(LAYERS.length - i).padStart(2, "0")}
+                      <svg viewBox="0 0 28 28" className="h-full w-full" aria-hidden>
+                        <text
+                          x="14"
+                          y="18.5"
+                          textAnchor="middle"
+                          fill="#064E3B"
+                          style={{ fill: "#064E3B", fontSize: 11, fontWeight: 700 }}
+                        >
+                          {String(LAYERS.length - i).padStart(2, "0")}
+                        </text>
+                      </svg>
+                      <span className="sr-only">
+                        Step {String(LAYERS.length - i).padStart(2, "0")}
+                      </span>
                     </span>
                     <span className="min-w-0 text-left">
                       <span className="block text-left text-sm font-semibold text-white">
