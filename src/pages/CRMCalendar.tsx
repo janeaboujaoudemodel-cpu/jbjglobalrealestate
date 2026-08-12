@@ -270,6 +270,18 @@ const CRMCalendar = () => {
         }
       }
 
+      // Push owner-created/edited events immediately to every enabled calendar.
+      // The manual Sync button remains available for a full reconciliation.
+      try {
+        const { error: syncError } = await supabase.functions.invoke("owner-calendar-sync", {
+          body: { action: "sync", days_back: 1, days_ahead: 365 },
+        });
+        if (syncError) throw syncError;
+      } catch (syncError) {
+        console.warn("Calendar event saved locally; external sync is pending", syncError);
+        toast.warning("Event saved. One connected calendar is still pending sync.");
+      }
+
       setOpen(false);
       setEditingId(null);
       fetchEvents();
