@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import {
   Mail, Inbox as InboxIcon, Send as SendIcon, FileText, Trash2, Archive, ShieldAlert,
-  RefreshCw, Loader2, Search, Star, Sparkles, Plus, Gauge, Broom,
+  RefreshCw, Loader2, Search, Star, Sparkles, Gauge, Brush,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import InboxMessageList from "./inbox/InboxMessageList";
@@ -133,7 +133,7 @@ const AdminInbox: React.FC = () => {
             disabled={busy !== null}
             onClick={() => run("cleanup", () => callInbox("inbox-cleanup-run", { dryRun: true }), "Cleanup preview generated")}
           >
-            <Broom className="mr-1.5 h-4 w-4" /> Cleanup preview
+            <Brush className="mr-1.5 h-4 w-4" /> Cleanup preview
           </Button>
         </div>
       </header>
