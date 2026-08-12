@@ -157,21 +157,8 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
   [data-sidebar-emerald] {
   border-color: rgba(6, 78, 59, 0.16) !important;
 }
-/* Sun: emerald action buttons (Sign In / Sign Out / Collapse) keep the
-   approved gradient with pure white glyphs — that is the only emerald
-   allowed on the champagne rail. */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-sidebar-emerald] :is([data-sidebar-collapse-control], [data-sidebar-auth-control]),
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-sidebar-emerald] :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) :is(span, svg, path) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: currentColor !important;
-}
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
-  [data-sidebar-emerald] :is([data-sidebar-collapse-control], [data-sidebar-auth-control]) {
-  background-image: var(--jj-emerald-approved-d) !important;
-}
+/* Rail footer controls are plain premium words in both skins — see PASS 305. */
+
 
 /* Icons only — no plate behind any collapsed-rail tile, on EITHER skin. */
 html body #root [data-sidebar-emerald] .jj-side-tile:not(.is-active),
