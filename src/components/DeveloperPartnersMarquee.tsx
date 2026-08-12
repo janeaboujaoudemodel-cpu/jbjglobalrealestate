@@ -100,10 +100,8 @@ const DeveloperPartnersMarquee = () => {
 
   return (
     <section
-      className="w-full overflow-hidden bg-[#042c1c] bg-[linear-gradient(160deg,#064E3B_0%,#042c1c_58%,#000000_100%)]"
+      className="w-full overflow-hidden"
       data-partners-marquee
-      data-emerald-surface="true"
-      data-jbj-invert="pair"
     >
       {loopWidth > 0 && (
         <style>{`
@@ -115,7 +113,7 @@ const DeveloperPartnersMarquee = () => {
       )}
 
       <div className="w-full">
-        <div className="relative z-10 min-h-[64px] border-b border-white/10 py-4" data-partners-heading data-no-contrast-guard>
+        <div className="relative z-10 min-h-[64px] py-4" data-partners-heading data-no-contrast-guard>
           <ContentTrack>
             <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase jj-partners-heading-ink">
               {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
@@ -125,6 +123,9 @@ const DeveloperPartnersMarquee = () => {
 
         <div
           className="relative w-full overflow-hidden py-5 md:py-6"
+          data-partners-strip
+          data-emerald-surface="true"
+          data-jbj-invert="pair"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >

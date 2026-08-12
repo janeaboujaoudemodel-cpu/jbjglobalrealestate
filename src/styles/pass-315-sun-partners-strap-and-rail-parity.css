@@ -123,3 +123,19 @@ html[data-jbj-theme="sun"] body #root
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+
+/* ── 6. Heading band and logo strip are now separate surfaces, so the global
+      emerald white-ink contract only applies to the strip. ── */
+html[data-jbj-theme] body #root [data-partners-marquee] {
+  background: transparent !important;
+  background-image: none !important;
+}
+html[data-jbj-theme] body #root [data-partners-marquee] [data-partners-strip] {
+  background-color: #042c1c !important;
+  background-image: linear-gradient(160deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+}
+html[data-jbj-theme="moon"] body #root [data-partners-marquee] [data-partners-heading] {
+  background-color: #032015 !important;
+  background-image: linear-gradient(90deg, #032015 0%, #064E3B 50%, #032015 100%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
