@@ -619,3 +619,15 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     filter: none !important;
   }
 }
+
+/* PASS 322 — moon phone wordmark: no plate/halo, pure white glyphs only. */
+@media (max-width: 1023.98px) {
+  html body div#root [data-chrome="header"] .jj-header-wordmark,
+  html body div#root [data-chrome="header"] .jj-header-wordmark * {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-text-stroke: 0 !important;
+  }
+}
