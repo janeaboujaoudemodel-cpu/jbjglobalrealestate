@@ -1,0 +1,110 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 309 — RAIL/HEADER SEAM REPAIR + DEEP-TOP EMERALD
+
+   1) NO BROKEN SEAM when the rail expands. The utility bar is pinned to
+      the viewport's right edge instead of being sized with 100vw math,
+      so a width change on the rail can never leave an unpainted strip on
+      the right during (or after) the transition.
+   2) BRAND BAND FULL BLEED. The monogram + wordmark band paints edge to
+      edge in both collapsed and expanded states — never a highlight that
+      only covers the middle of the row.
+   3) DEEP TOP. The rail starts at the deepest emerald at the very top,
+      lifts only slightly around the middle, and returns to black at the
+      bottom — collapsed and expanded alike.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Utility bar can never leave a right-side gap ═══════════ */
+html body #root .jj-utility-shell,
+html body.jj-vertical-nav-active #root .jj-utility-shell {
+  right: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* ═══════════ 2. Brand band — full bleed, one surface ═══════════ */
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row],
+html body #root [data-chrome="sidebar"] [data-sidebar-brand-row] > a,
+html body #root [data-chrome="sidebar"] .jj-rail-brand-band,
+html body #root [data-chrome="sidebar"] .jj-rail-brand-band .jj-rail-brand-link {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background-clip: border-box !important;
+}
+
+/* One continuous deep surface across the whole band (no middle-only wash). */
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-brand-row],
+html:not([data-jbj-theme="sun"]) body #root [data-chrome="sidebar"] [data-sidebar-brand-row] {
+  background-color: #01120b !important;
+  background-image: linear-gradient(180deg, #01120b 0%, #02180f 100%) !important;
+}
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-brand-row] > a,
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] .jj-rail-brand-band .jj-rail-brand-link,
+html:not([data-jbj-theme="sun"]) body #root [data-chrome="sidebar"] [data-sidebar-brand-row] > a {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Sun keeps its champagne band, also full bleed and seamless. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-brand-row] {
+  background-color: #F4EDDF !important;
+  background-image: linear-gradient(180deg, #FBF6EC 0%, #F1E8D7 100%) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-brand-row] > a {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* ═══════════ 3. Deep top → slight mid lift → black bottom ═══════════ */
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-emerald],
+html:not([data-jbj-theme="sun"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald] {
+  background-color: #01120b !important;
+  background-image: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #02180f 14%,
+    #043524 46%,
+    #02170f 74%,
+    #000000 100%
+  ) !important;
+}
+
+/* ═══════════ 4. Sun collapsed rail footer — always black ink ═══════════
+   Legacy index.css / pass-305 rules hard-code white or gold on the rail
+   footer tiles. In the champagne rail every glyph and label is black. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div#root [data-chrome="sidebar"]
+  :is(.jj-rail-footer-block, .jj-rail-footer-block--rail, .jj-rail-footer-inner, .jj-sidebar-footer) :is(a, button, span, kbd, svg, svg *, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div#root [data-chrome="sidebar"]
+  :is(.jj-side-tile, .jj-side-auth-tile, [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div#root [data-chrome="sidebar"]
+  :is(.jj-side-tile, .jj-side-auth-tile, [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action]) :is(span, svg, svg *, path) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  opacity: 1 !important;
+}
+
+/* ═══════════ 5. No gold arch/sliver artifact on the collapsed rail ═══════════ */
+html body #root [data-chrome="sidebar"] .jj-rail-emerald-edge::before,
+html body #root [data-chrome="sidebar"] .jj-rail-emerald-edge::after,
+html body #root [data-chrome="sidebar"] .jj-side-tile::before,
+html body #root [data-chrome="sidebar"] .jj-side-tile::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  animation: none !important;
+}
+
+/* Collapsed rail never shows the gold scrollbar sliver. */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald].jj-rail-emerald-edge :is(nav, .jj-rail-stack, [class*="overflow-y"]) {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald].jj-rail-emerald-edge :is(nav, .jj-rail-stack, [class*="overflow-y"])::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
