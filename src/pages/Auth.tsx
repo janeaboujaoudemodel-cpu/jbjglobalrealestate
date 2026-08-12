@@ -466,7 +466,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     setIsSubmitting(true);
     try {
       const safeReturnPath = getSafeReturnPath();
-      try { sessionStorage.setItem("jbj_post_login_redirect", safeReturnPath); } catch { /* ignore */ }
+      try {
+        sessionStorage.setItem("jbj_post_login_redirect", safeReturnPath);
+        sessionStorage.setItem("jbj_post_login_redirect_at", String(Date.now()));
+      } catch { /* ignore */ }
       const result = await lovable.auth.signInWithOAuth(provider, {
         redirect_uri: window.location.origin,
         ...(provider === "google" ? { extraParams: { prompt: "select_account" } } : {}),
@@ -484,7 +487,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   useEffect(() => {
     if (!user || mode === "reset" || isReactivationPreview) return;
     const safe = getSafeReturnPath();
-    try { sessionStorage.removeItem("jbj_post_login_redirect"); } catch { /* ignore */ }
+    try {
+      sessionStorage.removeItem("jbj_post_login_redirect");
+      sessionStorage.removeItem("jbj_post_login_redirect_at");
+    } catch { /* ignore */ }
     navigate(safe, { replace: true });
   }, [user, mode, isReactivationPreview, navigate]);
 

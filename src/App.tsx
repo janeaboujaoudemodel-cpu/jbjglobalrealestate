@@ -18,6 +18,7 @@ import { PodcastVisibilityProvider } from "@/contexts/PodcastVisibilityContext";
 import { ConsVisibilityProvider } from "@/contexts/ConsVisibilityContext";
 import { TeamPageVisibilityProvider } from "@/contexts/TeamPageVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
+import { PostLoginRedirect } from "@/components/PostLoginRedirect";
 import RouteResume from "@/components/RouteResume";
 import AdminBypass from "@/components/AdminBypass";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
@@ -152,6 +153,7 @@ const App = () => {
                     <PrintModeBoundary />
                     <PrintBlockerGuard />
                     <ScrollToTopOnMount />
+                    <PostLoginRedirect />
                   <AIToolsScopeMarker />
                   <OwnerLeadNotificationListener />
                   <RouteResume />
