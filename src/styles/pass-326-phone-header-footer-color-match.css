@@ -47,3 +47,38 @@
     box-shadow: none !important;
   }
 }
+
+/* ── PASS 326b — EXACT FOOTER BAND SURFACE ON THE PHONE HEADER ──────────
+   The approved colour is the footer's centred champagne band (light edges,
+   warm gold centre). Painted statically so header and footer read identical
+   regardless of shimmer phase. Champagne ⇒ black ink (unchanged above). */
+@media (max-width: 1023.98px) {
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header,
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-surface="dark"],
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-surface="light"] {
+    background-color: #C8AD7A !important;
+    background-image: linear-gradient(
+      90deg,
+      #F1E8D6 0%,
+      #E2D2B4 22%,
+      #C8AD7A 50%,
+      #E2D2B4 78%,
+      #F1E8D6 100%
+    ) !important;
+    background-size: 100% 100% !important;
+    animation: none !important;
+  }
+
+  /* Drawer footer must never clip the account control. */
+  html body div#root [data-chrome="mobile-drawer-layer"] .jj-drawer-footer {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 18px) !important;
+  }
+  html body div#root [data-chrome="mobile-drawer-layer"] .jj-drawer-footer
+    [data-sidebar-auth-control] {
+    min-height: 40px !important;
+    overflow: visible !important;
+  }
+}
