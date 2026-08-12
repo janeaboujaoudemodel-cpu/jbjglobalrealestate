@@ -97,3 +97,14 @@ html body #root [data-chrome="sidebar"] .jj-side-tile::after {
   background: none !important;
   animation: none !important;
 }
+
+/* Collapsed rail never shows the gold scrollbar sliver. */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald].jj-rail-emerald-edge :is(nav, .jj-rail-stack, [class*="overflow-y"]) {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald].jj-rail-emerald-edge :is(nav, .jj-rail-stack, [class*="overflow-y"])::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
