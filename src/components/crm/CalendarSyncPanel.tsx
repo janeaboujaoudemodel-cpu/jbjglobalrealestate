@@ -2,9 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { RefreshCw, CalendarCheck, ArrowDownToLine, ArrowUpFromLine, AlertTriangle, Mail } from "lucide-react";
+import { RefreshCw, CalendarCheck, AlertTriangle, Mail, CheckCircle2, XCircle } from "lucide-react";
 
 type ProviderId = "google_calendar" | "microsoft_outlook";
 type SyncState = { is_enabled: boolean; push_enabled: boolean; pull_enabled: boolean; last_pull_at: string | null; last_push_at: string | null; events_pulled: number; events_pushed: number; last_error: string | null } | null;
@@ -34,21 +33,15 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
   useEffect(() => { void load(); }, [load]);
 
 
-  const update = async (account: AccountStatus, calendar: CalendarTarget, patch: Record<string, boolean>) => {
-    try {
-      await call({ action: "toggle", provider: account.provider, account_key: account.account_key, account_label: account.account, calendar_id: calendar.id, ...patch });
-      await load();
-    } catch (e) { toast.error(`Could not update calendar: ${(e as Error).message}`); }
-  };
-  const sync = async (account?: AccountStatus, calendar?: CalendarTarget) => {
-    const key = account ? `${account.provider}:${account.account_key}:${calendar?.id ?? "all"}` : "all";
+  const sync = async (account?: AccountStatus) => {
+    const key = account ? `${account.provider}:${account.account_key}` : "all";
     setSyncing(key);
     try {
-      const data = await call({ action: "sync", ...(account ? { provider: account.provider, account_key: account.account_key } : {}), ...(calendar ? { calendar_id: calendar.id } : {}) });
+      const data = await call({ action: "sync", ...(account ? { provider: account.provider, account_key: account.account_key } : {}) });
       const results = data.results ?? [];
       const failure = results.find((r) => r.error);
       if (failure) toast.error(`Sync issue: ${failure.error}`);
-      else toast.success(`Calendar synced · ${results.reduce((n, r) => n + (r.pulled ?? 0), 0)} in · ${results.reduce((n, r) => n + (r.pushed ?? 0), 0)} out`);
+      else toast.success("All connected calendars are up to date");
       await load(); onSynced?.();
     } catch (e) { toast.error(`Sync failed: ${(e as Error).message}`); }
     finally { setSyncing(null); }
@@ -57,26 +50,15 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
   return (
     <Card className="border-border/60 bg-card overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
-        <div><CardTitle className="text-base flex items-center gap-2"><CalendarCheck className="h-4 w-4" />Calendar connections</CardTitle><p className="mt-1 text-xs text-muted-foreground">Nothing syncs until you select a calendar and direction.</p></div>
-        <Button size="sm" variant="primary" disabled={!!syncing || !accounts.some((a) => a.calendars.some((c) => c.state?.is_enabled))} onClick={() => sync()}><RefreshCw className={`h-4 w-4 mr-2 ${syncing ? "animate-spin" : ""}`} />Sync selected</Button>
+        <div><CardTitle className="text-base flex items-center gap-2"><CalendarCheck className="h-4 w-4" />Calendar connections</CardTitle><p className="mt-1 text-xs text-muted-foreground">Primary calendars stay synchronized automatically.</p></div>
+        <Button size="sm" variant="primary" disabled={!!syncing || !accounts.some((a) => a.connected)} onClick={() => sync()}><RefreshCw className={`h-4 w-4 mr-2 ${syncing ? "animate-spin" : ""}`} />Sync now</Button>
       </CardHeader>
       <CardContent className="space-y-4">
         {loading ? <p className="text-sm text-muted-foreground">Checking connected accounts…</p> : accounts.length === 0 ? <p className="text-sm text-muted-foreground">No calendar accounts are linked.</p> : accounts.map((account) => (
           <section key={`${account.provider}:${account.account_key}`} className="rounded-md border border-border/60 p-4 space-y-3">
-            <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><h3 className="font-semibold break-words">{account.email ?? account.account ?? `${LABEL[account.provider]} — account not identified`}</h3><p className="text-xs text-muted-foreground break-words">{LABEL[account.provider]}{account.slot ? ` · ${account.slot}` : ""}</p></div><span className={`text-xs font-medium ${account.connected ? "text-[color:var(--emerald-1)]" : "text-destructive"}`}>{account.connected ? "Connected" : "Needs reconnect"}</span></div>
+             <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><h3 className="font-semibold break-words">{account.email ?? account.account ?? `${LABEL[account.provider]} — account not identified`}</h3><p className="text-xs text-muted-foreground break-words">{LABEL[account.provider]}{account.slot ? ` · ${account.slot}` : ""}</p></div><span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${account.connected ? "text-[color:var(--emerald-1)]" : "text-destructive"}`}>{account.connected ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}{account.connected ? "Connected · automatic sync on" : "Not connected"}</span></div>
             {account.error && <p className="flex gap-2 text-xs text-destructive"><AlertTriangle className="h-4 w-4 shrink-0" />{account.error}</p>}
-            <div className="space-y-2">
-              {account.calendars.map((calendar) => {
-                const enabled = calendar.state?.is_enabled === true;
-                const rowKey = `${account.provider}:${account.account_key}:${calendar.id}`;
-                return <div key={calendar.id} className="grid gap-3 rounded-md border border-border/50 p-3 md:grid-cols-[minmax(180px,1fr)_auto_auto_auto] md:items-center">
-                  <label className="flex min-w-0 items-center gap-3"><Checkbox checked={enabled} onCheckedChange={(v) => update(account, calendar, { is_enabled: v === true, ...(v === true && !calendar.state ? { pull_enabled: false, push_enabled: false } : {}) })} /><span className="min-w-0"><span className="block font-medium break-words">{calendar.name}</span>{calendar.primary && <span className="text-xs text-muted-foreground">Primary calendar</span>}</span></label>
-                  <label className={`flex items-center gap-2 text-sm ${enabled ? "" : "opacity-50"}`}><Checkbox disabled={!enabled} checked={calendar.state?.pull_enabled === true} onCheckedChange={(v) => update(account, calendar, { pull_enabled: v === true })} /><ArrowDownToLine className="h-4 w-4" /><span>Bring in</span></label>
-                  <label className={`flex items-center gap-2 text-sm ${enabled && calendar.writable ? "" : "opacity-50"}`}><Checkbox disabled={!enabled || !calendar.writable} checked={calendar.state?.push_enabled === true} onCheckedChange={(v) => update(account, calendar, { push_enabled: v === true })} /><ArrowUpFromLine className="h-4 w-4" /><span>Send out</span></label>
-                  <Button size="sm" variant="outline" disabled={!enabled || !!syncing} onClick={() => sync(account, calendar)}><RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${syncing === rowKey ? "animate-spin" : ""}`} />Sync</Button>
-                </div>;
-              })}
-            </div>
+             {account.connected && <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border/50 p-3"><div><p className="text-sm font-medium">Primary calendar</p><p className="text-xs text-muted-foreground">Meetings update both here and in {LABEL[account.provider]} automatically. Holiday calendars are ignored.</p></div><Button size="sm" variant="outline" disabled={!!syncing} onClick={() => sync(account)}><RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${syncing === `${account.provider}:${account.account_key}` ? "animate-spin" : ""}`} />Check now</Button></div>}
           </section>
         ))}
         {!loading && (
