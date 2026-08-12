@@ -62,8 +62,17 @@ html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"]):not([data-y])
   background: linear-gradient(
     180deg,
     #01120b 0%,
-    #032a1c 26%,
-    #04382568 0%,
-    #033venue 0%
+    #02190f 16%,
+    #063d29 48%,
+    #021a11 76%,
+    #000000 100%
+  ) !important;
+  background-image: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #02190f 16%,
+    #063d29 48%,
+    #021a11 76%,
+    #000000 100%
   ) !important;
 }
