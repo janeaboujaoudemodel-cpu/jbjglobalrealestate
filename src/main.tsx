@@ -15,6 +15,7 @@ import"./styles/pass-309-rail-seam-and-deep-top.css";
 import"./styles/pass-310-deep-rail-and-seam-lock.css";
 import"./styles/pass-311-photo-card-white-ink.css";
 import"./styles/pass-312-moon-rail-no-icon-highlight.css";
+import"./styles/pass-313-rail-footer-fit-and-brand-padding.css";
 
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";
