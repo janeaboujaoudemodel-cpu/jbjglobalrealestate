@@ -261,7 +261,7 @@ export function useCommunities() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("communities")
-        .select("*")
+        .select("id,name,slug,description,image_url,location")
         .order("name");
       
       if (error) throw error;
@@ -494,7 +494,7 @@ export function useTrendingAreas() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("trending_areas")
-        .select("*")
+        .select("id,name,slug,emirate,image_url,is_trending")
         .eq("is_trending", true)
         .order("name");
       
@@ -930,7 +930,7 @@ export function useCommunity(communitySlug: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("communities")
-        .select("*")
+        .select("id,name,slug,description,image_url,location")
         .eq("slug", communitySlug)
         .maybeSingle();
       
