@@ -1,0 +1,113 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 308 — FOOTER PARITY, TIGHT RAIL, NO WHITE BAND, STRAP EMERALD
+
+   1) FOOTER HEIGHT PARITY — the public site footer band and the vertical
+      sidebar footer block share one height token in both skins, collapsed
+      or expanded, so the divider above the rail footer lines up exactly
+      with the footer's top hairline.
+   2) TIGHT COLLAPSED RAIL — icons in the collapsed rail sit closer so the
+      rail never scrolls.
+   3) NO WHITE BAND UNDER THE HEADER — in Moon the app shell / page surface
+      can never paint champagne or white under the utility header.
+   4) STRAP EMERALD — long straps and big cards use the exact ombre the
+      in-sidebar Day/Night toggle uses (dark edges, lifted centre), in Sun
+      and Moon. Pills, buttons and the Sun header are untouched.
+   5) SUN ACTIVE TAB — Explore Our Services + Royal Tools Hub active tabs
+      wear the sidebar champagne instead of pure white, ink stays black.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root,
+html[data-jbj-theme],
+html[data-jbj-theme] body {
+  /* Shared chrome footer height (site footer band == rail footer block). */
+  --jj-chrome-footer-h: 132px;
+  /* The exact gradient used by the in-rail Day/Night selector. */
+  --jj-strap-emerald: linear-gradient(90deg, #01110b 0%, #032015 14%, #064E3B 50%, #032015 86%, #01110b 100%);
+}
+
+/* ═══════════ 1. Footer height parity ═══════════ */
+html body #root footer[data-jj-minimal-footer] > div,
+html body #root footer#site-footer > div:last-child {
+  min-height: var(--jj-chrome-footer-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+html body #root [data-chrome="sidebar"] .jj-rail-footer-block {
+  min-height: var(--jj-chrome-footer-h);
+  height: var(--jj-chrome-footer-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+html body #root [data-chrome="sidebar"] .jj-rail-footer-block .jj-rail-footer-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* The rail divider is the rail's footer top edge — same weight as the
+   footer's own hairline so the two read as one continuous line. */
+html body #root [data-chrome="sidebar"] .jj-rail-footer-rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin: 0 0 6px 0;
+  flex: 0 0 1px;
+}
+
+/* ═══════════ 2. Tight collapsed rail ═══════════ */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-stack {
+  gap: 0 !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-stack .jj-side-tile {
+  height: 32px !important;
+  width: 32px !important;
+  border-radius: 8px !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-footer-block--rail {
+  gap: 0 !important;
+  padding-bottom: 4px;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-footer-block--rail .jj-rail-footer-inner {
+  gap: 0 !important;
+}
+
+/* ═══════════ 3. No white/champagne band under the header (Moon) ═══════════ */
+html[data-jbj-theme="moon"] body,
+html[data-jbj-theme="moon"] body #root,
+html[data-jbj-theme="moon"] body #root > div,
+html[data-jbj-theme="moon"] body #root main,
+html[data-jbj-theme="moon"] body #root [data-home-page],
+html[data-jbj-theme="moon"] body #root [data-page-shell] {
+  background-color: #000000 !important;
+}
+/* Any light band a lazy section leaves behind under the header goes black. */
+html[data-jbj-theme="moon"] body #root [data-home-page] > div:first-child {
+  background-color: #000000 !important;
+}
+
+/* ═══════════ 4. Strap emerald on long straps + big cards ═══════════
+   Applies to block-level emerald surfaces only. Anchors and buttons
+   (pills / CTAs) are excluded on purpose. */
+html[data-jbj-theme] body #root#root [data-ink-emerald]:not(a):not(button):not([role="tab"]),
+html[data-jbj-theme] body #root#root [data-partners-marquee],
+html[data-jbj-theme] body #root#root [data-emerald-strap] {
+  background-color: #032015 !important;
+  background-image: var(--jj-strap-emerald) !important;
+}
+
+/* ═══════════ 5. Sun active tab = sidebar champagne ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [role="tab"][data-tab-white-active="true"],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [role="tab"][data-tab-white-active="true"]:hover,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [role="tab"][data-tab-white-active="true"]:focus-visible {
+  background-color: #EFE6D2 !important;
+  background-image: linear-gradient(180deg, #F6EFE0 0%, #EDE2CB 55%, #E3D6B9 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), inset 0 -2px 0 rgba(184, 149, 85, 0.35) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [role="tab"][data-tab-white-active="true"],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [role="tab"][data-tab-white-active="true"] :is(span, svg, svg *, path) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}
