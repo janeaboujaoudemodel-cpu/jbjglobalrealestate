@@ -316,22 +316,22 @@ const CRMCalendar = () => {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/owner/crm">
-              <Button variant="ghost" size="sm" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
+              <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" /> Back to CRM
               </Button>
             </Link>
-            <div className="h-6 w-px bg-[#EFE6D6]" />
+            <div className="h-6 w-px bg-border" />
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40">
-                <CalendarIcon className="h-5 w-5 text-[#1A1A1A]" />
+              <div className="p-2 rounded-lg bg-muted border border-border">
+                <CalendarIcon className="h-5 w-5 text-foreground" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-[#1A1A1A]">Calendar</h1>
-                <p className="text-xs text-[#1A1A1A]/70">{events.length} event{events.length === 1 ? "" : "s"} this month</p>
+                 <h1 className="text-lg font-bold text-foreground">Calendar</h1>
+                 <p className="text-xs text-muted-foreground">{events.length} event{events.length === 1 ? "" : "s"} this month</p>
               </div>
             </div>
           </div>
-          <Button onClick={() => openCreate()} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+           <Button onClick={() => openCreate()} variant="primary">
             <Plus className="h-4 w-4 mr-2" /> Add Event
           </Button>
         </div>

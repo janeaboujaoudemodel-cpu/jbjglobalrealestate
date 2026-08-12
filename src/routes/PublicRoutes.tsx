@@ -272,7 +272,9 @@ export const PublicRoutes = () => (
     <Route path="/areas" element={<AreaGuides />} />
     <Route path="/area/:slug" element={<AreaDetail />} />
     <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
-    <Route path="/resale-properties" element={<ResaleProperties />} />
+    <Route path="/resale-properties" element={<Navigate to="/properties?purpose=buy&status=resale" replace />} />
+    <Route path="/resale" element={<Navigate to="/properties?purpose=buy&status=resale" replace />} />
+    <Route path="/distress" element={<Navigate to="/properties?purpose=buy&status=distress" replace />} />
     <Route path="/map" element={<PropertyMap />} />
     {/* Unified List Your Property page (manual + AI + browse). Old routes 301 here. */}
     <Route path="/list-property" element={<ListProperty />} />
@@ -286,8 +288,8 @@ export const PublicRoutes = () => (
     <Route path="/sell/valuation" element={<RequestValuation />} />
     <Route path="/property-management/list" element={<Navigate to="/list-property?purpose=rent&mode=manual" replace />} />
     <Route path="/property-measurement" element={<PropertyMeasurement />} />
-    <Route path="/buy" element={<Navigate to="/properties?transactionType=buy" replace />} />
-    <Route path="/rent" element={<Navigate to="/properties?transactionType=rent" replace />} />
+    <Route path="/buy" element={<Navigate to="/properties?purpose=buy" replace />} />
+    <Route path="/rent" element={<Navigate to="/properties?purpose=rent" replace />} />
     <Route path="/property-management" element={<Navigate to="/services/property-management" replace />} />
     <Route path="/projects" element={<Navigate to="/properties" replace />} />
     <Route path="/projects/:slug" element={<RedirectWithParams to="/project" />} />
