@@ -311,31 +311,24 @@ const CRMCalendar = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-black/10 bg-white sticky top-0 lg:top-[48px] z-40">
+    <div className="bg-background">
+      <header className="border-b border-black/10 bg-white">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/owner/crm">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" /> Back to CRM
-              </Button>
-            </Link>
-            <div className="h-6 w-px bg-border" />
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-muted border border-border">
-                <CalendarIcon className="h-5 w-5 text-foreground" />
-              </div>
-              <div>
-                 <h1 className="text-lg font-bold text-foreground">Calendar</h1>
-                 <p className="text-xs text-muted-foreground">{events.length} event{events.length === 1 ? "" : "s"} this month</p>
-              </div>
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-[#064E3B]/10 border border-black/10">
+              <CalendarIcon className="h-5 w-5 text-[#064E3B]" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-foreground">Calendar</h1>
+              <p className="text-xs text-muted-foreground">{events.length} event{events.length === 1 ? "" : "s"} this month</p>
             </div>
           </div>
-           <Button onClick={() => openCreate()} variant="primary">
+          <Button onClick={() => openCreate()} variant="primary">
             <Plus className="h-4 w-4 mr-2" /> Add Event
           </Button>
         </div>
       </header>
+
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
         <CalendarSyncPanel onSynced={fetchEvents} />
