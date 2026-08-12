@@ -11,7 +11,7 @@
  */
 import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, ChevronDown, Crown, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, Building2, Check, ChevronDown, Crown, MapPin, Minus, Search, SlidersHorizontal, X } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +20,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { getRegions } from "@/data/geography";
 import { GEO_COUNTRIES } from "@/data/geography";
 import AreaIncludeExclude from "./AreaIncludeExclude";
+import DeveloperIncludeExclude from "./DeveloperIncludeExclude";
 import PropertyFilterScreen from "./PropertyFilterScreen";
 import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
 import { usePropertyCount } from "@/hooks/usePropertyCount";
@@ -249,7 +250,9 @@ export default function PropertySearchBar({
   const KEYWORD_COLS = GRID_TOTAL - 6 - (showTiers ? 3 : 0) - 3 - UTILITY_COLS;
   const KEYWORD_SPAN = `jj-sspan-${KEYWORD_COLS}`;
   const ROW1_UTILITY_SPAN = `jj-sspan-${UTILITY_COLS}`;
-  const AREA_SPAN = "jj-sspan-6";
+  /* PASS 298 — row 2 opens with three 2-col segments so they sit exactly under
+     Buy (location), Rent (developers) and Sell (tiers). */
+  const AREA_SPAN = "jj-sspan-2";
   const ROW2_UTILITY_SPAN = "jj-sspan-6";
   const dividerColor = dark ? "rgba(255,255,255,0.45)" : "rgba(184,149,85,0.62)";
 
@@ -266,6 +269,22 @@ export default function PropertySearchBar({
     const c = GEO_COUNTRIES.find((x) => x.slug === f.country);
     return c ? (c.slug === "uae" ? "UAE" : c.name) : "Location";
   }, [f]);
+
+  const developersLabel = f.developersInclude.length
+    ? f.developersInclude.length === 1
+      ? f.developersInclude[0]
+      : `${f.developersInclude.length} developers`
+    : f.developersExclude.length
+      ? `All except ${f.developersExclude.length}`
+      : "Developers";
+
+  const tiersLabel = f.tiersInclude.length
+    ? f.tiersInclude.length === 1
+      ? TIER_LABELS[f.tiersInclude[0] as DeveloperTier] || "Tier"
+      : `${f.tiersInclude.length} tiers`
+    : f.tiersExclude.length
+      ? `All except ${f.tiersExclude.length}`
+      : "Tiers";
 
   const typeLabel = f.types.length
     ? f.types.length === 1
@@ -570,6 +589,104 @@ export default function PropertySearchBar({
                 })
               }
             />
+          </Seg>
+        </div>
+
+        <div className="order-4 lg:order-none col-span-1 jj-sspan-2 min-w-0">
+          <Seg
+            label={developersLabel}
+            active={!!(f.developersInclude.length || f.developersExclude.length)}
+            dark={dark}
+            wide
+            icon={<Building2 className="w-4 h-4 opacity-70" />}
+          >
+            <DeveloperIncludeExclude
+              include={f.developersInclude}
+              exclude={f.developersExclude}
+              onChange={({ include, exclude }) => set({ developersInclude: include, developersExclude: exclude })}
+            />
+          </Seg>
+        </div>
+
+        <div className="order-4 lg:order-none col-span-1 jj-sspan-2 min-w-0">
+          <Seg
+            label={tiersLabel}
+            active={!!(f.tiersInclude.length || f.tiersExclude.length)}
+            dark={dark}
+            wide
+            icon={<Crown className="w-4 h-4 opacity-70" />}
+          >
+            <div className="w-[240px] max-w-[88vw] p-2">
+              {(f.tiersInclude.length || f.tiersExclude.length) ? (
+                <button
+                  type="button"
+                  onClick={() => set({ tiersInclude: [], tiersExclude: [] })}
+                  className="mb-2 w-full rounded-md border border-[#064E3B]/25 px-2 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#064E3B]"
+                >
+                  Clear tiers
+                </button>
+              ) : null}
+              {(Object.entries(TIER_LABELS) as [DeveloperTier, string][]).map(([value, label]) => {
+                const on = f.tiersInclude.includes(value);
+                const off = f.tiersExclude.includes(value);
+                return (
+                  <div key={value} className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        set({
+                          tiersInclude: on
+                            ? f.tiersInclude.filter((t) => t !== value)
+                            : [...f.tiersInclude, value],
+                          tiersExclude: f.tiersExclude.filter((t) => t !== value),
+                        })
+                      }
+                      aria-pressed={on}
+                      data-no-contrast-guard
+                      className="flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2 text-left text-[13px]"
+                      style={{
+                        backgroundImage: on ? EMERALD_PAIR : undefined,
+                        color: on ? "#FFFFFF" : off ? "rgba(185,28,28,0.9)" : "#1A1A1A",
+                        WebkitTextFillColor: on ? "#FFFFFF" : undefined,
+                        textDecoration: off ? "line-through" : undefined,
+                      }}
+                    >
+                      <span
+                        className="grid h-4 w-4 shrink-0 place-items-center rounded-[4px] border"
+                        style={{
+                          borderColor: on ? "#FFFFFF" : off ? "#B91C1C" : "rgba(6,78,59,0.4)",
+                          background: on ? "#FFFFFF" : "transparent",
+                        }}
+                      >
+                        {on ? <Check className="h-3 w-3" style={{ color: "#064E3B" }} /> : null}
+                      </span>
+                      <span className="truncate">{label}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        set({
+                          tiersInclude: f.tiersInclude.filter((t) => t !== value),
+                          tiersExclude: off
+                            ? f.tiersExclude.filter((t) => t !== value)
+                            : [...f.tiersExclude, value],
+                        })
+                      }
+                      aria-label={`Exclude ${label}`}
+                      aria-pressed={off}
+                      data-no-contrast-guard
+                      className="grid h-7 w-7 shrink-0 place-items-center rounded-md border"
+                      style={{
+                        borderColor: off ? "#B91C1C" : "rgba(185,28,28,0.35)",
+                        background: off ? "#B91C1C" : "transparent",
+                      }}
+                    >
+                      <Minus className="h-3.5 w-3.5" style={{ color: off ? "#FFFFFF" : "#B91C1C" }} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </Seg>
         </div>
 
