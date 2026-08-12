@@ -11,6 +11,7 @@
  * the scoped `pass-318` stylesheet — no hardcoded champagne/black values.
  */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown, LogOut, User, Search, Headphones, Heart, Ticket, X,
@@ -75,6 +76,7 @@ export default function MobileNavDrawer({
   const { language, setLanguage } = useLanguage();
   const { currency } = useCurrency();
   const activeLang = getLanguageInfo(language);
+  const [toolsOpen, setToolsOpen] = useState(false);
 
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
   const { allowed: canCompare } = useCompareAccess();
@@ -190,7 +192,7 @@ export default function MobileNavDrawer({
     );
   };
 
-  return (
+  const drawer = (
     <div className="jj-drawer-layer fixed inset-0" role="dialog" aria-modal="true" aria-label="Main navigation">
       {/* Backdrop */}
       <button
@@ -204,7 +206,7 @@ export default function MobileNavDrawer({
       <aside
         data-jj-mobile-drawer
         data-jj-drawer-panel
-        className="absolute left-0 top-0 h-full w-[min(88vw,340px)] flex flex-col overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
+        className="absolute left-0 top-0 h-[100dvh] w-[min(88vw,340px)] flex flex-col overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
       >
         {/* Brand band — one-line company identity in both skins. */}
         <div data-sidebar-brand-row="drawer" className="jj-rail-brand-band shrink-0 flex items-center gap-3 px-4 pt-3 pb-3">
@@ -243,7 +245,7 @@ export default function MobileNavDrawer({
           ].map(({ key, Icon, label, to, onClick }) => {
             const inner = (
               <>
-                <Icon className="w-5 h-5" style={{ color: "currentColor" }} />
+                 <Icon data-jj-quick-icon className="w-5 h-5" style={{ color: isMoon ? "currentColor" : "#B89555" }} />
                 <span className="text-[11px] font-semibold leading-none">{label}</span>
               </>
             );
@@ -276,7 +278,7 @@ export default function MobileNavDrawer({
         {/* Preferences — each label and value is one aligned field. */}
         <div className="jj-drawer-prefs shrink-0 flex flex-col px-3 pb-2">
           <div className="jj-drawer-pref-row flex items-center gap-0 min-h-[46px] px-1">
-            <span className="flex w-[120px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <img
                 src={flagSrc(activeLang.flag)}
                 alt=""
@@ -286,7 +288,7 @@ export default function MobileNavDrawer({
 
               Language
             </span>
-            <span className="flex min-w-0 flex-1 items-center" style={rowStyle}>
+            <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -316,13 +318,13 @@ export default function MobileNavDrawer({
           </div>
 
           <div className="jj-drawer-pref-row flex items-center gap-0 min-h-[46px] px-1">
-            <span className="flex w-[120px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <span aria-hidden className="jj-drawer-pref-value text-[11px] font-bold tracking-[0.06em] w-[20px] text-center leading-none">
                 {currency}
               </span>
               Currency
             </span>
-            <span className="jj-drawer-currency flex min-w-0 flex-1 items-center" style={rowStyle}>
+            <span className="jj-drawer-currency flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
               <span className="inline-flex h-9 min-w-0 items-center">
                 <InlineCurrencySelect dark={isMoon} />
               </span>
@@ -370,20 +372,36 @@ export default function MobileNavDrawer({
               const SectionIcon = SECTION_ICONS[sectionKey];
               return (
                 <div key={sectionKey} className="flex flex-col">
-                  {/* Every page is always visible — no accordion, no arrows. */}
-                  <div
-                    data-jj-drawer-section
-                    className="jj-drawer-row flex items-center gap-3 rounded-lg px-3 text-[11px] font-bold uppercase tracking-[0.14em]"
-                    style={rowStyle}
-                  >
-                    <SectionIcon className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
-                    <span className="flex-1 text-left">{sectionKey}</span>
-                  </div>
-                  <div className="jj-drawer-sub ml-4 pl-2 flex flex-col gap-0.5 py-1">
-                    {items.map((item) => (
-                      <Row key={`${sectionKey}-${item.href}-${item.label}`} item={item} nested />
-                    ))}
-                  </div>
+                  {sectionKey === "TOOLS & WORKSPACE" ? (
+                    <button
+                      type="button"
+                      data-jj-drawer-section
+                      aria-expanded={toolsOpen}
+                      onClick={() => setToolsOpen((value) => !value)}
+                      className="jj-drawer-row flex items-center gap-3 rounded-lg px-3 text-[11px] font-bold uppercase tracking-[0.14em]"
+                      style={rowStyle}
+                    >
+                      <SectionIcon className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
+                      <span className="flex-1 text-left">{sectionKey}</span>
+                      <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
+                    </button>
+                  ) : (
+                    <div
+                      data-jj-drawer-section
+                      className="jj-drawer-row flex items-center gap-3 rounded-lg px-3 text-[11px] font-bold uppercase tracking-[0.14em]"
+                      style={rowStyle}
+                    >
+                      <SectionIcon className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
+                      <span className="flex-1 text-left">{sectionKey}</span>
+                    </div>
+                  )}
+                  {(sectionKey !== "TOOLS & WORKSPACE" || toolsOpen) && (
+                    <div className="jj-drawer-sub ml-4 pl-2 flex flex-col gap-0.5 py-1">
+                      {items.map((item) => (
+                        <Row key={`${sectionKey}-${item.href}-${item.label}`} item={item} nested />
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -395,7 +413,7 @@ export default function MobileNavDrawer({
 
         {/* Footer — theme switch, help, support, sign out. Same order and the
             same left ink column as the rail so icons and labels line up. */}
-        <div className="jj-drawer-footer shrink-0 flex flex-col gap-0.5 px-2 pt-2 pb-1">
+        <div className="jj-drawer-footer shrink-0 flex flex-col gap-0.5 px-2 pt-2 pb-[max(8px,env(safe-area-inset-bottom))]">
           <div className="px-1 pb-1">
             <ThemeModeToggle variant="menu" className="jj-drawer-theme" />
           </div>
@@ -445,4 +463,6 @@ export default function MobileNavDrawer({
       </aside>
     </div>
   );
+
+  return createPortal(drawer, document.body);
 }

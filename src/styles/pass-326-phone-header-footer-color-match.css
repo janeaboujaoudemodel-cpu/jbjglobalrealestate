@@ -26,7 +26,7 @@
     border-bottom: 1px solid rgba(184, 149, 85, 0.34) !important;
   }
 
-  /* Identity + hamburger read black on the champagne band, every state. */
+  /* Identity reads black on champagne; the emerald hamburger keeps white bars. */
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
     [data-chrome="header"] > header[data-header-surface="dark"] a[href="/"] img {
     filter: none !important;
@@ -43,7 +43,7 @@
   }
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
     [data-chrome="header"] > header [data-tour-target="mobile-menu"] .jj-hamburger-bar {
-    background-color: #1A1A1A !important;
+    background-color: #FFFFFF !important;
     box-shadow: none !important;
   }
 }

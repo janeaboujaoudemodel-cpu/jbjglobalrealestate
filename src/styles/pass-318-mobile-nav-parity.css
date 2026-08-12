@@ -20,6 +20,7 @@
 html body #root [data-chrome="header"] { position: relative; z-index: 10400; }
 html body #root [data-chrome="header"] header { z-index: 10400 !important; }
 html body #root .jj-drawer-layer { z-index: 10450; }
+html body > .jj-drawer-layer { z-index: 2147483000; }
 
 /* ═══════════ 2. Panel geometry ═══════════ */
 html body #root [data-jj-drawer-panel] {
@@ -56,7 +57,7 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
 }
 html[data-jbj-theme="sun"][data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
   [data-jj-drawer-panel][data-jj-mobile-drawer]
-  :is(a, button, span, p, strong, small, label, svg, svg *, path):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+  :is(a, button, span, p, strong, small, label, svg, svg *, path):not([data-jj-quick-icon]):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
   color: #0A0A0A !important;
   -webkit-text-fill-color: #0A0A0A !important;
   stroke: currentColor !important;
