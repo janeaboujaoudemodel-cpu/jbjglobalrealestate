@@ -32,7 +32,7 @@ const MODE_CONFIG = {
 } as const;
 
 const EMERALD_TILE =
-  "bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.65),inset_0_1px_0_rgba(255,255,255,0.18)]";
+  "bg-transparent border-0 shadow-none";
 
 export default function SidebarModePortalBlock({ collapsed = false }: { collapsed?: boolean }) {
   const { mode, hasMadeInitialSelection } = useUserModeContext();
@@ -57,7 +57,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         className="mx-auto my-1 w-10 h-10 flex items-center justify-center rounded-lg transition-all hover:bg-[#1A1A1A]/[0.045]"
       >
         <span
-          data-emerald-icon-surface
+          data-sidebar-mode-icon-tile
           className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
         >
           <Icon
@@ -92,7 +92,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         }
       >
         <span
-          data-emerald-icon-surface
+          data-sidebar-mode-icon-tile
           className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
         >
           <Icon
