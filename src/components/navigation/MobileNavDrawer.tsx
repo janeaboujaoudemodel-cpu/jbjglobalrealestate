@@ -13,7 +13,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  ChevronDown, LogOut, User, Search, HelpCircle, Headphones, Heart, Ticket, X,
+  ChevronDown, LogOut, User, Search, Headphones, Heart, Ticket, X,
   Globe, Coins, Lock,
 } from "lucide-react";
 
@@ -44,13 +44,12 @@ interface MobileNavDrawerProps {
   open: boolean;
   onClose: () => void;
   onOpenSearch?: () => void;
-  onOpenGuide?: () => void;
 }
 
 const hrefPath = (href: string) => href.split("?")[0].split("#")[0];
 
 export default function MobileNavDrawer({
-  open, onClose, onOpenSearch, onOpenGuide,
+  open, onClose, onOpenSearch,
 }: MobileNavDrawerProps) {
   const location = useLocation();
   const { user } = useAuth();
@@ -189,7 +188,7 @@ export default function MobileNavDrawer({
         data-jj-drawer-panel
         className="absolute left-0 top-0 h-full w-[min(88vw,340px)] flex flex-col overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
       >
-        {/* Brand band — larger identity on phone: 52px monogram + two-line wordmark */}
+        {/* Brand band — one-line company identity in both skins. */}
         <div data-sidebar-brand-row="drawer" className="jj-rail-brand-band shrink-0 flex items-center gap-3 px-4 pt-3 pb-3">
           <img
             src={jbjMonogram}
@@ -198,10 +197,10 @@ export default function MobileNavDrawer({
             data-eager
           />
           <span
-            className="jj-drawer-wordmark flex-1 min-w-0 text-[13px] font-semibold uppercase tracking-[0.14em] leading-[1.25]"
+            className="jj-drawer-wordmark flex-1 min-w-0 whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] leading-none"
             style={rowStyle}
           >
-            JBJ Global<br />Real Estate
+            JBJ Global Real Estate
           </span>
           <button
             type="button"
@@ -255,15 +254,13 @@ export default function MobileNavDrawer({
           })}
         </div>
 
-        {/* Preferences — label column, hairline divider, then one compact
-            value. No duplicated globe/dollar marks on the right. */}
+        {/* Preferences — each label and value is one aligned field. */}
         <div className="jj-drawer-prefs shrink-0 flex flex-col px-3 pb-2">
           <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
             <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <Globe className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Language
             </span>
-            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
             <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -300,8 +297,7 @@ export default function MobileNavDrawer({
               <Coins className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Currency
             </span>
-            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
-            <span className="flex min-w-0 flex-1 items-center pl-1" style={rowStyle}>
+            <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
               <span className="inline-flex h-9 min-w-0 items-center">
                 <InlineCurrencySelect dark={isMoon} />
               </span>
@@ -314,7 +310,6 @@ export default function MobileNavDrawer({
               <Lock className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Your view
             </span>
-            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
             <span className="flex min-w-0 flex-1 items-center justify-between gap-2 pl-3" style={rowStyle}>
               <span className="text-[12.5px] font-bold capitalize leading-none">{mode}</span>
               <Link
@@ -379,15 +374,6 @@ export default function MobileNavDrawer({
             <ThemeModeToggle variant="menu" className="jj-drawer-theme" />
           </div>
 
-          <button
-            type="button"
-            onClick={() => { onClose(); onOpenGuide?.(); }}
-            className="jj-drawer-row flex items-center gap-3 rounded-lg px-3 text-[13px] font-medium"
-            style={rowStyle}
-          >
-            <HelpCircle className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
-            <span className="flex-1 text-left">App &amp; Navigation Guide</span>
-          </button>
           <Link
             to="/contact"
             onClick={onClose}

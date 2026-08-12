@@ -125,7 +125,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchInitialQuery, setSearchInitialQuery] = useState("");
-  const [showWalkthrough, setShowWalkthrough] = useState(false);
   const [filterBarActive, setFilterBarActive] = useState(false);
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
@@ -405,7 +404,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // PASS 322 — the phone/tablet band is a real skin surface: champagne in Sun,
   // emerald in Moon. So on mobile the surface follows the skin, never the hero.
   const headerSurface: "dark" | "light" = shouldUseMobileHeader
-    ? (headerThemeMode === "sun" ? "light" : "dark")
+    ? (showSolidBackground ? "light" : "dark")
     : ((!shouldUseMobileHeader && isHomeHeroPath && isFullyTransparent) ? "dark" : "light");
 
   const useLightHeaderIdentity = headerSurface === "dark";
@@ -834,7 +833,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
+                src={jbjMonogramNobuffer}
                 alt="JBJ" 
                 className="w-full h-full object-contain relative z-10 transition-transform duration-300 scale-[1.2] sm:scale-100"
                 style={{
@@ -909,116 +908,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           <MobileNavDrawer
             open={shouldUseMobileHeader && mobileMenuOpen}
             onClose={() => setMobileMenuOpen(false)}
-            onOpenGuide={() => setShowWalkthrough(true)}
           />
-
-          {/* Mobile Menu Walkthrough Modal */}
-                {showWalkthrough && (
-                  <div
-                    className="fixed inset-0 z-[10470] flex items-end sm:items-center justify-center p-4"
-                    onClick={() => setShowWalkthrough(false)}
-                  >
-                    {/* Dimmed, NOT blank — the live site stays visible behind the card. */}
-                    <div aria-hidden className="absolute inset-0 bg-[#01120b]/35" />
-                    <div
-                      role="dialog"
-                      aria-modal="true"
-                      aria-label="App and navigation guide"
-                      data-jj-guide-card
-                      onClick={(e) => e.stopPropagation()}
-                      className="relative max-h-[86vh] w-full max-w-md overflow-y-auto rounded-2xl border border-[#064E3B]/30 p-5 shadow-2xl"
-                      style={{ background: '#FFFFFF' }}
-                    >
-                      <button
-                        onClick={() => setShowWalkthrough(false)}
-                        aria-label="Close guide"
-                        data-jj-guide-close
-                        className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full transition-colors"
-                      >
-                        <span className="text-xl">×</span>
-                      </button>
-
-                      <div className="flex items-center gap-3 pr-10">
-                        <img src={jbjMonogramLightBg} alt="JBJ" className="h-12 w-12 shrink-0 object-contain" loading="lazy" decoding="async" />
-                        <div className="min-w-0">
-                          <h3 className="text-base font-bold leading-tight">Guide &amp; support</h3>
-                          <p className="text-[12px] leading-snug opacity-80">Find a home, explore services, or reach a real adviser.</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 space-y-2">
-                        {[
-                          { n: 1, to: '/properties', title: 'Buy & rent', text: 'Browse every project and listing' },
-                          { n: 2, to: '/services', title: 'Services', text: 'Brokerage, advisory and management' },
-                          { n: 3, to: '/contact', title: 'Contact', text: 'Talk to our Dubai team' },
-                        ].map((row) => (
-                          <Link
-                            key={row.n}
-                            to={row.to}
-                            onClick={() => { setShowWalkthrough(false); setMobileMenuOpen(false); }}
-                            data-jj-guide-step
-                            className="flex items-center gap-3 rounded-xl px-2 py-2 text-sm transition-colors"
-                          >
-                            <span data-jj-guide-step-badge className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">{row.n}</span>
-                            <span className="min-w-0">
-                              <strong className="block leading-tight">{row.title}</strong>
-                              <span className="block text-[11.5px] leading-tight opacity-75">{row.text}</span>
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-
-                      {/* Real help, one tap away. */}
-                      <div className="mt-4">
-                        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] opacity-70">Need help now?</p>
-                        <div className="grid grid-cols-2 gap-2">
-                          {[
-                            { label: 'WhatsApp', href: 'https://wa.me/971541515015', external: true },
-                            { label: 'Call us', href: 'tel:+971541515015', external: true },
-                            { label: 'Ticket hub', href: '/ticket-hub', external: false },
-                            { label: 'Support', href: '/support', external: false },
-                          ].map((a) =>
-                            a.external ? (
-                              <a
-                                key={a.label}
-                                href={a.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                data-jj-guide-step
-                                className="flex h-11 items-center justify-center rounded-xl border border-current/25 px-2 text-[12.5px] font-semibold"
-                              >
-                                {a.label}
-                              </a>
-                            ) : (
-                              <Link
-                                key={a.label}
-                                to={a.href}
-                                onClick={() => { setShowWalkthrough(false); setMobileMenuOpen(false); }}
-                                data-jj-guide-step
-                                className="flex h-11 items-center justify-center rounded-xl border border-current/25 px-2 text-[12.5px] font-semibold"
-                              >
-                                {a.label}
-                              </Link>
-                            ),
-                          )}
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => { localStorage.setItem('jj_mobile_walkthrough_done', 'true'); setShowWalkthrough(false); }}
-                        data-no-contrast-guard
-                        className="mt-4 w-full rounded-xl py-3 font-semibold transition-[filter] hover:brightness-110"
-                        style={{
-                          backgroundImage: 'linear-gradient(180deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
-                          color: '#FFFFFF',
-                          WebkitTextFillColor: '#FFFFFF',
-                        }}
-                      >
-                        Got it!
-                      </button>
-                    </div>
-                  </div>
-                )}
 
 
 
