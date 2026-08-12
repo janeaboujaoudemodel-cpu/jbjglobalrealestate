@@ -22,6 +22,7 @@ import"./styles/pass-316-sun-champagne-tab-and-centered-strap.css";
 import"./styles/pass-317-sun-rail-footer-black-ink.css";
 import"./styles/pass-318-mobile-nav-parity.css";
 import"./styles/pass-324-phone-header-identity.css";
+import"./styles/pass-325-phone-champagne-chrome.css";
 
 
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";

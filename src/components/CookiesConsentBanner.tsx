@@ -138,19 +138,21 @@ const CookiesConsentBanner = () => {
                 <a href="/privacy" className="allow-white font-semibold underline underline-offset-4" style={{ color: "#FFFFFF" }}>Privacy Policy</a>.
               </p>
             </div>
-            <div className="flex w-full flex-none gap-2 sm:w-auto">
+            <div className="jj-cookie-actions flex w-full flex-none gap-2.5 sm:w-auto">
               <Button
-                variant="outline"
                 onClick={() => handleConsent("essential")}
-                className="allow-white h-9 flex-1 rounded-lg border-white/40 bg-transparent px-6 text-[11px] font-semibold uppercase tracking-[0.12em] hover:bg-white/10 sm:h-11 sm:flex-none"
+                className="jj-cookie-btn allow-white h-11 flex-1 rounded-xl px-5 text-[11px] font-semibold uppercase tracking-[0.1em] sm:flex-none sm:px-6"
                 data-no-contrast-guard
                 style={{ color: "#FFFFFF" }}
               >Reject optional</Button>
               <Button
                 onClick={() => handleConsent("all")}
-                className="h-9 flex-1 rounded-lg border border-white/40 bg-white px-6 text-[11px] font-semibold uppercase tracking-[0.12em] text-primary hover:bg-white/90 sm:h-11 sm:flex-none"
+                className="jj-cookie-btn allow-white h-11 flex-1 rounded-xl px-5 text-[11px] font-semibold uppercase tracking-[0.1em] sm:flex-none sm:px-6"
+                data-no-contrast-guard
+                style={{ color: "#FFFFFF" }}
               >Accept all</Button>
             </div>
+
           </div>
         </motion.div>
       )}

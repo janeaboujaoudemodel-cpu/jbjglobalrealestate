@@ -1,0 +1,105 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 325 — PHONE CHROME: CHAMPAGNE SHIMMER PARITY + EMERALD COOKIE PAIR
+   ═══════════════════════════════════════════════════════════════════════
+   Locked behaviour (owner):
+   - Sun theme, phone: the site footer and the scrolled (fixed) horizontal
+     header both wear the SAME gold-champagne shimmer as the vertical
+     sidebar. No other footer/header colour is approved on phone.
+   - Cookie banner: BOTH actions are the identical emerald button with pure
+     white content (never champagne, never white-on-champagne), taller and
+     softer on phone so the pair reads premium.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@keyframes jjChampagneShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (max-width: 1023.98px) {
+  /* 1. FOOTER — champagne shimmer, matching the vertical sidebar surface.
+        The emerald tint layer from PASS 307 is removed on phone: it was the
+        murky green cast the owner rejected. */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer,
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer[data-jj-minimal-footer],
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer#site-footer,
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer[data-footer="corporate"] {
+    background-color: #F4EDDF !important;
+    background-image: var(
+      --jj-champagne-long-h,
+      linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)
+    ) !important;
+    background-size: 220% 100% !important;
+    animation: jjChampagneShimmer 18s ease-in-out infinite !important;
+    border-top: 1px solid rgba(184, 149, 85, 0.34) !important;
+  }
+
+  /* Inner bands must not paint a competing colour over the shimmer. */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root footer > div {
+    background-color: transparent !important;
+  }
+  /* Champagne surface ⇒ black ink (brand contrast contract). */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root footer
+    :is(p, span, a, li, h2, h3, h4, small, svg):not([data-no-contrast-guard]) {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+  }
+
+  /* 2. HEADER — the fixed/scrolled band uses the same champagne shimmer. */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-surface="light"] {
+    background-color: #F4EDDF !important;
+    background-image: var(
+      --jj-champagne-long-h,
+      linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)
+    ) !important;
+    background-size: 220% 100% !important;
+    animation: jjChampagneShimmer 18s ease-in-out infinite !important;
+    border-bottom: 1px solid rgba(184, 149, 85, 0.34) !important;
+  }
+}
+
+/* 3. COOKIE BANNER — one emerald button pair, pure white content. */
+html body div#root [data-chrome="cookie-banner"] .jj-cookie-btn,
+html body div#root [data-chrome="cookie-banner"] .jj-cookie-btn:hover,
+html body div#root [data-chrome="cookie-banner"] .jj-cookie-btn:focus-visible {
+  background-color: #064E3B !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.34) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -14px rgba(4, 44, 28, 0.85) !important;
+  transition: transform 180ms ease, box-shadow 180ms ease !important;
+}
+html body div#root [data-chrome="cookie-banner"] .jj-cookie-btn * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body div#root [data-chrome="cookie-banner"] .jj-cookie-btn:active {
+  transform: scale(0.985) !important;
+}
+
+/* Phone: softer, roomier panel so the emerald pair reads premium. */
+@media (max-width: 639.98px) {
+  html body div#root [data-chrome="cookie-banner"] > div {
+    border-radius: 18px !important;
+    padding: 16px 16px 14px !important;
+    box-shadow: 0 26px 60px -26px rgba(4, 44, 28, 0.6) !important;
+  }
+  html body div#root [data-chrome="cookie-banner"] .jj-cookie-actions {
+    margin-top: 4px !important;
+  }
+}
+
+/* 4. COOKIE PANEL — always emerald, even under the Sun skin (the champagne
+      repaint produced white-on-champagne text, a contract violation). */
+html[data-jbj-theme="sun"] body div#root [data-chrome="cookie-banner"] > div,
+html body div#root [data-chrome="cookie-banner"] > div {
+  background-color: #064E3B !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+html[data-jbj-theme="sun"] body div#root [data-chrome="cookie-banner"] :is(p, a, span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
