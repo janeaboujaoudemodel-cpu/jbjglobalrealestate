@@ -454,37 +454,8 @@ export default function PropertySearchBar({
           ) : null}
         </div>
 
-        {showTiers && (
-          <div className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3">
-            <Seg
-              label={f.developerTier ? (TIER_LABELS[f.developerTier as DeveloperTier] || "Tier") : "All Tiers"}
-              active={!!f.developerTier}
-              icon={<Crown className="w-4 h-4" />}
-              dark={dark}
-              spanClass="w-full border-0 rounded-none h-full"
-            >
-              <div className="p-2 grid grid-cols-1 gap-1">
-                <button
-                  onClick={() => set({ developerTier: null })}
-                  className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-[#F2EBDC] transition-colors"
-                  style={{ background: !f.developerTier ? "#F2EBDC" : "transparent" }}
-                >
-                  All Tiers
-                </button>
-                {Object.entries(TIER_LABELS).map(([value, label]) => (
-                  <button
-                    key={value}
-                    onClick={() => set({ developerTier: value })}
-                    className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-[#F2EBDC] transition-colors"
-                    style={{ background: f.developerTier === value ? "#F2EBDC" : "transparent" }}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </Seg>
-          </div>
-        )}
+        {/* PASS 298 — tiers moved to row 2 (under "Sell") as a multi-select
+            include/exclude segment. No duplicated tier control in row 1. */}
         <div
           className="order-2 lg:order-none flex h-10 lg:h-16 min-w-0 items-center overflow-hidden rounded-lg col-span-1 jj-sspan-3"
           data-search-utility-controls
