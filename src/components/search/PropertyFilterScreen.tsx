@@ -160,7 +160,6 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
                 key={c}
                 type="button"
                 onClick={() => set({ category: c, types: [] })}
-                className="h-8 rounded-lg text-xs font-semibold capitalize"
                 data-surface={f.category === c ? "emerald" : "pearl"}
                 className={`h-8 rounded-lg text-xs font-semibold capitalize ${f.category === c ? "jj-cta-emerald" : "text-foreground"}`}
               >
