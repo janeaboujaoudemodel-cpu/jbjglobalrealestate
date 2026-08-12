@@ -217,7 +217,7 @@ export default function InnovationLabSection() {
             </div>
 
             <ol className="relative space-y-1">
-              <span className="absolute left-4 top-4 bottom-4 w-px bg-white/20" aria-hidden />
+              <span className="absolute left-4 top-4 bottom-4 w-px bg-[#064E3B]/20" aria-hidden />
               {STAGES.map((s, i) => {
                 const on = i === active;
                 return (
@@ -233,8 +233,8 @@ export default function InnovationLabSection() {
                         className="relative z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-all"
                         style={
                           on
-                            ? { background: "#FFFFFF", color: "#064E3B", boxShadow: "0 0 0 5px rgba(255,255,255,0.18)" }
-                            : { background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.45)" }
+                            ? { background: "#064E3B", color: "#FFFFFF", boxShadow: "0 0 0 5px rgba(6,78,59,0.14)" }
+                            : { background: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.35)" }
                         }
                       >
                         {s.index}
@@ -247,9 +247,9 @@ export default function InnovationLabSection() {
                         >
                           {s.title}
                         </span>
-                        <span className="mt-1 block h-[2px] w-full max-w-[190px] overflow-hidden rounded-full bg-white/15">
+                        <span className="mt-1 block h-[2px] w-full max-w-[190px] overflow-hidden rounded-full bg-[#064E3B]/12">
                           <motion.span
-                            className="block h-full rounded-full bg-white"
+                            className="block h-full rounded-full bg-[#064E3B]"
                             initial={false}
                             animate={{ width: on ? "100%" : "0%" }}
                             transition={{ duration: on && !paused ? 4.6 : 0.3, ease: "linear" }}
