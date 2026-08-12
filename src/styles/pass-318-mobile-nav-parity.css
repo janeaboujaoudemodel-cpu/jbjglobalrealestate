@@ -148,3 +148,159 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-row:not([data-active="true"
   background-image: none !important;
   box-shadow: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 319 — DRAWER TOP BLOCK, VISIBLE SCROLL HINT & READ-ONLY MODE
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Visible scroll affordance: gold in Sun, white in Moon. */
+html body #root [data-jj-drawer-panel] nav {
+  scrollbar-width: thin;
+}
+html body #root [data-jj-drawer-panel] nav::-webkit-scrollbar { width: 6px; height: 6px; }
+html body #root [data-jj-drawer-panel] nav::-webkit-scrollbar-track { background: transparent; }
+html[data-jbj-theme="sun"] body #root [data-jj-drawer-panel] nav {
+  scrollbar-color: #B89555 transparent;
+}
+html[data-jbj-theme="sun"] body #root [data-jj-drawer-panel] nav::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #D9C08A 0%, #B89555 100%);
+  border-radius: 999px;
+}
+html[data-jbj-theme="moon"] body #root [data-jj-drawer-panel] nav,
+html:not([data-jbj-theme="sun"]) body #root [data-jj-drawer-panel] nav {
+  scrollbar-color: rgba(255,255,255,0.75) transparent;
+}
+html[data-jbj-theme="moon"] body #root [data-jj-drawer-panel] nav::-webkit-scrollbar-thumb,
+html:not([data-jbj-theme="sun"]) body #root [data-jj-drawer-panel] nav::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.75);
+  border-radius: 999px;
+}
+
+/* Quick-action tiles: soft skin-aware plate, 56px touch target. */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] {
+  background: rgba(10, 10, 10, 0.045) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile],
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Preference rows share one hairline rhythm so labels and controls align. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row + .jj-drawer-pref-row {
+  border-top: 1px solid currentColor;
+  border-top-color: rgba(6, 78, 59, 0.14);
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-pref-row + .jj-drawer-pref-row,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-pref-row + .jj-drawer-pref-row {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Sun / Moon segmented control in the drawer footer — emerald ombré active
+   plate in Moon with pure white ink, champagne plate with black ink in Sun.
+   Fixes the black moon glyph on hover. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme {
+  padding: 0;
+  gap: 6px;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme button {
+  min-height: 44px;
+  border-radius: 12px;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="true"],
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="true"] {
+  background-image: linear-gradient(180deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  background-color: transparent !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="false"]:hover,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="false"]:hover {
+  background-image: linear-gradient(180deg, #064E3B 0%, #042c1c 100%) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-theme button :is(svg, svg *, span),
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-theme button :is(svg, svg *, span) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="true"] {
+  background-image: linear-gradient(180deg, #EFE1BF 0%, #E4D2A8 100%) !important;
+  background-color: transparent !important;
+}
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="false"]:hover {
+  background-image: none !important;
+  background-color: rgba(10, 10, 10, 0.06) !important;
+}
+
+/* Quick actions must stay a single 3-up row (a global layout rule was
+   collapsing the grid to one column on phone). */
+html body div#root [data-jj-drawer-panel] .jj-drawer-quick {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-auto-flow: row !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-quick > * {
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+/* Read-only mode row: value + CHANGE stay on one baseline, never stacked. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row {
+  flex-wrap: nowrap !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row > span {
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* ═══════════ App & Navigation Guide card — skin aware, never invisible ═══════════ */
+html[data-jbj-theme="sun"] body div#root [data-jj-guide-card]
+  :is(h3, p, span, strong, a, svg, svg *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-guide-card],
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] {
+  background: linear-gradient(180deg, #064E3B 0%, #042c1c 58%, #01120b 100%) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-guide-card] :is(h3, p, span, strong, a, svg, svg *),
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] :is(h3, p, span, strong, a, svg, svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-guide-card] a > span:first-child,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] a > span:first-child {
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-guide-card] img,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] img {
+  filter: brightness(0) invert(1) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-guide-card] > button:last-child,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] > button:last-child {
+  background-image: linear-gradient(180deg, #0a6b50 0%, #042c1c 60%, #000000 100%) !important;
+}
+
+/* Guide step badges + close mark: skin-aware plate, always legible ink. */
+html[data-jbj-theme="sun"] body div#root [data-jj-guide-card] [data-jj-guide-step-badge] {
+  background: #EFE6D6 !important;
+}
+html[data-jbj-theme="sun"] body div#root [data-jj-guide-card] [data-jj-guide-step]:hover,
+html[data-jbj-theme="sun"] body div#root [data-jj-guide-card] [data-jj-guide-close]:hover {
+  background: rgba(10, 10, 10, 0.06) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-guide-card] [data-jj-guide-step-badge],
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] [data-jj-guide-step-badge] {
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-guide-card] :is([data-jj-guide-step], [data-jj-guide-close]):hover,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] :is([data-jj-guide-step], [data-jj-guide-close]):hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
+  align-self: center !important;
+  line-height: 1 !important;
+}

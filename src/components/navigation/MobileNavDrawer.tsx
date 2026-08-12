@@ -14,7 +14,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown, LogOut, User, Search, HelpCircle, Headphones, Heart, Ticket, X,
+  Globe, Coins, Lock,
 } from "lucide-react";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
@@ -138,16 +140,9 @@ export default function MobileNavDrawer({
     [activeHref],
   );
 
-  /* Open the section that owns the current route. */
-  useEffect(() => {
-    if (!open) return;
-    for (const [section, items] of Object.entries(sectionGroups)) {
-      if (items.some((item) => isActive(item.href))) {
-        setOpenSection(section as SectionKey);
-        return;
-      }
-    }
-  }, [open, sectionGroups, isActive]);
+  /* Sections start collapsed on purpose so the whole nav fits one phone
+     screen (PASS 319). The user opens the one they need. */
+
 
   if (!open) return null;
 
@@ -188,79 +183,110 @@ export default function MobileNavDrawer({
         data-jj-drawer-panel
         className="absolute left-0 top-0 h-full w-[min(88vw,340px)] flex flex-col overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
       >
-        {/* Brand band — same 56px chrome height as the rail header */}
-        <div data-sidebar-brand-row="drawer" className="jj-rail-brand-band h-[56px] shrink-0 flex items-center gap-2.5 px-3">
+        {/* Brand band — larger identity on phone: 52px monogram + two-line wordmark */}
+        <div data-sidebar-brand-row="drawer" className="jj-rail-brand-band shrink-0 flex items-center gap-3 px-4 pt-3 pb-3">
           <img
             src={jbjMonogram}
             alt="JBJ"
-            className="h-[34px] w-[34px] object-contain shrink-0"
+            className="h-[52px] w-[52px] object-contain shrink-0"
             data-eager
           />
           <span
-            className="jj-drawer-wordmark flex-1 min-w-0 text-[10px] font-semibold uppercase tracking-[0.16em] leading-tight"
+            className="jj-drawer-wordmark flex-1 min-w-0 text-[13px] font-semibold uppercase tracking-[0.14em] leading-[1.25]"
             style={rowStyle}
           >
-            JBJ Global Real Estate
+            JBJ Global<br />Real Estate
           </span>
           <button
             type="button"
             aria-label="Close navigation"
             onClick={onClose}
-            className="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-lg"
+            className="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-lg"
             style={rowStyle}
           >
-            <X className="w-5 h-5" style={{ color: "currentColor" }} />
+            <X className="w-6 h-6" style={{ color: "currentColor" }} />
           </button>
         </div>
 
-        {/* Quick actions — three wide targets, no clipped labels */}
-        <div className="jj-drawer-quick shrink-0 flex items-stretch gap-1 px-2 py-2">
-          <button
-            type="button"
-            onClick={() => { onClose(); onOpenSearch?.(); }}
-            className="flex-1 basis-0 flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
-            style={rowStyle}
-          >
-            <Search className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
-            <span className="text-[10px] font-medium">Search</span>
-          </button>
-          <Link
-            to={user ? "/my-account" : "/auth"}
-            onClick={onClose}
-            className="flex-1 basis-0 flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
-            style={rowStyle}
-          >
-            <User className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
-            <span className="text-[10px] font-medium">{user ? "Account" : "Sign In"}</span>
-          </Link>
-          <Link
-            to="/shortlist"
-            onClick={onClose}
-            className="flex-1 basis-0 flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
-            style={rowStyle}
-          >
-            <Heart className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
-            <span className="text-[10px] font-medium">Shortlist</span>
-          </Link>
+        <span aria-hidden className="jj-drawer-rule h-px mx-4 shrink-0" />
+
+        {/* Quick actions — three equal wide targets, no clipped labels */}
+        <div className="jj-drawer-quick shrink-0 grid grid-cols-3 gap-2 px-3 pt-3 pb-2">
+          {[
+            { key: "search", Icon: Search, label: "Search", onClick: () => { onClose(); onOpenSearch?.(); } },
+            { key: "account", Icon: User, label: user ? "Account" : "Sign In", to: user ? "/my-account" : "/auth" },
+            { key: "shortlist", Icon: Heart, label: "Shortlist", to: "/shortlist" },
+          ].map(({ key, Icon, label, to, onClick }) => {
+            const inner = (
+              <>
+                <Icon className="w-5 h-5" style={{ color: "currentColor" }} />
+                <span className="text-[11px] font-semibold leading-none">{label}</span>
+              </>
+            );
+            return to ? (
+              <Link
+                key={key}
+                to={to}
+                onClick={onClose}
+                data-jj-drawer-tile
+                className="flex flex-col items-center justify-center gap-1.5 min-h-[56px] rounded-xl"
+                style={rowStyle}
+              >
+                {inner}
+              </Link>
+            ) : (
+              <button
+                key={key}
+                type="button"
+                onClick={onClick}
+                data-jj-drawer-tile
+                className="flex flex-col items-center justify-center gap-1.5 min-h-[56px] rounded-xl"
+                style={rowStyle}
+              >
+                {inner}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Language, currency and mode get full-width rows so no label is clipped */}
-        <div className="jj-drawer-prefs shrink-0 flex flex-col gap-1 px-3 pb-2">
-          <div className="flex items-center justify-between min-h-11 gap-3">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={rowStyle}>Language</span>
+        {/* Preferences — one setting per line, label left, control right */}
+        <div className="jj-drawer-prefs shrink-0 flex flex-col px-3 pb-2">
+          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
+            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+              <Globe className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
+              Language
+            </span>
             <LanguageSwitcher variant="compact" />
           </div>
-          <div className="flex items-center justify-between min-h-11 gap-3">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={rowStyle}>Currency</span>
+          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
+            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+              <Coins className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
+              Currency
+            </span>
             <CurrencySwitcher variant="default" />
           </div>
-          <div className="flex items-center justify-between min-h-11 gap-3">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={rowStyle}>Your mode</span>
-            <ModeSwitcher variant="compact" showForUnselected />
+          {/* Mode is READ-ONLY (PASS 319). Category changes go through the help desk. */}
+          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
+            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+              <Lock className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
+              Your view
+            </span>
+            <span className="flex items-center gap-2" style={rowStyle}>
+              <span className="text-[12px] font-bold capitalize">{mode}</span>
+              <Link
+                to={`/ticket-hub?topic=mode-change&current=${mode}`}
+                onClick={onClose}
+                className="text-[10px] font-bold uppercase tracking-[0.12em] underline underline-offset-2"
+                style={rowStyle}
+              >
+                Change
+              </Link>
+            </span>
           </div>
         </div>
 
-        <span aria-hidden className="jj-drawer-rule h-px mx-3 shrink-0" />
+        <span aria-hidden className="jj-drawer-rule h-px mx-4 shrink-0" />
+
 
         {/* Scrollable nav — highlights then the same accordion sections as the rail */}
         <nav className="flex-1 overflow-y-auto overscroll-contain px-2 py-2" aria-label="Site sections">
@@ -309,14 +335,13 @@ export default function MobileNavDrawer({
 
         <span aria-hidden className="jj-drawer-rule h-px mx-3 shrink-0" />
 
-        {/* Footer — theme switch, help, support, sign out. Same order as the rail. */}
-        <div className="jj-drawer-footer shrink-0 flex flex-col gap-0.5 px-2 pt-2">
-          <div className="flex items-center justify-between px-3 min-h-11">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={rowStyle}>
-              {isMoon ? "Night" : "Day"} theme
-            </span>
-            <ThemeModeToggle variant="header" />
+        {/* Footer — theme switch, help, support, sign out. Same order and the
+            same left ink column as the rail so icons and labels line up. */}
+        <div className="jj-drawer-footer shrink-0 flex flex-col gap-0.5 px-2 pt-2 pb-1">
+          <div className="px-1 pb-1">
+            <ThemeModeToggle variant="menu" className="jj-drawer-theme" />
           </div>
+
           <button
             type="button"
             onClick={() => { onClose(); onOpenGuide?.(); }}
