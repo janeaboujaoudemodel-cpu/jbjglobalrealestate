@@ -19,7 +19,7 @@ import {
   Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox, LifeBuoy, Headset,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-cropped.png";
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
@@ -682,8 +682,11 @@ export default function GlobalVerticalNav() {
     setMobileOpen(false);
   }, [pinnedOpen]);
 
+  const hoverExpandedAtRef = useRef(0);
+
   const handleSidebarEnter = useCallback(() => {
     if (!collapsed || pinnedOpen) return;
+    hoverExpandedAtRef.current = Date.now();
     setHoverExpanded(true);
     setCollapsed(false);
   }, [collapsed, pinnedOpen]);
@@ -694,6 +697,25 @@ export default function GlobalVerticalNav() {
     setCollapsed(true);
     setActiveMegaMenu(null);
   }, [hoverExpanded, pinnedOpen]);
+
+  /**
+   * Sign-out safety guard. When the rail auto-expands on hover, the freshly
+   * revealed Sign Out pill can land under a cursor that was aiming at the
+   * collapse/expand control. Any click within 1.2s of a hover-driven expand is
+   * treated as a mis-click and asks for a deliberate second click instead of
+   * kicking the user out.
+   */
+  const [signOutArmed, setSignOutArmed] = useState(false);
+  const handleSignOut = useCallback(() => {
+    const justHoverExpanded = hoverExpanded && Date.now() - hoverExpandedAtRef.current < 1200;
+    if (justHoverExpanded && !signOutArmed) {
+      setSignOutArmed(true);
+      window.setTimeout(() => setSignOutArmed(false), 4000);
+      return;
+    }
+    setSignOutArmed(false);
+    supabase.auth.signOut();
+  }, [hoverExpanded, signOutArmed]);
 
   useEffect(() => {
     if (!navRevealed) {
@@ -1345,16 +1367,16 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
 
       {/* ━━━ BOTTOM — Sign Out + Collapse only (premium, elegant) ━━━
           Contact & Support live in the HELP & SUPPORT nav section above. */}
-      <div className="flex-shrink-0">
+      <div className="jj-rail-footer-block flex-shrink-0">
         <div
-          className="h-px mb-1 mt-0"
+          className="jj-rail-footer-rule h-px mb-1 mt-0"
           style={{
             background:
               "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0) 8%, rgba(255,255,255,0.72) 50%, rgba(255,255,255,0) 92%, transparent 100%)",
           }}
           aria-hidden="true"
         />
-        <div className="px-3 pt-2 pb-2">
+        <div className="jj-rail-footer-inner px-3 pt-2 pb-2">
           <ThemeModeToggle variant="menu" className="jj-sidebar-theme-toggle mb-2 border border-current/20" />
           {/* Compact horizontal pills — icon + label side-by-side so labels stay
               readable at short viewports without being clipped. */}
@@ -1364,14 +1386,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 data-signout-action
                 data-no-contrast-guard
                 data-sidebar-auth-control
-                onClick={() => { supabase.auth.signOut(); }}
-                title="Sign Out"
-                aria-label="Sign Out"
+                onClick={handleSignOut}
+                title={signOutArmed ? "Click again to confirm sign out" : "Sign Out"}
+                aria-label={signOutArmed ? "Confirm sign out" : "Sign Out"}
                 className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
                 style={{ borderWidth: 0, height: '42px', minHeight: '42px', background: 'transparent', boxShadow: 'none' }}
               >
                 <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" strokeWidth={2.4} style={{ color: railInk, stroke: railInk }} />
-                <span data-signout-label className="whitespace-nowrap" style={{ color: railInk, WebkitTextFillColor: railInk, whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
+                <span data-signout-label className="whitespace-nowrap" style={{ color: railInk, WebkitTextFillColor: railInk, whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>{signOutArmed ? "Confirm?" : "Sign Out"}</span>
               </button>
             ) : (
               <Link
@@ -1513,11 +1535,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 all the way down to the footer of the collapsed rail. */}
             <div className="flex-1 min-h-[6px]" />
 
+            {/* Collapsed footer block — same height as the expanded rail footer
+                and the public site footer so the divider always lines up. */}
+            <div className="jj-rail-footer-block jj-rail-footer-block--rail w-full flex flex-col items-center justify-center">
             {/* Skin-aware divider above the Contact Us (headset) group */}
-            <span aria-hidden className="jj-rail-footer-divider" />
+            <span aria-hidden className="jj-rail-footer-divider jj-rail-footer-rule" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-[2px] pt-1 pb-1 w-full">
+            <div className="jj-rail-footer-inner flex flex-col items-center gap-0 pt-0.5 pb-0.5 w-full">
 
           
 
@@ -1555,7 +1580,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                   <TooltipTrigger asChild>
                     <button
                       data-signout-action
-                      onClick={() => { supabase.auth.signOut(); }}
+                      onClick={handleSignOut}
                       data-no-contrast-guard
                       data-sidebar-auth-control
                        className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 flex items-center justify-center"
@@ -1617,6 +1642,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            </div>
+
+
 
           </div>
         </div>
