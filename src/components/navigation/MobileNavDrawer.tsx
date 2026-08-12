@@ -214,11 +214,11 @@ export default function MobileNavDrawer({
         </div>
 
         {/* Quick actions — three wide targets, no clipped labels */}
-        <div className="jj-drawer-quick shrink-0 grid grid-cols-3 gap-1 px-2 py-2">
+        <div className="jj-drawer-quick shrink-0 flex items-stretch gap-1 px-2 py-2">
           <button
             type="button"
             onClick={() => { onClose(); onOpenSearch?.(); }}
-            className="flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
+            className="flex-1 basis-0 flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
             style={rowStyle}
           >
             <Search className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
@@ -227,7 +227,7 @@ export default function MobileNavDrawer({
           <Link
             to={user ? "/my-account" : "/auth"}
             onClick={onClose}
-            className="flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
+            className="flex-1 basis-0 flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
             style={rowStyle}
           >
             <User className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
@@ -236,7 +236,7 @@ export default function MobileNavDrawer({
           <Link
             to="/shortlist"
             onClick={onClose}
-            className="flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
+            className="flex-1 basis-0 flex flex-col items-center justify-center gap-1 min-h-11 rounded-lg"
             style={rowStyle}
           >
             <Heart className="w-[18px] h-[18px]" style={{ color: "currentColor" }} />
