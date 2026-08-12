@@ -55,45 +55,32 @@ export default function InlineCurrencySelect({ dark }: Props) {
         <button
           type="button"
           data-no-contrast-guard
-          className="group flex h-full w-full min-w-0 flex-col items-center justify-center gap-[4px] bg-transparent px-2.5 py-1.5 text-center lg:px-3"
+          className="group flex h-full w-full min-w-0 items-center justify-center gap-1.5 bg-transparent px-2 py-1.5 text-center lg:px-3"
           style={{ color: fg, borderRadius: 0 }}
           aria-label="Select currency"
         >
-          {/* Line 1 — symbol + label + chevron, all on the same baseline.
-              We render the currency symbol, never a flag emoji: emoji flags
-              fall back to tofu boxes on several platforms/fonts. */}
-          <span className="flex w-full min-w-0 items-center justify-center gap-1.5">
-            <span
-              aria-hidden
-              className="shrink-0 text-[11px] font-semibold leading-none"
-              style={{ color: dark ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.65)" }}
-            >
-              {active.symbol === active.code ? null : active.symbol}
-            </span>
-
-            <span
-              className="min-w-0 text-[8px] uppercase leading-none tracking-[0.04em] whitespace-nowrap"
-              style={{
-                color: dark ? "rgba(255,255,255,0.62)" : "rgba(26,26,26,0.55)",
-              }}
-            >
-              Currency
-            </span>
-            <ChevronDown
-              className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
-              style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
-            />
-          </span>
-
-          {/* Line 2 — the code */}
+          {/* One clean line: symbol · code · chevron. The word "Currency" is
+              redundant once the active code is shown. */}
           <span
-            className="block w-full text-center text-[13px] lg:text-sm font-semibold leading-none"
-            style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap", textAlign: "center" }}
+            aria-hidden
+            className="shrink-0 text-[11px] font-semibold leading-none"
+            style={{ color: dark ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.65)" }}
+          >
+            {active.symbol === active.code ? null : active.symbol}
+          </span>
+          <span
+            className="text-[13px] font-semibold leading-none lg:text-sm"
+            style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap" }}
           >
             {active.code}
           </span>
+          <ChevronDown
+            className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
+            style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
+          />
         </button>
       </DropdownMenuTrigger>
+
 
       <DropdownMenuContent align="start" className="z-[300] max-h-80 w-64 overflow-y-auto">
         {SUPPORTED_CURRENCIES.map((c) => (

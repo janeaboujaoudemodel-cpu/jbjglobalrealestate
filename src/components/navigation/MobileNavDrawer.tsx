@@ -25,8 +25,13 @@ import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { useGatedToolAccess } from "@/hooks/useGatedToolAccess";
 import { supabase } from "@/integrations/supabase/client";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage, SUPPORTED_LANGUAGES, getLanguageInfo } from "@/contexts/LanguageContext";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
+
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import { ThemeModeToggle } from "@/components/ThemeModeToggle";
 import jbjMonogram from "@/assets/jbj-monogram-cropped.png";
@@ -52,10 +57,11 @@ export default function MobileNavDrawer({
   const { isOwner } = useUserRole();
   const { mode, isBrokerMode, isInvestorMode } = useUserModeContext();
   const { isMoon } = useThemeMode();
+  const { language, setLanguage } = useLanguage();
+  const activeLang = getLanguageInfo(language);
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
   const { allowed: canCompare } = useCompareAccess();
   const { visible: canSeeCardScanner } = useGatedToolAccess("business-card-scanner");
-  const [openSection, setOpenSection] = useState<SectionKey | null>(null);
 
   const ink = isMoon ? "#FFFFFF" : "#0A0A0A";
   const isOwnerMode = isOwner && mode === "owner";
@@ -249,30 +255,68 @@ export default function MobileNavDrawer({
           })}
         </div>
 
-        {/* Preferences — one setting per line, label left, control right */}
+        {/* Preferences — label column, hairline divider, then one compact
+            value. No duplicated globe/dollar marks on the right. */}
         <div className="jj-drawer-prefs shrink-0 flex flex-col px-3 pb-2">
-          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
-            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <Globe className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Language
             </span>
-            <LanguageSwitcher variant="compact" />
+            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
+            <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    data-no-contrast-guard
+                    className="inline-flex h-9 items-center gap-2 bg-transparent px-0"
+                    style={rowStyle}
+                    aria-label="Select language"
+                  >
+                    <span aria-hidden className="text-[15px] leading-none">{activeLang.flag}</span>
+                    <span className="text-[12.5px] font-bold uppercase leading-none tracking-[0.06em]">
+                      {activeLang.code.slice(0, 2).toUpperCase()}
+                    </span>
+                    <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70" style={{ color: "currentColor" }} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="z-[10500] max-h-72 w-56 overflow-y-auto">
+                  {SUPPORTED_LANGUAGES.map((l) => (
+                    <DropdownMenuItem key={l.code} onClick={() => setLanguage(l.code)} className="gap-2 text-sm">
+                      <span aria-hidden>{l.flag}</span>
+                      <span className="font-semibold uppercase">{l.code.slice(0, 2)}</span>
+                      <span className="truncate opacity-70">{l.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </span>
+
           </div>
-          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
-            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+
+          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <Coins className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Currency
             </span>
-            <CurrencySwitcher variant="default" />
+            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
+            <span className="flex min-w-0 flex-1 items-center pl-1" style={rowStyle}>
+              <span className="inline-flex h-9 min-w-0 items-center">
+                <InlineCurrencySelect dark={isMoon} />
+              </span>
+            </span>
           </div>
+
           {/* Mode is READ-ONLY (PASS 319). Category changes go through the help desk. */}
-          <div className="jj-drawer-pref-row flex items-center justify-between gap-3 min-h-[48px] px-1">
-            <span className="flex items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
+          <div className="jj-drawer-pref-row flex items-stretch gap-0 min-h-[46px] px-1">
+            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
               <Lock className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
               Your view
             </span>
-            <span className="flex items-center gap-2 leading-none" style={rowStyle}>
-              <span className="text-[12px] font-bold capitalize leading-none">{mode}</span>
+            <span aria-hidden className="jj-drawer-pref-sep my-2 w-px shrink-0" />
+            <span className="flex min-w-0 flex-1 items-center justify-between gap-2 pl-3" style={rowStyle}>
+              <span className="text-[12.5px] font-bold capitalize leading-none">{mode}</span>
               <Link
                 to={`/ticket-hub?topic=mode-change&current=${mode}`}
                 onClick={onClose}
@@ -282,9 +326,9 @@ export default function MobileNavDrawer({
                 Change
               </Link>
             </span>
-
           </div>
         </div>
+
 
         <span aria-hidden className="jj-drawer-rule h-px mx-4 shrink-0" />
 
@@ -303,35 +347,27 @@ export default function MobileNavDrawer({
               const items = sectionGroups[sectionKey];
               if (!items || items.length === 0) return null;
               const SectionIcon = SECTION_ICONS[sectionKey];
-              const expanded = openSection === sectionKey;
               return (
                 <div key={sectionKey} className="flex flex-col">
-                  <button
-                    type="button"
-                    aria-expanded={expanded}
-                    onClick={() => setOpenSection((prev) => (prev === sectionKey ? null : sectionKey))}
+                  {/* Every page is always visible — no accordion, no arrows. */}
+                  <div
                     data-jj-drawer-section
                     className="jj-drawer-row flex items-center gap-3 rounded-lg px-3 text-[11px] font-bold uppercase tracking-[0.14em]"
                     style={rowStyle}
                   >
                     <SectionIcon className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
                     <span className="flex-1 text-left">{sectionKey}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 shrink-0 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-                      style={{ color: "currentColor" }}
-                    />
-                  </button>
-                  {expanded && (
-                    <div className="jj-drawer-sub ml-4 pl-2 flex flex-col gap-0.5 py-1">
-                      {items.map((item) => (
-                        <Row key={`${sectionKey}-${item.href}-${item.label}`} item={item} nested />
-                      ))}
-                    </div>
-                  )}
+                  </div>
+                  <div className="jj-drawer-sub ml-4 pl-2 flex flex-col gap-0.5 py-1">
+                    {items.map((item) => (
+                      <Row key={`${sectionKey}-${item.href}-${item.label}`} item={item} nested />
+                    ))}
+                  </div>
                 </div>
               );
             })}
           </div>
+
         </nav>
 
         <span aria-hidden className="jj-drawer-rule h-px mx-3 shrink-0" />

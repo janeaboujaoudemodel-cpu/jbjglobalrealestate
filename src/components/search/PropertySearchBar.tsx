@@ -49,7 +49,8 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1 h-11 lg:h-16 px-1.5 lg:px-2 rounded-lg text-[12.5px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-visible shadow-none";
+  "flex items-center justify-between gap-1 h-10 lg:h-16 px-2 lg:px-2 rounded-lg text-[12px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-visible shadow-none";
+
 
 function Seg({
   label,
@@ -104,10 +105,10 @@ function Seg({
           }}
         >
 
-          <span className="flex flex-1 items-center gap-1.5 min-w-0">
+          <span className="flex flex-1 items-center justify-center gap-1.5 min-w-0">
             <span className="shrink-0 inline-flex items-center">{icon}</span>
             <span
-              className="min-w-0 flex-1 leading-none"
+              className="min-w-0 leading-none text-center"
               style={{
                 color: active ? ink : muted,
                 WebkitTextFillColor: active ? ink : muted,
@@ -128,10 +129,13 @@ function Seg({
       </PopoverTrigger>
       <PopoverContent
         align="start"
+        side="bottom"
+        sideOffset={8}
+        avoidCollisions={false}
         collisionPadding={12}
         data-surface="light"
         data-search-dropdown
-        className={`${wide ? "w-auto max-w-[94vw]" : "w-auto max-w-[92vw]"} p-0 z-[70]`}
+        className={`${wide ? "w-auto max-w-[94vw]" : "w-auto max-w-[92vw]"} max-h-[52vh] overflow-y-auto overscroll-contain p-0 z-[70]`}
         style={{
           background: "#FFFFFF",
           border: "1px solid var(--jj-panel-hairline, rgba(184,149,85,0.35))",
@@ -140,6 +144,7 @@ function Seg({
       >
         {children}
       </PopoverContent>
+
     </Popover>
   );
 }
@@ -300,7 +305,7 @@ export default function PropertySearchBar({
       : `${f.developersInclude.length} developers`
     : f.developersExclude.length
       ? `All except ${f.developersExclude.length}`
-      : "Devs";
+      : "Developers";
 
   const tiersLabel = f.tiersInclude.length
     ? f.tiersInclude.length === 1
@@ -792,7 +797,7 @@ export default function PropertySearchBar({
              data-surface="emerald"
              data-search-segment
              data-no-contrast-guard
-            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-12 lg:h-16 w-full min-w-0 rounded-lg font-semibold px-2 py-1.5 leading-[1.05] tracking-tight text-center flex flex-col items-center justify-center gap-[1px] overflow-hidden"
+            className="order-11 lg:order-none col-span-2 lg:col-span-1 h-11 lg:h-16 w-full min-w-0 rounded-lg font-semibold px-2 py-1.5 leading-[1.05] tracking-tight text-center flex flex-col items-center justify-center gap-[1px] overflow-hidden"
             style={{
               backgroundImage: EMERALD_PAIR,
               color: "#FFFFFF",
@@ -802,13 +807,13 @@ export default function PropertySearchBar({
             }}
           >
             {count == null ? (
-              <span className="text-[13px] lg:text-[12px]">Search</span>
+              <span className="text-[14px] lg:text-[12px] font-semibold">Search</span>
             ) : (
               <>
-                <span className="text-[12.5px] lg:text-[12.5px] whitespace-nowrap">
+                <span className="text-[14px] lg:text-[12.5px] whitespace-nowrap">
                   Show {count.toLocaleString()}
                 </span>
-                <span className="text-[9.5px] lg:text-[9.5px] opacity-90 whitespace-nowrap">
+                <span className="text-[10.5px] lg:text-[9.5px] opacity-90 whitespace-nowrap">
                   {countNoun}
                 </span>
               </>

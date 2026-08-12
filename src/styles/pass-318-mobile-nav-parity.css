@@ -370,3 +370,98 @@ html[data-jbj-theme="sun"] body div#root [data-jj-guide-card]:not(#jj320-a):not(
   -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 321 — MOBILE HEADER IDENTITY, CLEAN HAMBURGER, DRAWER PREFS
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023.98px) {
+  /* The band stays transparent, but the header keeps its height so the
+     monogram + wordmark render over the hero (never removed again). */
+  html body #root [data-chrome="header"] > header {
+    height: 64px !important;
+    min-height: 64px !important;
+  }
+
+  /* Brand identity on phone — compact, legible over video heroes. */
+  html body #root [data-chrome="header"] > header a[href="/"] img {
+    width: 44px !important;
+    height: 44px !important;
+    transform: none !important;
+  }
+  html body #root [data-chrome="header"] > header .jj-header-wordmark {
+    font-size: 12px !important;
+    letter-spacing: 0.08em !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55) !important;
+  }
+
+  /* Hamburger: clean lines, no emerald plate, in flow at the right edge. */
+  html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] :is(.jj-hamburger-bar, .jj-hamburger-close) {
+    background-color: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45) !important;
+  }
+}
+
+/* Drawer preference hairline dividers, skin-aware. */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] .jj-drawer-pref-sep {
+  background: rgba(10, 10, 10, 0.16) !important;
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-pref-sep,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-pref-sep {
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Quick-action tiles: no plate in either skin — Moon treatment is the standard. */
+html body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* Inactive theme pill still reads as a button: clean animated hairline. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="false"] {
+  opacity: 1 !important;
+  border: 1px solid currentColor !important;
+  border-radius: 8px !important;
+  animation: jjThemePillPulse 2.8s ease-in-out infinite !important;
+}
+@keyframes jjThemePillPulse {
+  0%, 100% { border-color: rgba(184, 149, 85, 0.45); }
+  50% { border-color: rgba(184, 149, 85, 0.9); }
+}
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="false"],
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="false"] {
+  animation-name: jjThemePillPulseMoon !important;
+}
+@keyframes jjThemePillPulseMoon {
+  0%, 100% { border-color: rgba(255, 255, 255, 0.35); }
+  50% { border-color: rgba(255, 255, 255, 0.75); }
+}
+
+/* "Change" link sits on the same baseline as the mode value. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+
+/* Sun drawer quick tiles: no champagne plate — matches the Moon treatment. */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile],
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
