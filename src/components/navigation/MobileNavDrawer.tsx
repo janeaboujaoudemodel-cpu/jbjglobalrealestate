@@ -412,7 +412,7 @@ export default function MobileNavDrawer({
 
         {/* Footer — theme switch, help, support, sign out. Same order and the
             same left ink column as the rail so icons and labels line up. */}
-        <div className="jj-drawer-footer shrink-0 flex flex-col gap-0.5 px-2 pt-2 pb-[max(8px,env(safe-area-inset-bottom))]">
+        <div className="jj-drawer-footer shrink-0 flex flex-col gap-0.5 px-2 pt-2 pb-[calc(env(safe-area-inset-bottom)+18px)]">
           <div className="px-1 pb-1">
             <ThemeModeToggle variant="menu" className="jj-drawer-theme" />
           </div>
