@@ -193,7 +193,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, duration: 0.6 }}
-      className="w-full max-w-6xl mx-auto"
+      className="w-full max-w-[20rem] sm:max-w-md lg:max-w-6xl mx-auto"
     >
       <PropertySearchBar
         value={filters}
