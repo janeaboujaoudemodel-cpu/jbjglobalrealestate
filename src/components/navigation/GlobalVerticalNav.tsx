@@ -1447,7 +1447,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
       {collapsed ? (
         <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[59px] flex-shrink-0 flex-col h-full items-center overflow-hidden overflow-x-visible relative text-primary-foreground">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
-          <div data-sidebar-brand-row className="jj-rail-brand-band h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
+          <div data-sidebar-brand-row="rail" className="jj-rail-brand-band h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
             <Link to="/" className="jj-rail-brand-link flex w-full items-center justify-center">
               <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-11 h-11 max-w-none object-contain brightness-0 invert" loading="eager" data-eager decoding="async" />
             </Link>
