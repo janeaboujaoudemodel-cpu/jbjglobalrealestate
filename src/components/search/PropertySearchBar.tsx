@@ -105,10 +105,10 @@ function Seg({
           }}
         >
 
-          <span className="flex flex-1 items-center gap-1.5 min-w-0">
+          <span className="flex flex-1 items-center justify-center gap-1.5 min-w-0">
             <span className="shrink-0 inline-flex items-center">{icon}</span>
             <span
-              className="min-w-0 flex-1 leading-none"
+              className="min-w-0 leading-none text-center"
               style={{
                 color: active ? ink : muted,
                 WebkitTextFillColor: active ? ink : muted,
@@ -129,10 +129,13 @@ function Seg({
       </PopoverTrigger>
       <PopoverContent
         align="start"
+        side="bottom"
+        sideOffset={8}
+        avoidCollisions={false}
         collisionPadding={12}
         data-surface="light"
         data-search-dropdown
-        className={`${wide ? "w-auto max-w-[94vw]" : "w-auto max-w-[92vw]"} p-0 z-[70]`}
+        className={`${wide ? "w-auto max-w-[94vw]" : "w-auto max-w-[92vw]"} max-h-[52vh] overflow-y-auto overscroll-contain p-0 z-[70]`}
         style={{
           background: "#FFFFFF",
           border: "1px solid var(--jj-panel-hairline, rgba(184,149,85,0.35))",
@@ -141,6 +144,7 @@ function Seg({
       >
         {children}
       </PopoverContent>
+
     </Popover>
   );
 }
