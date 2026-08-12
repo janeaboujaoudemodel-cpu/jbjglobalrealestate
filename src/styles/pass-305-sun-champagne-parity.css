@@ -200,3 +200,14 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-par
   background: none !important;
   background-image: none !important;
 }
+
+/* Partners heading ink follows the skin (no hardcoded white in markup). */
+html[data-jbj-theme="sun"] body #root .jj-partners-heading-ink {
+  color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important;
+}
+html[data-jbj-theme="moon"] body #root .jj-partners-heading-ink {
+  color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
+}
+html[data-jbj-theme="sun"] body #root [data-partners-heading] span[aria-hidden] {
+  background: rgba(6,78,59,0.35) !important;
+}
