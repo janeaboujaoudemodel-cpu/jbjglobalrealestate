@@ -35,6 +35,7 @@ import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 import SidebarModePortalBlock from "@/components/navigation/SidebarModePortalBlock";
 import { SidebarItem } from "@/components/ui/ds/SidebarItem";
+import ThemeModeToggle from "@/components/ThemeModeToggle";
 
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
@@ -554,6 +555,11 @@ export default function GlobalVerticalNav() {
       return !!session;
     } catch { return !!session; }
   });
+  const [pinnedOpen, setPinnedOpen] = useState(() => {
+    try { return localStorage.getItem('jj_nav_collapsed') === '0'; }
+    catch { return false; }
+  });
+  const [hoverExpanded, setHoverExpanded] = useState(false);
   const [showExpandPulse, setShowExpandPulse] = useState(() => {
     try { return sessionStorage.getItem('jj_sidebar_expand_seen_session') !== '1'; }
     catch { return true; }
@@ -646,6 +652,8 @@ export default function GlobalVerticalNav() {
     setCollapsed(prev => {
       const next = !prev;
       try { localStorage.setItem('jj_nav_collapsed', next ? '1' : '0'); } catch {}
+      setPinnedOpen(!next);
+      setHoverExpanded(false);
       return next;
     });
     setActiveMegaMenu(null);
@@ -654,16 +662,36 @@ export default function GlobalVerticalNav() {
   useEffect(() => {
     if (!session) return;
     setCollapsed(true);
+    setPinnedOpen(false);
+    setHoverExpanded(false);
     try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
     setActiveMegaMenu(null);
   }, [session?.user?.id]);
 
   const collapseAfterNavigation = useCallback(() => {
+    if (pinnedOpen) {
+      setActiveMegaMenu(null);
+      setMobileOpen(false);
+      return;
+    }
     setCollapsed(true);
     try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
     setActiveMegaMenu(null);
     setMobileOpen(false);
-  }, []);
+  }, [pinnedOpen]);
+
+  const handleSidebarEnter = useCallback(() => {
+    if (!collapsed || pinnedOpen) return;
+    setHoverExpanded(true);
+    setCollapsed(false);
+  }, [collapsed, pinnedOpen]);
+
+  const handleSidebarLeave = useCallback(() => {
+    if (!hoverExpanded || pinnedOpen) return;
+    setHoverExpanded(false);
+    setCollapsed(true);
+    setActiveMegaMenu(null);
+  }, [hoverExpanded, pinnedOpen]);
 
   useEffect(() => {
     if (!navRevealed) {
@@ -1329,6 +1357,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           aria-hidden="true"
         />
         <div className="px-3 pt-2 pb-2">
+          <ThemeModeToggle variant="menu" className="mb-2 border border-current/20 bg-transparent" />
           {/* Compact horizontal pills — icon + label side-by-side so labels stay
               readable at short viewports without being clipped. */}
           <div className="grid grid-cols-2 gap-2">
@@ -1392,6 +1421,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
       <div
         className={`h-full transition-[transform,opacity] duration-100 ease-out ${navRevealed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
         style={{ willChange: 'transform, opacity' }}
+        onMouseEnter={handleSidebarEnter}
+        onMouseLeave={handleSidebarLeave}
       >
       {collapsed ? (
         <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[59px] flex-shrink-0 flex-col h-full items-center overflow-hidden overflow-x-visible relative text-primary-foreground">
@@ -1464,6 +1495,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                       data-no-contrast-guard
                       onClick={() => {
                         setCollapsed(false);
+                        setPinnedOpen(true);
+                        setHoverExpanded(false);
                         try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
@@ -1551,7 +1584,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               )}
             </div>
 
-            {/* Expand button — instant tooltip, soft pulse until first use */}
+            {/* Expand button pins the full sidebar; Collapse restores hover mode. */}
             <TooltipProvider delayDuration={0} skipDelayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
