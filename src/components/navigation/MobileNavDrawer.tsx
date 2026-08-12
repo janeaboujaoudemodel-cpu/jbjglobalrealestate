@@ -383,7 +383,6 @@ export default function MobileNavDrawer({
                     >
                       <SectionIcon className="w-[18px] h-[18px] shrink-0" style={{ color: "currentColor" }} />
                       <span className="flex-1 text-left">{sectionKey}</span>
-                      <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
                     </button>
                   ) : (
                     <div
@@ -464,5 +463,6 @@ export default function MobileNavDrawer({
     </div>
   );
 
-  return createPortal(drawer, document.body);
+  const portalRoot = document.getElementById("root");
+  return createPortal(drawer, portalRoot ?? document.body);
 }
