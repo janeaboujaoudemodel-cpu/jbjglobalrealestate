@@ -13,7 +13,6 @@ const OwnerDashboardOverview = lazy(() => import("@/pages/OwnerDashboardOverview
 const OwnerInbox = lazy(() => import("@/pages/OwnerInbox"));
 const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
-const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
 const CrmShell = lazy(() => import("@/pages/owner/crm/shell/CrmShell"));
 const CrmModulePage = lazy(() => import("@/pages/owner/crm/shell/CrmModulePage"));
 const CrmHome = lazy(() => import("@/pages/owner/crm/shell/CrmHome"));
@@ -68,11 +67,8 @@ const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagemen
 const Documents = lazy(() => import("@/pages/Documents"));
 const CRMLeadDetail = lazy(() => import("@/pages/CRMLeadDetail"));
 const CRMSyncDeadLetters = lazy(() => import("@/pages/CRMSyncDeadLetters"));
-const CRMSyncConflicts = lazy(() => import("@/pages/CRMSyncConflicts"));
-const CRMTasks = lazy(() => import("@/pages/CRMTasks"));
-const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
-const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
-// CRMReminders + CRMEmployees deleted — content lives inside UnifiedCRM sections
+// Legacy CRM page imports were removed. Every CRM surface now mounts inside
+// the Emerald JBJ shell below.
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
@@ -255,7 +251,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-property-map" element={<PropertyMap />} />
     <Route path="owner-listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
     <Route path="owner-listings-approval" element={<ListingAdminGuard><ListingsApproval /></ListingAdminGuard>} />
-    <Route path="owner-inbox" element={<OwnerInbox />} />
+    <Route path="owner-inbox" element={<Navigate to="/owner/crm/jbj/salesinbox" replace />} />
     <Route path="owner-team-chat" element={<TeamChat />} />
     <Route path="owner-relationships" element={<CRMRelationships />} />
     <Route path="relationships" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />

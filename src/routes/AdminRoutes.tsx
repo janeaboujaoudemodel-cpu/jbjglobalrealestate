@@ -15,7 +15,6 @@ const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const AdminCRM = lazy(() => import("@/pages/AdminCRM"));
 const AdminChatDashboard = lazy(() => import("@/pages/admin/AdminChatDashboard"));
-const AdminInbox = lazy(() => import("@/pages/admin/AdminInbox"));
 const AdminIntelligence = lazy(() => import("@/pages/admin/AdminIntelligence"));
 const InquiryManagementHub = lazy(() => import("@/pages/admin/InquiryManagementHub"));
 const AdminOnboarding = lazy(() => import("@/pages/AdminOnboarding"));
@@ -102,7 +101,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/leads" element={<Navigate to="/owner/admin/leads" replace />} />
     <Route path="/admin/inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
     <Route path="/admin-inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
-    <Route path="/admin/crm" element={<Navigate to="/owner/crm" replace />} />
+    <Route path="/admin/crm" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="/admin/chat-conversations" element={<OwnerGuard><AdminChatDashboard /></OwnerGuard>} />
     {/* /admin/onboarding redirected to Careers Portal below */}
     <Route path="/admin/roles" element={<Navigate to="/owner/admin" replace />} />
@@ -150,9 +149,9 @@ export const AdminRoutes = () => (
     <Route path="/internal/contrast-review" element={<OwnerGuard><Suspense fallback={<PageLoader />}><ContrastReview /></Suspense></OwnerGuard>} />
 
     {/* ── Legacy Redirects ── */}
-    <Route path="/crm" element={<Navigate to="/owner/crm" replace />} />
-    <Route path="/crm/relationships" element={<Navigate to="/owner/crm/relationships" replace />} />
-    <Route path="/crm/*" element={<Navigate to="/owner/crm" replace />} />
+    <Route path="/crm" element={<Navigate to="/owner/crm/jbj/home" replace />} />
+    <Route path="/crm/relationships" element={<Navigate to="/owner/crm/jbj/owner-relationships" replace />} />
+    <Route path="/crm/*" element={<Navigate to="/owner/crm/jbj/home" replace />} />
     <Route path="/listing-admin" element={<Navigate to="/owner/listing-admin" replace />} />
     <Route path="/listing-admin/preview/:id" element={<Navigate to="/owner/listing-admin" replace />} />
     <Route path="/automations" element={<Navigate to="/owner/automations" replace />} />
@@ -211,7 +210,7 @@ export const AdminRoutes = () => (
 
 
     {/* ── Communication & Productivity ── */}
-    <Route path="/admin/inbox" element={<OwnerGuard><AdminInbox /></OwnerGuard>} />
+    <Route path="/admin/inbox" element={<Navigate to="/owner/crm/jbj/salesinbox" replace />} />
     <Route path="/company-comm" element={<Navigate to="/owner/inbox" replace />} />
     <Route path="/email-client" element={<Navigate to="/owner/inbox" replace />} />
     <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />
