@@ -471,9 +471,9 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
    ═══════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 1023.98px) {
-  /* 1. The phone/tablet header is a real fixed band again: opaque skin
-        surface + one very thin hairline divider. Page content can never
-        show through it or cross above it. */
+  /* 1. At the hero top the header is transparent. Once the header reports
+        its fixed/solid surface, the approved cold-champagne band and fine
+        divider keep content below the chrome. */
   html body #root [data-chrome="header"] > header {
     position: fixed !important;
     top: 0 !important;
@@ -483,16 +483,17 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     min-height: 64px !important;
     overflow: visible !important;
     z-index: 10460 !important;
-    backdrop-filter: blur(14px) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+    background: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: 0 !important;
   }
   /* Moon (default) — emerald ombré band, pure white ink. */
   html:not([data-jbj-theme="sun"]) body #root [data-chrome="header"] > header {
-    background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
-    background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
-    border-bottom-color: rgba(255, 255, 255, 0.22) !important;
+    background: transparent !important;
+    background-image: none !important;
   }
   html:not([data-jbj-theme="sun"]) body #root [data-chrome="header"] > header
     :is(.jj-header-wordmark, .jj-header-tagline) {
@@ -500,10 +501,13 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     -webkit-text-fill-color: #FFFFFF !important;
   }
   /* Sun — the approved cold champagne band, black ink. */
-  html[data-jbj-theme="sun"] body #root [data-chrome="header"] > header {
+  html body #root [data-chrome="header"] > header[data-header-surface="light"] {
     background: linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
     background-image: linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
-    border-bottom-color: rgba(184, 149, 85, 0.35) !important;
+    border-bottom: 1px solid rgba(184, 149, 85, 0.35) !important;
+    backdrop-filter: blur(14px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18) !important;
   }
   html[data-jbj-theme="sun"] body #root [data-chrome="header"] > header
     :is(.jj-header-wordmark, .jj-header-tagline) {
@@ -527,13 +531,13 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     gap: 10px !important;
   }
   html body #root [data-chrome="header"] > header a[href="/"] > div:first-child {
-    width: 40px !important;
-    height: 40px !important;
+    width: 52px !important;
+    height: 52px !important;
     margin: 0 !important;
   }
   html body #root [data-chrome="header"] > header a[href="/"] img {
-    width: 40px !important;
-    height: 40px !important;
+    width: 52px !important;
+    height: 52px !important;
     transform: none !important;
   }
   html body #root [data-chrome="header"] > header .jj-header-wordmark {
@@ -562,10 +566,16 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  html body #root [data-chrome="header"] > header[data-header-surface="light"] [data-tour-target="mobile-menu"] {
     background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
     background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.26) !important;
+    border: 1px solid rgba(6, 78, 59, 0.42) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
   }
   html body #root [data-chrome="header"] [data-tour-target="mobile-menu"] .jj-hamburger {
     gap: 4px !important;
@@ -586,6 +596,19 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     line-height: 1 !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
+  }
+}
+
+/* PASS 323 — phone drawer identity and preference rows: one-line wordmark,
+   no artificial internal dividers. */
+@media (max-width: 1023.98px) {
+  html body div#root [data-jj-drawer-panel] .jj-drawer-wordmark {
+    max-width: none !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.08em !important;
+  }
+  html body div#root [data-jj-drawer-panel] .jj-drawer-pref-sep {
+    display: none !important;
   }
 }
 
