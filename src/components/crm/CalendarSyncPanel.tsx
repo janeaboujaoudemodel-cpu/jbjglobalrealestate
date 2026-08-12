@@ -63,7 +63,7 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
       <CardContent className="space-y-4">
         {loading ? <p className="text-sm text-muted-foreground">Checking connected accounts…</p> : accounts.length === 0 ? <p className="text-sm text-muted-foreground">No calendar accounts are linked.</p> : accounts.map((account) => (
           <section key={`${account.provider}:${account.account_key}`} className="rounded-md border border-border/60 p-4 space-y-3">
-            <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><h3 className="font-semibold">{LABEL[account.provider]}</h3><p className="text-xs text-muted-foreground break-words">{account.account ?? "Account access needs attention"}</p></div>{account.connected && <span className="text-xs font-medium text-[color:var(--emerald-1)]">Connected account</span>}</div>
+            <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><h3 className="font-semibold break-words">{account.email ?? account.account ?? `${LABEL[account.provider]} — account not identified`}</h3><p className="text-xs text-muted-foreground break-words">{LABEL[account.provider]}{account.slot ? ` · ${account.slot}` : ""}</p></div><span className={`text-xs font-medium ${account.connected ? "text-[color:var(--emerald-1)]" : "text-destructive"}`}>{account.connected ? "Connected" : "Needs reconnect"}</span></div>
             {account.error && <p className="flex gap-2 text-xs text-destructive"><AlertTriangle className="h-4 w-4 shrink-0" />{account.error}</p>}
             <div className="space-y-2">
               {account.calendars.map((calendar) => {
