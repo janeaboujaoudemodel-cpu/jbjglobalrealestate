@@ -50,7 +50,7 @@ if (typeof window !=="undefined") {
  // eslint-disable-next-line no-console
  console.warn("[boot-diag] vite:preloadError — reloading once", event);
  try {
- const k ="jbj_chunk_reload_at";
+  const k ="jbj_recovery_reload_at";
  const last = Number(sessionStorage.getItem(k) || 0);
  if (Date.now() - last > 60_000) {
  sessionStorage.setItem(k, String(Date.now()));
@@ -70,7 +70,9 @@ declare global {
  }
 }
 
-const root = createRoot(document.getElementById("root")!);
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error("Application root element is missing");
+const root = createRoot(rootElement);
 
 root.render(
  <StrictMode>

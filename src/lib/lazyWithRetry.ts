@@ -29,7 +29,7 @@ export function lazyWithRetry<T extends ComponentType<any>>(
       }
     }
     try {
-      const k = "jbj_chunk_reload_at";
+      const k = "jbj_recovery_reload_at";
       const last = Number(sessionStorage.getItem(k) || 0);
       if (Date.now() - last > 60_000) {
         sessionStorage.setItem(k, String(Date.now()));
