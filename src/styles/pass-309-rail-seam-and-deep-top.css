@@ -71,3 +71,18 @@ html:not([data-jbj-theme="sun"]) body #root [data-chrome="sidebar"] [data-sideba
     #000000 100%
   ) !important;
 }
+
+/* ═══════════ 4. Sun collapsed rail footer — always black ink ═══════════
+   Legacy index.css / pass-305 rules hard-code white or gold on the rail
+   footer tiles. In the champagne rail every glyph and label is black. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div#root [data-chrome="sidebar"]
+  :is(.jj-rail-footer-block, .jj-rail-footer-block--rail, .jj-rail-footer-inner, .jj-sidebar-footer) :is(a, button, span, kbd, svg, svg *, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div#root [data-chrome="sidebar"]
+  :is(.jj-side-tile, .jj-side-auth-tile, [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div#root [data-chrome="sidebar"]
+  :is(.jj-side-tile, .jj-side-auth-tile, [data-sidebar-collapse-control], [data-sidebar-auth-control], [data-signout-action]) :is(span, svg, svg *, path) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  opacity: 1 !important;
+}
