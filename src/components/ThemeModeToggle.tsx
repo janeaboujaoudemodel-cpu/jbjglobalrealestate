@@ -44,7 +44,7 @@ export function ThemeModeToggle({
         title={label}
         className={cn(
           "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] font-bold",
-          "border border-current/40 transition-colors hover:border-[#B89555]",
+          "border border-current/40 transition-colors hover:border-current",
           className,
         )}
       >
@@ -55,21 +55,37 @@ export function ThemeModeToggle({
   }
 
 
-  // menu row (account dropdown)
+  // menu row (account dropdown) — a segmented Sun / Moon control so the
+  // active skin is always visible instead of a single ambiguous label.
   return (
-    <button
-      type="button"
-      onClick={toggleMode}
-      aria-label={label}
-      className={cn(
-        "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 my-0.5 text-sm font-medium",
-        className,
-      )}
-      style={{ background: "transparent" }}
+    <div
+      role="group"
+      aria-label="Theme"
+      className={cn("flex w-full items-center gap-1 rounded-md px-1.5 py-1 my-0.5", className)}
     >
-      <Icon className="w-5 h-5" strokeWidth={2.25} />
-      <span>{isMoon ? "Day theme" : "Night theme"}</span>
-    </button>
+      {([
+        { key: "sun", Icon: Sun, text: "Day theme", active: !isMoon },
+        { key: "moon", Icon: Moon, text: "Night theme", active: isMoon },
+      ] as const).map((opt) => (
+        <button
+          key={opt.key}
+          type="button"
+          aria-pressed={opt.active}
+          onClick={() => {
+            if (!opt.active) toggleMode();
+          }}
+          className={cn(
+            "flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-[12px] font-semibold transition-colors",
+            opt.active
+              ? "bg-primary text-primary-foreground"
+              : "bg-transparent opacity-70 hover:opacity-100",
+          )}
+        >
+          <opt.Icon className="w-4 h-4" strokeWidth={2.25} />
+          <span className="whitespace-nowrap">{opt.text}</span>
+        </button>
+      ))}
+    </div>
   );
 }
 

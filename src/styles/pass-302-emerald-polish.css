@@ -1,0 +1,192 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 302 — EMERALD POLISH (LOCKED)
+
+   One contract, applied to BOTH skins (Sun + Moon):
+
+   1) NO GOLD ON EMERALD — every gold/champagne border, divider or ring
+      that sits on an emerald surface becomes a clean white hairline.
+   2) SIDEBAR BRAND HEADER — ombre merge, no divider line under it, no
+      highlight plate around the wordmark, bigger monogram, ink follows
+      the skin (white on emerald, black on champagne).
+   3) SIDEBAR CONTENT — pure white ink on the emerald rail, uniform
+      padding/rhythm for pages AND subpages.
+   4) NO HIGHLIGHT RECTANGLES — section labels, scroller navigators and
+      guide/book rails keep words + icons only.
+   5) MOON CANVAS — pearl/white like the JBJ Hub back end, never
+      champagne, and the emerald chrome is BALANCED top-to-bottom
+      (no light-to-dark run down a long page).
+   6) CONTRAST — white step circles carry full-ink numbers, footer ink
+      stays legible, champagne surfaces always take black ink.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. No gold on emerald ─────────────────────────────────────────── */
+html body #root
+  :is([data-surface="emerald"], [data-sidebar-emerald], [data-ink-emerald],
+      [data-hero-dark], [data-jj-utility-bar], [data-jj-mobile-drawer],
+      [data-chrome="sidebar"], [data-chrome="header"]),
+html body #root
+  :is([data-surface="emerald"], [data-sidebar-emerald], [data-ink-emerald],
+      [data-hero-dark], [data-jj-utility-bar], [data-jj-mobile-drawer],
+      [data-chrome="sidebar"], [data-chrome="header"]) * {
+  --jj-seg-hairline: rgba(255, 255, 255, 0.28);
+  --jj-panel-hairline: rgba(255, 255, 255, 0.2);
+  --gold: 255 255 255;
+}
+html body #root
+  :is([data-surface="emerald"], [data-sidebar-emerald], [data-ink-emerald],
+      [data-jj-utility-bar], [data-jj-mobile-drawer],
+      [data-chrome="sidebar"]) :is(
+    [class*="border-[#B89555]"], [class*="border-gold"], [class*="border-[#b89555]"],
+    [class*="divide-[#B89555]"], [class*="ring-[#B89555]"], .border-gold
+  ) {
+  border-color: rgba(255, 255, 255, 0.24) !important;
+  --tw-ring-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+/* Moon: gold hairlines are retired everywhere on the public site. */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(
+  [class*="border-[#B89555]"], [class*="border-gold"], [class*="border-[#b89555]"],
+  [class*="divide-[#B89555]"], [class*="ring-[#B89555]"], .border-gold
+) {
+  border-color: rgba(6, 78, 59, 0.22) !important;
+  --tw-ring-color: rgba(6, 78, 59, 0.22) !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-surface="emerald"], [data-sidebar-emerald], [data-jj-utility-bar],
+      [data-jj-mobile-drawer], [data-chrome="sidebar"]) :is(
+    [class*="border-[#B89555]"], [class*="border-gold"], .border-gold
+  ) {
+  border-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+/* ── 2. Sidebar brand header — ombre, seamless, bigger monogram ────── */
+html body #root [data-sidebar-emerald] > div:first-child,
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+html body #root [data-chrome="sidebar"] a[href="/"],
+html body #root [data-sidebar-emerald] > div:first-child a {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+html body #root [data-sidebar-emerald] img[alt="JBJ"],
+html body #root [data-chrome="sidebar"] img[alt="JBJ"] {
+  width: 58px !important;
+  height: 58px !important;
+}
+
+/* ── 3. Sidebar ink is pure white on emerald (pages + subpages) ────── */
+html body #root [data-sidebar-emerald] :is(a, button, span, p, strong, small, label, li, h1, h2, h3, h4),
+html body #root [data-sidebar-emerald] :is(svg, path) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+html body #root [data-sidebar-emerald] :is(svg, path) {
+  stroke: currentColor !important;
+}
+/* Uniform rhythm: one padding contract for every row, page and subpage. */
+html body #root [data-sidebar-emerald] nav a,
+html body #root [data-sidebar-emerald] nav button {
+  padding: 9px 12px !important;
+  margin-bottom: 4px !important;
+  min-height: 40px !important;
+  border-radius: 10px !important;
+}
+html body #root [data-sidebar-emerald] nav a:not([data-active="true"]):not([aria-current="page"]),
+html body #root [data-sidebar-emerald] nav button:not([data-active="true"]):not([aria-expanded="true"]) {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+html body #root [data-sidebar-emerald] nav a[data-active="true"],
+html body #root [data-sidebar-emerald] nav a[aria-current="page"] {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* ── 4. No highlight rectangles around section labels / rails ──────── */
+html body #root :is([data-section-label], [data-scroll-rail], [data-book-rail]) :is(a, button, span) {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ── 5. Moon canvas = JBJ Hub pearl, never champagne ──────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root :is(
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#EDE0C8]"], [class*="bg-[#E2D4B8]"], [class*="bg-[#D8C7A6]"],
+  .jj-champagne-surface, .jj-pearl-band, .jj-pearl-card
+):not([class*="]/"]):not(footer):not(footer *):not([data-surface="emerald"] *) {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: var(--jbj-moon-ink, #17231f) !important;
+}
+/* Balanced emerald chrome — same weight top and bottom of a long page. */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) {
+  --jbj-moon-chrome: linear-gradient(180deg, #064e3b 0%, #05412f 55%, #043526 100%);
+  --jbj-moon-chrome-h: linear-gradient(90deg, #064e3b 0%, #05412f 55%, #043526 100%);
+}
+html body #root [data-sidebar-emerald] {
+  background-image: linear-gradient(180deg, #064e3b 0%, #05412f 55%, #043526 100%) !important;
+  background-attachment: local !important;
+}
+
+/* ── 6. Contrast repairs ──────────────────────────────────────────── */
+/* White step circles keep full-ink numbers. */
+html body #root [data-step-circle],
+html body #root [data-step-circle] * {
+  color: #064e3b !important;
+  -webkit-text-fill-color: #064e3b !important;
+  opacity: 1 !important;
+}
+/* Champagne surfaces always take black ink. */
+html body #root :is([class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"]):not([class*="]/"]):not(footer *)
+  :is(h1, h2, h3, h4, h5, h6) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
+/* No emerald selection rectangle inside search fields. */
+html body ::selection {
+  background: rgba(120, 120, 120, 0.2) !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+html body [aria-hidden="true"] .jj-type-caret,
+html body [aria-hidden="true"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------------------------
+   PASS 302b — "How we build" step circles.
+   The global emerald-surface guard forces white ink on every descendant, which
+   erased the numbers inside the white circles. Re-assert emerald ink on the
+   circle itself (both themes) and keep the rail rows on one vertical axis.
+--------------------------------------------------------------------------- */
+html body #root [data-step-circle],
+html body #root [data-surface="emerald"] [data-step-circle],
+html[data-jbj-theme="moon"] body #root [data-step-circle] {
+  color: #064e3b !important;
+  -webkit-text-fill-color: #064e3b !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 0 !important;
+  font-variant-numeric: tabular-nums;
+}
+html body #root [data-step-circle] ~ * {
+  text-align: left !important;
+}
+html body #root li > button:has([data-step-circle]) {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}

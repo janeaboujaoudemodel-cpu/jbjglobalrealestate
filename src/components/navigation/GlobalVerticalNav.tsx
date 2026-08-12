@@ -1050,9 +1050,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
       <div data-sidebar-emerald className="flex flex-col h-full w-full min-w-0 bg-primary text-primary-foreground">
       {/* ━━━ LOGO HEADER — compact and aligned with the horizontal utility bar ━━━ */}
-      <div className="h-[56px] shrink-0 flex flex-row items-center px-2 bg-primary text-primary-foreground border-b border-primary-foreground/20">
+      <div className="h-[56px] shrink-0 flex flex-row items-center px-2 bg-transparent text-primary-foreground">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-0.5">
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain shrink-0 brightness-0 invert" loading="lazy" decoding="async" />
+          <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-[58px] h-[58px] object-contain shrink-0 brightness-0 invert" loading="eager" data-eager decoding="async" />
           <div className="min-w-0 mt-1">
             <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap text-primary-foreground">JBJ GLOBAL REAL ESTATE</span>
           </div>
@@ -1413,9 +1413,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
       {collapsed ? (
         <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-primary text-primary-foreground border-r border-primary-foreground/20">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
-          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-primary border-b border-primary-foreground/20">
+          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain brightness-0 invert" loading="lazy" decoding="async" />
+              <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-[52px] h-[52px] object-contain brightness-0 invert" loading="eager" data-eager decoding="async" />
             </Link>
           </div>
 
@@ -1434,8 +1434,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
             }
             html body .jj-side-tile svg,
             html body .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; fill: none !important; opacity: 1 !important; transition: none !important; }
-            html body .jj-side-tile:hover { border-color: rgba(184,149,85,0.55) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
-            html body .jj-side-tile.is-active { border-color: #B89555 !important; box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.45) !important; }
+            html body .jj-side-tile:hover { border-color: rgba(255,255,255,0.55) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
+            html body .jj-side-tile.is-active { border-color: rgba(255,255,255,0.85) !important; box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(255,255,255,0.45) !important; }
             html body .jj-side-tile.is-active svg,
             html body .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>

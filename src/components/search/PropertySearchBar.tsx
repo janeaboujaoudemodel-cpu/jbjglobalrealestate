@@ -426,7 +426,7 @@ export default function PropertySearchBar({
             backgroundImage: dark ? DARK_SURFACE : undefined,
             background: dark ? undefined : "#FFFFFF",
             backdropFilter: dark ? "blur(10px)" : undefined,
-            border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(184,149,85,0.58)"}`,
+            border: `1.5px solid ${dark ? "rgba(255,255,255,0.44)" : "rgba(6,78,59,0.28)"}`,
           }}
         >
           <Search className="w-4 h-4 shrink-0 opacity-80" style={{ color: dark ? "#FFF" : "#1A1A1A" }} />
