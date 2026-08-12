@@ -217,6 +217,28 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
           </button>
         </div>
       )}
+
+      {withoutPhotos.length > 0 && (
+        <div className="mt-6 rounded-xl border border-[#064E3B]/15 bg-[#FDFBF7] p-4">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#064E3B]">
+            Also included
+          </p>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2">
+            {withoutPhotos.map((amenity) => (
+              <li key={amenity} className="flex items-start gap-2">
+                <span
+                  aria-hidden
+                  className="mt-[2px] inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full"
+                  style={{ background: "#064E3B" }}
+                >
+                  <Check className="h-2.5 w-2.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                </span>
+                <span className="text-[13px] leading-snug text-[#1A1A1A]">{amenity}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
