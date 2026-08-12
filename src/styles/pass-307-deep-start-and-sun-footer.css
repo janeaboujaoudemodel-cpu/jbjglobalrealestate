@@ -1,0 +1,94 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 307 — DEEP-START EMERALD, CLEAN MOON RAIL, SUN INK & SUN FOOTER
+
+   1) LONG EMERALD SURFACES START AT THE MID TONE. No bright green top
+      edge anywhere: the rail, the utility header, the developer market
+      marquee, Explore Our Services and the Royal Tools Hub all begin at
+      the same deep shade the rail shows at the "Guides" icon and only
+      travel to black from there.
+   2) MOON RAIL = LOGO ONLY. The vertical highlighter behind the monogram
+      and the thin animated line running down the rail are removed.
+   3) SUN INK = PURE BLACK, including the Sign Out / Sign In icon and the
+      collapse ("connect"/expand) control, which kept inline white.
+   4) SUN FOOTER wears the same champagne surface + soft emerald-tinted
+      highlight used behind the monogram, with black ink.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Deep-start long surfaces ═══════════ */
+:root,
+html[data-jbj-theme],
+html[data-jbj-theme] body {
+  --jj-long-emerald-v: linear-gradient(180deg, #032015 0%, #021b12 42%, #000000 100%);
+  --jj-long-emerald-h: linear-gradient(90deg, #032015 0%, #021b12 46%, #000000 100%);
+  --jj-long-emerald-d: linear-gradient(160deg, #032015 0%, #021b12 46%, #000000 100%);
+  /* Cards/bands that used the bright emerald ink gradient. */
+  --gradient-ink: linear-gradient(135deg, #032015 0%, #021b12 46%, #000000 100%);
+}
+
+/* Bright emerald block fills behind the ink gradient (headers of the
+   Explore Our Services + Royal Tools Hub cards) must not peek through. */
+html body #root [data-ink-emerald].bg-\[\#064E3B\],
+html body #root [data-ink-emerald][style*="064E3B"] {
+  background-color: #032015 !important;
+  background-image: var(--gradient-ink) !important;
+}
+
+/* Marquee / emerald long surfaces */
+html body #root [data-partners-marquee] {
+  background-color: #032015 !important;
+  background-image: var(--jj-long-emerald-d) !important;
+}
+
+/* ═══════════ 2. Moon rail — logo only, no highlighter ═══════════ */
+html[data-jbj-theme="moon"] body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] div[data-sidebar-brand-row].jj-rail-brand-band:not([hidden]),
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] .jj-rail-brand-band .jj-rail-brand-link {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+html[data-jbj-theme="moon"] body #root .jj-rail-emerald-edge::after,
+html[data-jbj-theme="moon"] body #root .jj-rail-emerald-edge::before {
+  display: none !important;
+  content: none !important;
+  animation: none !important;
+}
+
+/* ═══════════ 3. Sun ink — Sign Out + collapse controls in black ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] :is(a, button).jj-side-tile :is(svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] [data-sidebar-auth-control] :is(svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-signout-icon],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-signout-icon] path,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-sidebar-auth-control] :is(span, svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root [data-sidebar-collapse-control] :is(span, svg, path) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* ═══════════ 4. Sun footer — champagne + monogram-style highlight ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer[data-jj-minimal-footer],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root footer#site-footer {
+  background-color: #F7F1E4 !important;
+  background-image:
+    linear-gradient(180deg, rgba(6, 78, 59, 0.09) 0%, rgba(6, 78, 59, 0.05) 72%, rgba(6, 78, 59, 0) 100%),
+    var(--jj-champagne-long-v, linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  color: #1A1A1A !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is(footer[data-jj-minimal-footer], footer#site-footer)
+  :is(a, button, span, p, h1, h2, h3, h4, h5, li, strong, small, label, svg, path) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is(footer[data-jj-minimal-footer], footer#site-footer) :is(hr, .h-px, .jj-footer-rule) {
+  background: linear-gradient(90deg, transparent, rgba(184, 149, 85, 0.75), transparent) !important;
+  border-color: rgba(184, 149, 85, 0.55) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is(footer[data-jj-minimal-footer], footer#site-footer) img[alt*="JBJ"] {
+  filter: brightness(0) saturate(0) !important;
+}

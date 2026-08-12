@@ -9,6 +9,7 @@ import"./styles/pass-302-emerald-polish.css";
 import"./styles/pass-303-skin-parity.css";
 import"./styles/pass-305-sun-champagne-parity.css";
 import"./styles/pass-306-rail-width-parity.css";
+import"./styles/pass-307-deep-start-and-sun-footer.css";
 
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";
