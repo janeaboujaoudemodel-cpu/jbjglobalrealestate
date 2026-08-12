@@ -33294,6 +33294,7 @@ export type Database = {
           reelly_developer_id: number | null
           reelly_id: number | null
           reelly_raw_data: Json | null
+          rent_frequency: string | null
           rental_yield_estimate: number | null
           roi_estimate: number | null
           sale_status: string | null
@@ -33417,6 +33418,7 @@ export type Database = {
           reelly_developer_id?: number | null
           reelly_id?: number | null
           reelly_raw_data?: Json | null
+          rent_frequency?: string | null
           rental_yield_estimate?: number | null
           roi_estimate?: number | null
           sale_status?: string | null
@@ -33540,6 +33542,7 @@ export type Database = {
           reelly_developer_id?: number | null
           reelly_id?: number | null
           reelly_raw_data?: Json | null
+          rent_frequency?: string | null
           rental_yield_estimate?: number | null
           roi_estimate?: number | null
           sale_status?: string | null
