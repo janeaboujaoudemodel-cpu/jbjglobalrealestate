@@ -13,7 +13,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  ChevronDown, LogOut, User, Search, HelpCircle, Headphones, Heart, Ticket, X,
+  LogOut, User, Search, HelpCircle, Headphones, Heart, Ticket, X,
   Globe, Coins, Lock,
 } from "lucide-react";
 
@@ -57,7 +57,6 @@ export default function MobileNavDrawer({
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
   const { allowed: canCompare } = useCompareAccess();
   const { visible: canSeeCardScanner } = useGatedToolAccess("business-card-scanner");
-  const [openSection, setOpenSection] = useState<SectionKey | null>(null);
 
   const ink = isMoon ? "#FFFFFF" : "#0A0A0A";
   const isOwnerMode = isOwner && mode === "owner";
