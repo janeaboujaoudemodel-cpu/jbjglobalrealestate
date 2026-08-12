@@ -5,7 +5,7 @@ import { Building2 } from "lucide-react";
 import { useDevelopers, useDeveloperProjectStats, type Developer } from "@/hooks/useProjects";
 import PropertySearchBar from "@/components/search/PropertySearchBar";
 import { EMPTY_SEARCH, type PropertySearch } from "@/lib/propertySearch";
-import { getDeveloperTier, ELITE_PRIORITY_ORDER } from "@/utils/developerTier";
+import { getDeveloperTier, ELITE_PRIORITY_ORDER, compareDevelopersByPriority } from "@/utils/developerTier";
 import DeveloperCard from "@/components/DeveloperCard";
 import { dedupeDevelopers } from "@/utils/developerDedupe";
 import { SEOHead } from "@/components/SEOHead";
