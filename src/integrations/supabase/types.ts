@@ -23758,6 +23758,13 @@ export type Database = {
         Row: {
           account_id: string | null
           action_needed: string | null
+          ai_analyzed_at: string | null
+          ai_intent: string | null
+          ai_summary: string | null
+          auto_acked: boolean
+          auto_acked_at: string | null
+          body_html: string | null
+          body_text: string | null
           category: string | null
           category_reason: string | null
           cc_email: string | null
@@ -23780,6 +23787,10 @@ export type Database = {
           provider_folder: string | null
           provider_labels: string[]
           received_at: string
+          requires_reply: boolean
+          sentiment: string | null
+          sla_due_at: string | null
+          sla_state: string
           snippet: string | null
           status_since: string
           subject: string | null
@@ -23787,11 +23798,19 @@ export type Database = {
           thread_id: string | null
           to_email: string | null
           updated_at: string
+          urgency: string | null
           web_link: string | null
         }
         Insert: {
           account_id?: string | null
           action_needed?: string | null
+          ai_analyzed_at?: string | null
+          ai_intent?: string | null
+          ai_summary?: string | null
+          auto_acked?: boolean
+          auto_acked_at?: string | null
+          body_html?: string | null
+          body_text?: string | null
           category?: string | null
           category_reason?: string | null
           cc_email?: string | null
@@ -23814,6 +23833,10 @@ export type Database = {
           provider_folder?: string | null
           provider_labels?: string[]
           received_at?: string
+          requires_reply?: boolean
+          sentiment?: string | null
+          sla_due_at?: string | null
+          sla_state?: string
           snippet?: string | null
           status_since?: string
           subject?: string | null
@@ -23821,11 +23844,19 @@ export type Database = {
           thread_id?: string | null
           to_email?: string | null
           updated_at?: string
+          urgency?: string | null
           web_link?: string | null
         }
         Update: {
           account_id?: string | null
           action_needed?: string | null
+          ai_analyzed_at?: string | null
+          ai_intent?: string | null
+          ai_summary?: string | null
+          auto_acked?: boolean
+          auto_acked_at?: string | null
+          body_html?: string | null
+          body_text?: string | null
           category?: string | null
           category_reason?: string | null
           cc_email?: string | null
@@ -23848,6 +23879,10 @@ export type Database = {
           provider_folder?: string | null
           provider_labels?: string[]
           received_at?: string
+          requires_reply?: boolean
+          sentiment?: string | null
+          sla_due_at?: string | null
+          sla_state?: string
           snippet?: string | null
           status_since?: string
           subject?: string | null
@@ -23855,6 +23890,7 @@ export type Database = {
           thread_id?: string | null
           to_email?: string | null
           updated_at?: string
+          urgency?: string | null
           web_link?: string | null
         }
         Relationships: [
