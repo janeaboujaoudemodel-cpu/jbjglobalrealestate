@@ -1,0 +1,56 @@
+/* ============================================================================
+   PASS 316 — SUN CHAMPAGNE ACTIVE TAB, NO GOLD UNDERLINE, CENTERED STRAP
+   1. Sun: the active segmented tab on Explore Our Services / Royal Tools Hub
+      uses the champagne sidebar gradient with black ink (never emerald).
+   2. No gold underline under the active tab in either skin.
+   3. The Partners strap headline is perfectly centred on the full band width.
+   ========================================================================== */
+
+/* ── 1 + 2. Sun active tab = champagne, black ink, no underline ── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [role="tab"][data-tab-white-active="true"][data-tab-white-active="true"],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [role="tab"][data-tab-white-active="true"][data-tab-white-active="true"]:hover,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [role="tab"][data-tab-white-active="true"][data-tab-white-active="true"]:focus-visible {
+  background-color: #EFE3CB !important;
+  background-image: linear-gradient(180deg, #FBF6EC 0%, #F1E6D0 55%, #E4D5B8 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+}
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [role="tab"][data-tab-white-active="true"][data-tab-white-active="true"] *,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [role="tab"][data-tab-white-active="true"][data-tab-white-active="true"]
+  :is(span, svg, svg *, path) {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  stroke: #111111 !important;
+}
+
+/* ── 2b. Moon keeps the emerald fill, but the gold underline is removed ── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  [role="tab"][data-tab-white-active="true"][data-tab-white-active="true"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+/* ── 3. Partners strap headline centred across the whole band ── */
+html[data-jbj-theme] body #root [data-partners-marquee] [data-partners-heading] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+html[data-jbj-theme] body #root [data-partners-marquee] [data-partners-heading] > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  text-align: center !important;
+}
+html[data-jbj-theme] body #root [data-partners-marquee] [data-partners-heading] p {
+  width: 100% !important;
+  text-align: center !important;
+}
