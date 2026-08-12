@@ -183,10 +183,10 @@ const CRMNotes = () => {
     toast.success("Note created");
   };
 
-  const patchNote = async (id: string, patch: Record<string, unknown>) => {
+  const patchNote = async (id: string, patch: Record<string, any>) => {
     const { data, error } = await supabase
       .from("owner_notes")
-      .update(patch)
+      .update(patch as never)
       .eq("id", id)
       .select(SELECT)
       .maybeSingle();
