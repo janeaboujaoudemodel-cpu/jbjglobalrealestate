@@ -140,7 +140,6 @@ const CookiesConsentBanner = () => {
             </div>
             <div className="jj-cookie-actions flex w-full flex-none gap-2.5 sm:w-auto">
               <Button
-                variant="outline"
                 onClick={() => handleConsent("essential")}
                 className="jj-cookie-btn allow-white h-11 flex-1 rounded-xl px-5 text-[11px] font-semibold uppercase tracking-[0.1em] sm:flex-none sm:px-6"
                 data-no-contrast-guard
