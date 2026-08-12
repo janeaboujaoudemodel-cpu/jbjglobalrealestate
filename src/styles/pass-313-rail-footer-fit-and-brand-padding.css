@@ -60,3 +60,12 @@ html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-bra
 html body #root [data-chrome="sidebar"] [data-sidebar-emerald] .jj-rail-footer-block--rail {
   padding-bottom: 2px !important;
 }
+
+/* No void between the brand header and the first row (mode portal) */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] nav > div:first-child {
+  padding-top: 2px !important;
+}
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-mode-portal-shell] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
