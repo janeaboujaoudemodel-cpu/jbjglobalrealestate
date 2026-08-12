@@ -809,8 +809,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         ref={headerContentRef}
         className="relative z-10 h-full flex items-center justify-between px-[var(--jj-page-gutter)]"
       >
-        {/* LEFT: Premium Brand Logo — desktop only (mobile identity lives in the drawer) */}
-        <div className="hidden lg:block min-w-0 flex-1 sm:flex-[2]">
+        {/* LEFT: Premium Brand Logo — always visible, phone included. */}
+        <div className="block min-w-0 flex-1 sm:flex-[2]">
+
 
           <Link 
             to="/" 
