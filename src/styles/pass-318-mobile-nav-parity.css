@@ -300,3 +300,7 @@ html[data-jbj-theme="moon"] body div#root [data-jj-guide-card] :is([data-jj-guid
 html:not([data-jbj-theme="sun"]) body div#root [data-jj-guide-card] :is([data-jj-guide-step], [data-jj-guide-close]):hover {
   background: rgba(255, 255, 255, 0.12) !important;
 }
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row a {
+  align-self: center !important;
+  line-height: 1 !important;
+}
