@@ -50,8 +50,10 @@ async function discover(account: Account) {
       gateway(account, "/calendar/v3/calendars/primary"),
       gateway(account, "/calendar/v3/users/me/calendarList?maxResults=100"),
     ]);
+    const email = typeof profile.id === "string" && profile.id.includes("@") ? profile.id : null;
     return {
-      label: profile.summary ?? profile.id ?? "Google account",
+      label: email ?? profile.summary ?? "Google account",
+      email,
       calendars: (list.items ?? []).map((c: any) => ({ id: String(c.id), name: c.summary ?? c.id, primary: c.primary === true, writable: ["owner", "writer"].includes(c.accessRole) })),
     };
   }
@@ -59,11 +61,14 @@ async function discover(account: Account) {
     gateway(account, "/me?$select=displayName,mail,userPrincipalName"),
     gateway(account, "/me/calendars?$top=100&$select=id,name,canEdit,isDefaultCalendar"),
   ]);
+  const email = profile.mail ?? profile.userPrincipalName ?? null;
   return {
-    label: profile.mail ?? profile.userPrincipalName ?? profile.displayName ?? "Outlook account",
+    label: email ?? profile.displayName ?? "Outlook account",
+    email,
     calendars: (list.value ?? []).map((c: any) => ({ id: String(c.id), name: c.name ?? "Calendar", primary: c.isDefaultCalendar === true, writable: c.canEdit !== false })),
   };
 }
+
 
 function normalizeGoogle(e: any, calendarId: string) {
   const start = e.start?.dateTime ?? (e.start?.date ? `${e.start.date}T00:00:00Z` : null);
