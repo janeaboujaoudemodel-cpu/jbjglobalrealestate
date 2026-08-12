@@ -253,7 +253,7 @@ const Properties = () => {
   const selectedCountry = getCountry(search.country);
   const marketComingSoon = !!selectedCountry && selectedCountry.live === false;
 
-  const { data: projects, isLoading } = useProjectsListing();
+  const { data: projects, isLoading } = useProjectsListing(search.purpose === "rent" ? "rent" : "buy");
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
   const { data: areas } = useAreas();
@@ -657,7 +657,7 @@ const Properties = () => {
   // agree with what the visitor can actually open.
   const displayedResultCount = finalProjects.length;
   // Dynamic SEO based on transaction type per Master Blueprint
-  const dynamicSEO = appliedFilters.transactionType === 'rent'
+  const dynamicSEO = search.purpose === 'rent'
     ? blueprintPagesSEO.rentListings
     : blueprintPagesSEO.buyListings;
 
@@ -684,7 +684,7 @@ const Properties = () => {
               className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-[-0.02em]"
               style={{ textShadow: '0 2px 12px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)' }}
             >
-              Curated Listings. Global Standard.
+              {search.purpose === "rent" ? "Homes for Rent. Verified and Ready." : "Curated Listings. Global Standard."}
             </h1>
             
             {/* Subtitle */}
@@ -692,7 +692,9 @@ const Properties = () => {
               className="text-white text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed font-light"
               style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)' }}
             >
-              Exclusive investment-grade properties with trusted advisory.
+              {search.purpose === "rent"
+                ? "Verified rental inventory with clear pricing periods and trusted advisory."
+                : "Exclusive investment-grade properties with trusted advisory."}
             </p>
           </motion.div>
         </div>

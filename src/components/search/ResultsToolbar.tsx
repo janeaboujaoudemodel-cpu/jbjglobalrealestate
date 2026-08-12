@@ -149,7 +149,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
               className="w-56 p-1 z-[70]"
               style={{ background: "#FFF", border: "1px solid rgba(184,149,85,0.35)", color: "#1A1A1A" }}
             >
-              {SORT_OPTIONS.map((s) => (
+              {SORT_OPTIONS.filter((s) => f.purpose !== "rent" || !["distress", "handover"].includes(s.slug)).map((s) => (
                 <button
                   key={s.slug}
                   type="button"

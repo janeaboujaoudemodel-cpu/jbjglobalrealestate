@@ -666,7 +666,7 @@ export function useProjects() {
  * fast-paint variant was tried but left users on a 120-row shortlist whenever
  * the background pass failed, so filters/search silently missed projects.
  */
-export function useProjectsListing() {
+export function useProjectsListing(purpose: "buy" | "rent" = "buy") {
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -688,7 +688,7 @@ export function useProjectsListing() {
   }, [queryClient]);
 
   return useQuery({
-    queryKey: ["projects-listing"],
+    queryKey: ["projects-listing", purpose],
     // The catalogue is ~1k rows with joins (multi-MB JSON). It used to be
     // re-fetched every 60s and on every window focus, which re-parsed and
     // re-rendered the whole grid and produced long main-thread tasks.
@@ -709,7 +709,7 @@ export function useProjectsListing() {
         reelly_id, construction_status, sale_status,
         area_name, cover_image_url, card_image_url, gallery_start_image_url, is_published,
         developer_name, construction_progress,
-        total_units, available_units, down_payment_percent,
+        total_units, available_units, down_payment_percent, listing_kind, rent_frequency,
         roi_estimate, rental_yield_estimate, latitude, longitude,
           deleted_at,
         developer_id,
@@ -722,14 +722,20 @@ export function useProjectsListing() {
           .from("projects")
           .select(LISTING_COLUMNS)
           .eq("is_published", true)
-          .or("listing_kind.is.null,listing_kind.neq.leasing")
           .is("deleted_at", null);
+
+      const scopedQuery = () => {
+        const query = baseQuery();
+        return purpose === "rent"
+          ? query.eq("listing_kind", "leasing")
+          : query.or("listing_kind.is.null,listing_kind.neq.leasing");
+      };
 
       const PAGE_SIZE = 1000;
       const MAX_PAGES = 10; // bounded upper limit (10k rows)
       const fetchPage = async (page: number) => {
         const from = page * PAGE_SIZE;
-        const { data, error } = await baseQuery()
+        const { data, error } = await scopedQuery()
           .order("created_at", { ascending: false })
           .range(from, from + PAGE_SIZE - 1);
         if (error) throw error;
