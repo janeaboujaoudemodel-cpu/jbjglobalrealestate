@@ -54,6 +54,14 @@ async def capture(path: str, out: str, selector: str | None, width: int, height:
                 [storage_key, session_json],
             )
 
+        # Seed the requested skin (sun|moon) before first paint.
+        theme = os.environ.get("JBJ_SHOT_THEME")
+        if theme in ("sun", "moon"):
+            await page.goto(BASE, wait_until="domcontentloaded", timeout=120_000)
+            await page.evaluate(
+                "(v) => window.localStorage.setItem('jbj-theme-mode', v)", theme
+            )
+
         # 1. Warm the route (cold Vite transform) — ignore what we see here.
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=120_000)

@@ -70,10 +70,14 @@ const AIComparisonWidget = () => {
           {features.map((feature, i) => (
             <div 
               key={i}
-              className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl shadow-sm"
+              className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-[color:var(--emerald-1,#064E3B)]/20 rounded-xl shadow-sm"
             >
-              <div className="w-10 h-10 bg-[#EFE6D6]/20 rounded-lg flex items-center justify-center">
-                <feature.icon className="w-5 h-5 text-[#1A1A1A]" />
+              <div
+                data-surface="emerald"
+                data-emerald-ok="icon"
+                className="jj-surface-emerald w-10 h-10 rounded-lg flex items-center justify-center shadow-sm"
+              >
+                <feature.icon className="w-5 h-5 text-white" />
               </div>
               <div>
                 <p className="text-[#1A1A1A] font-medium text-sm">{feature.label}</p>

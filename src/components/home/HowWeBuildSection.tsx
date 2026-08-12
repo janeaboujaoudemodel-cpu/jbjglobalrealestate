@@ -213,7 +213,7 @@ export default function HowWeBuildSection() {
       data-surface="emerald"
       className="relative overflow-hidden rounded-[28px] border border-white/20"
       style={{
-        background: `linear-gradient(160deg, ${EMERALD} 0%, #042c1c 55%, #000000 100%)`,
+        background: `linear-gradient(160deg, ${EMERALD} 0%, #05412f 55%, #043526 100%)`,
       }}
     >
       <div className="relative grid gap-8 p-6 md:grid-cols-2 md:gap-10 md:p-12">
@@ -221,9 +221,9 @@ export default function HowWeBuildSection() {
         <div className="flex flex-col justify-center">
           <span
             className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-white/85"
-            style={{ borderColor: `${GOLD}55` }}
+            style={{ borderColor: "rgba(255,255,255,0.34)" }}
           >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#FFFFFF" }} />
             How we build
           </span>
           <h2
@@ -248,19 +248,32 @@ export default function HowWeBuildSection() {
                     onClick={() => setActive(i)}
                     aria-current={isActive}
                     className="group flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition-colors"
-                    style={{
-                      background: isActive ? "rgba(255,255,255,0.10)" : "transparent",
-                      border: `1px solid ${isActive ? `${GOLD}55` : "transparent"}`,
-                    }}
+                    style={{ background: "transparent", border: "1px solid transparent" }}
                   >
                     <span
-                      className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md text-[11px] font-semibold"
+                      data-step-circle={isActive ? "active" : "idle"}
+                      className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px] font-bold"
                       style={{
-                        color: isActive ? "#0b0b0b" : "#ffffff",
-                        background: isActive ? GOLD : "rgba(255,255,255,0.10)",
+                        color: "#064E3B",
+                        WebkitTextFillColor: "#064E3B",
+                        background: "#FFFFFF",
+                        opacity: isActive ? 1 : 0.72,
                       }}
                     >
-                      {String(LAYERS.length - i).padStart(2, "0")}
+                      <svg viewBox="0 0 28 28" className="h-full w-full" aria-hidden>
+                        <text
+                          x="14"
+                          y="18.5"
+                          textAnchor="middle"
+                          fill="#064E3B"
+                          style={{ fill: "#064E3B", fontSize: 11, fontWeight: 700 }}
+                        >
+                          {String(LAYERS.length - i).padStart(2, "0")}
+                        </text>
+                      </svg>
+                      <span className="sr-only">
+                        Step {String(LAYERS.length - i).padStart(2, "0")}
+                      </span>
                     </span>
                     <span className="min-w-0 text-left">
                       <span className="block text-left text-sm font-semibold text-white">
@@ -268,7 +281,7 @@ export default function HowWeBuildSection() {
                       </span>
                       <span
                         className="block text-left text-xs leading-relaxed"
-                        style={{ color: isActive ? "rgba(255,255,255,0.82)" : "rgba(255,255,255,0.5)" }}
+                        style={{ color: isActive ? "#FFFFFF" : "rgba(255,255,255,0.78)" }}
                       >
                         {layer.caption}
                       </span>
