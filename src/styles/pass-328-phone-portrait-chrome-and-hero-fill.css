@@ -139,9 +139,9 @@
 /* ── 4. HOMEPAGE HERO FILTER BAR — CHAMPAGNE FILLS, BLACK INK (SUN) ──── */
 @media (max-width: 1023.98px) and (orientation: portrait) {
   html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
-    div[data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-surface="emerald"],
+    div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][data-surface="emerald"][data-surface="emerald"],
   html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
-    div[data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][aria-pressed="true"] {
+    div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][aria-pressed="true"][aria-pressed="true"] {
     background-color: #C8AD7A !important;
     background-image: linear-gradient(
       90deg,
@@ -155,9 +155,9 @@
     -webkit-text-fill-color: #1A1A1A !important;
   }
   html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
-    div[data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-surface="emerald"] :is(span, svg, path),
+    div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][data-surface="emerald"][data-surface="emerald"] :is(span, svg, path),
   html[data-jbj-theme="sun"] body[data-home-hero-state] div#root
-    div[data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][aria-pressed="true"] :is(span, svg, path) {
+    div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][aria-pressed="true"][aria-pressed="true"] :is(span, svg, path) {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
     stroke: currentColor !important;
