@@ -39,6 +39,8 @@ interface DeveloperLogoProps {
   /** false = artwork is already light (render as-is); true/undefined = dark artwork needing a white knockout. */
   needsInvert?: boolean | null;
   embedded?: boolean;
+  /** Compact filter rows skip the duplicate artwork probe and use square geometry. */
+  picker?: boolean;
   "data-keep-gold"?: boolean | string;
 }
 
@@ -135,6 +137,7 @@ export function DeveloperLogo({
   size = "md",
   needsInvert,
   embedded = false,
+  picker = false,
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
@@ -216,7 +219,7 @@ export function DeveloperLogo({
   // request count and image bytes of the developer directory (measured 4.9 MB
   // desktop) and added main-thread decode work per card, so those paths now
   // skip the probe completely. Paint behaviour is unchanged.
-  const skipPaintProbe = isCuratedWhiteArtwork || !!dataKeepGold;
+  const skipPaintProbe = isCuratedWhiteArtwork || !!dataKeepGold || picker;
 
   const [paintMode, setPaintMode] = useState<"silhouette" | "screen" | null>(() =>
     getCachedLogoPaintMode(resolvedSrc as string | null),
@@ -261,6 +264,7 @@ export function DeveloperLogo({
     md: "h-[72px] w-36",
     lg: "h-[88px] w-44",
   }[size];
+  const pickerPlate = "h-8 w-8 min-h-8 min-w-8 rounded-md p-1";
 
   // LOCKED: never fabricate a developer logo from typed text or initials.
   // Unresolved identities remain in the catalogue as an explicit audit failure.
@@ -367,14 +371,14 @@ export function DeveloperLogo({
   if (variant === "bare") {
     if (!valid) {
       return renderEmptyPlate(cn(
-        compactPlate,
+        picker ? pickerPlate : compactPlate,
         "inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
         embedded ? "bg-transparent border-0 shadow-none" : logoPlateSurface(false),
         className,
       ));
     }
     return renderImage(resolvedSrc as string, cn(
-      compactPlate,
+      picker ? pickerPlate : compactPlate,
       "inline-flex items-center justify-center overflow-hidden rounded-lg p-1.5",
       embedded ? "bg-transparent border-0 shadow-none" : logoPlateSurface(needsDarkPlate),
       className,

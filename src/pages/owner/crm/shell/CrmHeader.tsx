@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Bell, CalendarDays, CircleUserRound, Grip, Plus, Search, Settings, Store, Wand2 } from "lucide-react";
+import { Bell, CalendarDays, Grip, Plus, Search, Settings, Store, Wand2 } from "lucide-react";
 import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
 import CrmSearchOverlay from "./CrmSearchOverlay";
 import CrmQuickCreateMenu from "./CrmQuickCreateMenu";
 import CrmQuickCreateSheet from "./CrmQuickCreateSheet";
 import CrmNotificationsPanel from "./CrmNotificationsPanel";
 import CrmZiaPanel from "./CrmZiaPanel";
-import jbjMonogram from "@/assets/jbj-monogram-light-on-dark.png";
+import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
 
 export default function CrmHeader() {
   const { pathname } = useLocation();
@@ -107,19 +107,10 @@ export default function CrmHeader() {
         <Link to="/owner/crm/jbj/setup" className="jc-icon-btn" aria-label="Setup">
           <Settings size={21} />
         </Link>
-        <Link
-          to="/owner/crm/jbj/owner-overview"
-          className="jc-jbj-avatar"
-          aria-label="JBJ Hub"
-        >
-          <img src={jbjMonogram} alt="JBJ Global Real Estate" draggable={false} />
-        </Link>
-        <button className="jc-icon-btn" type="button" aria-label="Profile">
-          <CircleUserRound size={21} />
-        </button>
         <button className="jc-grid-btn" type="button" aria-label="Apps">
           <Grip size={26} />
         </button>
+        <div className="jc-account-menu"><UserAvatarMenu /></div>
       </div>
       <CrmSearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <CrmZiaPanel open={ziaOpen} onClose={() => setZiaOpen(false)} />

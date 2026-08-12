@@ -11,7 +11,7 @@
  * grid so the boxes can never touch or drift out of alignment, and the
  * exclude control is a full 32px hit target that reacts on the first tap.
  */
-import { useMemo, useState, type ReactNode } from "react";
+import { memo, useMemo, useState, type ReactNode } from "react";
 import { Check, Minus, Search, X } from "lucide-react";
 
 const EMERALD_PAIR = "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)";
@@ -42,7 +42,7 @@ interface Props {
   width?: number;
 }
 
-export default function FilterMultiSelect({
+function FilterMultiSelect({
   options,
   include,
   exclude,
@@ -116,7 +116,7 @@ export default function FilterMultiSelect({
         </button>
       ) : null}
 
-      <div className="max-h-[300px] overflow-y-auto overflow-x-hidden pr-0.5">
+      <div className="max-h-[300px] overflow-y-auto overflow-x-hidden pr-0.5" data-filter-options>
         {loading ? (
           <div className="flex flex-col gap-1.5 py-1">
             {[0, 1, 2, 3, 4].map((i) => (
@@ -135,7 +135,7 @@ export default function FilterMultiSelect({
               return (
                 <div
                   key={opt.value}
-                  className="grid min-h-10 w-full items-center gap-1.5"
+                  className="grid min-h-11 w-full items-center gap-2"
                   style={{ gridTemplateColumns: "minmax(0,1fr) 32px" }}
                 >
                   <button
@@ -143,7 +143,7 @@ export default function FilterMultiSelect({
                     onClick={() => toggle(opt.value, "include")}
                     aria-pressed={on}
                     data-no-contrast-guard
-                    className="flex min-h-10 min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] leading-tight transition-colors"
+                    className="flex min-h-11 min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] leading-tight"
                     style={{
                       backgroundImage: on ? EMERALD_PAIR : undefined,
                       background: on ? undefined : "transparent",
@@ -153,13 +153,13 @@ export default function FilterMultiSelect({
                     }}
                   >
                     <span
-                      className="grid h-4 w-4 shrink-0 place-items-center rounded-[4px]"
+                      className="grid h-[18px] w-[18px] min-h-[18px] min-w-[18px] shrink-0 place-items-center rounded-[4px]"
                       style={{
                         border: `1px solid ${on ? "#FFFFFF" : off ? RED : "rgba(6,78,59,0.4)"}`,
                         background: on ? "#FFFFFF" : "transparent",
                       }}
                     >
-                      {on ? <Check className="h-3 w-3" style={{ color: "#064E3B" }} /> : null}
+                      {on ? <Check className="h-4 w-4" style={{ color: "#064E3B" }} /> : null}
                     </span>
                     {opt.media ? <span className="shrink-0 inline-flex items-center">{opt.media}</span> : null}
                     <span
@@ -175,13 +175,21 @@ export default function FilterMultiSelect({
                     aria-label={`Exclude ${opt.label}`}
                     aria-pressed={off}
                     data-no-contrast-guard
-                    className="grid h-8 w-8 shrink-0 place-items-center rounded-md transition-colors"
+                    className="grid h-8 w-8 min-h-8 min-w-8 shrink-0 place-items-center rounded-md border-0 bg-transparent p-0"
                     style={{
-                      border: `1px solid ${off ? RED : "rgba(185,28,28,0.35)"}`,
-                      background: off ? RED : "transparent",
+                      border: "0",
+                      background: "transparent",
                     }}
                   >
-                    <Minus className="h-3.5 w-3.5" style={{ color: off ? "#FFFFFF" : RED }} />
+                    <span
+                      className="grid h-[18px] w-[18px] place-items-center rounded-[4px]"
+                      style={{
+                        border: `1px solid ${off ? RED : "rgba(185,28,28,0.48)"}`,
+                        background: off ? RED : "transparent",
+                      }}
+                    >
+                      <Minus className="h-3 w-3" style={{ color: off ? "#FFFFFF" : RED }} />
+                    </span>
                   </button>
                 </div>
               );
@@ -192,3 +200,5 @@ export default function FilterMultiSelect({
     </div>
   );
 }
+
+export default memo(FilterMultiSelect);

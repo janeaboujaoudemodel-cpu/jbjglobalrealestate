@@ -58,7 +58,10 @@
   display: flex; align-items: center; gap: 14px;
   height: 100%;
   flex-shrink: 0;
+  margin-left: auto;
 }
+.jc-account-menu { display: flex; align-items: center; margin-left: 4px; }
+.jc-account-menu > button { width: 40px !important; height: 40px !important; }
 .jc-icon-btn {
   width: 30px !important; height: 30px !important; min-width: 30px !important; min-height: 30px !important; border-radius: 6px !important;
   display: inline-grid; place-items: center;
