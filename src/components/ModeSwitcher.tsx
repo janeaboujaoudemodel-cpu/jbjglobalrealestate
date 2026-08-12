@@ -159,9 +159,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
   const safeMode: UserMode = mode === 'owner' && !canDisplayOwnerMode ? 'investor' : mode;
   const currentConfig = MODE_CONFIG[safeMode];
-  const CurrentIcon = isUnselected ? User : currentConfig.icon;
-  const triggerLabel = isUnselected ? 'Select your mode' : currentConfig.label;
-  const triggerShortLabel = isUnselected ? '?' : currentConfig.shortLabel;
+  // Read-only accounts always read as their registered category — never
+  // "Select your mode", because they cannot select one.
+  const showUnselectedCta = isUnselected && canDisplayOwnerMode;
+  const CurrentIcon = showUnselectedCta ? User : currentConfig.icon;
+  const triggerLabel = showUnselectedCta ? 'Select your mode' : currentConfig.label;
+  const triggerShortLabel = showUnselectedCta ? '?' : currentConfig.shortLabel;
+
 
   // ─────────────────────────────────────────────────────────────────
   // Closed header trigger: emerald-ombre with white text/icons to match
@@ -246,6 +250,58 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           </button>
         </DropdownMenuTrigger>
 
+        {!canDisplayOwnerMode ? (
+          /* ── READ-ONLY MODE (LOCKED) ──────────────────────────────────
+             Regular accounts can never switch category from the UI: the
+             mode is bound to the registration category. Changing it needs
+             a verified request through the help desk. */
+          <DropdownMenuContent
+            align="end"
+            side={side}
+            data-mode-switcher-panel="true"
+            data-preserve-surface
+            className="mode-switcher-panel w-[320px] mr-3 rounded-2xl p-3 z-[10001]"
+            sideOffset={22}
+            collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
+            avoidCollisions
+            onCloseAutoFocus={(e) => e.preventDefault()}
+          >
+            <div className="px-3 pt-1 pb-3 mb-2 border-b border-[#064E3B]/15">
+              <span
+                className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-[0.18em] border border-[#064E3B]/25"
+                style={{ backgroundColor: 'rgba(6,78,59,0.06)' }}
+              >
+                MODE
+              </span>
+              <p className="text-[14px] font-bold mt-1.5 leading-tight">{currentConfig.label}</p>
+              <p className="text-[11px] mt-0.5 leading-snug opacity-70">{currentConfig.description}</p>
+            </div>
+            <div className="px-3 pb-2">
+              <p className="text-[11px] leading-snug opacity-80">
+                Your account category is fixed for privacy — a broker view and a client view
+                never show the same data. To move your account to another category, raise a
+                request with our help desk and attach proof of your new category.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+                navigate(`/ticket-hub?topic=mode-change&current=${safeMode}`);
+              }}
+              data-no-contrast-guard
+              data-emerald-action="true"
+              className="w-full h-10 rounded-xl text-[12px] font-bold flex items-center justify-center gap-2"
+              style={{
+                backgroundImage: 'var(--jj-emerald-ombre)',
+                color: '#FFFFFF',
+                WebkitTextFillColor: '#FFFFFF',
+              }}
+            >
+              Request a mode change
+            </button>
+          </DropdownMenuContent>
+        ) : (
         <DropdownMenuContent
           align="end"
           side={side}
@@ -271,6 +327,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               Choose how you want to use the platform
             </p>
           </div>
+
 
           {/* Tight premium stack — uniform row height */}
           <div className="flex flex-col gap-1.5">
@@ -340,6 +397,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             })}
           </div>
         </DropdownMenuContent>
+        )}
+
 
       </DropdownMenu>
     </div>

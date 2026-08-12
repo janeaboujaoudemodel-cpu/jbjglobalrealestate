@@ -934,14 +934,26 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
           {/* Mobile Menu Walkthrough Modal */}
                 {showWalkthrough && (
-                  <div className="fixed inset-0 z-[10070] flex items-center justify-center bg-[#1A1A1A]/70 p-4">
-                    <div 
+                  <div
+                    className="fixed inset-0 z-[10470] flex items-end sm:items-center justify-center p-4"
+                    onClick={() => setShowWalkthrough(false)}
+                  >
+                    {/* Dimmed, NOT blank — the live site stays visible behind the card. */}
+                    <div aria-hidden className="absolute inset-0 bg-[#01120b]/35" />
+                    <div
+                      role="dialog"
+                      aria-modal="true"
+                      aria-label="App and navigation guide"
+                      data-jj-guide-card
+                      onClick={(e) => e.stopPropagation()}
                       className="relative max-w-md w-full rounded-2xl p-6 border-2 border-[#064E3B]/30 shadow-2xl"
                       style={{ background: '#FFFFFF' }}
                     >
                       <button
                         onClick={() => setShowWalkthrough(false)}
-                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#EFE6D6] transition-colors"
+                        aria-label="Close guide"
+                        data-jj-guide-close
+                        className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full transition-colors"
                       >
                         <span className="text-[#1A1A1A]/70 text-xl">×</span>
                       </button>
@@ -952,31 +964,42 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         Welcome to JBJ Global Real Estate
                       </h3>
                       <p className="text-[#1A1A1A]/70 text-sm text-center mb-6 leading-relaxed">
-                        Navigate our platform with ease. Use the menu sections above to explore properties, services, guides, and more.
+                        Navigate our platform with ease. Tap any step below to jump straight there.
                       </p>
                       <div className="space-y-3 mb-6">
-                        <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">1</span>
-                          <span className="text-[#1A1A1A]/70"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
-                        </div>
-                        <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">2</span>
-                          <span className="text-[#1A1A1A]/70"><strong>Services</strong> – Explore our brokerage services</span>
-                        </div>
-                        <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">3</span>
-                          <span className="text-[#1A1A1A]/70"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
-                        </div>
+                        {[
+                          { n: 1, to: '/properties', title: 'Buy & Rent', text: 'Browse properties for sale or rent' },
+                          { n: 2, to: '/services', title: 'Services', text: 'Explore our brokerage services' },
+                          { n: 3, to: '/contact', title: 'Contact', text: 'Reach us via WhatsApp, call, or email' },
+                        ].map((row) => (
+                          <Link
+                            key={row.n}
+                            to={row.to}
+                            onClick={() => { setShowWalkthrough(false); setMobileMenuOpen(false); }}
+                            data-jj-guide-step
+                            className="flex items-start gap-3 text-sm rounded-xl px-2 py-2 -mx-2 transition-colors"
+                          >
+                            <span data-jj-guide-step-badge className="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0">{row.n}</span>
+                            <span className="text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">{row.title}</strong> – {row.text}</span>
+                          </Link>
+                        ))}
                       </div>
                       <button
-                        onClick={() => { setShowWalkthrough(false); localStorage.setItem('jj_mobile_walkthrough_done', 'true'); }}
-                        className="w-full py-3 bg-[#1A1A1A] text-white font-semibold rounded-xl hover:bg-[#1A1A1A] transition-colors"
+                        onClick={() => { localStorage.setItem('jj_mobile_walkthrough_done', 'true'); setShowWalkthrough(false); }}
+                        data-no-contrast-guard
+                        className="w-full py-3 font-semibold rounded-xl transition-[filter] hover:brightness-110"
+                        style={{
+                          backgroundImage: 'linear-gradient(180deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
+                          color: '#FFFFFF',
+                          WebkitTextFillColor: '#FFFFFF',
+                        }}
                       >
                         Got it!
                       </button>
                     </div>
                   </div>
                 )}
+
 
 
           {/* DESKTOP HEADER (lg+): Premium Mega Menu Navigation */}
