@@ -52,6 +52,10 @@ export default function LazyVisible({
       setVisible(true);
       return;
     }
+    // Safety net: IntersectionObserver can remain silent when this placeholder
+    // is first measured inside a transitioning/previously hidden ancestor.
+    // Never leave a real section as a permanent empty reserved panel.
+    const fallbackTimer = window.setTimeout(() => setVisible(true), 4000);
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -65,7 +69,10 @@ export default function LazyVisible({
       { rootMargin },
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      io.disconnect();
+    };
   }, [visible, rootMargin]);
 
   // LAYOUT NEUTRALITY (LOCKED): once mounted the children are rendered with NO

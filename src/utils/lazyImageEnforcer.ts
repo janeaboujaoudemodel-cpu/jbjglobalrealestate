@@ -20,8 +20,8 @@ const EAGER_ATTR = "data-eager";
 
 /** How long after boot we still promote in-viewport images. */
 const PROMOTION_WINDOW_MS = 6000;
-/** Hard cap so an image-heavy route can never flood the network. */
-const MAX_PROMOTIONS = 28;
+/** Cap only near-viewport prefetches; actually visible images are never capped. */
+const MAX_NEAR_VIEWPORT_PROMOTIONS = 28;
 
 let promotions = 0;
 let promotionDeadline = 0;
@@ -39,7 +39,6 @@ function tune(img: HTMLImageElement) {
 }
 
 function queuePromotionCheck(img: HTMLImageElement) {
-  if (promotions >= MAX_PROMOTIONS) return;
   if (Date.now() > promotionDeadline) return;
   pending.push(img);
   if (flushScheduled) return;
@@ -55,17 +54,19 @@ function flushPromotions() {
   if (!batch.length) return;
   const limit = window.innerHeight * 1.15;
   for (const img of batch) {
-    if (promotions >= MAX_PROMOTIONS) break;
     if (!img.isConnected) continue;
     if (img.getAttribute("loading") !== "lazy") continue;
     const rect = img.getBoundingClientRect();
     if (rect.width === 0 && rect.height === 0) continue;
     if (rect.bottom < -80 || rect.top > limit) continue;
+    const isVisibleNow = rect.top < window.innerHeight && rect.bottom > 0;
+    if (!isVisibleNow && promotions >= MAX_NEAR_VIEWPORT_PROMOTIONS) continue;
     img.setAttribute("loading", "eager");
-    if (rect.top < window.innerHeight) {
+    if (isVisibleNow) {
       img.setAttribute("fetchpriority", "high");
+    } else {
+      promotions += 1;
     }
-    promotions += 1;
   }
 }
 

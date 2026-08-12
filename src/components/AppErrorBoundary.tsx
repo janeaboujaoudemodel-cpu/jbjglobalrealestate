@@ -42,7 +42,8 @@ class AppErrorBoundary extends React.Component<
 
     // Non-chunk render errors: silently remount, but cap retries to avoid
     // an infinite setState loop (React error #185) when the child throws
-    // synchronously on every remount. Defer setState out of the commit phase.
+    // synchronously on every remount. The render path below performs one
+    // rate-limited hard recovery after the cap instead of staying blank.
     if (!looksLikeChunk) {
       if (this.state.retryCount < 3) {
         setTimeout(() => {
@@ -61,7 +62,7 @@ class AppErrorBoundary extends React.Component<
       }, 0);
       if (this.state.retryCount === 0) {
         try {
-          const k = "jbj_chunk_reload_at";
+          const k = "jbj_recovery_reload_at";
           const last = Number(sessionStorage.getItem(k) || 0);
           if (Date.now() - last > 60_000) {
             sessionStorage.setItem(k, String(Date.now()));
@@ -98,9 +99,10 @@ class AppErrorBoundary extends React.Component<
       // Never show a user-facing "Connection issue" card. Always render
       // nothing while we silently retry. If retries are exhausted, schedule
       // a one-shot hard reload (rate-limited) instead of surfacing a modal.
-      if (this.state.retryCount >= 6) {
+      const exhaustedRetries = this.state.retryCount >= 3;
+      if (exhaustedRetries) {
         try {
-          const k = "jbj_boundary_hard_reload_at";
+          const k = "jbj_recovery_reload_at";
           const last = Number(sessionStorage.getItem(k) || 0);
           if (Date.now() - last > 60_000) {
             sessionStorage.setItem(k, String(Date.now()));

@@ -37,6 +37,9 @@ export default function DeferredSection({
       setShown(true);
       return;
     }
+    // Hidden tabs and transformed ancestors can prevent an observer callback.
+    // Mount after a bounded delay rather than leaving a blank shell forever.
+    const fallbackTimer = window.setTimeout(() => setShown(true), 4000);
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
@@ -47,7 +50,10 @@ export default function DeferredSection({
       { rootMargin },
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      io.disconnect();
+    };
   }, [shown, rootMargin]);
 
   // Print / PDF export must never depend on scrolling.
