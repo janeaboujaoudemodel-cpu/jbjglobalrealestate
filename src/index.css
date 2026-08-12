@@ -32681,3 +32681,41 @@ html body [data-emerald-surface="true"] [data-jbj-monogram="dark"],
 html body [data-chrome="sidebar"] [data-jbj-monogram="dark"] {
   filter: brightness(0) invert(1) !important;
 }
+
+/* PASS 301 — CLEAN ANIMATED EMERALD CARD EDGE (replaces gold card borders).
+   A 1px emerald hairline at rest that runs a soft emerald shimmer on hover.
+   Never gold, in either theme. */
+@keyframes jj-card-edge-sweep {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+html body .jj-card-emerald-edge {
+  border-color: rgba(6, 78, 59, 0.34) !important;
+}
+html body .jj-card-emerald-edge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(90deg, #064E3B, #0a6b52, #042c1c, #064E3B);
+  background-size: 200% auto;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  pointer-events: none;
+  z-index: 3;
+}
+html body .jj-card-emerald-edge:hover::after,
+html body .jj-card-emerald-edge:focus-within::after {
+  opacity: 1;
+  animation: jj-card-edge-sweep 2.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .jj-card-emerald-edge:hover::after { animation: none; }
+}
+html[data-jbj-theme="moon"] body .jj-card-emerald-edge {
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
