@@ -138,7 +138,7 @@ html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body div#root
    Sitewide `data-surface` rules painted a pale card behind expanded
    sub-lists and behind inactive rows. Only the single active row may
    carry a fill. */
-html body div#root [data-jj-drawer-panel] :is(.jj-drawer-sub, .jj-drawer-quick, .jj-drawer-footer, nav):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
+html body div#root [data-jj-drawer-panel] :is(.jj-drawer-sub, .jj-drawer-quick, .jj-drawer-prefs, .jj-drawer-footer, nav):not(#jj318-a):not(#jj318-b):not(#jj318-c):not(#jj318-d):not(#jj318-e):not(#jj318-f):not(#jj318-g):not(#jj318-h):not(#jj318-i):not(#jj318-j):not(#jj318-k):not(#jj318-l) {
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
