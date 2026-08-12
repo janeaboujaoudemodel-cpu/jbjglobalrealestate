@@ -335,7 +335,7 @@ const CRMCalendar = () => {
         <CalendarSyncPanel onSynced={fetchEvents} />
         <CalendarWebsiteApiPanel />
 
-        <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-6">
+        <div className="grid grid-cols-1 gap-6">
 
           {/* Calendar grid */}
           <Card className="min-w-0 border-black/10 bg-white">
@@ -384,8 +384,8 @@ const CRMCalendar = () => {
                         {dayEvents.slice(0, 2).map((ev) => (
                           <div key={ev.id}
                                title={`${format(new Date(ev.start_at), "HH:mm")} ${ev.title}`}
-                               className="flex min-w-0 items-center gap-1 overflow-hidden whitespace-nowrap text-[10px] leading-4 px-1.5 py-0.5 rounded border bg-[#064E3B] text-white border-[#1A1A1A]">
-                            <span className="shrink-0 font-semibold tabular-nums">{format(new Date(ev.start_at), "HH:mm")}</span><span className="min-w-0 overflow-hidden text-ellipsis">{ev.title}</span>
+                               className="flex min-w-0 items-start gap-1 whitespace-normal break-words text-[10px] leading-3 px-1.5 py-1 rounded border bg-[#064E3B] text-white border-[#1A1A1A]">
+                            <span className="shrink-0 font-semibold tabular-nums">{format(new Date(ev.start_at), "HH:mm")}</span><span className="min-w-0">{ev.title}</span>
                           </div>
                         ))}
                         {dayEvents.length > 2 && (
