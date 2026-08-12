@@ -159,7 +159,15 @@ export default function DeveloperGapsQueue() {
           <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
           Refresh
         </button>
+
+        <Link
+          to="/owner/crm/jbj/owner-developer-media"
+          className="inline-flex h-10 items-center gap-2 rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground"
+        >
+          Developer media studio <ExternalLink className="h-3.5 w-3.5" />
+        </Link>
       </div>
+
 
       <DeveloperHubAlerts />
 

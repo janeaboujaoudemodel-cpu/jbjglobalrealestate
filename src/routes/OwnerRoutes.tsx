@@ -142,6 +142,7 @@ const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
 const CompanyProfileRequestsQueue = lazy(() => import("@/pages/owner/CompanyProfileRequestsQueue"));
 const AdvisoryDeskQueue = lazy(() => import("@/pages/owner/AdvisoryDeskQueue"));
 const DeveloperGapsQueue = lazy(() => import("@/pages/owner/DeveloperGapsQueue"));
+const DeveloperMediaStudio = lazy(() => import("@/pages/owner/DeveloperMediaStudio"));
 const MarketDataImportHub = lazy(() => import("@/pages/owner/MarketDataImportHub"));
 const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
 const RepDirectory = lazy(() => import("@/pages/developers-portal/reps/RepDirectory"));
@@ -243,6 +244,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-developer-profiles" element={<DeveloperEnrichmentQueue />} />
     <Route path="owner-missing-logos" element={<MissingLogosQueue />} />
     <Route path="owner-developer-gaps" element={<DeveloperGapsQueue />} />
+    <Route path="owner-developer-media" element={<DeveloperMediaStudio />} />
     <Route path="owner-market-import" element={<MarketDataImportHub />} />
 
     <Route path="owner-profile-requests" element={<CompanyProfileRequestsQueue />} />
