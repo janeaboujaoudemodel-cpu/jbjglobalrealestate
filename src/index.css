@@ -20781,7 +20781,7 @@ html body #root :where(
   [role="option"],
   [data-radix-select-trigger],
   [data-jj-badge]
-):not(.jj-header-icon-control):not([data-icon-only]) {
+):not(.jj-header-icon-control):not([data-icon-only]):not([data-active-filter-chip]) {
   overflow: hidden !important;
   white-space: normal !important;
   overflow-wrap: anywhere !important;
