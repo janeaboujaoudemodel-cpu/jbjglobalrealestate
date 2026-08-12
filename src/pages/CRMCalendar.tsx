@@ -29,6 +29,7 @@ import {
   format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay,
   isToday, addMonths, subMonths,
 } from "date-fns";
+import CalendarSyncPanel from "@/components/crm/CalendarSyncPanel";
 
 interface Reminder {
   /** minutes before start_at */
@@ -325,7 +326,7 @@ const CRMCalendar = () => {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
-        <CalendarSyncPanel onSynced={loadEvents} />
+        <CalendarSyncPanel onSynced={fetchEvents} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
