@@ -1,0 +1,49 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 326 — PHONE HEADER = FOOTER COLOUR (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   Owner: the phone footer champagne shimmer is the approved chrome colour.
+   The horizontal header must wear the EXACT same surface in BOTH states
+   (page top and scrolled), not a transparent band over the hero.
+   Champagne surface ⇒ black ink (brand contrast contract).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023.98px) {
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header,
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-surface="dark"],
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-surface="light"] {
+    background-color: #F4EDDF !important;
+    background-image: var(
+      --jj-champagne-long-h,
+      linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)
+    ) !important;
+    background-size: 220% 100% !important;
+    animation: jjChampagneShimmer 18s ease-in-out infinite !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(184, 149, 85, 0.34) !important;
+  }
+
+  /* Identity + hamburger read black on the champagne band, every state. */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-header-surface="dark"] a[href="/"] img {
+    filter: none !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header[data-surface][data-header-surface]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline,
+        a[href="/"] span, a[href="/"] div, a[href="/"] p, a[href="/"] svg) {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    text-shadow: none !important;
+    background: transparent !important;
+    background-image: none !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+    [data-chrome="header"] > header [data-tour-target="mobile-menu"] .jj-hamburger-bar {
+    background-color: #1A1A1A !important;
+    box-shadow: none !important;
+  }
+}

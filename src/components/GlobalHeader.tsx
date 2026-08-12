@@ -403,8 +403,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // the transparent dark identity over its photographic hero.
   // PASS 322 — the phone/tablet band is a real skin surface: champagne in Sun,
   // emerald in Moon. So on mobile the surface follows the skin, never the hero.
+  // PASS 326 — on phone/tablet in Sun the band wears the footer's champagne
+  // shimmer in BOTH states, so the surface (and therefore the ink) is light.
   const headerSurface: "dark" | "light" = shouldUseMobileHeader
-    ? (showSolidBackground ? "light" : "dark")
+    ? (headerThemeMode === "moon" ? (showSolidBackground ? "light" : "dark") : "light")
     : ((!shouldUseMobileHeader && isHomeHeroPath && isFullyTransparent) ? "dark" : "light");
 
   const useLightHeaderIdentity = headerSurface === "dark";
