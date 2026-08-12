@@ -76,33 +76,32 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
+    const bodyContent = `<tr><td class="content-pad" style="padding:24px 28px 10px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
 <tr>
-<td width="56" style="vertical-align:top;padding-right:14px;">
-${monogramBadge(52)}
+<td width="48" style="vertical-align:top;padding-right:12px;">
+${monogramBadge(44)}
 </td>
 <td style="vertical-align:middle;">
-<p style="margin:0;font-size:16px;color:#333;">Hello${full_name ? ` <strong>${full_name}</strong>` : ''},</p>
-<p style="margin:4px 0 0;font-size:13px;color:#888;">Your JBJ verification code is below</p>
+<p style="margin:0;font-size:16px;color:#17231F;">Hello${full_name ? ` <strong>${full_name}</strong>` : ''},</p>
+<p style="margin:4px 0 0;font-size:13px;color:#52635C;">Use this code to open your JBJ chat.</p>
 </td>
 </tr>
 </table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin-bottom:24px;">
-<tr><td style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;padding:28px;text-align:center;">
-<span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
+<tr><td style="background:#F7FAF8;border:1px solid #B8CCC3;border-radius:10px;padding:18px 10px;text-align:center;">
+<span style="font-size:30px;font-weight:700;letter-spacing:6px;color:#042C1C;font-family:'SF Mono',Monaco,Consolas,monospace;white-space:nowrap;">${otpCode}</span>
 </td></tr>
 </table>
-<p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.6;">This code expires in <strong>10 minutes</strong>.</p>
-<p style="margin:0 0 16px;color:#999;font-size:13px;line-height:1.6;">If you didn't request this code, please ignore this email.</p>
+<p style="margin:0 0 8px;color:#52635C;font-size:13px;line-height:1.6;">Expires in <strong>10 minutes</strong>. Do not share it.</p>
 ${arabicDivider()}
 </td></tr>
-<tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
+<tr><td class="content-pad" style="padding:0 28px 24px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:16px;color:#333;">مرحباً${full_name ? ` <strong>${full_name}</strong>` : ''}،</p>
 <p style="margin:4px 0 16px;font-size:13px;color:#888;">رمز التحقق الخاص بك من JBJ أدناه</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin-bottom:24px;">
-<tr><td style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;padding:28px;text-align:center;">
-<span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
+<tr><td style="background:#F7FAF8;border:1px solid #B8CCC3;border-radius:10px;padding:18px 10px;text-align:center;">
+<span style="font-size:30px;font-weight:700;letter-spacing:6px;color:#042C1C;font-family:'SF Mono',Monaco,Consolas,monospace;white-space:nowrap;">${otpCode}</span>
 </td></tr>
 </table>
 <p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.7;">ينتهي هذا الرمز خلال <strong>١٠ دقائق</strong>.</p>
@@ -127,6 +126,8 @@ ${sharedSections("verification")}</td></tr>`;
       if (!emailResponse.ok) {
         const errorData = await emailResponse.text();
         console.error("Resend API error:", errorData);
+        return new Response(JSON.stringify({ error: "We could not deliver the verification email. Please try again." }),
+          { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
       console.log(`OTP email sent successfully to ${email}`);
@@ -135,8 +136,8 @@ ${sharedSections("verification")}</td></tr>`;
         { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     } catch (emailError) {
       console.error("Error sending email:", emailError);
-      return new Response(JSON.stringify({ success: true, message: "Verification code sent. Check your inbox." }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "We could not deliver the verification email. Please try again." }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
   } catch (error) {

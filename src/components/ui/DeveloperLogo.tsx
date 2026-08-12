@@ -335,7 +335,7 @@ export function DeveloperLogo({
           // tightly-authored SVG/PNG canvases. Object-contain and centered
           // positioning are non-negotiable on every semantic size.
           "block h-full w-full max-h-full max-w-full object-contain object-center",
-          scale === "compact" ? "rounded-sm p-1" : "rounded-md p-1.5",
+          scale === "compact" ? "rounded-sm p-2" : "rounded-md p-2",
           "scale-100",
         )}
         style={{

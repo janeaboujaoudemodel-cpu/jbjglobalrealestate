@@ -12,6 +12,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { renderBrandedEmail, htmlEscape, SITE_URL } from "../_shared/booking-email.ts";
+import { OWNER_ALERT_EMAIL } from "../_shared/owner-alerts.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -25,7 +26,7 @@ const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") || "";
 
 const OWNER_USER_ID = "72ca2405-b4ca-48df-9b47-623ee260a3cc";
-const OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
+const OWNER_EMAIL = OWNER_ALERT_EMAIL;
 const FROM_ADDRESS = "JBJ GLOBAL REAL ESTATE <bookings@jbj.ae>";
 // Reply-To on every visitor email = contact@jbj.ae per policy.
 const REPLY_TO = "contact@jbj.ae";

@@ -24,6 +24,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3";
 import { sendViaResend } from "../_shared/resendClient.ts";
 import { wrapEmailHtml } from "../_shared/email-shell.ts";
+import { OWNER_ALERT_RECIPIENTS } from "../_shared/owner-alerts.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,7 +32,6 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const OWNER_ALERT_RECIPIENTS = ["janeaboujaoudenails@gmail.com", "infoo.jane@gmail.com"];
 const FROM = "JBJ Advisory Desk <jane@jbj.ae>";
 const BACKEND_QUEUE = "https://www.jbj.ae/owner/crm/jbj/owner-advisory-desk";
 

@@ -18,7 +18,7 @@ import {
   Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
   Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox, LifeBuoy, Headset,
 } from "lucide-react";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-transparent.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -1048,13 +1048,13 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
   };
 
   const renderNavContent = () => (
-    <div data-sidebar-emerald className="flex flex-col h-full w-full min-w-0">
+      <div data-sidebar-emerald className="flex flex-col h-full w-full min-w-0 bg-primary text-primary-foreground">
       {/* ━━━ LOGO HEADER — compact and aligned with the horizontal utility bar ━━━ */}
-      <div className="h-[56px] shrink-0 flex flex-row items-center px-2 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-2 before:bottom-2 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)] after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
+      <div className="h-[56px] shrink-0 flex flex-row items-center px-2 bg-primary text-primary-foreground border-b border-primary-foreground/20">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-0.5">
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain shrink-0"  loading="lazy" decoding="async" />
+          <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain shrink-0 brightness-0 invert" loading="lazy" decoding="async" />
           <div className="min-w-0 mt-1">
-            <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap" style={{ color: "#0A0A0A", WebkitTextFillColor: "#0A0A0A" }}>JBJ GLOBAL REAL ESTATE</span>
+            <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap text-primary-foreground">JBJ GLOBAL REAL ESTATE</span>
           </div>
         </Link>
       </div>
@@ -1411,11 +1411,11 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-primary text-primary-foreground border-r border-primary-foreground/20">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
-          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
+          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-primary border-b border-primary-foreground/20">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain"  loading="lazy" decoding="async" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-[46px] h-[46px] object-contain brightness-0 invert" loading="lazy" decoding="async" />
             </Link>
           </div>
 

@@ -222,8 +222,7 @@ serve(async (req: Request) => {
       const subj = `Breakfast booked — ${invite.brokerage_name} · ${dateStr} ${timeStr}`;
       const resendResult = await sendViaResend({
         from: "JBJ Breakfast <contact@jbj.ae>",
-        to: "janeaboujaoudenails@gmail.com",
-        cc: "infoo.jane@gmail.com",
+        to: "infoo.jane@gmail.com",
         reply_to: body.email,
         subject: subj,
         html,
@@ -237,7 +236,7 @@ serve(async (req: Request) => {
         portalKind: "brokerage",
         entityType: "brokerage",
         entityId: invite.brokerage_id ?? null,
-        email: "janeaboujaoudenails@gmail.com",
+        email: "infoo.jane@gmail.com",
         templateSlug: "breakfast_booking_confirm",
         senderEmail: "contact@jbj.ae",
         replyTo: body.email,
@@ -251,7 +250,7 @@ serve(async (req: Request) => {
           portalKind: "brokerage",
           templateSlug: "breakfast_booking_confirm",
           workflowInstanceId: invite.id,
-          recipientId: "janeaboujaoudenails@gmail.com",
+          recipientId: "infoo.jane@gmail.com",
           intendedSendId,
         }),
       });
