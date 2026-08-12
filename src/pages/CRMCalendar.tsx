@@ -30,6 +30,7 @@ import {
   isToday, addMonths, subMonths,
 } from "date-fns";
 import CalendarSyncPanel from "@/components/crm/CalendarSyncPanel";
+import CalendarWebsiteApiPanel from "@/components/crm/CalendarWebsiteApiPanel";
 
 interface Reminder {
   /** minutes before start_at */
@@ -332,6 +333,7 @@ const CRMCalendar = () => {
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
         <CalendarSyncPanel onSynced={fetchEvents} />
+        <CalendarWebsiteApiPanel />
 
         <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-6">
 
