@@ -114,11 +114,11 @@ const DeveloperPartnersMarquee = () => {
 
       <div className="w-full">
         <div className="relative z-10 min-h-[64px] py-4" data-partners-heading data-no-contrast-guard>
-          <ContentTrack>
-            <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase jj-partners-heading-ink">
+          <div className="w-full px-6">
+            <p className="w-full text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase jj-partners-heading-ink">
               {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
             </p>
-          </ContentTrack>
+          </div>
         </div>
 
         <div
