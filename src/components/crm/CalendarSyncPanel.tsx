@@ -79,7 +79,24 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
             </div>
           </section>
         ))}
+        {!loading && (
+          <section className="rounded-md border border-border/60 p-4 space-y-2">
+            <div className="flex items-center gap-2"><Mail className="h-4 w-4" /><h3 className="font-semibold text-sm">Mailboxes</h3></div>
+            <p className="text-xs text-muted-foreground">Which inbox is connected, and which is still missing.</p>
+            {EXPECTED_MAILBOXES.map((address) => {
+              const box = mailboxes.find((m) => m.email_address.toLowerCase() === address);
+              return <div key={address} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/50 p-2.5">
+                <span className="min-w-0 break-words text-sm font-medium">{address}</span>
+                <span className={`text-xs font-medium ${box ? "text-[color:var(--emerald-1)]" : "text-destructive"}`}>{box ? `Connected · ${box.provider}${box.last_synced_at ? ` · last sync ${new Date(box.last_synced_at).toLocaleString()}` : " · never synced"}` : "Not connected yet"}</span>
+              </div>;
+            })}
+            {mailboxes.filter((m) => !EXPECTED_MAILBOXES.includes(m.email_address.toLowerCase())).map((m) => (
+              <div key={m.email_address} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/50 p-2.5"><span className="min-w-0 break-words text-sm font-medium">{m.email_address}</span><span className="text-xs font-medium text-[color:var(--emerald-1)]">Connected · {m.provider}</span></div>
+            ))}
+          </section>
+        )}
       </CardContent>
+
     </Card>
   );
 }
