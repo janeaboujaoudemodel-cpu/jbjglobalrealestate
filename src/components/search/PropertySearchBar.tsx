@@ -244,15 +244,15 @@ export default function PropertySearchBar({
        Row 1: purposes(6) keyword(rest) [tiers(3)] currency(3) sqft(3)[+CTA(3)]
      → purposes sits over "UAE — all areas", keyword ends on the Status edge,
        tiers sits over Sort, currency over More, sq ft / sq m over "Show N". */
-  const GRID_TOTAL = showSort ? 27 : 24;
+  const GRID_TOTAL = showSort ? 30 : 27;
   const GRID_KEY = String(GRID_TOTAL);
   const UTILITY_COLS = onConsultation ? 6 : 3;
-  const KEYWORD_COLS = GRID_TOTAL - 6 - 3 - UTILITY_COLS;
+  const KEYWORD_COLS = GRID_TOTAL - 9 - 3 - UTILITY_COLS;
   const KEYWORD_SPAN = `jj-sspan-${KEYWORD_COLS}`;
   const ROW1_UTILITY_SPAN = `jj-sspan-${UTILITY_COLS}`;
   /* PASS 298 — row 2 opens with three 2-col segments so they sit exactly under
      Buy (location), Rent (developers) and Sell (tiers). */
-  const AREA_SPAN = "jj-sspan-2";
+  const AREA_SPAN = "jj-sspan-3";
   const ROW2_UTILITY_SPAN = "jj-sspan-6";
   const dividerColor = dark ? "rgba(255,255,255,0.45)" : "rgba(184,149,85,0.62)";
 
@@ -343,7 +343,7 @@ export default function PropertySearchBar({
       {/* Row 1 — equal-height purpose, keyword, and detached consultation controls */}
       <div className={`contents lg:grid lg:grid-cols-[minmax(14.5rem,auto)_minmax(0,1fr)] lg:items-stretch lg:gap-2 lg:mb-2`} data-search-grid={GRID_KEY}>
         <div
-          className="order-1 lg:order-none col-span-2 flex h-10 lg:h-16 min-w-0 lg:col-span-1 jj-sspan-6 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
+          className="order-1 lg:order-none col-span-2 flex h-10 lg:h-16 min-w-0 lg:col-span-1 jj-sspan-9 items-center rounded-lg overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]"
 
           data-surface={dark ? "dark" : "light"}
           data-search-segment
@@ -563,7 +563,7 @@ export default function PropertySearchBar({
           </Seg>
         </div>
 
-        <div className="order-4 lg:order-none col-span-1 jj-sspan-2 min-w-0">
+        <div className="order-4 lg:order-none col-span-1 jj-sspan-3 min-w-0">
           <Seg
             label={developersLabel}
             active={!!(f.developersInclude.length || f.developersExclude.length)}
@@ -579,7 +579,7 @@ export default function PropertySearchBar({
           </Seg>
         </div>
 
-        <div className="order-4 lg:order-none col-span-1 jj-sspan-2 min-w-0">
+        <div className="order-4 lg:order-none col-span-1 jj-sspan-3 min-w-0">
           <Seg
             label={tiersLabel}
             active={!!(f.tiersInclude.length || f.tiersExclude.length)}
