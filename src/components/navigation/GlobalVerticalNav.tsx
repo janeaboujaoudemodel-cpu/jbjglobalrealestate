@@ -1050,8 +1050,8 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
       <div data-sidebar-emerald className="flex flex-col h-full w-full min-w-0 bg-primary text-primary-foreground">
       {/* ━━━ LOGO HEADER — compact and aligned with the horizontal utility bar ━━━ */}
-      <div className="h-[56px] shrink-0 flex flex-row items-center px-2 bg-transparent text-primary-foreground">
-        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-0.5">
+      <div data-sidebar-brand-row className="h-[56px] shrink-0 flex flex-row items-stretch bg-transparent text-primary-foreground">
+        <Link to="/" className="jj-rail-brand-link flex w-full items-center gap-2 px-3 transition-colors">
           <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-[58px] h-[58px] object-contain shrink-0 brightness-0 invert" loading="eager" data-eager decoding="async" />
           <div className="min-w-0 mt-1">
             <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap text-primary-foreground">JBJ GLOBAL REAL ESTATE</span>
@@ -1397,7 +1397,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-8 flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground border-r border-primary-foreground/20">
+        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[42px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative text-primary-foreground">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
           <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
             <Link to="/">
@@ -1486,7 +1486,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
 
             {/* Bottom pinned */}
             <div className="flex flex-col items-center gap-1 pt-1 pb-1 w-full">
-          <div className="h-px w-6 mb-1 bg-gradient-to-r from-transparent via-primary-foreground/70 to-transparent" aria-hidden="true" />
+          
 
 
               <Tooltip>
@@ -1588,7 +1588,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[264px] flex-shrink-0 h-full relative overscroll-contain border-r border-primary-foreground/20">
+        <div className="jj-rail-emerald-edge hidden sm:flex w-[264px] flex-shrink-0 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
