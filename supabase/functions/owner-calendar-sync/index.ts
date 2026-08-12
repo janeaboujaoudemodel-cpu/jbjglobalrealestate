@@ -122,16 +122,20 @@ Deno.serve(async (req) => {
     if (action === "status") {
       const { data: states } = await db.from("owner_calendar_sync_state").select("*").eq("owner_id", ownerId);
       const result = [];
+      const slotOf = (accountKey: string) => `Connection ${Number(accountKey.replace("account_", "")) + 1}`;
       for (const account of linked) {
+        const base = { provider: account.provider, account_key: account.accountKey, slot: slotOf(account.accountKey) };
         try {
           const info = await discover(account);
-          result.push({ provider: account.provider, account_key: account.accountKey, connected: true, account: info.label, calendars: info.calendars.map((calendar: any) => ({ ...calendar, state: (states ?? []).find((s: any) => s.provider === account.provider && s.account_key === account.accountKey && s.calendar_id === calendar.id) ?? null })) });
+          result.push({ ...base, connected: true, account: info.label, email: info.email, calendars: info.calendars.map((calendar: any) => ({ ...calendar, state: (states ?? []).find((s: any) => s.provider === account.provider && s.account_key === account.accountKey && s.calendar_id === calendar.id) ?? null })) });
         } catch (e) {
-          result.push({ provider: account.provider, account_key: account.accountKey, connected: false, account: null, calendars: [], error: String((e as Error).message).slice(0, 300) });
+          result.push({ ...base, connected: false, account: null, email: null, calendars: [], error: String((e as Error).message).slice(0, 300) });
         }
       }
-      return json({ ok: true, accounts: result });
+      const { data: mailboxes } = await db.from("inbox_accounts").select("email_address, provider, status, last_synced_at, last_sync_status").order("email_address");
+      return json({ ok: true, accounts: result, mailboxes: mailboxes ?? [] });
     }
+
     if (action === "toggle") {
       const provider = payload.provider as Provider;
       const accountKey = String(payload.account_key ?? "");
