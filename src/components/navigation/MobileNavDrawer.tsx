@@ -27,6 +27,8 @@ import { useGatedToolAccess } from "@/hooks/useGatedToolAccess";
 import { supabase } from "@/integrations/supabase/client";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
+
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import { ThemeModeToggle } from "@/components/ThemeModeToggle";
 import jbjMonogram from "@/assets/jbj-monogram-cropped.png";
