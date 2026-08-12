@@ -79,6 +79,9 @@ html[data-jbj-theme="moon"] body #root,
 html[data-jbj-theme="moon"] body #root > div,
 html[data-jbj-theme="moon"] body #root main,
 html[data-jbj-theme="moon"] body #root [data-home-page],
+html[data-jbj-theme="moon"] body #root .jj-page-shell,
+html[data-jbj-theme="moon"] body #root .jj-main-shell,
+html[data-jbj-theme="moon"] body #root .jj-page-shell > div[class*="min-h-screen"],
 html[data-jbj-theme="moon"] body #root [data-page-shell] {
   background-color: #000000 !important;
 }
