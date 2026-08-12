@@ -1107,7 +1107,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
       <div data-sidebar-emerald className="flex flex-col h-full w-full min-w-0 bg-primary text-primary-foreground">
       {/* ━━━ LOGO HEADER — compact and aligned with the horizontal utility bar ━━━ */}
-      <div data-sidebar-brand-row className="h-[56px] shrink-0 flex flex-row items-stretch bg-transparent text-primary-foreground">
+      <div data-sidebar-brand-row className="jj-rail-brand-band h-[56px] w-full shrink-0 flex flex-row items-stretch bg-transparent text-primary-foreground">
         <Link to="/" className="jj-rail-brand-link flex w-full items-center gap-2 px-3 transition-colors">
           <img src={jbjMonogramLightBg} alt="JBJ" data-jbj-monogram="dark" className="w-[58px] h-[58px] object-contain shrink-0 brightness-0 invert" loading="eager" data-eager decoding="async" />
           <div className="min-w-0 mt-1">
