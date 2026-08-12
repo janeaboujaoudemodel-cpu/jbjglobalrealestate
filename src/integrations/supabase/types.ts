@@ -29964,37 +29964,124 @@ export type Database = {
       }
       owner_calendar_events: {
         Row: {
+          all_day: boolean
+          attendees: Json
           created_at: string | null
           description: string | null
           end_at: string
+          external_calendar_id: string | null
+          external_id: string | null
+          external_updated_at: string | null
           id: string
+          is_cancelled: boolean
+          last_synced_at: string | null
           location: string | null
           metadata: Json | null
           owner_id: string
+          provider: string
+          source_ref: string | null
           start_at: string
+          sync_direction: string
           title: string
+          updated_at: string
         }
         Insert: {
+          all_day?: boolean
+          attendees?: Json
           created_at?: string | null
           description?: string | null
           end_at: string
+          external_calendar_id?: string | null
+          external_id?: string | null
+          external_updated_at?: string | null
           id?: string
+          is_cancelled?: boolean
+          last_synced_at?: string | null
           location?: string | null
           metadata?: Json | null
           owner_id: string
+          provider?: string
+          source_ref?: string | null
           start_at: string
+          sync_direction?: string
           title: string
+          updated_at?: string
         }
         Update: {
+          all_day?: boolean
+          attendees?: Json
           created_at?: string | null
           description?: string | null
           end_at?: string
+          external_calendar_id?: string | null
+          external_id?: string | null
+          external_updated_at?: string | null
           id?: string
+          is_cancelled?: boolean
+          last_synced_at?: string | null
           location?: string | null
           metadata?: Json | null
           owner_id?: string
+          provider?: string
+          source_ref?: string | null
           start_at?: string
+          sync_direction?: string
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      owner_calendar_sync_state: {
+        Row: {
+          calendar_id: string | null
+          created_at: string
+          events_pulled: number
+          events_pushed: number
+          id: string
+          is_enabled: boolean
+          last_error: string | null
+          last_pull_at: string | null
+          last_push_at: string | null
+          owner_id: string
+          provider: string
+          pull_enabled: boolean
+          push_enabled: boolean
+          sync_token: string | null
+          updated_at: string
+        }
+        Insert: {
+          calendar_id?: string | null
+          created_at?: string
+          events_pulled?: number
+          events_pushed?: number
+          id?: string
+          is_enabled?: boolean
+          last_error?: string | null
+          last_pull_at?: string | null
+          last_push_at?: string | null
+          owner_id: string
+          provider: string
+          pull_enabled?: boolean
+          push_enabled?: boolean
+          sync_token?: string | null
+          updated_at?: string
+        }
+        Update: {
+          calendar_id?: string | null
+          created_at?: string
+          events_pulled?: number
+          events_pushed?: number
+          id?: string
+          is_enabled?: boolean
+          last_error?: string | null
+          last_pull_at?: string | null
+          last_push_at?: string | null
+          owner_id?: string
+          provider?: string
+          pull_enabled?: boolean
+          push_enabled?: boolean
+          sync_token?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -30905,6 +30992,119 @@ export type Database = {
           owner_id?: string
           storage_bucket?: string
           storage_path?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      owner_note_alert_log: {
+        Row: {
+          channels: string[]
+          created_at: string
+          error: string | null
+          fired_for: string
+          id: string
+          note_id: string
+          owner_id: string
+          status: string
+        }
+        Insert: {
+          channels?: string[]
+          created_at?: string
+          error?: string | null
+          fired_for: string
+          id?: string
+          note_id: string
+          owner_id: string
+          status?: string
+        }
+        Update: {
+          channels?: string[]
+          created_at?: string
+          error?: string | null
+          fired_for?: string
+          id?: string
+          note_id?: string
+          owner_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_note_alert_log_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "owner_notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      owner_notes: {
+        Row: {
+          alert_channels: string[]
+          alert_count: number
+          color: string
+          content: string
+          created_at: string
+          id: string
+          is_archived: boolean
+          is_done: boolean
+          is_pinned: boolean
+          last_alerted_at: string | null
+          lead_minutes: number
+          next_alert_at: string | null
+          owner_id: string
+          reminder_at: string | null
+          reminder_timezone: string
+          repeat_rule: string
+          repeat_until: string | null
+          snoozed_until: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          alert_channels?: string[]
+          alert_count?: number
+          color?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_archived?: boolean
+          is_done?: boolean
+          is_pinned?: boolean
+          last_alerted_at?: string | null
+          lead_minutes?: number
+          next_alert_at?: string | null
+          owner_id: string
+          reminder_at?: string | null
+          reminder_timezone?: string
+          repeat_rule?: string
+          repeat_until?: string | null
+          snoozed_until?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          alert_channels?: string[]
+          alert_count?: number
+          color?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_archived?: boolean
+          is_done?: boolean
+          is_pinned?: boolean
+          last_alerted_at?: string | null
+          lead_minutes?: number
+          next_alert_at?: string | null
+          owner_id?: string
+          reminder_at?: string | null
+          reminder_timezone?: string
+          repeat_rule?: string
+          repeat_until?: string | null
+          snoozed_until?: string | null
+          tags?: string[]
+          title?: string
           updated_at?: string
         }
         Relationships: []
