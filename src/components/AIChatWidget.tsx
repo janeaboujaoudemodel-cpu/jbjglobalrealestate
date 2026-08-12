@@ -958,12 +958,12 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     // Navigation shortcuts - open page directly instead of chat
     const navigationMap: Partial<Record<ShortcutType, string>> = {
       'owner_command': '/owner',
-      'crm_dashboard': '/owner/crm',
+      'crm_dashboard': '/owner/crm/jbj/home',
       'admin_panel': '/owner/admin',
       'listing_admin': '/owner/listing-admin',
-      'inbox': '/owner/crm?tab=inbox',
+      'inbox': '/owner/crm/jbj/salesinbox',
       'cv_center': '/hr-dashboard?tab=cv-center',
-      'email_client': '/owner/crm?tab=email',
+      'email_client': '/owner/crm/jbj/salesinbox',
       'team_chat': '/owner/team-chat',
       'automations': '/automations',
       'customer_happiness': '/ticket-hub',

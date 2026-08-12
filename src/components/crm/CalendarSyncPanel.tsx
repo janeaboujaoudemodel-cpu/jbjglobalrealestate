@@ -77,7 +77,8 @@ export default function CalendarSyncPanel({ onSynced }: { onSynced?: () => void 
       if (failed.length) {
         toast.error(`${LABEL[failed[0].provider as ProviderId]} sync issue: ${String(failed[0].error).slice(0, 120)}`);
       } else {
-        toast.success(`Calendar synced · ${pulled} pulled in, ${pushed} pushed out`);
+        const candidates = results.reduce((n, r) => n + (r.push_candidates ?? 0), 0);
+        toast.success(`Calendar synced · ${pulled} pulled in, ${pushed} pushed out${pushed === 0 && candidates === 0 ? " · no local events awaiting sync" : ""}`);
       }
       await loadStatus();
       onSynced?.();

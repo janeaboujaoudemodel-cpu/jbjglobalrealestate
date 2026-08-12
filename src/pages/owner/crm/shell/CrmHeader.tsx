@@ -98,9 +98,9 @@ export default function CrmHeader() {
           </button>
           <CrmNotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
         </div>
-        <button className="jc-icon-btn" type="button" aria-label="Calendar">
+        <Link to="/owner/crm/jbj/calendar" className="jc-icon-btn" aria-label="Calendar">
           <CalendarDays size={21} />
-        </button>
+        </Link>
         <button className="jc-icon-btn" type="button" aria-label="Marketplace">
           <Store size={21} />
         </button>
