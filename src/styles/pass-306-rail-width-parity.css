@@ -31,8 +31,7 @@
 }
 
 /* ═══════════ 2. Brand band — full width, soft bottom ═══════════ */
-html[data-jbj-theme] body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row].jj-rail-brand-band,
-html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row].jj-rail-brand-band {
+html[data-jbj-theme] body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] div[data-sidebar-brand-row].jj-rail-brand-band:not([hidden]) {
   width: 100% !important;
   padding: 0 !important;
   background: rgba(255, 255, 255, 0.10) !important;
@@ -45,7 +44,8 @@ html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"] [data-sidebar-eme
   border-bottom: 0 !important;
   box-shadow: none !important;
 }
-html[data-jbj-theme="sun"] body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-brand-row].jj-rail-brand-band {
+html[data-jbj-theme="sun"] body div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] div[data-sidebar-brand-row].jj-rail-brand-band:not([hidden]) {
+
   background: rgba(6, 78, 59, 0.06) !important;
   background-image: linear-gradient(
     180deg,
