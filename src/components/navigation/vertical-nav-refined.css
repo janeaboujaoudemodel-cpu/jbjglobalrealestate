@@ -54,10 +54,24 @@ html body #root [data-sidebar-emerald] nav [class*="ml-5"] > * + * { margin-top:
 /* Shared Resend-like navigation rhythm for Sun and Moon. Visual colors remain
    theme-owned; only spacing and icon motion are common. */
 html body #root [data-sidebar-emerald] nav {
-  padding-inline: 10px !important;
+  padding-inline: 14px !important;
 }
 html body #root [data-sidebar-emerald] nav :is(a, button) {
   min-height: 40px;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body #root [data-sidebar-emerald] [data-jjds-sidebar-icon] {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body #root [data-sidebar-emerald] :is(a, button) :is(svg, path) {
+  color: #ffffff !important;
+  stroke: currentColor !important;
 }
 html body #root [data-sidebar-emerald] nav :is(a, button):hover svg {
   animation: jj-sidebar-icon-hover 420ms ease both;
@@ -66,6 +80,25 @@ html body #root [data-sidebar-emerald] nav :is(a, button):hover svg {
   0% { transform: translateY(0) scale(1); }
   45% { transform: translateY(-2px) scale(1.08); }
   100% { transform: translateY(0) scale(1); }
+}
+
+/* Collapsed rail: icon-only, no tile boxes; active state is a restrained white
+   wash and the rail/footer dividers use the same white chrome hairline. */
+html body #root .jj-side-tile,
+html body #root button.jj-side-tile,
+html body #root a.jj-side-tile {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+html body #root .jj-side-tile.is-active {
+  background: rgba(255,255,255,.14) !important;
+  box-shadow: none !important;
+}
+html body #root .jj-side-tile:hover svg {
+  animation: jj-sidebar-icon-hover 420ms ease both;
 }
 @media (prefers-reduced-motion: reduce) {
   html body #root [data-sidebar-emerald] nav :is(a, button):hover svg { animation: none; }
