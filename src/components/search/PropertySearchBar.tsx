@@ -877,6 +877,8 @@ export default function PropertySearchBar({
               }}
               data-no-contrast-guard
                data-active-filter-chip
+               data-surface="emerald"
+               data-photo-copy-lock
                className="allow-white inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11.5px] font-semibold !text-white [&_*]:!text-white"
               style={{
                 backgroundImage: EMERALD_PAIR,
