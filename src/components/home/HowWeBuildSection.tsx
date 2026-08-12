@@ -17,7 +17,7 @@ const LAYERS: Layer[] = [
 ];
 
 const EMERALD = "#064E3B";
-const GOLD = "#C9A84C";
+const GOLD = "#FFFFFF";
 
 export default function HowWeBuildSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -139,13 +139,13 @@ export default function HowWeBuildSection() {
 
         ctx.lineWidth = isActive ? 1.8 : 1;
         ctx.strokeStyle = isActive
-          ? `rgba(201,168,76,${0.55 + pulse * 0.45})`
+          ? `rgba(255,255,255,${0.55 + pulse * 0.45})`
           : "rgba(255,255,255,0.28)";
 
         if (isActive) {
           ctx.shadowColor = GOLD;
           ctx.shadowBlur = 10;
-          ctx.fillStyle = `rgba(201,168,76,${0.05 + pulse * 0.07})`;
+          ctx.fillStyle = `rgba(255,255,255,${0.05 + pulse * 0.07})`;
         } else {
           ctx.shadowBlur = 0;
           ctx.fillStyle = "rgba(255,255,255,0.02)";
@@ -180,8 +180,8 @@ export default function HowWeBuildSection() {
         const prog = ((t * 0.5 + b / beams) % 1) * (LAYERS.length * floorH);
         const p = project(0, prog, 0, cx, cy, scale, rot);
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 26);
-        grad.addColorStop(0, "rgba(201,168,76,0.9)");
-        grad.addColorStop(1, "rgba(201,168,76,0)");
+        grad.addColorStop(0, "rgba(255,255,255,0.92)");
+        grad.addColorStop(1, "rgba(255,255,255,0)");
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(p.x, p.y, 26, 0, Math.PI * 2);
@@ -191,7 +191,7 @@ export default function HowWeBuildSection() {
       // core mast
       const base = project(0, 0, 0, cx, cy, scale, rot);
       const tip = project(0, LAYERS.length * floorH + 1.1, 0, cx, cy, scale, rot);
-      ctx.strokeStyle = "rgba(201,168,76,0.35)";
+      ctx.strokeStyle = "rgba(255,255,255,0.32)";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(base.x, base.y);
@@ -211,7 +211,7 @@ export default function HowWeBuildSection() {
     <section
       aria-labelledby="how-we-build-heading"
       data-surface="emerald"
-      className="relative overflow-hidden rounded-[28px] border border-[#C9A84C]/25"
+      className="relative overflow-hidden rounded-[28px] border border-white/20"
       style={{
         background: `linear-gradient(160deg, ${EMERALD} 0%, #042c1c 55%, #000000 100%)`,
       }}
@@ -249,7 +249,7 @@ export default function HowWeBuildSection() {
                     aria-current={isActive}
                     className="group flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition-colors"
                     style={{
-                      background: isActive ? "rgba(201,168,76,0.10)" : "transparent",
+                      background: isActive ? "rgba(255,255,255,0.10)" : "transparent",
                       border: `1px solid ${isActive ? `${GOLD}55` : "transparent"}`,
                     }}
                   >
@@ -287,7 +287,7 @@ export default function HowWeBuildSection() {
             className="pointer-events-none absolute inset-0 opacity-[0.35]"
             style={{
               background:
-                "radial-gradient(circle at 60% 35%, rgba(201,168,76,0.18), transparent 60%)",
+                "radial-gradient(circle at 60% 35%, rgba(255,255,255,0.14), transparent 60%)",
             }}
           />
           <canvas

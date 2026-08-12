@@ -6,6 +6,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getHighResImageUrl } from "@/lib/imageUtils";
+import { developerPriorityWeight, compareDevelopersByPriority } from "@/utils/developerTier";
 import { supabase } from "@/integrations/supabase/client";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getVerifiedDeveloperFlagship, isUsableDeveloperCover } from "@/utils/developerFlagshipMedia";
@@ -66,11 +67,14 @@ export default function RecommendedDevelopers({
       // Boost well-known developers with descriptions
       if (dev.description) score += 3;
 
+      // PASS 298 — top developers always outrank unknown ones.
+      score += Math.max(0, 60 - developerPriorityWeight(dev.slug || "", dev.name || "", dev.rank));
+
       return { developer: dev, score };
     });
 
     return scored
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => b.score - a.score || compareDevelopersByPriority(a.developer, b.developer))
       .slice(0, 4)
       .map((s) => s.developer);
   }, [developers, currentDeveloperSlug, browsingContext]);

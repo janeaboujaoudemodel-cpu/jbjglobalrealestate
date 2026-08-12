@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { findLibraryAmenityPhoto } from "@/lib/amenityPhotoLibrary";
 import {
   Dumbbell, Waves, TreePine, Car, Shield, Wifi, Utensils, Baby, Dog, Sun,
   Wind, Building, Users, Heart, Coffee, ShoppingBag, Sparkles, Gamepad2,
@@ -41,16 +42,19 @@ const getAmenityIcon = (amenity: string) => {
 };
 
 const findRealPhoto = (amenity: string, amenityImages?: Record<string, string> | null): string | null => {
-  if (!amenityImages) return null;
-  if (amenityImages[amenity]) return amenityImages[amenity];
-  const lower = amenity.toLowerCase();
-  for (const [key, url] of Object.entries(amenityImages)) {
-    if (key.toLowerCase() === lower) return url;
+  if (amenityImages) {
+    if (amenityImages[amenity]) return amenityImages[amenity];
+    const lower = amenity.toLowerCase();
+    for (const [key, url] of Object.entries(amenityImages)) {
+      if (key.toLowerCase() === lower) return url;
+    }
+    for (const [key, url] of Object.entries(amenityImages)) {
+      if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) return url;
+    }
   }
-  for (const [key, url] of Object.entries(amenityImages)) {
-    if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) return url;
-  }
-  return null;
+  // PASS 298 — fall back to the shared in-brand amenity library so cards are
+  // never rendered empty when the owner has not uploaded a photo yet.
+  return findLibraryAmenityPhoto(amenity);
 };
 
 const paginateAmenities = (amenities: string[], pageSize: number, amenityImages?: Record<string, string> | null) => {
@@ -82,9 +86,24 @@ const paginateAmenities = (amenities: string[], pageSize: number, amenityImages?
 
 export default function AmenitiesWithPhotos({ amenities, amenityImages, className = "", pageSize = 15 }: AmenitiesWithPhotosProps) {
   const [page, setPage] = useState(0);
+
+  /* Photo-bearing amenities always sit at the top; everything without imagery
+     is collapsed into a compact "what's included" tick list underneath so the
+     grid never shows empty cards. */
+  const { withPhotos, withoutPhotos } = useMemo(() => {
+    const list = amenities || [];
+    const withPhotos: string[] = [];
+    const withoutPhotos: string[] = [];
+    list.forEach((amenity) => {
+      if (findRealPhoto(amenity, amenityImages)) withPhotos.push(amenity);
+      else withoutPhotos.push(amenity);
+    });
+    return { withPhotos, withoutPhotos };
+  }, [amenities, amenityImages]);
+
   const pages = useMemo(
-    () => paginateAmenities(amenities || [], pageSize, amenityImages),
-    [amenities, pageSize, amenityImages],
+    () => paginateAmenities(withPhotos, pageSize, amenityImages),
+    [withPhotos, pageSize, amenityImages],
   );
   const totalPages = Math.max(1, pages.length);
   const currentPage = Math.min(page, totalPages - 1);
@@ -196,6 +215,28 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
           >
             <ChevronRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </button>
+        </div>
+      )}
+
+      {withoutPhotos.length > 0 && (
+        <div className="mt-6 rounded-xl border border-[#064E3B]/15 bg-[#FDFBF7] p-4">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#064E3B]">
+            Also included
+          </p>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2">
+            {withoutPhotos.map((amenity) => (
+              <li key={amenity} className="flex items-start gap-2">
+                <span
+                  aria-hidden
+                  className="mt-[2px] inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full"
+                  style={{ background: "#064E3B" }}
+                >
+                  <Check className="h-2.5 w-2.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                </span>
+                <span className="text-[13px] leading-snug text-[#1A1A1A]">{amenity}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

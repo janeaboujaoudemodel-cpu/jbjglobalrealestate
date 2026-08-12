@@ -31,3 +31,42 @@ export const TIER_LABELS: Record<DeveloperTier, string> = {
   established: "ESTABLISHED",
   other: "PARTNER"
 };
+
+/**
+ * PASS 298 — TOP DEVELOPERS ALWAYS ON TOP.
+ * Lower weight = higher priority. Used by every developer list so an unknown
+ * or newly imported developer can never outrank Emaar, Omniyat, Sobha, Nakheel…
+ */
+export const TIER_WEIGHT: Record<DeveloperTier, number> = {
+  elite: 0,
+  premium: 1,
+  "top-tier": 2,
+  established: 3,
+  other: 4,
+};
+
+export function developerPriorityWeight(
+  slug: string,
+  name: string = "",
+  rank?: number | null,
+): number {
+  const s = (slug || "").toLowerCase();
+  const n = (name || "").toLowerCase();
+  const eliteIdx = ELITE_PRIORITY_ORDER.findIndex((d) => s.includes(d) || n.includes(d));
+  if (eliteIdx >= 0) return eliteIdx; // 0..8 — hand-curated marquee order
+  return 10 + TIER_WEIGHT[getDeveloperTier(slug, name, rank)] * 10;
+}
+
+/** Canonical comparator: curated elite order → tier → rank → name. */
+export function compareDevelopersByPriority(
+  a: { slug?: string | null; name?: string | null; rank?: number | null },
+  b: { slug?: string | null; name?: string | null; rank?: number | null },
+): number {
+  const aw = developerPriorityWeight(a.slug || "", a.name || "", a.rank);
+  const bw = developerPriorityWeight(b.slug || "", b.name || "", b.rank);
+  if (aw !== bw) return aw - bw;
+  const ar = a.rank && a.rank > 0 ? a.rank : 999;
+  const br = b.rank && b.rank > 0 ? b.rank : 999;
+  if (ar !== br) return ar - br;
+  return (a.name || "").localeCompare(b.name || "");
+}

@@ -179,6 +179,12 @@ export interface PropertySearch {
   furnishing: "any" | "furnished" | "unfurnished";
   developer: string | null;
   developerTier: string | null;
+  /** PASS 298 — multi-select developer include/exclude (search bar row 2). */
+  developersInclude: string[];
+  developersExclude: string[];
+  /** PASS 298 — multi-select developer tiers. */
+  tiersInclude: string[];
+  tiersExclude: string[];
   labels: string[];
   sort: SortOption;
   view: ViewMode;
@@ -205,6 +211,10 @@ export const EMPTY_SEARCH: PropertySearch = {
   areasExclude: [],
   furnishing: "any",
   developer: null,
+  developersInclude: [],
+  developersExclude: [],
+  tiersInclude: [],
+  tiersExclude: [],
   labels: [],
   sort: "recommended",
   developerTier: null,
@@ -319,6 +329,10 @@ export function searchToParams(f: PropertySearch): URLSearchParams {
 
   if (f.furnishing !== "any") p.set("furnishing", f.furnishing);
   if (f.developer) p.set("developer", f.developer);
+  if (f.developersInclude.length) p.set("developers", f.developersInclude.join(","));
+  if (f.developersExclude.length) p.set("developers_ex", f.developersExclude.join(","));
+  if (f.tiersInclude.length) p.set("tiers", f.tiersInclude.join(","));
+  if (f.tiersExclude.length) p.set("tiers_ex", f.tiersExclude.join(","));
   if (f.labels.length) p.set("labels", f.labels.join(","));
   if (f.developerTier) p.set("tier", f.developerTier);
   if (f.sort !== "recommended") p.set("sort", f.sort);
@@ -370,6 +384,10 @@ export function paramsToSearch(p: URLSearchParams): PropertySearch {
     furnishing:
       furnishRaw === "furnished" || furnishRaw === "unfurnished" ? furnishRaw : "any",
     developer: p.get("developer"),
+    developersInclude: (p.get("developers") || "").split(",").filter(Boolean),
+    developersExclude: (p.get("developers_ex") || "").split(",").filter(Boolean),
+    tiersInclude: (p.get("tiers") || "").split(",").filter(Boolean),
+    tiersExclude: (p.get("tiers_ex") || "").split(",").filter(Boolean),
     labels: list(p.get("labels")),
     sort: (SORT_OPTIONS.some((o) => o.slug === p.get("sort")) ? p.get("sort") : "recommended") as SortOption,
     view: (VIEW_MODES as readonly string[]).includes(p.get("view") ?? "")
@@ -387,6 +405,10 @@ export function countExtraFilters(f: PropertySearch): number {
   if (f.payment !== "any") n += 1;
   if (f.furnishing !== "any") n += 1;
   if (f.developer) n += 1;
+  n += f.developersInclude.length ? 1 : 0;
+  n += f.developersExclude.length ? 1 : 0;
+  n += f.tiersInclude.length ? 1 : 0;
+  n += f.tiersExclude.length ? 1 : 0;
   if (f.labels.length) n += 1;
   if (f.baths.length) n += 1;
   if (f.areasExclude.length) n += 1;
