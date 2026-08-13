@@ -409,6 +409,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     }));
     
     setMessages(restoredMessages);
+    setIsExistingUser(true);
+    setThreadsOpen(false);
     setStep('chatting');
   };
 
