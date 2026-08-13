@@ -1,0 +1,43 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 331 — HERO-CLEAR TOP CHROME (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   On every page that opens on a dark / photographic hero (marked with
+   `data-hero-dark`), the desktop top chrome — utility bar + global filter
+   bar — is fully transparent at page top so the first screen reads bigger
+   and cleaner. Ink is pure white, per the emerald/dark surface contract.
+   The moment the visitor scrolls past the hero band the chrome snaps back
+   to the selected skin (Sun champagne / Moon emerald) untouched.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar].jj-utility-shell,
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-filter-bar] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Dark hero ⇒ pure white text and icons, in every state. */
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar].jj-utility-shell,
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar].jj-utility-shell
+    :is(span, small, strong, em, label, a, button, svg, path, circle, rect, line, polyline),
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-filter-bar],
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-filter-bar]
+    :is(span, small, strong, em, label, a, button, svg, path, circle, rect, line, polyline) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  /* Soft legibility scrim only — never a painted band. */
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar].jj-utility-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+}
