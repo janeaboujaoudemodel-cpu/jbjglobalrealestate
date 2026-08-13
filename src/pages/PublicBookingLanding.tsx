@@ -101,6 +101,8 @@ export default function PublicBookingLanding() {
 
   const [step, setStep] = useState<Step>("pick");
   const [selectedDate, setSelectedDate] = useState<string>(() => toDateKey(new Date()));
+  const [calView, setCalView] = useState<"day" | "month" | "year">("day");
+  const [viewAnchor, setViewAnchor] = useState<Date>(() => new Date());
   const [slots, setSlots] = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
