@@ -187,8 +187,10 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
       data-allow-dark-cta
       data-jj-utility-pill
       data-header-control-family="segmented"
+      data-surface={champagne ? "champagne" : undefined}
       className={cn(
-        "allow-white jj-header-premium-control inline-flex items-center h-10 rounded-full overflow-hidden relative",
+        champagne ? "jj-header-premium-control" : "allow-white jj-header-premium-control",
+        "inline-flex items-center h-10 rounded-full overflow-hidden relative",
         !champagne && "shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
         className,
       )}
@@ -208,8 +210,12 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
               data-jjds-skin={skin}
               data-on-dark={skin !== "champagne" ? "" : undefined}
               data-allow-dark-cta
+              data-surface={champagne ? "champagne" : undefined}
               className={cn(
-                "allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200",
+                // On champagne the button is a LIGHT surface: no allow-white opt-in,
+                // so the global white-ink guards never claim it.
+                champagne ? "jj-sqtoggle" : "allow-white jj-sqtoggle",
+                "relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200",
                 isActive && !champagne && "jj-emerald-metallic",
               )}
               style={
