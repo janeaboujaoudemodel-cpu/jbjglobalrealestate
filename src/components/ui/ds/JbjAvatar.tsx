@@ -105,6 +105,7 @@ export function NotificationBadge({ count, floating = false, className, ...props
   return (
     <span
       data-jbj-notification-badge
+      data-jbj-badge-skin={skin}
       data-surface={champagne ? "champagne" : "emerald"}
       data-emerald={champagne ? undefined : "true"}
       data-emerald-ok
