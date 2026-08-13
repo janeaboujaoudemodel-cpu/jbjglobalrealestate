@@ -93,3 +93,100 @@ html body[data-jj-chrome-mode="phone"] div#root .jj-footer-shell {
     min-height: 40px;
   }
 }
+
+/* ── 4. Hero-clear rail is viewport-agnostic ─────────────────────────
+   PASS 335 originally guarded this contract behind min-width: 1024px.
+   Once PASS 341 moved the desktop rail onto every device, narrower preview
+   canvases could therefore fall back to the Sun champagne rail over a hero.
+   A collapsed rail over a hero is always unpainted, in both skins and at
+   every width; only the white monogram, icons and hairline remain. */
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  #root [data-chrome="sidebar"],
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  #root [data-chrome="sidebar"] :is([data-sidebar-emerald], .jj-rail-emerald-edge, .jj-rail-brand-band, nav, .jj-rail-stack) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  #root [data-chrome="sidebar"] :is(.jj-rail-emerald-edge, .jj-rail-brand-band)::before,
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  #root [data-chrome="sidebar"] :is(.jj-rail-emerald-edge, .jj-rail-brand-band)::after {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  #root [data-chrome="sidebar"] .jj-rail-emerald-edge {
+  border-right: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  #root [data-chrome="sidebar"] :is(a, button, span, svg, path, .lucide) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  #root [data-chrome="sidebar"] img[alt="JBJ"] {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55)) !important;
+}
+
+/* Clear the fixed footer mask as well. It intentionally paints the selected
+   skin after scroll, but must not survive over the opening hero. */
+html[data-jbj-theme][data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  div#root div[data-chrome="sidebar"][data-chrome]
+  [data-sidebar-emerald][data-sidebar-emerald]
+  :is(.jj-rail-footer-block, .jj-rail-footer-block--rail, .jj-rail-footer-inner),
+html[data-jbj-theme][data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  div#root div[data-chrome="sidebar"][data-chrome]
+  [data-sidebar-emerald][data-sidebar-emerald]
+  :is(.jj-rail-footer-block, .jj-rail-footer-block--rail)::before,
+html[data-jbj-theme][data-jbj-theme]:not([data-jbj-backend-lock="1"])
+  body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  div#root div[data-chrome="sidebar"][data-chrome]
+  [data-sidebar-emerald][data-sidebar-emerald]
+  :is(.jj-rail-footer-block, .jj-rail-footer-block--rail)::after {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Let the opening hero image physically continue behind the transparent 59px
+   rail. Without this, transparency correctly reveals the page shell's pearl
+   background, which looks like a beige/white rail even though the rail itself
+   is unpainted. This selector intentionally comes after the legacy full-bleed
+   resets and applies only while the collapsed clear state is active. */
+html[data-jbj-theme][data-jbj-theme]
+  body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed.jj-vertical-nav-collapsed
+  div#root main.jj-main-shell.jj-main-shell:not(.jj-main-shell--standalone)
+  section[data-hero-dark][data-hero-dark] {
+  margin-left: -59px !important;
+  width: calc(100% + 59px) !important;
+  max-width: none !important;
+  padding-left: 59px !important;
+}
+
+html[data-jbj-theme][data-jbj-theme]
+  body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed.jj-vertical-nav-collapsed
+  div#root main.jj-main-shell.jj-main-shell:not(.jj-main-shell--standalone) {
+  overflow-x: visible !important;
+}
