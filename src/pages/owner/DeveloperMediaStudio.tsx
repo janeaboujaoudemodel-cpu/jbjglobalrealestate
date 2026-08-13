@@ -101,6 +101,9 @@ export default function DeveloperMediaStudio() {
   const [view, setView] = useState<"list" | "grid">("grid");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [archiving, setArchiving] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
+
 
 
   const { data: rows = [], isLoading, refetch, isFetching } = useQuery({
