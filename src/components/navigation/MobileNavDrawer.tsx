@@ -322,6 +322,9 @@ export default function MobileNavDrawer({
                     type="button"
                     data-no-contrast-guard
                     className="inline-flex h-9 min-w-0 items-center justify-start gap-2 bg-transparent px-0"
+                    /* Global button rules centre this content, which pushed EN
+                       out of line with AED — pin it left inline. */
+                    style={{ justifyContent: "flex-start" }}
                     aria-label="Select language"
                   >
                     <img
@@ -360,6 +363,7 @@ export default function MobileNavDrawer({
                     type="button"
                     data-no-contrast-guard
                     className="inline-flex h-9 min-w-0 items-center justify-start gap-2 bg-transparent px-0"
+                    style={{ justifyContent: "flex-start" }}
                     aria-label="Select currency"
                   >
                     {/* Empty flag-width spacer so AED starts on the exact same
