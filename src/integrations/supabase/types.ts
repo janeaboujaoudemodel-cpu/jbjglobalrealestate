@@ -45821,6 +45821,14 @@ export type Database = {
         | { Args: never; Returns: boolean }
         | { Args: { _uid: string }; Returns: boolean }
       is_admin_or_owner_caller: { Args: never; Returns: boolean }
+      is_approved_developer_rep: {
+        Args: {
+          _developer_email: string
+          _developer_name: string
+          _user_id: string
+        }
+        Returns: boolean
+      }
       is_authorized_staff: { Args: never; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
       is_crm_owner: { Args: { check_user_id: string }; Returns: boolean }
