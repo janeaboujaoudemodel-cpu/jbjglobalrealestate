@@ -23,7 +23,7 @@
 }
 
 /* ═══════════ 1. PUBLIC SITE — champagne fills in Sun ═══════════ */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root
   :is(
     [data-surface="emerald"],
     [data-emerald-surface="true"],
@@ -47,7 +47,7 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
 }
 
 /* Black ink on every champagne fill, in every state. */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root
   :is(
     [data-surface="emerald"],
     [data-emerald-surface="true"],
@@ -65,7 +65,7 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
   color: var(--jj-sun-ink) !important;
   -webkit-text-fill-color: var(--jj-sun-ink) !important;
 }
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root
   :is([data-surface="emerald"], .jj-emerald-action, .jj-emerald-ombre, .jj-emerald-metallic, .jj-emerald-solid, .jj-emerald-fill)
   :is(svg, svg *, path):not([fill="none"]) {
   stroke: var(--jj-sun-ink) !important;
