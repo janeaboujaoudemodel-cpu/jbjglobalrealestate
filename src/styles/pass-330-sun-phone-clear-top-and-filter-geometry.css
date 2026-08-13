@@ -50,7 +50,7 @@
 
   /* ── 2. sq ft / sq m — TRUE OPTICAL CENTRE IN THE FIELD ─────────────── */
   html body div#root div[data-property-search-bar]
-    [data-search-utility-controls] > button {
+    [data-search-utility-controls] > button[aria-pressed] {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -63,7 +63,7 @@
     text-align: center !important;
   }
   html body div#root div[data-property-search-bar]
-    [data-search-utility-controls] > button > span:not([aria-hidden="true"]) {
+    [data-search-utility-controls] > button[aria-pressed] > span:not([aria-hidden="true"]) {
     display: block !important;
     line-height: 1 !important;
   }

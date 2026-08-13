@@ -74,7 +74,7 @@
 
   /* Every unit / segment button centres its label on both axes. */
   html body[data-home-hero-state] div#root
-    div[data-property-search-bar] [data-search-utility-controls] > button {
+    div[data-property-search-bar] [data-search-utility-controls] > button[aria-pressed] {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
