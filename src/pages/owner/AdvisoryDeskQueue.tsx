@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import "@/styles/advisory-desk-queue.css";
 import { toast } from "sonner";
 import {
   Mail, Phone, User, Loader2, Send, CheckCircle2, Clock, MessageCircle, RefreshCw, Search,
@@ -123,6 +124,7 @@ export default function AdvisoryDeskQueue() {
                  role=button div keeps the block layout intact. */
               <div
                 key={t.id}
+                data-advisory-ticket
                 role="button"
                 tabIndex={0}
                 onClick={() => setParams({ request: t.id })}
@@ -137,7 +139,7 @@ export default function AdvisoryDeskQueue() {
                   active ? "jj-surface-emerald text-white border-transparent" : "border-border bg-card hover:border-primary/40"
                 }`}
               >
-                <div className="flex items-center justify-between gap-3">
+                <div data-advisory-row="head" className="flex items-center justify-between gap-3">
                   <span className={`text-sm font-semibold ${active ? "text-white" : "text-foreground"}`}>
                     {t.visitor_name || t.visitor_email || "Visitor"}
                   </span>
@@ -150,9 +152,10 @@ export default function AdvisoryDeskQueue() {
                   {t.visitor_email} {t.visitor_phone ? `· ${t.visitor_phone}` : ""}
                 </p>
                 <p className={`mt-2 text-sm ${active ? "text-white" : "text-foreground/90"}`}>{t.query}</p>
-                <div className="mt-2 flex flex-wrap items-center gap-2">
+                <div data-advisory-row="flags" className="mt-2 flex flex-wrap items-center gap-2">
                   <span
                     data-no-contrast-guard
+                    data-advisory-pill
                     className="jj-nowrap inline-flex items-center gap-1 rounded-full px-2 py-[3px] text-[10px] font-semibold uppercase tracking-[0.1em]"
                     style={
                       t.visitor_kind === "guest"
