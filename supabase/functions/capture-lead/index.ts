@@ -334,7 +334,8 @@ serve(async (req: Request): Promise<Response> => {
     const allowedSources = [
       'website', 'homepage', 'market_report', 'property-evaluation',
       'contact_form', 'newsletter', 'ai_chat', 'inquiry', 'comparison',
-      'broker_signup', 'project_inquiry', 'schedule_call',
+      'broker_signup', 'project_inquiry', 'schedule_call', 'viewing_request',
+      'meeting_booking',
       // Partner service sources
       'partner_mortgage', 'partner_legal', 'partner_company_setup', 'partner_visa'
     ];
@@ -433,23 +434,30 @@ serve(async (req: Request): Promise<Response> => {
     // 2. Check if lead already exists in crm_leads
     const { data: existingLead } = await supabase
       .from('crm_leads')
-      .select('id')
+      .select('id, full_name, phone_e164')
       .eq('email_lower', normalizedEmail)
       .maybeSingle();
 
     let resolvedLeadId: string | null = existingLead?.id ?? null;
 
     if (existingLead) {
+      // Repeat lead: attribution must follow the LATEST submission, otherwise every
+      // future enquiry keeps the source of the very first form the person used.
       const { error: updateError } = await supabase
         .from('crm_leads')
         .update({
-          full_name: sanitizedFullName || existingLead.id,
-          phone_e164: sanitizedPhone,
+          // Never write a UUID into the name, and never downgrade a real name we
+          // already hold just because this form did not ask for one.
+          full_name: sanitizedFullName || existingLead.full_name || normalizedEmail.split('@')[0],
+          phone_e164: sanitizedPhone || existingLead.phone_e164 || null,
           nationality: sanitizedNationality,
           preferred_language: sanitizedLanguage,
           current_location_country: locationCountry,
           current_location_city: locationCity,
           age_range: sanitizedAgeRange,
+          source: sanitizedSource,
+          source_page: sanitizedPageSource,
+          lead_source_type: 'website',
           pipeline_stage: 'qualified',
           priority: sanitizedPhone ? 'high' : 'normal',
           notes: sanitizedMessage || undefined,
@@ -482,6 +490,7 @@ serve(async (req: Request): Promise<Response> => {
           current_location_city: locationCity,
           age_range: sanitizedAgeRange,
           source: sanitizedSource,
+          source_page: sanitizedPageSource,
           owner_type: 'company_assigned',
           lead_source_type: 'website',
           contact_type: contactType,
