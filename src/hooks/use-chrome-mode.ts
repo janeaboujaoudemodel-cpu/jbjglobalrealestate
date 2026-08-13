@@ -15,17 +15,17 @@ import * as React from "react";
  */
 export type ChromeMode = "desktop" | "phone";
 
-const DESKTOP_MIN_WIDTH = 1024;
-
-const computeMode = (): ChromeMode => {
-  if (typeof window === "undefined") return "desktop";
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  const isLandscape = w >= h;
-  if (isLandscape && w >= DESKTOP_MIN_WIDTH) return "desktop";
-  // Portrait: phone logic, no matter how wide the tablet is.
-  return "phone";
-};
+/**
+ * PASS 341 — ONE CHROME ON EVERY DEVICE (LOCKED)
+ *
+ * Phone, iPad (portrait and landscape), laptop and desktop all run the SAME
+ * navigation chrome: the emerald/champagne vertical rail pinned left plus the
+ * horizontal utility bar. There is no separate phone shell any more, so the
+ * structure, logic and skin (Sun / Moon, collapsed / expanded) are identical
+ * everywhere. Below 1024px the expanded rail overlays the page instead of
+ * squeezing it — the permanently reserved column stays the 59px rail width.
+ */
+const computeMode = (): ChromeMode => "desktop";
 
 export function useChromeMode(): ChromeMode {
   const [mode, setMode] = React.useState<ChromeMode>(computeMode);

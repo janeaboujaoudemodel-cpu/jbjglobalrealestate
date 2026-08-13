@@ -1,0 +1,95 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 341 — ONE RAIL, ONE LOGIC, EVERY DEVICE (LOCKED)
+
+   Phone, iPad portrait/landscape, laptop and desktop all run the SAME
+   chrome: the 59px vertical rail pinned left + the 56px horizontal
+   utility bar, in the same Sun / Moon skins and the same collapsed /
+   expanded logic. The old phone-only shell (floating hamburger +
+   drawer) is retired, so nothing here is device-specific except one
+   thing: below 1024px the EXPANDED rail overlays the page instead of
+   squeezing the content column — the reserved column always stays the
+   collapsed 59px rail width so the page never reflows on open/close.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Shell column reserved on every viewport (not just ≥1024px) ── */
+@media (max-width: 1023.98px) {
+  html body,
+  html body.jj-vertical-nav-collapsed,
+  html body.jj-vertical-nav-active {
+    --jj-shell-sidebar-w: 59px;
+    --jj-shell-main-w: calc(100vw - 59px);
+    --jj-content-gutter-l: 0px;
+    --jj-content-gutter-r: 0px;
+    --jj-content-gutter: 0px;
+  }
+
+  html body #root main.jj-main-shell:not(.jj-main-shell--standalone),
+  html body #root .jj-footer-shell,
+  html body #root .jj-utility-shell {
+    left: var(--jj-shell-sidebar-w) !important;
+    margin-left: 0 !important;
+    width: var(--jj-shell-main-w) !important;
+    max-width: var(--jj-shell-main-w) !important;
+    box-sizing: border-box !important;
+  }
+  html body #root main.jj-main-shell:not(.jj-main-shell--standalone),
+  html body #root .jj-footer-shell {
+    position: relative !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  html body #root main.jj-main-shell.jj-main-shell--standalone {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Collapsed rail = the same 59px everywhere, both skins. */
+  html body.jj-vertical-nav-collapsed #root [data-chrome="sidebar"] [data-sidebar-emerald] {
+    width: 59px !important;
+    min-width: 59px !important;
+  }
+  html body.jj-vertical-nav-collapsed #root .jj-side-tile {
+    width: 44px !important;
+    height: 34px !important;
+    border-radius: 9px !important;
+  }
+
+  /* Expanded rail overlays the page: content keeps its 59px offset. */
+  html body #root [data-chrome="sidebar"] {
+    z-index: 9999 !important;
+  }
+  html body.jj-vertical-nav-active #root [data-chrome="sidebar"] {
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.42);
+  }
+
+  /* Utility bar breathes in the narrower column. */
+  html body #root .jj-utility-shell {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  html body #root .jj-utility-shell > div {
+    gap: 4px !important;
+  }
+}
+
+/* ── 2. Phone-chrome escape hatches are retired ── */
+html body[data-jj-chrome-mode="phone"],
+html body[data-jj-chrome-mode="phone"].jj-vertical-nav-active,
+html body[data-jj-chrome-mode="phone"].jj-vertical-nav-collapsed {
+  --jj-shell-sidebar-w: 59px;
+  --jj-shell-main-w: calc(100vw - 59px);
+}
+html body[data-jj-chrome-mode="phone"] div#root main.jj-main-shell:not(.jj-main-shell--standalone),
+html body[data-jj-chrome-mode="phone"] div#root .jj-footer-shell {
+  left: var(--jj-shell-sidebar-w) !important;
+  width: var(--jj-shell-main-w) !important;
+  max-width: var(--jj-shell-main-w) !important;
+}
+
+/* ── 3. Touch comfort — rows stay at least 40px on small screens ── */
+@media (max-width: 1023.98px) and (pointer: coarse) {
+  html body #root [data-chrome="sidebar"] nav :is(a, button) {
+    min-height: 40px;
+  }
+}

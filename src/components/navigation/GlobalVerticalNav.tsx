@@ -556,15 +556,21 @@ export default function GlobalVerticalNav() {
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [, setMobileOpen] = useState(false);
+  /* PASS 341 — the rail is the ONLY nav on every device. On compact
+     viewports (phone, iPad portrait) it always starts collapsed to the 59px
+     rail so the page keeps its reading width; expanding overlays the page. */
   const [collapsed, setCollapsed] = useState(() => {
+    const compact = typeof window !== 'undefined' && window.innerWidth < 1024;
     try {
       const stored = localStorage.getItem('jj_nav_collapsed');
+      if (compact) return true;
       if (stored === '0') return false;
       if (stored === '1') return true;
       return !!session;
-    } catch { return !!session; }
+    } catch { return compact || !!session; }
   });
   const [pinnedOpen, setPinnedOpen] = useState(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return false;
     try { return localStorage.getItem('jj_nav_collapsed') === '0'; }
     catch { return false; }
   });
@@ -686,6 +692,12 @@ export default function GlobalVerticalNav() {
   }, [pinnedOpen]);
 
   const handleSidebarEnter = useCallback(() => {
+    /* Hover-to-expand is a pointer affordance only — on touch devices the
+       rail expands from an explicit tap on the expand control. */
+    const hoverCapable = typeof window === 'undefined'
+      ? true
+      : window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!hoverCapable) return;
     if (!collapsed || pinnedOpen) return;
     setHoverExpanded(true);
     setCollapsed(false);
@@ -697,6 +709,22 @@ export default function GlobalVerticalNav() {
     setCollapsed(true);
     setActiveMegaMenu(null);
   }, [hoverExpanded, pinnedOpen]);
+
+  /* PASS 341 — compact viewports: tapping the page collapses the overlay rail. */
+  useEffect(() => {
+    if (collapsed) return;
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth >= 1024) return;
+    const onDown = (e: PointerEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('[data-chrome="sidebar"]')) return;
+      setHoverExpanded(false);
+      setCollapsed(true);
+      setActiveMegaMenu(null);
+    };
+    document.addEventListener('pointerdown', onDown, true);
+    return () => document.removeEventListener('pointerdown', onDown, true);
+  }, [collapsed]);
 
   const handleSignOut = useCallback(() => {
     supabase.auth.signOut();
@@ -1475,12 +1503,14 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
       {/* Desktop sidebar — slides in after reveal */}
       <div
         className="h-full"
+        data-rail-state={collapsed ? 'collapsed' : 'expanded'}
+        data-rail-pinned={pinnedOpen ? '1' : '0'}
         style={{ contain: 'layout paint style' }}
         onMouseEnter={handleSidebarEnter}
         onMouseLeave={handleSidebarLeave}
       >
       {collapsed ? (
-        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge hidden sm:flex w-[59px] flex-shrink-0 flex-col h-full items-center overflow-hidden overflow-x-visible relative text-primary-foreground">
+        <div data-sidebar-emerald onWheel={passSidebarBoundaryWheelToPage} className="jj-rail-emerald-edge flex w-[59px] flex-shrink-0 flex-col h-full items-center overflow-hidden overflow-x-visible relative text-primary-foreground">
           {/* Logo header — matches horizontal utility bar gradient exactly */}
           <div data-sidebar-brand-row="rail" className="jj-rail-brand-band h-[56px] w-full shrink-0 flex items-center justify-center bg-transparent">
             <Link to="/" className="jj-rail-brand-link flex w-full items-center justify-center">
@@ -1653,7 +1683,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="jj-rail-emerald-edge hidden sm:flex w-[264px] flex-shrink-0 h-full relative overscroll-contain">
+        <div className="jj-rail-emerald-edge flex w-[264px] flex-shrink-0 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
