@@ -67,8 +67,9 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root
 }
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root#root#root#root#root
   :is([data-surface="emerald"], .jj-emerald-action, .jj-emerald-ombre, .jj-emerald-metallic, .jj-emerald-solid, .jj-emerald-fill)
-  :is(svg, svg *, path):not([fill="none"]) {
+  :is(svg, svg *, path):not([stroke="none"]) {
   stroke: var(--jj-sun-ink) !important;
+  opacity: 1 !important;
 }
 
 /* ═══════════ 2. DROPDOWNS / POPOVERS — champagne head, black ink ═══════════ */
