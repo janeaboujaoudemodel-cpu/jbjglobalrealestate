@@ -1,0 +1,96 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 335 — CLEAR VERTICAL RAIL + THEME HOVER SKIN (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   1. Desktop / iPad-landscape, page top over a hero (body[data-jj-hero-chrome
+      ="clear"]): the vertical sidebar is fully transparent in BOTH Sun and
+      Moon, its content pure white, separated from the page by one very thin
+      white hairline on its right edge (and one under the horizontal header).
+      On scroll the rail snaps back to the selected skin, untouched.
+   2. Header/utility controls hover skin:
+        Moon  → emerald ombré fill + pure white ink
+        Sun   → champagne (vertical-sidebar Sun colour) + black ink
+      Hover motion (lift + soft glow) is restored for every control,
+      including the sq ft / sq m segmented pair and the AED currency chip.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1024px) {
+  /* ── 1. Transparent rail at page top ───────────────────────────────── */
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald],
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald] [data-sidebar-brand-row],
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald] .jj-rail-brand-band,
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald] .jj-rail-footer-block {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* One very thin white hairline instead of the emerald/champagne edge. */
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald] {
+    border-right: 1px solid rgba(255, 255, 255, 0.26) !important;
+  }
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald] [data-sidebar-brand-row] {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+  }
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar].jj-utility-shell {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+  }
+
+  /* Pure white content, no plates behind rows/icons while clear. */
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald],
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald]
+    :is(span, small, strong, em, label, a, button, p, h1, h2, h3, h4, svg, path, circle, rect, line, polyline) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald] :is(a, button) {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  /* Hover inside the clear rail: a whisper of white only. */
+  html body[data-jj-hero-chrome="clear"] div#root [data-sidebar-emerald] :is(a, button):hover {
+    background: rgba(255, 255, 255, 0.14) !important;
+  }
+}
+
+/* ── 2. Hover skin for the top-chrome controls ─────────────────────────── */
+html body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]),
+html body div#root [data-jj-utility-bar] [data-search-utility-controls] > button {
+  transition: background-color 160ms ease, background-image 160ms ease,
+    color 160ms ease, border-color 160ms ease, transform 160ms ease,
+    box-shadow 200ms ease !important;
+}
+
+/* Moon — emerald ombré on hover, pure white ink. */
+html body[data-jj-skin="moon"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html body:not([data-jj-skin="sun"]) div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover {
+  background: linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: rgba(255, 255, 255, 0.34) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 20px -12px rgba(0, 0, 0, 0.65) !important;
+}
+html body[data-jj-skin="moon"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html body[data-jj-skin="moon"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*),
+html body:not([data-jj-skin="sun"]) div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html body:not([data-jj-skin="sun"]) div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Sun — champagne (vertical sidebar Sun colour) on hover, black ink. */
+html body[data-jj-skin="sun"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover {
+  background: linear-gradient(90deg, #eadbb6 0%, #e2d4b8 52%, #d8c7a6 100%) !important;
+  background-image: linear-gradient(90deg, #eadbb6 0%, #e2d4b8 52%, #d8c7a6 100%) !important;
+  border-color: rgba(184, 149, 85, 0.55) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 20px -12px rgba(26, 26, 26, 0.35) !important;
+}
+html body[data-jj-skin="sun"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html body[data-jj-skin="sun"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
