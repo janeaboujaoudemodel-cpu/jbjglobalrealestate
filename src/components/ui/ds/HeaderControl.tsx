@@ -145,6 +145,8 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
   const skin = useControlSkin();
   const champagne = skin === "champagne";
   const ink = champagne ? "#1A1A1A" : "#FFFFFF";
+  const groupRef = useInkLock<HTMLDivElement>(ink);
+
   const groupStyle: React.CSSProperties =
     skin === "clear"
       ? {}
