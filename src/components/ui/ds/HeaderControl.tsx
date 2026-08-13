@@ -163,7 +163,9 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
           };
   return (
     <div
+      ref={groupRef}
       data-jjds-segmented=""
+
       data-jjds-skin={skin}
       data-no-contrast-guard
       data-on-dark={skin !== "champagne" ? "" : undefined}
