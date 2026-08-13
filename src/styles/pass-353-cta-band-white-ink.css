@@ -1,0 +1,94 @@
+/*
+ * PASS 353 — CTA BAND INK BY SKIN + 3-UP CONTACT TILES (LOCKED)
+ *
+ * "Ready to Get Started" band:
+ *   Moon → emerald ombre surface, so ALL ink (text + glyphs) is pure white.
+ *   Sun  → champagne band (PASS 349), so ALL ink is black #1A1A1A.
+ * The compact "Get Alerts" newsletter pill keeps its emerald ombre fill in
+ * BOTH skins, so its ink is always pure white — PASS 348 was painting its bell
+ * and search glyphs black in Sun, which broke Rule 2 of the contrast contract.
+ *
+ * Contact tiles are a true 3-up row on every width (phone included).
+ */
+
+/* ── Moon: emerald band → white ink ───────────────────────────────── */
+html[data-jbj-theme="moon"] body
+  #root#root#root#root#root#root#root#root#root#root#root
+  :is(#ready-to-get-started, #section-cta, #cta)
+  :is(span, p, a, button, small, strong, label, li, div, h2, h3) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html[data-jbj-theme="moon"] body
+  #root#root#root#root#root#root#root#root#root#root#root
+  :is(#ready-to-get-started, #section-cta, #cta)
+  :is(svg, svg *, path):not([stroke="none"]) {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* ── Sun: champagne band → black ink (Rule 1) ─────────────────────── */
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root
+  :is(#ready-to-get-started, #section-cta, #cta)
+  :is(span, p, a, button, small, strong, label, li, div, h2, h3) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root
+  :is(#ready-to-get-started, #section-cta, #cta)
+  :is(svg, svg *, path):not([stroke="none"]) {
+  color: #1a1a1a !important;
+  stroke: #1a1a1a !important;
+}
+
+/* ── The emerald newsletter pill is white ink in BOTH skins ───────── */
+html body
+  #root#root#root#root#root#root#root#root#root#root#root#root
+  .jj-newsletter-emerald .jj-hero-search-bar
+  :is(span, p, a, button, small, strong, label, div, input) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html body
+  #root#root#root#root#root#root#root#root#root#root#root#root
+  .jj-newsletter-emerald .jj-hero-search-bar
+  :is(svg, svg *, path):not([stroke="none"]) {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+/* The transparent typing input must never inherit an opaque ink colour. */
+html body
+  #root#root#root#root#root#root#root#root#root#root#root#root
+  .jj-newsletter-emerald .jj-hero-search-bar input.jj-hero-search-input {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* ── Contact tiles: always three across ──────────────────────────── */
+html body
+  #root#root#root#root
+  :is(#ready-to-get-started, #section-cta, #cta)
+  .jj-loop-block
+  > div:has(> a[data-emerald-ok="button"]) {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+/* ── Footer ink by skin ───────────────────────────────────────────
+   Moon footer is the emerald rail gradient → pure white ink (the legal
+   row was rendering #1A1A1A on emerald). Sun footer stays champagne with
+   black ink, which is already correct. */
+html[data-jbj-theme="moon"] body
+  #root#root#root#root#root#root#root#root#root#root#root
+  footer :is(span, p, a, small, strong, li, div, h2, h3, h4) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html[data-jbj-theme="moon"] body
+  #root#root#root#root#root#root#root#root#root#root#root
+  footer :is(svg, svg *, path):not([stroke="none"]) {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}

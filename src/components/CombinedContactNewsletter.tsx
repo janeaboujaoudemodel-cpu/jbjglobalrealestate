@@ -81,7 +81,7 @@ const CombinedContactNewsletter = ({
       </div>
 
       {/* Contact tiles — premium rectangular emerald, white icons/text */}
-      <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-6">
+      <div className="relative grid grid-cols-3 gap-2 sm:gap-4 max-w-3xl mx-auto mb-6">
         {contactCards.map((card) => (
           <a
             key={card.label}
@@ -91,22 +91,23 @@ const CombinedContactNewsletter = ({
             data-surface="emerald"
             data-emerald-ok="button"
             data-no-contrast-guard
-            className="jj-emerald-metallic jj-ready-cta-metallic group flex min-h-[132px] flex-col items-center justify-center gap-2.5 px-5 py-6 rounded-xl text-center"
+            className="jj-emerald-metallic jj-ready-cta-metallic group flex min-h-[96px] sm:min-h-[132px] flex-col items-center justify-start sm:justify-center gap-1.5 sm:gap-2.5 px-2 py-3.5 sm:px-5 sm:py-6 rounded-xl text-center"
             style={{ color: '#FFFFFF' }}
           >
             <span
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border"
+              className="inline-flex h-8 w-8 sm:h-11 sm:w-11 items-center justify-center rounded-full border"
               style={{ borderColor: 'rgba(255,255,255,0.35)', backgroundColor: 'rgba(255,255,255,0.10)' }}
             >
-              <card.icon className="w-5 h-5" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <card.icon className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             </span>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.label}</p>
-              <p className="text-sm sm:text-base font-semibold break-words" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.value}</p>
+            <div className="min-w-0 w-full">
+              <p className="text-[8.5px] sm:text-[10px] uppercase tracking-[0.14em] sm:tracking-[0.2em] font-semibold mb-0.5 sm:mb-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.label}</p>
+              <p className="text-[10.5px] leading-snug sm:text-base font-semibold break-words" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.value}</p>
             </div>
           </a>
         ))}
       </div>
+
 
       {/* Divider */}
       <div className="relative flex items-center gap-3 max-w-2xl mx-auto mb-5">
