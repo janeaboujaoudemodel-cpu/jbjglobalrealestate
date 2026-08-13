@@ -127,3 +127,12 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row button[aria-label]
   opacity: 1 !important;
   flex: 0 0 auto !important;
 }
+
+/* 6 — Animated emerald ring wins over earlier passes in both skins. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme button,
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="true"],
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme button[aria-pressed="false"] {
+  border: 1px solid #064E3B !important;
+  border-radius: 10px !important;
+  animation: jj354-emerald-ring 2.6s ease-in-out infinite !important;
+}
