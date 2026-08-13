@@ -40,6 +40,8 @@ import"./styles/pass-346-open-rail-ink-and-title-parity.css";
 import"./styles/pass-348-sun-champagne-dominant-chrome.css";
 import"./styles/pass-349-sun-emerald-accents-and-gold-borders.css";
 import"./styles/pass-351-phone-drawer-gold-and-pref-align.css";
+import"./styles/pass-353-cta-band-white-ink.css";
+
 
 
 
