@@ -104,6 +104,9 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const root = document.documentElement;
+    // PASS 338 — instant theme swap: kill chrome colour transitions for the
+    // frames around the flip so the sidebar/header repaint with the click.
+    root.setAttribute("data-jbj-theme-swap", "1");
     // Preserve the selected preference while forcing the gated portal to its
     // original, pre-theme skin. Leaving the gate restores the stored mode.
     root.setAttribute("data-jbj-theme", themeLocked ? "sun" : mode);
@@ -112,7 +115,13 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (backendLocked) root.setAttribute("data-jbj-backend-lock", "1");
     else root.removeAttribute("data-jbj-backend-lock");
 
+    // Held long enough to cover the React re-render that repaints the skinned
+    // control surfaces, otherwise their 300ms colour transition still lags.
+    const id = window.setTimeout(() => root.removeAttribute("data-jbj-theme-swap"), 500);
+    return () => window.clearTimeout(id);
+
   }, [mode, backendLocked, themeLocked]);
+
 
   const value = useMemo(
     () => ({ mode, isMoon: mode === "moon", setMode, toggleMode }),

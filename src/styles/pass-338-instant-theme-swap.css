@@ -1,0 +1,26 @@
+/* ============================================================================
+ * PASS 338 — INSTANT THEME SWAP (LOCKED)
+ *
+ * Switching Sun ⇄ Moon must repaint the vertical sidebar and the horizontal
+ * header in the same frame as the click. Colour transitions on chrome surfaces
+ * made the swap look laggy (the old skin lingered while the gradient animated),
+ * so while the root carries data-jbj-theme-swap="1" every chrome surface paints
+ * with zero transition/animation. Layout animations elsewhere are untouched.
+ * ========================================================================== */
+
+html[data-jbj-theme-swap="1"] [data-jj-rail],
+html[data-jbj-theme-swap="1"] [data-jj-rail] *,
+html[data-jbj-theme-swap="1"] [data-jjds-header-control],
+html[data-jbj-theme-swap="1"] [data-jjds-header-control] *,
+html[data-jbj-theme-swap="1"] [data-jjds-segmented],
+html[data-jbj-theme-swap="1"] [data-jjds-segmented] *,
+html[data-jbj-theme-swap="1"] [data-jj-utility-pill],
+html[data-jbj-theme-swap="1"] [data-jj-utility-pill] *,
+html[data-jbj-theme-swap="1"] header,
+html[data-jbj-theme-swap="1"] header *,
+html[data-jbj-theme-swap="1"] aside,
+html[data-jbj-theme-swap="1"] aside * {
+  transition: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
