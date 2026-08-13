@@ -1,0 +1,264 @@
+/* ============================================================
+   PASS 347 — BACKEND ALERT BADGE, ALERT DROPDOWN & CHIP GEOMETRY (LOCKED)
+   1. The header alert count is a TRUE 20px circle, never cropped, never
+      overlapping the bell glyph, emerald-gradient fill with white ink and a
+      gold ring so it stays visible on the emerald header.
+   2. The alerts dropdown is a premium panel: emerald-gradient head (white ink),
+      opaque white body (graphite ink, never faded), emerald-gradient tone tiles.
+   3. Every square action chip beside a widget title ("+" buttons next to
+      My Open Tasks / Today's Meetings / Today's Leads / Deals Closing) is a
+      real 32x32 square — identical on every card, emerald→black gradient,
+      white glyph. Never a flat green, never a vertical oval.
+   Scope: CRM/owner backend shell only.
+============================================================ */
+
+.jc-app {
+  --jc347-emerald: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jc347-gold: #B89555;
+}
+
+/* ---------- 1. Alert count badge ---------- */
+.jc-app .jc-icon-btn { overflow: visible !important; }
+.jc-app .jc-icon-btn__badge {
+  position: absolute !important;
+  top: -5px !important;
+  right: -5px !important;
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  max-height: 20px !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--jc347-emerald) !important;
+  border: 1.5px solid var(--jc347-gold) !important;
+  box-shadow: 0 2px 6px rgba(2, 15, 10, 0.45) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  transform: none !important;
+}
+
+/* ---------- 2. Alerts dropdown ---------- */
+.jc-app .jc-popover--notif {
+  width: 396px !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(6, 78, 59, 0.18) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 28px 70px rgba(2, 15, 10, 0.34), 0 8px 20px rgba(2, 15, 10, 0.16) !important;
+  opacity: 1 !important;
+  animation: jc347-pop 160ms ease-out both;
+}
+@keyframes jc347-pop {
+  from { opacity: 0; transform: translateY(-6px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.jc-app .jc-popover--notif .jc-notif__head {
+  background: var(--jc347-emerald) !important;
+  border-bottom: 1px solid rgba(184, 149, 85, 0.45) !important;
+  padding: 13px 16px !important;
+}
+.jc-app .jc-popover--notif .jc-notif__head :is(span, button, div, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+.jc-app .jc-popover--notif .jc-notif__title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+}
+.jc-app .jc-popover--notif .jc-notif__count {
+  min-width: 22px !important;
+  height: 20px !important;
+  padding: 0 7px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid var(--jc347-gold) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+.jc-app .jc-popover--notif .jc-notif__mark {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 999px !important;
+  padding: 5px 11px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+.jc-app .jc-popover--notif .jc-notif__mark:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  text-decoration: none !important;
+}
+
+.jc-app .jc-popover--notif .jc-notif__tabs {
+  padding: 10px 14px 6px !important;
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #EDF1EF !important;
+}
+.jc-app .jc-popover--notif .jc-notif__tab {
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  background: #F2F5F3 !important;
+  border: 1px solid rgba(6, 78, 59, 0.14) !important;
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+}
+.jc-app .jc-popover--notif .jc-notif__tab.is-active,
+.jc-app .jc-popover--notif .jc-notif__tab.is-active :is(span, svg, path) {
+  background: var(--jc347-emerald) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+
+.jc-app .jc-popover--notif .jc-notif__list { background: #FFFFFF !important; padding: 6px !important; }
+.jc-app .jc-popover--notif .jc-notif__item {
+  border-radius: 12px !important;
+  background: #FFFFFF !important;
+}
+.jc-app .jc-popover--notif .jc-notif__item.is-unread {
+  background: rgba(6, 78, 59, 0.055) !important;
+  box-shadow: inset 3px 0 0 0 #064E3B !important;
+}
+.jc-app .jc-popover--notif .jc-notif__row { padding: 11px 12px !important; border-radius: 12px !important; }
+.jc-app .jc-popover--notif .jc-notif__row:hover { background: rgba(6, 78, 59, 0.09) !important; }
+.jc-app .jc-popover--notif .jc-notif__row-title {
+  color: #05221A !important;
+  -webkit-text-fill-color: #05221A !important;
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+}
+.jc-app .jc-popover--notif .jc-notif__row-sub {
+  color: #33443E !important;
+  -webkit-text-fill-color: #33443E !important;
+  font-size: 12.5px !important;
+}
+.jc-app .jc-popover--notif .jc-notif__row-time {
+  color: #5C6B65 !important;
+  -webkit-text-fill-color: #5C6B65 !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+}
+.jc-app .jc-popover--notif :is(.jc-notif__icon, .jc-notif__icon--lead, .jc-notif__icon--deal, .jc-notif__icon--meeting, .jc-notif__icon--task, .jc-notif__icon--message) {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 32px !important;
+  align-self: flex-start !important;
+  border-radius: 10px !important;
+  background: var(--jc347-emerald) !important;
+  border: 1px solid rgba(184, 149, 85, 0.35) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 8px rgba(2, 15, 10, 0.22) !important;
+}
+.jc-app .jc-popover--notif .jc-notif__icon :is(svg, path) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-popover--notif .jc-notif__dot {
+  width: 8px !important;
+  height: 8px !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 999px !important;
+  background: var(--jc347-gold) !important;
+  align-self: center !important;
+  flex: 0 0 8px !important;
+}
+.jc-app .jc-popover--notif .jc-notif__foot {
+  background: #FFFFFF !important;
+  border-top: 1px solid #EDF1EF !important;
+  padding: 10px 12px !important;
+}
+.jc-app .jc-popover--notif .jc-notif__view,
+.jc-app .jc-popover--notif .jc-notif__view :is(span, svg, path) {
+  width: 100% !important;
+  background: var(--jc347-emerald) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  border: 1px solid rgba(184, 149, 85, 0.35) !important;
+}
+.jc-app .jc-popover--notif .jc-notif__view:hover {
+  filter: brightness(1.12) !important;
+}
+.jc-app .jc-popover--notif .jc-notif__empty {
+  color: #5C6B65 !important;
+  -webkit-text-fill-color: #5C6B65 !important;
+}
+
+/* ---------- 3. Widget square action chips ---------- */
+.jc-app :is(.jc-widget__icon, .jc-widget__head-actions > .jc-widget__icon) {
+  width: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 32px !important;
+  align-self: center !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  border-radius: 9px !important;
+  border: 1px solid rgba(184, 149, 85, 0.32) !important;
+  background: var(--jc347-emerald) !important;
+  background-color: #064E3B !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 8px rgba(2, 15, 10, 0.24) !important;
+  transition: filter 120ms ease !important;
+}
+.jc-app .jc-widget__icon :is(svg, path) {
+  width: 17px !important;
+  height: 17px !important;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-widget__icon:hover { filter: brightness(1.15) !important; }
+.jc-app .jc-widget__head-actions { align-items: center !important; gap: 8px !important; }
+
+/* Scope pill beside the chip: readable graphite ink, never faded. */
+.jc-app .jc-widget__scope,
+.jc-app .jc-widget__scope :is(span, svg, path) {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+  stroke: currentColor !important;
+}
+.jc-app .jc-widget__scope {
+  background: #F2F5F3 !important;
+  border: 1px solid rgba(6, 78, 59, 0.16) !important;
+  height: 32px !important;
+  padding: 0 12px !important;
+  align-self: center !important;
+  font-weight: 600 !important;
+}
