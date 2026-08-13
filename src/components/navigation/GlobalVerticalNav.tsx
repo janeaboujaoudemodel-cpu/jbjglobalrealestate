@@ -1411,7 +1411,12 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           }}
           aria-hidden="true"
         />
-        <div className="jj-rail-footer-inner px-3 pt-2 pb-2">
+        {/* PASS 331 — Sign Out never touches the rail's bottom edge on any
+            device: a real breathing gap plus the iOS home-indicator inset. */}
+        <div
+          className="jj-rail-footer-inner px-3 pt-2 pb-4"
+          style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
+        >
           <ThemeModeToggle variant="menu" className="jj-sidebar-theme-toggle mb-2 border border-current/20" />
           <div className="flex flex-col gap-1">
           <button
