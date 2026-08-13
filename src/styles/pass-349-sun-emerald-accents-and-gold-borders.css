@@ -1,0 +1,116 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 349 — SUN: CHAMPAGNE BANDS, EMERALD ACCENTS (LOCKED)
+
+   Refines PASS 348. In SUN the *dominant* fills (page bands, section
+   surfaces, chrome, dropdown heads, backend chrome) stay champagne with
+   black ink — but the ACCENT layer keeps the emerald ombre with pure
+   white ink, so the site never looks flat or empty:
+
+     · buttons / CTAs / action pills
+     · active tabs, filter pills, chips, badges
+     · pickers, sliders, segmented controls
+     · the newsletter "Get alerts" emerald bar
+
+   Also locked here:
+     · Developer partner marquee logos are BLACK on the Sun champagne
+       strip (they were white-knocked-out and invisible).
+     · Listing / project cards never wear a dark border in Sun — the
+       border is always the premium gold hairline.
+     · MOON is untouched.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --jj349-emerald: linear-gradient(160deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj349-gold: #B89555;
+}
+
+/* ═══════════ 1. ACCENTS KEEP THE EMERALD OMBRE + WHITE INK ═══════════ */
+html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
+  :is(
+    .jj-emerald-pill,
+    .jj-emerald-rect-pill,
+    .jj-emerald-chip,
+    .jj-emerald-action,
+    .jj-emerald-metallic,
+    .jj-pill-emerald,
+    .jj-pill-emerald-metallic,
+    .jj-tab-active-metallic,
+    .jj-newsletter-emerald,
+    .jj-cta-dark,
+    .filter-emerald-action,
+    [data-ink-emerald],
+    [data-emerald-accent],
+    [data-filter-selected="true"],
+    [data-active-filter-chip],
+    [role="tab"][data-state="active"],
+    [data-jj-segmented-trigger][data-state="active"]
+  ):not([data-brand-hero]):not([data-brand-hero] *) {
+  background: var(--jj349-emerald) !important;
+  background-image: var(--jj349-emerald) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
+  :is(
+    .jj-emerald-pill,
+    .jj-emerald-rect-pill,
+    .jj-emerald-chip,
+    .jj-emerald-action,
+    .jj-emerald-metallic,
+    .jj-pill-emerald,
+    .jj-pill-emerald-metallic,
+    .jj-tab-active-metallic,
+    .jj-newsletter-emerald,
+    .jj-cta-dark,
+    .filter-emerald-action,
+    [data-ink-emerald],
+    [data-emerald-accent],
+    [data-filter-selected="true"],
+    [data-active-filter-chip],
+    [role="tab"][data-state="active"],
+    [data-jj-segmented-trigger][data-state="active"]
+  ) :is(span, p, a, small, strong, label, li, div, input, button, svg, svg *, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
+  :is(.jj-emerald-pill, .jj-emerald-action, .jj-emerald-metallic, .jj-newsletter-emerald, [data-ink-emerald])
+  :is(svg, svg *, path):not([stroke="none"]) {
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Inner controls of an emerald accent bar (input + submit) stay emerald
+   with white ink and a white placeholder — never black-on-emerald. */
+html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
+  :is(.jj-emerald-pill, .jj-newsletter-emerald, [data-ink-emerald]) :is(input, textarea) {
+  background: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
+  :is(.jj-emerald-pill, .jj-newsletter-emerald, [data-ink-emerald]) :is(input, textarea)::placeholder {
+  color: rgba(255, 255, 255, 0.72) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* ═══════════ 2. DEVELOPER MARQUEE — BLACK MARKS ON CHAMPAGNE ═══════════ */
+html[data-jbj-theme="sun"] body #root#root#root .jj-partner-mark img {
+  filter: brightness(0) !important;
+  opacity: 0.9 !important;
+}
+
+/* ═══════════ 3. LISTING CARDS — GOLD HAIRLINE, NEVER A DARK BORDER ═══════════ */
+html[data-jbj-theme="sun"] body #root#root#root
+  :is([data-project-card="true"], [data-listing-card="true"]) {
+  border-color: rgba(184, 149, 85, 0.45) !important;
+  box-shadow: 0 10px 30px -18px rgba(184, 149, 85, 0.45) !important;
+}
+html[data-jbj-theme="sun"] body #root#root#root
+  :is([data-project-card="true"], [data-listing-card="true"]):hover {
+  border-color: rgba(184, 149, 85, 0.75) !important;
+}
