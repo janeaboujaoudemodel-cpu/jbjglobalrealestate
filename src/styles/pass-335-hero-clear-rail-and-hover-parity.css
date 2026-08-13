@@ -132,3 +132,19 @@
     animation: none !important;
   }
 }
+
+/* Specificity lift: PASS 312 paints the Moon rail gradient with a triple
+   [data-sidebar-emerald] selector, so the clear state must out-rank it. */
+@media (min-width: 1024px) {
+  html[data-jbj-theme][data-jbj-theme] body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+    div#root div[data-chrome="sidebar"][data-chrome]
+    [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald],
+  html[data-jbj-theme][data-jbj-theme] body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+    div#root div[data-chrome="sidebar"][data-chrome]
+    [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald] :is(nav, .jj-rail-stack, .jj-rail-brand-band) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+}
