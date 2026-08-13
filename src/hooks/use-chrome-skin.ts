@@ -80,29 +80,3 @@ export function useInkLock<T extends HTMLElement>(ink: string) {
   });
   return ref;
 }
-
-/* PASS 335 — theme attribute reader. `sun` ⇒ champagne hover skin,
-   `moon` ⇒ emerald ombré hover skin. */
-export function useJbjTheme(): "sun" | "moon" {
-  const [theme, setTheme] = React.useState<"sun" | "moon">(() =>
-    typeof document === "undefined"
-      ? "sun"
-      : document.documentElement.getAttribute("data-jbj-theme") === "moon"
-        ? "moon"
-        : "sun",
-  );
-  React.useEffect(() => {
-    const read = () =>
-      setTheme(
-        document.documentElement.getAttribute("data-jbj-theme") === "moon" ? "moon" : "sun",
-      );
-    read();
-    const mo = new MutationObserver(read);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-jbj-theme"] });
-    return () => mo.disconnect();
-  }, []);
-  return theme;
-}
-
-export const HOVER_EMERALD = "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)";
-export const HOVER_CHAMPAGNE = "linear-gradient(90deg, #EADBB6 0%, #E2D4B8 52%, #D8C7A6 100%)";

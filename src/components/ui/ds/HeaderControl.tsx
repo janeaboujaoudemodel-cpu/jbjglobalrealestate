@@ -63,7 +63,7 @@ const headerControl = cva(
 );
 
 export type { ControlSkin } from "@/hooks/use-chrome-skin";
-import { useControlSkin, useInkLock, inkForSkin, paintInk, useJbjTheme, HOVER_EMERALD, HOVER_CHAMPAGNE, type ControlSkin } from "@/hooks/use-chrome-skin";
+import { useControlSkin, useInkLock, inkForSkin, paintInk, type ControlSkin } from "@/hooks/use-chrome-skin";
 
 
 const CHAMPAGNE_SURFACE: React.CSSProperties = {
@@ -93,29 +93,10 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
   ({ className, shape, tone, active, style, children, ...props }, ref) => {
     const emerald = tone === "emerald" || tone === undefined;
     const skin = useControlSkin();
-    const theme = useJbjTheme();
-    const [hovered, setHovered] = React.useState(false);
-    /* PASS 335 — hover always matches the selected theme: Moon = emerald
-       ombré + white ink, Sun = champagne (sidebar colour) + black ink. */
-    const hoverSurface: React.CSSProperties = {
-      backgroundImage: theme === "sun" ? HOVER_CHAMPAGNE : HOVER_EMERALD,
-      backgroundColor: "transparent",
-      border: theme === "sun" ? "1px solid rgba(184,149,85,0.55)" : "1px solid rgba(255,255,255,0.30)",
-      boxShadow:
-        theme === "sun"
-          ? "0 8px 20px -12px rgba(26,26,26,0.35)"
-          : "0 10px 24px -14px rgba(6,78,59,0.92)",
-      transform: "translateY(-1px)",
-    };
-    const baseSkinned = emerald && skin !== "clear"
+    const skinned = emerald && skin !== "clear"
       ? { ...(skin === "champagne" ? CHAMPAGNE_SURFACE : EMERALD_SURFACE), ...style }
       : style;
-    const skinned = emerald && hovered
-      ? { ...baseSkinned, ...hoverSurface, transition: "all 160ms ease" }
-      : { ...baseSkinned, transition: "all 160ms ease" };
-    const ink = emerald && hovered
-      ? theme === "sun" ? "#1A1A1A" : "#FFFFFF"
-      : inkForSkin(skin);
+    const ink = inkForSkin(skin);
     const innerRef = React.useRef<HTMLButtonElement | null>(null);
     React.useEffect(() => {
       const run = () => paintInk(innerRef.current, ink);
@@ -136,8 +117,6 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
         data-jjds-tone={tone ?? "emerald"}
         data-jjds-skin={emerald ? skin : "light"}
         data-no-contrast-guard
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         data-surface={emerald && skin === "emerald" ? "emerald" : "light"}
         className={cn("allow-white jj-header-premium-control", headerControl({ shape, tone, active }), className)}
         style={skinned}
@@ -164,20 +143,9 @@ export interface HeaderSegmentedProps {
 }
 export function HeaderSegmented({ value, options, onChange, className }: HeaderSegmentedProps) {
   const skin = useControlSkin();
-  const theme = useJbjTheme();
-  const [hovered, setHovered] = React.useState(false);
   const champagne = skin === "champagne";
-  const ink = hovered ? (theme === "sun" ? "#1A1A1A" : "#FFFFFF") : champagne ? "#1A1A1A" : "#FFFFFF";
+  const ink = champagne ? "#1A1A1A" : "#FFFFFF";
   const groupRef = useInkLock<HTMLDivElement>(ink);
-  const hoverGroup: React.CSSProperties = {
-    backgroundImage: theme === "sun" ? HOVER_CHAMPAGNE : HOVER_EMERALD,
-    border: theme === "sun" ? "1px solid rgba(184,149,85,0.55)" : "1px solid rgba(255,255,255,0.30)",
-    boxShadow:
-      theme === "sun"
-        ? "0 8px 20px -12px rgba(26,26,26,0.35)"
-        : "0 10px 24px -14px rgba(6,78,59,0.92)",
-    transform: "translateY(-1px)",
-  };
 
   const groupStyle: React.CSSProperties =
     skin === "clear"
@@ -196,8 +164,6 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
   return (
     <div
       ref={groupRef}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       data-jjds-segmented=""
 
       data-jjds-skin={skin}
@@ -213,7 +179,7 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
         !champagne && "shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
         className,
       )}
-      style={hovered ? { ...groupStyle, ...hoverGroup, transition: "all 160ms ease" } : { ...groupStyle, transition: "all 160ms ease" }}
+      style={groupStyle}
     >
       {options.map((opt, index) => {
         const isActive = opt.value === value;
