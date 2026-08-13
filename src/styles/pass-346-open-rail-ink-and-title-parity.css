@@ -24,12 +24,12 @@ html[data-jbj-theme="sun"]
   body.jj-vertical-nav-active
   div#root
   [data-chrome="sidebar"][data-chrome="sidebar"]
-  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item]):not([data-active="true"]):not([aria-current="page"]),
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]):not([data-active="true"]):not([aria-current="page"]),
 html[data-jbj-theme="sun"]
   body.jj-vertical-nav-active
   div#root
   [data-chrome="sidebar"][data-chrome="sidebar"]
-  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item]):not([data-active="true"]):not([aria-current="page"])
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]):not([data-active="true"]):not([aria-current="page"])
   :is(span, small, strong, label, kbd, svg, svg *, path) {
   color: #1a1a1a !important;
   -webkit-text-fill-color: #1a1a1a !important;
@@ -45,13 +45,13 @@ html[data-jbj-theme="moon"]
   body.jj-vertical-nav-active
   div#root
   [data-chrome="sidebar"][data-chrome="sidebar"]
-  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item])
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal])
   :is(span, small, strong, label, kbd, svg, svg *, path),
 html[data-jbj-theme="moon"]
   body.jj-vertical-nav-active
   div#root
   [data-chrome="sidebar"][data-chrome="sidebar"]
-  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item]) {
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]) {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   stroke: currentColor !important;
@@ -79,7 +79,7 @@ html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
 /* ───────────────────── 2. ONE TITLE TYPOGRAPHY ───────────────────── */
 
 html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
-  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item]) {
+  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]) {
   min-height: 36px !important;
   font-size: 13.5px !important;
   font-weight: 600 !important;
@@ -93,7 +93,7 @@ html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
 }
 
 html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
-  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item])
+  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal])
   :is(span, small, strong) {
   font-size: 13.5px !important;
   font-weight: 600 !important;
@@ -105,7 +105,7 @@ html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
 
 /* Identical icon geometry on every row. */
 html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
-  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item])
+  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal])
   svg {
   width: 18px !important;
   height: 18px !important;
@@ -113,7 +113,7 @@ html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
   flex: 0 0 auto !important;
 }
 html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
-  :is([data-sidebar-highlight-tile], [data-sidebar-subitem-icon-tile]) {
+  :is([data-sidebar-highlight-tile], [data-sidebar-subitem-icon-tile], [data-sidebar-mode-icon-tile]) {
   width: 22px !important;
   height: 22px !important;
 }
