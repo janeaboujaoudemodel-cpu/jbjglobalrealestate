@@ -24,7 +24,7 @@ import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Loader2, CheckCircle2, CalendarDays, Clock, Mail, ArrowLeft, Plus, X,
-  Sparkles, Globe2, Sunrise, Sun, Moon, ChevronRight, ShieldCheck, Video,
+  Sparkles, Globe2, Sunrise, Sun, Moon, ChevronRight, ChevronLeft, ShieldCheck, Video,
 } from "lucide-react";
 
 type FormField = { key: string; label: string; type: string; required?: boolean; placeholder?: string };
@@ -67,6 +67,16 @@ function nextDays(count: number): Date[] {
   return Array.from({ length: count }, (_, i) => new Date(today.getTime() + i * 86400_000));
 }
 
+/** Calendar matrix (weeks × 7) for the month of `anchor`, Sunday-first. */
+function monthMatrix(anchor: Date): Array<Array<Date | null>> {
+  const first = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+  const total = new Date(anchor.getFullYear(), anchor.getMonth() + 1, 0).getDate();
+  const cells: Array<Date | null> = Array.from({ length: first.getDay() }, () => null);
+  for (let d = 1; d <= total; d++) cells.push(new Date(anchor.getFullYear(), anchor.getMonth(), d));
+  while (cells.length % 7 !== 0) cells.push(null);
+  return Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
+}
+
 /** Run promises with limited concurrency so prefetching 30 days never floods the network. */
 async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length) as R[];
@@ -91,6 +101,8 @@ export default function PublicBookingLanding() {
 
   const [step, setStep] = useState<Step>("pick");
   const [selectedDate, setSelectedDate] = useState<string>(() => toDateKey(new Date()));
+  const [calView, setCalView] = useState<"day" | "month" | "year">("day");
+  const [viewAnchor, setViewAnchor] = useState<Date>(() => new Date());
   const [slots, setSlots] = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
@@ -433,15 +445,71 @@ export default function PublicBookingLanding() {
           <section className="min-w-0 rounded-2xl border border-neutral-200/80 bg-white p-5 sm:p-6 lg:p-8 shadow-[0_10px_30px_-20px_rgba(6,78,59,0.3)]">
             {step === "pick" && (
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2 text-emerald-900">
                     <CalendarDays className="w-4 h-4" />
                     <span className="text-sm font-medium tracking-wide uppercase">Pick a date</span>
                   </div>
+                  {/* View switcher — Daily · Monthly · Yearly */}
+                  <div className="inline-flex rounded-full border border-emerald-900/20 p-0.5 bg-white">
+                    {([["day", "Daily"], ["month", "Monthly"], ["year", "Yearly"]] as const).map(([v, label]) => (
+                      <button
+                        key={v}
+                        type="button"
+                        onClick={() => setCalView(v)}
+                        aria-pressed={calView === v}
+                        className="rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-wider transition"
+                        data-surface={calView === v ? "emerald" : undefined}
+                        style={calView === v
+                          ? { background: EMERALD_GRADIENT, color: "#FFFFFF" }
+                          : { color: "#064E3B" }}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Month / year header — the month is named ONCE, here */}
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    {calView !== "day" && (
+                      <button
+                        type="button"
+                        aria-label="Previous"
+                        onClick={() => setViewAnchor((a) => calView === "year"
+                          ? new Date(a.getFullYear() - 1, a.getMonth(), 1)
+                          : new Date(a.getFullYear(), a.getMonth() - 1, 1))}
+                        className="grid h-8 w-8 place-items-center rounded-full border border-neutral-200 text-emerald-900 hover:border-emerald-800"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                    )}
+                    <div className="text-base sm:text-lg text-emerald-900" style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, letterSpacing: "0.02em" }}>
+                      {calView === "year"
+                        ? viewAnchor.getFullYear()
+                        : viewAnchor.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                    </div>
+                    {calView !== "day" && (
+                      <button
+                        type="button"
+                        aria-label="Next"
+                        onClick={() => setViewAnchor((a) => calView === "year"
+                          ? new Date(a.getFullYear() + 1, a.getMonth(), 1)
+                          : new Date(a.getFullYear(), a.getMonth() + 1, 1))}
+                        className="grid h-8 w-8 place-items-center rounded-full border border-neutral-200 text-emerald-900 hover:border-emerald-800"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                   {nextOpenDay && (
                     <button
                       type="button"
-                      onClick={() => setSelectedDate(nextOpenDay)}
+                      onClick={() => {
+                        setSelectedDate(nextOpenDay);
+                        setViewAnchor(new Date(`${nextOpenDay}T12:00:00`));
+                      }}
                       className="inline-flex items-center gap-1.5 rounded-full border border-emerald-900/25 px-3 py-1.5 text-xs font-medium text-emerald-900 hover:bg-emerald-50 transition"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
@@ -451,55 +519,130 @@ export default function PublicBookingLanding() {
                   )}
                 </div>
 
-                {/* Date rail — scroll-snap on phone, grid from sm up */}
-                <div className="-mx-1 px-1 overflow-x-auto scrollbar-hide sm:overflow-visible">
-                  <div className="flex gap-2 sm:grid sm:gap-2 sm:grid-cols-5 md:grid-cols-6 xl:grid-cols-7">
-                    {days.map((d) => {
-                      const key = toDateKey(d);
-                      const active = key === selectedDate;
-                      const count = availability[key];
-                      const unavailable = count === 0;
+                {/* ── Daily rail: horizontal on phone, grid from sm up ─────── */}
+                {calView === "day" && (
+                  <div className="-mx-1 px-1 overflow-x-auto scrollbar-hide sm:overflow-visible">
+                    <div className="flex gap-2 sm:grid sm:gap-2 sm:grid-cols-5 md:grid-cols-6 xl:grid-cols-7">
+                      {days.map((d) => {
+                        const key = toDateKey(d);
+                        const active = key === selectedDate;
+                        const count = availability[key];
+                        const unavailable = count === 0;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            disabled={unavailable}
+                            onClick={() => { setSelectedDate(key); setViewAnchor(d); }}
+                            aria-pressed={active}
+                            className={[
+                              "shrink-0 basis-[68px] sm:basis-auto snap-start rounded-xl border px-2 py-2.5 text-center transition",
+                              active
+                                ? "border-emerald-900 text-white shadow-[0_6px_18px_-10px_rgba(6,78,59,0.8)]"
+                                : unavailable
+                                  ? "border-neutral-100 bg-neutral-50 text-neutral-300 cursor-not-allowed"
+                                  : "border-neutral-200 bg-white text-neutral-700 hover:border-emerald-800 hover:-translate-y-0.5",
+                            ].join(" ")}
+                            data-surface={active ? "emerald" : undefined}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              gap: "1px",
+                              ...(active
+                                ? { background: EMERALD_GRADIENT, color: "#FFFFFF" }
+                                : unavailable
+                                  ? { color: "#C7C7C7" }
+                                  : { color: "#374151" }),
+                            }}
+                          >
+                            <span style={{ display: "block", fontSize: 10, lineHeight: 1.2, letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.8 }}>
+                              {d.toLocaleDateString("en-US", { weekday: "short" })}
+                            </span>
+                            <span style={{ display: "block", fontSize: 18, lineHeight: 1.15, fontWeight: 600 }}>{d.getDate()}</span>
+                            <span style={{ display: "block", marginTop: 3, height: 3, width: count === undefined ? 3 : count > 0 ? 16 : 0, borderRadius: 999, background: count === undefined ? "#E5E7EB" : active ? "rgba(255,255,255,0.85)" : "#047857" }} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Monthly calendar grid ────────────────────────────────── */}
+                {calView === "month" && (
+                  <div>
+                    <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-1">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((w) => (
+                        <div key={w} className="text-center text-[10px] uppercase tracking-[0.14em] text-neutral-400">{w}</div>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-7 gap-1 sm:gap-2">
+                      {monthMatrix(viewAnchor).flat().map((d, i) => {
+                        if (!d) return <div key={`e${i}`} />;
+                        const key = toDateKey(d);
+                        const count = availability[key];
+                        const active = key === selectedDate;
+                        const unavailable = count === undefined || count === 0;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            disabled={unavailable}
+                            onClick={() => setSelectedDate(key)}
+                            aria-pressed={active}
+                            className={[
+                              "aspect-square rounded-xl border text-center transition",
+                              active
+                                ? "border-emerald-900 shadow-[0_6px_18px_-10px_rgba(6,78,59,0.8)]"
+                                : unavailable
+                                  ? "border-neutral-100 bg-neutral-50 cursor-not-allowed"
+                                  : "border-neutral-200 bg-white hover:border-emerald-800",
+                            ].join(" ")}
+                            data-surface={active ? "emerald" : undefined}
+                            style={{
+                              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2,
+                              ...(active ? { background: EMERALD_GRADIENT, color: "#FFFFFF" } : { color: unavailable ? "#C7C7C7" : "#374151" }),
+                            }}
+                          >
+                            <span style={{ fontSize: 15, fontWeight: 600, lineHeight: 1 }}>{d.getDate()}</span>
+                            <span style={{ height: 3, width: count && count > 0 ? 14 : 0, borderRadius: 999, background: active ? "rgba(255,255,255,0.85)" : "#047857" }} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Yearly overview ─────────────────────────────────────── */}
+                {calView === "year" && (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                    {Array.from({ length: 12 }, (_, m) => {
+                      const prefix = `${viewAnchor.getFullYear()}-${String(m + 1).padStart(2, "0")}`;
+                      const open = Object.entries(availability).filter(([k, n]) => k.startsWith(prefix) && n > 0).length;
+                      const isCurrent = m === viewAnchor.getMonth();
                       return (
                         <button
-                          key={key}
+                          key={m}
                           type="button"
-                          disabled={unavailable}
-                          onClick={() => setSelectedDate(key)}
-                          aria-pressed={active}
+                          onClick={() => { setViewAnchor(new Date(viewAnchor.getFullYear(), m, 1)); setCalView("month"); }}
                           className={[
-                            "shrink-0 basis-[74px] sm:basis-auto snap-start rounded-xl border px-2 py-2.5 text-center transition",
-                            active
-                              ? "border-emerald-900 text-white shadow-[0_6px_18px_-10px_rgba(6,78,59,0.8)]"
-                              : unavailable
-                                ? "border-neutral-100 bg-neutral-50 text-neutral-300 cursor-not-allowed"
-                                : "border-neutral-200 bg-white text-neutral-700 hover:border-emerald-800 hover:-translate-y-0.5",
+                            "rounded-xl border px-3 py-3 text-left transition",
+                            isCurrent ? "border-emerald-900" : open > 0 ? "border-neutral-200 bg-white hover:border-emerald-800" : "border-neutral-100 bg-neutral-50",
                           ].join(" ")}
-                          data-surface={active ? "emerald" : undefined}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: "1px",
-                            ...(active
-                              ? { background: EMERALD_GRADIENT, color: "#FFFFFF" }
-                              : unavailable
-                                ? { color: "#C7C7C7" }
-                                : { color: "#374151" }),
-                          }}
+                          data-surface={isCurrent ? "emerald" : undefined}
+                          style={isCurrent ? { background: EMERALD_GRADIENT, color: "#FFFFFF" } : { color: open > 0 ? "#374151" : "#9CA3AF" }}
                         >
-                          <span style={{ display: "block", fontSize: 10, lineHeight: 1.2, letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.8 }}>
-                            {d.toLocaleDateString("en-US", { weekday: "short" })}
-                          </span>
-                          <span style={{ display: "block", fontSize: 17, lineHeight: 1.15, fontWeight: 600 }}>{d.getDate()}</span>
-                          <span style={{ display: "block", fontSize: 10, lineHeight: 1.2, opacity: 0.7 }}>
-                            {d.toLocaleDateString("en-US", { month: "short" })}
-                          </span>
-                          <span style={{ display: "block", marginTop: 3, height: 3, width: count === undefined ? 3 : count > 0 ? 16 : 0, borderRadius: 999, background: count === undefined ? "#E5E7EB" : active ? "rgba(255,255,255,0.85)" : "#047857" }} />
+                          <div style={{ fontSize: 14, fontWeight: 600 }}>
+                            {new Date(viewAnchor.getFullYear(), m, 1).toLocaleDateString("en-US", { month: "long" })}
+                          </div>
+                          <div style={{ fontSize: 11, opacity: 0.8 }}>
+                            {open > 0 ? `${open} open ${open === 1 ? "day" : "days"}` : "No open days"}
+                          </div>
                         </button>
                       );
                     })}
                   </div>
-                </div>
+                )}
 
                 <div className="mt-7">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
