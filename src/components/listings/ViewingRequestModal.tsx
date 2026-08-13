@@ -49,6 +49,11 @@ export const ViewingRequestModal = ({
       return;
     }
 
+    if (!formData.email) {
+      toast.error('Please provide your email address');
+      return;
+    }
+
     if (!formData.privacyAccepted) {
       toast.error('Please accept the privacy policy');
       return;
@@ -57,17 +62,33 @@ export const ViewingRequestModal = ({
     setIsSubmitting(true);
 
     try {
-      // Submit to crm_leads (using correct column names)
-      const { error } = await supabase.from('crm_leads').insert({
-        full_name: formData.name,
-        phone_raw: formData.phone,
-        email_lower: formData.email?.toLowerCase() || null,
-        source: 'viewing_request',
-        lead_source_type: 'website',
-        tags: ['viewing_request', listingId],
+      // Guests have no session, so the insert must go through the capture-lead
+      // edge function (service role) exactly like every other public form.
+      // Every collected viewing detail travels with it — nothing is dropped.
+      const { data, error } = await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: formData.email.trim(),
+          fullName: formData.name.trim(),
+          phone: formData.phone.trim(),
+          source: 'viewing_request',
+          pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
+          subSource: listingName,
+          message: formData.message?.trim() || null,
+          context: {
+            requestType: 'Property viewing',
+            listingId,
+            listingName,
+            listingLocation: listingLocation || null,
+            preferredDate: formData.preferredDate || null,
+            preferredTime: formData.preferredTime || null,
+            notes: formData.message?.trim() || null,
+            privacyAccepted: true,
+          },
+        },
       });
 
       if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
 
       // Track event
       console.log(`[Tracking] ${trackingEvents.viewing_form_submit}`, { listingId, listingName });
@@ -169,10 +190,11 @@ export const ViewingRequestModal = ({
 
                     <Input
                       type="email"
-                      placeholder="Email Address"
+                      placeholder="Email Address *"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="h-12 bg-[#FDFBF7] border-[#B89555]/30"
+                      required
                     />
 
                     <div className="grid grid-cols-2 gap-3">

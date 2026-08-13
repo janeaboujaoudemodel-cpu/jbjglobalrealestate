@@ -76,6 +76,9 @@ export default function PublicBookingLanding() {
   const [verifyCode, setVerifyCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  // Server tells us whether the appointment still needs owner approval, so the
+  // success screen never claims "booked" for a pending request.
+  const [awaitingApproval, setAwaitingApproval] = useState(false);
 
   // Load page metadata
   useEffect(() => {
@@ -151,6 +154,19 @@ export default function PublicBookingLanding() {
 
   const days = useMemo(() => nextDays(page?.event_type.max_advance_days ?? 30).slice(0, 30), [page]);
 
+  // Name / email / phone are rendered hardcoded above, so any configured field
+  // that repeats them is dropped — a guest must never see a field twice.
+  const RESERVED_FIELD_KEYS = /^(full[_\s-]?name|name|your[_\s-]?name|e[-_\s]?mail|email|email[_\s-]?address|phone|phone[_\s-]?number|mobile|tel|telephone|whatsapp)$/i;
+  const customFields = useMemo(() => {
+    const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "_").replace(/\*/g, "");
+    return (page?.form_fields ?? []).filter(
+      (f) =>
+        f.type !== "guests" &&
+        !RESERVED_FIELD_KEYS.test(norm(f.key ?? "")) &&
+        !RESERVED_FIELD_KEYS.test(norm(f.label ?? "")),
+    );
+  }, [page]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -198,7 +214,12 @@ export default function PublicBookingLanding() {
         return;
       }
       if ((data as any)?.step === "verify_email") setStep("verify");
-      else if ((data as any)?.step === "confirmed") setStep("done");
+      else if ((data as any)?.step === "confirmed") {
+        setAwaitingApproval(
+          (data as any)?.requires_approval === true || (data as any)?.status === "awaiting_approval",
+        );
+        setStep("done");
+      }
       else setSubmitError((data as any)?.error ?? "Something went wrong.");
     } catch (e: any) {
       setSubmitError(String(e?.message ?? e));
@@ -346,7 +367,8 @@ export default function PublicBookingLanding() {
                 />
               </FieldRow>
 
-              {page.form_fields.filter((f) => f.type !== "guests").map((f) => (
+              {customFields.map((f) => (
+
                 <FieldRow key={f.key} label={f.label} required={f.required}>
                   {f.type === "textarea" ? (
                     <textarea
@@ -451,11 +473,18 @@ export default function PublicBookingLanding() {
           <section className="max-w-lg mx-auto text-center">
             <CheckCircle2 className="w-12 h-12 text-emerald-700 mx-auto mb-4" />
             <h2 className="text-3xl mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-              You're booked
+              {awaitingApproval ? "Request received" : "You're booked"}
             </h2>
             <p className="text-neutral-600 text-sm">
-              {page.confirmation_message ?? "Your booking has been submitted. You'll receive a confirmation email shortly."}
+              {awaitingApproval
+                ? "Your requested time is reserved and awaiting confirmation by our team. You'll receive an email as soon as it is accepted."
+                : (page.confirmation_message ?? "Your booking has been submitted. You'll receive a confirmation email shortly.")}
             </p>
+            {awaitingApproval && selectedSlot && (
+              <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs tracking-wide uppercase border border-emerald-900/30 text-emerald-900">
+                Awaiting confirmation
+              </div>
+            )}
             {page.access_mode === "with_promotion" && page.promo_actions.length > 0 && (
               <div className="mt-8">
                 <div className="text-xs uppercase tracking-widest text-neutral-500 mb-3">While you're here</div>

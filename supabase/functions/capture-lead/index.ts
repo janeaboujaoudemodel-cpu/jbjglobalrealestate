@@ -334,7 +334,8 @@ serve(async (req: Request): Promise<Response> => {
     const allowedSources = [
       'website', 'homepage', 'market_report', 'property-evaluation',
       'contact_form', 'newsletter', 'ai_chat', 'inquiry', 'comparison',
-      'broker_signup', 'project_inquiry', 'schedule_call',
+      'broker_signup', 'project_inquiry', 'schedule_call', 'viewing_request',
+      'meeting_booking',
       // Partner service sources
       'partner_mortgage', 'partner_legal', 'partner_company_setup', 'partner_visa'
     ];
@@ -440,16 +441,22 @@ serve(async (req: Request): Promise<Response> => {
     let resolvedLeadId: string | null = existingLead?.id ?? null;
 
     if (existingLead) {
+      // Repeat lead: attribution must follow the LATEST submission, otherwise every
+      // future enquiry keeps the source of the very first form the person used.
       const { error: updateError } = await supabase
         .from('crm_leads')
         .update({
-          full_name: sanitizedFullName || existingLead.id,
+          // Never write a UUID into the name — fall back to the email local part.
+          full_name: sanitizedFullName || normalizedEmail.split('@')[0],
           phone_e164: sanitizedPhone,
           nationality: sanitizedNationality,
           preferred_language: sanitizedLanguage,
           current_location_country: locationCountry,
           current_location_city: locationCity,
           age_range: sanitizedAgeRange,
+          source: sanitizedSource,
+          source_page: sanitizedPageSource,
+          lead_source_type: 'website',
           pipeline_stage: 'qualified',
           priority: sanitizedPhone ? 'high' : 'normal',
           notes: sanitizedMessage || undefined,
@@ -482,6 +489,7 @@ serve(async (req: Request): Promise<Response> => {
           current_location_city: locationCity,
           age_range: sanitizedAgeRange,
           source: sanitizedSource,
+          source_page: sanitizedPageSource,
           owner_type: 'company_assigned',
           lead_source_type: 'website',
           contact_type: contactType,
