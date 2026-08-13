@@ -128,6 +128,25 @@ export default function DeveloperMediaStudio() {
     [rows],
   );
 
+  /**
+   * Duplicate developer rows are a data-integrity problem, not a media problem:
+   * two records with the same name split photos, logos and projects. Flag them
+   * here so the owner can merge instead of uploading the same artwork twice.
+   */
+  const duplicateNames = useMemo(() => {
+    const seen = new Map<string, number>();
+    rows.forEach((d) => {
+      const key = (d.name || "").trim().toLowerCase().replace(/\s+/g, " ");
+      if (!key) return;
+      seen.set(key, (seen.get(key) ?? 0) + 1);
+    });
+    return new Set([...seen.entries()].filter(([, n]) => n > 1).map(([k]) => k));
+  }, [rows]);
+
+  const isDuplicate = (d: DevRow) =>
+    duplicateNames.has((d.name || "").trim().toLowerCase().replace(/\s+/g, " "));
+
+
   const visible = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return rows
