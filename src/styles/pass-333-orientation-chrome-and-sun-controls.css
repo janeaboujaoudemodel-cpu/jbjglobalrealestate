@@ -123,3 +123,14 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   stroke: #1a1a1a !important;
   color: #1a1a1a !important;
 }
+
+/* Sun sq ft / sq m — champagne is a light surface, so the label ink is black.
+   Skin is stamped on the element itself so this beats the legacy emerald
+   sq-toggle ink locks without widening their blast radius. */
+html[data-jbj-theme="sun"] body div#root [data-jj-utility-bar] [data-jj-utility-pill][data-jjds-skin="champagne"] .jj-sqtoggle[data-jjds-skin="champagne"],
+html[data-jbj-theme="sun"] body div#root [data-jj-utility-bar] [data-jj-utility-pill][data-jjds-skin="champagne"] .jj-sqtoggle[data-jjds-skin="champagne"]:hover,
+html[data-jbj-theme="sun"] body div#root [data-jj-utility-bar] [data-jj-utility-pill][data-jjds-skin="champagne"] .jj-sqtoggle[data-jjds-skin="champagne"][data-active="true"],
+html[data-jbj-theme="sun"] body div#root [data-jj-utility-bar] [data-jj-utility-pill][data-jjds-skin="champagne"] .jj-sqtoggle[data-jjds-skin="champagne"] :is(span, svg, svg *) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
