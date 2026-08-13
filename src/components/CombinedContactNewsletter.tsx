@@ -102,7 +102,20 @@ const CombinedContactNewsletter = ({
             </span>
             <div className="min-w-0 w-full">
               <p className="text-[8.5px] sm:text-[10px] uppercase tracking-[0.14em] sm:tracking-[0.2em] font-semibold mb-0.5 sm:mb-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.label}</p>
-              <p className="text-[10.5px] leading-snug sm:text-base font-semibold break-words" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.value}</p>
+              <p
+                className="font-semibold whitespace-nowrap"
+                style={{
+                  color: '#FFFFFF',
+                  WebkitTextFillColor: '#FFFFFF',
+                  whiteSpace: 'nowrap',
+                  wordBreak: 'keep-all',
+                  overflowWrap: 'normal',
+                  fontSize: 'clamp(8.5px, 2.55vw, 16px)',
+                  lineHeight: 1.25,
+                }}
+              >
+                {String(card.value).replace(/ /g, '\u00A0')}
+              </p>
             </div>
           </a>
         ))}
