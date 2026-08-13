@@ -35,6 +35,20 @@ export const normalizeNotificationRoute = (rawRoute?: string | null, fallback: s
     route = route.replace("/admin/hr", "/hr-dashboard");
   }
 
+  // The champagne back office is retired: every legacy CRM deep link must land
+  // in the JBJ Hub CRM instead of the old /crm shell.
+  if (route === "/crm" || /^\/crm(?=[/?#])/.test(route)) {
+    const rest = route.slice("/crm".length);
+    if (!rest || rest.startsWith("?") || rest.startsWith("#")) {
+      route = `/owner/crm/jbj/leads${rest}`;
+    } else if (/^\/leads?\b/.test(rest)) {
+      route = `/owner/crm/jbj/leads${rest.replace(/^\/leads?/, "")}`;
+    } else {
+      route = `/owner/crm/jbj${rest}`;
+    }
+  }
+
+
   return route || fallback;
 };
 

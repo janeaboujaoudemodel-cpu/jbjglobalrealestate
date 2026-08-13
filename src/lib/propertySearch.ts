@@ -122,6 +122,10 @@ export const SORT_OPTIONS = [
 ] as const;
 export type SortOption = (typeof SORT_OPTIONS)[number]["slug"];
 
+/** Sort orders that only exist in the SALE market (off-plan / deal pipeline). */
+export const SALE_ONLY_SORTS: SortOption[] = ["distress", "handover"];
+
+
 export const VIEW_MODES = ["list", "grid", "map"] as const;
 export type ViewMode = (typeof VIEW_MODES)[number];
 
@@ -251,16 +255,30 @@ export const EMPTY_SEARCH: PropertySearch = {
 
 export const SALE_ONLY_STATUSES: ProjectStatus[] = [
   "off-plan",
-  "resale",
   "distress",
   "nearing-completion",
 ];
 
+/**
+ * RENT has exactly two statuses:
+ *  - `ready`  — leased directly from the developer (first-hand stock)
+ *  - `resale` — the first buyer is now renting the unit out ("resale ready")
+ */
+export const RENT_STATUSES: { slug: ProjectStatus; label: string }[] = [
+  { slug: "ready", label: "Ready" },
+  { slug: "resale", label: "Resale ready" },
+];
+const RENT_STATUS_SLUGS: ProjectStatus[] = RENT_STATUSES.map((s) => s.slug);
+
 /** Status chips that make sense for the active purpose. */
 export const statusOptionsFor = (purpose: Purpose) =>
+  purpose === "rent" ? RENT_STATUSES : PROJECT_STATUSES;
+
+/** Sort orders that make sense for the active purpose. */
+export const sortOptionsFor = (purpose: Purpose) =>
   purpose === "rent"
-    ? PROJECT_STATUSES.filter((s) => !SALE_ONLY_STATUSES.includes(s.slug))
-    : PROJECT_STATUSES;
+    ? SORT_OPTIONS.filter((o) => !SALE_ONLY_SORTS.includes(o.slug))
+    : SORT_OPTIONS;
 
 /** True when the off-plan axes (status pipeline, handover, payment plan) apply. */
 export const supportsOffPlanAxes = (purpose: Purpose) => purpose !== "rent";
@@ -270,14 +288,16 @@ export function sanitizeSearchForPurpose(f: PropertySearch): PropertySearch {
   if (supportsOffPlanAxes(f.purpose)) return f;
   return {
     ...f,
-    statuses: f.statuses.filter((s) => !SALE_ONLY_STATUSES.includes(s)),
+    statuses: f.statuses.filter((s) => RENT_STATUS_SLUGS.includes(s)),
     completionTo: null,
     payment: "any",
+    sort: SALE_ONLY_SORTS.includes(f.sort) ? "recommended" : f.sort,
     rentPeriod: f.rentPeriod ?? "yearly",
   };
 }
 
 export const currencyFor = (country?: string | null) => COUNTRY_CURRENCY[country ?? ""] ?? "AED";
+
 
 /* -------------------------------------------------------------------- codec */
 

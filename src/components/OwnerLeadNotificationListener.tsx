@@ -41,10 +41,12 @@ export default function OwnerLeadNotificationListener() {
           ? {
               label: "Open CRM",
               onClick: () => {
-                window.location.href = row.action_url;
+                // Legacy /crm links are remapped to the JBJ Hub CRM.
+                window.location.href = normalizeNotificationRoute(row.action_url, "/owner/crm/jbj/leads");
               },
             }
           : undefined,
+
         duration: 12000,
       });
     };

@@ -684,7 +684,11 @@ const Properties = () => {
               className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-[-0.02em]"
               style={{ textShadow: '0 2px 12px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)' }}
             >
-              {search.purpose === "rent" ? "Homes for Rent. Verified and Ready." : "Curated Listings. Global Standard."}
+              {search.purpose === "rent"
+                ? (finalProjects.length > 0
+                    ? "Homes for Rent. Verified and Ready."
+                    : "Rentals. Sourced On Request.")
+                : "Curated Listings. Global Standard."}
             </h1>
             
             {/* Subtitle */}
@@ -693,8 +697,11 @@ const Properties = () => {
               style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)' }}
             >
               {search.purpose === "rent"
-                ? "Verified rental inventory with clear pricing periods and trusted advisory."
+                ? (finalProjects.length > 0
+                    ? "Verified rental inventory with clear pricing periods and trusted advisory."
+                    : "We do not publish a public rental list. Tell us what you need and our advisors source ready and resale-ready stock directly.")
                 : "Exclusive investment-grade properties with trusted advisory."}
+
             </p>
           </motion.div>
         </div>

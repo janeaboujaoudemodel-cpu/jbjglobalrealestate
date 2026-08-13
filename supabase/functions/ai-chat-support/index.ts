@@ -426,28 +426,37 @@ serve(async (req) => {
   const supabaseService = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
+    /**
+     * Gated vs public escalation (LOCKED):
+     * - Public-site visitors may chat as guests (identity unverified).
+     * - Requests that declare a gated portal origin MUST carry a session;
+     *   without one we reject with 401 auth_required.
+     */
     const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Authentication required',
-          response: `Please sign in to use the AI chat assistant. Contact our team:\n📧 ${APPROVED_CONTACT_INFO.email}\n📞 ${APPROVED_CONTACT_INFO.phone}`
-        }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    let user: { id: string; email?: string | null } | null = null;
+
+    if (authHeader) {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+        global: { headers: { Authorization: authHeader } }
+      });
+      const { data } = await supabase.auth.getUser();
+      user = data?.user ?? null;
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } }
-    });
+    let originSurface = 'public';
+    try {
+      const peek = await req.clone().json();
+      if (peek && typeof peek.originSurface === 'string') originSurface = peek.originSurface;
+    } catch {
+      // body is read again below; a failed peek just leaves the default
+    }
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
-    if (authError || !user) {
+    if (!user && originSurface === 'portal') {
       return new Response(
-        JSON.stringify({ 
-          error: 'Invalid authentication token',
-          response: `Your session has expired. Please sign in again.\n📧 ${APPROVED_CONTACT_INFO.email}\n📞 ${APPROVED_CONTACT_INFO.phone}`
+        JSON.stringify({
+          error: 'auth_required',
+          surface: 'portal',
+          response: `Please sign in to continue inside the portal.\n📧 ${APPROVED_CONTACT_INFO.email}\n📞 ${APPROVED_CONTACT_INFO.phone}`
         }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -463,7 +472,8 @@ serve(async (req) => {
       );
     }
 
-    const rateLimitResult = await checkRateLimit(supabaseService, user.id, clientIp);
+    const rateLimitResult = await checkRateLimit(supabaseService, user?.id ?? `guest:${clientIp}`, clientIp);
+
     if (!rateLimitResult.allowed) {
       return new Response(
         JSON.stringify({ 

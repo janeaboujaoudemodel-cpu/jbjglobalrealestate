@@ -36,6 +36,8 @@ import {
   sanitizeSearchForPurpose,
   statusOptionsFor,
   SORT_OPTIONS,
+  sortOptionsFor,
+
   compactPrice,
   countExtraFilters,
   currencyFor,
@@ -260,7 +262,7 @@ export default function PropertySearchBar({
   onConsultation,
   onSellSelected,
   showSort = false,
-  sortOptions = SORT_OPTIONS,
+  sortOptions,
   showTiers = false,
   countOverride,
   countNoun = "properties",
@@ -771,13 +773,13 @@ export default function PropertySearchBar({
 
         {showSort ? (
           <Seg
-            label={sortOptions.find((s) => s.slug === f.sort)?.label ?? "Sort"}
+            label={(sortOptions ?? sortOptionsFor(f.purpose)).find((s) => s.slug === f.sort)?.label ?? "Sort"}
             active
             dark={dark}
             spanClass="jj-sspan-3"
           >
             <div className="p-1.5">
-              {sortOptions.map((s) => {
+              {(sortOptions ?? sortOptionsFor(f.purpose)).map((s) => {
                 const on = f.sort === s.slug;
                 return (
                   <button
