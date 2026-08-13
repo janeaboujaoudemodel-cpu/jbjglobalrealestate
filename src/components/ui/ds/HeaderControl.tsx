@@ -63,7 +63,7 @@ const headerControl = cva(
 );
 
 export type { ControlSkin } from "@/hooks/use-chrome-skin";
-import { useControlSkin, useInkLock, inkForSkin, paintInk, type ControlSkin } from "@/hooks/use-chrome-skin";
+import { useControlSkin, useInkLock, inkForSkin, paintInk, clearHoverInk, type ControlSkin } from "@/hooks/use-chrome-skin";
 
 
 const CHAMPAGNE_SURFACE: React.CSSProperties = {
@@ -98,12 +98,24 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
       : style;
     const ink = inkForSkin(skin);
     const innerRef = React.useRef<HTMLButtonElement | null>(null);
+    const hoverInk = clearHoverInk(skin);
+    const hovered = React.useRef(false);
     React.useEffect(() => {
-      const run = () => paintInk(innerRef.current, ink);
+      const el = innerRef.current;
+      const run = () => paintInk(innerRef.current, hovered.current && hoverInk ? hoverInk : ink);
       run();
       const id = window.setTimeout(run, 60);
-      return () => window.clearTimeout(id);
+      const enter = () => { hovered.current = true; run(); };
+      const leave = () => { hovered.current = false; run(); };
+      el?.addEventListener("pointerenter", enter);
+      el?.addEventListener("pointerleave", leave);
+      return () => {
+        window.clearTimeout(id);
+        el?.removeEventListener("pointerenter", enter);
+        el?.removeEventListener("pointerleave", leave);
+      };
     });
+
     return (
       <button
         ref={(node) => {
@@ -145,7 +157,7 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
   const skin = useControlSkin();
   const champagne = skin === "champagne";
   const ink = champagne ? "#1A1A1A" : "#FFFFFF";
-  const groupRef = useInkLock<HTMLDivElement>(ink);
+  const groupRef = useInkLock<HTMLDivElement>(ink, clearHoverInk(skin));
 
   const groupStyle: React.CSSProperties =
     skin === "clear"

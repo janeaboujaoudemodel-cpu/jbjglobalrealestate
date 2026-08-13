@@ -170,11 +170,11 @@
 /* Clear rail ink: white in BOTH skins (Sun's black-ink rail locks must not win
    over a photo/video hero). Specificity stacked to beat pass-317 / pass-312. */
 @media (min-width: 1024px) {
-  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root div#root [data-chrome="sidebar"] :is(a, button, span, svg, path, [data-jjds-sidebar-icon]) {
+  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"][data-chrome="sidebar"] :is(a, button, span, svg, path, [data-jjds-sidebar-icon]) {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
   }
-  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root div#root [data-chrome="sidebar"] :is(svg, path):not([fill="none"]) {
+  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"][data-chrome="sidebar"] :is(svg, path):not([fill="none"]) {
     stroke: #ffffff !important;
   }
   /* Rail edge + footer dividers: one thin white hairline while clear. */
@@ -192,4 +192,79 @@
   html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] :is(svg, .jj-rail-monogram, [data-sidebar-brand]) {
     filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55)) !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 336 — CLEAR CHROME: NO COLOUR UNTIL HOVER (LOCKED)
+   Over any hero, at page top: the utility bar and the collapsed rail carry
+   NO fill in either skin — only white glyphs and one white hairline. Colour
+   (emerald in Moon / champagne in Sun) appears on hover only.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* 1. Rail ink: pure white in BOTH skins while clear — beats the Sun black-ink
+      rail locks, which are only correct once the rail is filled. */
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"]) body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] :is(a, button, span, small, strong, label, svg, path, circle, rect, line, polyline, polygon, g, .lucide, .jj-side-tile),
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"]) body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] .jj-side-tile :is(svg, .lucide, path, circle, rect, line, polyline, polygon, g),
+html[data-jbj-theme]:not([data-jbj-backend-lock="1"]) body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  div#root div[data-chrome="sidebar"] div[data-sidebar-emerald] :is(a, button) :is(svg, .lucide, path) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  stroke: currentColor !important;
+}
+
+/* 2. Utility-bar controls: no colour at rest, in EITHER skin — kills the Moon
+      emerald ombre on the mode trigger, the avatar plate and its alert badge. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented], [data-jbj-avatar-skin], [data-jbj-badge-skin], [data-search-utility-controls]) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented], [data-jbj-avatar-skin], [data-jbj-badge-skin]) {
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+}
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(svg, path, .lucide) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* 3. Divider: the same white hairline that edges the collapsed rail also runs
+      under the horizontal header while clear. */
+html body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar].jj-utility-shell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+/* 4. Hover = the selected theme colour, and only on hover. Boosted to match the
+      at-rest clear rules above so hover always wins. */
+html[data-jbj-theme="moon"] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented], [data-jbj-avatar-skin]):hover {
+  background-image: linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: rgba(255, 255, 255, 0.26) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented], [data-jbj-avatar-skin]):hover {
+  background-image: linear-gradient(90deg, #fdfbf7 0%, #f7f2ea 52%, #f2ebdc 100%) !important;
+  border-color: rgba(184, 149, 85, 0.42) !important;
+}
+html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented]):hover,
+html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented]):hover :is(span, svg, path, .lucide) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
+html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented]):hover * {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  background-image: none !important;
 }
