@@ -24,6 +24,8 @@ import {
   EyeOff,
   ImageOff,
   ImagePlus,
+  LayoutGrid,
+  List,
   Loader2,
   RefreshCw,
   Search,
@@ -331,11 +333,13 @@ export default function DeveloperMediaStudio() {
 function MediaRow({
   dev,
   busy,
+  duplicate = false,
   onSave,
   onToggleHidden,
 }: {
   dev: DevRow;
   busy: boolean;
+  duplicate?: boolean;
   onSave: (dev: DevRow, patch: Partial<DevRow>) => Promise<void>;
   onToggleHidden: (dev: DevRow) => Promise<void>;
 }) {
