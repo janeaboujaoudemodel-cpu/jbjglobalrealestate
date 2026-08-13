@@ -148,3 +148,15 @@
     box-shadow: none !important;
   }
 }
+
+/* While the rail is clear it must sit ON the hero, so the hero band bleeds the
+   rail's 59px back to the viewport edge. Inner content keeps its original box
+   via the matching padding, so nothing shifts. */
+@media (min-width: 1024px) {
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root main.jj-main-shell [data-hero-dark] {
+    margin-left: -59px !important;
+    width: calc(100% + 59px) !important;
+    max-width: none !important;
+    padding-left: 59px !important;
+  }
+}
