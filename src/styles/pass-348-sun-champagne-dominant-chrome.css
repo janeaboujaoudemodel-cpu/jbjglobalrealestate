@@ -61,7 +61,7 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
     .jj-emerald-pill,
     .jj-emerald-rect-pill
   ):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not([data-service-photo-copy]):not([data-service-photo-copy] *)
-  :is(span, p, a, button, small, strong, label, li, h1, h2, h3, h4, h5, h6, svg, svg *, path) {
+  *:not([data-photo-copy-lock] *):not([data-service-photo-copy] *) {
   color: var(--jj-sun-ink) !important;
   -webkit-text-fill-color: var(--jj-sun-ink) !important;
 }
