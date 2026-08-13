@@ -1,0 +1,86 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 329 — PHONE/TABLET PORTRAIT (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   Owner rules encoded here (they supersede PASS 328 where they overlap):
+   1. SUN skin, phone/tablet portrait → the horizontal header wears the
+      EXACT footer champagne band in BOTH states (page top and scrolled).
+      Ink stays pure black. Never emerald, never plain white.
+   2. MOON skin keeps PASS 328 behaviour: transparent at page top, dark
+      emerald band on scroll, pure white identity in both.
+   3. The band is slightly taller (74px) in both skins — height only.
+   4. Homepage hero filter bar (Sun): the "Show N properties" label and the
+      active sq ft / sq m pills read in BLACK on the champagne fill, and
+      every unit button centres its label vertically and horizontally.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023.98px) {
+  /* ── 3. Slightly taller band, same number for the content offset ────── */
+  :root {
+    --responsive-header-height: 74px;
+  }
+  html body div#root [data-chrome="header"] > header[data-header-surface] {
+    min-height: 74px !important;
+  }
+
+  /* ── 1. SUN — footer champagne band in EVERY state ──────────────────── */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled] {
+    background-color: #C8AD7A !important;
+    background-image: linear-gradient(
+      90deg,
+      #F1E8D6 0%,
+      #E2D2B4 22%,
+      #C8AD7A 50%,
+      #E2D2B4 78%,
+      #F1E8D6 100%
+    ) !important;
+    background-size: 100% 100% !important;
+    animation: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(184, 149, 85, 0.34) !important;
+  }
+
+  /* Champagne surface ⇒ black ink, in every state. */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled] a[href="/"] img {
+    filter: brightness(0) saturate(0) !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline, .jj-header-tagline *) {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    text-shadow: none !important;
+  }
+}
+
+/* ── 4. HERO FILTER BAR — BLACK INK ON THE CHAMPAGNE FILLS (SUN) ──────── */
+@media (max-width: 1023.98px) and (orientation: portrait) {
+  html[data-jbj-theme="sun"]:not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body[data-home-hero-state] div#root
+    div[data-property-search-bar] :is(button, a)[data-surface="emerald"],
+  html[data-jbj-theme="sun"]:not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body[data-home-hero-state] div#root
+    div[data-property-search-bar] :is(button, a)[data-surface="emerald"] :is(span, svg, path, strong, em),
+  html[data-jbj-theme="sun"]:not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body[data-home-hero-state] div#root
+    div[data-property-search-bar] :is(button, a)[aria-pressed="true"],
+  html[data-jbj-theme="sun"]:not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body[data-home-hero-state] div#root
+    div[data-property-search-bar] :is(button, a)[aria-pressed="true"] :is(span, svg, path, strong, em) {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    fill: currentColor !important;
+    text-shadow: none !important;
+  }
+
+  /* Every unit / segment button centres its label on both axes. */
+  html body[data-home-hero-state] div#root
+    div[data-property-search-bar] [data-search-utility-controls] > button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: 1 !important;
+  }
+}
