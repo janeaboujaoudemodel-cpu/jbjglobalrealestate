@@ -93,26 +93,35 @@ export default function MobileNavDrawer({
     return () => { document.body.style.overflow = previous; };
   }, [open]);
 
-  /* PASS 351 — Sun only: the three quick glyphs wear premium gold. Global ink
-     guards repaint icon strokes with !important, so the gold has to be written
-     inline with the same priority. Moon is never touched. */
+  /* PASS 352 — quick-glyph ink is decided by the LIVE html skin attribute, not
+     by React state, because the two can disagree for a frame and that is what
+     painted Moon glyphs gold. Sun = premium gold, Moon = pure white. Always. */
   useEffect(() => {
-    if (!open || isMoon) return;
-    const paintGold = () => {
+    if (!open) return;
+    const paint = () => {
+      const sun = document.documentElement.getAttribute("data-jbj-theme") === "sun";
+      const tone = sun ? "#B89555" : "#FFFFFF";
       document
         .querySelectorAll<SVGElement>('[data-jj-drawer-panel] [data-jj-drawer-tile] svg, [data-jj-drawer-panel] [data-jj-drawer-tile] svg *')
         .forEach((node) => {
-          node.style.setProperty("color", "#B89555", "important");
+          node.style.setProperty("color", tone, "important");
           if (node.tagName.toLowerCase() !== "svg") {
-            node.style.setProperty("stroke", "#B89555", "important");
+            node.style.setProperty("stroke", tone, "important");
           }
         });
     };
-    paintGold();
-    const raf = window.requestAnimationFrame(paintGold);
-    const t = window.setTimeout(paintGold, 220);
-    return () => { window.cancelAnimationFrame(raf); window.clearTimeout(t); };
+    paint();
+    const raf = window.requestAnimationFrame(paint);
+    const t = window.setTimeout(paint, 220);
+    const observer = new MutationObserver(paint);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-jbj-theme"] });
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.clearTimeout(t);
+      observer.disconnect();
+    };
   }, [open, isMoon, user]);
+
 
   /* Escape closes. */
   useEffect(() => {
@@ -268,7 +277,7 @@ export default function MobileNavDrawer({
           ].map(({ key, Icon, label, to, onClick }) => {
             const inner = (
               <>
-                 <Icon data-jj-quick-icon className="w-5 h-5" style={{ color: isMoon ? "currentColor" : "#B89555" }} />
+                 <Icon data-jj-quick-icon className="w-5 h-5" style={{ color: isMoon ? "#FFFFFF" : "#B89555" }} />
                 <span className="text-[11px] font-semibold leading-none">{label}</span>
               </>
             );
@@ -353,7 +362,11 @@ export default function MobileNavDrawer({
                     className="inline-flex h-9 min-w-0 items-center justify-start gap-2 bg-transparent px-0"
                     aria-label="Select currency"
                   >
+                    {/* Empty flag-width spacer so AED starts on the exact same
+                        x-axis as EN in the language row above. */}
+                    <span aria-hidden className="h-[13px] w-[20px] shrink-0" />
                     <span className="jj-drawer-pref-value text-[13px] font-bold uppercase leading-none tracking-[0.1em]">
+
                       {currency}
                     </span>
                     <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0 ml-1" />
