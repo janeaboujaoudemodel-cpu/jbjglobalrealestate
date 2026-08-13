@@ -24,7 +24,7 @@
 
   /* ── 1. SUN — footer champagne band in EVERY state ──────────────────── */
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
-    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled] {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"] {
     background-color: #C8AD7A !important;
     background-image: linear-gradient(
       90deg,
@@ -44,11 +44,11 @@
 
   /* Champagne surface ⇒ black ink, in every state. */
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
-    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled] a[href="/"] img {
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"] a[href="/"] img {
     filter: brightness(0) saturate(0) !important;
   }
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
-    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled]
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline, .jj-header-tagline *) {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
