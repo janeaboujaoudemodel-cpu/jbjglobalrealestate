@@ -113,3 +113,20 @@ html body div#root header[data-header-surface="dark"] [data-jjds-segmented] {
   border: 1px solid rgba(255, 255, 255, 0.26) !important;
   box-shadow: none !important;
 }
+
+/* Inside the clear group: no inner pill borders, and the active segment is a
+   whisper of white — never the emerald metallic plate. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jjds-segmented] button,
+html body div#root header[data-header-surface="dark"] [data-jjds-segmented] button {
+  border: 0 !important;
+  border-radius: 9999px !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] :is(.jj-emerald-metallic, .jj-sqtoggle[data-active="true"], .jj-sqtoggle[aria-pressed="true"]),
+html body div#root header[data-header-surface="dark"] :is(.jj-emerald-metallic, .jj-sqtoggle[data-active="true"], .jj-sqtoggle[aria-pressed="true"]) {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
