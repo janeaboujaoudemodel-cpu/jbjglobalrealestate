@@ -284,6 +284,25 @@ export default function DeveloperMediaStudio() {
         >
           Project-level gaps <ExternalLink className="h-3.5 w-3.5" />
         </Link>
+
+        {/* Grid / List density rail — the owner works visually in grid and
+            audits row-by-row in list. */}
+        <div className="ml-auto inline-flex h-10 items-center gap-1 rounded-full border border-border bg-card p-1">
+          {(["grid", "list"] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setView(mode)}
+              aria-pressed={view === mode}
+              className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold capitalize transition-colors ${
+                view === mode ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"
+              }`}
+            >
+              {mode === "grid" ? <LayoutGrid className="h-3.5 w-3.5" /> : <List className="h-3.5 w-3.5" />}
+              {mode}
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading ? (
@@ -291,18 +310,20 @@ export default function DeveloperMediaStudio() {
       ) : visible.length === 0 ? (
         <p className="text-sm text-muted-foreground">Nothing in “{BUCKET_LABEL[bucket]}”.</p>
       ) : (
-        <ul className="space-y-3">
+        <ul className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>
           {visible.map((dev) => (
             <MediaRow
               key={dev.id}
               dev={dev}
               busy={busyId === dev.id}
+              duplicate={isDuplicate(dev)}
               onSave={saveMedia}
               onToggleHidden={toggleHidden}
             />
           ))}
         </ul>
       )}
+
     </div>
   );
 }
