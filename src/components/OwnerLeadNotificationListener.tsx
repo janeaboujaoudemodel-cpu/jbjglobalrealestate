@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { normalizeNotificationRoute } from "@/lib/notificationRouting";
+
 
 function playLeadSound() {
   try {
@@ -41,10 +43,12 @@ export default function OwnerLeadNotificationListener() {
           ? {
               label: "Open CRM",
               onClick: () => {
-                window.location.href = row.action_url;
+                // Legacy /crm links are remapped to the JBJ Hub CRM.
+                window.location.href = normalizeNotificationRoute(row.action_url, "/owner/crm/jbj/leads");
               },
             }
           : undefined,
+
         duration: 12000,
       });
     };

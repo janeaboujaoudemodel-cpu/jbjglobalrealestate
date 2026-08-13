@@ -676,6 +676,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           history: conversationHistory,
           service: selectedService,
           userName: userInfo.firstName,
+          originSurface: window.location.pathname.startsWith('/portal') ? 'portal' : 'public',
         },
       });
 
@@ -696,16 +697,25 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
     } catch (error) {
       console.error('Chat error:', error);
+      const fallback = `I apologize for the technical difficulty. Please contact our team directly:${APPROVED_CONTACT_BLOCK}`;
       setMessages(prev => 
         prev.map(msg => 
           msg.id === assistantMessageId 
-            ? { ...msg, content: `I apologize for the technical difficulty. Please contact our team directly:${APPROVED_CONTACT_BLOCK}` }
+            ? { ...msg, content: fallback }
             : msg
         )
       );
+      // The visitor's message must never be lost because the AI leg failed —
+      // persist the transcript so the owner queue still receives the enquiry.
+      try {
+        await saveMessagesToDb([...newMessages, { ...assistantMessage, content: fallback }]);
+      } catch (persistErr) {
+        console.error('Failed to persist chat transcript after error:', persistErr);
+      }
     } finally {
       setIsLoading(false);
     }
+
   }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId, guestToken, ownerJoined]);
 
   /**

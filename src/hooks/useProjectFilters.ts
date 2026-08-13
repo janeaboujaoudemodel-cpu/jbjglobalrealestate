@@ -76,20 +76,32 @@ export function useFilteredProjects(
         if (!matchesSearch) return false;
       }
 
-      // Price range filter
-      if (project.price_from) {
-        if (project.price_from < filters.priceMin) return false;
-        if (project.price_from > filters.priceMax) return false;
-      }
-
-      // Size range filter
-      if (filters.sizeMin > 0 || filters.sizeMax < 50000) {
-        const projectSize = project.size_min || project.size_max;
-        if (projectSize) {
-          if (projectSize < filters.sizeMin) return false;
-          if (projectSize > filters.sizeMax) return false;
+      // Price range filter — a project matches when its own [from, to] band
+      // overlaps the requested [min, max] band. Using only `price_from` made
+      // max-price filtering wrong (a 2M–40M tower was kept under "max 3M").
+      {
+        const pFrom = typeof project.price_from === "number" && project.price_from > 0 ? project.price_from : null;
+        const pTo = typeof project.price_to === "number" && project.price_to > 0 ? project.price_to : null;
+        const lo = pFrom ?? pTo;
+        const hi = pTo ?? pFrom;
+        if (lo !== null && hi !== null) {
+          if (hi < filters.priceMin) return false;
+          if (lo > filters.priceMax) return false;
         }
       }
+
+      // Size range filter — same overlap rule across size_min/size_max.
+      if (filters.sizeMin > 0 || filters.sizeMax < 50000) {
+        const sFrom = typeof project.size_min === "number" && project.size_min > 0 ? project.size_min : null;
+        const sTo = typeof project.size_max === "number" && project.size_max > 0 ? project.size_max : null;
+        const lo = sFrom ?? sTo;
+        const hi = sTo ?? sFrom;
+        if (lo !== null && hi !== null) {
+          if (hi < filters.sizeMin) return false;
+          if (lo > filters.sizeMax) return false;
+        }
+      }
+
 
       // Bedrooms filter
       if (filters.bedroomsMin !== null) {

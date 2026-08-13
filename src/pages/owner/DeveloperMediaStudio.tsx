@@ -24,6 +24,8 @@ import {
   EyeOff,
   ImageOff,
   ImagePlus,
+  LayoutGrid,
+  List,
   Loader2,
   RefreshCw,
   Search,
@@ -96,8 +98,10 @@ async function fetchAllDevelopers(): Promise<DevRow[]> {
 export default function DeveloperMediaStudio() {
   const [bucket, setBucket] = useState<Bucket>("needs_both");
   const [q, setQ] = useState("");
+  const [view, setView] = useState<"list" | "grid">("grid");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [archiving, setArchiving] = useState(false);
+
 
   const { data: rows = [], isLoading, refetch, isFetching } = useQuery({
     queryKey: ["developer-media-studio"],
@@ -125,6 +129,25 @@ export default function DeveloperMediaStudio() {
     () => rows.filter((d) => !d.is_hidden && !coverOf(d)),
     [rows],
   );
+
+  /**
+   * Duplicate developer rows are a data-integrity problem, not a media problem:
+   * two records with the same name split photos, logos and projects. Flag them
+   * here so the owner can merge instead of uploading the same artwork twice.
+   */
+  const duplicateNames = useMemo(() => {
+    const seen = new Map<string, number>();
+    rows.forEach((d) => {
+      const key = (d.name || "").trim().toLowerCase().replace(/\s+/g, " ");
+      if (!key) return;
+      seen.set(key, (seen.get(key) ?? 0) + 1);
+    });
+    return new Set([...seen.entries()].filter(([, n]) => n > 1).map(([k]) => k));
+  }, [rows]);
+
+  const isDuplicate = (d: DevRow) =>
+    duplicateNames.has((d.name || "").trim().toLowerCase().replace(/\s+/g, " "));
+
 
   const visible = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -263,6 +286,25 @@ export default function DeveloperMediaStudio() {
         >
           Project-level gaps <ExternalLink className="h-3.5 w-3.5" />
         </Link>
+
+        {/* Grid / List density rail — the owner works visually in grid and
+            audits row-by-row in list. */}
+        <div className="ml-auto inline-flex h-10 items-center gap-1 rounded-full border border-border bg-card p-1">
+          {(["grid", "list"] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setView(mode)}
+              aria-pressed={view === mode}
+              className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold capitalize transition-colors ${
+                view === mode ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"
+              }`}
+            >
+              {mode === "grid" ? <LayoutGrid className="h-3.5 w-3.5" /> : <List className="h-3.5 w-3.5" />}
+              {mode}
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading ? (
@@ -270,18 +312,20 @@ export default function DeveloperMediaStudio() {
       ) : visible.length === 0 ? (
         <p className="text-sm text-muted-foreground">Nothing in “{BUCKET_LABEL[bucket]}”.</p>
       ) : (
-        <ul className="space-y-3">
+        <ul className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>
           {visible.map((dev) => (
             <MediaRow
               key={dev.id}
               dev={dev}
               busy={busyId === dev.id}
+              duplicate={isDuplicate(dev)}
               onSave={saveMedia}
               onToggleHidden={toggleHidden}
             />
           ))}
         </ul>
       )}
+
     </div>
   );
 }
@@ -289,11 +333,13 @@ export default function DeveloperMediaStudio() {
 function MediaRow({
   dev,
   busy,
+  duplicate = false,
   onSave,
   onToggleHidden,
 }: {
   dev: DevRow;
   busy: boolean;
+  duplicate?: boolean;
   onSave: (dev: DevRow, patch: Partial<DevRow>) => Promise<void>;
   onToggleHidden: (dev: DevRow) => Promise<void>;
 }) {
@@ -397,6 +443,13 @@ function MediaRow({
               {real ? <CheckCircle2 className="h-3.5 w-3.5" /> : <ImageOff className="h-3.5 w-3.5" />}
               {real ? "Real logo" : logo ? "Temporary wordmark" : "Logo missing"}
             </span>
+            {duplicate && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-3 py-1 font-medium text-destructive">
+                <ShieldAlert className="h-3.5 w-3.5" />
+                Duplicate name — merge
+              </span>
+            )}
+
             <span
               className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-medium ${
                 dev.is_hidden ? "border-border text-muted-foreground" : "border-primary/40 text-primary"
