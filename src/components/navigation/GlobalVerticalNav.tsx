@@ -680,7 +680,10 @@ export default function GlobalVerticalNav() {
   }, [session?.user?.id]);
 
   const collapseAfterNavigation = useCallback(() => {
-    if (pinnedOpen) {
+    /* PASS 346 — the rail NEVER closes while the pointer is still inside it.
+       A hover-expanded rail only collapses from handleSidebarLeave (real
+       mouse-out) or an explicit Collapse click. Navigation just closes menus. */
+    if (pinnedOpen || hoverExpanded) {
       setActiveMegaMenu(null);
       setMobileOpen(false);
       return;
@@ -689,7 +692,8 @@ export default function GlobalVerticalNav() {
     try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
     setActiveMegaMenu(null);
     setMobileOpen(false);
-  }, [pinnedOpen]);
+  }, [pinnedOpen, hoverExpanded]);
+
 
   const handleSidebarEnter = useCallback(() => {
     /* Hover-to-expand is a pointer affordance only — on touch devices the
