@@ -65,32 +65,32 @@ html body div#root [data-jj-utility-bar] [data-search-utility-controls] > button
 }
 
 /* Moon — emerald ombré on hover, pure white ink. */
-html body[data-jj-skin="moon"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
-html body:not([data-jj-skin="sun"]) div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover {
+html[data-jbj-theme="moon"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html[data-jbj-theme="moon"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover {
   background: linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%) !important;
   background-image: linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%) !important;
   border-color: rgba(255, 255, 255, 0.34) !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 8px 20px -12px rgba(0, 0, 0, 0.65) !important;
 }
-html body[data-jj-skin="moon"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
-html body[data-jj-skin="moon"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*),
-html body:not([data-jj-skin="sun"]) div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
-html body:not([data-jj-skin="sun"]) div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*) {
+html[data-jbj-theme="moon"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html[data-jbj-theme="moon"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*),
+html[data-jbj-theme="moon"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html[data-jbj-theme="moon"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*) {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
 
 /* Sun — champagne (vertical sidebar Sun colour) on hover, black ink. */
-html body[data-jj-skin="sun"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover {
+html[data-jbj-theme="sun"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover {
   background: linear-gradient(90deg, #eadbb6 0%, #e2d4b8 52%, #d8c7a6 100%) !important;
   background-image: linear-gradient(90deg, #eadbb6 0%, #e2d4b8 52%, #d8c7a6 100%) !important;
   border-color: rgba(184, 149, 85, 0.55) !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 8px 20px -12px rgba(26, 26, 26, 0.35) !important;
 }
-html body[data-jj-skin="sun"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
-html body[data-jj-skin="sun"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*) {
+html[data-jbj-theme="sun"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover,
+html[data-jbj-theme="sun"] body div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]):hover :where(*) {
   color: #1a1a1a !important;
   -webkit-text-fill-color: #1a1a1a !important;
 }
