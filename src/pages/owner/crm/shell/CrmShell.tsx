@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import CrmHeader from "./CrmHeader";
 import CrmSidebar from "./CrmSidebar";
 import "./crmShell.css";
+import "./pass-347-crm-alert-and-chip-geometry.css";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { isOwnerBackendEmail } from "@/config/ownerEmails";
