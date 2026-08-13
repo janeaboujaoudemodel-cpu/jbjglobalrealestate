@@ -38,12 +38,13 @@ export function useTeamVisibility() {
   const [loaded, setLoaded] = useState(false);
 
   const load = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('team_visibility')
-      .select('member_id, is_visible');
+    // Reads go through a hardened read-only helper so the raw toggle table is
+    // never exposed to anonymous visitors (only owners/admins can read it).
+    const { data, error } = await supabase.rpc('get_team_visibility' as any);
     if (!error && data) {
       const next: TeamVisibilityMap = {};
-      for (const row of data) next[row.member_id] = row.is_visible;
+      for (const row of data as Array<{ member_id: string; is_visible: boolean }>) next[row.member_id] = row.is_visible;
+
       // DB is the source of truth — overwrite local mirror to stay in sync across sessions/devices.
       setMap(next);
       writeLocal(next);
