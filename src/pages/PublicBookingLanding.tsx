@@ -67,6 +67,16 @@ function nextDays(count: number): Date[] {
   return Array.from({ length: count }, (_, i) => new Date(today.getTime() + i * 86400_000));
 }
 
+/** Calendar matrix (weeks × 7) for the month of `anchor`, Sunday-first. */
+function monthMatrix(anchor: Date): Array<Array<Date | null>> {
+  const first = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+  const total = new Date(anchor.getFullYear(), anchor.getMonth() + 1, 0).getDate();
+  const cells: Array<Date | null> = Array.from({ length: first.getDay() }, () => null);
+  for (let d = 1; d <= total; d++) cells.push(new Date(anchor.getFullYear(), anchor.getMonth(), d));
+  while (cells.length % 7 !== 0) cells.push(null);
+  return Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
+}
+
 /** Run promises with limited concurrency so prefetching 30 days never floods the network. */
 async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length) as R[];
