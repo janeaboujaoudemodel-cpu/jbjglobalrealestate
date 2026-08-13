@@ -69,14 +69,36 @@ export function paintInk(el: HTMLElement | null, ink: string) {
   });
 }
 
-/** Ref that keeps its subtree's ink locked to the given colour. */
-export function useInkLock<T extends HTMLElement>(ink: string) {
+/**
+ * Ref that keeps its subtree's ink locked to the given colour.
+ * `hoverInk` (optional) is used while the pointer is over the element — a clear
+ * control over a hero paints its theme surface on hover, so its ink has to flip
+ * with it (champagne hover in Sun ⇒ black ink, per the contrast contract).
+ */
+export function useInkLock<T extends HTMLElement>(ink: string, hoverInk?: string) {
   const ref = React.useRef<T | null>(null);
+  const hovered = React.useRef(false);
   React.useEffect(() => {
-    const run = () => paintInk(ref.current, ink);
+    const el = ref.current;
+    const run = () => paintInk(ref.current, hovered.current && hoverInk ? hoverInk : ink);
     run();
     const id = window.setTimeout(run, 60);
-    return () => window.clearTimeout(id);
+    const enter = () => {
+      hovered.current = true;
+      run();
+    };
+    const leave = () => {
+      hovered.current = false;
+      run();
+    };
+    el?.addEventListener("pointerenter", enter);
+    el?.addEventListener("pointerleave", leave);
+    return () => {
+      window.clearTimeout(id);
+      el?.removeEventListener("pointerenter", enter);
+      el?.removeEventListener("pointerleave", leave);
+    };
   });
   return ref;
 }
+
