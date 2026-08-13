@@ -14,10 +14,10 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ═══════════ 1. Sun — champagne CTA + count button ═══════════ */
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d)
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
   body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
   :is(button, a)[data-desktop-consultation],
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d)
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
   body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
   :is(button, a)[data-search-segment][data-surface="emerald"] {
   background-color: #C8AD7A !important;
@@ -34,12 +34,12 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(
   border-color: rgba(184, 149, 85, 0.62) !important;
   box-shadow: 0 8px 22px -14px rgba(184, 149, 85, 0.7) !important;
 }
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d)
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
   body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
   :is(button, a)[data-desktop-consultation] :is(span, svg, path),
-html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d)
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
   body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
-  :is(button, a)[data-search-segment][data-surface="emerald"] :is(span, svg, path) {
+  :is(button, a)[data-search-segment][data-surface="emerald"] :is(span, svg, path):not(#jj-p340-k):not(#jj-p340-l):not(#jj-p340-m):not(#jj-p340-n) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
