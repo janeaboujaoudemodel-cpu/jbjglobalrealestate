@@ -72,15 +72,35 @@ function Seg({
   const ink = dark ? "#FFFFFF" : "#1A1A1A";
   const muted = dark ? "rgba(255,255,255,0.92)" : "rgba(26,26,26,0.62)";
   const [open, setOpen] = useState(false);
+  // PASS 339 — phone layout gets a centred, near-full-width sheet.
+  const [isPhoneLayout, setIsPhoneLayout] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 1023.98px)").matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023.98px)");
+    const sync = () => setIsPhoneLayout(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
-  // The panel is anchored to THIS button. Any page scroll dismisses it so it can
-  // never detach and float over the page (PASS 301).
+
+  // PASS 339 — the panel is anchored to THIS button. A page scroll dismisses it
+  // so it can never detach and float over the page (PASS 301), but a scroll or
+  // tap that happens INSIDE the panel must never close it: on phones the panel
+  // is a scrollable sheet, and the old capture-phase listener swallowed every
+  // interaction ("I click a field and it just closes").
   useEffect(() => {
     if (!open) return;
-    const close = () => setOpen(false);
+    const close = (e: Event) => {
+      const t = e.target as Node | null;
+      if (t && t instanceof Element && t.closest("[data-search-dropdown]")) return;
+      setOpen(false);
+    };
     window.addEventListener("scroll", close, { passive: true, capture: true });
     return () => window.removeEventListener("scroll", close, { capture: true } as EventListenerOptions);
   }, [open]);
+
 
   // Long active labels ("Emaar Properties", "My Properties") shrink to fit their
   // box instead of being cropped. Never split a word.
@@ -139,13 +159,17 @@ function Seg({
         </button>
       </PopoverTrigger>
       <PopoverContent
-        align="start"
+        align={isPhoneLayout ? "center" : "start"}
         side="bottom"
         sideOffset={8}
-        avoidCollisions={false}
-        collisionPadding={12}
+        avoidCollisions={isPhoneLayout}
+        collisionPadding={10}
         data-surface="light"
         data-search-dropdown
+        onOpenAutoFocus={(e) => {
+          // Phones must not scroll the page to focus the first control.
+          if (isPhoneLayout) e.preventDefault();
+        }}
         className={`${wide ? "w-auto max-w-[94vw]" : "w-auto max-w-[92vw]"} max-h-[52vh] overflow-y-auto overscroll-contain p-0 z-[70]`}
         style={{
           background: "#FFFFFF",
@@ -153,6 +177,7 @@ function Seg({
           color: "#1A1A1A",
         }}
       >
+
         {children}
       </PopoverContent>
 

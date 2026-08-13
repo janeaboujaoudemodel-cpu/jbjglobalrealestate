@@ -1,0 +1,119 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 339 — SUN SEARCH CHAMPAGNE (ALL DEVICES), MOON FOOTER = RAIL,
+              RAIL FOOTER NEVER OVERLAID, PHONE-FRIENDLY DROPDOWNS
+
+   1) SUN THEME: every active pill in a search / filter bar wears the
+      SAME gold-champagne fill with black ink that the phone hero already
+      uses — Buy / Rent, sq ft / sq m and the "Show N properties" CTA —
+      on phone, iPad AND desktop. (PASS 328 limited it to portrait phones.)
+   2) MOON THEME: the site footer matches the vertical sidebar surface.
+   3) The expanded rail footer (theme toggle + Collapse + Sign Out) is a
+      solid, opaque block on its own layer: nothing from the scrolling
+      nav list can ever bleed above the divider or over the theme card.
+   4) The hero filter dropdowns become a real phone sheet: full-width,
+      centred, comfortable rows, and taps inside never dismiss them.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Sun — champagne active pills on EVERY viewport ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p339-a):not(#jj-p339-b):not(#jj-p339-c):not(#jj-p339-d)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][data-surface="emerald"][data-surface="emerald"],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p339-a):not(#jj-p339-b):not(#jj-p339-c):not(#jj-p339-d)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][aria-pressed="true"][aria-pressed="true"] {
+  background-color: #C8AD7A !important;
+  background-image: linear-gradient(
+    90deg,
+    #F1E8D6 0%,
+    #E2D2B4 22%,
+    #C8AD7A 50%,
+    #E2D2B4 78%,
+    #F1E8D6 100%
+  ) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184, 149, 85, 0.62) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p339-a):not(#jj-p339-b):not(#jj-p339-c):not(#jj-p339-d)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][data-surface="emerald"][data-surface="emerald"]
+  :is(span, svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p339-a):not(#jj-p339-b):not(#jj-p339-c):not(#jj-p339-d)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][aria-pressed="true"][aria-pressed="true"]
+  :is(span, svg, path) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+/* ═══════════ 2. Moon — footer wears the sidebar surface ═══════════ */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root footer#site-footer,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root footer[data-jj-minimal-footer] {
+  background-color: #01120b !important;
+  background-image: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #02190f 16%,
+    #063d29 48%,
+    #021a11 76%,
+    #000000 100%
+  ) !important;
+  color: #FFFFFF !important;
+}
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"]) body #root
+  :is(footer#site-footer, footer[data-jj-minimal-footer]) > div[aria-hidden="true"] {
+  opacity: 0.35 !important;
+}
+
+/* ═══════════ 3. Rail footer is its own opaque layer ═══════════ */
+html body #root [data-chrome="sidebar"] nav {
+  /* the scrolling list is strictly clipped inside its own track */
+  overflow-y: auto;
+  min-height: 0;
+}
+html body #root [data-chrome="sidebar"] .jj-rail-footer-block {
+  position: relative;
+  z-index: 5;
+  background-color: transparent;
+  backdrop-filter: none;
+  isolation: isolate;
+}
+/* Solid backdrop so a scrolling row can never be seen through / above it. */
+html body #root [data-chrome="sidebar"] .jj-rail-footer-block::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: inherit;
+  background-color: #01120b;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-chrome="sidebar"] .jj-rail-footer-block::before {
+  background-color: #F4EDDF;
+}
+/* The theme card never crops a word. */
+html body #root [data-chrome="sidebar"] .jj-sidebar-theme-toggle button > span {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* ═══════════ 4. Phone-friendly search dropdowns ═══════════ */
+@media (max-width: 1023.98px) {
+  html body [data-radix-popper-content-wrapper] > [data-search-dropdown] {
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+    max-height: 68vh !important;
+    border-radius: 14px !important;
+    box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.55) !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Comfortable touch rows inside every filter panel. */
+  html body [data-search-dropdown] :is(button, [role="option"], label) {
+    min-height: 40px;
+  }
+  html body [data-search-dropdown] [data-numeric-chip="true"] {
+    min-height: 40px;
+  }
+}
