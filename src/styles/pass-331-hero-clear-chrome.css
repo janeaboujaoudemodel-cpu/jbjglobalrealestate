@@ -41,3 +41,114 @@
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0) 100%);
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   PASS 332 — TRANSPARENT-HEADER CONTROLS (LOCKED)
+   While the top chrome is clear (page-top over a hero) or the header is
+   painting its transparent dark identity, every control in the bar drops
+   its emerald pill: transparent fill, one very soft hairline, pure white
+   glyphs — matching the homepage desktop hero. Applies in Sun and Moon.
+   ───────────────────────────────────────────────────────────────────── */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] :is(button, a[role="button"], [data-header-control]),
+html body div#root header[data-header-surface="dark"] :is(button, a[role="button"], [data-header-control]),
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-search-utility-controls],
+html body div#root header[data-header-surface="dark"] [data-search-utility-controls] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Active/pressed segment stays legible with a whisper of white, never emerald. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] button[aria-pressed="true"],
+html body div#root header[data-header-surface="dark"] button[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, 0.42) !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] svg,
+html body div#root header[data-header-surface="dark"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* The grouped sq ft / sq m control keeps one outer hairline, no inner pill. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-search-utility-controls] button,
+html body div#root header[data-header-surface="dark"] [data-search-utility-controls] button {
+  border: 0 !important;
+}
+
+/* Kill the metallic sheen layers (pseudo-elements + sweep spans) that paint the
+   emerald pill behind a transparent button, so the clear header really is clear. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] :is(button, [data-jjds-segmented])::before,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] :is(button, [data-jjds-segmented])::after,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] :is(button, [data-jjds-segmented]) > span:not(:has(*))::before,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle-sweep,
+html body div#root header[data-header-surface="dark"] :is(button, [data-jjds-segmented])::before,
+html body div#root header[data-header-surface="dark"] :is(button, [data-jjds-segmented])::after,
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle-sweep {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle[data-active="true"] {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+}
+
+/* The paired sq ft / sq m group is a DIV, not a button — it needs the same
+   clear treatment or it keeps its emerald plate. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jjds-segmented],
+html body div#root header[data-header-surface="dark"] [data-jjds-segmented] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+  box-shadow: none !important;
+}
+
+/* Inside the clear group: no inner pill borders, and the active segment is a
+   whisper of white — never the emerald metallic plate. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jjds-segmented] button,
+html body div#root header[data-header-surface="dark"] [data-jjds-segmented] button {
+  border: 0 !important;
+  border-radius: 9999px !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] :is(.jj-emerald-metallic, .jj-sqtoggle[data-active="true"], .jj-sqtoggle[aria-pressed="true"]),
+html body div#root header[data-header-surface="dark"] :is(.jj-emerald-metallic, .jj-sqtoggle[data-active="true"], .jj-sqtoggle[aria-pressed="true"]) {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Highest-specificity twin of the emerald utility-pill rules in index.css so
+   the clear state genuinely wins on the sq ft / sq m pair. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html body div#root header[data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]::before,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]::after {
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}

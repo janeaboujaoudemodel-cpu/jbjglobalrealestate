@@ -7,7 +7,7 @@
  * (see `useCurrency`).
  */
 import { useEffect, useState } from "react";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, CircleDollarSign } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,16 +59,21 @@ export default function InlineCurrencySelect({ dark }: Props) {
           style={{ color: fg, borderRadius: 0 }}
           aria-label="Select currency"
         >
-          {/* Same 3-column geometry as every filter segment: the symbol sits in
-              the icon slot, the code centres, the chevron pins right — so all
-              chevrons in the bar share one inset. */}
+          {/* Same 3-column geometry as every filter segment: the icon slot is
+              NEVER empty — currencies whose symbol equals their code (AED, CHF…)
+              fall back to the coin glyph so the phone bar matches desktop. */}
           <span
             aria-hidden
             className="inline-flex shrink-0 items-center justify-center text-[11px] font-semibold leading-none"
             style={{ color: dark ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.65)" }}
           >
-            {active.symbol === active.code ? null : active.symbol}
+            {active.symbol && active.symbol !== active.code ? (
+              active.symbol
+            ) : (
+              <CircleDollarSign className="h-4 w-4 opacity-80" />
+            )}
           </span>
+
           <span
             className="min-w-0 text-center text-[13px] font-semibold leading-none lg:text-sm"
             style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap" }}

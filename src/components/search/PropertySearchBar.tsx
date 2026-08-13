@@ -796,13 +796,17 @@ export default function PropertySearchBar({
             }}
 
           >
-            <span className="flex w-full min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[15px_minmax(0,1fr)_13px] lg:gap-0">
-              <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 opacity-70 lg:justify-self-center" />
-              <span className="text-center lg:text-[11px]" style={{ whiteSpace: "nowrap" }}>
+            {/* PASS 332 — "More" shares the EXACT segment geometry (icon | label |
+                trailing track) on every device, so its icon lines up with Price,
+                Type, Developers and the rest of the bar instead of hugging the label. */}
+            <span className="grid w-full min-w-0 grid-cols-[18px_minmax(0,1fr)_18px] lg:grid-cols-[15px_minmax(0,1fr)_13px] items-center gap-0">
+              <SlidersHorizontal className="h-4 w-4 lg:h-3.5 lg:w-3.5 shrink-0 opacity-70 justify-self-center" />
+              <span className="min-w-0 text-center leading-none lg:text-[11px]" style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
-              <span aria-hidden="true" className="hidden lg:inline-flex" />
+              <span aria-hidden="true" className="inline-flex" />
             </span>
+
 
           </button>
 
