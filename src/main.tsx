@@ -30,6 +30,7 @@ import"./styles/pass-330-sun-phone-clear-top-and-filter-geometry.css";
 import"./styles/pass-331-hero-clear-chrome.css";
 import"./styles/pass-333-orientation-chrome-and-sun-controls.css";
 import"./styles/pass-335-hero-clear-rail-and-hover-parity.css";
+import"./styles/pass-338-instant-theme-swap.css";
 
 
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";

@@ -50,10 +50,17 @@ export function inkForSkin(skin: ControlSkin): string {
  * descendant. Legacy global stylesheets still force white ink with !important on
  * header controls, and an inline style alone loses that fight — this wins it
  * without adding more global CSS.
+ *
+ * Writes are cached per node: repainting the same ink is a no-op, so a theme
+ * switch never triggers a style-recalc storm across every header control.
  */
+const lastInk = new WeakMap<Element, string>();
+
 export function paintInk(el: HTMLElement | null, ink: string) {
   if (!el) return;
+  if (lastInk.get(el) === ink) return;
   const apply = (node: HTMLElement | SVGElement) => {
+    if (lastInk.get(node) === ink) return;
     const s = node.style as CSSStyleDeclaration;
     s.setProperty("color", ink, "important");
     s.setProperty("-webkit-text-fill-color", ink, "important");
@@ -61,6 +68,7 @@ export function paintInk(el: HTMLElement | null, ink: string) {
       const current = node.getAttribute("stroke");
       if (current !== "none") s.setProperty("stroke", ink, "important");
     }
+    lastInk.set(node, ink);
   };
   apply(el);
   el.querySelectorAll<HTMLElement>("*").forEach((child) => {
@@ -74,6 +82,9 @@ export function paintInk(el: HTMLElement | null, ink: string) {
  * `hoverInk` (optional) is used while the pointer is over the element — a clear
  * control over a hero paints its theme surface on hover, so its ink has to flip
  * with it (champagne hover in Sun ⇒ black ink, per the contrast contract).
+ *
+ * The paint runs synchronously on skin change plus once on the next frame (for
+ * children mounted late) — never on a timer, so switching themes is instant.
  */
 export function useInkLock<T extends HTMLElement>(ink: string, hoverInk?: string) {
   const ref = React.useRef<T | null>(null);
@@ -82,7 +93,7 @@ export function useInkLock<T extends HTMLElement>(ink: string, hoverInk?: string
     const el = ref.current;
     const run = () => paintInk(ref.current, hovered.current && hoverInk ? hoverInk : ink);
     run();
-    const id = window.setTimeout(run, 60);
+    const raf = window.requestAnimationFrame(run);
     const enter = () => {
       hovered.current = true;
       run();
@@ -94,13 +105,14 @@ export function useInkLock<T extends HTMLElement>(ink: string, hoverInk?: string
     el?.addEventListener("pointerenter", enter);
     el?.addEventListener("pointerleave", leave);
     return () => {
-      window.clearTimeout(id);
+      window.cancelAnimationFrame(raf);
       el?.removeEventListener("pointerenter", enter);
       el?.removeEventListener("pointerleave", leave);
     };
-  });
+  }, [ink, hoverInk]);
   return ref;
 }
+
 
 
 /**

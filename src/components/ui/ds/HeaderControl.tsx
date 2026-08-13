@@ -104,17 +104,18 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
       const el = innerRef.current;
       const run = () => paintInk(innerRef.current, hovered.current && hoverInk ? hoverInk : ink);
       run();
-      const id = window.setTimeout(run, 60);
+      const raf = window.requestAnimationFrame(run);
       const enter = () => { hovered.current = true; run(); };
       const leave = () => { hovered.current = false; run(); };
       el?.addEventListener("pointerenter", enter);
       el?.addEventListener("pointerleave", leave);
       return () => {
-        window.clearTimeout(id);
+        window.cancelAnimationFrame(raf);
         el?.removeEventListener("pointerenter", enter);
         el?.removeEventListener("pointerleave", leave);
       };
-    });
+    }, [ink, hoverInk]);
+
 
     return (
       <button
