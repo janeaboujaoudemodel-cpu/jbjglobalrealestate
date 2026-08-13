@@ -83,4 +83,17 @@
     padding-bottom: 0 !important;
     line-height: 1 !important;
   }
+
+  /* The "Show N properties" CTA is champagne in Sun ⇒ its label and every
+     nested node read pure black. Extra specificity beats the inline
+     -webkit-text-fill-color on the button. */
+  html[data-jbj-theme="sun"]:not(#p1):not(#p2):not(#p3):not(#p4):not(#p5):not(#p6) body[data-home-hero-state] div#root
+    div[data-property-search-bar] button[data-surface="emerald"][data-search-segment],
+  html[data-jbj-theme="sun"]:not(#p1):not(#p2):not(#p3):not(#p4):not(#p5):not(#p6) body[data-home-hero-state] div#root
+    div[data-property-search-bar] button[data-surface="emerald"][data-search-segment] * {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    text-shadow: none !important;
+  }
 }
+
