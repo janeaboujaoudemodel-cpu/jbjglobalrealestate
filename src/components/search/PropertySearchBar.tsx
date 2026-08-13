@@ -105,15 +105,15 @@ function Seg({
           }}
         >
 
-          {/* Phone/tablet: icon · label · chevron read as ONE centred group
-              (exactly like the AED currency control) so the pin sits right
-              before "UAE" and every chevron lands at the same inset.
-              Desktop keeps the 3-column grid used by the alignment lock. */}
-          <span className="flex flex-1 min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[18px_minmax(0,1fr)_18px] lg:gap-0">
+          {/* PASS 330 — one geometry on EVERY device: a fixed 3-column track
+              [icon 18px | label | chevron 18px]. Every segment therefore lands
+              its icon at the same left inset and its chevron at the same right
+              inset, on phone, tablet and desktop alike. */}
+          <span className="grid w-full min-w-0 grid-cols-[18px_minmax(0,1fr)_18px] items-center gap-0">
             {icon ? (
               <span className="inline-flex shrink-0 items-center justify-center">{icon}</span>
             ) : (
-              <span className="hidden lg:inline-flex" />
+              <span aria-hidden="true" className="inline-flex" />
             )}
             <span
               className="min-w-0 leading-none text-center"
@@ -131,8 +131,9 @@ function Seg({
 
               {label}
             </span>
-            <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70 lg:col-start-3 lg:justify-self-end" />
+            <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70 col-start-3 justify-self-end" />
           </span>
+
 
         </button>
       </PopoverTrigger>
