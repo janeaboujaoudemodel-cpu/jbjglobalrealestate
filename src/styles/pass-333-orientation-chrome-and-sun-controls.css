@@ -170,3 +170,32 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   color: #1a1a1a !important;
   -webkit-text-fill-color: #1a1a1a !important;
 }
+
+/* ── Sun account identity: champagne plate, black initials, champagne alert
+      badge with black count. Beats the legacy emerald avatar/badge locks. */
+html body div#root [data-jbj-avatar][data-jbj-avatar-skin="champagne"]:not(#a):not(#b),
+html body div#root [data-jbj-avatar][data-jbj-avatar-skin="champagne"]:not(#a):not(#b) span,
+html body div#root [data-jbj-notification-badge][data-jbj-badge-skin="champagne"]:not(#a):not(#b),
+html body div#root [data-jbj-notification-badge][data-jbj-badge-skin="champagne"]:not(#a):not(#b) span {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  text-shadow: none !important;
+}
+
+html body div#root [data-jbj-avatar][data-jbj-avatar-skin="champagne"]:not(#a):not(#b),
+html body div#root [data-jbj-notification-badge][data-jbj-badge-skin="champagne"]:not(#a):not(#b) {
+  background: linear-gradient(90deg, #fdfbf7 0%, #f7f2ea 52%, #f2ebdc 100%) !important;
+  background-image: linear-gradient(90deg, #fdfbf7 0%, #f7f2ea 52%, #f2ebdc 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.5) !important;
+}
+
+/* Inner count span must stay flat — legacy rules paint emerald on every
+   descendant of the badge, which showed as a dark square on champagne. */
+html body div#root [data-jbj-notification-badge][data-jbj-badge-skin="champagne"]:not(#a):not(#b) > span,
+html body div#root [data-jbj-avatar][data-jbj-avatar-skin="champagne"]:not(#a):not(#b) > span {
+  background: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}

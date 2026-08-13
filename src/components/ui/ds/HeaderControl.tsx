@@ -62,41 +62,9 @@ const headerControl = cva(
   },
 );
 
-/**
- * Chrome skin state, read straight off the document so every control in the
- * horizontal header follows the same skin as the vertical sidebar:
- *   - "clear"     → header floats over a hero: transparent surface, white ink
- *   - "champagne" → Sun skin: gold-champagne surface, black ink (light surface)
- *   - "emerald"   → Moon skin: emerald ombre surface, white ink (dark surface)
- */
-type ControlSkin = "clear" | "champagne" | "emerald";
+export type { ControlSkin } from "@/hooks/use-chrome-skin";
+import { useControlSkin, useInkLock, inkForSkin, paintInk, type ControlSkin } from "@/hooks/use-chrome-skin";
 
-function readControlSkin(): ControlSkin {
-  if (typeof document === "undefined") return "emerald";
-  const root = document.documentElement;
-  if (document.body?.getAttribute("data-jj-hero-chrome") === "clear") return "clear";
-  const backendLocked = root.getAttribute("data-jbj-backend-lock") === "1";
-  if (!backendLocked && root.getAttribute("data-jbj-theme") === "sun") return "champagne";
-  return "emerald";
-}
-
-function useControlSkin(): ControlSkin {
-  const [skin, setSkin] = React.useState<ControlSkin>(readControlSkin);
-  React.useEffect(() => {
-    const sync = () => setSkin((prev) => {
-      const next = readControlSkin();
-      return next === prev ? prev : next;
-    });
-    sync();
-    const obs = new MutationObserver(sync);
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-jbj-theme", "data-jbj-backend-lock"] });
-    if (document.body) {
-      obs.observe(document.body, { attributes: true, attributeFilter: ["data-jj-hero-chrome"] });
-    }
-    return () => obs.disconnect();
-  }, []);
-  return skin;
-}
 
 const CHAMPAGNE_SURFACE: React.CSSProperties = {
   backgroundImage: "linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)",
@@ -128,9 +96,21 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
     const skinned = emerald && skin !== "clear"
       ? { ...(skin === "champagne" ? CHAMPAGNE_SURFACE : EMERALD_SURFACE), ...style }
       : style;
+    const ink = inkForSkin(skin);
+    const innerRef = React.useRef<HTMLButtonElement | null>(null);
+    React.useEffect(() => {
+      const run = () => paintInk(innerRef.current, ink);
+      run();
+      const id = window.setTimeout(run, 60);
+      return () => window.clearTimeout(id);
+    });
     return (
       <button
-        ref={ref}
+        ref={(node) => {
+          innerRef.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) (ref as React.MutableRefObject<HTMLButtonElement | null>).current = node;
+        }}
         type="button"
         data-jjds-header-control=""
         data-jjds-shape={shape ?? "circle"}
@@ -147,6 +127,7 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
     );
   },
 );
+
 HeaderControl.displayName = "HeaderControl";
 
 
@@ -164,6 +145,8 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
   const skin = useControlSkin();
   const champagne = skin === "champagne";
   const ink = champagne ? "#1A1A1A" : "#FFFFFF";
+  const groupRef = useInkLock<HTMLDivElement>(ink);
+
   const groupStyle: React.CSSProperties =
     skin === "clear"
       ? {}
@@ -180,7 +163,9 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
           };
   return (
     <div
+      ref={groupRef}
       data-jjds-segmented=""
+
       data-jjds-skin={skin}
       data-no-contrast-guard
       data-on-dark={skin !== "champagne" ? "" : undefined}

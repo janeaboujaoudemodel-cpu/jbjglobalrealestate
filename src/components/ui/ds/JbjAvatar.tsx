@@ -1,15 +1,19 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useControlSkin, inkForSkin } from "@/hooks/use-chrome-skin";
 
-/** Forces pure white ink at runtime with !important priority (beats any stylesheet). */
-function useForceWhiteInk() {
+/**
+ * Forces the skin ink at runtime with !important priority (beats any stylesheet).
+ * Sun/champagne chrome = black ink, Moon/emerald + hero-clear = white ink.
+ */
+function useForceWhiteInk(ink = "#FFFFFF") {
   const ref = React.useRef<HTMLSpanElement>(null);
   React.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const paint = () => {
-      el.style.setProperty("color", "#FFFFFF", "important");
-      el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+      el.style.setProperty("color", ink, "important");
+      el.style.setProperty("-webkit-text-fill-color", ink, "important");
     };
     paint();
     const id = window.setTimeout(paint, 60);
@@ -35,28 +39,47 @@ const sizeClass = {
  */
 export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
   ({ initials = "JB", size = "md", className, ...props }, ref) => {
-    const inkRef = useForceWhiteInk();
+    const skin = useControlSkin();
+    const champagne = skin === "champagne";
+    const ink = inkForSkin(skin);
+    const inkRef = useForceWhiteInk(ink);
     return (
       <span
         ref={ref}
         data-jbj-avatar
-        data-surface="emerald"
+        data-jbj-avatar-skin={skin}
+        data-surface={champagne ? "champagne" : "emerald"}
         data-no-contrast-guard
         className={cn(
-          "jj-avatar-metallic allow-white relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
+          champagne ? "" : "jj-avatar-metallic allow-white",
+          "relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
+
           sizeClass[size],
           className,
         )}
         {...props}
       >
-        <span aria-hidden="true" className="jj-avatar-spinner absolute inset-0 rounded-full pointer-events-none" />
-        <span aria-hidden="true" className="jj-avatar-core absolute inset-0 rounded-full overflow-hidden" />
+        {champagne ? (
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 rounded-full"
+            style={{
+              backgroundImage: "linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)",
+              boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.42)",
+            }}
+          />
+        ) : (
+          <>
+            <span aria-hidden="true" className="jj-avatar-spinner absolute inset-0 rounded-full pointer-events-none" />
+            <span aria-hidden="true" className="jj-avatar-core absolute inset-0 rounded-full overflow-hidden" />
+          </>
+        )}
         <span
           ref={inkRef}
           data-no-contrast-guard
           data-emerald-ok
-          className="allow-white relative z-[3] font-extrabold leading-none tracking-[0.01em] !text-white"
-          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          className={cn("relative z-[3] font-extrabold leading-none tracking-[0.01em]", champagne ? "" : "allow-white !text-white")}
+          style={{ color: ink, WebkitTextFillColor: ink }}
         >
           {initials}
         </span>
@@ -74,31 +97,41 @@ export interface NotificationBadgeProps extends React.HTMLAttributes<HTMLSpanEle
 
 /** Single notification badge used in header + dropdown. */
 export function NotificationBadge({ count, floating = false, className, ...props }: NotificationBadgeProps) {
-  const inkRef = useForceWhiteInk();
+  const skin = useControlSkin();
+  const champagne = skin === "champagne";
+  const ink = inkForSkin(skin);
+  const inkRef = useForceWhiteInk(ink);
   if (!count || count <= 0) return null;
   return (
     <span
       data-jbj-notification-badge
-      data-surface="emerald"
-      data-emerald="true"
+      data-jbj-badge-skin={skin}
+      data-surface={champagne ? "champagne" : "emerald"}
+      data-emerald={champagne ? undefined : "true"}
       data-emerald-ok
       data-no-contrast-guard
       className={cn(
-        "allow-white inline-flex h-[20px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none !text-white ![color:#FFFFFF] ![-webkit-text-fill-color:#FFFFFF] shadow-[0_6px_14px_-8px_rgba(0,0,0,0.85)]",
+        champagne
+          ? "inline-flex h-[20px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none"
+          : "allow-white inline-flex h-[20px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none !text-white ![color:#FFFFFF] ![-webkit-text-fill-color:#FFFFFF] shadow-[0_6px_14px_-8px_rgba(0,0,0,0.85)]",
         floating && "absolute right-0 top-0 z-[6] translate-x-[30%]",
         className,
       )}
       {...props}
       style={{
-        background: "linear-gradient(135deg, #E11D48 0%, #B0122F 100%)",
-        boxShadow: "0 0 0 2px rgba(255,255,255,0.92)",
+        background: champagne
+          ? "linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)"
+          : "linear-gradient(135deg, #E11D48 0%, #B0122F 100%)",
+        boxShadow: champagne
+          ? "0 0 0 1px rgba(184,149,85,0.55), 0 2px 6px -3px rgba(26,26,26,0.35)"
+          : "0 0 0 2px rgba(255,255,255,0.92)",
         ...props.style,
-        color: "#FFFFFF",
-        WebkitTextFillColor: "#FFFFFF",
+        color: ink,
+        WebkitTextFillColor: ink,
       }}
 
     >
-      <span ref={inkRef} data-emerald-ok data-no-contrast-guard className="text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
+      <span ref={inkRef} data-emerald-ok data-no-contrast-guard style={{ color: ink, WebkitTextFillColor: ink }}>
         {count > 9 ? "9+" : count}
       </span>
     </span>
