@@ -7,6 +7,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { isOwnerBackendEmail } from "@/config/ownerEmails";
 import { cn } from "@/lib/utils";
+import { useControlSkin, inkForSkin, useInkLock } from "@/hooks/use-chrome-skin";
 import {
   DropdownMenu,
   DropdownMenuContent,
