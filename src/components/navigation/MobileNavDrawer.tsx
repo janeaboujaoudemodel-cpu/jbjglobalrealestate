@@ -93,6 +93,27 @@ export default function MobileNavDrawer({
     return () => { document.body.style.overflow = previous; };
   }, [open]);
 
+  /* PASS 351 — Sun only: the three quick glyphs wear premium gold. Global ink
+     guards repaint icon strokes with !important, so the gold has to be written
+     inline with the same priority. Moon is never touched. */
+  useEffect(() => {
+    if (!open || isMoon) return;
+    const paintGold = () => {
+      document
+        .querySelectorAll<SVGElement>('[data-jj-drawer-panel] [data-jj-drawer-tile] svg, [data-jj-drawer-panel] [data-jj-drawer-tile] svg *')
+        .forEach((node) => {
+          node.style.setProperty("color", "#B89555", "important");
+          if (node.tagName.toLowerCase() !== "svg") {
+            node.style.setProperty("stroke", "#B89555", "important");
+          }
+        });
+    };
+    paintGold();
+    const raf = window.requestAnimationFrame(paintGold);
+    const t = window.setTimeout(paintGold, 220);
+    return () => { window.cancelAnimationFrame(raf); window.clearTimeout(t); };
+  }, [open, isMoon, user]);
+
   /* Escape closes. */
   useEffect(() => {
     if (!open) return;
