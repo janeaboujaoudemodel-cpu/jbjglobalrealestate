@@ -1668,17 +1668,20 @@ export default function PublicAccess() {
       </footer>
 
 
-      {/* Welcome portal pop-up — explains this is the access gate, not the full site. */}
+      {/* Welcome portal pop-up — the ONLY pop-up on the gate. Once resolved,
+          the free-consultation form opens so the visitor can pick the service
+          they need and be contacted. The old "one widget" guide is retired:
+          Call + Contact Us already live in the support launcher. */}
       <WelcomePortalOverlay
         onCreateAccount={openSignup}
         onLogin={openLogin}
         onResolved={() => setWelcomeDone(true)}
       />
 
-      {/* Unified Contact widget and its advisor form are mounted globally. */}
-      <SupportGuideOverlay enabled={welcomeDone} />
+      <FreeConsultationAfterWelcome enabled={welcomeDone} onOpen={() => setLeadOpen(true)} />
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
+
       <PaymentRequestDialog
         open={!!payCtx}
         onOpenChange={(o) => { if (!o) setPayCtx(null); }}
@@ -1797,8 +1800,20 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
             type="button"
             onClick={dismiss}
             aria-label="Close welcome portal"
-            className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/25 text-white opacity-100 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 sm:right-3 sm:top-3"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            className="allow-white absolute right-2 top-2 z-20 grid place-items-center rounded-full border border-white/30 bg-black/25 p-0 leading-none text-white opacity-100 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 sm:right-3 sm:top-3"
+            style={{
+              /* A true circle: fixed square box that no flex/line-height can
+                 stretch into an oval. */
+              width: 36,
+              height: 36,
+              minWidth: 36,
+              minHeight: 36,
+              aspectRatio: "1 / 1",
+              borderRadius: "9999px",
+              flex: "0 0 auto",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+            }}
           >
             <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
           </button>
@@ -1815,12 +1830,15 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
             Welcome · Private access portal
           </span>
 
+          {/* Trimmed monogram: the original asset carries a huge transparent
+              margin, which made the mark look tiny inside the card. */}
           <img
             data-no-fallback
-            src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
+            src={new URL("@/assets/jbj-monogram-light-trimmed.png", import.meta.url).href}
             alt="JBJ"
-            className="h-32 w-32 object-contain opacity-95 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-28 sm:w-28"
+            className="h-24 w-auto object-contain opacity-100 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-28"
           />
+
 
           <h2 id="jbj-welcome-portal-title" className="mt-5 font-serif text-2xl leading-tight text-white sm:text-3xl">
             Welcome to JBJ Global Real Estate
@@ -1838,17 +1856,22 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
               onClick={handleCreateAccount}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
+              className="allow-white inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-md text-[11px] font-bold uppercase tracking-[0.14em] transition-[filter] hover:brightness-110"
               style={{
+                /* Centre-lit emerald: black at both edges, emerald in the
+                   middle — the locked band gradient. White ink always. */
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
-                backgroundImage: "var(--jj-emerald-ombre)",
+                background: "linear-gradient(90deg, #000000 0%, #064E3B 50%, #000000 100%)",
+                backgroundImage: "linear-gradient(90deg, #000000 0%, #064E3B 50%, #000000 100%)",
                 border: 0,
                 boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
               }}
             >
-              Create account <ArrowRight className="h-4 w-4" />
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Create account</span>
+              <ArrowRight className="h-4 w-4" style={{ stroke: "#FFFFFF", color: "#FFFFFF" }} />
             </button>
+
             <button
               type="button"
               onClick={handleLogin}
@@ -1867,135 +1890,34 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
 
 
 /* ============================================================================
- * SupportGuideOverlay — first-visit modal that explains the difference between
- * the "Contact Us" support hub (WhatsApp/Call/Concierge) and the "Speak to an
- * Advisor" lead form. After "Okay":
- *   • Anonymous visitor → hidden for 24h, re-shown after that if still signed out.
- *   • Signed-in user   → never shown again.
+ * FreeConsultationAfterWelcome — the gate shows exactly one pop-up (the welcome
+ * portal). Once it is resolved, the free-consultation form opens so the visitor
+ * can choose the services they need and leave their details. The old
+ * "one widget / quick guide" pop-up is removed: Call and Contact Us are already
+ * one tap away in the support launcher.
  * ==========================================================================*/
-const SUPPORT_GUIDE_KEY = "jbj_support_guide_dismissed_at";
-const SUPPORT_GUIDE_TTL_MS = 24 * 60 * 60 * 1000;
+const FREE_CONSULT_KEY = "jbj_access_free_consult_offered_at";
+const FREE_CONSULT_TTL_MS = 24 * 60 * 60 * 1000;
 
-function SupportGuideOverlay({ enabled = true }: { enabled?: boolean }) {
+function FreeConsultationAfterWelcome({ enabled, onOpen }: { enabled: boolean; onOpen: () => void }) {
   const { user } = useAuth();
-  const [open, setOpen] = useState(false);
-  // The single dismissal control appears only after 4s, so we can be confident
-  // the visitor actually read the guide before it can be closed.
-  const [okReady, setOkReady] = useState(false);
 
   useEffect(() => {
-    if (!open) { setOkReady(false); return; }
-    const t = window.setTimeout(() => setOkReady(true), 4000);
-    return () => window.clearTimeout(t);
-  }, [open]);
-
-  useEffect(() => {
-    // Queue behaviour: wait until the welcome portal has been resolved.
-    if (!enabled) { setOpen(false); return; }
-    // Signed-in users: never show, and clear any stale flag.
-    if (user) {
-      try { localStorage.removeItem(SUPPORT_GUIDE_KEY); } catch {}
-      setOpen(false);
-      return;
-    }
+    if (!enabled || user) return;
+    let stale = true;
     try {
-      const raw = localStorage.getItem(SUPPORT_GUIDE_KEY);
-      if (!raw) {
-        // First visit — small delay so the page paints first
-        const t = window.setTimeout(() => setOpen(true), 1500);
-        return () => window.clearTimeout(t);
-      }
-      const dismissedAt = parseInt(raw, 10);
-      if (Number.isFinite(dismissedAt) && Date.now() - dismissedAt >= SUPPORT_GUIDE_TTL_MS) {
-        const t = window.setTimeout(() => setOpen(true), 1500);
-        return () => window.clearTimeout(t);
-      }
-    } catch {
-      // Silent fail — never block UX
-    }
-  }, [user, enabled]);
+      const raw = localStorage.getItem(FREE_CONSULT_KEY);
+      const at = raw ? parseInt(raw, 10) : NaN;
+      stale = !Number.isFinite(at) || Date.now() - at >= FREE_CONSULT_TTL_MS;
+    } catch { /* silent */ }
+    if (!stale) return;
+    const t = window.setTimeout(() => {
+      try { localStorage.setItem(FREE_CONSULT_KEY, String(Date.now())); } catch { /* silent */ }
+      onOpen();
+    }, 900);
+    return () => window.clearTimeout(t);
+  }, [enabled, user, onOpen]);
 
-  const handleOkay = () => {
-    try { localStorage.setItem(SUPPORT_GUIDE_KEY, String(Date.now())); } catch {}
-    setOpen(false);
-  };
-
-  if (!open) return null;
-
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="jbj-support-guide-title"
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4"
-    >
-      <div
-        className="absolute inset-0 bg-black/55 backdrop-blur-sm"
-        onClick={() => { if (okReady) handleOkay(); }}
-        aria-hidden
-      />
-      <div
-        data-no-contrast-guard
-        className="jbj-emerald-animated-border relative w-full max-w-lg rounded-2xl p-[2px] shadow-[0_30px_60px_rgba(0,0,0,0.45),0_0_34px_rgba(16,185,129,0.35)]"
-      >
-        <div
-          data-emerald="true"
-          data-allow-dark-cta
-          data-no-contrast-guard
-          className="jj-emerald-metallic allow-white relative flex flex-col rounded-[14px] p-6 text-white sm:p-8"
-        >
-          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80">Quick guide</span>
-          <h3 id="jbj-support-guide-title" className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl">
-            One widget. Every way to reach JBJ.
-          </h3>
-          <p className="mt-2 text-sm text-white/80">
-            Tap the <span className="font-semibold text-white">Contact Us</span> control (right edge on desktop, bottom-right on mobile) to open every support channel in one place.
-          </p>
-
-          <div className="mt-5 grid gap-3">
-            <div className="rounded-xl bg-white/8 p-4 ring-1 ring-white/15">
-              <div className="flex items-center gap-2">
-                <PhoneCall className="h-4 w-4 text-white" />
-                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Speak to an advisor</span>
-              </div>
-              <p className="mt-1.5 text-[13px] leading-relaxed text-white/80">
-                Scheduled callback from a senior advisor — best for property, investment or brokerage requests.
-              </p>
-            </div>
-            <div className="rounded-xl bg-white/8 p-4 ring-1 ring-white/15">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-white" />
-                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Instant support · 24/7</span>
-              </div>
-              <p className="mt-1.5 text-[13px] leading-relaxed text-white/80">
-                WhatsApp, call now, live voice agent or JBJ Concierge — all inside the same panel.
-              </p>
-            </div>
-          </div>
-
-
-          {/* Rendered only once the 4s read window has elapsed. */}
-          {okReady && (
-          <button
-            type="button"
-            onClick={handleOkay}
-            data-allow-dark-cta
-            data-no-contrast-guard
-            className="allow-white mt-6 inline-flex h-12 w-full animate-in fade-in items-center justify-center rounded-full text-[13px] font-bold uppercase tracking-[0.22em] text-white duration-500 hover:brightness-110"
-            style={{
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              backgroundImage: "var(--jj-emerald-ombre)",
-              border: 0,
-              boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-            }}
-          >
-            Okay, got it
-          </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }
 
