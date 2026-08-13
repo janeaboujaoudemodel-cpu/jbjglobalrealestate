@@ -1,0 +1,119 @@
+/*
+ * PASS 346 — OPEN RAIL INK + ONE TITLE TYPOGRAPHY (LOCKED)
+ *
+ * 1. INK: while the vertical sidebar is OPEN (body.jj-vertical-nav-active) the
+ *    rail always wears its skin surface — champagne in Sun, emerald in Moon —
+ *    so its ink must follow the brand contract in EVERY state, including while
+ *    the page still sits on its hero (body[data-jj-hero-chrome="clear"]).
+ *    Sun → black ink (#1A1A1A). Moon → pure white (#FFFFFF).
+ *    Inline `color:#FFFFFF` on the rows is beaten with !important here.
+ *
+ * 2. TITLE PARITY: every rail row (highlight hubs like Owner Portal / Resale
+ *    Properties, section rows like Tools & Workspaces / My Account, and every
+ *    sub-item) renders with the SAME font family, size (13.5px), weight (600),
+ *    letter-spacing, row height (36px) and the SAME icon geometry
+ *    (18px glyph in a 22px box, stroke 2) so all titles sit on one line.
+ *
+ * Loaded after every earlier pass, scoped to the rail only.
+ */
+
+/* ───────────────────────── 1. OPEN-RAIL INK ───────────────────────── */
+
+/* Sun — black ink on champagne, every state, hero or not. */
+html[data-jbj-theme="sun"]
+  body.jj-vertical-nav-active
+  div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"]
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]):not([data-active="true"]):not([aria-current="page"]),
+html[data-jbj-theme="sun"]
+  body.jj-vertical-nav-active
+  div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"]
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]):not([data-active="true"]):not([aria-current="page"])
+  :is(span, small, strong, label, kbd, svg, svg *, path) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  stroke: currentColor !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  opacity: 1 !important;
+}
+
+/* Moon — pure white ink on emerald, every state. */
+html[data-jbj-theme="moon"]
+  body.jj-vertical-nav-active
+  div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"]
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal])
+  :is(span, small, strong, label, kbd, svg, svg *, path),
+html[data-jbj-theme="moon"]
+  body.jj-vertical-nav-active
+  div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"]
+  :is(a, button, [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  stroke: currentColor !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+/* The emerald ACTIVE pill keeps its own gradient + white ink in both skins. */
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is(a, button)[data-active="true"],
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is(a, button)[aria-current="page"] {
+  background-image: var(--jj-emerald-ombre) !important;
+}
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is(a, button):is([data-active="true"], [aria-current="page"]),
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is(a, button):is([data-active="true"], [aria-current="page"])
+  :is(span, small, strong, svg, svg *, path) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  stroke: currentColor !important;
+}
+
+/* ───────────────────── 2. ONE TITLE TYPOGRAPHY ───────────────────── */
+
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal]) {
+  min-height: 36px !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  line-height: 1.2 !important;
+  gap: 10px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal])
+  :is(span, small, strong) {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+/* Identical icon geometry on every row. */
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is(a, button):is([data-sidebar-highlight], [data-sidebar-section], [data-sidebar-subitem], [data-backend-nav-item], [data-sidebar-mode-portal])
+  svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke-width: 2 !important;
+  flex: 0 0 auto !important;
+}
+html body.jj-vertical-nav-active div#root [data-chrome="sidebar"]
+  :is([data-sidebar-highlight-tile], [data-sidebar-subitem-icon-tile], [data-sidebar-mode-icon-tile]) {
+  width: 22px !important;
+  height: 22px !important;
+}

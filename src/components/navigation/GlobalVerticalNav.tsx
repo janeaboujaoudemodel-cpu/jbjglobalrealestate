@@ -680,7 +680,10 @@ export default function GlobalVerticalNav() {
   }, [session?.user?.id]);
 
   const collapseAfterNavigation = useCallback(() => {
-    if (pinnedOpen) {
+    /* PASS 346 — the rail NEVER closes while the pointer is still inside it.
+       A hover-expanded rail only collapses from handleSidebarLeave (real
+       mouse-out) or an explicit Collapse click. Navigation just closes menus. */
+    if (pinnedOpen || hoverExpanded) {
       setActiveMegaMenu(null);
       setMobileOpen(false);
       return;
@@ -689,7 +692,8 @@ export default function GlobalVerticalNav() {
     try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
     setActiveMegaMenu(null);
     setMobileOpen(false);
-  }, [pinnedOpen]);
+  }, [pinnedOpen, hoverExpanded]);
+
 
   const handleSidebarEnter = useCallback(() => {
     /* Hover-to-expand is a pointer affordance only — on touch devices the
@@ -907,18 +911,12 @@ export default function GlobalVerticalNav() {
     }
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    if (
-      item.href === '/join' ||
-      item.href === '/ai-home-finder' ||
-      (hrefPathname(item.href) === '/list-property' && item.highlight) ||
-      item.href === '/resale-properties'
-    ) {
-      return shouldHighlight ? "font-bold text-[#1A1A1A]" : "font-semibold text-[#1A1A1A]";
-    }
+    /* PASS 346 — every rail title shares one typography: same weight, size and
+       ink. Owner Portal / Resale Properties are no longer special-cased. */
+    void shouldHighlight;
+    void sectionKey;
+    return "text-[#1A1A1A] font-semibold";
 
-    return shouldHighlight
-      ? "text-[#1A1A1A] font-bold"
-      : (sectionKey ? "text-[#1A1A1A] font-medium" : "text-[#1A1A1A]");
   };
 
   // PASS 303: no plates/rings behind sidebar icons — icons only, both states.
