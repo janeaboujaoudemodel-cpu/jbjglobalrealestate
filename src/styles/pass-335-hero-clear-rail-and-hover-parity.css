@@ -161,7 +161,7 @@
   }
   /* The page shell clips horizontally; while clear it must let the hero bleed
      left under the rail (nothing extends past the right edge, so no overflow). */
-  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root main.jj-main-shell > div > .jj-page-shell,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root main.jj-main-shell,
   html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root main.jj-main-shell .jj-page-shell {
     overflow-x: visible !important;
   }
