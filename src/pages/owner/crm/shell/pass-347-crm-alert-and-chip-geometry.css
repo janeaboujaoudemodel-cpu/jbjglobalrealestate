@@ -277,3 +277,42 @@
   background: rgba(255, 255, 255, 0.14) !important;
 }
 .jc-app .jc-header .jc-popover--notif { max-height: 560px !important; }
+
+/* ---------- 4. PASS 348 — EMERALD CENTRE-LIT BAND + WHITE HEAD INK ---------- */
+/* New emerald rule: darkest at BOTH edges, emerald lift only in the centre. */
+.jc-app {
+  --jc347-band: linear-gradient(90deg, #000000 0%, #042c1c 22%, #064E3B 50%, #042c1c 78%, #000000 100%);
+}
+
+.jc-app .jc-popover--notif .jc-notif__head,
+.jc-app .jc-header .jc-popover--notif .jc-notif__head {
+  background: var(--jc347-band) !important;
+}
+.jc-app .jc-header .jc-popover--notif .jc-notif__view,
+.jc-app .jc-popover--notif .jc-notif__view {
+  background: var(--jc347-band) !important;
+}
+
+/* Head ink is pure white in every state (beats crmShell header scope). */
+.jc-app .jc-header .jc-popover .jc-notif__head .jc-notif__title,
+.jc-app .jc-header .jc-popover--notif .jc-notif__head :is(span, button, div, svg, path),
+.jc-app .jc-popover--notif .jc-notif__head :is(span, button, div, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Count chip + alert badge rings are emerald, never gold. */
+.jc-app .jc-header .jc-popover--notif .jc-notif__count,
+.jc-app .jc-popover--notif .jc-notif__count {
+  background: rgba(6, 78, 59, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jc-app .jc-icon-btn__badge {
+  border: 1.5px solid #064E3B !important;
+}
+.jc-app .jc-popover--notif .jc-notif__view {
+  border: 1px solid rgba(6, 78, 59, 0.55) !important;
+}
