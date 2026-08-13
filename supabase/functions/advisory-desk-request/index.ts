@@ -32,7 +32,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const FROM = "JBJ Advisory Desk <jane@jbj.ae>";
+const FROM = "JBJ Advisory Desk <Contact@JBJ.AE>";
 const BACKEND_QUEUE = "https://www.jbj.ae/owner/crm/jbj/owner-advisory-desk";
 
 const BodySchema = z.object({

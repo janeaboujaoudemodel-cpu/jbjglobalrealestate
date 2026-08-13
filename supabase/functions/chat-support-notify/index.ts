@@ -21,7 +21,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const FROM = "JBJ Live Chat <jane@jbj.ae>";
+const FROM = "JBJ Live Chat <Contact@JBJ.AE>";
 
 const BodySchema = z.object({
   conversationId: z.string().uuid().optional(),
