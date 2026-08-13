@@ -105,18 +105,18 @@ function Seg({
           }}
         >
 
-          {/* PASS 330 — one geometry on EVERY device: a fixed 3-column track
-              [icon 18px | label | chevron 18px]. Every segment therefore lands
-              its icon at the same left inset and its chevron at the same right
-              inset, on phone, tablet and desktop alike. */}
-          <span className="grid w-full min-w-0 grid-cols-[18px_minmax(0,1fr)_18px] items-center gap-0">
+          {/* PASS 330/331 — one geometry on EVERY device: a fixed 3-column track
+              [icon | label | chevron]. Desktop uses slightly tighter side
+              tracks so long labels ("Developers", "Status") never crop while
+              every icon and chevron still shares one inset. */}
+          <span className="grid w-full min-w-0 grid-cols-[18px_minmax(0,1fr)_18px] lg:grid-cols-[15px_minmax(0,1fr)_13px] items-center gap-0">
             {icon ? (
               <span className="inline-flex shrink-0 items-center justify-center">{icon}</span>
             ) : (
               <span aria-hidden="true" className="inline-flex" />
             )}
             <span
-              className="min-w-0 leading-none text-center"
+              className="min-w-0 leading-none text-center lg:text-[11px] lg:tracking-[-0.01em] lg:px-0.5"
               style={{
                 color: active ? ink : muted,
                 WebkitTextFillColor: active ? ink : muted,
@@ -131,8 +131,9 @@ function Seg({
 
               {label}
             </span>
-            <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70 col-start-3 justify-self-end" />
+            <ChevronDown className="h-3.5 w-3.5 lg:h-3 lg:w-3 shrink-0 opacity-70 col-start-3 justify-self-end" />
           </span>
+
 
 
         </button>
@@ -546,7 +547,7 @@ export default function PropertySearchBar({
                     WebkitTextFillColor: on ? "#FFFFFF" : dark ? "#FFFFFF" : undefined,
                   }}
                 >
-                  {unit === "sqft" ? "sq ft" : "sq m"}
+                  {unit === "sqft" ? "sq\u00A0ft" : "sq\u00A0m"}
                   {i === 0 ? (
                     <span
                       aria-hidden="true"
@@ -795,11 +796,12 @@ export default function PropertySearchBar({
             }}
 
           >
-            <span className="flex w-full min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[18px_minmax(0,1fr)_18px] lg:gap-0">
+            <span className="flex w-full min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[15px_minmax(0,1fr)_13px] lg:gap-0">
               <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 opacity-70 lg:justify-self-center" />
-              <span className="text-center" style={{ whiteSpace: "nowrap" }}>
+              <span className="text-center lg:text-[11px]" style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
+              <span aria-hidden="true" className="hidden lg:inline-flex" />
             </span>
 
           </button>
@@ -822,9 +824,15 @@ export default function PropertySearchBar({
             {count == null ? (
               <span className="text-[13px] lg:text-[12px] font-semibold leading-none">Search</span>
             ) : (
-              <span className="text-[13px] lg:text-[12px] font-semibold leading-none whitespace-nowrap">
-                Show {count.toLocaleString()} {countNoun}
-              </span>
+              <>
+                <span className="text-[13px] font-semibold leading-none whitespace-nowrap lg:hidden">
+                  Show {count.toLocaleString()} {countNoun}
+                </span>
+                <span className="hidden lg:flex lg:flex-col lg:items-center lg:justify-center lg:gap-[2px] lg:text-[12px] lg:font-semibold lg:leading-[1.1]">
+                  <span className="whitespace-nowrap">Show {count.toLocaleString()}</span>
+                  <span className="whitespace-nowrap">{countNoun}</span>
+                </span>
+              </>
             )}
 
           </button>
