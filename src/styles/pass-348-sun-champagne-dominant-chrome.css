@@ -200,3 +200,13 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
   .jc-header :is(.jc-icon-btn, .jc-grid-btn):hover {
   background: rgba(184, 149, 85, 0.20) !important;
 }
+
+/* Icon glyph strokes on champagne fills — black, beating every legacy
+   white-stroke lock (hence the repeated #root specificity anchor). */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body
+  #root#root#root#root#root#root#root#root#root#root
+  :is([data-surface="emerald"], [data-emerald-surface="true"], .jj-emerald-ombre, .jj-emerald-metallic, .jj-emerald-action, .jj-emerald-solid, .jj-emerald-fill, .jj-emerald-card, .jj-emerald-chip, .jj-emerald-pill)
+  :is(svg, svg *):not([data-photo-copy-lock] *):not([data-service-photo-copy] *) {
+  stroke: var(--jj-sun-ink) !important;
+  color: var(--jj-sun-ink) !important;
+}
