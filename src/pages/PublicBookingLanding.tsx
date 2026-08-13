@@ -474,12 +474,17 @@ export default function PublicBookingLanding() {
                                 ? "border-neutral-100 bg-neutral-50 text-neutral-300 cursor-not-allowed"
                                 : "border-neutral-200 bg-white text-neutral-700 hover:border-emerald-800 hover:-translate-y-0.5",
                           ].join(" ")}
+                          data-surface={active ? "emerald" : undefined}
                           style={{
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
                             gap: "1px",
-                            ...(active ? { background: EMERALD_GRADIENT } : null),
+                            ...(active
+                              ? { background: EMERALD_GRADIENT, color: "#FFFFFF" }
+                              : unavailable
+                                ? { color: "#C7C7C7" }
+                                : { color: "#374151" }),
                           }}
                         >
                           <span style={{ display: "block", fontSize: 10, lineHeight: 1.2, letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.8 }}>
