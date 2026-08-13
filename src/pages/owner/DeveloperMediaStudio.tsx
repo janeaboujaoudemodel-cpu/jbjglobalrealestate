@@ -101,6 +101,9 @@ export default function DeveloperMediaStudio() {
   const [view, setView] = useState<"list" | "grid">("grid");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [archiving, setArchiving] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
+
 
 
   const { data: rows = [], isLoading, refetch, isFetching } = useQuery({
@@ -216,6 +219,67 @@ export default function DeveloperMediaStudio() {
     }
   };
 
+  /**
+   * Every logo that lands here is auto-treated into the locked emerald plate +
+   * pure-white knockout before it is used publicly — the owner never has to run
+   * the treatment by hand.
+   */
+  const treatLogo = async (dev: DevRow) => {
+    try {
+      const { error } = await supabase.functions.invoke("process-developer-logos", {
+        body: { developer_id: dev.id, force_reprocess: true, batch_size: 1 },
+      });
+      if (error) throw error;
+      toast.success("Logo treated — emerald plate + white knockout");
+      await refetch();
+    } catch (error) {
+      toast.message("Logo saved — automatic treatment pending", {
+        description: (error as Error).message,
+      });
+    }
+  };
+
+  const toggleSelect = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  const runBulk = async (action: "publish" | "archive" | "treat") => {
+    const ids = [...selected];
+    if (!ids.length) return;
+    setBulkBusy(true);
+    try {
+      if (action === "treat") {
+        for (const id of ids) {
+          await supabase.functions.invoke("process-developer-logos", {
+            body: { developer_id: id, force_reprocess: true, batch_size: 1 },
+          });
+        }
+        toast.success(`${ids.length} logos re-treated`);
+      } else {
+        const hidden = action === "archive";
+        for (let i = 0; i < ids.length; i += 200) {
+          const { error } = await supabase
+            .from("developers")
+            .update({ is_hidden: hidden })
+            .in("id", ids.slice(i, i + 200));
+          if (error) throw error;
+        }
+        toast.success(`${ids.length} profiles ${hidden ? "archived" : "published live"}`);
+      }
+      setSelected(new Set());
+      await refetch();
+    } catch (error) {
+      toast.error(`Bulk action failed: ${(error as Error).message}`);
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+
   return (
     <div className="space-y-6 p-4 md:p-6">
       <header className="space-y-2">
@@ -307,6 +371,49 @@ export default function DeveloperMediaStudio() {
         </div>
       </div>
 
+      {/* Bulk rail — select rows, then change status, publish, or re-treat the
+          logos of the whole selection in one action. */}
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-card p-3">
+        <label className="inline-flex items-center gap-2 text-xs font-medium text-foreground">
+          <input
+            type="checkbox"
+            checked={visible.length > 0 && visible.every((d) => selected.has(d.id))}
+            onChange={(e) =>
+              setSelected(e.target.checked ? new Set(visible.map((d) => d.id)) : new Set())
+            }
+            className="h-4 w-4 accent-[#064E3B]"
+          />
+          Select all in view
+        </label>
+        <span className="text-xs text-muted-foreground">{selected.size} selected</span>
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => void runBulk("publish")}
+            disabled={bulkBusy || selected.size === 0}
+            className="inline-flex h-9 items-center gap-2 rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground disabled:opacity-50"
+          >
+            {bulkBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Eye className="h-3.5 w-3.5" />}
+            Publish selected
+          </button>
+          <button
+            onClick={() => void runBulk("archive")}
+            disabled={bulkBusy || selected.size === 0}
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-border bg-card px-4 text-xs font-semibold text-foreground hover:bg-muted disabled:opacity-50"
+          >
+            <EyeOff className="h-3.5 w-3.5" />
+            Archive selected
+          </button>
+          <button
+            onClick={() => void runBulk("treat")}
+            disabled={bulkBusy || selected.size === 0}
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-border bg-card px-4 text-xs font-semibold text-foreground hover:bg-muted disabled:opacity-50"
+          >
+            <RefreshCw className="h-3.5 w-3.5" />
+            Re-treat logos
+          </button>
+        </div>
+      </div>
+
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Loading developer media…</p>
       ) : visible.length === 0 ? (
@@ -319,12 +426,16 @@ export default function DeveloperMediaStudio() {
               dev={dev}
               busy={busyId === dev.id}
               duplicate={isDuplicate(dev)}
+              selected={selected.has(dev.id)}
+              onToggleSelect={toggleSelect}
               onSave={saveMedia}
+              onTreatLogo={treatLogo}
               onToggleHidden={toggleHidden}
             />
           ))}
         </ul>
       )}
+
 
     </div>
   );
@@ -334,13 +445,19 @@ function MediaRow({
   dev,
   busy,
   duplicate = false,
+  selected = false,
+  onToggleSelect,
   onSave,
+  onTreatLogo,
   onToggleHidden,
 }: {
   dev: DevRow;
   busy: boolean;
   duplicate?: boolean;
+  selected?: boolean;
+  onToggleSelect?: (id: string) => void;
   onSave: (dev: DevRow, patch: Partial<DevRow>) => Promise<void>;
+  onTreatLogo?: (dev: DevRow) => Promise<void>;
   onToggleHidden: (dev: DevRow) => Promise<void>;
 }) {
   const coverInput = useRef<HTMLInputElement>(null);
@@ -351,6 +468,8 @@ function MediaRow({
   const cover = coverOf(dev);
   const logo = logoOf(dev);
   const real = hasRealLogo(dev);
+  /** Complete = real cover artwork + real logo + live in the public directory. */
+  const complete = Boolean(cover) && !coverBroken && real && !dev.is_hidden;
 
   const upload = async (file: File, kind: "cover" | "logo") => {
     setUploading(kind);
@@ -370,6 +489,11 @@ function MediaRow({
           ? { feature_image_url: data.publicUrl }
           : { logo_url: data.publicUrl, logo_url_processed: data.publicUrl },
       );
+      // Locked standard: an uploaded logo is treated into the emerald plate +
+      // pure-white knockout automatically, never stored raw.
+      if (kind === "logo") await onTreatLogo?.(dev);
+      if (kind === "logo") setLogoBroken(false);
+      if (kind === "cover") setCoverBroken(false);
     } catch (error) {
       toast.error(`Upload failed: ${(error as Error).message}`);
     } finally {
@@ -384,14 +508,35 @@ function MediaRow({
       dev,
       kind === "cover" ? { feature_image_url: value } : { logo_url: value, logo_url_processed: value },
     );
+    if (kind === "logo") {
+      setLogoBroken(false);
+      await onTreatLogo?.(dev);
+    } else {
+      setCoverBroken(false);
+    }
   };
+
 
   return (
     <li className="rounded-2xl border border-border bg-card p-3 md:p-4">
       <div className="flex flex-wrap items-start gap-4">
-        {/* Cover thumbnail. A stored URL that no longer resolves counts as a
-            broken cover, not as a published one — the owner must see that. */}
-        <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={() => onToggleSelect?.(dev.id)}
+          aria-label={`Select ${dev.name ?? "developer"}`}
+          className="mt-2 h-4 w-4 shrink-0 accent-[#064E3B]"
+        />
+
+        {/* Cover thumbnail — click it to upload straight away. A stored URL that
+            no longer resolves counts as a broken cover, not a published one. */}
+        <button
+          type="button"
+          onClick={() => coverInput.current?.click()}
+          disabled={busy || uploading !== null}
+          title="Click to upload a cover photo"
+          className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-border bg-muted"
+        >
           {cover && !coverBroken ? (
             <img
               src={cover}
@@ -405,9 +550,20 @@ function MediaRow({
               {cover ? "Link broken" : "No photo"}
             </span>
           )}
-        </div>
+          {uploading === "cover" && (
+            <span className="absolute inset-0 flex items-center justify-center bg-black/50">
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
+            </span>
+          )}
+        </button>
 
-        <div className="flex h-20 w-32 shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(150deg,#064E3B,#042c1c,#000)] p-2">
+        <button
+          type="button"
+          onClick={() => logoInput.current?.click()}
+          disabled={busy || uploading !== null}
+          title="Click to upload a logo — auto-treated into the emerald plate"
+          className="relative flex h-20 w-32 shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(150deg,#064E3B,#042c1c,#000)] p-2"
+        >
           {logo && !logoBroken ? (
             <img
               src={logo}
@@ -421,10 +577,19 @@ function MediaRow({
               {logo ? "Link broken" : "No logo"}
             </span>
           )}
-        </div>
+          {uploading === "logo" && (
+            <span className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/50">
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
+            </span>
+          )}
+        </button>
 
         <div className="min-w-[14rem] flex-1 space-y-2">
-          <p className="break-words font-serif text-lg text-foreground">{dev.name || "Unnamed developer"}</p>
+          <p className="flex items-center gap-2 break-words font-serif text-lg text-foreground">
+            {complete && <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" aria-label="Complete" />}
+            {dev.name || "Unnamed developer"}
+          </p>
+
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${

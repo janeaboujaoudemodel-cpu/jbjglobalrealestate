@@ -23,13 +23,13 @@ Status legend: `DONE` = shipped + proven, `WIP` = in progress this turn, `OPEN` 
 14. `OPEN` Explain (in-product, not chat): what MEMBER · VERIFIED vs GUEST · UNVERIFIED means, and the mailbox "Sync now" step for contact@jbj.ae / helpdesk@jbj.ae.
 
 ## D. Developer Media Studio
-15. `OPEN` Grid view + per-page selector on every listing page (front end and back end), matching the developers page.
-16. `OPEN` Inline live edit: click the photo to upload, click the logo to upload, see the result immediately.
-17. `OPEN` Any uploaded logo is auto-treated into the emerald plate + pure-white knockout before it is stored.
-18. `OPEN` Verified/complete tick per row, bulk select, bulk status change, bulk publish.
-19. `OPEN` Preview the treated logo before publishing.
-20. `OPEN` "Cover link broken" state for stored URLs that no longer load (must not count as published).
-21. `OPEN` De-duplicate developer rows (e.g. two "Ab Developers L.L.C").
+15. `DONE` Grid / List toggle in the studio (per-page selector still open on other listing pages).
+16. `DONE` Inline live edit: the cover thumbnail and the logo plate are both click-to-upload with an inline spinner.
+17. `DONE` Uploaded / pasted logos are auto-treated via `process-developer-logos` (emerald plate + white knockout).
+18. `DONE` Complete tick per row, row checkboxes, select-all-in-view, bulk publish / archive / re-treat.
+19. `DONE` The treated logo renders on its emerald plate in the row before Publish is pressed.
+20. `DONE` "Cover link broken" / "Link broken" state for stored URLs that no longer load.
+21. `WIP` Duplicate developer rows are flagged ("Duplicate name — merge"); the merge action itself is still open.
 
 ## E. One back end only
 22. `OPEN` Retire the old champagne back office: move/merge everything still living there into the JBJ Hub (starting with the CRM client panel — AI Lead Score, Log Call, Deal Prediction, AI Tools), remove duplicate surfaces, and repoint every notification deep link (e.g. "new lead received → open CRM") at the new Hub.
