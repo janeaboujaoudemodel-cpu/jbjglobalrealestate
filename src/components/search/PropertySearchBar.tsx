@@ -105,8 +105,16 @@ function Seg({
           }}
         >
 
-          <span className="grid flex-1 grid-cols-[18px_minmax(0,1fr)_18px] items-center min-w-0">
-            <span className="inline-flex items-center justify-center">{icon}</span>
+          {/* Phone/tablet: icon · label · chevron read as ONE centred group
+              (exactly like the AED currency control) so the pin sits right
+              before "UAE" and every chevron lands at the same inset.
+              Desktop keeps the 3-column grid used by the alignment lock. */}
+          <span className="flex flex-1 min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[18px_minmax(0,1fr)_18px] lg:gap-0">
+            {icon ? (
+              <span className="inline-flex shrink-0 items-center justify-center">{icon}</span>
+            ) : (
+              <span className="hidden lg:inline-flex" />
+            )}
             <span
               className="min-w-0 leading-none text-center"
               style={{
@@ -123,8 +131,9 @@ function Seg({
 
               {label}
             </span>
-            <ChevronDown className="col-start-3 h-3.5 w-3.5 justify-self-end opacity-70" />
+            <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70 lg:col-start-3 lg:justify-self-end" />
           </span>
+
         </button>
       </PopoverTrigger>
       <PopoverContent
