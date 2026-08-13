@@ -36,6 +36,7 @@ import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 import SidebarModePortalBlock from "@/components/navigation/SidebarModePortalBlock";
 import { SidebarItem } from "@/components/ui/ds/SidebarItem";
 import ThemeModeToggle from "@/components/ThemeModeToggle";
+import { useControlSkin } from "@/hooks/use-chrome-skin";
 import { useThemeMode } from "@/contexts/ThemeModeContext";
 
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
@@ -546,6 +547,7 @@ export default function GlobalVerticalNav() {
   const { isInvestor, isOwner } = useUserRole();
   const { mode, isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
   const { isMoon } = useThemeMode();
+  const controlSkin = useControlSkin();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [, setMobileOpen] = useState(false);
@@ -895,12 +897,15 @@ export default function GlobalVerticalNav() {
   // PASS 307: the rail is champagne in Sun and emerald in Moon, so the inline
   // ink must follow the skin — index.css hard-codes white for the emerald skin
   // inside a cascade layer, which no unlayered override can beat.
-  const railInk = isMoon ? '#FFFFFF' : '#1A1A1A';
+  /* PASS 335 — over a photo/video hero the collapsed rail is transparent, so
+     its ink is white in BOTH skins. Expanded rail keeps its theme ink. */
+  const heroClearRail = controlSkin === 'clear' && collapsed && !hoverExpanded;
+  const railInk = isMoon || heroClearRail ? '#FFFFFF' : '#1A1A1A';
 
   const getSidebarIconStyle = (onEmerald: boolean): React.CSSProperties => ({
-    color: onEmerald ? railInk : '#1A1A1A',
-    stroke: onEmerald ? railInk : '#1A1A1A',
-    WebkitTextFillColor: onEmerald ? railInk : '#1A1A1A',
+    color: onEmerald || heroClearRail ? railInk : '#1A1A1A',
+    stroke: onEmerald || heroClearRail ? railInk : '#1A1A1A',
+    WebkitTextFillColor: onEmerald || heroClearRail ? railInk : '#1A1A1A',
     opacity: 1,
   });
 
@@ -908,7 +913,7 @@ export default function GlobalVerticalNav() {
      index.css forces white inside a cascade layer, so only an !important
      inline declaration can win. Re-applied whenever the skin changes. */
   useEffect(() => {
-    const ink = isMoon ? '#FFFFFF' : '#0A0A0A';
+    const ink = isMoon || heroClearRail ? '#FFFFFF' : '#0A0A0A';
     const apply = () => {
       const nodes = document.querySelectorAll<HTMLElement>(
         '[data-chrome="sidebar"] [data-sidebar-account-action], [data-chrome="sidebar"] [data-sidebar-collapse-control], [data-chrome="sidebar"] [data-sidebar-auth-control]'
@@ -926,7 +931,7 @@ export default function GlobalVerticalNav() {
     apply();
     const id = window.setTimeout(apply, 120);
     return () => window.clearTimeout(id);
-  }, [isMoon, collapsed, hoverExpanded, openSection, session]);
+  }, [isMoon, heroClearRail, collapsed, hoverExpanded, openSection, session]);
 
 
   const navHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#0A0A0A]";
