@@ -106,7 +106,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       ? "Developer Portal"
       : "Investor Dashboard";
   const location = useLocation();
-  const { mode: headerThemeMode } = useThemeMode();
+  // PASS 339 — deferred so a Sun/Moon flip repaints via CSS instantly while the
+  // header subtree re-renders at low priority instead of blocking the click.
+  const { mode: headerThemeModeLive } = useThemeMode();
+  const headerThemeMode = React.useDeferredValue(headerThemeModeLive);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Mark the drawer row for the current route so it gets the single emerald
