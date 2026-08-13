@@ -34,7 +34,6 @@ html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
     .jj-pill-emerald,
     .jj-pill-emerald-metallic,
     .jj-tab-active-metallic,
-    .jj-newsletter-emerald,
     .jj-cta-dark,
     .filter-emerald-action,
     [data-emerald-accent],
@@ -60,7 +59,6 @@ html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
     .jj-pill-emerald,
     .jj-pill-emerald-metallic,
     .jj-tab-active-metallic,
-    .jj-newsletter-emerald,
     .jj-cta-dark,
     .filter-emerald-action,
     [data-emerald-accent],
@@ -74,7 +72,7 @@ html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
 }
 
 html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
-  :is(.jj-emerald-pill, .jj-emerald-action, .jj-newsletter-emerald)
+  :is(.jj-emerald-pill, .jj-emerald-action)
   :is(svg, svg *, path):not([stroke="none"]) {
   stroke: #FFFFFF !important;
   opacity: 1 !important;
@@ -83,13 +81,13 @@ html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
 /* Inner controls of an emerald accent bar (input + submit) stay emerald
    with white ink and a white placeholder — never black-on-emerald. */
 html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
-  :is(.jj-emerald-pill, .jj-newsletter-emerald) :is(input, textarea) {
+  :is(.jj-emerald-pill) :is(input, textarea) {
   background: transparent !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root
-  :is(.jj-emerald-pill, .jj-newsletter-emerald) :is(input, textarea)::placeholder {
+  :is(.jj-emerald-pill) :is(input, textarea)::placeholder {
   color: rgba(255, 255, 255, 0.72) !important;
   -webkit-text-fill-color: rgba(255, 255, 255, 0.72) !important;
 }
