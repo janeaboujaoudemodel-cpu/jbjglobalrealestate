@@ -185,3 +185,11 @@
     background: rgba(255, 255, 255, 0.22) !important;
   }
 }
+
+/* Legibility over bright hero frames: white icons keep a soft shadow instead of
+   a filled plate, matching the transparent horizontal header controls. */
+@media (min-width: 1024px) {
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] :is(svg, .jj-rail-monogram, [data-sidebar-brand]) {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55)) !important;
+  }
+}
