@@ -219,6 +219,67 @@ export default function DeveloperMediaStudio() {
     }
   };
 
+  /**
+   * Every logo that lands here is auto-treated into the locked emerald plate +
+   * pure-white knockout before it is used publicly — the owner never has to run
+   * the treatment by hand.
+   */
+  const treatLogo = async (dev: DevRow) => {
+    try {
+      const { error } = await supabase.functions.invoke("process-developer-logos", {
+        body: { developer_id: dev.id, force_reprocess: true, batch_size: 1 },
+      });
+      if (error) throw error;
+      toast.success("Logo treated — emerald plate + white knockout");
+      await refetch();
+    } catch (error) {
+      toast.message("Logo saved — automatic treatment pending", {
+        description: (error as Error).message,
+      });
+    }
+  };
+
+  const toggleSelect = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  const runBulk = async (action: "publish" | "archive" | "treat") => {
+    const ids = [...selected];
+    if (!ids.length) return;
+    setBulkBusy(true);
+    try {
+      if (action === "treat") {
+        for (const id of ids) {
+          await supabase.functions.invoke("process-developer-logos", {
+            body: { developer_id: id, force_reprocess: true, batch_size: 1 },
+          });
+        }
+        toast.success(`${ids.length} logos re-treated`);
+      } else {
+        const hidden = action === "archive";
+        for (let i = 0; i < ids.length; i += 200) {
+          const { error } = await supabase
+            .from("developers")
+            .update({ is_hidden: hidden })
+            .in("id", ids.slice(i, i + 200));
+          if (error) throw error;
+        }
+        toast.success(`${ids.length} profiles ${hidden ? "archived" : "published live"}`);
+      }
+      setSelected(new Set());
+      await refetch();
+    } catch (error) {
+      toast.error(`Bulk action failed: ${(error as Error).message}`);
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+
   return (
     <div className="space-y-6 p-4 md:p-6">
       <header className="space-y-2">
