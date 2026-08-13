@@ -88,6 +88,9 @@ async def capture(path: str, out: str, selector: str | None, width: int, height:
             pass
         if scroll_y > 0:
             await page.evaluate("y => window.scrollTo({ top: y, behavior: 'instant' })", scroll_y)
+        # Keep the pointer away from hover-expand navigation rails so captures
+        # prove the requested resting state rather than an accidental hover.
+        await page.mouse.move(width - 8, max(80, height // 2))
         await page.wait_for_timeout(2500)
 
         text = await page.evaluate("document.querySelector('main')?.innerText?.trim() || document.body.innerText.trim()")
