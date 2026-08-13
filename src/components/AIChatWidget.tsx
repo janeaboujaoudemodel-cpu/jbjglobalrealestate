@@ -76,6 +76,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [selectedShortcut, setSelectedShortcut] = useState<ShortcutType | null>(null);
   const [detectedFullName, setDetectedFullName] = useState<string | null>(null);
+  // PASS 345 — recent thread switcher (resume any past conversation, not just one)
+  const [threadsOpen, setThreadsOpen] = useState(false);
 
   /**
    * Hero-search handoff: when the AI search router cannot understand a
