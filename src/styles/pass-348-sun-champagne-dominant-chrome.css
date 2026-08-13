@@ -1,0 +1,201 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 348 — SUN = CHAMPAGNE DOMINANT CHROME (LOCKED)
+
+   The emerald→black ombre is the MOON (night) primary only. In SUN the
+   dominant fills — headers, bands, dropdown/popover heads, CTA buttons,
+   pills, chips, icon tiles, badges, the CRM backend chrome — all wear the
+   SAME champagne gradient as the vertical sidebar, with pure BLACK ink
+   (text + icons) per brand contract Rule 1.
+
+   Never applied to:
+     · Moon (html[data-jbj-theme="moon"]) — untouched emerald.
+     · Owner backend lock (data-jbj-backend-lock="1") — fixed emerald CRM.
+     · Hero / photo surfaces (white ink is locked there by PASS 311/331).
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Champagne equivalents of the emerald pair, matching the Sun sidebar. */
+  --jj-sun-band-h: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-sun-band-v: linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-sun-band-d: linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-sun-ink: #1A1A1A;
+  --jj-sun-line: rgba(184, 149, 85, 0.42);
+}
+
+/* ═══════════ 1. PUBLIC SITE — champagne fills in Sun ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is(
+    [data-surface="emerald"],
+    [data-emerald-surface="true"],
+    .jj-emerald-ombre,
+    .jj-emerald-ombre-hover,
+    .jj-emerald-metallic,
+    .jj-emerald-action,
+    .jj-emerald-solid,
+    .jj-emerald-fill,
+    .jj-emerald-card,
+    .jj-emerald-chip,
+    .jj-emerald-pill,
+    .jj-emerald-rect-pill
+  ):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not([data-service-photo-copy]):not([data-service-photo-copy] *):not([role="tab"][data-tab-white-active="true"]) {
+  background: var(--jj-sun-band-d) !important;
+  background-image: var(--jj-sun-band-d) !important;
+  background-color: #F7F1E4 !important;
+  border-color: var(--jj-sun-line) !important;
+  color: var(--jj-sun-ink) !important;
+  -webkit-text-fill-color: var(--jj-sun-ink) !important;
+}
+
+/* Black ink on every champagne fill, in every state. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is(
+    [data-surface="emerald"],
+    [data-emerald-surface="true"],
+    .jj-emerald-ombre,
+    .jj-emerald-metallic,
+    .jj-emerald-action,
+    .jj-emerald-solid,
+    .jj-emerald-fill,
+    .jj-emerald-card,
+    .jj-emerald-chip,
+    .jj-emerald-pill,
+    .jj-emerald-rect-pill
+  ):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not([data-service-photo-copy]):not([data-service-photo-copy] *)
+  :is(span, p, a, button, small, strong, label, li, h1, h2, h3, h4, h5, h6, svg, svg *, path) {
+  color: var(--jj-sun-ink) !important;
+  -webkit-text-fill-color: var(--jj-sun-ink) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  :is([data-surface="emerald"], .jj-emerald-action, .jj-emerald-ombre, .jj-emerald-metallic, .jj-emerald-solid, .jj-emerald-fill)
+  :is(svg, svg *, path):not([fill="none"]) {
+  stroke: var(--jj-sun-ink) !important;
+}
+
+/* ═══════════ 2. DROPDOWNS / POPOVERS — champagne head, black ink ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body
+  :is([data-radix-popper-content-wrapper] [role="menu"],
+      [data-radix-popper-content-wrapper] [role="listbox"],
+      [data-radix-popper-content-wrapper] [data-radix-select-viewport],
+      [data-jj-dropdown]) {
+  background: var(--jj-sun-band-v) !important;
+  background-image: var(--jj-sun-band-v) !important;
+  background-color: #FBF6EC !important;
+  border: 1px solid var(--jj-sun-line) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body
+  :is([data-radix-popper-content-wrapper] [role="menu"],
+      [data-radix-popper-content-wrapper] [role="listbox"],
+      [data-jj-dropdown])
+  :is(span, p, a, button, small, strong, label, li, div, svg, svg *, path) {
+  color: var(--jj-sun-ink) !important;
+  -webkit-text-fill-color: var(--jj-sun-ink) !important;
+}
+
+/* ═══════════ 3. OWNER / CRM BACKEND — champagne chrome in Sun ═══════════ */
+/* Token remap: everything driven by the CRM emerald tokens flips at once. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app {
+  --jbjcrm-metallic-emerald: var(--jj-sun-band-v);
+  --jbjcrm-metallic-emerald-h: var(--jj-sun-band-h);
+  --jbjcrm-emerald-action: var(--jj-sun-band-d);
+  --jbjcrm-sidebar: var(--jj-sun-band-v);
+  --jbjcrm-sidebar-deep: #EAE0CC;
+  --jbjcrm-sidebar-text: #1A1A1A;
+  --jbjcrm-sidebar-muted: rgba(26, 26, 26, 0.78);
+  --jbjcrm-sidebar-line: rgba(184, 149, 85, 0.42);
+  --jbjcrm-active: rgba(184, 149, 85, 0.26);
+  --jc347-emerald: var(--jj-sun-band-d);
+  --jc347-band: var(--jj-sun-band-h);
+}
+
+/* Alert badge, notification head, tabs, tone tiles, CTA, widget chips. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  :is(.jc-icon-btn__badge,
+      .jc-popover--notif .jc-notif__head,
+      .jc-popover--notif .jc-notif__view,
+      .jc-popover--notif .jc-notif__count,
+      .jc-popover--notif .jc-notif__tab.is-active,
+      .jc-popover--notif .jc-notif__icon,
+      .jc-widget__icon) {
+  background: var(--jj-sun-band-d) !important;
+  background-image: var(--jj-sun-band-d) !important;
+  background-color: #F4EDDF !important;
+  border-color: var(--jj-sun-line) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 2px 8px rgba(184, 149, 85, 0.22) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  :is(.jc-icon-btn__badge,
+      .jc-popover--notif .jc-notif__head,
+      .jc-popover--notif .jc-notif__view,
+      .jc-popover--notif .jc-notif__count,
+      .jc-popover--notif .jc-notif__mark,
+      .jc-popover--notif .jc-notif__tab.is-active,
+      .jc-popover--notif .jc-notif__icon,
+      .jc-widget__icon),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  :is(.jc-icon-btn__badge,
+      .jc-popover--notif .jc-notif__head,
+      .jc-popover--notif .jc-notif__view,
+      .jc-popover--notif .jc-notif__count,
+      .jc-popover--notif .jc-notif__mark,
+      .jc-popover--notif .jc-notif__tab.is-active,
+      .jc-popover--notif .jc-notif__icon,
+      .jc-widget__icon) :is(span, button, div, svg, svg *, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-header .jc-popover--notif .jc-notif__head :is(span, button, div, svg, svg *, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-header .jc-popover--notif :is(.jc-notif__view, .jc-notif__mark, .jc-notif__count),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-header .jc-popover--notif :is(.jc-notif__view, .jc-notif__mark, .jc-notif__count) :is(span, svg, svg *, path) {
+  color: var(--jj-sun-ink) !important;
+  -webkit-text-fill-color: var(--jj-sun-ink) !important;
+  stroke: currentColor !important;
+}
+/* "Mark all read" pill on champagne: light gold wash, gold hairline. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-popover--notif .jc-notif__mark,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-header .jc-popover--notif .jc-notif__mark {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border: 1px solid var(--jj-sun-line) !important;
+}
+/* Unread row rail + dot in Sun = gold, not emerald. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-popover--notif .jc-notif__item.is-unread {
+  background: rgba(184, 149, 85, 0.10) !important;
+  box-shadow: inset 3px 0 0 0 #B89555 !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-popover--notif .jc-notif__dot {
+  background: #B89555 !important;
+}
+/* Panel body stays bright pearl with graphite/black ink. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-popover--notif :is(.jc-notif__list, .jc-notif__tabs, .jc-notif__foot, .jc-notif__item) {
+  background-color: #FFFDF8 !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-popover--notif .jc-notif__tab:not(.is-active) {
+  background: #F4EDDF !important;
+  border-color: var(--jj-sun-line) !important;
+  color: var(--jj-sun-ink) !important;
+  -webkit-text-fill-color: var(--jj-sun-ink) !important;
+}
+
+/* CRM header band + sidebar surface follow the Sun sidebar champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  :is(.jc-header, .jc-sidebar) {
+  background: var(--jj-sun-band-h) !important;
+  background-image: var(--jj-sun-band-h) !important;
+  background-color: #F7F1E4 !important;
+  border-bottom-color: var(--jj-sun-line) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  :is(.jc-header, .jc-sidebar) :is(.jc-header__title, .jc-search, .jc-search__placeholder, .jc-search__kbd, .jc-icon-btn, .jc-grid-btn, a, button, span, div, svg, svg *, path) {
+  color: var(--jj-sun-ink) !important;
+  -webkit-text-fill-color: var(--jj-sun-ink) !important;
+  stroke: currentColor !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app
+  .jc-header :is(.jc-icon-btn, .jc-grid-btn):hover {
+  background: rgba(184, 149, 85, 0.20) !important;
+}
