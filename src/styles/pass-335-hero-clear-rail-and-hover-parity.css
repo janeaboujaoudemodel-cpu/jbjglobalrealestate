@@ -1,0 +1,195 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 335 — HERO-CLEAR COLLAPSED RAIL + THEME HOVER PARITY (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   1. On desktop / landscape iPad, while the page sits on its hero
+      (body[data-jj-hero-chrome="clear"]) AND the vertical sidebar is
+      collapsed (body.jj-vertical-nav-collapsed), the rail paints NOTHING:
+      transparent surface, pure white glyphs, one very thin white hairline
+      on its right edge and one under its 56px brand band — exactly like
+      the transparent horizontal header above the same hero.
+      The moment the visitor scrolls past the hero the rail returns to the
+      selected skin (Sun champagne / Moon emerald) untouched.
+      The OPEN (expanded / hover-expanded) sidebar is never touched — the
+      collapsed class is removed while it is open, so these rules cannot
+      apply to it.
+   2. Hover on the transparent header controls returns the theme surface:
+      Moon → emerald ombré with white ink (sq ft / sq m keeps its metallic
+      sweep), Sun → the sidebar's gold-champagne with black ink.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1024px) {
+  /* ── 1a. Rail surface: fully transparent ───────────────────────────── */
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"],
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-emerald-edge,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] [data-sidebar-emerald],
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-brand-band,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] :is(nav, .jj-rail-stack) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Kill the painted seam / animated edge layers while clear. */
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-emerald-edge::before,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-emerald-edge::after,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-brand-band::before,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-brand-band::after {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* ── 1b. Very thin white dividers: right edge + under the brand band ─ */
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-emerald-edge {
+    border-right: 1px solid rgba(255, 255, 255, 0.22) !important;
+  }
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-brand-band {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+  }
+
+  /* ── 1c. Pure white glyphs, no tiles, in every state ────────────────── */
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] :is(a, button),
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] :is(a, button):hover,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] :is(span, svg, svg *) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-side-tile,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-side-tile.is-active {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  /* Hover / active still readable — a whisper of white, never a colour plate. */
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-side-tile:hover,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-side-tile.is-active:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+  }
+  /* Footer dividers inside the rail follow the same white hairline. */
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] [data-rail-divider],
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] hr {
+    background: rgba(255, 255, 255, 0.22) !important;
+    background-image: none !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     2. HOVER PARITY ON THE TRANSPARENT HEADER CONTROLS
+     ═════════════════════════════════════════════════════════════════════ */
+
+  /* Moon: hover restores the emerald ombré plate with white ink. */
+  html[data-jbj-theme="moon"] body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar]
+    :is(button, a[role="button"], [data-header-control], [data-jjds-segmented], [data-search-utility-controls]):hover {
+    background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%)) !important;
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.32) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  html[data-jbj-theme="moon"] body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar]
+    :is(button, [data-jjds-segmented]):hover :is(span, svg, svg *) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+  /* Restore the locked metallic sweep on the active sq ft / sq m pill on hover. */
+  html[data-jbj-theme="moon"] body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar]
+    [data-jjds-segmented]:hover .jj-sqtoggle-sweep,
+  html[data-jbj-theme="moon"] body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar]
+    [data-search-utility-controls]:hover .jj-sqtoggle-sweep {
+    opacity: 1 !important;
+  }
+
+  /* Sun: hover matches the vertical sidebar's gold-champagne, black ink. */
+  html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar]
+    :is(button, a[role="button"], [data-header-control], [data-jjds-segmented], [data-search-utility-controls]):hover {
+    background-image: var(--jj-champagne-chrome-h, linear-gradient(90deg, #fdfbf7 0%, #f7f2ea 52%, #f2ebdc 100%)) !important;
+    background-color: transparent !important;
+    border-color: rgba(26, 26, 26, 0.18) !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+  html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar]
+    :is(button, [data-jjds-segmented]):hover :is(span, svg, svg *) {
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    stroke: #1a1a1a !important;
+  }
+  /* No metallic emerald sweep on a light champagne surface. */
+  html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar]
+    :is([data-jjds-segmented], [data-search-utility-controls]):hover .jj-sqtoggle-sweep {
+    opacity: 0 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle-sweep {
+    animation: none !important;
+  }
+}
+
+/* Specificity lift: PASS 312 paints the Moon rail gradient with a triple
+   [data-sidebar-emerald] selector, so the clear state must out-rank it. */
+@media (min-width: 1024px) {
+  html[data-jbj-theme][data-jbj-theme] body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+    div#root div[data-chrome="sidebar"][data-chrome]
+    [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald],
+  html[data-jbj-theme][data-jbj-theme] body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+    div#root div[data-chrome="sidebar"][data-chrome]
+    [data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald][data-sidebar-emerald] :is(nav, .jj-rail-stack, .jj-rail-brand-band) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* While the rail is clear it must sit ON the hero, so the hero band bleeds the
+   rail's 59px back to the viewport edge. Inner content keeps its original box
+   via the matching padding, so nothing shifts. */
+@media (min-width: 1024px) {
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root main.jj-main-shell [data-hero-dark] {
+    margin-left: -59px !important;
+    width: calc(100% + 59px) !important;
+    max-width: none !important;
+    padding-left: 59px !important;
+  }
+  /* The page shell clips horizontally; while clear it must let the hero bleed
+     left under the rail (nothing extends past the right edge, so no overflow). */
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root main.jj-main-shell,
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root main.jj-main-shell .jj-page-shell {
+    overflow-x: visible !important;
+  }
+}
+
+/* Clear rail ink: white in BOTH skins (Sun's black-ink rail locks must not win
+   over a photo/video hero). Specificity stacked to beat pass-317 / pass-312. */
+@media (min-width: 1024px) {
+  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root div#root [data-chrome="sidebar"] :is(a, button, span, svg, path, [data-jjds-sidebar-icon]) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root div#root [data-chrome="sidebar"] :is(svg, path):not([fill="none"]) {
+    stroke: #ffffff !important;
+  }
+  /* Rail edge + footer dividers: one thin white hairline while clear. */
+  html body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-emerald-edge {
+    border-right: 1px solid rgba(255, 255, 255, 0.22) !important;
+  }
+  html body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-footer-divider {
+    background: rgba(255, 255, 255, 0.22) !important;
+  }
+}
+
+/* Legibility over bright hero frames: white icons keep a soft shadow instead of
+   a filled plate, matching the transparent horizontal header controls. */
+@media (min-width: 1024px) {
+  html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] :is(svg, .jj-rail-monogram, [data-sidebar-brand]) {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55)) !important;
+  }
+}
