@@ -20,6 +20,13 @@ class AppErrorBoundary extends React.Component<
 > {
   state: AppErrorBoundaryState = { hasError: false, retryCount: 0, isReloading: false };
 
+  private reloadTimer: number | undefined;
+
+  componentWillUnmount() {
+    if (this.reloadTimer) window.clearTimeout(this.reloadTimer);
+  }
+
+
   static getDerivedStateFromError(error: unknown): Partial<AppErrorBoundaryState> {
     const msg = error instanceof Error ? error.message : "Unknown error";
     return { hasError: true, errorMessage: msg };
