@@ -37,6 +37,7 @@ import"./styles/pass-341-universal-rail-all-devices.css";
 import"./styles/pass-342-moon-rail-white-labels.css";
 import"./styles/pass-344-sun-rail-black-ink.css";
 import"./styles/pass-346-open-rail-ink-and-title-parity.css";
+import"./styles/pass-348-sun-champagne-dominant-chrome.css";
 
 
 
