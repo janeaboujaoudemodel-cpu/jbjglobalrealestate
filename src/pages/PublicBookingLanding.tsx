@@ -474,22 +474,22 @@ export default function PublicBookingLanding() {
                                 ? "border-neutral-100 bg-neutral-50 text-neutral-300 cursor-not-allowed"
                                 : "border-neutral-200 bg-white text-neutral-700 hover:border-emerald-800 hover:-translate-y-0.5",
                           ].join(" ")}
-                          style={active ? { background: EMERALD_GRADIENT } : undefined}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "1px",
+                            ...(active ? { background: EMERALD_GRADIENT } : null),
+                          }}
                         >
-                          <div className="text-[10px] uppercase tracking-wider opacity-80">
+                          <span style={{ display: "block", fontSize: 10, lineHeight: 1.2, letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.8 }}>
                             {d.toLocaleDateString("en-US", { weekday: "short" })}
-                          </div>
-                          <div className="text-base font-semibold leading-tight">{d.getDate()}</div>
-                          <div className="text-[10px] opacity-70">
+                          </span>
+                          <span style={{ display: "block", fontSize: 17, lineHeight: 1.15, fontWeight: 600 }}>{d.getDate()}</span>
+                          <span style={{ display: "block", fontSize: 10, lineHeight: 1.2, opacity: 0.7 }}>
                             {d.toLocaleDateString("en-US", { month: "short" })}
-                          </div>
-                          <div className="mt-1 h-1 flex items-center justify-center">
-                            {count === undefined ? (
-                              <span className="block h-1 w-1 rounded-full bg-neutral-200" />
-                            ) : count > 0 ? (
-                              <span className={`block h-1 w-4 rounded-full ${active ? "bg-white/80" : "bg-emerald-700"}`} />
-                            ) : null}
-                          </div>
+                          </span>
+                          <span style={{ display: "block", marginTop: 3, height: 3, width: count === undefined ? 3 : count > 0 ? 16 : 0, borderRadius: 999, background: count === undefined ? "#E5E7EB" : active ? "rgba(255,255,255,0.85)" : "#047857" }} />
                         </button>
                       );
                     })}
