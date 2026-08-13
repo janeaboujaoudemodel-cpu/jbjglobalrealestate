@@ -130,3 +130,25 @@ html body div#root header[data-header-surface="dark"] :is(.jj-emerald-metallic, 
   box-shadow: none !important;
   filter: none !important;
 }
+
+/* Highest-specificity twin of the emerald utility-pill rules in index.css so
+   the clear state genuinely wins on the sq ft / sq m pair. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html body div#root header[data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]::before,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]::after {
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
