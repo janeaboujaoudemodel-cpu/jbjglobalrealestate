@@ -911,18 +911,12 @@ export default function GlobalVerticalNav() {
     }
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    if (
-      item.href === '/join' ||
-      item.href === '/ai-home-finder' ||
-      (hrefPathname(item.href) === '/list-property' && item.highlight) ||
-      item.href === '/resale-properties'
-    ) {
-      return shouldHighlight ? "font-bold text-[#1A1A1A]" : "font-semibold text-[#1A1A1A]";
-    }
+    /* PASS 346 — every rail title shares one typography: same weight, size and
+       ink. Owner Portal / Resale Properties are no longer special-cased. */
+    void shouldHighlight;
+    void sectionKey;
+    return "text-[#1A1A1A] font-semibold";
 
-    return shouldHighlight
-      ? "text-[#1A1A1A] font-bold"
-      : (sectionKey ? "text-[#1A1A1A] font-medium" : "text-[#1A1A1A]");
   };
 
   // PASS 303: no plates/rings behind sidebar icons — icons only, both states.
