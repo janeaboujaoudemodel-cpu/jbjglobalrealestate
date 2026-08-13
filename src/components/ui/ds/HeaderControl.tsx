@@ -98,12 +98,24 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
       : style;
     const ink = inkForSkin(skin);
     const innerRef = React.useRef<HTMLButtonElement | null>(null);
+    const hoverInk = clearHoverInk(skin);
+    const hovered = React.useRef(false);
     React.useEffect(() => {
-      const run = () => paintInk(innerRef.current, ink);
+      const el = innerRef.current;
+      const run = () => paintInk(innerRef.current, hovered.current && hoverInk ? hoverInk : ink);
       run();
       const id = window.setTimeout(run, 60);
-      return () => window.clearTimeout(id);
+      const enter = () => { hovered.current = true; run(); };
+      const leave = () => { hovered.current = false; run(); };
+      el?.addEventListener("pointerenter", enter);
+      el?.addEventListener("pointerleave", leave);
+      return () => {
+        window.clearTimeout(id);
+        el?.removeEventListener("pointerenter", enter);
+        el?.removeEventListener("pointerleave", leave);
+      };
     });
+
     return (
       <button
         ref={(node) => {
