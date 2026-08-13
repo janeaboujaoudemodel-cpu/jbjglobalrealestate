@@ -445,13 +445,19 @@ function MediaRow({
   dev,
   busy,
   duplicate = false,
+  selected = false,
+  onToggleSelect,
   onSave,
+  onTreatLogo,
   onToggleHidden,
 }: {
   dev: DevRow;
   busy: boolean;
   duplicate?: boolean;
+  selected?: boolean;
+  onToggleSelect?: (id: string) => void;
   onSave: (dev: DevRow, patch: Partial<DevRow>) => Promise<void>;
+  onTreatLogo?: (dev: DevRow) => Promise<void>;
   onToggleHidden: (dev: DevRow) => Promise<void>;
 }) {
   const coverInput = useRef<HTMLInputElement>(null);
@@ -462,6 +468,8 @@ function MediaRow({
   const cover = coverOf(dev);
   const logo = logoOf(dev);
   const real = hasRealLogo(dev);
+  /** Complete = real cover artwork + real logo + live in the public directory. */
+  const complete = Boolean(cover) && !coverBroken && real && !dev.is_hidden;
 
   const upload = async (file: File, kind: "cover" | "logo") => {
     setUploading(kind);
@@ -481,6 +489,11 @@ function MediaRow({
           ? { feature_image_url: data.publicUrl }
           : { logo_url: data.publicUrl, logo_url_processed: data.publicUrl },
       );
+      // Locked standard: an uploaded logo is treated into the emerald plate +
+      // pure-white knockout automatically, never stored raw.
+      if (kind === "logo") await onTreatLogo?.(dev);
+      if (kind === "logo") setLogoBroken(false);
+      if (kind === "cover") setCoverBroken(false);
     } catch (error) {
       toast.error(`Upload failed: ${(error as Error).message}`);
     } finally {
@@ -495,7 +508,14 @@ function MediaRow({
       dev,
       kind === "cover" ? { feature_image_url: value } : { logo_url: value, logo_url_processed: value },
     );
+    if (kind === "logo") {
+      setLogoBroken(false);
+      await onTreatLogo?.(dev);
+    } else {
+      setCoverBroken(false);
+    }
   };
+
 
   return (
     <li className="rounded-2xl border border-border bg-card p-3 md:p-4">
