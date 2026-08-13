@@ -371,6 +371,49 @@ export default function DeveloperMediaStudio() {
         </div>
       </div>
 
+      {/* Bulk rail — select rows, then change status, publish, or re-treat the
+          logos of the whole selection in one action. */}
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-card p-3">
+        <label className="inline-flex items-center gap-2 text-xs font-medium text-foreground">
+          <input
+            type="checkbox"
+            checked={visible.length > 0 && visible.every((d) => selected.has(d.id))}
+            onChange={(e) =>
+              setSelected(e.target.checked ? new Set(visible.map((d) => d.id)) : new Set())
+            }
+            className="h-4 w-4 accent-[#064E3B]"
+          />
+          Select all in view
+        </label>
+        <span className="text-xs text-muted-foreground">{selected.size} selected</span>
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => void runBulk("publish")}
+            disabled={bulkBusy || selected.size === 0}
+            className="inline-flex h-9 items-center gap-2 rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground disabled:opacity-50"
+          >
+            {bulkBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Eye className="h-3.5 w-3.5" />}
+            Publish selected
+          </button>
+          <button
+            onClick={() => void runBulk("archive")}
+            disabled={bulkBusy || selected.size === 0}
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-border bg-card px-4 text-xs font-semibold text-foreground hover:bg-muted disabled:opacity-50"
+          >
+            <EyeOff className="h-3.5 w-3.5" />
+            Archive selected
+          </button>
+          <button
+            onClick={() => void runBulk("treat")}
+            disabled={bulkBusy || selected.size === 0}
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-border bg-card px-4 text-xs font-semibold text-foreground hover:bg-muted disabled:opacity-50"
+          >
+            <RefreshCw className="h-3.5 w-3.5" />
+            Re-treat logos
+          </button>
+        </div>
+      </div>
+
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Loading developer media…</p>
       ) : visible.length === 0 ? (
@@ -383,12 +426,16 @@ export default function DeveloperMediaStudio() {
               dev={dev}
               busy={busyId === dev.id}
               duplicate={isDuplicate(dev)}
+              selected={selected.has(dev.id)}
+              onToggleSelect={toggleSelect}
               onSave={saveMedia}
+              onTreatLogo={treatLogo}
               onToggleHidden={toggleHidden}
             />
           ))}
         </ul>
       )}
+
 
     </div>
   );
