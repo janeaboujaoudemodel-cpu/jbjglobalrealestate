@@ -382,7 +382,28 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Header is transparent on initial load across all viewports; turns solid on scroll.
   const showSolidBackground = isSolid;
   const isFullyTransparent = isTransparentRoute && !showSolidBackground;
-  const isHomeHeroPath = location.pathname === "/" || location.pathname === "/index";
+  const isHomeRoute = location.pathname === "/" || location.pathname === "/index";
+  // PASS 331 — every interior page that opens on a dark/photographic hero gets
+  // the same treatment as the homepage: transparent header + white identity at
+  // page top, themed chrome (Sun champagne / Moon emerald) once scrolled.
+  const [hasDarkHero, setHasDarkHero] = useState(false);
+  useEffect(() => {
+    let timer = 0;
+    let tries = 0;
+    const check = () => {
+      const el = document.querySelector("[data-hero-dark]") as HTMLElement | null;
+      let ok = false;
+      if (el) {
+        const r = el.getBoundingClientRect();
+        ok = r.top < 220 && r.height > 240;
+      }
+      setHasDarkHero(ok);
+      if (!ok && tries++ < 16) timer = window.setTimeout(check, 150);
+    };
+    check();
+    return () => window.clearTimeout(timer);
+  }, [location.pathname]);
+  const isHomeHeroPath = isHomeRoute || hasDarkHero;
   const mobileHeroAtRest =
     isTransparentRoute &&
     shouldUseMobileHeader &&
