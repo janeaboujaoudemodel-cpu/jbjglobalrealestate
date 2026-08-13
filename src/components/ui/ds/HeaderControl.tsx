@@ -62,41 +62,9 @@ const headerControl = cva(
   },
 );
 
-/**
- * Chrome skin state, read straight off the document so every control in the
- * horizontal header follows the same skin as the vertical sidebar:
- *   - "clear"     → header floats over a hero: transparent surface, white ink
- *   - "champagne" → Sun skin: gold-champagne surface, black ink (light surface)
- *   - "emerald"   → Moon skin: emerald ombre surface, white ink (dark surface)
- */
-type ControlSkin = "clear" | "champagne" | "emerald";
+export type { ControlSkin } from "@/hooks/use-chrome-skin";
+import { useControlSkin, useInkLock, inkForSkin, paintInk, type ControlSkin } from "@/hooks/use-chrome-skin";
 
-function readControlSkin(): ControlSkin {
-  if (typeof document === "undefined") return "emerald";
-  const root = document.documentElement;
-  if (document.body?.getAttribute("data-jj-hero-chrome") === "clear") return "clear";
-  const backendLocked = root.getAttribute("data-jbj-backend-lock") === "1";
-  if (!backendLocked && root.getAttribute("data-jbj-theme") === "sun") return "champagne";
-  return "emerald";
-}
-
-function useControlSkin(): ControlSkin {
-  const [skin, setSkin] = React.useState<ControlSkin>(readControlSkin);
-  React.useEffect(() => {
-    const sync = () => setSkin((prev) => {
-      const next = readControlSkin();
-      return next === prev ? prev : next;
-    });
-    sync();
-    const obs = new MutationObserver(sync);
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-jbj-theme", "data-jbj-backend-lock"] });
-    if (document.body) {
-      obs.observe(document.body, { attributes: true, attributeFilter: ["data-jj-hero-chrome"] });
-    }
-    return () => obs.disconnect();
-  }, []);
-  return skin;
-}
 
 const CHAMPAGNE_SURFACE: React.CSSProperties = {
   backgroundImage: "linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)",
