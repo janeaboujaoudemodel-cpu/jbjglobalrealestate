@@ -544,11 +544,12 @@ export default function PublicBookingLanding() {
                                   key={s}
                                   type="button"
                                   onClick={() => { setSelectedSlot(s); setStep("form"); }}
-                                  className="group rounded-xl border border-neutral-200 bg-white px-3 py-2.5 text-left transition hover:border-emerald-800 hover:-translate-y-0.5"
+                                  className="rounded-xl border border-neutral-200 bg-white px-3 py-2.5 transition hover:border-emerald-800 hover:-translate-y-0.5"
+                                  style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1 }}
                                 >
-                                  <span className="block text-sm font-medium text-neutral-900">{fmtSlot(s)}</span>
+                                  <span style={{ display: "block", whiteSpace: "nowrap", fontSize: 14, fontWeight: 500, color: "#111827" }}>{fmtSlot(s)}</span>
                                   {tzDiffers && (
-                                    <span className="block text-[10px] text-neutral-500">{fmtSlot(s, viewerTz)} local</span>
+                                    <span style={{ display: "block", whiteSpace: "nowrap", fontSize: 10, color: "#6B7280" }}>{fmtSlot(s, viewerTz)} local</span>
                                   )}
                                 </button>
                               ))}
