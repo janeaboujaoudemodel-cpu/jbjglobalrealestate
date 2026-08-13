@@ -1,0 +1,134 @@
+/**
+ * PASS 345 — PREMIUM CHAT AURORA (scoped)
+ * Animated champagne/gold aurora + neural mesh behind the AI support chat.
+ * Scoped strictly to `.jbj-chat-aurora` — no global selectors, no !important.
+ * Contrast contract: the aurora only paints light champagne tones, so all
+ * content above it stays black ink (Rule 1).
+ */
+
+.jbj-chat-aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.jbj-chat-aurora__orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(46px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.jbj-chat-aurora__orb--a {
+  width: 300px;
+  height: 300px;
+  top: -90px;
+  left: -70px;
+  background: radial-gradient(circle at 30% 30%, rgba(184, 149, 85, 0.55), rgba(184, 149, 85, 0) 70%);
+  animation: jbjChatDriftA 18s ease-in-out infinite alternate;
+}
+
+.jbj-chat-aurora__orb--b {
+  width: 340px;
+  height: 340px
+  ;
+  bottom: -120px;
+  right: -90px;
+  background: radial-gradient(circle at 60% 40%, rgba(6, 78, 59, 0.28), rgba(6, 78, 59, 0) 72%);
+  animation: jbjChatDriftB 22s ease-in-out infinite alternate;
+}
+
+.jbj-chat-aurora__orb--c {
+  width: 240px;
+  height: 240px;
+  top: 40%;
+  left: 30%;
+  background: radial-gradient(circle at 50% 50%, rgba(239, 230, 214, 0.9), rgba(239, 230, 214, 0) 70%);
+  animation: jbjChatDriftC 26s ease-in-out infinite alternate;
+}
+
+/* Fine neural grid — reads as engineered intelligence, not decoration */
+.jbj-chat-aurora__mesh {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    linear-gradient(to right, rgba(184, 149, 85, 0.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(184, 149, 85, 0.10) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(circle at 50% 30%, rgba(0, 0, 0, 0.65), transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 30%, rgba(0, 0, 0, 0.65), transparent 70%);
+  animation: jbjChatMesh 40s linear infinite;
+}
+
+/* Slow sweeping shimmer across the panel */
+.jbj-chat-aurora__sheen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: jbjChatSheen 9s ease-in-out infinite;
+}
+
+@keyframes jbjChatDriftA {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(60px, 40px, 0) scale(1.15); }
+}
+
+@keyframes jbjChatDriftB {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to { transform: translate3d(-50px, -60px, 0) scale(1); }
+}
+
+@keyframes jbjChatDriftC {
+  from { transform: translate3d(-30px, 20px, 0) scale(0.9); }
+  to { transform: translate3d(40px, -30px, 0) scale(1.2); }
+}
+
+@keyframes jbjChatMesh {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(34px, 34px, 0); }
+}
+
+@keyframes jbjChatSheen {
+  0% { transform: translate3d(-120%, 0, 0); opacity: 0; }
+  35% { opacity: 0.6; }
+  100% { transform: translate3d(260%, 0, 0); opacity: 0; }
+}
+
+/* Live "thinking" pulse used on the AI badge */
+.jbj-chat-pulse-ring {
+  position: relative;
+}
+
+.jbj-chat-pulse-ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px solid rgba(184, 149, 85, 0.7);
+  animation: jbjChatPulse 2.4s ease-out infinite;
+}
+
+@keyframes jbjChatPulse {
+  0% { transform: scale(0.85); opacity: 0.8; }
+  100% { transform: scale(1.25); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jbj-chat-aurora__orb,
+  .jbj-chat-aurora__mesh,
+  .jbj-chat-aurora__sheen,
+  .jbj-chat-pulse-ring::after {
+    animation: none;
+  }
+  .jbj-chat-aurora__sheen { opacity: 0; }
+}
