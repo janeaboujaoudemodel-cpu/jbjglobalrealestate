@@ -34,6 +34,8 @@ import ChatCVConfirmation from './chat/ChatCVConfirmation';
 import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 import ChatConversationalCollect from './chat/ChatConversationalCollect';
 import ChatConfirmDetails from './chat/ChatConfirmDetails';
+import ChatThreadsPanel from './chat/ChatThreadsPanel';
+import ChatAuroraBackground from './chat/ChatAuroraBackground';
 import { SUPABASE_URL } from "@/config/backend";
 import { consumeChatPrefill, notifyOwnerOfHandoff } from "@/lib/searchIntent";
 
