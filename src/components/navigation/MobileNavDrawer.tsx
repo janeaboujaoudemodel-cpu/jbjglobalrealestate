@@ -333,10 +333,10 @@ export default function MobileNavDrawer({
                       aria-hidden
                       className="h-[13px] w-[20px] shrink-0 rounded-[2px] object-cover"
                     />
-                    <span className="jj-drawer-pref-value text-[13px] font-bold uppercase leading-none tracking-[0.1em]">
+                    <span className="jj-drawer-pref-value w-[42px] shrink-0 text-left text-[13px] font-bold uppercase leading-none" style={{ letterSpacing: 0 }}>
                       {activeLang.code.slice(0, 2).toUpperCase()}
                     </span>
-                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0 ml-1" />
+                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="z-[10500] max-h-72 w-56 overflow-y-auto">
@@ -369,11 +369,10 @@ export default function MobileNavDrawer({
                     {/* Empty flag-width spacer so AED starts on the exact same
                         x-axis as EN in the language row above. */}
                     <span aria-hidden className="h-[13px] w-[20px] shrink-0" />
-                    <span className="jj-drawer-pref-value text-[13px] font-bold uppercase leading-none tracking-[0.1em]">
-
+                    <span className="jj-drawer-pref-value w-[42px] shrink-0 text-left text-[13px] font-bold uppercase leading-none" style={{ letterSpacing: 0 }}>
                       {currency}
                     </span>
-                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0 ml-1" />
+                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="z-[10500] max-h-72 w-56 overflow-y-auto">
@@ -418,7 +417,12 @@ export default function MobileNavDrawer({
 
 
         {/* Scrollable nav — highlights then the same accordion sections as the rail */}
-        <nav className="flex-1 overflow-y-auto overscroll-contain px-2 py-2" aria-label="Site sections">
+        <nav
+          data-jj-drawer-scroll
+          className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-2 py-2"
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+          aria-label="Site sections"
+        >
           {highlightItems.length > 0 && (
             <div className="flex flex-col gap-0.5 pb-2">
               {highlightItems.map((item) => <Row key={`hl-${item.href}-${item.label}`} item={item} />)}
@@ -474,7 +478,7 @@ export default function MobileNavDrawer({
         {/* Footer — theme switch, help, support, sign out. Same order and the
             same left ink column as the rail so icons and labels line up. */}
         <div className="jj-drawer-footer shrink-0 flex flex-col gap-0.5 px-2 pt-2 pb-[calc(env(safe-area-inset-bottom)+18px)]">
-          <div className="px-1 pb-1">
+          <div className="px-0 pb-1">
             <ThemeModeToggle variant="menu" className="jj-drawer-theme" />
           </div>
 
