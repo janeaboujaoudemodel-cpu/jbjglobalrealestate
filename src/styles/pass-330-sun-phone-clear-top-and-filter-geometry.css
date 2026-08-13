@@ -1,0 +1,103 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 330 — PHONE/TABLET (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   1. Normal load (page top): the SUN header is IDENTICAL to the Moon header
+      — fully transparent band, pure white monogram / wordmark / tagline /
+      hamburger bars, one hairline white divider. Scrolled states are
+      untouched (Sun = champagne band, Moon = emerald band).
+   2. sq ft / sq m sit dead-centre in their field: equal padding on all four
+      edges, in both skins.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023.98px) {
+  /* ── 1. SUN, PAGE TOP = MOON, PAGE TOP ──────────────────────────────── */
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    animation: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.24) !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"] a[href="/"] img {
+    filter: brightness(0) invert(1) !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
+    :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline, .jj-header-tagline *) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    text-shadow: none !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
+    [data-tour-target="mobile-menu"] {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+    [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
+    [data-tour-target="mobile-menu"] .jj-hamburger-bar {
+    background-color: #FFFFFF !important;
+    box-shadow: none !important;
+  }
+
+  /* ── 2. sq ft / sq m — TRUE OPTICAL CENTRE IN THE FIELD ─────────────── */
+  html body div#root div[data-property-search-bar]
+    [data-search-utility-controls] > button[aria-pressed] {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: stretch !important;
+    height: auto !important;
+    min-height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+  }
+  html body div#root div[data-property-search-bar]
+    [data-search-utility-controls] > button[aria-pressed] > span:not([aria-hidden="true"]) {
+    display: block !important;
+    line-height: 1 !important;
+  }
+}
+
+/* ── 3. CURRENCY CONTROL SHARES THE SEGMENT GEOMETRY ──────────────────── */
+@media (max-width: 1023.98px) {
+  html body div#root div[data-property-search-bar]
+    [data-search-utility-controls] > button[aria-label="Select currency"] {
+    display: grid !important;
+    grid-template-columns: 18px minmax(0, 1fr) 18px !important;
+    align-items: center !important;
+    justify-content: stretch !important;
+    justify-items: center !important;
+    gap: 0 !important;
+    padding-inline: 8px !important;
+  }
+  html body div#root div[data-property-search-bar]
+    [data-search-utility-controls] > button[aria-label="Select currency"] > svg {
+    grid-column-start: 3 !important;
+    justify-self: end !important;
+  }
+}
+
+/* ── 4. SUN PORTRAIT — "Show N" CTA INK IS PURE BLACK, EVERY NODE ─────── */
+@media (max-width: 1023.98px) and (orientation: portrait) {
+  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f):not(#jj-p330-g):not(#jj-p330-h):not(#jj-p330-i) body div#root
+    div[data-property-search-bar] button[data-surface="emerald"][data-search-segment],
+  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f):not(#jj-p330-g):not(#jj-p330-h):not(#jj-p330-i) body div#root
+    div[data-property-search-bar] button[data-surface="emerald"][data-search-segment] span,
+  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f):not(#jj-p330-g):not(#jj-p330-h):not(#jj-p330-i) body div#root
+    div[data-property-search-bar] button[aria-pressed="true"] span {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    text-shadow: none !important;
+  }
+}

@@ -11,7 +11,7 @@
  */
 import { TIER_LABELS, type DeveloperTier } from "@/utils/developerTier";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUpDown, Check, ChevronDown, Crown, MapPin, Minus, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, BedDouble, Building2, Check, ChevronDown, CircleDot, Crown, Home, MapPin, Minus, Search, SlidersHorizontal, Tag, X } from "lucide-react";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useNavigate } from "react-router-dom";
 
@@ -105,15 +105,15 @@ function Seg({
           }}
         >
 
-          {/* Phone/tablet: icon · label · chevron read as ONE centred group
-              (exactly like the AED currency control) so the pin sits right
-              before "UAE" and every chevron lands at the same inset.
-              Desktop keeps the 3-column grid used by the alignment lock. */}
-          <span className="flex flex-1 min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[18px_minmax(0,1fr)_18px] lg:gap-0">
+          {/* PASS 330 — one geometry on EVERY device: a fixed 3-column track
+              [icon 18px | label | chevron 18px]. Every segment therefore lands
+              its icon at the same left inset and its chevron at the same right
+              inset, on phone, tablet and desktop alike. */}
+          <span className="grid w-full min-w-0 grid-cols-[18px_minmax(0,1fr)_18px] items-center gap-0">
             {icon ? (
               <span className="inline-flex shrink-0 items-center justify-center">{icon}</span>
             ) : (
-              <span className="hidden lg:inline-flex" />
+              <span aria-hidden="true" className="inline-flex" />
             )}
             <span
               className="min-w-0 leading-none text-center"
@@ -131,8 +131,9 @@ function Seg({
 
               {label}
             </span>
-            <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70 lg:col-start-3 lg:justify-self-end" />
+            <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70 col-start-3 justify-self-end" />
           </span>
+
 
         </button>
       </PopoverTrigger>
@@ -604,6 +605,7 @@ export default function PropertySearchBar({
         <div className="order-4 lg:order-none col-span-1 jj-sspan-3 min-w-0">
           <Seg
             label={developersLabel}
+            icon={<Building2 className="w-4 h-4 opacity-70" />}
             active={!!(f.developersInclude.length || f.developersExclude.length)}
             dark={dark}
             wide
@@ -619,6 +621,7 @@ export default function PropertySearchBar({
         <div className="order-4 lg:order-none col-span-1 jj-sspan-3 min-w-0">
           <Seg
             label={tiersLabel}
+            icon={<Crown className="w-4 h-4 opacity-70" />}
             active={!!(f.tiersInclude.length || f.tiersExclude.length)}
             dark={dark}
             wide
@@ -639,7 +642,7 @@ export default function PropertySearchBar({
           </Seg>
         </div>
 
-        <Seg label={typeLabel} active={f.types.length > 0} dark={dark} spanClass="order-5 lg:order-none jj-sspan-3">
+        <Seg label={typeLabel} active={f.types.length > 0} dark={dark} icon={<Home className="w-4 h-4 opacity-70" />} spanClass="order-5 lg:order-none jj-sspan-3">
           <div className="p-3">
             <div className="grid grid-cols-2 gap-1 p-1 rounded-xl mb-2" style={{ background: "#F2EBDC" }}>
               {(Object.keys(CATEGORY_TYPES) as SearchCategory[]).map((c) => (
@@ -681,7 +684,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={bedLabel} active={f.beds.length > 0 || f.baths.length > 0} dark={dark} spanClass="order-6 lg:order-none jj-sspan-3">
+        <Seg label={bedLabel} active={f.beds.length > 0 || f.baths.length > 0} dark={dark} icon={<BedDouble className="w-4 h-4 opacity-70" />} spanClass="order-6 lg:order-none jj-sspan-3">
           <div className="p-3 space-y-3">
             <div>
               <p className="text-[11px] uppercase tracking-wider opacity-60 mb-1.5">Bedrooms</p>
@@ -707,7 +710,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={priceLabel} active={f.priceMin != null || f.priceMax != null} dark={dark} spanClass="order-7 lg:order-none jj-sspan-3">
+        <Seg label={priceLabel} active={f.priceMin != null || f.priceMax != null} dark={dark} icon={<Tag className="w-4 h-4 opacity-70" />} spanClass="order-7 lg:order-none jj-sspan-3">
           <div className="p-3 grid grid-cols-2 gap-2">
             <input
               className={numInput}
@@ -726,7 +729,7 @@ export default function PropertySearchBar({
           </div>
         </Seg>
 
-        <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark} spanClass="order-8 lg:order-none jj-sspan-3">
+        <Seg label={statusLabel} active={f.statuses.length > 0} dark={dark} icon={<CircleDot className="w-4 h-4 opacity-70" />} spanClass="order-8 lg:order-none jj-sspan-3">
           <div className="p-3 flex flex-wrap gap-1.5">
             {statusOptionsFor(f.purpose).map((s) => (
               <Chip
