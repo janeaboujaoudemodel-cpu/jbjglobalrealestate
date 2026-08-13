@@ -233,7 +233,8 @@ export default function PublicBookingLanding() {
       {/* Emerald banner (brand-locked, no site nav) */}
       <div
         className="w-full text-white"
-        style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)" }}
+        data-surface="emerald"
+        style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)", color: "#FFFFFF" }}
       >
         <div className="max-w-3xl mx-auto px-6 py-10 text-center">
           <div className="text-xs tracking-[0.35em] uppercase opacity-80">{isPersonal ? "Personal Meeting" : "Private Briefing"}</div>
