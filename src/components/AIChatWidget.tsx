@@ -34,6 +34,8 @@ import ChatCVConfirmation from './chat/ChatCVConfirmation';
 import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 import ChatConversationalCollect from './chat/ChatConversationalCollect';
 import ChatConfirmDetails from './chat/ChatConfirmDetails';
+import ChatThreadsPanel from './chat/ChatThreadsPanel';
+import ChatAuroraBackground from './chat/ChatAuroraBackground';
 import { SUPABASE_URL } from "@/config/backend";
 import { consumeChatPrefill, notifyOwnerOfHandoff } from "@/lib/searchIntent";
 
@@ -74,6 +76,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [selectedShortcut, setSelectedShortcut] = useState<ShortcutType | null>(null);
   const [detectedFullName, setDetectedFullName] = useState<string | null>(null);
+  // PASS 345 — recent thread switcher (resume any past conversation, not just one)
+  const [threadsOpen, setThreadsOpen] = useState(false);
 
   /**
    * Hero-search handoff: when the AI search router cannot understand a
@@ -342,6 +346,21 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     }
   };
 
+  // PASS 345 — resolve the identity we can look threads up by
+  const threadLookupEmail = (userInfo.email || user?.email || '').trim();
+
+  // Open the thread switcher (loads the latest list every time it opens)
+  const openThreads = useCallback(() => {
+    setThreadsOpen(true);
+    if (threadLookupEmail) {
+      void fetchChatHistory(threadLookupEmail);
+    }
+  }, [threadLookupEmail]);
+
+  const refreshThreads = useCallback(() => {
+    if (threadLookupEmail) void fetchChatHistory(threadLookupEmail);
+  }, [threadLookupEmail]);
+
   // Handle email verification result
   const handleEmailVerified = (email: string, isExisting: boolean, userData?: any) => {
     if (isExisting) {
@@ -390,6 +409,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     }));
     
     setMessages(restoredMessages);
+    setIsExistingUser(true);
+    setThreadsOpen(false);
     setStep('chatting');
   };
 
@@ -1170,13 +1191,30 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         }}
       >
 
+        {/* PASS 345 — premium animated aurora behind the whole chat panel */}
+        <ChatAuroraBackground depth={-1} />
+
         <ChatHeader
           step={step} 
           isExistingUser={isExistingUser} 
           onBack={handleBack} 
           onToggleCollapse={onToggleCollapse} 
           onClearChat={messages.length > 0 ? clearChat : undefined}
+          onOpenThreads={threadLookupEmail ? openThreads : undefined}
+          threadCount={chatHistory.length}
         />
+
+        <ChatThreadsPanel
+          open={threadsOpen}
+          threads={chatHistory}
+          isLoading={isLoadingHistory}
+          activeThreadId={conversationId}
+          onClose={() => setThreadsOpen(false)}
+          onNewThread={() => { setThreadsOpen(false); resetChat(); }}
+          onResumeThread={handleContinueConversation}
+          onRefresh={refreshThreads}
+        />
+
 
 
         {step === 'welcome_choice' && (

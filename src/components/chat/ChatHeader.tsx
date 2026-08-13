@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Minus, Eraser } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus, Eraser, History } from 'lucide-react';
 import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChatStep, getRandomAgent } from './types';
@@ -12,9 +12,12 @@ interface ChatHeaderProps {
   onBack: () => void;
   onToggleCollapse: () => void;
   onClearChat?: () => void;
+  /** PASS 345 — opens the recent-conversation switcher */
+  onOpenThreads?: () => void;
+  threadCount?: number;
 }
 
-const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, isExistingUser, onBack, onToggleCollapse, onClearChat }, ref) => {
+const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, isExistingUser, onBack, onToggleCollapse, onClearChat, onOpenThreads, threadCount = 0 }, ref) => {
 
   const { isRTL, t } = useLanguage();
   const agent = useMemo(() => getRandomAgent(), []);
@@ -86,6 +89,23 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
           <div className="w-2 h-2 rounded-full bg-[#EFE6D6] animate-pulse" />
           <span className="text-[#1A1A1A] text-[10px] font-semibold">{t('chat.available247', 'Available 24/7')}</span>
         </div>
+        {onOpenThreads && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onOpenThreads}
+            className="relative w-10 h-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]/40 hover:border-[#B89555] hover:shadow-lg hover:shadow-gold/20 transition-all"
+            title={t('chat.recentChats', 'Recent conversations')}
+            aria-label={t('chat.recentChats', 'Recent conversations')}
+          >
+            <History className="w-4 h-4" />
+            {threadCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#B89555] text-[#1A1A1A] text-[9px] font-bold flex items-center justify-center">
+                {threadCount > 9 ? '9+' : threadCount}
+              </span>
+            )}
+          </Button>
+        )}
         {onClearChat && (
           <Button
             variant="ghost"
