@@ -547,7 +547,7 @@ export default function PropertySearchBar({
                     WebkitTextFillColor: on ? "#FFFFFF" : dark ? "#FFFFFF" : undefined,
                   }}
                 >
-                  {unit === "sqft" ? "sq ft" : "sq m"}
+                  {unit === "sqft" ? "sq\u00A0ft" : "sq\u00A0m"}
                   {i === 0 ? (
                     <span
                       aria-hidden="true"
@@ -796,11 +796,12 @@ export default function PropertySearchBar({
             }}
 
           >
-            <span className="flex w-full min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[18px_minmax(0,1fr)_18px] lg:gap-0">
+            <span className="flex w-full min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[15px_minmax(0,1fr)_13px] lg:gap-0">
               <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 opacity-70 lg:justify-self-center" />
-              <span className="text-center" style={{ whiteSpace: "nowrap" }}>
+              <span className="text-center lg:text-[11px]" style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
+              <span aria-hidden="true" className="hidden lg:inline-flex" />
             </span>
 
           </button>
@@ -823,9 +824,15 @@ export default function PropertySearchBar({
             {count == null ? (
               <span className="text-[13px] lg:text-[12px] font-semibold leading-none">Search</span>
             ) : (
-              <span className="text-[13px] lg:text-[12px] font-semibold leading-none whitespace-nowrap">
-                Show {count.toLocaleString()} {countNoun}
-              </span>
+              <>
+                <span className="text-[13px] font-semibold leading-none whitespace-nowrap lg:hidden">
+                  Show {count.toLocaleString()} {countNoun}
+                </span>
+                <span className="hidden lg:flex lg:flex-col lg:items-center lg:justify-center lg:gap-[2px] lg:text-[12px] lg:font-semibold lg:leading-[1.1]">
+                  <span className="whitespace-nowrap">Show {count.toLocaleString()}</span>
+                  <span className="whitespace-nowrap">{countNoun}</span>
+                </span>
+              </>
             )}
 
           </button>
