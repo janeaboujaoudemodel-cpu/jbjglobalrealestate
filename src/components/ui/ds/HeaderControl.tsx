@@ -96,9 +96,21 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
     const skinned = emerald && skin !== "clear"
       ? { ...(skin === "champagne" ? CHAMPAGNE_SURFACE : EMERALD_SURFACE), ...style }
       : style;
+    const ink = inkForSkin(skin);
+    const innerRef = React.useRef<HTMLButtonElement | null>(null);
+    React.useEffect(() => {
+      const run = () => paintInk(innerRef.current, ink);
+      run();
+      const id = window.setTimeout(run, 60);
+      return () => window.clearTimeout(id);
+    });
     return (
       <button
-        ref={ref}
+        ref={(node) => {
+          innerRef.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) (ref as React.MutableRefObject<HTMLButtonElement | null>).current = node;
+        }}
         type="button"
         data-jjds-header-control=""
         data-jjds-shape={shape ?? "circle"}
@@ -115,6 +127,7 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
     );
   },
 );
+
 HeaderControl.displayName = "HeaderControl";
 
 
