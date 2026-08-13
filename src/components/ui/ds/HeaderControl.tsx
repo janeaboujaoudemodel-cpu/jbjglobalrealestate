@@ -213,7 +213,7 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
         !champagne && "shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
         className,
       )}
-      style={groupStyle}
+      style={hovered ? { ...groupStyle, ...hoverGroup, transition: "all 160ms ease" } : { ...groupStyle, transition: "all 160ms ease" }}
     >
       {options.map((opt, index) => {
         const isActive = opt.value === value;
