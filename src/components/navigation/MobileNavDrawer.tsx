@@ -202,11 +202,13 @@ export default function MobileNavDrawer({
         onClick={onClose}
       />
 
-      {/* Panel — mirrors the desktop rail language via the shared drawer hook */}
+      {/* Panel — mirrors the desktop rail language via the shared drawer hook.
+          PASS 350: slides in from the RIGHT, next to the hamburger. */}
       <aside
         data-jj-mobile-drawer
         data-jj-drawer-panel
-        className="absolute left-0 top-0 h-[100dvh] w-[min(88vw,340px)] flex flex-col overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
+        data-jj-drawer-side="right"
+        className="absolute right-0 top-0 h-[100dvh] w-[min(88vw,340px)] flex flex-col overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
       >
         {/* Brand band — one-line company identity in both skins. */}
         <div data-sidebar-brand-row="drawer" className="jj-rail-brand-band shrink-0 flex items-center gap-3 px-4 pt-3 pb-3">

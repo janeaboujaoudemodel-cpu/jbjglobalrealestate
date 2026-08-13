@@ -16,16 +16,22 @@ import * as React from "react";
 export type ChromeMode = "desktop" | "phone";
 
 /**
- * PASS 341 — ONE CHROME ON EVERY DEVICE (LOCKED)
+ * PASS 350 — PHONE = HEADER + HAMBURGER ONLY (LOCKED)
  *
- * Phone, iPad (portrait and landscape), laptop and desktop all run the SAME
- * navigation chrome: the emerald/champagne vertical rail pinned left plus the
- * horizontal utility bar. There is no separate phone shell any more, so the
- * structure, logic and skin (Sun / Moon, collapsed / expanded) are identical
- * everywhere. Below 1024px the expanded rail overlays the page instead of
- * squeezing it — the permanently reserved column stays the 59px rail width.
+ * Phones (narrow screens, < 768px) never show the collapsed vertical rail or
+ * the horizontal utility bar — the screen is too small. They run the compact
+ * global header with the hamburger only; tapping it opens the full sidebar as
+ * a drawer sliding in from the RIGHT (next to the hamburger) in both skins.
+ *
+ * iPad and above (portrait AND landscape) plus laptops/desktops keep the
+ * unified desktop chrome: vertical rail + utility bar.
  */
-const computeMode = (): ChromeMode => "desktop";
+const PHONE_MAX = 768;
+const computeMode = (): ChromeMode => {
+  if (typeof window === "undefined") return "desktop";
+  return window.innerWidth < PHONE_MAX ? "phone" : "desktop";
+};
+
 
 export function useChromeMode(): ChromeMode {
   const [mode, setMode] = React.useState<ChromeMode>(computeMode);

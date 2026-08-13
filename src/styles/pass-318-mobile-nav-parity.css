@@ -678,3 +678,15 @@ html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] [data-jj-drawer
     -webkit-text-stroke: 0 !important;
   }
 }
+
+/* ═══ PASS 350 — DRAWER OPENS FROM THE RIGHT (phone) ═══
+   The panel now slides in next to the hamburger, so the hairline edge moves
+   to the left side in both skins. */
+html body #root [data-jj-drawer-panel][data-jj-drawer-side="right"] {
+  border-right: 0 !important;
+  border-left: 1px solid rgba(6, 78, 59, 0.22) !important;
+}
+html[data-jbj-theme="moon"] body #root [data-jj-drawer-panel][data-jj-drawer-side="right"],
+html:not([data-jbj-theme="sun"]) body #root [data-jj-drawer-panel][data-jj-drawer-side="right"] {
+  border-left-color: rgba(255, 255, 255, 0.10) !important;
+}
