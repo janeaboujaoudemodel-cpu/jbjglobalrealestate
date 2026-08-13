@@ -24,7 +24,7 @@ import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Loader2, CheckCircle2, CalendarDays, Clock, Mail, ArrowLeft, Plus, X,
-  Sparkles, Globe2, Sunrise, Sun, Moon, ChevronRight, ShieldCheck, Video,
+  Sparkles, Globe2, Sunrise, Sun, Moon, ChevronRight, ChevronLeft, ShieldCheck, Video,
 } from "lucide-react";
 
 type FormField = { key: string; label: string; type: string; required?: boolean; placeholder?: string };
