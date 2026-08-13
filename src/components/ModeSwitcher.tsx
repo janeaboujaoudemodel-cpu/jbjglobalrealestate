@@ -172,14 +172,26 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // the search/filter/favorite utility controls.
   // ─────────────────────────────────────────────────────────────────
   // Closed-trigger: same emerald premium control family as AED/filter/favorites.
-  const triggerStyle: CSSProperties = {
-    backgroundColor: 'transparent',
-    backgroundImage: 'var(--jj-emerald-ombre)',
-    border: 0,
-    color: '#FFFFFF',
-    WebkitTextFillColor: '#FFFFFF',
-    boxShadow: '0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)',
-  };
+  const chromeSkin = useControlSkin();
+  const chromeInk = inkForSkin(chromeSkin);
+  const triggerRef = useInkLock<HTMLButtonElement>(chromeInk);
+  const triggerStyle: CSSProperties = chromeSkin === 'champagne'
+    ? {
+        backgroundColor: 'transparent',
+        backgroundImage: 'linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)',
+        border: '1px solid rgba(184,149,85,0.42)',
+        color: '#1A1A1A',
+        WebkitTextFillColor: '#1A1A1A',
+        boxShadow: '0 1px 2px rgba(26,26,26,0.08)',
+      }
+    : {
+        backgroundColor: 'transparent',
+        backgroundImage: chromeSkin === 'clear' ? 'none' : 'var(--jj-emerald-ombre)',
+        border: 0,
+        color: '#FFFFFF',
+        WebkitTextFillColor: '#FFFFFF',
+        boxShadow: chromeSkin === 'clear' ? 'none' : '0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)',
+      };
 
 
 
@@ -216,6 +228,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
         <DropdownMenuTrigger asChild>
           <button
+            ref={triggerRef}
             disabled={isLoading}
             onClick={(e) => e.stopPropagation()}
             style={triggerStyle}
@@ -238,14 +251,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             )}
             <span
               className="mode-switcher-trigger-label text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block tracking-wide"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+              style={{ color: chromeInk, WebkitTextFillColor: chromeInk }}
             >
               {triggerLabel}
             </span>
             <ChevronDown
               data-no-contrast-guard
               className={cn("mode-switcher-trigger-chevron w-3.5 h-3.5 shrink-0 transition-none duration-0", isOpen && "rotate-180")}
-              style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+              style={{ color: chromeInk, stroke: chromeInk }}
             />
           </button>
         </DropdownMenuTrigger>
