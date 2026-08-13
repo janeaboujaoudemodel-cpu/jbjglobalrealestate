@@ -166,3 +166,22 @@
     overflow-x: visible !important;
   }
 }
+
+/* Clear rail ink: white in BOTH skins (Sun's black-ink rail locks must not win
+   over a photo/video hero). Specificity stacked to beat pass-317 / pass-312. */
+@media (min-width: 1024px) {
+  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root div#root [data-chrome="sidebar"] :is(a, button, span, svg, path, [data-jjds-sidebar-icon]) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root div#root [data-chrome="sidebar"] :is(svg, path):not([fill="none"]) {
+    stroke: #ffffff !important;
+  }
+  /* Rail edge + footer dividers: one thin white hairline while clear. */
+  html body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-emerald-edge {
+    border-right: 1px solid rgba(255, 255, 255, 0.22) !important;
+  }
+  html body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed div#root [data-chrome="sidebar"] .jj-rail-footer-divider {
+    background: rgba(255, 255, 255, 0.22) !important;
+  }
+}
