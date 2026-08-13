@@ -792,12 +792,13 @@ export default function PropertySearchBar({
             }}
 
           >
-            <span className="grid w-full grid-cols-[18px_minmax(0,1fr)_18px] items-center">
-              <SlidersHorizontal className="h-3.5 w-3.5 justify-self-center opacity-70" />
+            <span className="flex w-full min-w-0 items-center justify-center gap-1.5 lg:grid lg:grid-cols-[18px_minmax(0,1fr)_18px] lg:gap-0">
+              <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 opacity-70 lg:justify-self-center" />
               <span className="text-center" style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
             </span>
+
           </button>
 
           <button
