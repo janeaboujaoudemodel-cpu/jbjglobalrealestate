@@ -262,3 +262,18 @@
   align-self: center !important;
   font-weight: 600 !important;
 }
+
+/* Header-scoped overrides — PASS 290 forced emerald ink on these two controls;
+   both now sit on emerald gradient fills, so their ink must be pure white. */
+.jc-app .jc-header .jc-popover--notif .jc-notif__mark,
+.jc-app .jc-header .jc-popover--notif .jc-notif__mark :is(span, svg, path),
+.jc-app .jc-header .jc-popover--notif .jc-notif__view,
+.jc-app .jc-header .jc-popover--notif .jc-notif__view :is(span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+.jc-app .jc-header .jc-popover--notif .jc-notif__mark {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+.jc-app .jc-header .jc-popover--notif { max-height: 560px !important; }
