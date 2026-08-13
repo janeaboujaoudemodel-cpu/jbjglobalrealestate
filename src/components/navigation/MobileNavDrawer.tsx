@@ -30,9 +30,9 @@ import { useLanguage, SUPPORTED_LANGUAGES, getLanguageInfo } from "@/contexts/La
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import CurrencySwitcher from "@/components/CurrencySwitcher";
+import CurrencySwitcher, { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { useCurrency } from "@/hooks/useCurrency";
-import InlineCurrencySelect from "@/components/search/InlineCurrencySelect";
+import { setCurrencyGlobal } from "@/components/search/InlineCurrencySelect";
 
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import { ThemeModeToggle } from "@/components/ThemeModeToggle";
@@ -279,30 +279,31 @@ export default function MobileNavDrawer({
 
         {/* Preferences — each label and value is one aligned field. */}
         <div className="jj-drawer-prefs shrink-0 flex flex-col px-3 pb-2">
-          <div className="jj-drawer-pref-row flex items-center gap-0 min-h-[46px] px-1">
-            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
-              <img
-                src={flagSrc(activeLang.flag)}
-                alt=""
-                aria-hidden
-                className="h-[13px] w-[20px] shrink-0 rounded-[2px] object-cover"
-              />
-
+          {/* Label first, then the value cluster (flag + code + chevron) right
+              beside it — no wide gap, and the chevron never touches the code. */}
+          <div className="jj-drawer-pref-row flex items-center gap-2 min-h-[46px] px-1">
+            <span className="w-[86px] shrink-0 text-[12px] font-semibold leading-none" style={rowStyle}>
               Language
             </span>
-            <span className="flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
+            <span className="flex min-w-0 flex-1 items-center" style={rowStyle}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
                     data-no-contrast-guard
-                    className="inline-flex h-9 w-16 min-w-0 items-center justify-start gap-1.5 bg-transparent px-0"
+                    className="inline-flex h-9 min-w-0 items-center justify-start gap-2 bg-transparent px-0"
                     aria-label="Select language"
                   >
+                    <img
+                      src={flagSrc(activeLang.flag)}
+                      alt=""
+                      aria-hidden
+                      className="h-[13px] w-[20px] shrink-0 rounded-[2px] object-cover"
+                    />
                     <span className="jj-drawer-pref-value text-[13px] font-bold uppercase leading-none tracking-[0.1em]">
                       {activeLang.code.slice(0, 2).toUpperCase()}
                     </span>
-                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0" />
+                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0 ml-1" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="z-[10500] max-h-72 w-56 overflow-y-auto">
@@ -316,20 +317,40 @@ export default function MobileNavDrawer({
                 </DropdownMenuContent>
               </DropdownMenu>
             </span>
-
           </div>
 
-          <div className="jj-drawer-pref-row flex items-center gap-0 min-h-[46px] px-1">
-            <span className="flex w-[112px] shrink-0 items-center gap-2.5 text-[12px] font-semibold" style={rowStyle}>
-              <span aria-hidden className="jj-drawer-pref-value text-[11px] font-bold tracking-[0.06em] w-[20px] text-center leading-none">
-                {currency}
-              </span>
+          <div className="jj-drawer-pref-row flex items-center gap-2 min-h-[46px] px-1">
+            <span className="w-[86px] shrink-0 text-[12px] font-semibold leading-none" style={rowStyle}>
               Currency
             </span>
-            <span className="jj-drawer-currency flex min-w-0 flex-1 items-center pl-3" style={rowStyle}>
-              <span className="inline-flex h-9 min-w-0 items-center">
-                <InlineCurrencySelect dark={isMoon} />
-              </span>
+            <span className="jj-drawer-currency flex min-w-0 flex-1 items-center" style={rowStyle}>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    data-no-contrast-guard
+                    className="inline-flex h-9 min-w-0 items-center justify-start gap-2 bg-transparent px-0"
+                    aria-label="Select currency"
+                  >
+                    <span className="jj-drawer-pref-value text-[13px] font-bold uppercase leading-none tracking-[0.1em]">
+                      {currency}
+                    </span>
+                    <ChevronDown className="jj-drawer-pref-value h-3.5 w-3.5 shrink-0 ml-1" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="z-[10500] max-h-72 w-56 overflow-y-auto">
+                  {SUPPORTED_CURRENCIES.map((c) => (
+                    <DropdownMenuItem
+                      key={c.code}
+                      onClick={() => setCurrencyGlobal(c.code)}
+                      className="gap-2 text-sm"
+                    >
+                      <span className="font-semibold uppercase">{c.code}</span>
+                      <span className="truncate opacity-70">{c.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </span>
           </div>
 

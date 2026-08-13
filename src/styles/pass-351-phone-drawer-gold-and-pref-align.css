@@ -1,0 +1,46 @@
+/**
+ * PASS 351 — PHONE DRAWER: SUN GOLD QUICK ICONS + GOLD BRAND RULE
+ *
+ * Sun only: the Search / Sign In / Shortlist glyphs and the divider under the
+ * monogram + wordmark wear premium gold (#B89555). Moon is untouched — white
+ * ink and the emerald rule stay exactly as they are.
+ */
+
+/* ── Sun: gold quick-action glyphs ───────────────────────────────── */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] svg,
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] svg *,
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-quick-icon],
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-quick-icon] * {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+  fill: none !important;
+}
+
+/* Labels under the glyphs stay black ink on champagne (Rule 1). */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] [data-jj-drawer-tile] span {
+  color: #1A1A1A !important;
+}
+
+/* ── Sun: premium gold rule under the brand band ─────────────────── */
+html[data-jbj-theme="sun"] body div#root [data-jj-drawer-panel] .jj-drawer-rule {
+  background: linear-gradient(
+    90deg,
+    rgba(184, 149, 85, 0) 0%,
+    #B89555 18%,
+    #E3C98B 50%,
+    #B89555 82%,
+    rgba(184, 149, 85, 0) 100%
+  ) !important;
+  height: 1.5px !important;
+  opacity: 1 !important;
+}
+
+/* ── Both skins: preference rows sit tight and never clip the chevron ── */
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row > span:first-child {
+  letter-spacing: 0.01em;
+}
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row button[aria-label="Select language"],
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row button[aria-label="Select currency"] {
+  padding-right: 4px !important;
+  white-space: nowrap;
+}
