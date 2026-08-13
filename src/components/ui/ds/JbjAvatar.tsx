@@ -41,6 +41,8 @@ export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
   ({ initials = "JB", size = "md", className, ...props }, ref) => {
     const skin = useControlSkin();
     const champagne = skin === "champagne";
+    /* PASS 337 — over a hero the avatar is a bare white ring, never a plate. */
+    const clear = skin === "clear";
     const ink = inkForSkin(skin);
     const inkRef = useForceWhiteInk(ink);
     return (
@@ -50,8 +52,9 @@ export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
         data-jbj-avatar-skin={skin}
         data-surface={champagne ? "champagne" : "emerald"}
         data-no-contrast-guard
+        style={clear ? { background: "transparent", backgroundImage: "none", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.26)" } : undefined}
         className={cn(
-          champagne ? "" : "jj-avatar-metallic allow-white",
+          champagne || clear ? "" : "jj-avatar-metallic allow-white",
           "relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
 
           sizeClass[size],
@@ -59,7 +62,7 @@ export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
         )}
         {...props}
       >
-        {champagne ? (
+        {clear ? null : champagne ? (
           <span
             aria-hidden="true"
             className="absolute inset-0 rounded-full"

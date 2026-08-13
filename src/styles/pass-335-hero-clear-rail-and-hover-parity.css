@@ -268,3 +268,36 @@ html[data-jbj-theme="sun"] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome
   -webkit-text-fill-color: #1a1a1a !important;
   background-image: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 337 — CLEAR CHROME: WHITE MONOGRAM, BARE AVATAR, INSTANT HOVER
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* 1. Sun rail monogram is a black knockout only once the rail is champagne.
+      While the rail is clear (over a hero) it is a white knockout in BOTH skins. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
+  div#root [data-chrome="sidebar"] img[alt="JBJ"] {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55)) !important;
+}
+
+/* 2. The account avatar carries no plate while clear — its inner metallic and
+      spinner layers are knocked out too, leaving only the white hairline ring. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root
+  [data-jj-utility-bar][data-jj-utility-bar] [data-jbj-avatar] :is(.jj-avatar-core, .jj-avatar-spinner, .jj-avatar-metallic) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+/* 3. Hover must paint instantly — no transition/animation lag on clear controls. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root
+  [data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-mode-trigger], [data-jjds-segmented], [data-jbj-avatar], [data-search-utility-controls]),
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root
+  [data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, [data-jjds-segmented]) * {
+  transition: none !important;
+  animation-delay: 0s !important;
+}
