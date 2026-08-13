@@ -48,6 +48,7 @@ const CombinedContactNewsletter = ({
   const body = (
     <div
       data-ink-emerald
+      data-jj-cta-band
       data-surface="emerald"
       data-emerald="true"
       className={`jj-loop-block relative w-full px-4 py-8 sm:px-8 md:py-10 ${fitContainer ? "max-w-none" : "max-w-6xl mx-auto"}`}
@@ -89,9 +90,10 @@ const CombinedContactNewsletter = ({
             target={card.label === "WhatsApp" ? "_blank" : undefined}
             rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
             data-surface="emerald"
+            data-jj-cta-tile
             data-emerald-ok="button"
             data-no-contrast-guard
-            className="jj-emerald-metallic jj-ready-cta-metallic group flex min-h-[96px] sm:min-h-[132px] flex-col items-center justify-start sm:justify-center gap-1.5 sm:gap-2.5 px-2 py-3.5 sm:px-5 sm:py-6 rounded-xl text-center"
+            className="jj-emerald-metallic jj-ready-cta-metallic group flex min-h-[72px] sm:min-h-[132px] flex-col items-center justify-center gap-1 sm:gap-2.5 px-1.5 py-2 sm:px-5 sm:py-6 rounded-xl text-center"
             style={{ color: '#FFFFFF' }}
           >
             <span

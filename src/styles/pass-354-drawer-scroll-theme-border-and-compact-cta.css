@@ -1,0 +1,109 @@
+/* PASS 354 — Phone/tablet drawer: real scroll, animated emerald theme border,
+   footer icon-column parity, and a compact (non-vertical) CTA band on phones.
+   Scoped to the drawer panel and the CTA band only. */
+
+/* 1 — Scroll actually works: the nav is the only growing flex child and it is
+      allowed to shrink below its content height. */
+html body div#root [data-jj-drawer-panel] {
+  min-height: 0;
+}
+
+html body div#root [data-jj-drawer-panel] [data-jj-drawer-scroll] {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+/* Nothing above the nav may grow and steal the scroll area. */
+html body div#root [data-jj-drawer-panel] > :is([data-sidebar-brand-row], .jj-drawer-quick, .jj-drawer-prefs, .jj-drawer-footer, .jj-drawer-rule) {
+  flex: 0 0 auto;
+}
+
+/* Short viewports (phone portrait): tighten the fixed blocks so the scroll
+   region always has room. */
+@media (max-width: 1024px) {
+  html body div#root [data-jj-drawer-panel] .jj-drawer-prefs .jj-drawer-pref-row {
+    min-height: 40px;
+  }
+  html body div#root [data-jj-drawer-panel] .jj-drawer-quick {
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
+/* 2 — Theme switch: animated emerald border in both skins, and the control box
+      lines up with the Contact Us / Support icon column. */
+@keyframes jj354-emerald-ring {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(6, 78, 59, 0.85), 0 0 0 0 rgba(6, 78, 59, 0.28); }
+  50% { box-shadow: 0 0 0 1px rgba(6, 78, 59, 1), 0 0 10px 2px rgba(6, 78, 59, 0.35); }
+}
+
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme {
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-left: 0;
+  margin-right: 0;
+  gap: 8px;
+}
+
+html body div#root [data-jj-drawer-panel] .jj-drawer-theme button {
+  border: 1px solid rgba(6, 78, 59, 0.85);
+  border-radius: 10px;
+  animation: jj354-emerald-ring 2.6s ease-in-out infinite;
+  min-height: 34px;
+}
+
+html[data-jbj-theme="moon"] body div#root [data-jj-drawer-panel] .jj-drawer-theme button,
+html:not([data-jbj-theme="sun"]) body div#root [data-jj-drawer-panel] .jj-drawer-theme button {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body div#root [data-jj-drawer-panel] .jj-drawer-theme button {
+    animation: none;
+  }
+}
+
+/* 3 — Footer rows share one icon/label column: Contact Us, Support, Sign Out. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-footer .jj-drawer-row,
+html body div#root [data-jj-drawer-panel] .jj-drawer-footer [data-sidebar-auth-control] {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+  justify-content: flex-start !important;
+  gap: 0.75rem !important;
+  text-align: left !important;
+}
+
+html body div#root [data-jj-drawer-panel] .jj-drawer-footer [data-signout-label] {
+  text-align: left !important;
+  flex: 1 1 auto !important;
+}
+
+/* 4 — Compact CTA band on phones: horizontal rhythm, never a tall vertical stack. */
+@media (max-width: 767px) {
+  html body div#root [data-jj-cta-band] {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+  html body div#root [data-jj-cta-band] [data-jj-cta-tile] {
+    min-height: 72px !important;
+    padding: 0.5rem 0.375rem !important;
+    gap: 0.25rem !important;
+    justify-content: center !important;
+  }
+  html body div#root [data-jj-cta-band] [data-jj-cta-tile] > span:first-child {
+    height: 26px !important;
+    width: 26px !important;
+  }
+  html body div#root [data-jj-cta-band] [data-jj-cta-tile] svg {
+    height: 14px !important;
+    width: 14px !important;
+  }
+}
