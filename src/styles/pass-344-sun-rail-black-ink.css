@@ -1,0 +1,128 @@
+/*
+ * PASS 344 — CHAMPAGNE RAIL: BLACK TITLES + BLACK ICONS (LOCKED)
+ *
+ * Brand contract rule 1: any champagne / gold / pearl surface carries black
+ * ink (#1A1A1A) in EVERY state — default, hover, focus, active.
+ *
+ * The Sun vertical sidebar (front-end rail and back-end JBJ Hub rail) still
+ * painted several labels with a clipped gold/emerald gradient (or a faded
+ * gold hex), which reads as washed-out text on champagne. This file kills the
+ * gradient text-fill and locks black ink for titles, section labels, sub-item
+ * labels and icons, on normal load and on hover.
+ *
+ * Loaded after index.css and every earlier pass, so it wins on cascade order
+ * without adding rules to the global stylesheet.
+ *
+ * Exception kept intentionally: the emerald-filled ACTIVE pill still owns its
+ * own white ink (dark surface = white ink) — see the [data-active] carve-outs.
+ */
+
+/* ─────────────── 1. FRONT-END rail (Sun skin, not over a hero) ─────────────── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"]
+  :is(
+    [data-sidebar-section],
+    [data-sidebar-section]:hover,
+    [data-sidebar-section-label],
+    [data-sidebar-section]:hover [data-sidebar-section-label],
+    a[data-sidebar-subitem],
+    a[data-sidebar-subitem]:hover,
+    [data-sidebar-subitem-label],
+    a[data-sidebar-subitem]:hover [data-sidebar-subitem-label],
+    [data-backend-nav-item],
+    [data-sidebar-brand-wordmark],
+    [data-sidebar-group-label]
+  ):not([data-active="true"]):not([data-emerald="true"]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"]
+  :is([data-sidebar-section], a[data-sidebar-subitem], [data-backend-nav-item]):not([data-active="true"]):not([data-emerald="true"])
+  :is(span, small, strong, label, kbd, svg, svg *, path) {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+/* Hover tint stays champagne-safe so black ink keeps its contrast. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-chrome="sidebar"][data-chrome="sidebar"]
+  :is([data-sidebar-section], a[data-sidebar-subitem], [data-backend-nav-item]):not([data-active="true"]):not([data-emerald="true"]):hover {
+  background: rgba(26, 26, 26, 0.06) !important;
+}
+
+/* ─────────────── 2. BACK-END JBJ Hub rail (Sun skin) ─────────────── */
+html[data-jbj-theme="sun"] body .jc-app .jc-rail.jc-rail
+  :is(
+    .jc-side-link,
+    .jc-team-item,
+    .jc-teamspace__title,
+    .jc-folder__label,
+    .jc-side-search,
+    .jc-brand-product,
+    .jc-sidebar-footer__action
+  ):not([data-active="true"]):not([aria-current="page"]),
+html[data-jbj-theme="sun"] body .jc-app .jc-rail.jc-rail
+  :is(
+    .jc-side-link,
+    .jc-team-item,
+    .jc-teamspace__title,
+    .jc-folder__label,
+    .jc-side-search,
+    .jc-brand-product,
+    .jc-sidebar-footer__action
+  ):not([data-active="true"]):not([aria-current="page"]):hover,
+html[data-jbj-theme="sun"] body .jc-app .jc-rail.jc-rail
+  :is(
+    .jc-side-link,
+    .jc-team-item,
+    .jc-teamspace__title,
+    .jc-folder__label,
+    .jc-side-search,
+    .jc-sidebar-footer__action
+  ):not([data-active="true"]):not([aria-current="page"])
+  :is(span, small, strong, label, kbd, svg, svg *, path),
+html[data-jbj-theme="sun"] body .jc-app .jc-rail.jc-rail
+  :is(
+    .jc-side-link,
+    .jc-team-item,
+    .jc-teamspace__title,
+    .jc-folder__label,
+    .jc-side-search,
+    .jc-sidebar-footer__action
+  ):not([data-active="true"]):not([aria-current="page"]):hover
+  :is(span, small, strong, label, kbd, svg, svg *, path) {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+/* Champagne-safe hover surface for the back-end rail rows. */
+html[data-jbj-theme="sun"] body .jc-app .jc-rail.jc-rail
+  :is(.jc-side-link, .jc-team-item, .jc-sidebar-footer__action):not([data-active="true"]):not([aria-current="page"]):hover {
+  background: rgba(26, 26, 26, 0.06) !important;
+}
+
+/* Active row keeps its emerald pill + white ink (dark surface contract). */
+html[data-jbj-theme="sun"] body .jc-app .jc-rail.jc-rail
+  :is(.jc-side-link, .jc-team-item)[data-active="true"],
+html[data-jbj-theme="sun"] body .jc-app .jc-rail.jc-rail
+  :is(.jc-side-link, .jc-team-item)[data-active="true"]
+  :is(span, svg, svg *, path) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}

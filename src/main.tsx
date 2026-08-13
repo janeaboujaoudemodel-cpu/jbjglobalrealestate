@@ -35,6 +35,7 @@ import"./styles/pass-339-sun-search-champagne-and-rail-fit.css";
 import"./styles/pass-340-sun-cta-champagne-and-clear-rail-footer.css";
 import"./styles/pass-341-universal-rail-all-devices.css";
 import"./styles/pass-342-moon-rail-white-labels.css";
+import"./styles/pass-344-sun-rail-black-ink.css";
 
 
 
