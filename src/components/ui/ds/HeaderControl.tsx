@@ -62,6 +62,58 @@ const headerControl = cva(
   },
 );
 
+/**
+ * Chrome skin state, read straight off the document so every control in the
+ * horizontal header follows the same skin as the vertical sidebar:
+ *   - "clear"     → header floats over a hero: transparent surface, white ink
+ *   - "champagne" → Sun skin: gold-champagne surface, black ink (light surface)
+ *   - "emerald"   → Moon skin: emerald ombre surface, white ink (dark surface)
+ */
+type ControlSkin = "clear" | "champagne" | "emerald";
+
+function readControlSkin(): ControlSkin {
+  if (typeof document === "undefined") return "emerald";
+  const root = document.documentElement;
+  if (document.body?.getAttribute("data-jj-hero-chrome") === "clear") return "clear";
+  const backendLocked = root.getAttribute("data-jbj-backend-lock") === "1";
+  if (!backendLocked && root.getAttribute("data-jbj-theme") === "sun") return "champagne";
+  return "emerald";
+}
+
+function useControlSkin(): ControlSkin {
+  const [skin, setSkin] = React.useState<ControlSkin>(readControlSkin);
+  React.useEffect(() => {
+    const sync = () => setSkin((prev) => {
+      const next = readControlSkin();
+      return next === prev ? prev : next;
+    });
+    sync();
+    const obs = new MutationObserver(sync);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-jbj-theme", "data-jbj-backend-lock"] });
+    if (document.body) {
+      obs.observe(document.body, { attributes: true, attributeFilter: ["data-jj-hero-chrome"] });
+    }
+    return () => obs.disconnect();
+  }, []);
+  return skin;
+}
+
+const CHAMPAGNE_SURFACE: React.CSSProperties = {
+  backgroundImage: "linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)",
+  border: "1px solid rgba(184,149,85,0.42)",
+  boxShadow: "0 1px 2px rgba(26,26,26,0.08)",
+  color: "#1A1A1A",
+  WebkitTextFillColor: "#1A1A1A",
+};
+
+const EMERALD_SURFACE: React.CSSProperties = {
+  backgroundImage: "var(--jj-emerald-ombre)",
+  border: "0",
+  boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+  color: "#FFFFFF",
+  WebkitTextFillColor: "#FFFFFF",
+};
+
 export interface HeaderControlProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
     VariantProps<typeof headerControl> {
@@ -72,6 +124,10 @@ export interface HeaderControlProps
 export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlProps>(
   ({ className, shape, tone, active, style, children, ...props }, ref) => {
     const emerald = tone === "emerald" || tone === undefined;
+    const skin = useControlSkin();
+    const skinned = emerald && skin !== "clear"
+      ? { ...(skin === "champagne" ? CHAMPAGNE_SURFACE : EMERALD_SURFACE), ...style }
+      : style;
     return (
       <button
         ref={ref}
@@ -79,22 +135,11 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
         data-jjds-header-control=""
         data-jjds-shape={shape ?? "circle"}
         data-jjds-tone={tone ?? "emerald"}
+        data-jjds-skin={emerald ? skin : "light"}
         data-no-contrast-guard
-        data-surface={emerald ? "emerald" : "light"}
+        data-surface={emerald && skin === "emerald" ? "emerald" : "light"}
         className={cn("allow-white jj-header-premium-control", headerControl({ shape, tone, active }), className)}
-        style={
-          emerald
-            ? {
-                backgroundImage: "var(--jj-emerald-ombre)",
-                border: "0",
-                boxShadow:
-                  "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                ...style,
-              }
-            : style
-        }
+        style={skinned}
         {...props}
       >
         {children}
@@ -103,6 +148,7 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
   },
 );
 HeaderControl.displayName = "HeaderControl";
+
 
 /**
  * HeaderSegmented — paired segment control (e.g. sq ft / sq m).
@@ -115,46 +161,80 @@ export interface HeaderSegmentedProps {
   className?: string;
 }
 export function HeaderSegmented({ value, options, onChange, className }: HeaderSegmentedProps) {
+  const skin = useControlSkin();
+  const champagne = skin === "champagne";
+  const ink = champagne ? "#1A1A1A" : "#FFFFFF";
+  const groupStyle: React.CSSProperties =
+    skin === "clear"
+      ? {}
+      : champagne
+        ? {
+            backgroundImage: "linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)",
+            border: "1px solid rgba(184,149,85,0.42)",
+            boxShadow: "0 1px 2px rgba(26,26,26,0.08)",
+          }
+        : {
+            backgroundImage: "var(--jj-emerald-ombre)",
+            border: 0,
+            boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+          };
   return (
     <div
       data-jjds-segmented=""
+      data-jjds-skin={skin}
       data-no-contrast-guard
-      data-on-dark
+      data-on-dark={skin !== "champagne" ? "" : undefined}
       data-allow-dark-cta
       data-jj-utility-pill
       data-header-control-family="segmented"
+      data-surface={champagne ? "champagne" : undefined}
       className={cn(
-        "allow-white jj-header-premium-control inline-flex items-center h-10 rounded-full overflow-hidden relative shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
+        champagne ? "jj-header-premium-control" : "allow-white jj-header-premium-control",
+        "inline-flex items-center h-10 rounded-full overflow-hidden relative",
+        !champagne && "shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
         className,
       )}
-      style={{
-        backgroundImage: "var(--jj-emerald-ombre)",
-        border: 0,
-        boxShadow:
-          "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-      }}
+      style={groupStyle}
     >
       {options.map((opt, index) => {
         const isActive = opt.value === value;
         return (
           <React.Fragment key={opt.value}>
-            {index > 0 && <span aria-hidden className="w-px h-5 bg-white/20" />}
+            {index > 0 && (
+              <span aria-hidden className={cn("w-px h-5", champagne ? "bg-[#B89555]/35" : "bg-white/20")} />
+            )}
             <button
               type="button"
               data-no-contrast-guard
               data-active={isActive}
-              data-on-dark
+              data-jjds-skin={skin}
+              data-on-dark={skin !== "champagne" ? "" : undefined}
               data-allow-dark-cta
+              data-surface={champagne ? "champagne" : undefined}
               className={cn(
-                "allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200",
-                isActive && "jj-emerald-metallic"
+                // On champagne the button is a LIGHT surface: no allow-white opt-in,
+                // so the global white-ink guards never claim it.
+                champagne ? "jj-sqtoggle" : "allow-white jj-sqtoggle",
+                "relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200",
+                isActive && !champagne && "jj-emerald-metallic",
               )}
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              style={
+                champagne
+                  ? {
+                      color: ink,
+                      WebkitTextFillColor: ink,
+                      backgroundImage: isActive
+                        ? "linear-gradient(180deg, #F0E5CF 0%, #E7D9BD 100%)"
+                        : "none",
+                      boxShadow: isActive ? "inset 0 0 0 1px rgba(184,149,85,0.5)" : "none",
+                    }
+                  : { color: ink, WebkitTextFillColor: ink }
+              }
               aria-label={opt["aria-label"] ?? String(opt.label)}
               aria-pressed={isActive}
               onClick={() => onChange(opt.value)}
             >
-              <span aria-hidden="true" className="jj-sqtoggle-sweep" />
+              {!champagne && <span aria-hidden="true" className="jj-sqtoggle-sweep" />}
               <span>{opt.label}</span>
             </button>
           </React.Fragment>
@@ -163,5 +243,6 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
     </div>
   );
 }
+
 
 export default HeaderControl;
