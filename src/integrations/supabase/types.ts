@@ -45700,6 +45700,13 @@ export type Database = {
           price_usd: number
         }[]
       }
+      get_team_visibility: {
+        Args: never
+        Returns: {
+          is_visible: boolean
+          member_id: string
+        }[]
+      }
       get_user_access_level: { Args: { p_user_id: string }; Returns: string }
       get_user_points_balance: { Args: { _user_id: string }; Returns: number }
       get_user_tier: {
