@@ -546,7 +546,12 @@ export default function GlobalVerticalNav() {
   const { session } = useAuth();
   const { isInvestor, isOwner } = useUserRole();
   const { mode, isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
-  const { isMoon } = useThemeMode();
+  // PASS 339 — the visible skin flip is pure CSS (data-jbj-theme). Deferring the
+  // React value keeps the rail's re-render at low priority so the toggle click
+  // never blocks the main thread (the old flip cost ~2.8s of blocking render).
+  const { isMoon: isMoonLive } = useThemeMode();
+  const isMoon = React.useDeferredValue(isMoonLive);
+
   const controlSkin = useControlSkin();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);

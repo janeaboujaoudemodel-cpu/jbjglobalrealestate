@@ -64,8 +64,9 @@ export function ThemeModeToggle({
       className={cn("flex w-full items-center gap-1 rounded-md px-1.5 py-1 my-0.5", className)}
     >
       {([
-        { key: "sun", Icon: Sun, text: "Day theme", active: !isMoon },
-        { key: "moon", Icon: Moon, text: "Night theme", active: isMoon },
+        { key: "sun", Icon: Sun, text: "Day", active: !isMoon },
+        { key: "moon", Icon: Moon, text: "Night", active: isMoon },
+
       ] as const).map((opt) => (
         <button
           key={opt.key}
