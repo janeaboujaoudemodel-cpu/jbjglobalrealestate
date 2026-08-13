@@ -24,6 +24,7 @@ import HorizontalUtilityBar from "@/components/navigation/HorizontalUtilityBar";
 import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsPhoneChrome } from "@/hooks/use-chrome-mode";
 import { useIdleOrInteraction } from "@/hooks/useIdleOrInteraction";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
@@ -70,6 +71,7 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
+  const isPhoneChrome = useIsPhoneChrome();
   const location = useLocation();
   const { trackPageVisit } = useActivityTracker();
   useAntiCapture();
@@ -293,18 +295,26 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <CommandPaletteRoot />
         </Suspense>
       )}
-       {/* Phone + tablet (<lg 1024): mobile header | Desktop (lg 1024+): reference L-shape sidebar + utility bar */}
+      {/* PASS 333 — ORIENTATION-DRIVEN CHROME (LOCKED)
+          Landscape ≥1024px (laptop, desktop, iPad sideways) → L-shape vertical
+          sidebar + horizontal utility bar. Portrait (phone, iPad upright) →
+          phone header + drawer, identical logic on every device. */}
       {!usesStandalonePortalChrome && (
         <>
-          <div data-chrome="header" className="lg:hidden">
-            <GlobalHeader forceSolid={needsHeaderSpacing} />
-          </div>
-          <div data-chrome="sidebar" className="hidden lg:block fixed left-0 top-0 h-[100dvh] z-[9997]">
-            <GlobalVerticalNav />
-          </div>
-          <div data-chrome="utility-bar" className="hidden lg:block">
-            <HorizontalUtilityBar />
-          </div>
+          {isPhoneChrome ? (
+            <div data-chrome="header">
+              <GlobalHeader forceSolid={needsHeaderSpacing} />
+            </div>
+          ) : (
+            <>
+              <div data-chrome="sidebar" className="block fixed left-0 top-0 h-[100dvh] z-[9997]">
+                <GlobalVerticalNav />
+              </div>
+              <div data-chrome="utility-bar" className="block">
+                <HorizontalUtilityBar />
+              </div>
+            </>
+          )}
         </>
       )}
       <GlobalContactGating>

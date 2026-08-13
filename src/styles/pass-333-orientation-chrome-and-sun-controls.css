@@ -1,0 +1,125 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 333 — ORIENTATION CHROME + SUN CONTROL PARITY (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   1. Portrait screens run the phone chrome even when the tablet is 1024px
+      wide, so the desktop shell must not reserve a sidebar column.
+   2. In the Sun skin every top-chrome control (search, shortlist, filters,
+      sq ft / sq m, currency, mode, account, sign in) wears the SAME gold
+      champagne surface as the vertical sidebar, with black ink — never an
+      emerald pill. Emerald ink pairs only with emerald surfaces (Moon).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Phone chrome never reserves the desktop sidebar column ── */
+html body[data-jj-chrome-mode="phone"],
+html body[data-jj-chrome-mode="phone"].jj-vertical-nav-active,
+html body[data-jj-chrome-mode="phone"].jj-vertical-nav-collapsed {
+  --jj-shell-sidebar-w: 0px !important;
+  --jj-shell-main-w: 100vw !important;
+}
+
+html body[data-jj-chrome-mode="phone"] div#root main.jj-main-shell:not(.jj-main-shell--standalone),
+html body[data-jj-chrome-mode="phone"] div#root .jj-footer-shell {
+  left: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+}
+
+/* ── 2. Sun skin: champagne controls, black ink ── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-jjds-segmented], [data-jj-utility-pill], [data-search-utility-controls]),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar]
+  [data-jj-utility-pill]
+  .jj-sqtoggle,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar]
+  :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-surface-emerald) {
+  background: var(--jj-champagne-chrome-h, linear-gradient(90deg, #fdfbf7 0%, #f7f2ea 52%, #f2ebdc 100%)) !important;
+  background-color: #f7f2ea !important;
+  background-image: var(--jj-champagne-chrome-h, linear-gradient(90deg, #fdfbf7 0%, #f7f2ea 52%, #f2ebdc 100%)) !important;
+  border: 1px solid rgba(184, 149, 85, 0.42) !important;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.08) !important;
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
+
+/* Champagne is a light surface ⇒ black ink and black glyphs, every state. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-jj-utility-pill], [data-jjds-segmented])
+  :is(span, small, strong, em, label, svg, path, circle, rect, line, polyline, polygon) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  stroke: currentColor !important;
+}
+
+/* The active sq ft / sq m segment reads as a deeper champagne plate. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar]
+  [data-jj-utility-pill]
+  .jj-sqtoggle[data-active="true"] {
+  background: linear-gradient(180deg, #f0e5cf 0%, #e7d9bd 100%) !important;
+  background-image: linear-gradient(180deg, #f0e5cf 0%, #e7d9bd 100%) !important;
+  border: 0 !important;
+  box-shadow: inset 0 0 0 1px rgba(184, 149, 85, 0.5) !important;
+}
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar]
+  [data-jj-utility-pill]
+  .jj-sqtoggle
+  .jj-sqtoggle-sweep {
+  opacity: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Inner segment buttons share the group's surface — no double pill. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar]
+  [data-jjds-segmented]
+  button {
+  border: 0 !important;
+}
+
+/* Ink lock — champagne is a light surface, so the glyphs are black in every
+   state. Specificity is deliberately stacked to beat the emerald ink rules. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-jj-utility-pill], [data-jjds-segmented], .jj-sqtoggle),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], [data-jj-utility-pill], [data-jjds-segmented], .jj-sqtoggle)
+  :is(span, small, strong, em, label, div, svg, path, circle, rect, line, polyline, polygon) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body:not([data-jj-hero-chrome="clear"])
+  div#root
+  [data-jj-utility-bar][data-jj-utility-bar][data-jj-utility-bar]
+  :is(button, a[role="button"], [data-header-control], .jj-sqtoggle)
+  :is(svg, svg *) {
+  stroke: #1a1a1a !important;
+  color: #1a1a1a !important;
+}
