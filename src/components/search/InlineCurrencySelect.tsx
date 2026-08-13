@@ -55,30 +55,32 @@ export default function InlineCurrencySelect({ dark }: Props) {
         <button
           type="button"
           data-no-contrast-guard
-          className="group flex h-full w-full min-w-0 items-center justify-center gap-1.5 bg-transparent px-2 py-1.5 text-center lg:px-3"
+          className="group grid h-full w-full min-w-0 grid-cols-[18px_minmax(0,1fr)_18px] items-center gap-0 bg-transparent px-2 py-1.5 text-center lg:px-2"
           style={{ color: fg, borderRadius: 0 }}
           aria-label="Select currency"
         >
-          {/* One clean line: symbol · code · chevron. The word "Currency" is
-              redundant once the active code is shown. */}
+          {/* Same 3-column geometry as every filter segment: the symbol sits in
+              the icon slot, the code centres, the chevron pins right — so all
+              chevrons in the bar share one inset. */}
           <span
             aria-hidden
-            className="shrink-0 text-[11px] font-semibold leading-none"
+            className="inline-flex shrink-0 items-center justify-center text-[11px] font-semibold leading-none"
             style={{ color: dark ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.65)" }}
           >
             {active.symbol === active.code ? null : active.symbol}
           </span>
           <span
-            className="text-[13px] font-semibold leading-none lg:text-sm"
+            className="min-w-0 text-center text-[13px] font-semibold leading-none lg:text-sm"
             style={{ color: fg, letterSpacing: "0.06em", whiteSpace: "nowrap" }}
           >
             {active.code}
           </span>
           <ChevronDown
-            className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-[1px]"
+            className="col-start-3 h-3.5 w-3.5 shrink-0 justify-self-end transition-transform duration-200 group-hover:translate-y-[1px]"
             style={{ color: dark ? "rgba(255,255,255,0.7)" : "rgba(26,26,26,0.6)" }}
           />
         </button>
+
       </DropdownMenuTrigger>
 
 
