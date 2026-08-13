@@ -520,9 +520,23 @@ function MediaRow({
   return (
     <li className="rounded-2xl border border-border bg-card p-3 md:p-4">
       <div className="flex flex-wrap items-start gap-4">
-        {/* Cover thumbnail. A stored URL that no longer resolves counts as a
-            broken cover, not as a published one — the owner must see that. */}
-        <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={() => onToggleSelect?.(dev.id)}
+          aria-label={`Select ${dev.name ?? "developer"}`}
+          className="mt-2 h-4 w-4 shrink-0 accent-[#064E3B]"
+        />
+
+        {/* Cover thumbnail — click it to upload straight away. A stored URL that
+            no longer resolves counts as a broken cover, not a published one. */}
+        <button
+          type="button"
+          onClick={() => coverInput.current?.click()}
+          disabled={busy || uploading !== null}
+          title="Click to upload a cover photo"
+          className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-border bg-muted"
+        >
           {cover && !coverBroken ? (
             <img
               src={cover}
@@ -536,9 +550,20 @@ function MediaRow({
               {cover ? "Link broken" : "No photo"}
             </span>
           )}
-        </div>
+          {uploading === "cover" && (
+            <span className="absolute inset-0 flex items-center justify-center bg-black/50">
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
+            </span>
+          )}
+        </button>
 
-        <div className="flex h-20 w-32 shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(150deg,#064E3B,#042c1c,#000)] p-2">
+        <button
+          type="button"
+          onClick={() => logoInput.current?.click()}
+          disabled={busy || uploading !== null}
+          title="Click to upload a logo — auto-treated into the emerald plate"
+          className="relative flex h-20 w-32 shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(150deg,#064E3B,#042c1c,#000)] p-2"
+        >
           {logo && !logoBroken ? (
             <img
               src={logo}
@@ -552,10 +577,19 @@ function MediaRow({
               {logo ? "Link broken" : "No logo"}
             </span>
           )}
-        </div>
+          {uploading === "logo" && (
+            <span className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/50">
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
+            </span>
+          )}
+        </button>
 
         <div className="min-w-[14rem] flex-1 space-y-2">
-          <p className="break-words font-serif text-lg text-foreground">{dev.name || "Unnamed developer"}</p>
+          <p className="flex items-center gap-2 break-words font-serif text-lg text-foreground">
+            {complete && <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" aria-label="Complete" />}
+            {dev.name || "Unnamed developer"}
+          </p>
+
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${
