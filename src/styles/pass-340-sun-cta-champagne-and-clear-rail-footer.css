@@ -1,0 +1,120 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 340 — SUN CTA CHAMPAGNE, BLACK COUNT INK, CLEAR RAIL FOOTER,
+              ACCOUNT ROWS NEVER CROSS THE RAIL DIVIDER
+
+   1) SUN: the hero "Consultation" CTA and the "Show N properties"
+      button wear the SAME gold-champagne fill with pure black ink as
+      the Buy / sq ft pills — text, spans and icons included.
+   2) The expanded sidebar nav list is strictly clipped inside its own
+      scroll track, and the footer block (theme card + Collapse +
+      Sign Out) is an opaque layer above it: MY ACCOUNT rows can never
+      slide under / over the divider.
+   3) Hero-clear chrome (top of any hero, both themes): the collapsed
+      rail footer is fully transparent — never a beige/champagne block.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ═══════════ 1. Sun — champagne CTA + count button ═══════════ */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-desktop-consultation],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-search-segment][data-surface="emerald"] {
+  background-color: #C8AD7A !important;
+  background-image: linear-gradient(
+    90deg,
+    #F1E8D6 0%,
+    #E2D2B4 22%,
+    #C8AD7A 50%,
+    #E2D2B4 78%,
+    #F1E8D6 100%
+  ) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184, 149, 85, 0.62) !important;
+  box-shadow: 0 8px 22px -14px rgba(184, 149, 85, 0.7) !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-desktop-consultation] :is(span, svg, path),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p340-a):not(#jj-p340-b):not(#jj-p340-c):not(#jj-p340-d):not(#jj-p340-e):not(#jj-p340-f):not(#jj-p340-g):not(#jj-p340-h):not(#jj-p340-i):not(#jj-p340-j)
+  body div#root div[data-property-search-bar][data-property-search-bar][data-property-search-bar]
+  :is(button, a)[data-search-segment][data-surface="emerald"] :is(span, svg, path):not(#jj-p340-k):not(#jj-p340-l):not(#jj-p340-m):not(#jj-p340-n) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+/* The emerald shine sweep must not repaint the champagne surface. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  div[data-property-search-bar] :is(button, a)[data-desktop-consultation]::before,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
+  div[data-property-search-bar] :is(button, a)[data-desktop-consultation]::after {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 100%
+  ) !important;
+  opacity: 0.7 !important;
+}
+
+/* ═══════════ 2. Expanded rail — clipped list, opaque footer ═══════════ */
+html body #root [data-sidebar-emerald] > nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+html body #root [data-sidebar-emerald] .jj-rail-footer-block {
+  position: relative;
+  z-index: 6;
+  isolation: isolate;
+  flex: 0 0 auto;
+}
+html body #root [data-sidebar-emerald] .jj-rail-footer-block::before {
+  content: "";
+  position: absolute;
+  inset: -1px 0 0 0;
+  z-index: -1;
+  background-color: #01120b;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root
+  [data-sidebar-emerald] .jj-rail-footer-block::before {
+  background-color: #F4EDDF;
+}
+
+/* ═══════════ 3. Hero-clear: rail footer is transparent ═══════════ */
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald] .jj-rail-footer-block,
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald] .jj-rail-footer-block--rail,
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald] .jj-rail-footer-inner,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-block,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-block--rail,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-inner {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald] .jj-rail-footer-block::before,
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald] .jj-rail-footer-block::after,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-block::before,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-block::after {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+/* White hairline divider + white ink in clear mode, both themes. */
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald]
+  :is(.jj-rail-footer-divider, .jj-rail-footer-rule) {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.72) 50%,
+    transparent 100%
+  ) !important;
+}
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald]
+  .jj-rail-footer-block :is(a, button, span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
