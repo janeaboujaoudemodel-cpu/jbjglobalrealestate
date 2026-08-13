@@ -90,11 +90,11 @@
 
 /* ── 4. SUN PORTRAIT — "Show N" CTA INK IS PURE BLACK, EVERY NODE ─────── */
 @media (max-width: 1023.98px) and (orientation: portrait) {
-  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f):not(#jj-p330-g):not(#jj-p330-h):not(#jj-p330-i) body div#root
     div[data-property-search-bar] button[data-surface="emerald"][data-search-segment],
-  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f):not(#jj-p330-g):not(#jj-p330-h):not(#jj-p330-i) body div#root
     div[data-property-search-bar] button[data-surface="emerald"][data-search-segment] span,
-  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f) body div#root
+  html[data-jbj-theme="sun"]:not(#jj-p330-a):not(#jj-p330-b):not(#jj-p330-c):not(#jj-p330-d):not(#jj-p330-e):not(#jj-p330-f):not(#jj-p330-g):not(#jj-p330-h):not(#jj-p330-i) body div#root
     div[data-property-search-bar] button[aria-pressed="true"] span {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
