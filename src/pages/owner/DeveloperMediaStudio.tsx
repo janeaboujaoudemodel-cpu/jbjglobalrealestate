@@ -96,8 +96,10 @@ async function fetchAllDevelopers(): Promise<DevRow[]> {
 export default function DeveloperMediaStudio() {
   const [bucket, setBucket] = useState<Bucket>("needs_both");
   const [q, setQ] = useState("");
+  const [view, setView] = useState<"list" | "grid">("grid");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [archiving, setArchiving] = useState(false);
+
 
   const { data: rows = [], isLoading, refetch, isFetching } = useQuery({
     queryKey: ["developer-media-studio"],
