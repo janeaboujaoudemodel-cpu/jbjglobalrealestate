@@ -346,6 +346,21 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     }
   };
 
+  // PASS 345 — resolve the identity we can look threads up by
+  const threadLookupEmail = (userInfo.email || user?.email || '').trim();
+
+  // Open the thread switcher (loads the latest list every time it opens)
+  const openThreads = useCallback(() => {
+    setThreadsOpen(true);
+    if (threadLookupEmail) {
+      void fetchChatHistory(threadLookupEmail);
+    }
+  }, [threadLookupEmail]);
+
+  const refreshThreads = useCallback(() => {
+    if (threadLookupEmail) void fetchChatHistory(threadLookupEmail);
+  }, [threadLookupEmail]);
+
   // Handle email verification result
   const handleEmailVerified = (email: string, isExisting: boolean, userData?: any) => {
     if (isExisting) {
