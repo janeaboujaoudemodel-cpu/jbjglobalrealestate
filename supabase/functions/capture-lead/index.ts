@@ -434,7 +434,7 @@ serve(async (req: Request): Promise<Response> => {
     // 2. Check if lead already exists in crm_leads
     const { data: existingLead } = await supabase
       .from('crm_leads')
-      .select('id')
+      .select('id, full_name, phone_e164')
       .eq('email_lower', normalizedEmail)
       .maybeSingle();
 
@@ -446,9 +446,10 @@ serve(async (req: Request): Promise<Response> => {
       const { error: updateError } = await supabase
         .from('crm_leads')
         .update({
-          // Never write a UUID into the name — fall back to the email local part.
-          full_name: sanitizedFullName || normalizedEmail.split('@')[0],
-          phone_e164: sanitizedPhone,
+          // Never write a UUID into the name, and never downgrade a real name we
+          // already hold just because this form did not ask for one.
+          full_name: sanitizedFullName || existingLead.full_name || normalizedEmail.split('@')[0],
+          phone_e164: sanitizedPhone || existingLead.phone_e164 || null,
           nationality: sanitizedNationality,
           preferred_language: sanitizedLanguage,
           current_location_country: locationCountry,
