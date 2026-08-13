@@ -63,7 +63,7 @@ const headerControl = cva(
 );
 
 export type { ControlSkin } from "@/hooks/use-chrome-skin";
-import { useControlSkin, useInkLock, inkForSkin, paintInk, type ControlSkin } from "@/hooks/use-chrome-skin";
+import { useControlSkin, useInkLock, inkForSkin, paintInk, clearHoverInk, type ControlSkin } from "@/hooks/use-chrome-skin";
 
 
 const CHAMPAGNE_SURFACE: React.CSSProperties = {
@@ -145,7 +145,7 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
   const skin = useControlSkin();
   const champagne = skin === "champagne";
   const ink = champagne ? "#1A1A1A" : "#FFFFFF";
-  const groupRef = useInkLock<HTMLDivElement>(ink);
+  const groupRef = useInkLock<HTMLDivElement>(ink, clearHoverInk(skin));
 
   const groupStyle: React.CSSProperties =
     skin === "clear"

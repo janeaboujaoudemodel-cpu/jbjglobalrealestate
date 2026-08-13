@@ -7,7 +7,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { isOwnerBackendEmail } from "@/config/ownerEmails";
 import { cn } from "@/lib/utils";
-import { useControlSkin, inkForSkin, useInkLock } from "@/hooks/use-chrome-skin";
+import { useControlSkin, inkForSkin, useInkLock, clearHoverInk } from "@/hooks/use-chrome-skin";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -175,7 +175,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // Closed-trigger: same emerald premium control family as AED/filter/favorites.
   const chromeSkin = useControlSkin();
   const chromeInk = inkForSkin(chromeSkin);
-  const triggerRef = useInkLock<HTMLButtonElement>(chromeInk);
+  const triggerRef = useInkLock<HTMLButtonElement>(chromeInk, clearHoverInk(chromeSkin));
   const triggerStyle: CSSProperties = chromeSkin === 'champagne'
     ? {
         backgroundColor: 'transparent',
