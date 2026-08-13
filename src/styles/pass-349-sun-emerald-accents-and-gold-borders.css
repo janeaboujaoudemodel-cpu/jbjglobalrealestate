@@ -109,15 +109,21 @@ html[data-jbj-theme="sun"] body #root#root#root
   border-color: rgba(184, 149, 85, 0.75) !important;
 }
 
-/* ═══════════ 4. COOKIE PAIR — TWO IDENTICAL LEGIBLE BUTTONS ═══════════ */
+/* ═══════════ 4. COOKIE PAIR — TWO IDENTICAL LEGIBLE BUTTONS ═══════════
+   In Sun the banner is champagne, so the pair wears black ink on a gold
+   hairline (never white-on-champagne). Moon keeps the emerald pair. */
 html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root .jj-cookie-btn,
+html[data-jbj-theme="sun"] body [data-chrome="cookie-banner"] .jj-cookie-btn,
+html[data-jbj-theme="sun"] body [data-chrome="cookie-banner"] .jj-cookie-btn * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
 html[data-jbj-theme="sun"] body [data-chrome="cookie-banner"] .jj-cookie-btn {
-  background: rgba(255, 255, 255, 0.16) !important;
+  background: rgba(255, 255, 255, 0.86) !important;
   background-image: none !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
 }
 html[data-jbj-theme="sun"] body [data-chrome="cookie-banner"] .jj-cookie-btn:hover {
-  background: rgba(255, 255, 255, 0.26) !important;
+  background: #FFFFFF !important;
+  border-color: rgba(184, 149, 85, 0.9) !important;
 }
