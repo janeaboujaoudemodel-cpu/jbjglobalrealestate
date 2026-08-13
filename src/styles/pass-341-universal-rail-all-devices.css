@@ -175,16 +175,18 @@ html[data-jbj-theme][data-jbj-theme]:not([data-jbj-backend-lock="1"])
    background, which looks like a beige/white rail even though the rail itself
    is unpainted. This selector intentionally comes after the legacy full-bleed
    resets and applies only while the collapsed clear state is active. */
-html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
-  div#root main.jj-main-shell:not(.jj-main-shell--standalone)
-  section[data-hero-dark] {
+html[data-jbj-theme][data-jbj-theme]
+  body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed.jj-vertical-nav-collapsed
+  div#root main.jj-main-shell.jj-main-shell:not(.jj-main-shell--standalone)
+  section[data-hero-dark][data-hero-dark] {
   margin-left: -59px !important;
   width: calc(100% + 59px) !important;
   max-width: none !important;
   padding-left: 59px !important;
 }
 
-html body[data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed
-  div#root main.jj-main-shell:not(.jj-main-shell--standalone) {
+html[data-jbj-theme][data-jbj-theme]
+  body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"].jj-vertical-nav-collapsed.jj-vertical-nav-collapsed
+  div#root main.jj-main-shell.jj-main-shell:not(.jj-main-shell--standalone) {
   overflow-x: visible !important;
 }
