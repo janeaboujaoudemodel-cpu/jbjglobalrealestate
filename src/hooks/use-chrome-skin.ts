@@ -102,3 +102,15 @@ export function useInkLock<T extends HTMLElement>(ink: string, hoverInk?: string
   return ref;
 }
 
+
+/**
+ * Hover ink for a control while the chrome is clear: hovering paints the selected
+ * theme surface, so Sun (champagne) needs black ink and Moon (emerald) white.
+ * Returns undefined when the chrome is not clear — the rest ink already matches.
+ */
+export function clearHoverInk(skin: ControlSkin): string | undefined {
+  if (skin !== "clear" || typeof document === "undefined") return undefined;
+  const root = document.documentElement;
+  const sun = root.getAttribute("data-jbj-backend-lock") !== "1" && root.getAttribute("data-jbj-theme") === "sun";
+  return sun ? "#1A1A1A" : "#FFFFFF";
+}
