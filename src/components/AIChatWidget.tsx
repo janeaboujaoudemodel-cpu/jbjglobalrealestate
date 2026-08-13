@@ -1191,13 +1191,30 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         }}
       >
 
+        {/* PASS 345 — premium animated aurora behind the whole chat panel */}
+        <ChatAuroraBackground depth={-1} />
+
         <ChatHeader
           step={step} 
           isExistingUser={isExistingUser} 
           onBack={handleBack} 
           onToggleCollapse={onToggleCollapse} 
           onClearChat={messages.length > 0 ? clearChat : undefined}
+          onOpenThreads={threadLookupEmail ? openThreads : undefined}
+          threadCount={chatHistory.length}
         />
+
+        <ChatThreadsPanel
+          open={threadsOpen}
+          threads={chatHistory}
+          isLoading={isLoadingHistory}
+          activeThreadId={conversationId}
+          onClose={() => setThreadsOpen(false)}
+          onNewThread={() => { setThreadsOpen(false); resetChat(); }}
+          onResumeThread={handleContinueConversation}
+          onRefresh={refreshThreads}
+        />
+
 
 
         {step === 'welcome_choice' && (
