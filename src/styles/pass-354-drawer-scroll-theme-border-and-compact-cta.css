@@ -107,3 +107,23 @@ html body div#root [data-jj-drawer-panel] .jj-drawer-footer [data-signout-label]
     width: 14px !important;
   }
 }
+
+/* 5 — Preference rows: the value cluster is never clipped, and the chevron sits
+      at the same x-axis in the Language and Currency rows. */
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row button[aria-label="Select language"],
+html body div#root [data-jj-drawer-panel] .jj-drawer-currency button {
+  width: auto !important;
+  min-width: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 6px !important;
+  justify-content: flex-start !important;
+  overflow: visible !important;
+}
+
+html body div#root [data-jj-drawer-panel] .jj-drawer-pref-row button[aria-label] svg {
+  height: 14px !important;
+  width: 14px !important;
+  margin-left: 0 !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+}
