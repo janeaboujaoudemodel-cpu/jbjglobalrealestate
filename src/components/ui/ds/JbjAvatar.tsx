@@ -51,7 +51,9 @@ export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
         data-surface={champagne ? "champagne" : "emerald"}
         data-no-contrast-guard
         className={cn(
-          champagne ? "relative inline-flex" : "jj-avatar-metallic allow-white relative inline-flex" shrink-0 items-center justify-center rounded-full overflow-hidden",
+          champagne ? "" : "jj-avatar-metallic allow-white",
+          "relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
+
           sizeClass[size],
           className,
         )}
