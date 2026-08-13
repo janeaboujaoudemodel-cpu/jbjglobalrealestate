@@ -443,6 +443,13 @@ function MediaRow({
               {real ? <CheckCircle2 className="h-3.5 w-3.5" /> : <ImageOff className="h-3.5 w-3.5" />}
               {real ? "Real logo" : logo ? "Temporary wordmark" : "Logo missing"}
             </span>
+            {duplicate && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-3 py-1 font-medium text-destructive">
+                <ShieldAlert className="h-3.5 w-3.5" />
+                Duplicate name — merge
+              </span>
+            )}
+
             <span
               className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-medium ${
                 dev.is_hidden ? "border-border text-muted-foreground" : "border-primary/40 text-primary"
