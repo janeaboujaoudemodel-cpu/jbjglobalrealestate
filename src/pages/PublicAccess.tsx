@@ -1860,6 +1860,8 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
               onClick={handleCreateAccount}
               data-allow-dark-cta
               data-no-contrast-guard
+              data-jbj-portal-create
+
               className="allow-white inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-md text-[11px] font-bold uppercase tracking-[0.14em] transition-[filter] hover:brightness-110"
               style={{
                 /* Centre-lit emerald: black at both edges, emerald in the
