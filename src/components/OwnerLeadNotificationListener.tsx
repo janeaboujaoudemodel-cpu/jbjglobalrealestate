@@ -33,25 +33,48 @@ export default function OwnerLeadNotificationListener() {
     // or render them on public, access-gate, or non-owner portal routes.
     if (!user || !isOwner || !isOwnerBackendRoute) return;
 
-    const handleLeadNotification = (row: any) => {
+    // One toast at a time, no matter how many leads land. Re-firing uses the
+    // same toast id so 300 leads never mean 300 pop-ups to dismiss.
+    const TOAST_ID = "owner-new-leads";
+
+    const markAllRead = async () => {
+      await supabase
+        .from("notifications")
+        .update({ is_read: true })
+        .eq("user_id", user.id)
+        .eq("notification_type", "new_lead")
+        .eq("is_read", false);
+      toast.dismiss(TOAST_ID);
+    };
+
+    const handleLeadNotification = (row: any, pendingCount = 0) => {
       if (!row || row.notification_type !== "new_lead" || seenRef.current.has(row.id)) return;
       seenRef.current.add(row.id);
       playLeadSound();
+      const extra = pendingCount > 1 ? ` · ${pendingCount - 1} more waiting` : "";
       toast(row.title || "New lead received", {
-        description: row.body || "Open CRM to follow up.",
-        action: row.action_url
-          ? {
-              label: "Open CRM",
-              onClick: () => {
-                // Legacy /crm links are remapped to the JBJ Hub CRM.
-                window.location.href = normalizeNotificationRoute(row.action_url, "/owner/crm/jbj/leads");
-              },
-            }
-          : undefined,
-
+        id: TOAST_ID,
+        description: `${row.body || "Open CRM to follow up."}${extra}`,
+        action: {
+          label: "Open CRM",
+          onClick: () => {
+            // Legacy /crm links are remapped to the JBJ Hub CRM.
+            window.location.href = normalizeNotificationRoute(
+              row.action_url || "/owner/crm/jbj/leads",
+              "/owner/crm/jbj/leads",
+            );
+          },
+        },
+        cancel: {
+          label: "Ignore all",
+          onClick: () => {
+            void markAllRead();
+          },
+        },
         duration: 12000,
       });
     };
+
 
     const poll = async () => {
       // Realtime already delivers new leads instantly; this poll is only a
