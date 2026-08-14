@@ -1,0 +1,48 @@
+/* PASS 357 — ADVANCED FILTER PANEL: ONE ALIGNMENT RAIL (LOCKED)
+ *
+ * Every option row in the Advanced Filter Panel (countries, emirates /
+ * provinces / governorates, areas, developers) must share ONE geometry:
+ *   - the tick box always starts on the same left rail
+ *   - the label always starts on the same x, whatever the country or label length
+ *   - the row never centres its content (global button rules used to centre it,
+ *     which made Istanbul / Muğla / Ankara drift a few px apart)
+ *   - equal-width grid columns so the second column lines up with the first
+ *
+ * Scoped strictly to this dialog — no globals, no new !important on shared
+ * selectors.
+ */
+
+[role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  min-height: 44px;
+  height: 44px;
+}
+
+/* Fixed tick-box rail: identical square in every row, never shrinks or grows. */
+[role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"] > div:first-child {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+/* Label column: starts on one x, fills the rest, wraps instead of pushing. */
+[role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"] > span {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+/* Equal columns so both halves of a 2-up option grid share the same rail. */
+[role="dialog"][data-advanced-filter-panel="true"] .grid {
+  grid-auto-columns: minmax(0, 1fr);
+}
+[role="dialog"][data-advanced-filter-panel="true"] .grid > * {
+  min-width: 0;
+}

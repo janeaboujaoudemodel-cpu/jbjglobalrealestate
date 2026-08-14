@@ -193,23 +193,34 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       });
   }, [open, contentReady]);
 
-  // Fetch one lightweight listing snapshot for instant, accurate local counts.
-  // This avoids a backend round-trip on every chip/slider click and lets views,
-  // handover range, post-handover and local search all affect the visible count.
+  // Fetch the FULL published snapshot for instant, accurate local counts.
+  // PostgREST caps a single response at 1000 rows, which used to make this panel
+  // report "1,000 live projects" while the rest of the site reported the true
+  // total. Page through in 1000-row chunks so every surface agrees.
   useEffect(() => {
     if (!open || !contentReady) return;
     let cancelled = false;
-    supabase
-      .from('projects')
-      .select('id,name,description,price_from,bedrooms_min,bedrooms_max,size_min,size_max,handover_date,payment_plan,status,construction_status,availability_status,property_type_label,status_label,sale_status,emirate,area_name,developer_name,views,down_payment_percent,expected_completion')
-      .eq('is_published', true)
-      .or('listing_kind.is.null,listing_kind.neq.leasing')
-      .limit(1500)
-      .then(({ data }) => {
-        if (!cancelled) setCountRows((data || []) as Record<string, unknown>[]);
-      });
+    const COLUMNS = 'id,name,description,price_from,bedrooms_min,bedrooms_max,size_min,size_max,handover_date,payment_plan,status,construction_status,availability_status,property_type_label,status_label,sale_status,emirate,area_name,developer_name,views,down_payment_percent,expected_completion';
+    const PAGE = 1000;
+    (async () => {
+      const rows: Record<string, unknown>[] = [];
+      for (let page = 0; page < 10; page++) {
+        const { data, error } = await supabase
+          .from('projects')
+          .select(COLUMNS)
+          .eq('is_published', true)
+          .or('listing_kind.is.null,listing_kind.neq.leasing')
+          .order('id')
+          .range(page * PAGE, page * PAGE + PAGE - 1);
+        if (error || !data) break;
+        rows.push(...(data as Record<string, unknown>[]));
+        if (!cancelled) setCountRows([...rows]);
+        if (data.length < PAGE) break;
+      }
+    })();
     return () => { cancelled = true; };
   }, [open, contentReady]);
+
 
   // Live count with a short debounce — computed locally for immediate feedback.
   useEffect(() => {
