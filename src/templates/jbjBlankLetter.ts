@@ -24,6 +24,7 @@ import {
   LETTERHEAD_PAGE_CLOSE,
 } from "./letterheadChrome";
 import { sanitizeHtml } from "@/utils/contentSanitizer";
+import DOMPurify from "dompurify";
 
 export const BLANK_LETTER_LAYOUT_VERSION = 2;
 export const BLANK_LETTER_TEMPLATE_KEY = "jbj-blank-letter";
@@ -96,7 +97,7 @@ export function buildBlankLetterHtml(
   const bodyRendered = hasText
     ? `<div style="white-space:pre-wrap;font-family:Inter,Arial,sans-serif;font-size:12.5px;line-height:1.75;color:${INK};">${esc(v.body_text!)}</div>`
     : hasLegacyHtml
-      ? `<div style="font-family:Inter,Arial,sans-serif;font-size:12.5px;line-height:1.75;color:${INK};">${sanitizeHtml(v.body_html!)}</div>`
+      ? `<div style="font-family:Inter,Arial,sans-serif;font-size:12.5px;line-height:1.75;color:${INK};">${DOMPurify.sanitize(sanitizeHtml(v.body_html!), { USE_PROFILES: { html: true }, FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form'], FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'formaction'] })}</div>`
       : (opts.renderMode === "final"
           ? ""
           : `<p style="opacity:.45;font-style:italic;">Type the letter body here…</p>`);

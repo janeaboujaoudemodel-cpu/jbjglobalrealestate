@@ -12,6 +12,7 @@ import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { toast } from "sonner";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
 import { PremiumBookCover } from "@/components/books/PremiumBookCover";
+import DOMPurify from "dompurify";
 
 
 type Page =
@@ -656,7 +657,13 @@ function ChapterBodyPage({
       </div>
       <div
         className="prose prose-neutral max-w-none prose-headings:text-[#1A1A1A] prose-headings:font-bold prose-p:text-[#1A1A1A]/85 prose-strong:text-[#1A1A1A] prose-a:text-[#1A1A1A] prose-a:underline prose-li:text-[#1A1A1A]/85 prose-blockquote:border-l-[#B89555] prose-blockquote:bg-[#F2EADB] prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic prose-table:text-sm prose-th:bg-[#F2EADB] prose-th:text-[#1A1A1A] text-[15px] leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: html }}
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(html, {
+            USE_PROFILES: { html: true },
+            FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "form"],
+            FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover", "onfocus", "onblur", "formaction"],
+          }),
+        }}
       />
     </div>
   );

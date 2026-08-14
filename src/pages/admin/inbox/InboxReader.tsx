@@ -10,6 +10,7 @@ import {
   Sparkles, Send, Loader2, ShieldAlert,
 } from "lucide-react";
 import { callInbox, type InboxEmail } from "./useInboxData";
+import DOMPurify from "dompurify";
 
 interface Props {
   email: InboxEmail | null;
@@ -163,8 +164,17 @@ const InboxReader: React.FC<Props> = ({ email, onChanged }) => {
         ) : body?.html ? (
           <div
             className="jbj-inbox-body text-sm leading-relaxed text-[#0F172A] [&_a]:text-[#064E3B] [&_img]:max-w-full"
-            // Provider HTML is sanitised server-side in inbox-message.
-            dangerouslySetInnerHTML={{ __html: body.html }}
+            // SECURITY: inbound provider HTML is untrusted — sanitize before render.
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(body.html, {
+                USE_PROFILES: { html: true },
+                FORBID_TAGS: ["script", "iframe", "object", "embed", "form", "base", "meta", "link"],
+                FORBID_ATTR: [
+                  "onerror", "onload", "onclick", "onmouseover", "onfocus", "onblur",
+                  "formaction", "srcdoc", "ping",
+                ],
+              }),
+            }}
           />
         ) : (
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-[#0F172A]">

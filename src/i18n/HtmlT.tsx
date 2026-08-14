@@ -14,6 +14,7 @@ import {
   subscribeTranslations,
 } from './translateClient';
 import { LATIN_LOCKED_STRINGS } from '@/translations/proper-nouns';
+import DOMPurify from 'dompurify';
 
 type HtmlTTag = 'div' | 'span' | 'section' | 'article' | 'aside' | 'p';
 
@@ -61,7 +62,11 @@ export function HtmlT({ html, className, as: As = 'div', domain = 'content' }: H
   // upstream by callers — they pass already-sanitized strings).
   useLayoutEffect(() => {
     if (!ref.current) return;
-    ref.current.innerHTML = html;
+    ref.current.innerHTML = DOMPurify.sanitize(html, {
+      USE_PROFILES: { html: true },
+      FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'formaction'],
+    });
     translateSubtree(ref.current, language, domain);
   }, [html, language, domain]);
 
