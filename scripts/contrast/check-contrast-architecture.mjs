@@ -46,7 +46,14 @@ if (presentFinalContracts.length !== 1 || presentFinalContracts[0] !== 'GLOBAL S
 }
 
 const finalContractIndex = stylesheet.lastIndexOf('GLOBAL SEMANTIC CONTRAST CONTRACT');
-const finalContractEnd = stylesheet.indexOf('/* PASS 200', finalContractIndex);
+// The contract is bounded by the next banner comment (currently "PASS 200"),
+// which is written as a multi-line "/* ===...\n   PASS 200..." banner, not a
+// literal "/* PASS 200" prefix — so we locate the banner's label text first,
+// then walk back to the "/*" that opens its comment block.
+const nextBannerLabelIndex = stylesheet.indexOf('PASS 200', finalContractIndex);
+const finalContractEnd = nextBannerLabelIndex >= 0
+  ? stylesheet.lastIndexOf('/*', nextBannerLabelIndex)
+  : -1;
 const finalContract = finalContractIndex >= 0
   ? stylesheet.slice(finalContractIndex, finalContractEnd >= 0 ? finalContractEnd : undefined)
   : '';
@@ -69,6 +76,20 @@ if (unsafeFinalRules.length) {
   violations.push('The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.');
 }
 
+// Matches each color/-webkit-text-fill-color declaration and captures its
+// value, so the inherit/currentColor exception checks the actual value
+// rather than a lookahead position — a bare `\s*` before the lookahead can
+// backtrack to zero width and let leading whitespace hide the excluded
+// keyword from the lookahead, silently defeating the exception.
+function hasLeakingPaint(body) {
+  const declRe = /(?:color|-webkit-text-fill-color):\s*([^;]+?)\s*!important/gi;
+  let m;
+  while ((m = declRe.exec(body)) !== null) {
+    if (!/^(?:inherit|currentColor)\b/i.test(m[1])) return true;
+  }
+  return false;
+}
+
 const surfaceDescendantPaint = finalContract
   .split('}')
   .map((rule) => {
@@ -78,7 +99,7 @@ const surfaceDescendantPaint = finalContract
   .filter(({ selector, body }) =>
     /\[data-surface\]/.test(selector)
     && /\s:(?:where|is)\(/.test(selector)
-    && /(?:color|-webkit-text-fill-color):\s*(?!inherit\b|currentColor\b)[^;]+!important/i.test(body)
+    && hasLeakingPaint(body)
   );
 if (surfaceDescendantPaint.length) {
   violations.push('Surface contrast must paint the surface boundary only; descendant paint leaks across nested surfaces.');
