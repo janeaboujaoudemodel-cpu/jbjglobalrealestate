@@ -8,6 +8,8 @@ import CrmQuickCreateSheet from "./CrmQuickCreateSheet";
 import CrmNotificationsPanel from "./CrmNotificationsPanel";
 import CrmZiaPanel from "./CrmZiaPanel";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
+import { supabase } from "@/integrations/supabase/client";
+
 
 export default function CrmHeader() {
   const { pathname } = useLocation();
