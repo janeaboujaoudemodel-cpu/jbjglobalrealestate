@@ -97,7 +97,8 @@ const AreaDetail = () => {
         .from('projects')
         .select('developer_name, developers(name)')
         .eq('is_published', true)
-        .ilike('area_name', area.name);
+        .ilike('area_name', area.name)
+        .limit(1000); // bounded public read (anti-scrape)
       if (error) throw error;
       const devs = new Set<string>();
       (data || []).forEach((p: any) => {

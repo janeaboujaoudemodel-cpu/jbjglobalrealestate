@@ -262,7 +262,8 @@ export function useCommunities() {
       const { data, error } = await supabase
         .from("communities")
         .select("id,name,slug,description,image_url,location")
-        .order("name");
+        .order("name")
+        .limit(200); // bounded public read (anti-scrape)
       
       if (error) throw error;
       return data as Community[];
@@ -289,10 +290,23 @@ export function useDeveloperProjectStats() {
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("developer_id, developer_name, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units, is_published");
-      if (error) throw error;
+      // ANTI-SCRAPE / DATA TRUTH: public reads are capped at 1000 rows per
+      // request, so this stats query MUST page explicitly (it used to be
+      // silently truncated, under-counting developer project totals).
+      const STATS_PAGE = 1000;
+      const STATS_MAX_PAGES = 5;
+      const data: any[] = [];
+      for (let page = 0; page < STATS_MAX_PAGES; page++) {
+        const { data: rows, error } = await supabase
+          .from("projects")
+          .select("developer_id, developer_name, cover_image_url, card_image_url, gallery_start_image_url, is_featured, total_units, is_published")
+          .order("id", { ascending: true })
+          .range(page * STATS_PAGE, page * STATS_PAGE + STATS_PAGE - 1);
+        if (error) throw error;
+        data.push(...(rows ?? []));
+        if (!rows || rows.length < STATS_PAGE) break;
+      }
+
 
       const counts: Record<string, number> = {};
       const images: Record<string, string> = {};
@@ -377,7 +391,8 @@ export function useDevelopers(includeHidden = false) {
       let query = supabase
         .from("developers")
         .select(DEVELOPERS_PUBLIC_SELECT)
-        .order("rank");
+        .order("rank")
+        .limit(1000); // bounded public read (anti-scrape)
 
       
       if (!includeHidden) {
@@ -479,7 +494,8 @@ export function useFeaturedDevelopers(slugs: readonly string[]) {
       const { data, error } = await supabase
         .from("developers")
         .select("id,name,slug")
-        .in("slug", stableSlugs);
+        .in("slug", stableSlugs)
+        .limit(200); // bounded public read (anti-scrape)
       if (error) throw error;
       return (data ?? []) as Pick<Developer, "id" | "name" | "slug">[];
     },
@@ -496,7 +512,8 @@ export function useTrendingAreas() {
         .from("trending_areas")
         .select("id,name,slug,emirate,image_url,is_trending")
         .eq("is_trending", true)
-        .order("name");
+        .order("name")
+        .limit(60); // bounded public read (anti-scrape)
       
       if (error) throw error;
       return data as TrendingArea[];
