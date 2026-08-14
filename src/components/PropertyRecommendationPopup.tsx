@@ -353,7 +353,7 @@ const PropertyRecommendationPopup = () => {
                 <button
                   key={project.id}
                   onClick={() => handleExplore(project.slug)}
-                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border jj-rec-divider transition-all group text-left"
+                  className="jj-rec-row w-full flex items-center gap-3 p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border jj-rec-divider transition-all group text-left"
                 >
                   {project.cover_image_url ? (
                     <img
@@ -365,20 +365,20 @@ const PropertyRecommendationPopup = () => {
                       fetchPriority="high"
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <div className="jj-rec-thumb w-14 h-14 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
                       <Building2 className="w-5 h-5" />
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
+                  <div className="jj-rec-body flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{project.name}</p>
                     {project.area_name && (
-                      <p className="text-xs flex items-center gap-1 mt-0.5">
+                      <p className="jj-rec-meta text-xs flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
                         {project.area_name}
                       </p>
                     )}
                     {project.price_from ? (
-                      <p className="text-xs font-semibold mt-0.5">
+                      <p className="text-xs font-semibold">
                         <span>From {formatPrice(project.price_from)}</span>
                       </p>
                     ) : null}
@@ -401,11 +401,12 @@ const PropertyRecommendationPopup = () => {
               <button
                 type="button"
                 onClick={handleHideForSession}
-                className="w-full text-center text-[11px] underline-offset-2 hover:underline transition-colors"
+                className="jj-rec-hide w-full text-center text-[11px] underline-offset-2 hover:underline transition-colors"
               >
                 Hide from my page (still available in your account)
               </button>
             </div>
+
           </div>
 
         </motion.div>

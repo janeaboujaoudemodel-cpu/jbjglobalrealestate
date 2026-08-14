@@ -1,0 +1,102 @@
+/* PASS 360 — "RECOMMENDED FOR YOU" POPUP: WHITE ICONS + BALANCED LAYOUT (LOCKED)
+ *
+ * Two proven regressions from the screenshot:
+ *  1. Icons rendered BLACK. The sitewide champagne contrast guard paints svg
+ *     stroke/fill #1A1A1A with `#root` x7-x9 selectors (specificity 700-900),
+ *     which outranks PASS 358's attribute-only chain (max ~120). This pass
+ *     re-states the lock with `#root` x10 + the popup attribute so the emerald
+ *     surface contract wins: pure white stroke, no dark fill, in every state.
+ *  2. Card content was centred and unbalanced. Text inside the popup is pinned
+ *     left-aligned, rows are vertically centred, and the meta/price lines get a
+ *     single consistent rhythm so nothing floats or clips.
+ *
+ * Emerald surface => pure white ink, pure white icons, white hairlines. Always.
+ */
+
+/* ---------- 1. ICON INK: pure white, beats the #root champagne guard ---------- */
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] svg,
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] svg *,
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] :is(svg, path, line, polyline, polygon, rect, circle, ellipse, g) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] svg {
+  fill: none !important;
+  opacity: 1 !important;
+}
+/* Lucide icons draw with stroke only — keep every child fill transparent so no
+   dark shape can bleed through. */
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] svg :is(path, line, polyline, polygon, rect, circle, ellipse) {
+  fill: none !important;
+}
+/* Text ink, restated at the same weight class. */
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"],
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] *,
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] *::before,
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] *::after {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.26) !important;
+}
+
+/* ---------- 2. LAYOUT: left-aligned, vertically balanced rows ---------- */
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] {
+  text-align: left !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-align: left !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-row > img,
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-row > .jj-rec-thumb {
+  width: 56px !important;
+  height: 56px !important;
+  flex: 0 0 56px !important;
+  object-fit: cover !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-body {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  text-align: left !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-body > * {
+  text-align: left !important;
+  margin: 0 !important;
+  line-height: 1.3 !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-meta {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-meta svg {
+  flex: 0 0 12px !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+/* CTA + hide link stay centred on purpose. */
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-cta,
+html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"] .jj-rec-hide {
+  text-align: center !important;
+  justify-content: center !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ---------- 3. CTA ARROW: the last black icon (a sitewide button-svg guard
+   with an even heavier selector was still painting it #1A1A1A) ---------- */
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] button svg,
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] button svg *,
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] .jj-rec-cta svg,
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] .jj-rec-cta svg * {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
