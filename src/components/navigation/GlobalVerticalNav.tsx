@@ -1201,10 +1201,10 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                   data-sidebar-highlight
                   data-active={highlightActive ? 'true' : undefined}
                   aria-current={highlightActive ? 'page' : undefined}
-                  className={`group flex items-center gap-3 px-3 min-h-9 text-[14px] transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
+                  className={`group flex items-center gap-3 px-3 min-h-9 text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
                   iconWrapperData={{ 'data-sidebar-highlight-tile': true }}
-                  iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
+                  iconWrapperClassName={`w-[22px] h-[22px] flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0 ${getIconTileClass(item)}`}
                   iconClassName="w-[18px] h-[18px] transition-colors"
                   iconStrokeWidth={2.25}
                   iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
