@@ -132,9 +132,84 @@ const OverseasInvestorsStrip = () => {
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
-        @media (prefers-reduced-motion: reduce) {
-          .oi-orb, .oi-stat, .oi-metallic::after { animation: none !important; }
+
+        /* ── Layers of innovation: animated AI "cake" ─────────────────── */
+        @keyframes oi-slab-in {
+          from { opacity: 0; transform: translateY(14px) scale(0.985); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
+        @keyframes oi-slab-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+        .oi-cake { display: flex; flex-direction: column-reverse; gap: 8px; }
+        .oi-slab {
+          position: relative;
+          overflow: hidden;
+          border-radius: 14px;
+          border: 1px solid rgba(255,255,255,0.16);
+          background: rgba(255,255,255,0.06);
+          padding: 10px 14px;
+          animation: oi-slab-in 0.7s cubic-bezier(0.22,1,0.36,1) both, oi-slab-float 7s ease-in-out infinite;
+        }
+        .oi-slab-index {
+          display: inline-flex; align-items: center; justify-content: center;
+          height: 24px; width: 24px; flex: none; border-radius: 8px;
+          font-size: 11px; font-weight: 800;
+          background: rgba(255,255,255,0.14);
+        }
+
+        /* Sun skin — brighter champagne surface matching the vertical rail,
+           black ink and icons per the brand contrast contract. */
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-surface {
+          background: linear-gradient(135deg, #FBF6EC 0%, #F4EDDF 52%, #EFE6D6 100%) !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band * {
+          color: #1A1A1A !important;
+          -webkit-text-fill-color: #1A1A1A !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band svg,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band svg * {
+          stroke: #1A1A1A !important;
+          color: #1A1A1A !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-muted,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-muted *,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-faint,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-faint * {
+          color: rgba(26,26,26,0.72) !important;
+          -webkit-text-fill-color: rgba(26,26,26,0.72) !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-meter {
+          background: rgba(26,26,26,0.14) !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-meter > span {
+          background: linear-gradient(90deg, rgba(6,78,59,0.45), #064E3B) !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-slab {
+          border-color: rgba(6,78,59,0.22) !important;
+          background: rgba(255,255,255,0.62) !important;
+        }
+        /* Emerald accent plate keeps white ink in both skins (pair lock). */
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-slab-index {
+          background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .jj-cta-emerald,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .jj-cta-emerald * {
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          stroke: #FFFFFF !important;
+        }
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-metallic::after {
+          display: none !important;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .oi-orb, .oi-stat, .oi-slab, .oi-metallic::after { animation: none !important; }
+        }
+
       `}</style>
 
       <Link
@@ -143,7 +218,7 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="jj-bleed-allow allow-white oi-metallic group relative block w-full overflow-hidden px-5 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
+        className="jj-bleed-allow allow-white oi-metallic oi-surface group relative block w-full overflow-hidden px-5 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
         style={{
           background: "var(--jj-emerald-ombre)",
           color: "#FFFFFF",
@@ -185,12 +260,34 @@ const OverseasInvestorsStrip = () => {
         {/* Hairline divider */}
         <div className="relative z-[1] mx-auto mt-6 h-px w-full max-w-[1500px]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
 
+        {/* Layers of innovation — animated AI "cake", bottom data → top decision */}
+        <div className="oi-cake relative z-[1] mx-auto mt-5 w-full max-w-[1500px]">
+          {aiLayers.map((layer, i) => (
+            <div
+              key={layer.label}
+              className="oi-slab flex items-center gap-3"
+              style={{
+                animationDelay: `${i * 90}ms, ${i * 320}ms`,
+                marginLeft: `${i * 10}px`,
+                marginRight: `${(aiLayers.length - 1 - i) * 6}px`,
+              }}
+            >
+              <span className="oi-slab-index">{aiLayers.length - i}</span>
+              <span className="min-w-0">
+                <span className="block text-[12.5px] font-bold leading-tight">{layer.label}</span>
+                <span className="oi-muted block text-[11.5px] font-medium leading-snug">{layer.detail}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+
         {/* Stats row — always 5 on one line, premium animated */}
-        <div className="relative z-[1] mx-auto mt-4 grid w-full max-w-[1500px] grid-cols-5 gap-x-1 sm:gap-x-3">
+        <div className="relative z-[1] mx-auto mt-5 grid w-full max-w-[1500px] grid-cols-5 gap-x-1 sm:gap-x-3">
           {microStats.map((s, i) => (
             <AnimatedStat key={s.label} stat={s} start={inView} index={i} />
           ))}
         </div>
+
       </Link>
     </section>
   );
