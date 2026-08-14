@@ -54,15 +54,16 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}
         aria-current={active ? "page" : undefined}
-        className="mx-auto my-1 w-10 h-10 flex items-center justify-center rounded-lg transition-all hover:bg-[#1A1A1A]/[0.045]"
+        className="group mx-auto my-1 w-10 h-10 flex items-center justify-center rounded-lg transition-all hover:bg-[#1A1A1A]/[0.045]"
       >
         <span
           data-sidebar-mode-icon-tile
-          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
+          className={`w-[22px] h-[22px] flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110 ${EMERALD_TILE}`}
         >
           <Icon
-            className="w-4 h-4"
-            strokeWidth={2.1}
+            className="w-[18px] h-[18px]"
+            strokeWidth={2.25}
+            style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
           />
         </span>
       </Link>
@@ -77,7 +78,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}
         aria-current={active ? "page" : undefined}
-        className={`group flex items-center gap-3 px-3 min-h-9 rounded-lg transition-all duration-200 ${
+        className={`group flex items-center gap-3 px-3 min-h-9 rounded-xl transition-all duration-200 ${
           active ? "" : "hover:bg-[#1A1A1A]/[0.045]"
         }`}
         style={
@@ -92,15 +93,16 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
       >
         <span
           data-sidebar-mode-icon-tile
-          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
+          className={`w-[22px] h-[22px] flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110 ${EMERALD_TILE}`}
         >
           <Icon
-            className="w-4 h-4"
-            strokeWidth={2.1}
+            className="w-[18px] h-[18px]"
+            strokeWidth={2.25}
+            style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
           />
         </span>
         <span
-          className="flex-1 min-w-0 text-left text-[11px] uppercase tracking-[0.08em] leading-[1.15] font-extrabold whitespace-normal break-words [overflow-wrap:anywhere]"
+          className="flex-1 min-w-0 text-left text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold whitespace-normal break-normal [overflow-wrap:normal]"
         >
           {cfg.label}
         </span>
