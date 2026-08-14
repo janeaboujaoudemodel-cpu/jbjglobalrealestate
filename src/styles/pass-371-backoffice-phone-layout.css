@@ -193,3 +193,28 @@
     overflow-x: hidden !important;
   }
 }
+
+/* Bottom dock on phones: the smart-chat field + Help button were sized for a
+   desktop dock and ran past the viewport. Geometry only. */
+@media (max-width: 820px) {
+  body .jc-app .jc-chat-dock {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  body .jc-app .jc-chat-dock > *:not(.jc-smart-chat):not(.jc-help-btn) {
+    display: none !important;
+  }
+  body .jc-app .jc-smart-chat {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: auto !important;
+  }
+  body .jc-app .jc-help-btn {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+}
