@@ -51,7 +51,7 @@ const DARK_SURFACE = "linear-gradient(180deg,rgba(6,78,59,0.82) 0%,rgba(4,44,28,
 
 
 const SEG =
-  "flex items-center justify-between gap-1 h-10 lg:h-16 px-2 lg:px-2 rounded-lg text-[12px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-visible shadow-none";
+  "flex items-center justify-between gap-1 h-11 lg:h-16 px-2.5 lg:px-2 rounded-lg text-[13px] lg:text-[12px] font-medium tracking-tight min-w-0 w-full transition-colors overflow-visible shadow-none";
 
 
 function Seg({
@@ -364,7 +364,7 @@ export default function PropertySearchBar({
   const bedLabel =
     f.beds.length || f.baths.length
       ? [f.beds.join("/"), f.baths.length ? `${f.baths.join("/")} bath` : ""].filter(Boolean).join(" · ")
-      : "Beds";
+      : "Bedrooms";
 
   const priceLabel =
     f.priceMin != null || f.priceMax != null
