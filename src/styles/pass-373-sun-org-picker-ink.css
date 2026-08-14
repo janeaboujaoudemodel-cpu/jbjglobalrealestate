@@ -1,0 +1,27 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PASS 373 — SUN BACK OFFICE: ORG PICKER INK (LOCKED)
+   Sun only. Colors only — no geometry, spacing or layout properties here.
+
+   Bug: PASS 348 remaps --jbjcrm-metallic-emerald-h to the champagne band in
+   Sun, but crmShell.css hard-locks the org picker ink to #FFFFFF → white text
+   on champagne (champagne-on-champagne). Contract: champagne surface = black
+   ink, gold hairline. Moon is untouched.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app .jc-org-picker,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app .jc-org-picker
+  :is(span, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app .jc-org-picker {
+  border-color: rgba(184, 149, 85, 0.55) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 2px rgba(26, 26, 26, 0.14) !important;
+}
+
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .jc-app .jc-org-picker:hover {
+  border-color: #B89555 !important;
+}
