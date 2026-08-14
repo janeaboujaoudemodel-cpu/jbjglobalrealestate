@@ -831,7 +831,7 @@ export default function PropertySearchBar({
               <span className="min-w-0 text-center leading-none lg:text-[11px]" style={{ whiteSpace: "nowrap" }}>
                 More{extras ? ` (${extras})` : ""}
               </span>
-              <span aria-hidden="true" className="inline-flex" />
+              <ChevronDown className="h-3.5 w-3.5 lg:h-3 lg:w-3 shrink-0 opacity-70 col-start-3 justify-self-end" />
             </span>
 
 

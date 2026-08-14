@@ -47,6 +47,15 @@ export default function OwnerLeadNotificationListener() {
       toast.dismiss(TOAST_ID);
     };
 
+    const markOneRead = async (id: string) => {
+      await supabase
+        .from("notifications")
+        .update({ is_read: true })
+        .eq("id", id)
+        .eq("user_id", user.id)
+        .eq("notification_type", "new_lead");
+    };
+
     const handleLeadNotification = (row: any, pendingCount = 0) => {
       if (!row || row.notification_type !== "new_lead" || seenRef.current.has(row.id)) return;
       seenRef.current.add(row.id);
@@ -58,6 +67,7 @@ export default function OwnerLeadNotificationListener() {
         action: {
           label: "Open CRM",
           onClick: () => {
+            void markOneRead(row.id);
             // Legacy /crm links are remapped to the JBJ Hub CRM.
             window.location.href = normalizeNotificationRoute(
               row.action_url || "/owner/crm/jbj/leads",
@@ -71,7 +81,10 @@ export default function OwnerLeadNotificationListener() {
             void markAllRead();
           },
         },
-        duration: 12000,
+        onDismiss: () => {
+          void markOneRead(row.id);
+        },
+        duration: Number.POSITIVE_INFINITY,
       });
     };
 
