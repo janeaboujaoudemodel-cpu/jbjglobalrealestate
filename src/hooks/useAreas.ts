@@ -47,9 +47,8 @@ export function useAreas(options?: {
         query = query.eq("is_trending", true);
       }
 
-      if (options?.limit) {
-        query = query.limit(options.limit);
-      }
+      // Bounded public read (anti-scrape): never an unlimited area dump.
+      query = query.limit(Math.min(options?.limit ?? 500, 500));
 
       const { data, error } = await query;
 
@@ -107,7 +106,8 @@ export function useEmiratesWithAreas() {
       const { data, error } = await supabase
         .from("areas")
         .select("emirate")
-        .eq("is_active", true);
+        .eq("is_active", true)
+        .limit(1000); // bounded public read (anti-scrape)
 
       if (error) {
         console.error("Error fetching emirates:", error);
