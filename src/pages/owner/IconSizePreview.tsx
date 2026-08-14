@@ -24,16 +24,31 @@ const SURFACES = [
 ] as const;
 
 const IconSizePreview: React.FC = () => {
+  // The full Lucide catalog is ~600 kB parsed, so it is fetched on demand
+  // instead of being baked into this owner-only route chunk.
+  const [catalog, setCatalog] = useState<Record<string, unknown> | null>(null);
+  useEffect(() => {
+    let alive = true;
+    import("lucide-react").then((mod) => {
+      if (alive) setCatalog(mod as unknown as Record<string, unknown>);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const icons = useMemo<IconEntry[]>(() => {
+    if (!catalog) return [];
     const out: IconEntry[] = [];
-    for (const [name, Comp] of Object.entries(LucideIcons)) {
+    for (const [name, Comp] of Object.entries(catalog)) {
       if (typeof Comp !== "function" && typeof Comp !== "object") continue;
       if (!/^[A-Z]/.test(name)) continue;
       if (["createLucideIcon", "Icon", "default"].includes(name)) continue;
       out.push({ name, Comp: Comp as React.ComponentType<any> });
     }
     return out.sort((a, b) => a.name.localeCompare(b.name));
-  }, []);
+  }, [catalog]);
+
 
   const [filter, setFilter] = useState("");
   const [sizes, setSizes] = useState<number[]>([...PRESET_SIZES]);
