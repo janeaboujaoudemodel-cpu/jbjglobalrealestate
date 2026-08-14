@@ -51,6 +51,7 @@ import"./styles/pass-360-recommendation-popup-ink-and-layout.css";
 import"./styles/pass-364-rail-no-gold-white-monogram-resend-rhythm.css";
 import"./styles/pass-365-rail-footer-fill-and-innovation-layers.css";
 import"./styles/pass-366-moon-rail-deep-top-density.css";
+import"./styles/pass-367-featured-ad-photo-ink.css";
 
 
 
