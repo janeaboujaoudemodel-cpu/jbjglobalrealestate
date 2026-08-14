@@ -1025,11 +1025,11 @@ const PropertyEvaluator = () => {
         {!entryChosen ? (
           <div className="max-w-5xl mx-auto py-6 w-full">
             <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-black/25 px-4 py-1.5 text-xs font-semibold text-white mb-4">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-300" /> Start your valuation
+              <div className="jj-ai-gate-chip inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold mb-4">
+                <Sparkles className="w-3.5 h-3.5 text-white" /> Start your valuation
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">How would you like to evaluate your property?</h2>
-              <p className="text-white/80 mt-2 text-sm sm:text-base">Choose one option. You can review and edit every field before generating the report.</p>
+              <h2 className="jj-ai-gate-title text-2xl sm:text-3xl font-bold">How would you like to evaluate your property?</h2>
+              <p className="jj-ai-gate-sub mt-2 text-sm sm:text-base">Choose one option. You can review and edit every field before generating the report.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
               {[
@@ -1059,17 +1059,17 @@ const PropertyEvaluator = () => {
                   tabIndex={0}
                   onClick={() => chooseEntry(key)}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseEntry(key); } }}
-                  className="group relative w-full min-w-0 aspect-square sm:aspect-[1/1] rounded-[28px] p-6 sm:p-8 cursor-pointer flex flex-col justify-between overflow-hidden transition-transform hover:scale-[1.015] focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  className="jj-ai-gate-card group relative w-full min-w-0 aspect-square sm:aspect-[1/1] rounded-[28px] p-6 sm:p-8 cursor-pointer flex flex-col justify-between overflow-hidden transition-transform hover:scale-[1.015] focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   style={{
                     background: 'radial-gradient(120% 120% at 0% 0%, rgba(6,95,70,0.95) 0%, rgba(4,44,28,0.92) 45%, rgba(0,0,0,0.98) 100%)',
                     boxShadow: '0 24px 60px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.08)',
                   }}
                 >
                   <div>
-                    <div className="w-14 h-14 rounded-2xl bg-emerald-500/25 flex items-center justify-center mb-5">
-                      <Icon className="w-7 h-7 text-emerald-200" />
+                    <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center mb-5">
+                      <Icon className="w-7 h-7 text-white" />
                     </div>
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-emerald-300 font-bold mb-2 whitespace-normal break-words [overflow-wrap:anywhere]">{eyebrow}</div>
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-white/90 font-bold mb-2 whitespace-normal break-words [overflow-wrap:anywhere]">{eyebrow}</div>
                     <div className="text-xl sm:text-2xl font-bold text-white leading-tight mb-3 whitespace-normal break-words [overflow-wrap:anywhere]">{title}</div>
                     <p className="text-white/85 text-sm leading-relaxed break-words">{desc}</p>
                   </div>
@@ -1077,12 +1077,12 @@ const PropertyEvaluator = () => {
                     <ul className="space-y-2 text-xs text-white/90 mb-5">
                       {bullets.map((b) => (
                         <li key={b} className="flex items-start gap-2">
-                          <CheckCircle className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
+                          <CheckCircle className="w-4 h-4 text-white mt-0.5 shrink-0" />
                           <span className="break-words">{b}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 group-hover:bg-emerald-400 text-white font-semibold text-sm px-4 py-2.5 transition">
+                    <div className="jj-ai-gate-cta inline-flex items-center gap-2 rounded-xl font-semibold text-sm px-4 py-2.5 transition">
                       {cta} <ChevronRight className="w-4 h-4" />
                     </div>
                   </div>

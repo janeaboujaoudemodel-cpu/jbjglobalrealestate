@@ -90,7 +90,7 @@ export const AIToolStartGate = ({
                 setActive(key);
               }
             }}
-            className="group relative w-full min-w-0 rounded-[28px] p-6 sm:p-8 cursor-pointer flex flex-col justify-between overflow-hidden transition-transform hover:scale-[1.015] focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            className="jj-ai-gate-card group relative w-full min-w-0 rounded-[28px] p-6 sm:p-8 cursor-pointer flex flex-col justify-between overflow-hidden transition-transform hover:scale-[1.015] focus:outline-none focus:ring-2 focus:ring-emerald-400"
             style={{
               background:
                 "radial-gradient(120% 120% at 0% 0%, rgba(6,95,70,0.95) 0%, rgba(4,44,28,0.92) 45%, rgba(0,0,0,0.98) 100%)",
@@ -118,7 +118,7 @@ export const AIToolStartGate = ({
                   </li>
                 ))}
               </ul>
-              <div className="inline-flex items-center gap-2 rounded-xl bg-white group-hover:bg-[#F7F2EA] text-[#1A1A1A] font-semibold text-sm px-4 py-2.5 transition">
+              <div className="jj-ai-gate-cta inline-flex items-center gap-2 rounded-xl font-semibold text-sm px-4 py-2.5 transition">
                 {cta} <ChevronRight className="w-4 h-4" />
               </div>
             </div>
