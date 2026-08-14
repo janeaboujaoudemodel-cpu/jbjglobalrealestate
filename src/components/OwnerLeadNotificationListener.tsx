@@ -138,7 +138,10 @@ export default function OwnerLeadNotificationListener() {
     return () => {
       window.clearInterval(interval);
       supabase.removeChannel(channel);
+      // Unmount (route change, sign-out) must never leave a client card behind.
+      toast.dismiss(TOAST_ID);
     };
+
   }, [user, isOwner, isOwnerBackendRoute]);
 
   return null;
