@@ -24,7 +24,23 @@ const BASE_URL =
   process.env.BASE_URL ||
   'https://jbjglobalrealestate.lovable.app';
 
-const OUT_DIR = '/mnt/documents';
+// /mnt/documents only exists in the Lovable sandbox; on a stock CI runner
+// (or any other environment) it isn't writable, so fall back to a local
+// directory the caller can pick up instead (the CI workflow already tries
+// both locations when collecting artifacts).
+function resolveOutDir() {
+  const preferred = '/mnt/documents';
+  try {
+    fs.mkdirSync(preferred, { recursive: true });
+    return preferred;
+  } catch {
+    const fallback = path.resolve(process.cwd(), 'artifacts', 'pass-142');
+    fs.mkdirSync(fallback, { recursive: true });
+    return fallback;
+  }
+}
+
+const OUT_DIR = resolveOutDir();
 const HTML_OUT = path.join(OUT_DIR, 'pass-142-report.html');
 const JSON_OUT = path.join(OUT_DIR, 'pass-142-report.json');
 
@@ -271,11 +287,14 @@ function renderHtml(results, meta) {
 }
 
 (async () => {
-  fs.mkdirSync(OUT_DIR, { recursive: true });
   console.log(`[pass-142] base=${BASE_URL} routes=${ROUTES.length} viewports=${VIEWPORTS.length}`);
   const browser = await chromium.launch({
     headless: true,
-    executablePath: process.env.CHROMIUM_PATH || '/bin/chromium',
+    // Only override the browser binary when the caller explicitly points at
+    // one (the Lovable sandbox does). Otherwise let Playwright resolve its
+    // own installed browser — /bin/chromium doesn't exist on a stock CI
+    // runner, where playwright installs under ~/.cache/ms-playwright.
+    ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
     args: ['--no-sandbox'],
   });
   const results = [];
