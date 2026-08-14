@@ -334,8 +334,11 @@ const HubCard = ({
     <motion.div
       variants={fadeInUp}
       id={hub.id}
+      data-surface="emerald"
+      data-emerald="true"
       className="bg-gradient-to-br from-[#064E3B] via-[#053d2e] to-[#042c1c] border border-[#B89555]/30 rounded-2xl p-6 hover:border-[#B89555]/70 hover:shadow-[0_10px_30px_rgba(6,78,59,0.25)] transition-all"
     >
+
       <div className="flex items-center gap-3 mb-4 pb-3 border-b border-white/10">
         <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 border border-white/15">
           <Icon className="w-5 h-5 text-white" strokeWidth={2} />

@@ -59,6 +59,10 @@ export const PremiumHeroButton = ({
     className
   );
 
+  const surfaceProps = isLight
+    ? { "data-surface": "champagne" as const }
+    : { "data-surface": "emerald" as const, "data-emerald": "true" as const };
+
   const sharedStyle = {
     background: isLight ? undefined : 'linear-gradient(135deg, #042c1c 0%, #031b12 58%, #000000 100%)',
     color: isLight ? undefined : '#FFFFFF',
@@ -103,6 +107,7 @@ export const PremiumHeroButton = ({
     return (
       <Link 
         to={href} 
+        {...surfaceProps}
         className={sharedClasses}
         style={sharedStyle}
         onMouseEnter={handleMouseEnter}
@@ -117,6 +122,7 @@ export const PremiumHeroButton = ({
   return (
     <button 
       onClick={onClick}
+      {...surfaceProps}
       className={sharedClasses}
       style={sharedStyle}
       onMouseEnter={handleMouseEnter}
