@@ -9,13 +9,13 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Chip = locked emerald pair plate with white ink in every skin. */
-.jj-ai-gate-chip {
+.jj-ai-gate-chip:not(#\a):not(#\b):not(#\c) {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.28) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-.jj-ai-gate-chip svg {
+.jj-ai-gate-chip:not(#\a):not(#\b):not(#\c) svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
@@ -44,26 +44,26 @@ html[data-jbj-theme="moon"] .jj-ai-gate-sub {
    The Sun champagne repaint (PASS 369) was forcing black ink onto these
    emerald gradient cards, producing dark-on-dark text. Ink is restored here
    at the card scope, which stays emerald in both skins by design.        */
-html body .jj-ai-gate-card,
-html body .jj-ai-gate-card :is(p, span, div, li, h1, h2, h3, h4, strong, em, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+html body .jj-ai-gate-card:not(#\a):not(#\b):not(#\c),
+html body .jj-ai-gate-card:not(#\a):not(#\b):not(#\c) :is(p, span, div, li, h1, h2, h3, h4, strong, em, svg, path, circle, rect, line, polyline, polygon, ellipse) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body .jj-ai-gate-card :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+html body .jj-ai-gate-card:not(#\a):not(#\b):not(#\c) :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
   stroke: currentColor !important;
 }
 
 /* Primary action inside the card: white plate, black ink (light-surface rule). */
-html body .jj-ai-gate-card .jj-ai-gate-cta,
-html body .jj-ai-gate-card .jj-ai-gate-cta :is(span, svg, path) {
+html body .jj-ai-gate-card:not(#\a):not(#\b):not(#\c) .jj-ai-gate-cta,
+html body .jj-ai-gate-card:not(#\a):not(#\b):not(#\c) .jj-ai-gate-cta :is(span, svg, path) {
   background: #FFFFFF !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
-html body .jj-ai-gate-card .jj-ai-gate-cta :is(span, svg, path) {
+html body .jj-ai-gate-card:not(#\a):not(#\b):not(#\c) .jj-ai-gate-cta :is(span, svg, path) {
   background: transparent !important;
 }
-html body .jj-ai-gate-card:hover .jj-ai-gate-cta {
+html body .jj-ai-gate-card:not(#\a):not(#\b):not(#\c):hover .jj-ai-gate-cta {
   background: #F7F2EA !important;
 }
