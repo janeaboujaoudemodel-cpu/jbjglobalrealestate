@@ -5,6 +5,7 @@
 // so the cap, throttle, and observability live in one place.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { HELPDESK_EMAIL } from "./contactConstants.ts";
 
 const RESEND_API = "https://api.resend.com/emails";
 
@@ -84,7 +85,7 @@ export async function sendViaResend(input: ResendSendInput): Promise<ResendSendR
   // 3. Force Reply-To: helpdesk@jbj.ae on every send unless caller provided one.
   //    This guarantees every recipient who hits "Reply" reaches a real inbox,
   //    even if the From: address is noreply@jbj.ae.
-  const REPLY_TO_CONTACT = "helpdesk@jbj.ae";
+  const REPLY_TO_CONTACT = HELPDESK_EMAIL;
   const hasReplyTo =
     (typeof input.reply_to === "string" && input.reply_to.trim().length > 0) ||
     (Array.isArray(input.reply_to) && input.reply_to.length > 0);
