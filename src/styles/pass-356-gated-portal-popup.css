@@ -1,0 +1,62 @@
+/* ============================================================================
+ * PASS 356 — GATED PORTAL WELCOME POP-UP (LOCKED)
+ *
+ * Owner-mandated fixes for the "Welcome · Private access portal" pop-up:
+ *   1. Close (X) button must be a TRUE circle — earlier global button rules
+ *      (min-height: 44px, padding) stretched it into an oval.
+ *   2. "Create account" label + arrow must be PURE WHITE inside the emerald
+ *      centre-lit button, even under Sun's black-ink contrast rules.
+ *   3. Portal monogram is the black mark (no drop shadow, no white J).
+ *
+ * Scoped strictly to the pop-up via data attributes — no global additions.
+ * ==========================================================================*/
+
+button[data-jbj-portal-close],
+#root button[data-jbj-portal-close],
+#root #root button[data-jbj-portal-close] {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 9999px !important;
+  box-sizing: border-box !important;
+  flex: 0 0 auto !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+button[data-jbj-portal-close] svg,
+#root button[data-jbj-portal-close] svg {
+  width: 16px !important;
+  height: 16px !important;
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+
+button[data-jbj-portal-create],
+button[data-jbj-portal-create] *,
+#root button[data-jbj-portal-create],
+#root button[data-jbj-portal-create] *,
+#root #root button[data-jbj-portal-create],
+#root #root button[data-jbj-portal-create] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+button[data-jbj-portal-create] svg,
+#root button[data-jbj-portal-create] svg,
+#root #root button[data-jbj-portal-create] svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+
+img[data-jbj-portal-monogram] {
+  filter: none !important;
+  -webkit-filter: none !important;
+  mix-blend-mode: normal !important;
+}
