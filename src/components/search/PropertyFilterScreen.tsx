@@ -71,7 +71,14 @@ interface Props {
 }
 
 export default function PropertyFilterScreen({ value: f, onChange, count, onApply, onReset, onSellSelected }: Props) {
+  /**
+   * B.9 — rent frequency has no backing inventory column, so a frequency pick
+   * must never pretend to filter. Picking one opens the consultation flow with
+   * an honest "coming soon / we'll notify you" message instead.
+   */
+  const [rentPeriodAsk, setRentPeriodAsk] = useState<string | null>(null);
   const set = (patch: Partial<PropertySearch>) => onChange(sanitizeSearchForPurpose({ ...f, ...patch }));
+
   const offPlanAxes = supportsOffPlanAxes(f.purpose);
   const toggleIn = <T extends string>(arr: T[], v: T): T[] =>
     arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
