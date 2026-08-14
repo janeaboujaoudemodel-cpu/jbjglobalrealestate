@@ -233,3 +233,17 @@
     padding-right: 10px !important;
   }
 }
+
+/* Suggested-next-action rows on narrow phones: stack identity above the
+   Call/Assign actions so the name/source line gets the full width instead of
+   being squeezed into a 3-character column. Geometry only. */
+@media (max-width: 560px) {
+  body .jc-app .jc-todays-focus .jc-focus-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  body .jc-app .jc-todays-focus .jc-focus-row > div:last-child {
+    justify-content: flex-start !important;
+  }
+}
