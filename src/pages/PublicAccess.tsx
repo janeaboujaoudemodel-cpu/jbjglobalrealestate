@@ -1800,7 +1800,9 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
             type="button"
             onClick={dismiss}
             aria-label="Close welcome portal"
+            data-jbj-portal-close
             className="allow-white absolute right-2 top-2 z-20 grid place-items-center rounded-full border border-white/30 bg-black/25 p-0 leading-none text-white opacity-100 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 sm:right-3 sm:top-3"
+
             style={{
               /* A true circle: fixed square box that no flex/line-height can
                  stretch into an oval. */
@@ -1830,14 +1832,16 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
             Welcome · Private access portal
           </span>
 
-          {/* Trimmed monogram: the original asset carries a huge transparent
-              margin, which made the mark look tiny inside the card. */}
+          {/* Black monogram (owner-locked for this portal card), trimmed so the
+              mark fills the space instead of floating in transparent margin. */}
           <img
             data-no-fallback
-            src={new URL("@/assets/jbj-monogram-light-trimmed.png", import.meta.url).href}
+            data-jbj-portal-monogram
+            src={new URL("@/assets/jbj-monogram-black-trimmed.png", import.meta.url).href}
             alt="JBJ"
-            className="h-24 w-auto object-contain opacity-100 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-28"
+            className="h-24 w-auto object-contain opacity-100 sm:h-28"
           />
+
 
 
           <h2 id="jbj-welcome-portal-title" className="mt-5 font-serif text-2xl leading-tight text-white sm:text-3xl">
@@ -1856,6 +1860,8 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
               onClick={handleCreateAccount}
               data-allow-dark-cta
               data-no-contrast-guard
+              data-jbj-portal-create
+
               className="allow-white inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-md text-[11px] font-bold uppercase tracking-[0.14em] transition-[filter] hover:brightness-110"
               style={{
                 /* Centre-lit emerald: black at both edges, emerald in the
