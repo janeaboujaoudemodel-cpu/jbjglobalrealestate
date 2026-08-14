@@ -276,6 +276,8 @@ function TodaysFocus({
               {hotList.map((l) => (
                 <div
                   key={l.id}
+                  className="jc-focus-row"
+
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "space-between",
                     padding: "9px 12px", borderRadius: 8,
