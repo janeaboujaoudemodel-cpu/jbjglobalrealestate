@@ -63,6 +63,7 @@ export const FeaturedProjectAd = ({
             <div
               className="absolute bottom-0 left-0 right-0 p-6 md:p-8 allow-white [&_*]:!text-white"
               data-on-dark
+              data-photo-copy-lock
               data-no-contrast-guard
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
