@@ -1,0 +1,26 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 367 — FEATURED AD OVERLAY: WHITE INK OVER PHOTO (LOCKED)
+   The full-width featured project banner renders its copy on top of a
+   dark photo + emerald→black scrim. Page-level champagne ink guards
+   (which key off the surrounding `bg-[#FDFBF7]` section) were forcing
+   #1A1A1A onto that copy, making the headline unreadable. This raises
+   the photo-copy lock above those guards without introducing any new
+   color value: pure white only, per the brand contrast contract.
+   Owner backend chrome (data-jbj-backend-lock) is untouched.
+   ═══════════════════════════════════════════════════════════════════ */
+
+html:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock],
+html:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock] :is(h1, h2, h3, h4, h5, h6, p, span, a, small, strong, li),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock],
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock] :is(h1, h2, h3, h4, h5, h6, p, span, a, small, strong, li) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock] :is(svg, .lucide),
+html:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock] :is(svg, .lucide) *,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock] :is(svg, .lucide),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root#root#root [data-photo-copy-lock] :is(svg, .lucide) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
