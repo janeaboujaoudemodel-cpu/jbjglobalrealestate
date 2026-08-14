@@ -307,19 +307,24 @@ const PropertyRecommendationPopup = () => {
           exit={{ opacity: 0, y: 80, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
+          {/* Locked emerald surface → pure white ink + white hairlines in EVERY skin.
+              Never black text or gold borders on this gradient. */}
+          <div
+            data-jj-rec-popup="true"
+            className="allow-white jj-rec-popup border rounded-2xl shadow-[0_18px_45px_rgba(0,0,0,0.35)] overflow-hidden"
+          >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30">
+            <div className="flex items-center justify-between px-4 py-3 border-b jj-rec-divider">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
-                <span className="text-[#1A1A1A] text-sm font-semibold">Recommended for You</span>
+                <Sparkles className="w-4 h-4" />
+                <span className="text-sm font-semibold">Recommended for You</span>
               </div>
               <div className="flex items-center gap-1">
                 <button
                   onClick={handleMinimize}
                   aria-label="Minimize"
                   title="Minimize"
-                  className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors p-1 rounded hover:bg-[#FDFBF7]/60"
+                  className="transition-colors p-1 rounded hover:bg-white/10"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
@@ -327,7 +332,7 @@ const PropertyRecommendationPopup = () => {
                   onClick={handleHideForSession}
                   aria-label="Hide from my page"
                   title="Hide from my page"
-                  className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors p-1 rounded hover:bg-[#FDFBF7]/60"
+                  className="transition-colors p-1 rounded hover:bg-white/10"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -336,8 +341,8 @@ const PropertyRecommendationPopup = () => {
 
             {topArea && (
               <div className="px-4 pt-3">
-                <p className="text-[#1A1A1A]/70 text-xs">
-                  Based on your interest in <span className="text-[#1A1A1A] font-medium capitalize">{topArea}</span>
+                <p className="text-xs">
+                  Based on your interest in <span className="font-medium capitalize">{topArea}</span>
                 </p>
               </div>
             )}
@@ -348,38 +353,37 @@ const PropertyRecommendationPopup = () => {
                 <button
                   key={project.id}
                   onClick={() => handleExplore(project.slug)}
-                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-[#FDFBF7]/70 hover:bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 transition-all group text-left"
+                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border jj-rec-divider transition-all group text-left"
                 >
                   {project.cover_image_url ? (
                     <img
                       src={project.cover_image_url}
                       alt={project.name}
-                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-[#EFE6D6]/10"
+                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
                       loading="eager"
                       decoding="sync"
                       fetchPriority="high"
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">
-                      <Building2 className="w-5 h-5 text-[#1A1A1A]/70" />
+                    <div className="w-14 h-14 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-5 h-5" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-[#1A1A1A] text-sm font-medium truncate group-hover:text-[#1A1A1A] transition-colors">{project.name}</p>
+                    <p className="text-sm font-medium truncate">{project.name}</p>
                     {project.area_name && (
-                      <p className="text-[#1A1A1A]/70 text-xs flex items-center gap-1 mt-0.5">
+                      <p className="text-xs flex items-center gap-1 mt-0.5">
                         <MapPin className="w-3 h-3" />
                         {project.area_name}
                       </p>
                     )}
                     {project.price_from ? (
                       <p className="text-xs font-semibold mt-0.5">
-                        <span className="text-[#1A1A1A]">From </span>
-                        <span style={{ color: "var(--price-orange)" }}>{formatPrice(project.price_from)}</span>
+                        <span>From {formatPrice(project.price_from)}</span>
                       </p>
                     ) : null}
                   </div>
-                  <ArrowRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors flex-shrink-0" />
+                  <ArrowRight className="w-4 h-4 flex-shrink-0" />
                 </button>
               ))}
             </div>
@@ -388,7 +392,7 @@ const PropertyRecommendationPopup = () => {
             <div className="px-3 pb-3 space-y-2">
               <Button
                 onClick={() => { handleMinimize(); navigate("/properties"); }}
-                className="w-full jj-surface-emerald font-semibold text-sm"
+                className="jj-rec-cta w-full font-semibold text-sm border jj-rec-divider"
                 size="sm"
               >
                 Explore All Properties
@@ -397,12 +401,13 @@ const PropertyRecommendationPopup = () => {
               <button
                 type="button"
                 onClick={handleHideForSession}
-                className="w-full text-center text-[11px] text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline-offset-2 hover:underline transition-colors"
+                className="w-full text-center text-[11px] underline-offset-2 hover:underline transition-colors"
               >
                 Hide from my page (still available in your account)
               </button>
             </div>
           </div>
+
         </motion.div>
       )}
     </AnimatePresence>
