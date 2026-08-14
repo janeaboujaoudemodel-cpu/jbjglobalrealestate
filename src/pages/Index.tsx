@@ -66,6 +66,11 @@ const InnovationLabSection = lazy(() => import("@/components/home/InnovationLabS
 const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 const ModePortalBanner = lazy(() => import("@/components/home/ModePortalBanner"));
 const CTABand = lazy(() => import("@/components/home/CTABand"));
+const HomeSearchToolsSection = lazy(() => import("@/components/home/HomeSearchToolsSection"));
+const WhyJbjSection = lazy(() => import("@/components/home/WhyJbjSection"));
+const AiToolsSection = lazy(() => import("@/components/home/AiToolsSection"));
+const GuidesInsightsSection = lazy(() => import("@/components/home/GuidesInsightsSection"));
+const InvestorPartnerStrip = lazy(() => import("@/components/home/InvestorPartnerStrip"));
 
 
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
@@ -342,25 +347,6 @@ const Index = () => {
               Your Gateway to the Global Finest Real Estate
             </motion.h1>
 
-            {/* Full company wordmark — sits directly below the headline, centred */}
-            <motion.div
-              variants={fadeInUp}
-              data-no-contrast-guard
-              data-on-dark
-              className="allow-white mt-3 sm:mt-4 inline-flex items-center justify-center gap-2.5 sm:gap-3 whitespace-nowrap"
-              style={{
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                textShadow: "0 2px 14px rgba(0,0,0,0.85)",
-              }}
-            >
-              <span
-                className="allow-white font-display uppercase"
-                style={{ fontSize: "clamp(0.68rem,2.3vw,1rem)", letterSpacing: "0.24em", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              >
-                JBJ Global Real Estate
-              </span>
-            </motion.div>
             <motion.p
               variants={fadeInUp}
               data-no-contrast-guard
@@ -383,40 +369,7 @@ const Index = () => {
         </motion.div>
       </div>
 
-      {/* DEVELOPER PARTNERS MARQUEE — directly under hero */}
-      <Suspense fallback={<SectionLoader />}>
-        <DeveloperPartnersMarquee />
-      </Suspense>
-
-      {/* EXPLORE OUR SERVICES — separator section between Partners marquee and the
-          Get Verified / Mode Portal pair, with generous breathing room above and below. */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto pt-16 pb-16 md:pt-20 md:pb-20">
-        <LazyVisible minHeight={720} minHeightMobile={672}>
-          <Suspense fallback={<SectionLoader />}>
-            <ExploreServicesCard />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
-
-      {/* HOW WE BUILD — scroll-driven 3D assembly of the JBJ method */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto">
-        <LazyVisible minHeight={696} minHeightMobile={1100}>
-          <Suspense fallback={<SectionLoader />}>
-            <InnovationLabSection />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
-
-      {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block. */}
-      <div className="jj-fullbleed-band pt-6 md:pt-8" data-fullbleed-band>
-        <Suspense fallback={null}>
-          <VerificationBanner />
-        </Suspense>
-        <Suspense fallback={null}>
-          <PartnerVerifyHeroCTA />
-        </Suspense>
-      </div>
-      {/* FEATURED LISTINGS — full-bleed band */}
+      {/* FEATURED LISTINGS — directly after the hero */}
       <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
         <LazyVisible minHeight={1500} minHeightMobile={900} rootMargin="2000px">
           <Suspense fallback={<SectionLoader />}>
@@ -425,150 +378,39 @@ const Index = () => {
         </LazyVisible>
       </div>
 
-      {/* CONTINUE SEARCHING — full-bleed band */}
-      <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
-        <LazyVisible minHeight={448} minHeightMobile={426} rootMargin="2000px">
-          <Suspense fallback={<SectionLoader />}>
-            <ContinueSearching type="property" />
-          </Suspense>
-        </LazyVisible>
-      </div>
+      {/* SEARCH TOOLS — Continue Searching / Resale / Top Areas (tabs) */}
+      <Suspense fallback={<SectionLoader />}>
+        <HomeSearchToolsSection />
+      </Suspense>
 
+      {/* WHY JBJ — services + how we build + verification + partner verify */}
+      <Suspense fallback={<SectionLoader />}>
+        <WhyJbjSection />
+      </Suspense>
 
-      {/* RESALE PROPERTIES */}
+      {/* AI TOOLS — three entry cards to the full tools */}
+      <Suspense fallback={<SectionLoader />}>
+        <AiToolsSection />
+      </Suspense>
+
+      {/* GUIDES & INSIGHTS — marquee + podcast tab */}
+      <Suspense fallback={<SectionLoader />}>
+        <GuidesInsightsSection />
+      </Suspense>
+
+      {/* INVESTORS & DEVELOPMENT PARTNERS — one combined strip */}
+      <Suspense fallback={<SectionLoader />}>
+        <InvestorPartnerStrip />
+      </Suspense>
+
+      {/* SINGLE CLOSING CTA — opens the inquiry modal below */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={0} rootMargin="2400px">
-          <Suspense fallback={<SectionLoader />}>
-            <ResalePropertiesSection />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
-
-      {/* OVERSEAS INVESTORS — full-bleed edge-to-edge (post-sidebar) */}
-      <div className="jj-fullbleed-band cv-auto" data-fullbleed-band>
-        <LazyVisible minHeight={325} minHeightMobile={404}>
-          <Suspense fallback={<SectionLoader />}>
-            <OverseasInvestorsBanner />
-          </Suspense>
-        </LazyVisible>
-      </div>
-
-
-      {/* EXPLORE OUR GUIDES & REPORTS — full-bleed band */}
-      <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
-        <LazyVisible minHeight={400}>
-          <Suspense fallback={<SectionLoader />}>
-            <HomepageBookMarquee />
-          </Suspense>
-        </LazyVisible>
-      </div>
-
-
-      {/* (EXPLORE OUR SERVICES moved up — now sits between Partners marquee
-          and the Get Verified / Mode Portal pair as a visual separator.) */}
-
-
-
-      {/* TOOLKIT SHOWCASE CARD */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={831} minHeightMobile={772}>
-          <Suspense fallback={<SectionLoader />}>
-            <ToolkitShowcaseCard />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
-
-      {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={733} minHeightMobile={1185}>
-          <div className="jj-premium-shell">
-            <span aria-hidden className="jj-premium-shell__c-bl" />
-            <span aria-hidden className="jj-premium-shell__c-br" />
-            <Suspense fallback={<SectionLoader />}>
-              <AIComparisonWidget />
-            </Suspense>
-          </div>
-        </LazyVisible>
-      </PremiumSectionCard>
-
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={1767} minHeightMobile={2850} rootMargin="1200px">
-          <div className="jj-premium-shell" style={{ contain: "layout paint" }}>
-            <span aria-hidden className="jj-premium-shell__c-bl" />
-            <span aria-hidden className="jj-premium-shell__c-br" />
-
-            <Suspense fallback={<SectionLoader />}>
-              <MortgageCalculator compact />
-            </Suspense>
-            <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
-              Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
-              <PearlButton
-                to="/mortgage-calculator"
-                size="md"
-                variant="primary"
-                leadingIcon={<Sparkles strokeWidth={2.2} />}
-                trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-              >
-                <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
-              </PearlButton>
-
-              <PearlButton
-                to="/partners/mortgage"
-                size="md"
-                variant="secondary"
-                leadingIcon={<Users strokeWidth={2.2} />}
-                trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-              >
-                <span className="whitespace-nowrap">{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
-              </PearlButton>
-            </div>
-
-          </div>
-        </LazyVisible>
-      </PremiumSectionCard>
-
-
-      <PodcastVisibilityGate>
-        <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-          <LazyVisible minHeight={700} minHeightMobile={1390} rootMargin="2400px">
-            <Suspense fallback={<SectionLoader />}>
-              <JBJPodcastSection />
-            </Suspense>
-          </LazyVisible>
-        </PremiumSectionCard>
-      </PodcastVisibilityGate>
-
-      {/* TOP AREAS IN DUBAI */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={696} minHeightMobile={1392}>
-          <Suspense fallback={<SectionLoader />}>
-            <AreasWeCover />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
-
-      {/* READY TO GET STARTED — restored under Top Areas */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
-
         <LazyVisible minHeight={777} minHeightMobile={988}>
           <Suspense fallback={<SectionLoader />}>
             <CTABand />
           </Suspense>
         </LazyVisible>
       </PremiumSectionCard>
-
-      {/* Conversion band for anonymous visitors */}
-      <ConversionBand />
-
-
-
-
-
-
-
 
       <Suspense fallback={null}>
         <InquiryFormModal 
