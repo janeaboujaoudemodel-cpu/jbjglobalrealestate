@@ -1,0 +1,41 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PASS 372 — AI TOOL START GATE: REAL CONTRAST (LOCKED)
+   Colors only. No geometry, spacing or layout properties in this file.
+
+   Bug: the "Get started" chip and the gate headline rendered emerald/dark ink
+   in BOTH skins — unreadable over the Moon emerald page and weak in Sun.
+   Contract: emerald surfaces → pure white ink; champagne/white surfaces →
+   black ink.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Chip = locked emerald pair plate with white ink in every skin. */
+.jj-ai-gate-chip {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jj-ai-gate-chip svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Sun (champagne page) → black ink. */
+html[data-jbj-theme="sun"] .jj-ai-gate-title,
+html[data-jbj-theme="sun"] .jj-ai-gate-sub {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html[data-jbj-theme="sun"] .jj-ai-gate-sub {
+  opacity: 0.82;
+}
+
+/* Moon (emerald page) → pure white ink. */
+html[data-jbj-theme="moon"] .jj-ai-gate-title,
+html[data-jbj-theme="moon"] .jj-ai-gate-sub {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html[data-jbj-theme="moon"] .jj-ai-gate-sub {
+  opacity: 0.88;
+}
