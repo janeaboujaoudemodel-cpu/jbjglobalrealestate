@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { Switch } from "@/components/ui/switch";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Search, 
@@ -70,7 +70,7 @@ import PropertySearchBar from "@/components/search/PropertySearchBar";
 import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
 
-import { EMPTY_SEARCH, paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
+import { EMPTY_SEARCH, paramsToSearch, searchToParams, type ProjectStatus, type PropertySearch } from "@/lib/propertySearch";
 import { findAreaExact } from "@/lib/areaResolver";
 import { getCountry } from "@/data/geography";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
