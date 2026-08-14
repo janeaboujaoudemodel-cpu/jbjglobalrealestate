@@ -17,7 +17,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
           toast:
             "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
           description: "group-[.toast]:text-muted-foreground",
-          actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
+          // Emerald pair lock: never the flat primary green — always the
+          // #064E3B -> #042C1C -> #000 ombre with pure white ink.
+          actionButton: "jj-toast-action-emerald group-[.toast]:text-white",
           cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
         },
       }}
