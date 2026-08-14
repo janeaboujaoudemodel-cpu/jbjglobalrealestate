@@ -116,7 +116,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
   );
 
   return (
-    <div data-results-toolbar className="w-full">
+    <div data-results-toolbar className="w-full px-4 sm:px-0">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
           <h1 className="text-xl sm:text-2xl font-semibold" style={{ color: ink }}>
