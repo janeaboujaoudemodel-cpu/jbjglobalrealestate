@@ -1,0 +1,220 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 355 — HERO-CLEAR HEADER: ZERO HIGHLIGHT (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   While the top chrome is clear (the page sits on its hero, or the header
+   paints its transparent dark identity) NOTHING in the bar wears a plate:
+   the account avatar, its notification badge, the Mode pill and the
+   sq ft / sq m pair are transparent with pure white ink and at most one
+   whisper hairline. Tapping sq ft / sq m never paints a plate — colour
+   returns only once the visitor scrolls past the hero, and disappears
+   again on scroll back to the top.
+   Specificity is deliberately extreme so it beats the Sun champagne and
+   Moon emerald dominant-chrome passes without touching them.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* 1 — Account avatar: bare white ring, no plate. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jbj-avatar],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jbj-avatar] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.26) !important;
+}
+
+/* 1b — avatar plate / spinner layers never render. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jbj-avatar] > span[aria-hidden="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jbj-avatar] > span[aria-hidden="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jbj-avatar]::before,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jbj-avatar]::before,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jbj-avatar]::after,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jbj-avatar]::after {
+  display: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* 2 — Notification badge: white digits only, no plate or glow. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jbj-notification-badge],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jbj-notification-badge],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jbj-notification-badge] > span,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jbj-notification-badge] > span {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* 3 — Mode pill: one hairline, white ink, in every state. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-mode-trigger],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-mode-trigger],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-mode-trigger]:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-mode-trigger]:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-mode-trigger][aria-expanded="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-mode-trigger][aria-expanded="true"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.26) !important;
+}
+
+/* 3b — Mode pill sheen layers off. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-mode-trigger]::before,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-mode-trigger]::before,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-mode-trigger]::after,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-mode-trigger]::after {
+  display: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* 4 — sq ft / sq m stays transparent in every state, including after a tap. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle[data-active="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle[data-active="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle[aria-pressed="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle[aria-pressed="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle:focus-visible,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle:focus-visible,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle:active,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle:active,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle[data-active="true"]:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle[data-active="true"]:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle[data-active="true"]:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle[data-active="true"]:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle[aria-pressed="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle[aria-pressed="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle:focus-visible,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle:focus-visible,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle:active,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle:active,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button[data-active="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button[data-active="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button[aria-pressed="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button[aria-pressed="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button:focus-visible,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button:focus-visible,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button:active,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button:active,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button[data-active="true"]:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button[data-active="true"]:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jjds-segmented] button[data-active="true"]:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jjds-segmented] button[data-active="true"]:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"][data-active="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"][data-active="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"][aria-pressed="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"][aria-pressed="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"]:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"]:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"]:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"]:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"]:focus-visible,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"]:focus-visible,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"]:active,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"]:active,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"][data-active="true"]:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"][data-active="true"]:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] button[aria-pressed="true"][data-active="true"]:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] button[aria-pressed="true"][data-active="true"]:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic[data-active="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic[data-active="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic[aria-pressed="true"],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic[aria-pressed="true"],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic:focus,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic:focus-visible,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic:focus-visible,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic:active,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic:active,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic[data-active="true"]:hover,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic[data-active="true"]:hover,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-emerald-metallic[data-active="true"]:focus,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-emerald-metallic[data-active="true"]:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+/* 4b — metallic sweep never runs while the chrome is clear. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle-sweep,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle-sweep,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle::before,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle::before,
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root .jj-sqtoggle::after,
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] .jj-sqtoggle::after {
+  display: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* 5 — the wrapper holding the pair keeps one outer hairline only. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] [data-jj-utility-pill],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] [data-jj-utility-pill],
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] [data-jjds-segmented],
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] [data-jjds-segmented] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.26) !important;
+}
+
+/* 6 — the inactive side reads softer; the active side is full-strength white. */
+html[data-jbj-theme] body[data-jj-hero-chrome="clear"][data-jj-hero-chrome="clear"] div#root#root#root#root#root#root#root#root#root [data-jj-utility-bar] .jj-sqtoggle:not([data-active="true"]),
+html[data-jbj-theme] body div#root#root#root#root#root#root#root#root#root header[data-header-surface="dark"][data-header-surface="dark"] [data-jj-utility-bar] .jj-sqtoggle:not([data-active="true"]) {
+  opacity: 0.72 !important;
+}
+
