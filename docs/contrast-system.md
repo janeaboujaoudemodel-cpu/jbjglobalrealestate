@@ -14,7 +14,7 @@ Every region of the app must be pinned to exactly one of these tones, either via
 |---|---|---|---|---|
 | **Page** | `page` (default) | `#FDFBF7` | `#1A1A1A` ink | Body of every route |
 | **Champagne** | `champagne` / `light` | `#F7F2EA` | `#1A1A1A` ink | Cards, panels, raised surfaces |
-| **Gold** | `gold` | `#B89555` | `#FFFFFF` (large UI only) | CTA tiles, accent badges — **never body copy** |
+| **Gold** | `gold` | `#B89555` | `#1A1A1A` ink (`0 0% 10%`) | CTA tiles, accent badges — **never white ink** |
 | **Ink** | `ink` / `dark` | `#1A1A1A` | `#FDFBF7` champagne | Footer, dark hero sections |
 
 Rule: if a section is none of those tones, it doesn't ship. The runtime guard (`contrastGuard.ts`) treats anything else as `__unknown__` and leaves authored color alone — meaning silent bugs become visible bugs fast.
