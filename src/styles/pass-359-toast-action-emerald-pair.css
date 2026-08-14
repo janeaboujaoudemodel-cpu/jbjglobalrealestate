@@ -1,0 +1,62 @@
+/* PASS 359 — TOAST ACTION BUTTONS = EMERALD PAIR (LOCKED)
+ *
+ * Toast actions ("Open CRM", "View", "Undo"...) were painted with the flat
+ * primary green (#064E3B alone). Flat green is banned: an emerald fill is
+ * ALWAYS the locked pair gradient #064E3B -> #042C1C -> #000000 with pure
+ * white ink and a white hairline, in every state and in both skins.
+ */
+
+html body [data-sonner-toast] [data-button],
+html body [data-sonner-toast] [data-action],
+html body [data-sonner-toast] button[data-button],
+html body [data-radix-toast-root] [data-jj-toast-action],
+html body .toaster [data-sonner-toast] [data-button] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-radius: 9999px !important;
+  padding: 0 14px !important;
+  height: 32px !important;
+  font-weight: 600 !important;
+}
+
+/* Every state keeps the pair — never a flat green, never dark ink. */
+html body [data-sonner-toast] [data-button]:hover,
+html body [data-sonner-toast] [data-button]:focus,
+html body [data-sonner-toast] [data-button]:focus-visible,
+html body [data-sonner-toast] [data-button]:active,
+html body [data-sonner-toast] [data-action]:hover,
+html body [data-sonner-toast] [data-action]:focus,
+html body [data-sonner-toast] [data-action]:active {
+  background: linear-gradient(135deg, #075C46 0%, #05341f 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #075C46 0%, #05341f 58%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.34) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18) !important;
+}
+
+html body [data-sonner-toast] [data-button] :is(svg, path, line, polyline, circle) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+/* Cancel/secondary stays neutral so the emerald pair remains the only fill. */
+html body [data-sonner-toast] [data-cancel] {
+  background: transparent !important;
+  background-image: none !important;
+  border: 1px solid currentColor !important;
+}
+
+html body .jj-toast-action-emerald,
+html body [data-sonner-toast] .jj-toast-action-emerald {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+}
