@@ -1,0 +1,113 @@
+/* PASS 358 — "RECOMMENDED FOR YOU" POPUP: EMERALD SURFACE = PURE WHITE INK (LOCKED)
+ *
+ * The recommendation popup floats over both skins and over emerald portal
+ * pages. It is now ALWAYS the locked emerald ombre, which means, without any
+ * exception, in every state:
+ *   - all text is pure white (#FFFFFF)
+ *   - all icons are pure white (stroke + fill)
+ *   - every border / divider is a white hairline — NEVER gold, never champagne
+ *
+ * Black ink or a gold divider inside this popup is a bug.
+ */
+
+html body [data-jj-rec-popup="true"].jj-rec-popup,
+[data-jj-rec-popup="true"].jj-rec-popup {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Ink lock — text and icons. */
+html body [data-jj-rec-popup="true"],
+html body [data-jj-rec-popup="true"] :is(p, span, a, button, h1, h2, h3, h4, small, strong, em, div),
+html body [data-jj-rec-popup="true"] :is(svg, path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF;
+}
+html body [data-jj-rec-popup="true"] :is(svg, path, line, polyline, polygon, rect, circle) {
+  stroke: #FFFFFF;
+}
+html body [data-jj-rec-popup="true"] svg {
+  fill: none;
+}
+
+/* Border lock — every hairline inside the popup is white, never gold. */
+html body [data-jj-rec-popup="true"] .jj-rec-divider,
+html body [data-jj-rec-popup="true"] [class*="border"] {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+
+/* Global champagne contrast-guard rules paint sitewide ink #1A1A1A and gold
+   hairlines with !important. This popup is an emerald surface, so the locked
+   emerald contract wins — scoped to the popup only. */
+html body [data-jj-rec-popup="true"],
+html body [data-jj-rec-popup="true"] *,
+html body [data-jj-rec-popup="true"] *::before,
+html body [data-jj-rec-popup="true"] *::after {
+  color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.24) !important;
+}
+html body [data-jj-rec-popup="true"] :is(svg, path, line, polyline, polygon, rect, circle) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+html body [data-jj-rec-popup="true"].jj-rec-popup {
+  border-color: rgba(255, 255, 255, 0.30) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+}
+html body [data-jj-rec-popup="true"] img {
+  border-color: transparent !important;
+}
+
+
+/* The champagne contrast guard also forces -webkit-text-fill-color. Beat it with
+   equal weapons, scoped strictly to this emerald popup. */
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"],
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *,
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *::before,
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *::after {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.26) !important;
+}
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] :is(svg, path, line, polyline, polygon, rect, circle) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+
+/* FINAL WORD — the sitewide champagne guard uses a long :is() chain, so this
+   popup wins with a deliberately heavier scoped selector. Emerald surface =>
+   pure white ink, pure white icons, pure white hairlines, always. */
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"],
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *,
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *::before,
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *::after {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.26) !important;
+  text-decoration-color: rgba(255, 255, 255, 0.6) !important;
+}
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] :is(svg, path, line, polyline, polygon, rect, circle) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"].jj-rec-popup {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border-color: rgba(255, 255, 255, 0.30) !important;
+}
+
+
+/* No champagne/gold fills inside this emerald popup — a light fill with white
+   ink would break the contrast contract, so buttons stay white-on-emerald. */
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button,
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] [role="button"] {
+  background-image: none !important;
+  background-color: rgba(255, 255, 255, 0.10) !important;
+}
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button:hover,
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] [role="button"]:hover {
+  background-color: rgba(255, 255, 255, 0.20) !important;
+}
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] img {
+  border-color: transparent !important;
+}
