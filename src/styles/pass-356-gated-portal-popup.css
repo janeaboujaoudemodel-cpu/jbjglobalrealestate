@@ -38,22 +38,18 @@ button[data-jbj-portal-close] svg,
   color: #ffffff !important;
 }
 
-button[data-jbj-portal-create],
-button[data-jbj-portal-create] *,
-#root button[data-jbj-portal-create],
-#root button[data-jbj-portal-create] *,
-#root #root button[data-jbj-portal-create],
-#root #root button[data-jbj-portal-create] * {
+/* Sun's dominant-chrome rule wears #root x7 specificity, so the portal CTA
+   needs a heavier hammer to keep its locked pure-white ink. */
+html body #root#root#root#root#root#root#root#root#root button[data-jbj-portal-create],
+html body #root#root#root#root#root#root#root#root#root button[data-jbj-portal-create] *,
+html body #root#root#root#root#root#root#root#root#root button[data-jbj-portal-create] span,
+html body #root#root#root#root#root#root#root#root#root button[data-jbj-portal-create] svg,
+html body #root#root#root#root#root#root#root#root#root button[data-jbj-portal-create] svg * {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
-button[data-jbj-portal-create] svg,
-#root button[data-jbj-portal-create] svg,
-#root #root button[data-jbj-portal-create] svg {
-  stroke: #ffffff !important;
-  color: #ffffff !important;
-}
 
 img[data-jbj-portal-monogram] {
   filter: none !important;
