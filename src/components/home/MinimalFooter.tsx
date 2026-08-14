@@ -21,13 +21,13 @@ const MinimalFooter = () => {
       {/* Top gold hairline — same treatment as the sidebar divider */}
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 h-px"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px z-0"
         style={{
           background:
             "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 6%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0) 94%, transparent 100%)",
         }}
       />
-      <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-5 md:py-6">
+      <div className="relative z-10 max-w-[1600px] mx-auto px-5 md:px-10 py-5 md:py-6">
         <nav
           aria-label="Footer"
           className="flex flex-wrap items-center justify-center gap-x-5 md:gap-x-7 gap-y-2 text-center"
@@ -57,7 +57,7 @@ const MinimalFooter = () => {
         </nav>
 
         <div
-          className="jj-footer-rule mx-auto mt-4 h-px w-40 max-w-full"
+          className="jj-footer-rule pointer-events-none mx-auto mt-4 h-px w-40 max-w-full"
           style={{
             background:
               "linear-gradient(90deg, transparent, rgba(184,149,85,0.75), transparent)",
