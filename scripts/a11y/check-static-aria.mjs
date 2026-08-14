@@ -16,6 +16,10 @@
  * regex-based scan, baseline allowlist for pre-existing hits, exit 1 on
  * any new violation. Refresh the baseline with --print-baseline.
  *
+ * lint-staged invokes this with the staged .tsx/.jsx file paths as CLI
+ * args — only those are scanned. Run with no file args (npm run
+ * check:a11y:static, CI, --print-baseline) to scan the whole src/ tree.
+ *
  * NOTE: This is a heuristic scan, not a full TS/JSX AST parse. It errs on
  * the side of false positives, which the allowlist mops up. Anything that
  * needs full type information should go in the rendered axe sweep instead.
@@ -29,6 +33,7 @@ const root = path.resolve(__dirname, '..', '..');
 const SRC = path.join(root, 'src');
 const allowlistPath = path.join(__dirname, 'allowlist.json');
 const PRINT_BASELINE = process.argv.includes('--print-baseline');
+const stagedFileArgs = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 
 let BASELINE = new Set();
 try {
@@ -48,6 +53,15 @@ function walk(dir, out = []) {
     else if (exts.has(path.extname(entry.name))) out.push(p);
   }
   return out;
+}
+
+// PRINT_BASELINE always scans the full tree — it's a manual baseline
+// snapshot, not a pre-commit run, and needs every file to be meaningful.
+function targetFiles() {
+  if (PRINT_BASELINE || stagedFileArgs.length === 0) return walk(SRC);
+  return stagedFileArgs
+    .map((f) => path.resolve(f))
+    .filter((f) => exts.has(path.extname(f)) && fs.existsSync(f));
 }
 
 /* ----------------------------- detectors ---------------------------------- */
@@ -117,7 +131,7 @@ function record(file, line, rule, snippet) {
   findings.push({ key, rel, line, rule, snippet: snippet.slice(0, 120) });
 }
 
-for (const file of walk(SRC)) {
+for (const file of targetFiles()) {
   // Skip test files and the scanner's own dogfood targets.
   if (/\.(test|spec)\.(t|j)sx?$/.test(file)) continue;
   const source = fs.readFileSync(file, 'utf8');
