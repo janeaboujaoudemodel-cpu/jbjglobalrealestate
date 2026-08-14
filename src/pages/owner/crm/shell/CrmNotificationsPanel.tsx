@@ -88,8 +88,15 @@ export default function CrmNotificationsPanel({ open, onClose }: Props) {
   const filtered = tab === "unread" ? items.filter((i) => i.unread) : items;
   const unreadCount = items.filter((i) => i.unread).length;
 
-  const markAll = () => setItems((s) => s.map((i) => ({ ...i, unread: false })));
-  const mark = (id: string) => setItems((s) => s.map((i) => (i.id === id ? { ...i, unread: false } : i)));
+  const markAll = () => {
+    const ids = items.filter((i) => i.unread).map((i) => i.id);
+    setItems((s) => s.map((i) => ({ ...i, unread: false })));
+    if (ids.length) void supabase.from("notifications").update({ is_read: true }).in("id", ids);
+  };
+  const mark = (id: string) => {
+    setItems((s) => s.map((i) => (i.id === id ? { ...i, unread: false } : i)));
+    void supabase.from("notifications").update({ is_read: true }).eq("id", id);
+  };
 
   return (
     <div className="jc-popover jc-popover--notif" ref={ref} role="dialog" aria-label="Notifications">
