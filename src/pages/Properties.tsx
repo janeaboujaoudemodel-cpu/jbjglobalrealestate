@@ -230,20 +230,37 @@ const BATHROOM_OPTIONS = [
   { value: "4", label: "4+" },
 ];
 
-const Properties = () => {
+/**
+ * `preset` turns /resale and /distress into first-class status presets of this
+ * same page (PASS 368). They used to be `<Navigate>` redirects, which cost a
+ * second navigation, threw away any query the visitor arrived with and made the
+ * canonical URL /properties. Now the preset route renders the search directly
+ * and stays on its own path.
+ */
+const Properties = ({ preset }: { preset?: ProjectStatus } = {}) => {
   const [searchParams] = useSearchParams();
+  const { pathname } = useLocation();
+  const hydrate = useCallback(
+    (p: URLSearchParams): PropertySearch => {
+      const next = paramsToSearch(p);
+      if (!preset || p.get("status")) return next;
+      return { ...next, purpose: "buy", statuses: [preset] };
+    },
+    [preset],
+  );
   /** Unified Bayut-grade search model, hydrated from the URL. */
-  const [search, setSearch] = useState<PropertySearch>(() => paramsToSearch(searchParams));
+  const [search, setSearch] = useState<PropertySearch>(() => hydrate(searchParams));
   useEffect(() => {
-    setSearch(paramsToSearch(searchParams));
+    setSearch(hydrate(searchParams));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.toString()]);
+  }, [searchParams.toString(), hydrate]);
   const submitSearch = useCallback((next: PropertySearch) => {
     const qs = searchToParams(next).toString();
-    window.history.replaceState(null, "", `/properties${qs ? `?${qs}` : ""}`);
+    window.history.replaceState(null, "", `${pathname}${qs ? `?${qs}` : ""}`);
     setSearch(next);
     window.dispatchEvent(new CustomEvent("jbj:property-search", { detail: next }));
-  }, []);
+  }, [pathname]);
+
 
   /**
    * Markets we are still onboarding hold no inventory yet. Saying "0 properties"
