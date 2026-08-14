@@ -20,6 +20,7 @@ import SecurityShield from "@/components/SecurityShield";
 // prevents the visible "page → sidebar → header" stagger on first load.
 import GlobalVerticalNav from "@/components/navigation/GlobalVerticalNav";
 import { useHeroChromeWatcher } from "@/hooks/useHeroChromeWatcher";
+import { useModalViewportInset } from "@/hooks/useModalViewportInset";
 import HorizontalUtilityBar from "@/components/navigation/HorizontalUtilityBar";
 // GlobalFilterBar is now embedded inside HorizontalUtilityBar
 import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
@@ -71,6 +72,7 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children }: MainLayoutProps) => {
   useHeroChromeWatcher();
+  useModalViewportInset();
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
   const isPhoneChrome = useIsPhoneChrome();

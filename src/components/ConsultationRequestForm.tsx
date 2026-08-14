@@ -279,7 +279,7 @@ export const ConsultationRequestForm = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
+        className={`bg-[#FBF6EC] border border-[#B89555] rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
       >
         <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-[#1A1A1A]" />
@@ -303,22 +303,29 @@ export const ConsultationRequestForm = ({
         data-jbj-consultation-form
         data-surface="champagne-raised"
         data-allow-ink
-        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-7 sm:p-10 md:p-12 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
+        className={`jbj-form-shell bg-[#FBF6EC] border border-[#B89555]/35 rounded-2xl p-7 sm:p-10 md:p-12 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
     >
-      {/* Local pill lock — force gold champagne on inactive & pure emerald+white on active,
-          winning over the site-wide emerald surface guards. Scoped to this form only. */}
+      {/* PASS 374 — pill lock. Inactive: #1A1A1A ink on flat #F1E7D4 (13.9:1, AAA)
+          with a solid gold hairline. Active: locked emerald pair + pure white ink. */}
       <style>{`
         [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive,
-        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:hover,
         [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:focus,
         [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:focus-visible {
-          background: linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%) !important;
-          background-color: #F3E4C2 !important;
-          background-image: linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%) !important;
+          background: #F1E7D4 !important;
+          background-color: #F1E7D4 !important;
+          background-image: none !important;
           color: #1A1A1A !important;
           -webkit-text-fill-color: #1A1A1A !important;
           border: 1px solid #B89555 !important;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.55) !important;
+          box-shadow: none !important;
+        }
+        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:hover {
+          background: #E9DCC2 !important;
+          background-color: #E9DCC2 !important;
+          background-image: none !important;
+          color: #1A1A1A !important;
+          -webkit-text-fill-color: #1A1A1A !important;
+          border: 1px solid #A5843F !important;
         }
         [data-jbj-consultation-form] [data-field-group] button.jbj-pill-active,
         [data-jbj-consultation-form] [data-field-group] button.jbj-pill-active:hover {
@@ -570,7 +577,7 @@ export const ConsultationRequestForm = ({
                   return (
                     <FormItem>
                       <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                  <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
+                  <div data-field-group>
                         <div className="flex flex-wrap gap-2">
                           {BEDROOM_OPTIONS.map((b) => {
                             const active = selected.includes(b.value);
@@ -585,7 +592,6 @@ export const ConsultationRequestForm = ({
                                     ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
                                     : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
                                 }
-                                style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                               >
                                 {b.label}
                               </button>
@@ -621,7 +627,7 @@ export const ConsultationRequestForm = ({
                   return (
                     <FormItem>
                       <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                      <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
+                      <div data-field-group>
                         <div className="flex flex-wrap gap-2">
                           {SIZE_BUCKETS.map((b) => {
                             const active =
@@ -638,7 +644,6 @@ export const ConsultationRequestForm = ({
                                     ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
                                     : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
                                 }
-                                style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                               >
                                 {b.label}
                               </button>
@@ -784,7 +789,7 @@ export const ConsultationRequestForm = ({
               control={form.control}
               name="agreeTerms"
               render={({ field }) => (
-                  <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]/35 p-4 md:p-5">
+                  <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]/60 p-4 md:p-5">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
