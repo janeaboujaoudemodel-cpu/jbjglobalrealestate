@@ -134,6 +134,9 @@
   body .jc-app .jc-todays-focus :is(h2, p) {
     min-width: 0 !important;
     max-width: 100% !important;
+  }
+  /* Headline copy may wrap; lead rows keep their single-line ellipsis. */
+  body .jc-app .jc-todays-focus :is(h2, p) {
     overflow-wrap: anywhere !important;
   }
 
@@ -216,5 +219,17 @@
   body .jc-app .jc-help-btn {
     flex: 0 0 auto !important;
     white-space: nowrap !important;
+  }
+}
+
+/* Narrow phones: one KPI per row, stacked lead rows, icon-only Help. */
+@media (max-width: 560px) {
+  body .jc-app .jc-kpi-row,
+  body .jc-app .jc-widget-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  body .jc-app .jc-help-btn {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 }
