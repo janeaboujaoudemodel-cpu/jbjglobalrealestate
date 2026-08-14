@@ -20,6 +20,15 @@ const microStats: Stat[] = [
   { target: 4, suffix: "×", label: "Co-Owners", icon: Users2 },
 ];
 
+/* Layers of the AI intelligence "cake" — bottom (data) to top (decision). */
+const aiLayers = [
+  { label: "Live Market Data", detail: "1,398 projects, 40+ developers, refreshed daily" },
+  { label: "Verification Layer", detail: "Every listing checked against the developer source" },
+  { label: "AI Matching Engine", detail: "Yield, handover and payment-plan fit scored per investor" },
+  { label: "Advisory Layer", detail: "Human advisors validate every AI recommendation" },
+  { label: "Your Decision", detail: "One shortlist, fully explained, ready to sign remotely" },
+];
+
 const useCountUp = (target: number, start: boolean, duration = 1400) => {
   const [val, setVal] = useState(0);
   useEffect(() => {
