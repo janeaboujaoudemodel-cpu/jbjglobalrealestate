@@ -11,6 +11,7 @@ import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendViaResend } from "../_shared/resendClient.ts";
 import { recordJbjResendSend, buildCampaignIntendedSendKey } from "../_shared/jbjSpine.ts";
+import { HELPDESK_EMAIL } from "../_shared/contactConstants.ts";
 
 
 const corsHeaders = {
@@ -23,7 +24,7 @@ const OWNER_EMAILS = [
   "janeaboujaoudenails@gmail.com",
   "janeaboujaoudemodel@gmail.com",
   "infoo.jane@gmail.com",
-  "helpdesk@jbj.ae",
+  HELPDESK_EMAIL,
 ];
 const DEFAULT_REGISTRATION_PACKAGE_LINK = "https://drive.google.com/open?id=1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS&usp=drive_fs";
 
@@ -87,7 +88,7 @@ const injectJbjBrandHeader = (html: string) => html;
 const DEVELOPER_REQUIREMENTS_BLOCK = `<table role="presentation" data-jbj-developer-requirements="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:18px 0 8px;background:#FAF5EA;border:1px solid #B89555;border-radius:6px;font-family:Inter,Arial,sans-serif;font-size:13px;line-height:1.55;color:#0a0a0a;">
   <tr><td style="padding:16px 18px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">
     <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Registration desk</p>
-    <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Kindly reply with your registration form and requirements. Send documents to <strong>helpdesk@jbj.ae</strong>.</p>
+    <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Kindly reply with your registration form and requirements. Send documents to <strong>${HELPDESK_EMAIL}</strong>.</p>
 
     <p style="margin:0 0 4px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;font-size:11px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">Project escrow &amp; bank details</p>
     <p style="margin:0 0 12px;color:#0a0a0a !important;-webkit-text-fill-color:#0a0a0a !important;">In your marketing-material link, please include <strong>one folder per project</strong> containing project details, the <strong>project escrow account</strong>, and the <strong>corporate bank account</strong> for that project. For any project not yet registered, mark it <em>&ldquo;Registration pending &mdash; documents pending from JBJ&rdquo;</em> with the reason.</p>
@@ -261,7 +262,7 @@ serve(async (req: Request) => {
     }
 
     const fromName = "JBJ Global Real Estate";
-    const replyTo = "helpdesk@jbj.ae";
+    const replyTo = HELPDESK_EMAIL;
     const forcedDeveloperCc = "infoo.jane@gmail.com";
     const activeCcArr = Array.isArray(settings?.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
     const legacyCc = (settings?.cc_email || "").trim();

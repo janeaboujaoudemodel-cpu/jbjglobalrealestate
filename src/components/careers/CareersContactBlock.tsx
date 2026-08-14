@@ -12,8 +12,8 @@ export default function CareersContactBlock() {
     {
       icon: Mail,
       label: "Email Careers",
-      value: "careers@JBJ.ae",
-      href: "mailto:careers@JBJ.ae",
+      value: CONTACT_INFO.careersEmail,
+      href: `mailto:${CONTACT_INFO.careersEmail}`,
       tag: "Replies within 24h",
     },
     {

@@ -51,6 +51,7 @@ export const CONTACT_INFO = {
   emailCapitalized: 'CONTACT@JBJ.AE',
   privacyEmail: 'PRIVACY@JBJ.AE',
   supportEmail: 'SUPPORT@JBJ.AE',
+  HELPDESK_EMAIL: 'helpdesk@jbj.ae',
   careersEmail: 'CAREERS@JBJ.AE',
   partnershipsEmail: 'PARTNERSHIPS@JBJ.AE',
   securityEmail: 'SECURITY@JBJ.AE',
