@@ -248,16 +248,18 @@ const OverseasInvestorsStrip = () => {
       <Link
          to="/investor-hub"
         aria-label="Invest in Dubai from anywhere in the world — discover the opportunity"
-        data-surface="dark"
-        data-on-dark
-        data-no-contrast-guard
-        className="jj-bleed-allow allow-white oi-metallic oi-surface group relative block w-full overflow-hidden px-5 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
+        data-surface={isSun ? "light" : "dark"}
+        {...(isSun ? {} : { "data-on-dark": true, "data-no-contrast-guard": true })}
+        className={`jj-bleed-allow ${isSun ? "" : "allow-white"} oi-metallic oi-surface group relative block w-full overflow-hidden px-5 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16`}
         style={{
-          background: "var(--jj-emerald-ombre)",
-          color: "#FFFFFF",
+          background: isSun
+            ? "linear-gradient(135deg, #FBF6EC 0%, #F4EDDF 52%, #EFE6D6 100%)"
+            : "var(--jj-emerald-ombre)",
+          color: isSun ? "#1A1A1A" : "#FFFFFF",
           marginLeft: 0,
           marginRight: 0,
         }}
+
       >
         {/* Ambient orbs */}
         <span aria-hidden className="oi-orb pointer-events-none absolute -left-24 -top-16 h-64 w-64 rounded-full blur-[110px]" style={{ background: `${EMERALD_BRIGHT}17` }} />
