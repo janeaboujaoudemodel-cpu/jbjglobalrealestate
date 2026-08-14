@@ -88,3 +88,15 @@ html body #root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup=
   display: flex !important;
   align-items: center !important;
 }
+
+/* ---------- 3. CTA ARROW: the last black icon (a sitewide button-svg guard
+   with an even heavier selector was still painting it #1A1A1A) ---------- */
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] button svg,
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] button svg *,
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] .jj-rec-cta svg,
+html body #root#root#root#root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"] .jj-rec-cta svg * {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
