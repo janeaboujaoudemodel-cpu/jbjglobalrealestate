@@ -351,7 +351,7 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
 
       {/* B.9 — rent frequency opens the consultation flow (no rental inventory yet). */}
       <Dialog open={!!rentPeriodAsk} onOpenChange={(o) => !o && setRentPeriodAsk(null)}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl sm:max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{rentPeriodAsk} rentals — coming soon</DialogTitle>
             <DialogDescription>
