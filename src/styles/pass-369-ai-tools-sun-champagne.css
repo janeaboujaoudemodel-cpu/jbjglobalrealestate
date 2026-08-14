@@ -201,3 +201,15 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+
+/* ───────── 8. Final catch-all: any inline emerald gradient in Sun AI scope ───────── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  [style*="linear-gradient"]:not(.allow-white):not(.allow-white *):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *):not([style*="url("]) {
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
