@@ -88,8 +88,10 @@ export default function OwnerLeadNotificationListener() {
         .eq("notification_type", "new_lead")
         .eq("is_read", false)
         .order("created_at", { ascending: false })
-        .limit(3);
-      (data || []).reverse().forEach(handleLeadNotification);
+        .limit(20);
+      const rows = data || [];
+      // Only the newest unseen lead surfaces; the rest are summarised as a count.
+      if (rows.length) handleLeadNotification(rows[0], rows.length);
     };
 
     void poll();
