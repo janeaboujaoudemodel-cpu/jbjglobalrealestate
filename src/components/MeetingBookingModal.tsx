@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const meetingSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100),
@@ -80,7 +81,8 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
-  
+  const { honeypot, setHoneypot } = useHoneypot();
+
   const countries = getCountryList();
 
   const form = useForm<MeetingFormData>({
@@ -128,6 +130,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
         phone: data.phone,
         nationality: data.nationality,
         currentLocation: data.currentLocation,
+        honeypot,
       }, "meeting-booking", "client");
 
       // Send notification email
@@ -205,6 +208,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <HoneypotField value={honeypot} onChange={setHoneypot} name="meeting_company_website" />
               {/* Progress Indicator */}
               <div className="flex items-center justify-center gap-2 mb-6">
                 {[1, 2, 3].map((s) => (

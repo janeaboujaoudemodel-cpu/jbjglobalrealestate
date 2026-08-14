@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield, Mail, Phone, User, Globe, Languages, Briefcase, CheckCircle } from 'lucide-react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 interface ContactGatingModalProps {
   isOpen: boolean;
@@ -93,6 +94,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
     preferredLanguage: 'English',
     interestedService: '',
   });
+  const { honeypot, setHoneypot } = useHoneypot();
 
   // Check if user already submitted contact details
   useEffect(() => {
@@ -187,6 +189,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
             location: formData.location || undefined,
             preferred_language: formData.preferredLanguage || undefined,
             service_interest: formData.interestedService || undefined,
+            honeypot,
           }),
         }
       );
@@ -259,6 +262,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
 
         {step === 'form' && (
           <div className="space-y-4 mt-4">
+            <HoneypotField value={honeypot} onChange={setHoneypot} name="gating_company_website" />
             {/* Full Name */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2">

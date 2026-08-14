@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { toast } from "sonner";
 import BrokerCircleSection from "@/components/BrokerCircleSection";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 
 const DRAFT_KEY = "jbj_broker_join_draft";
@@ -50,6 +51,7 @@ const JoinBrokerList = () => {
   const navigate = useNavigate();
   const { captureLead } = useLeadCapture();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const loadDraft = () => {
     try {
@@ -85,7 +87,7 @@ const JoinBrokerList = () => {
     setIsSubmitting(true);
     try {
       const success = await captureLead(
-        { email: formData.email || undefined, fullName: formData.fullName, phone: formData.phone, nationality: formData.nationality || undefined },
+        { email: formData.email || undefined, fullName: formData.fullName, phone: formData.phone, nationality: formData.nationality || undefined, honeypot },
         "brokers-join"
       );
       if (success) { localStorage.removeItem(DRAFT_KEY); navigate("/thank-you?type=broker"); }
@@ -183,6 +185,8 @@ const JoinBrokerList = () => {
 
               {/* Form Card */}
               <motion.form variants={fadeInUp} onSubmit={handleSubmit} className="bg-[#FDFBF7] shadow-lg border border-[#B89555]/30 p-6 md:p-8 space-y-6">
+                <HoneypotField value={honeypot} onChange={setHoneypot} name="broker_company_website" />
+
                 {/* Section 1: Contact Details */}
                 <div className="space-y-1 mb-4">
                   <h3 className="text-lg font-bold text-foreground tracking-wide uppercase flex items-center gap-2">

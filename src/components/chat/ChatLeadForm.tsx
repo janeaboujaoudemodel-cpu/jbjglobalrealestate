@@ -8,6 +8,7 @@ import { UserCircle, Mail, Phone as PhoneIcon, Globe, MapPin, Calendar } from 'l
 import { Link } from 'react-router-dom';
 import { UserInfo, AGE_RANGES, LANGUAGES, validateEmail, validateE164Phone } from './types';
 import { T } from '@/components/ui/T';
+import { HoneypotField } from '@/components/forms/HoneypotField';
 
 interface ChatLeadFormProps {
   userInfo: UserInfo;
@@ -15,14 +16,18 @@ interface ChatLeadFormProps {
   onSubmit: () => void;
   formErrors: Record<string, string>;
   setFormErrors: (errors: Record<string, string>) => void;
+  honeypot: string;
+  onHoneypotChange: (value: string) => void;
 }
 
-const ChatLeadForm = ({ 
-  userInfo, 
-  onUserInfoChange, 
-  onSubmit, 
-  formErrors, 
-  setFormErrors 
+const ChatLeadForm = ({
+  userInfo,
+  onUserInfoChange,
+  onSubmit,
+  formErrors,
+  setFormErrors,
+  honeypot,
+  onHoneypotChange,
 }: ChatLeadFormProps) => {
 
   const validateForm = (): boolean => {
@@ -62,6 +67,7 @@ const ChatLeadForm = ({
 
   return (
     <ScrollArea className="flex-1 p-4" data-jbj-form>
+      <HoneypotField value={honeypot} onChange={onHoneypotChange} name="chat_lead_company_website" />
       <div className="text-center mb-4">
         <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
           <UserCircle className="w-7 h-7 text-[#1A1A1A]" />

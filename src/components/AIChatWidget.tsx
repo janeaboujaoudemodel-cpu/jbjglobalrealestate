@@ -64,6 +64,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   const [step, setStep] = useState<ChatStep>('welcome_choice');
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
+  const [chatHoneypot, setChatHoneypot] = useState('');
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -454,6 +455,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           subSource: `Chat - ${serviceId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`,
           pageSource: pageSource,
           contactType: 'client',
+          honeypot: chatHoneypot,
         },
       });
 
@@ -1302,6 +1304,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
             onSubmit={() => setStep('shortcuts')}
             formErrors={formErrors}
             setFormErrors={setFormErrors}
+            honeypot={chatHoneypot}
+            onHoneypotChange={setChatHoneypot}
           />
         )}
 

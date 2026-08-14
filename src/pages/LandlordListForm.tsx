@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { toast } from "sonner";
 import { FormDraftBar } from "@/components/shared/FormDraftBar";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const DRAFT_KEY = "jbj_landlord_list_draft";
 
@@ -49,6 +50,7 @@ const LandlordListForm = () => {
   const navigate = useNavigate();
   const { captureLead } = useLeadCapture();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const loadDraft = () => {
     try {
@@ -98,6 +100,7 @@ const LandlordListForm = () => {
           email: formData.email || undefined,
           fullName: formData.fullName,
           phone: formData.phone,
+          honeypot,
         },
         "landlord-onboarding"
       );
@@ -229,6 +232,8 @@ const LandlordListForm = () => {
                 onSubmit={handleSubmit}
                 className="jj-card-inner p-8 space-y-6"
               >
+                <HoneypotField value={honeypot} onChange={setHoneypot} name="landlord_company_website" />
+
                 {/* Contact Details */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-white">Contact Details</h3>

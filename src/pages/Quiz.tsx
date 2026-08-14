@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 import { useQuizUsage } from "@/hooks/useQuizUsage";
 import { useSubscription } from "@/hooks/useSubscription";
 import { 
@@ -498,6 +499,7 @@ const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { isLeadCaptured, captureLead, checkLead } = useLeadCapture();
+  const { honeypot, setHoneypot } = useHoneypot();
   // AI Home Finder is free but limited to ONE run per user/device.
   // A subscription is required for any subsequent run.
   const { hasUsedFreeQuiz, markFreeUsed: persistFreeUsed } = useQuizUsage();
@@ -1064,6 +1066,7 @@ const Quiz = () => {
       phone: formData.phone,
       nationality: formData.nationality,
       language: formData.preferredLanguage,
+      honeypot,
     }, 'ai_home_finder');
     await proceedToResults();
   };
@@ -1363,6 +1366,7 @@ const Quiz = () => {
             </div>
 
             <div className="aihf-card border border-white/30 rounded-2xl p-6 md:p-8">
+              <HoneypotField value={honeypot} onChange={setHoneypot} name="quiz_company_website" />
               <div className="space-y-5">
                 <div>
                   <Label className="text-[#1A1A1A] mb-2 block">Full Name *</Label>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building2, HelpCircle, Send, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 interface OffPlanInquiryCTAProps {
   variant?: "full" | "compact";
@@ -20,6 +21,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
     phone: "",
     message: "",
   });
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +36,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
       const sourceContext = sourcePage.split('/').filter(Boolean).join(' > ');
       const { error } = await supabase.functions.invoke("capture-lead", {
         body: {
+          honeypot,
           email: formData.email,
           fullName: formData.name,
           phone: formData.phone || undefined,
@@ -75,6 +78,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
             Speak with our off-plan specialists to find the perfect investment opportunity.
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+            <HoneypotField value={honeypot} onChange={setHoneypot} name="offplan_cta_company_website" />
             <Input
               type="email"
               placeholder="Your email"
@@ -138,6 +142,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
               </h3>
               
               <form onSubmit={handleSubmit} className="space-y-4">
+                <HoneypotField value={honeypot} onChange={setHoneypot} name="offplan_cta_company_website" />
                 <Input
                   type="text"
                   placeholder="Your Name *"
