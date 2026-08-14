@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import GlobalSearchModal from "@/components/GlobalSearchModalLazy";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
 const AdvancedFilterPanel = lazy(() => import("@/components/filters/AdvancedFilterPanel"));
-import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/shortcutFilterState";
 import { HeaderControl, HeaderSegmented } from "@/components/ui/ds/HeaderControl";
 
 /** Encode filter state into URLSearchParams */

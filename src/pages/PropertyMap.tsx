@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { MapPin, List, X, ChevronRight, ExternalLink, Bed, Maximize, Calendar, Grid3X3, ArrowUpDown, Search } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
-import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/shortcutFilterState";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";

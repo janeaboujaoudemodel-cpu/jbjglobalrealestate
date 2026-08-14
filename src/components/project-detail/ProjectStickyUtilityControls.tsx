@@ -10,7 +10,7 @@ import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { HeaderControl, HeaderSegmented } from "@/components/ui/ds/HeaderControl";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useAuth } from "@/contexts/AuthContext";
-import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/shortcutFilterState";
 
 function encodeFiltersToURL(f: ShortcutFilterState): URLSearchParams {
   const p = new URLSearchParams();

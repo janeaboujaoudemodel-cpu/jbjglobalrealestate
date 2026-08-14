@@ -5,11 +5,14 @@
  */
 import { useState, useCallback, useEffect, lazy, Suspense } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import FilterShortcutBar, {
+import {
   type ShortcutFilterState,
   defaultShortcutFilters,
-} from "@/components/filters/FilterShortcutBar";
+} from "@/components/filters/shortcutFilterState";
+// Loaded on demand: keeps the 53 kB filter bar out of the main entry chunk.
+const FilterShortcutBar = lazy(() => import("@/components/filters/FilterShortcutBar"));
 import { encodeFilters, decodeFilters } from "./filterUrl";
+
 
 
 /** Session-only key for active filters. Never persist between close/re-open. */
@@ -140,13 +143,16 @@ export default function GlobalFilterBar() {
       {/* pr clears the fixed right Contact-Us rail so the last chip
           ("Construction…") never gets cropped on narrow desktops. */}
       <div className="pl-3 pr-3 lg:pr-[64px] py-1">
-        <FilterShortcutBar
-          variant="light"
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          resultsLabel="Properties"
-        />
+        <Suspense fallback={<div className="h-[64px]" aria-hidden="true" />}>
+          <FilterShortcutBar
+            variant="light"
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            resultsLabel="Properties"
+          />
+        </Suspense>
       </div>
+
     </div>
   );
 }

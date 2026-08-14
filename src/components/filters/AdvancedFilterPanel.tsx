@@ -15,8 +15,8 @@ import { GEO_COUNTRIES, getCountry } from "@/data/geography";
 
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
-import type { ShortcutFilterState } from "./FilterShortcutBar";
-import { defaultShortcutFilters } from "./FilterShortcutBar";
+import type { ShortcutFilterState } from "./shortcutFilterState";
+import { defaultShortcutFilters } from "./shortcutFilterState";
 import {
   filterInput,
   filterLabel,
