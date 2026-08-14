@@ -25,6 +25,7 @@ import { z } from "npm:zod@3";
 import { sendViaResend } from "../_shared/resendClient.ts";
 import { wrapEmailHtml } from "../_shared/email-shell.ts";
 import { OWNER_ALERT_RECIPIENTS } from "../_shared/owner-alerts.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -92,6 +93,14 @@ const waDigits = (phone?: string | null) => (phone || "").replace(/\D/g, "");
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // SECURITY: public intake — IP blocklist + rate limit (5 req / 10 min per IP).
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "advisory-desk-request", maxRequests: 5, windowMinutes: 10 },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
 
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {

@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { z } from "https://esm.sh/zod@3.23.8";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const Body = z.object({
   full_name: z.string().trim().min(1).max(200),
@@ -22,6 +23,14 @@ const supabase = createClient(
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // SECURITY: public intake — IP blocklist + rate limit (5 req / 10 min per IP).
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "submit-lead", maxRequests: 5, windowMinutes: 10 },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
   try {
     const parsed = Body.safeParse(await req.json());
     if (!parsed.success) {

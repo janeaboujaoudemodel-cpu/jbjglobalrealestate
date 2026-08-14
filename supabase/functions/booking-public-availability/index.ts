@@ -2,6 +2,7 @@
 // Returns available start times for a given booking page slug and date.
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -93,6 +94,14 @@ function zonedTimeToUtc(local: string, tz: string): Date {
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+
+  // SECURITY: public intake — IP blocklist + rate limit (60 req / 5 min per IP).
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "booking-public-availability", maxRequests: 60, windowMinutes: 5 },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
   try {
     const url = new URL(req.url);
     const slug = url.searchParams.get('slug');
