@@ -1,0 +1,93 @@
+/**
+ * PASS 366 — MOON RAIL: DEEP TOP, LIGHT MIDDLE ONLY, NO ICON HIGHLIGHT (LOCKED)
+ *
+ * The open rail was still reading greenish at the very top. In Moon (and the
+ * default/unset skin) BOTH the collapsed rail and the expanded panel now use
+ * one gradient whose density matches the bottom: deepest emerald-black at the
+ * top, a single lighter emerald lift through the middle, black at the base.
+ * No plate, box or outline is ever painted behind the icons or rows.
+ *
+ * Sun and the owner/backend shell are untouched.
+ */
+
+:root {
+  --jj-rail-deep-v: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #021610 14%,
+    #043726 50%,
+    #021610 78%,
+    #000000 100%
+  );
+}
+
+/* ── 1. One gradient for collapsed rail + expanded panel ───────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is([data-sidebar-emerald], .jj-rail-emerald-edge)[data-sidebar-emerald],
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] > :is(div, aside),
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] .jj-rail-emerald-edge,
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is([data-sidebar-emerald], .jj-rail-emerald-edge)[data-sidebar-emerald],
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] > :is(div, aside),
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] .jj-rail-emerald-edge {
+  background-color: #01120b !important;
+  background: var(--jj-rail-deep-v) !important;
+  background-image: var(--jj-rail-deep-v) !important;
+  background-attachment: local !important;
+}
+
+/* The 264px expanded column shares the rail's own gradient, so the seam
+   between rail and panel is invisible and the top stays deep. */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] nav,
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] nav {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* ── 2. Absolutely no highlight around the icons or rows ───────────────── */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is(
+    nav a, nav button,
+    .jj-side-tile, .jj-side-tile.is-active,
+    .jj-side-auth-tile, .jj-rail-stack,
+    [data-jjds-sidebar-icon], [data-sidebar-section-label]
+  ),
+html[data-jbjs-theme="moon"] body div#root div[data-chrome="sidebar"] nav a,
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is(nav a, nav button, .jj-side-tile, .jj-side-auth-tile, [data-jjds-sidebar-icon]):is(:hover, :focus, :active),
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is(
+    nav a, nav button,
+    .jj-side-tile, .jj-side-tile.is-active,
+    .jj-side-auth-tile, .jj-rail-stack,
+    [data-jjds-sidebar-icon], [data-sidebar-section-label]
+  ),
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"]
+  :is(nav a, nav button, .jj-side-tile, .jj-side-auth-tile, [data-jjds-sidebar-icon]):is(:hover, :focus, :active) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Keep pure white ink/icons on the emerald rail (Rule 2). */
+html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] :is(nav a, nav button, .jj-side-tile) :is(span, svg, path),
+html:not([data-jbj-theme="sun"]):not([data-jbj-backend-lock="1"])
+  body div#root div[data-chrome="sidebar"] :is(nav a, nav button, .jj-side-tile) :is(span, svg, path) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
