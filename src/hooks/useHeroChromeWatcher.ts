@@ -41,12 +41,15 @@ function hasRenderedMedia(hero: HTMLElement): boolean {
   const media = hero.querySelectorAll<HTMLElement>("video, img, picture img, canvas");
   for (const el of Array.from(media)) {
     const r = el.getBoundingClientRect();
-    // Must be a real, visible, hero-sized surface — not a small logo or icon.
-    if (r.width >= 200 && r.height >= 160) {
-      const cs = getComputedStyle(el);
-      if (cs.visibility !== "hidden" && cs.display !== "none" && Number(cs.opacity) > 0.05) return true;
-    }
+    // Must be a real, hero-sized surface — not a small logo or icon.
+    // NOTE: `visibility`/`opacity` are intentionally NOT checked. Hero videos and
+    // photos fade in after load, so a strict visibility test made a photographic
+    // hero read as "no media" for the first frames — which is exactly the
+    // "sometimes filled instead of transparent" bug.
+    if (r.width >= 200 && r.height >= 160 && getComputedStyle(el).display !== "none") return true;
   }
+
+
 
   // Photographic background-image (CSS hero), including on inner layers.
   const layers: HTMLElement[] = [hero, ...Array.from(hero.querySelectorAll<HTMLElement>(":scope > *, :scope > * > *"))];
