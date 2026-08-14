@@ -225,7 +225,8 @@ const OverseasInvestorsStrip = () => {
           background: rgba(255,255,255,0.62) !important;
         }
         /* Emerald accent plate keeps white ink in both skins (pair lock). */
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-slab-index {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-slab .oi-slab-index.oi-slab-index,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-slab .oi-slab-index.oi-slab-index * {
           background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
