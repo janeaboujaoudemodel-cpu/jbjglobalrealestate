@@ -3,8 +3,8 @@
  * Side-by-side renders of every Lucide icon at 12px / 16px / 20px so the team
  * can verify strokes stay crisp at small sizes used across the platform.
  */
-import React, { useMemo, useState } from "react";
-import * as LucideIcons from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
