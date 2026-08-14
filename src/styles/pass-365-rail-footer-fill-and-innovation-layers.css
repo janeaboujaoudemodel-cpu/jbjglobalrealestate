@@ -1,0 +1,100 @@
+/**
+ * PASS 365 — RAIL FOOTER ALWAYS FILLED + INNOVATION LAYER CAKE (LOCKED)
+ *
+ * Bug: on hero-clear routes the open sidebar's footer block was forced
+ * transparent, so page names scrolling under the divider stayed visible
+ * through the footer. The footer fill is now MANDATORY in both skins —
+ * only the surrounding rail may go clear over a hero, never the footer.
+ *
+ * Fill: Moon #01120b (emerald→black floor), Sun #F4EDDF (champagne floor).
+ * Ink follows the skin (Moon white / Sun black) per the brand contract.
+ */
+
+/* ── 1. Footer block is opaque in every mode, including hero-clear ─────── */
+html body #root [data-chrome="sidebar"] .jj-rail-footer-block,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-block,
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald] .jj-rail-footer-block {
+  position: relative !important;
+  z-index: 8 !important;
+  isolation: isolate !important;
+  background-color: #01120b !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+}
+html body #root [data-chrome="sidebar"] .jj-rail-footer-block::before,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-block::before,
+html body[data-jj-hero-chrome="clear"] #root [data-sidebar-emerald] .jj-rail-footer-block::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -1px 0 0 0 !important;
+  z-index: -1 !important;
+  background-color: #01120b !important;
+  background-image: none !important;
+}
+html body #root [data-chrome="sidebar"] .jj-rail-footer-inner,
+html body[data-jj-hero-chrome="clear"] #root [data-chrome="sidebar"] .jj-rail-footer-inner {
+  position: relative !important;
+  background: transparent !important;
+}
+
+/* Sun skin floor — champagne, black ink. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] .jj-rail-footer-block,
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] .jj-rail-footer-block::before {
+  background-color: #F4EDDF !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"]
+  .jj-rail-footer-block :is(a, button, span, svg, path) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html[data-jbj-theme="moon"] body #root [data-chrome="sidebar"]
+  .jj-rail-footer-block :is(a, button, span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* ── 2. Divider is a solid edge, not a see-through gradient ───────────── */
+html body #root [data-chrome="sidebar"] :is(.jj-rail-footer-rule, .jj-rail-footer-divider) {
+  background: rgba(255, 255, 255, 0.28) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"]
+  :is(.jj-rail-footer-rule, .jj-rail-footer-divider) {
+  background: rgba(26, 26, 26, 0.18) !important;
+  background-image: none !important;
+}
+
+/* ── 3. Innovation layer cake — animated stacked layers ───────────────── */
+.jj-layers-stage {
+  perspective: 1100px;
+}
+.jj-layer-slab {
+  transform-style: preserve-3d;
+  animation: jj365-slab-float 7s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes jj365-slab-float {
+  0%, 100% { transform: rotateX(52deg) rotateZ(-38deg) translateZ(0); }
+  50% { transform: rotateX(52deg) rotateZ(-38deg) translateZ(14px); }
+}
+.jj-layer-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: jj365-sheen 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes jj365-sheen {
+  0%, 60% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-layer-slab { animation: none !important; }
+  .jj-layer-sheen::after { animation: none !important; opacity: 0 !important; }
+}

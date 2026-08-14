@@ -1,0 +1,56 @@
+/**
+ * PASS 364 — RAIL: NO GOLD, WHITE MONOGRAM, CALM RHYTHM (LOCKED)
+ * Emerald surface, pure white ink/icons, no gold plates or borders,
+ * soft icon lift on hover instead of a coloured highlight tile.
+ */
+
+html body #root [data-chrome="sidebar"] img[alt="JBJ"] {
+  filter: brightness(0) invert(1) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-chrome="sidebar"] .jj-rail-brand-link:hover {
+  background: transparent !important;
+}
+
+html body #root [data-chrome="sidebar"] .jj-scrollbar-gold {
+  scrollbar-color: rgba(255, 255, 255, 0.24) transparent !important;
+}
+html body #root [data-chrome="sidebar"] .jj-scrollbar-gold::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+
+html body #root [data-chrome="sidebar"] [class*="from-gold"],
+html body #root [data-chrome="sidebar"] [class*="to-gold"],
+html body #root [data-chrome="sidebar"] [class*="bg-gold"] {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-color: transparent !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-chrome="sidebar"] [class*="from-gold"] :is(span, svg, path),
+html body #root [data-chrome="sidebar"] [class*="to-gold"] :is(span, svg, path),
+html body #root [data-chrome="sidebar"] [class*="bg-gold"] :is(span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+html body #root [data-chrome="sidebar"] a:hover > svg:first-child,
+html body #root [data-chrome="sidebar"] button:hover > svg:first-child {
+  animation: jj364-icon-lift 380ms ease both;
+}
+@keyframes jj364-icon-lift {
+  0% { transform: translateY(0) scale(1); }
+  45% { transform: translateY(-2px) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root [data-chrome="sidebar"] a:hover > svg:first-child,
+  html body #root [data-chrome="sidebar"] button:hover > svg:first-child {
+    animation: none !important;
+  }
+}
