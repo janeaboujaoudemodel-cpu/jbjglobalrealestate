@@ -20,24 +20,15 @@
   stroke: #FFFFFF !important;
 }
 
-/* Sun (champagne page) → black ink. */
-html[data-jbj-theme="sun"] .jj-ai-gate-title,
-html[data-jbj-theme="sun"] .jj-ai-gate-sub {
+/* Headline + subhead sit on the tool's white/champagne shell card in BOTH
+   skins, so they follow the light-surface rule: black ink. */
+html body .jj-ai-gate-title:not(#\a):not(#\b):not(#\c),
+html body .jj-ai-gate-sub:not(#\a):not(#\b):not(#\c) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html[data-jbj-theme="sun"] .jj-ai-gate-sub {
+html body .jj-ai-gate-sub:not(#\a):not(#\b):not(#\c) {
   opacity: 0.82;
-}
-
-/* Moon (emerald page) → pure white ink. */
-html[data-jbj-theme="moon"] .jj-ai-gate-title,
-html[data-jbj-theme="moon"] .jj-ai-gate-sub {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html[data-jbj-theme="moon"] .jj-ai-gate-sub {
-  opacity: 0.88;
 }
 
 /* ── Gate cards: locked emerald pair → PURE WHITE ink in BOTH skins ───────
