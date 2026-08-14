@@ -19,6 +19,7 @@ import SecurityShield from "@/components/SecurityShield";
 // Eager-load shell chrome so the sidebar + utility bar paint in the same frame as the page —
 // prevents the visible "page → sidebar → header" stagger on first load.
 import GlobalVerticalNav from "@/components/navigation/GlobalVerticalNav";
+import { useHeroChromeWatcher } from "@/hooks/useHeroChromeWatcher";
 import HorizontalUtilityBar from "@/components/navigation/HorizontalUtilityBar";
 // GlobalFilterBar is now embedded inside HorizontalUtilityBar
 import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
@@ -69,6 +70,7 @@ interface MainLayoutProps {
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
+  useHeroChromeWatcher();
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
   const isPhoneChrome = useIsPhoneChrome();

@@ -109,37 +109,13 @@ export default function HorizontalUtilityBar() {
     return () => observer.disconnect();
   }, []);
 
-  /* PASS 331 — HERO-CLEAR CHROME (LOCKED)
-     Any page that opens on a dark/photographic hero starts with fully
-     transparent top chrome (utility bar + filter bar) and white ink, exactly
-     like the homepage. The instant the visitor scrolls past the hero band the
-     chrome returns to the selected skin (Sun champagne / Moon emerald). */
-  useEffect(() => {
-    let raf = 0;
-    const apply = () => {
-      raf = 0;
-      const hero = document.querySelector('[data-hero-dark]') as HTMLElement | null;
-      let overHero = false;
-      if (hero) {
-        const r = hero.getBoundingClientRect();
-        overHero = r.height > 240 && r.bottom > 140 && window.scrollY <= 80;
-      }
-      document.body.setAttribute('data-jj-hero-chrome', overHero ? 'clear' : 'solid');
-    };
-    const onChange = () => {
-      if (!raf) raf = requestAnimationFrame(apply);
-    };
-    apply();
-    const poll = window.setInterval(apply, 400);
-    window.addEventListener('scroll', onChange, { passive: true });
-    window.addEventListener('resize', onChange);
-    return () => {
-      window.clearInterval(poll);
-      window.removeEventListener('scroll', onChange);
-      window.removeEventListener('resize', onChange);
-      document.body.removeAttribute('data-jj-hero-chrome');
-    };
-  }, []);
+  /* HERO CHROME — detection now lives in `useHeroChromeWatcher`
+     (src/hooks/useHeroChromeWatcher.ts), mounted globally in MainLayout and
+     OwnerDashboardShell so it also runs on back-office routes and re-evaluates
+     on route change + hero media load. This bar only *reads*
+     `body[data-jj-hero-chrome]` via `useControlSkin()`. */
+
+
 
 
   const toggleAreaUnit = () => {
