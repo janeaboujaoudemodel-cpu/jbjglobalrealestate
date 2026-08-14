@@ -1830,14 +1830,16 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
             Welcome · Private access portal
           </span>
 
-          {/* Trimmed monogram: the original asset carries a huge transparent
-              margin, which made the mark look tiny inside the card. */}
+          {/* Black monogram (owner-locked for this portal card), trimmed so the
+              mark fills the space instead of floating in transparent margin. */}
           <img
             data-no-fallback
-            src={new URL("@/assets/jbj-monogram-light-trimmed.png", import.meta.url).href}
+            data-jbj-portal-monogram
+            src={new URL("@/assets/jbj-monogram-black-trimmed.png", import.meta.url).href}
             alt="JBJ"
-            className="h-24 w-auto object-contain opacity-100 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-28"
+            className="h-24 w-auto object-contain opacity-100 sm:h-28"
           />
+
 
 
           <h2 id="jbj-welcome-portal-title" className="mt-5 font-serif text-2xl leading-tight text-white sm:text-3xl">
