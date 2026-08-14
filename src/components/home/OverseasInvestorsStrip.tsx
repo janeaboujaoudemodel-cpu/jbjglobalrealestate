@@ -170,49 +170,49 @@ const OverseasInvestorsStrip = () => {
 
         /* Sun skin — brighter champagne surface matching the vertical rail,
            black ink and icons per the brand contrast contract. */
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-surface {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-surface {
           background: linear-gradient(135deg, #FBF6EC 0%, #F4EDDF 52%, #EFE6D6 100%) !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band,
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band * {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band * {
           color: #1A1A1A !important;
           -webkit-text-fill-color: #1A1A1A !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band svg,
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band svg * {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band svg,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band svg * {
           stroke: #1A1A1A !important;
           color: #1A1A1A !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-muted,
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-muted *,
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-faint,
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-faint * {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-muted,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-muted *,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-faint,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-faint * {
           color: rgba(26,26,26,0.72) !important;
           -webkit-text-fill-color: rgba(26,26,26,0.72) !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-meter {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-meter {
           background: rgba(26,26,26,0.14) !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-meter > span {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-meter > span {
           background: linear-gradient(90deg, rgba(6,78,59,0.45), #064E3B) !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-slab {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-slab {
           border-color: rgba(6,78,59,0.22) !important;
           background: rgba(255,255,255,0.62) !important;
         }
         /* Emerald accent plate keeps white ink in both skins (pair lock). */
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-slab-index {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-slab-index {
           background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .jj-cta-emerald,
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .jj-cta-emerald * {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .jj-cta-emerald,
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .jj-cta-emerald * {
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           stroke: #FFFFFF !important;
         }
-        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) .oi-band .oi-metallic::after {
+        html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-metallic::after {
           display: none !important;
         }
         @media (prefers-reduced-motion: reduce) {
