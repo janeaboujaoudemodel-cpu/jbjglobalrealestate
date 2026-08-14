@@ -1,0 +1,126 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 355 — HERO-CLEAR HEADER: ZERO HIGHLIGHT (LOCKED)
+   ═══════════════════════════════════════════════════════════════════════
+   While the top chrome is clear (page sits on its hero, or the header is
+   painting its transparent dark identity) NOTHING in the bar wears a plate:
+   the account avatar, its notification badge, the Mode: Investor pill and
+   the sq ft / sq m pair are fully transparent with pure white ink and at
+   most one whisper hairline. Tapping sq ft / sq m never paints a plate —
+   the chrome only takes colour once the visitor scrolls past the hero.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* 1 — Account avatar: bare white ring, no champagne / emerald plate. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jbj-avatar],
+html body div#root header[data-header-surface="dark"] [data-jbj-avatar] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26) !important;
+  filter: none !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jbj-avatar] > span[aria-hidden="true"],
+html body div#root header[data-header-surface="dark"] [data-jbj-avatar] > span[aria-hidden="true"],
+html body[data-jj-hero-chrome="clear"] div#root [data-jbj-avatar]::before,
+html body[data-jj-hero-chrome="clear"] div#root [data-jbj-avatar]::after,
+html body div#root header[data-header-surface="dark"] [data-jbj-avatar]::before,
+html body div#root header[data-header-surface="dark"] [data-jbj-avatar]::after {
+  display: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* 2 — Notification badge: no plate, no ring glow — white digits only. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jbj-notification-badge],
+html body div#root header[data-header-surface="dark"] [data-jbj-notification-badge],
+html body[data-jj-hero-chrome="clear"] div#root [data-jbj-notification-badge] > span,
+html body div#root header[data-header-surface="dark"] [data-jbj-notification-badge] > span {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* 3 — Mode: Investor pill: transparent with one hairline, white ink. */
+html body[data-jj-hero-chrome="clear"] div#root [data-mode-trigger],
+html body div#root header[data-header-surface="dark"] [data-mode-trigger] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-mode-trigger]::before,
+html body[data-jj-hero-chrome="clear"] div#root [data-mode-trigger]::after,
+html body div#root header[data-header-surface="dark"] [data-mode-trigger]::before,
+html body div#root header[data-header-surface="dark"] [data-mode-trigger]::after {
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+}
+
+/* 4 — sq ft / sq m: the pair and the ACTIVE segment stay fully transparent,
+      in every state (default, hover, focus, active, aria-pressed). The active
+      side is told apart by full-strength white ink, never by a plate. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] :is([data-jjds-segmented], [data-jj-utility-pill]) :is(button, .jj-sqtoggle),
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle:hover,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle:focus,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle:focus-visible,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle:active,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:hover,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle[aria-pressed="true"],
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] button[aria-pressed="true"],
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle,
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle[data-active="true"],
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle[aria-pressed="true"],
+html body div#root header[data-header-surface="dark"] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html body div#root header[data-header-surface="dark"] button[aria-pressed="true"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle:not([data-active="true"]),
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle:not([data-active="true"]) {
+  opacity: 0.72 !important;
+}
+
+/* The metallic sweep layer never runs while the chrome is clear. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle-sweep,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle::before,
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] .jj-sqtoggle::after,
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle-sweep,
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle::before,
+html body div#root header[data-header-surface="dark"] .jj-sqtoggle::after {
+  display: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* 5 — The utility pill wrapper holding the pair keeps one outer hairline only. */
+html body[data-jj-hero-chrome="clear"] div#root [data-jj-utility-bar] [data-jj-utility-pill],
+html body div#root header[data-header-surface="dark"] [data-jj-utility-pill] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+}
