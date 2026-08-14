@@ -101,8 +101,13 @@ html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup
    ink would break the contrast contract, so buttons stay white-on-emerald. */
 html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button,
 html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] [role="button"] {
-  background-image: none !important;
-  background-color: rgba(255, 255, 255, 0.10) !important;
+  background: transparent !important;
+}
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button.jj-rec-cta {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button.jj-rec-cta:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
 }
 html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button:hover,
 html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] [role="button"]:hover {
