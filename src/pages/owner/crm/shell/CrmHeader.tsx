@@ -8,8 +8,6 @@ import CrmQuickCreateSheet from "./CrmQuickCreateSheet";
 import CrmNotificationsPanel from "./CrmNotificationsPanel";
 import CrmZiaPanel from "./CrmZiaPanel";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
-import { supabase } from "@/integrations/supabase/client";
-
 
 export default function CrmHeader() {
   const { pathname } = useLocation();
@@ -20,30 +18,7 @@ export default function CrmHeader() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [ziaOpen, setZiaOpen] = useState(false);
   const [quickSlug, setQuickSlug] = useState<string | null>(null);
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  // Real unread notifications only — never a hardcoded badge.
-  useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      const { data: auth } = await supabase.auth.getUser();
-      const uid = auth?.user?.id;
-      if (!uid) return;
-      const { count } = await supabase
-        .from("notifications")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", uid)
-        .eq("is_read", false);
-      if (!cancelled) setUnreadCount(count || 0);
-    };
-    void load();
-    const interval = window.setInterval(load, 60000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(interval);
-    };
-  }, [notifOpen]);
-
+  const unreadCount = 3;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

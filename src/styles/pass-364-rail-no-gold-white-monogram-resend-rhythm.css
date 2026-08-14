@@ -1,45 +1,27 @@
 /**
- * PASS 364 — RAIL: NO GOLD, WHITE MONOGRAM, RESEND RHYTHM (LOCKED)
- *
- * Owner mandate:
- *  - The vertical sidebar (rail + expanded + its mega panels) carries NO gold
- *    borders, NO gold pills, NO highlight plates. Emerald surface, pure white
- *    ink and icons in every state (brand contract Rule 2).
- *  - The JBJ monogram is pure white only.
- *  - Row rhythm follows the Resend reference: calm 36px rows, 2px gaps,
- *    a soft icon lift on hover instead of a coloured plate.
- *
- * Scoped to the sidebar chrome only — never public page content.
+ * PASS 364 — RAIL: NO GOLD, WHITE MONOGRAM, CALM RHYTHM (LOCKED)
+ * Emerald surface, pure white ink/icons, no gold plates or borders,
+ * soft icon lift on hover instead of a coloured highlight tile.
  */
 
-/* ── 1. Monogram: pure white, no plate, no glow ───────────────────────── */
-html body #root [data-chrome="sidebar"] img[alt="JBJ"],
-html body #root [data-jj-drawer-panel] img[alt="JBJ"] {
+html body #root [data-chrome="sidebar"] img[alt="JBJ"] {
   filter: brightness(0) invert(1) !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
-  border-radius: 0 !important;
 }
 
-/* ── 2. Brand band: no divider, no gold seam ──────────────────────────── */
-html body #root [data-chrome="sidebar"] [data-sidebar-brand-row],
-html body #root [data-chrome="sidebar"] .jj-rail-brand-band,
-html body #root [data-chrome="sidebar"] .jj-rail-brand-link {
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
 html body #root [data-chrome="sidebar"] .jj-rail-brand-link:hover {
   background: transparent !important;
 }
 
-/* ── 3. Kill every gold surface inside the sidebar + its mega panels ───── */
 html body #root [data-chrome="sidebar"] .jj-scrollbar-gold {
   scrollbar-color: rgba(255, 255, 255, 0.24) transparent !important;
 }
 html body #root [data-chrome="sidebar"] .jj-scrollbar-gold::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.24) !important;
 }
+
 html body #root [data-chrome="sidebar"] [class*="from-gold"],
 html body #root [data-chrome="sidebar"] [class*="to-gold"],
 html body #root [data-chrome="sidebar"] [class*="bg-gold"] {
@@ -56,20 +38,7 @@ html body #root [data-chrome="sidebar"] [class*="bg-gold"] :is(span, svg, path) 
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
-html body #root [data-chrome="sidebar"] [class*="border-[hsl(var(--gold))]"],
-html body #root [data-chrome="sidebar"] [class*="border-[#B89555]"] {
-  border-color: rgba(255, 255, 255, 0.16) !important;
-}
 
-/* ── 4. No highlight plate behind icons or rows — hover is a soft wash ─── */
-html body #root [data-chrome="sidebar"] a:hover,
-html body #root [data-chrome="sidebar"] button:hover {
-  box-shadow: none !important;
-}
-html body #root [data-chrome="sidebar"] a:hover :is(svg, path),
-html body #root [data-chrome="sidebar"] button:hover :is(svg, path) {
-  color: #FFFFFF !important;
-}
 html body #root [data-chrome="sidebar"] a:hover > svg:first-child,
 html body #root [data-chrome="sidebar"] button:hover > svg:first-child {
   animation: jj364-icon-lift 380ms ease both;
@@ -79,16 +48,6 @@ html body #root [data-chrome="sidebar"] button:hover > svg:first-child {
   45% { transform: translateY(-2px) scale(1.08); }
   100% { transform: translateY(0) scale(1); }
 }
-
-/* ── 5. Resend rhythm — calm rows, even gaps ───────────────────────────── */
-@media (min-width: 1024px) {
-  html body #root [data-chrome="sidebar"] [data-rail-state="expanded"] nav a,
-  html body #root [data-chrome="sidebar"] [data-rail-state="expanded"] nav button {
-    min-height: 36px !important;
-  }
-}
-
-/* ── 6. Reduced motion respects the lift ──────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html body #root [data-chrome="sidebar"] a:hover > svg:first-child,
   html body #root [data-chrome="sidebar"] button:hover > svg:first-child {

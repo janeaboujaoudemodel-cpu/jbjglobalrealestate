@@ -28,22 +28,14 @@ export default function OwnerLeadNotificationListener() {
     pathname === "/admin" ||
     pathname.startsWith("/admin/");
 
-  // One toast at a time, no matter how many leads land. Re-firing uses the
-  // same toast id so 300 leads never mean 300 pop-ups to dismiss.
-  const TOAST_ID = "owner-new-leads";
-
   useEffect(() => {
     // Client/lead notifications are private CRM data. Never subscribe, poll,
     // or render them on public, access-gate, or non-owner portal routes.
-    // A toast raised inside the back end is global and infinite-duration, so
-    // the moment the guard turns false we must also tear the visible card
-    // down — otherwise client names/phones stay on screen on public routes.
-    if (!user || !isOwner || !isOwnerBackendRoute) {
-      toast.dismiss(TOAST_ID);
-      seenRef.current.clear();
-      return;
-    }
+    if (!user || !isOwner || !isOwnerBackendRoute) return;
 
+    // One toast at a time, no matter how many leads land. Re-firing uses the
+    // same toast id so 300 leads never mean 300 pop-ups to dismiss.
+    const TOAST_ID = "owner-new-leads";
 
     const markAllRead = async () => {
       await supabase
@@ -138,10 +130,7 @@ export default function OwnerLeadNotificationListener() {
     return () => {
       window.clearInterval(interval);
       supabase.removeChannel(channel);
-      // Unmount (route change, sign-out) must never leave a client card behind.
-      toast.dismiss(TOAST_ID);
     };
-
   }, [user, isOwner, isOwnerBackendRoute]);
 
   return null;
