@@ -185,3 +185,19 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
 }
+
+/* ───────── 7. Tailwind emerald utility fills (Sun, AI scope) ─────────
+   Start-gate method cards use `bg-emerald-500/…` utilities; in Sun the global
+   ink lock writes black on them. Repaint to champagne so ink stays black.
+   (Moon is untouched — the same markup keeps its emerald there.) */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  [class*="bg-emerald-"]:not(.allow-white):not([data-preserve-surface]):not([data-brand-hero] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *) {
+  background: linear-gradient(160deg, #F4EDDF 0%, #EAE0CC 100%) !important;
+  background-image: linear-gradient(160deg, #F4EDDF 0%, #EAE0CC 100%) !important;
+  background-color: #F0E7D5 !important;
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
