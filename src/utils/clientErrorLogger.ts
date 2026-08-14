@@ -9,8 +9,12 @@
  *  - sessionStorage mirror (key: `jbj_error_log`) so QA can copy/paste
  *    after a navigation
  *
- * No PII, no network egress. Safe in production.
+ * Also forwards to Sentry (see src/lib/sentry.ts) so the team gets an
+ * automatic alert instead of finding out from a client. Sentry forwarding
+ * is opt-in via VITE_SENTRY_DSN — with no DSN set, nothing leaves the
+ * browser and behavior is identical to before this was added.
  */
+import { captureToSentry } from "@/lib/sentry";
 
 export type JbjErrorEvent = {
   ts: string;
@@ -56,6 +60,12 @@ export function logClientError(
 
   // eslint-disable-next-line no-console
   console.error(`[jbj-error][${surface}]`, err, extra ?? {});
+
+  // Forward to Sentry (no-op if VITE_SENTRY_DSN isn't set — see src/lib/sentry.ts).
+  // This is the one place every error boundary in the app already reports
+  // through, so wiring it here covers all of them without touching each
+  // call site individually. Local buffer/console behavior above is unchanged.
+  captureToSentry(surface, err, extra);
 }
 
 export function getClientErrorLog(): JbjErrorEvent[] {
