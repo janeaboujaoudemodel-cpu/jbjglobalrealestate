@@ -1,0 +1,1 @@
+DELETE FROM public.chat_conversations WHERE user_email = 'qa.probe@example.com';

@@ -52,10 +52,32 @@ export function usePropertyCount(filters: PropertySearch, debounceMs = 350) {
         const excludeNames = filters.areasExclude.map(nameOf).filter(Boolean) as string[];
         for (const n of excludeNames) q = q.not("area_name", "eq", n);
 
-        if (filters.priceMin != null) q = q.gte("price_from", filters.priceMin);
-        if (filters.priceMax != null) q = q.lte("price_from", filters.priceMax);
-        if (filters.sizeMin != null) q = q.gte("size_min", filters.sizeMin);
-        if (filters.sizeMax != null) q = q.lte("size_max", filters.sizeMax);
+        // Price / size are RANGES on the row (price_from…price_to,
+        // size_min…size_max). A row matches when its own band OVERLAPS the
+        // requested band — comparing the max against `price_from` alone kept a
+        // 2M–40M tower under "max 3M" and made this count disagree with the
+        // grid (useProjectFilters already uses the overlap rule).
+        if (filters.priceMin != null) {
+          q = q.or(
+            `price_to.gte.${filters.priceMin},and(price_to.is.null,price_from.gte.${filters.priceMin})`,
+          );
+        }
+        if (filters.priceMax != null) {
+          q = q.or(
+            `price_from.lte.${filters.priceMax},and(price_from.is.null,price_to.lte.${filters.priceMax})`,
+          );
+        }
+        if (filters.sizeMin != null) {
+          q = q.or(
+            `size_max.gte.${filters.sizeMin},and(size_max.is.null,size_min.gte.${filters.sizeMin})`,
+          );
+        }
+        if (filters.sizeMax != null) {
+          q = q.or(
+            `size_min.lte.${filters.sizeMax},and(size_min.is.null,size_max.lte.${filters.sizeMax})`,
+          );
+        }
+
 
         if (filters.types.length) q = q.in("property_type_label", filters.types);
 
