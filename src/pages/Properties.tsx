@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { Switch } from "@/components/ui/switch";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Search, 
@@ -70,7 +70,7 @@ import PropertySearchBar from "@/components/search/PropertySearchBar";
 import "@/components/search/property-filter-refined.css";
 import ResultsToolbar from "@/components/search/ResultsToolbar";
 
-import { EMPTY_SEARCH, paramsToSearch, searchToParams, type PropertySearch } from "@/lib/propertySearch";
+import { EMPTY_SEARCH, paramsToSearch, searchToParams, type ProjectStatus, type PropertySearch } from "@/lib/propertySearch";
 import { findAreaExact } from "@/lib/areaResolver";
 import { getCountry } from "@/data/geography";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
@@ -230,20 +230,37 @@ const BATHROOM_OPTIONS = [
   { value: "4", label: "4+" },
 ];
 
-const Properties = () => {
+/**
+ * `preset` turns /resale and /distress into first-class status presets of this
+ * same page (PASS 368). They used to be `<Navigate>` redirects, which cost a
+ * second navigation, threw away any query the visitor arrived with and made the
+ * canonical URL /properties. Now the preset route renders the search directly
+ * and stays on its own path.
+ */
+const Properties = ({ preset }: { preset?: ProjectStatus } = {}) => {
   const [searchParams] = useSearchParams();
+  const { pathname } = useLocation();
+  const hydrate = useCallback(
+    (p: URLSearchParams): PropertySearch => {
+      const next = paramsToSearch(p);
+      if (!preset || p.get("status")) return next;
+      return { ...next, purpose: "buy", statuses: [preset] };
+    },
+    [preset],
+  );
   /** Unified Bayut-grade search model, hydrated from the URL. */
-  const [search, setSearch] = useState<PropertySearch>(() => paramsToSearch(searchParams));
+  const [search, setSearch] = useState<PropertySearch>(() => hydrate(searchParams));
   useEffect(() => {
-    setSearch(paramsToSearch(searchParams));
+    setSearch(hydrate(searchParams));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.toString()]);
+  }, [searchParams.toString(), hydrate]);
   const submitSearch = useCallback((next: PropertySearch) => {
     const qs = searchToParams(next).toString();
-    window.history.replaceState(null, "", `/properties${qs ? `?${qs}` : ""}`);
+    window.history.replaceState(null, "", `${pathname}${qs ? `?${qs}` : ""}`);
     setSearch(next);
     window.dispatchEvent(new CustomEvent("jbj:property-search", { detail: next }));
-  }, []);
+  }, [pathname]);
+
 
   /**
    * Markets we are still onboarding hold no inventory yet. Saying "0 properties"

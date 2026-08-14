@@ -271,9 +271,12 @@ export const PublicRoutes = () => (
     <Route path="/areas" element={<AreaGuides />} />
     <Route path="/area/:slug" element={<AreaDetail />} />
     <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
-    <Route path="/resale-properties" element={<Navigate to="/properties?purpose=buy&status=resale" replace />} />
-    <Route path="/resale" element={<Navigate to="/properties?purpose=buy&status=resale" replace />} />
-    <Route path="/distress" element={<Navigate to="/properties?purpose=buy&status=distress" replace />} />
+    {/* PASS 368 — resale / distress are real status presets of the property
+        search, not redirect hops: one navigation, own canonical path. */}
+    <Route path="/resale-properties" element={<Navigate to="/resale" replace />} />
+    <Route path="/resale" element={<Properties preset="resale" />} />
+    <Route path="/distress" element={<Properties preset="distress" />} />
+
     <Route path="/map" element={<PropertyMap />} />
     {/* Unified List Your Property page (manual + AI + browse). Old routes 301 here. */}
     <Route path="/list-property" element={<ListProperty />} />

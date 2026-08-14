@@ -4,6 +4,8 @@
  * Rendered both by the header/bar "More filters" and by any page-level
  * "Filters" button, so the user always sees the identical screen (plan §5).
  */
+import { Suspense, lazy, useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { GEO_COUNTRIES } from "@/data/geography";
 import AreaIncludeExclude from "./AreaIncludeExclude";
 import {
@@ -56,6 +58,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+const ConsultationRequestForm = lazy(() => import("@/components/ConsultationRequestForm"));
+
 const numInput =
   "h-10 w-full rounded-lg px-3 text-sm bg-[#FDFBF7] border border-[#B89555]/35 outline-none";
 
@@ -71,7 +75,14 @@ interface Props {
 }
 
 export default function PropertyFilterScreen({ value: f, onChange, count, onApply, onReset, onSellSelected }: Props) {
+  /**
+   * B.9 — rent frequency has no backing inventory column, so a frequency pick
+   * must never pretend to filter. Picking one opens the consultation flow with
+   * an honest "coming soon / we'll notify you" message instead.
+   */
+  const [rentPeriodAsk, setRentPeriodAsk] = useState<string | null>(null);
   const set = (patch: Partial<PropertySearch>) => onChange(sanitizeSearchForPurpose({ ...f, ...patch }));
+
   const offPlanAxes = supportsOffPlanAxes(f.purpose);
   const toggleIn = <T extends string>(arr: T[], v: T): T[] =>
     arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
@@ -102,12 +113,20 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
           {f.purpose === "rent" && (
             <div className="flex flex-wrap gap-1.5 mt-2">
               {RENT_PERIODS.map((p) => (
-                <Chip key={p.slug} on={f.rentPeriod === p.slug} onClick={() => set({ rentPeriod: p.slug })}>
+                <Chip
+                  key={p.slug}
+                  on={f.rentPeriod === p.slug}
+                  onClick={() => {
+                    set({ rentPeriod: p.slug });
+                    setRentPeriodAsk(p.label);
+                  }}
+                >
                   {p.label}
                 </Chip>
               ))}
             </div>
           )}
+
         </Section>
 
         <Section title={offPlanAxes ? "Project status (multi-select)" : "Availability"}>
@@ -329,6 +348,25 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
           {count == null ? "Apply filters" : `Show ${count.toLocaleString()} propert${count === 1 ? "y" : "ies"}`}
         </button>
       </div>
+
+      {/* B.9 — rent frequency opens the consultation flow (no rental inventory yet). */}
+      <Dialog open={!!rentPeriodAsk} onOpenChange={(o) => !o && setRentPeriodAsk(null)}>
+        <DialogContent className="max-w-2xl sm:max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{rentPeriodAsk} rentals — coming soon</DialogTitle>
+            <DialogDescription>
+              New rental listings are coming soon — request a consultation and we&apos;ll notify you
+              as soon as {(rentPeriodAsk ?? "").toLowerCase()} stock is released.
+            </DialogDescription>
+          </DialogHeader>
+          <Suspense fallback={<p className="text-sm text-[#1A1A1A]/70">Loading request form…</p>}>
+            <ConsultationRequestForm
+              title="Request a rental consultation"
+              subtitle="Tell us what you need and an advisor sources it directly."
+            />
+          </Suspense>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
