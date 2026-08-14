@@ -102,12 +102,20 @@ export default function PropertyFilterScreen({ value: f, onChange, count, onAppl
           {f.purpose === "rent" && (
             <div className="flex flex-wrap gap-1.5 mt-2">
               {RENT_PERIODS.map((p) => (
-                <Chip key={p.slug} on={f.rentPeriod === p.slug} onClick={() => set({ rentPeriod: p.slug })}>
+                <Chip
+                  key={p.slug}
+                  on={f.rentPeriod === p.slug}
+                  onClick={() => {
+                    set({ rentPeriod: p.slug });
+                    setRentPeriodAsk(p.label);
+                  }}
+                >
                   {p.label}
                 </Chip>
               ))}
             </div>
           )}
+
         </Section>
 
         <Section title={offPlanAxes ? "Project status (multi-select)" : "Availability"}>
