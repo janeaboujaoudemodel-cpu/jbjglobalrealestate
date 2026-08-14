@@ -7,13 +7,13 @@ Status legend: `DONE` = shipped + proven, `WIP` = in progress this turn, `OPEN` 
 2. `DONE` Moon mode: sidebar section labels still render in dim gold-gradient ink — must be pure white.
 
 ## B. Rent / search purpose integrity
-3. `OPEN` Rent has zero inventory (1,398 published, 0 leasing). Owner decision: hide Rent vs. rental-desk capture into the Advisory Desk.
+3. `DONE` (owner: keep as-is) Rent has zero inventory (1,398 published, 0 leasing). Owner decision: hide Rent vs. rental-desk capture into the Advisory Desk.
 4. `DONE` Rent status chips: **Ready** (direct from developer) and **Resale ready** (first buyer reselling) — the only two statuses under Rent.
 5. `DONE` Headline must follow purpose — `/properties` still shows the "Off-plan…" hero with a "For rent" sub-label.
 6. `DONE` Sort options leak sale logic into Rent ("Handover soonest", "Distress first").
-7. `OPEN` Buy / Resale / Distress overlap with `/resale` and `/distress` routes — one canonical path (status chips), routes become presets.
+7. `DONE` Buy / Resale / Distress overlap with `/resale` and `/distress` routes — one canonical path (status chips), routes become presets.
 8. `DONE` Price filter only reads `price_from` (max-price filtering is wrong); size filters mix `size_min`/`size_max`.
-9. `OPEN` Rent frequency (Yearly/Monthly/Weekly/Daily) has no backing column — either add the column or remove the filter.
+9. `DONE` Rent frequency (Yearly/Monthly/Weekly/Daily) has no backing column — either add the column or remove the filter.
 
 ## C. Guest chat / Advisory Desk
 10. `DONE` Advisory Desk ticket cards overlapped each other (Hub shell forced `display:flex` on their children) — card layout is now pinned.
