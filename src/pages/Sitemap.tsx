@@ -525,8 +525,11 @@ const Sitemap = () => {
           </div>
         </section>
 
-        {/* GET IN TOUCH — emerald sidebar tone, champagne cards, black text */}
-        <section className="py-14 sm:py-16 bg-gradient-to-b from-[#064E3B] via-[#053d2e] to-[#042c1c]">
+        {/* GET IN TOUCH — emerald surface, white ink per brand contrast contract */}
+        <section
+          data-surface="emerald"
+          className="py-14 sm:py-16 bg-gradient-to-b from-[#064E3B] via-[#053d2e] to-[#042c1c]"
+        >
           <div className="max-w-3xl mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
@@ -534,12 +537,13 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <h2 className="allow-black font-cormorant text-3xl sm:text-4xl font-semibold mb-2" style={{ color: "#0F172A", WebkitTextFillColor: "#0F172A" }}>
+              <h2 className="font-cormorant text-3xl sm:text-4xl font-semibold mb-2">
                 Get In Touch
               </h2>
-              <p className="allow-black text-sm" style={{ color: "#0F172A", WebkitTextFillColor: "#0F172A" }}>
+              <p className="text-sm">
                 Choose your preferred way to connect with us
               </p>
+
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
