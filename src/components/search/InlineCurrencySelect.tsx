@@ -64,7 +64,7 @@ export default function InlineCurrencySelect({ dark }: Props) {
               fall back to the coin glyph so the phone bar matches desktop. */}
           <span
             aria-hidden
-            className="inline-flex shrink-0 items-center justify-center text-[11px] font-semibold leading-none"
+            className="inline-flex shrink-0 translate-x-1.5 items-center justify-center text-[11px] font-semibold leading-none lg:translate-x-0"
             style={{ color: dark ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.65)" }}
           >
             {active.symbol && active.symbol !== active.code ? (
