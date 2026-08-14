@@ -18,9 +18,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import OwnerSidebarNav from "@/components/owner-dashboard/OwnerSidebarNav";
 import { OwnerTasksPopupAlert } from "@/components/owner-dashboard/OwnerTasksPopupAlert";
 import GlobalVerticalNav from "@/components/navigation/GlobalVerticalNav";
+import { useHeroChromeWatcher } from "@/hooks/useHeroChromeWatcher";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 const OwnerDashboardShell = () => {
+  useHeroChromeWatcher();
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
   const { user, signOut } = useAuth();
