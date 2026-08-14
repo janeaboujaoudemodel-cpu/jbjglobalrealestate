@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { buildPAAHtml, JBJ_PAA_TEMPLATE_ID, type PAAFieldKey } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { sanitizeHtml } from "@/utils/contentSanitizer";
 import type { CrmDocument } from "@/hooks/useCrmDocuments";
+import DOMPurify from "dompurify";
 
 interface Props {
   open: boolean;
@@ -41,7 +42,13 @@ export default function DocumentPreviewDialog({ open, onOpenChange, doc }: Props
         </div>
         <div
           className="flex-1 overflow-auto p-6"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(sanitizeHtml(html), {
+              USE_PROFILES: { html: true },
+              FORBID_TAGS: ["script", "iframe", "object", "embed", "form"],
+              FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover", "onfocus", "onblur", "formaction"],
+            }),
+          }}
         />
       </DialogContent>
     </Dialog>

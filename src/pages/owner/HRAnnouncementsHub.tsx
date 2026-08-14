@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Megaphone, Plus, Pin, Send, FileText } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
+import DOMPurify from "dompurify";
 
 const CATEGORIES: AnnouncementCategory[] = ["general","policy","training","event","recognition","urgent","holiday","payroll"];
 
@@ -76,7 +77,14 @@ export default function HRAnnouncementsHub() {
                   </div>
                   <div
                     className="text-sm text-[#1A1A1A]/80 mt-2 prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: a.body_html }}
+                    // SECURITY: authored in-house but sanitized defensively (stored XSS).
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(a.body_html ?? "", {
+                        USE_PROFILES: { html: true },
+                        FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "form"],
+                        FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover", "onfocus", "onblur", "formaction"],
+                      }),
+                    }}
                   />
                 </div>
                 {a.status !== "published" && (
