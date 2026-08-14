@@ -106,7 +106,7 @@ const DialogContent = React.forwardRef<
         ref={ref}
         data-surface="light"
         className={cn(
-          "fixed left-[50%] top-[50%] grid w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#064E3B]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
+          "fixed top-[50%] grid translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#064E3B]/30 bg-[#FBF6EC] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
           className,
         )}
         /* Stacking is enforced inline so a consumer utility class (e.g. `z-[80]`)
@@ -115,7 +115,15 @@ const DialogContent = React.forwardRef<
         onPointerDownOutside={handlePointerDownOutside}
         onInteractOutside={handleInteractOutside}
         {...props}
-        style={{ ...((props as { style?: React.CSSProperties }).style || {}), zIndex: 120001 }}
+        style={{
+          /* PASS 374 — centre inside the VISIBLE content viewport (window minus
+             the docked rail), never the raw window, so the panel reads centred
+             in every rail state: expanded, collapsed and closed. */
+          width: "calc(100vw - var(--jj-modal-inset-left, 0px) - 2rem)",
+          left: "calc(var(--jj-modal-inset-left, 0px) + (100vw - var(--jj-modal-inset-left, 0px)) / 2)",
+          ...((props as { style?: React.CSSProperties }).style || {}),
+          zIndex: 120001,
+        }}
       >
         {children}
         <DialogPrimitive.Close aria-label="Close" className={cn(
