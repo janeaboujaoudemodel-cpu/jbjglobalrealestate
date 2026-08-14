@@ -293,7 +293,7 @@ const OverseasInvestorsStrip = () => {
         </div>
 
         {/* Hairline divider */}
-        <div className="relative z-[1] mx-auto mt-6 h-px w-full max-w-[1500px]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
+        <div className="relative z-[1] mx-auto mt-6 h-px w-full max-w-[1500px]" style={{ background: isSun ? "linear-gradient(90deg, transparent, rgba(26,26,26,0.16), transparent)" : "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
 
         {/* Layers of innovation — animated AI "cake", bottom data → top decision */}
         <div className="oi-cake relative z-[1] mx-auto mt-5 w-full max-w-[1500px]">
