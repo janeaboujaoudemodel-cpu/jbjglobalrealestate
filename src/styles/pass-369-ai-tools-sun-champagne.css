@@ -1,0 +1,215 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PASS 369 — AI TOOLS PAGES: SUN = SIDEBAR CHAMPAGNE (LOCKED)
+
+   Problem this fixes (colour only, no layout):
+   PASS 222 (`src/index.css`) paints every card / rounded-border panel, chip,
+   input and icon tile inside `body[data-ai-tools-scope="true"]` with the
+   emerald→black ombre in BOTH skins. In Sun, the global ink lock correctly
+   writes BLACK text on those fills, so the result is black-on-emerald —
+   unreadable, and off-brand versus the Sun vertical sidebar.
+
+   Rule applied here (brand contract Rule 1):
+     Sun + AI tool route  ->  champagne band identical to the Sun sidebar
+                              (#FBF6EC → #F4EDDF → #EAE0CC), BLACK ink
+                              (#1A1A1A), gold hairline rgba(184,149,85,.42).
+
+   Hard scope guards — this file can never touch:
+     · Moon  — every selector requires html[data-jbj-theme="sun"].
+     · Owner backend lock (data-jbj-backend-lock="1") — fixed emerald CRM.
+     · Chrome (header / nav / footer / rails) and photo heroes.
+     · Layout: only background, border-color, colour, fill/stroke, shadow.
+
+   Contrast: #1A1A1A on #F4EDDF = 15.0:1 (AAA), on #EAE0CC = 13.6:1 (AAA).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────── 1. Champagne fills replace the emerald ombre ───────── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is(
+    [data-slot="card"],
+    .card,
+    [data-surface="emerald"],
+    [data-emerald-surface="true"],
+    .jj-emerald-ombre,
+    .jj-emerald-metallic,
+    .jj-emerald-action,
+    .jj-emerald-solid,
+    .jj-emerald-fill,
+    .jj-emerald-card,
+    .jj-emerald-chip,
+    .jj-emerald-pill,
+    [class*="rounded-2xl"][class*="border"],
+    [class*="rounded-xl"][class*="border"],
+    input,
+    textarea,
+    select
+  ):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *) {
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-color: #F7F1E4 !important;
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 14px 34px -20px rgba(26, 26, 26, 0.22) !important;
+}
+
+/* Small icon tiles / round monograms inside those panels — same champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is([class*="rounded-full"], [class*="rounded-lg"])[class*="border"]:not([data-preserve-surface]):not([data-brand-hero] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *) {
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+}
+
+/* ───────── 2. Black ink on every champagne fill, in every state ───────── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is([data-slot="card"], .card, [data-surface="emerald"], [class*="rounded-2xl"][class*="border"], [class*="rounded-xl"][class*="border"], input, textarea, select):not([data-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-brand-hero]):not([data-brand-hero] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *),
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is([data-slot="card"], .card, [data-surface="emerald"], [class*="rounded-2xl"][class*="border"], [class*="rounded-xl"][class*="border"]):not([data-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-brand-hero]):not([data-brand-hero] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *)
+  :is(h1, h2, h3, h4, h5, h6, p, span, label, strong, em, small, li, dt, dd, button, a, div, td, th) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* Icons follow the ink. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is([data-slot="card"], .card, [data-surface="emerald"], [class*="rounded-2xl"][class*="border"], [class*="rounded-xl"][class*="border"]):not([data-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-brand-hero]):not([data-brand-hero] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *)
+  :is(svg, svg *, .lucide, path, line, polyline, polygon, rect, circle, ellipse):not([stroke="none"]) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is([data-slot="card"], .card, [data-surface="emerald"], [class*="rounded-xl"][class*="border"])
+  :is(svg, .lucide) [fill]:not([fill="none"]) {
+  fill: #1A1A1A !important;
+}
+
+/* Field placeholders — readable warm grey, not white on champagne. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is(input, textarea)::placeholder {
+  color: rgba(26, 26, 26, 0.62) !important;
+  -webkit-text-fill-color: rgba(26, 26, 26, 0.62) !important;
+}
+
+/* ───────── 3. Active / selected state stays legible (darker champagne) ───────── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is(button, [role="tab"], [data-chip], .chip):is([aria-selected="true"], [data-state="active"], [aria-pressed="true"], [data-active="true"]) {
+  background: linear-gradient(160deg, #EFE4CC 0%, #E7D9BC 100%) !important;
+  background-image: linear-gradient(160deg, #EFE4CC 0%, #E7D9BC 100%) !important;
+  border-color: rgba(184, 149, 85, 0.68) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* ───────── 4. Hairlines: no white-on-champagne borders ───────── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  [class*="border-white"]:not(header *):not(nav *):not(footer *):not([data-jj-rail] *):not([data-brand-hero] *) {
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+}
+
+/* ───────── 5. Class-driven emerald CTAs / active pills inside the AI scope ─────────
+   `.jj-cta-dark` and `.jj-pill-active` paint their own emerald ombre. In Sun on
+   an AI tool route they become champagne with black ink (CTA) and the darker
+   champagne active tone (pill), so nothing is black-on-emerald. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  .jj-cta-dark:not(header *):not(nav *):not(footer *):not([data-jj-rail] *):not([data-brand-hero] *) {
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-color: #F7F1E4 !important;
+  border: 1px solid var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  .jj-pill-active:not(header *):not(nav *):not(footer *):not([data-jj-rail] *) {
+  background: linear-gradient(160deg, #EFE4CC 0%, #E7D9BC 100%) !important;
+  background-image: linear-gradient(160deg, #EFE4CC 0%, #E7D9BC 100%) !important;
+  background-color: #EBDFC4 !important;
+  border-color: rgba(184, 149, 85, 0.68) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is(.jj-cta-dark, .jj-pill-active) :is(span, svg, svg *, .lucide, path, line, polyline, polygon, rect, circle, ellipse):not([stroke="none"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+/* ───────── 6. Inline-gradient emerald links & buttons (Sun, AI scope) ─────────
+   Some tool pages paint CTAs with an inline emerald gradient. Inline styles lose
+   to `!important`, so they land on champagne with black ink here. Surfaces that
+   are *intentionally* white-ink-on-emerald (`.allow-white`, preserved surfaces,
+   photo heroes) are left alone — white on emerald is already compliant. */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is(a, button):not(.allow-white):not(.allow-white *):not([data-allow-ink]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-brand-hero] *):not([data-photo-copy-lock] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *):not([data-surface="light"]):not([data-emerald-lock="true"])[class*="rounded"] {
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is(a, button):not(.allow-white):not(.allow-white *):not([data-allow-ink]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-brand-hero] *):not([data-photo-copy-lock] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *):not([data-surface="light"]):not([data-emerald-lock="true"])[class*="rounded"][style*="linear-gradient"] {
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-color: #F7F1E4 !important;
+}
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  :is(a, button)[class*="rounded"][style*="linear-gradient"]:not(.allow-white):not([data-preserve-surface]):not([data-brand-hero] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *)
+  :is(span, svg, svg *, .lucide, path, line, polyline, polygon, rect, circle, ellipse):not([stroke="none"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+/* ───────── 7. Tailwind emerald utility fills (Sun, AI scope) ─────────
+   Start-gate method cards use `bg-emerald-500/…` utilities; in Sun the global
+   ink lock writes black on them. Repaint to champagne so ink stays black.
+   (Moon is untouched — the same markup keeps its emerald there.) */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  [class*="bg-emerald-"]:not(.allow-white):not([data-preserve-surface]):not([data-brand-hero] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *) {
+  background: linear-gradient(160deg, #F4EDDF 0%, #EAE0CC 100%) !important;
+  background-image: linear-gradient(160deg, #F4EDDF 0%, #EAE0CC 100%) !important;
+  background-color: #F0E7D5 !important;
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* ───────── 8. Final catch-all: any inline emerald gradient in Sun AI scope ───────── */
+html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
+  body[data-ai-tools-scope="true"]
+  #root#root#root#root#root#root#root#root
+  [style*="linear-gradient"]:not(.allow-white):not(.allow-white *):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *):not([style*="url("]) {
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
