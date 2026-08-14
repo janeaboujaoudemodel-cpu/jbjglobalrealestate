@@ -13,7 +13,7 @@
 import {
   type ShortcutFilterState,
   defaultShortcutFilters,
-} from "@/components/filters/FilterShortcutBar";
+} from "@/components/filters/shortcutFilterState";
 
 /** Encode filter state into URLSearchParams. Empty / default values are omitted. */
 export function encodeFilters(f: ShortcutFilterState): URLSearchParams {

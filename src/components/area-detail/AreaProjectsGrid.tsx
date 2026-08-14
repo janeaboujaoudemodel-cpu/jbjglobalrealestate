@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, ArrowUpRight, Search } from "lucide-react";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
-import { type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import { type ShortcutFilterState } from "@/components/filters/shortcutFilterState";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";

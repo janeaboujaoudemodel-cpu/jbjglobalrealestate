@@ -1,4 +1,4 @@
-import type { ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import type { ShortcutFilterState } from "@/components/filters/shortcutFilterState";
 import { areaMatches } from "@/utils/areaMatch";
 
 

@@ -28,7 +28,7 @@ const DLDMarketWidget = lazy(() => import("@/components/shared/DLDMarketWidget")
 const CombinedContactNewsletter = lazy(() => import("@/components/CombinedContactNewsletter"));
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 // PropertiesVerticalNav removed — handled globally by MainLayout
-import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/shortcutFilterState";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { filterPillBase, filterPillActive, pillInactive, filterPopoverSurface, filterPrimaryButton } from "@/components/filters/filterStyles";
