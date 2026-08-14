@@ -364,7 +364,7 @@ export default function PropertySearchBar({
   const bedLabel =
     f.beds.length || f.baths.length
       ? [f.beds.join("/"), f.baths.length ? `${f.baths.join("/")} bath` : ""].filter(Boolean).join(" · ")
-      : "Beds";
+      : "Bedrooms";
 
   const priceLabel =
     f.priceMin != null || f.priceMax != null
