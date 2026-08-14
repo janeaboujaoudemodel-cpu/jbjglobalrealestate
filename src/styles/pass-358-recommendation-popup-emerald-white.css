@@ -116,3 +116,34 @@ html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup
 html body [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] img {
   border-color: transparent !important;
 }
+
+
+/* The Sun skin repaints emerald CTAs champagne with a #root x7 selector. Inside
+   this popup that would produce white ink on champagne, so the emerald CTA is
+   pinned here for both skins. */
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button,
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] [role="button"] {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+}
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button.jj-rec-cta {
+  background: rgba(255, 255, 255, 0.12) !important;
+  background-image: none !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] button.jj-rec-cta:hover {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+}
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"],
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *,
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *::before,
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"] *::after {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.26) !important;
+}
+html body #root#root#root#root#root#root#root#root#root [data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"][data-jj-rec-popup="true"].jj-rec-popup {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  border-color: rgba(255, 255, 255, 0.30) !important;
+}
