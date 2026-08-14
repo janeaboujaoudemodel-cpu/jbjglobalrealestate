@@ -1800,7 +1800,9 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
             type="button"
             onClick={dismiss}
             aria-label="Close welcome portal"
+            data-jbj-portal-close
             className="allow-white absolute right-2 top-2 z-20 grid place-items-center rounded-full border border-white/30 bg-black/25 p-0 leading-none text-white opacity-100 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 sm:right-3 sm:top-3"
+
             style={{
               /* A true circle: fixed square box that no flex/line-height can
                  stretch into an oval. */
