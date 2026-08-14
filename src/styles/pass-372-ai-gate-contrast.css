@@ -39,3 +39,31 @@ html[data-jbj-theme="moon"] .jj-ai-gate-sub {
 html[data-jbj-theme="moon"] .jj-ai-gate-sub {
   opacity: 0.88;
 }
+
+/* ── Gate cards: locked emerald pair → PURE WHITE ink in BOTH skins ───────
+   The Sun champagne repaint (PASS 369) was forcing black ink onto these
+   emerald gradient cards, producing dark-on-dark text. Ink is restored here
+   at the card scope, which stays emerald in both skins by design.        */
+html body .jj-ai-gate-card,
+html body .jj-ai-gate-card :is(p, span, div, li, h1, h2, h3, h4, strong, em, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-ai-gate-card :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  stroke: currentColor !important;
+}
+
+/* Primary action inside the card: white plate, black ink (light-surface rule). */
+html body .jj-ai-gate-card .jj-ai-gate-cta,
+html body .jj-ai-gate-card .jj-ai-gate-cta :is(span, svg, path) {
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body .jj-ai-gate-card .jj-ai-gate-cta :is(span, svg, path) {
+  background: transparent !important;
+}
+html body .jj-ai-gate-card:hover .jj-ai-gate-cta {
+  background: #F7F2EA !important;
+}
