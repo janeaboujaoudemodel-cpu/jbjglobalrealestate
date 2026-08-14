@@ -73,9 +73,31 @@ const AnimatedStat = ({ stat, start, index }: { stat: Stat; start: boolean; inde
   );
 };
 
+const readSkin = () =>
+  typeof document !== "undefined" &&
+  document.documentElement.getAttribute("data-jbj-theme") === "sun" &&
+  document.documentElement.getAttribute("data-jbj-backend-lock") !== "1"
+    ? "sun"
+    : "moon";
+
 const OverseasInvestorsStrip = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
+  const [skin, setSkin] = useState<"sun" | "moon">(readSkin);
+
+  // Sun renders a champagne surface with black ink, Moon stays emerald with
+  // white ink, so the surface attributes must follow the live skin.
+  useEffect(() => {
+    const sync = () => setSkin(readSkin());
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-jbj-theme", "data-jbj-backend-lock"],
+    });
+    return () => mo.disconnect();
+  }, []);
+
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -90,15 +112,17 @@ const OverseasInvestorsStrip = () => {
     return () => io.disconnect();
   }, []);
 
+  const isSun = skin === "sun";
+
   return (
     <section
       ref={sectionRef}
       className="jj-bleed-allow jj-fullbleed-band oi-band relative w-full overflow-hidden"
       data-fullbleed-band
-      data-surface="dark"
-      data-on-dark
-      data-no-contrast-guard
+      data-surface={isSun ? "light" : "dark"}
+      {...(isSun ? {} : { "data-on-dark": true, "data-no-contrast-guard": true })}
     >
+
       <style>{`
         @keyframes oi-orb-drift {
           0%, 100% { transform: translate(0,0) scale(1); opacity: 0.22; }
