@@ -7,6 +7,7 @@
  */
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendViaResend } from "../_shared/resendClient.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -23,6 +24,14 @@ const esc = (s: unknown) =>
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // SECURITY: public intake — IP blocklist + rate limit (6 req / 10 min per IP).
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "company-profile-notify", maxRequests: 6, windowMinutes: 10 },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
 
   try {
     const { requestId } = await req.json();

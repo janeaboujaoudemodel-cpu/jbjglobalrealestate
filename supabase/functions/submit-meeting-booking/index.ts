@@ -13,6 +13,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { renderBrandedEmail, htmlEscape, SITE_URL } from "../_shared/booking-email.ts";
 import { OWNER_ALERT_EMAIL } from "../_shared/owner-alerts.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -119,6 +120,14 @@ function buildIcs(b: Booking, summary: string): string {
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // SECURITY: public intake — IP blocklist + rate limit (4 req / 15 min per IP).
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "submit-meeting-booking", maxRequests: 4, windowMinutes: 15 },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" },

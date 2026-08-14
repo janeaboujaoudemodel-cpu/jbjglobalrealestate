@@ -5,6 +5,7 @@
 // mode updates the same row's contact_type instead of creating duplicates.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -36,6 +37,14 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
+
+  // SECURITY: public intake — IP blocklist + rate limit (10 req / 10 min per IP).
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "register-mode-lead", maxRequests: 10, windowMinutes: 10 },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
 
   try {
     const authHeader = req.headers.get('Authorization');
