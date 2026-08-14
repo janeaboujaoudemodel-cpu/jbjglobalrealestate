@@ -666,7 +666,8 @@ export function useProjects() {
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(1000); // bounded public read (anti-scrape)
       
       if (error) throw error;
       return data as UnifiedProject[];
@@ -855,7 +856,8 @@ export function useProjectsByCommunity(communitySlug: string) {
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .is("deleted_at", null)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(1000); // bounded public read (anti-scrape)
       
       if (error) throw error;
           return dedupePublicProjects(data as UnifiedProject[]);
@@ -881,7 +883,8 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .eq("developer.slug", canonicalSlug)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .is("deleted_at", null)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(1000); // bounded public read (anti-scrape)
       
       if (error) throw error;
           return dedupePublicProjects(data as UnifiedProject[]);
