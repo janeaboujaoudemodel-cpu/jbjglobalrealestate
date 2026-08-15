@@ -97,6 +97,7 @@ const AreaDetail = () => {
         .from('projects')
         .select('developer_name, developers(name)')
         .eq('is_published', true)
+        .is('deleted_at', null)
         .ilike('area_name', area.name)
         .limit(1000); // bounded public read (anti-scrape)
       if (error) throw error;

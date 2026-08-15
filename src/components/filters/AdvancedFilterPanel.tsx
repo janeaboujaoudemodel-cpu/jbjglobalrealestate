@@ -209,6 +209,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           .from('projects')
           .select(COLUMNS)
           .eq('is_published', true)
+          .is('deleted_at', null)
           .or('listing_kind.is.null,listing_kind.neq.leasing')
           .order('id')
           .range(page * PAGE, page * PAGE + PAGE - 1);
