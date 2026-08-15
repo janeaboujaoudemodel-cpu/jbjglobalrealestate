@@ -115,8 +115,12 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   }
 
   // A cached owner verification must never leak /owner or /admin while the active
-  // perspective is Investor/Broker/Developer.
-  if (user && mode !== "owner" && !isRegisteredOwnerEmail) {
+  // perspective is Investor/Broker/Developer — including for registered owner
+  // emails: the block above only returns for NON-registered emails, so without
+  // this check a registered owner browsing in Broker/Developer/Investor mode
+  // would fall all the way through to "REGISTERED OWNER → allowed" below and
+  // see Owner content regardless of their active mode.
+  if (user && mode !== "owner" && isRegisteredOwnerEmail) {
     const destination =
       mode === "broker" ? "/broker-dashboard" :
       mode === "developer" ? "/developers-portal" :
