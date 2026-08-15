@@ -141,6 +141,32 @@ describe("OwnerGuard", () => {
     expect(screen.queryByText("OWNER_CONTENT")).not.toBeInTheDocument();
   });
 
+  // Regression coverage for the inverted-condition bug fixed alongside this
+  // file: the guard at OwnerGuard.tsx's "cached owner verification must never
+  // leak" check was gated on `!isRegisteredOwnerEmail`, the opposite of who it
+  // was meant to protect, so a registered owner browsing in Developer or
+  // Investor mode fell through to the final "REGISTERED OWNER → allowed"
+  // return and saw Owner content regardless of mode. The broker-mode case
+  // above already covered one of the three non-owner modes; these two close
+  // the other two so the exact bug can't come back in either branch unnoticed.
+  it("redirects the registered owner email out of /owner when mode is 'developer'", () => {
+    authState.user = { id: "u1", email: OWNER_EMAIL };
+    authState.isOwner = true;
+    modeState.mode = "developer";
+    renderAtRoute(<OwnerGuard><div>OWNER_CONTENT</div></OwnerGuard>, "/owner-test/x");
+    expect(screen.getByText("DEVELOPERS_PORTAL")).toBeInTheDocument();
+    expect(screen.queryByText("OWNER_CONTENT")).not.toBeInTheDocument();
+  });
+
+  it("redirects the registered owner email out of /owner when mode is 'investor'", () => {
+    authState.user = { id: "u1", email: OWNER_EMAIL };
+    authState.isOwner = true;
+    modeState.mode = "investor";
+    renderAtRoute(<OwnerGuard><div>OWNER_CONTENT</div></OwnerGuard>, "/owner-test/x");
+    expect(screen.getByText("INVESTOR_DASHBOARD")).toBeInTheDocument();
+    expect(screen.queryByText("OWNER_CONTENT")).not.toBeInTheDocument();
+  });
+
   it("renders children for the registered owner in Owner mode", () => {
     authState.user = { id: "u1", email: OWNER_EMAIL };
     authState.isOwner = true;
