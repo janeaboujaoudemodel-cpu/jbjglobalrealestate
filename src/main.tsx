@@ -14,6 +14,7 @@ import"./styles/cards.css";
 import"./styles/buttons-ctas.css";
 import"./styles/hero-video.css";
 import"./styles/modals.css";
+import"./styles/forms.css";
 import"./styles/theme-moon.css";
 import"./styles/pass-302-emerald-polish.css";
 import"./styles/pass-303-skin-parity.css";
