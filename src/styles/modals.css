@@ -1,0 +1,343 @@
+/* ============================================================
+   MODALS — extracted from src/index.css
+   Step 5, area 5 of 6 (CTO CSS-debt audit). Scope: rules whose selector
+   list is exclusively modal-scoped — every top-level comma-separated
+   alternative (nested :is()/:where() argument lists are NOT top-level
+   alternatives; they're descendant tag/branch lists still governed by
+   whatever precedes them), with :not(...) exclusion clauses stripped
+   before the check, requires [role="dialog"], [role="alertdialog"],
+   [data-radix-dialog-content], [data-radix-dialog-overlay],
+   [data-radix-alert-dialog-overlay], or [data-advanced-filter-panel]
+   (the Advanced Filter Panel is rendered through <DialogContent>, so it
+   is a modal by construction) either directly on the alternative, or via
+   a :is()/:where() group all of whose own branches independently carry
+   one of those tokens.
+
+   There is no .jj-modal-* class convention in this codebase. Modal scope
+   is expressed entirely through role/data-radix-dialog-* attributes —
+   confirmed independently by useScrollUnlocker.ts's own written contract
+   ([data-state="open"][role="dialog"], [role="alertdialog"],
+   [data-jbj-modal-open="true"]) and by pass-374-form-modal-system.css,
+   which already treats [role="dialog"] as the site-wide modal token.
+
+   Rules that mix a modal alternative with unrelated alternatives (filter
+   dropdowns, popovers, currency/mode-switcher panels, generic switches,
+   form shells) in the same selector list were deliberately left in
+   index.css — extracting them would have silently dropped their
+   non-modal behavior. This includes the "PASS 282 — MODAL SCRIM LOCK"
+   rule, which despite its name mixes two non-role-scoped fixed-overlay
+   div selectors alongside the dialog-overlay tokens.
+
+   Original rule order is preserved. Imported in main.tsx immediately
+   after hero-video.css, before all pass-*.css overrides, to keep the
+   exact same cascade position these rules held before extraction.
+   ============================================================ */
+
+
+
+
+
+/* Advanced Filter Panel — champagne + ink standard (matches user account dropdown).
+   Emerald reserved for active pills/hovers via jj-pill-emerald-metallic. */
+html body [data-filter-clean][role="dialog"] {
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-filter-clean][role="dialog"] :is(h1,h2,h3,h4,h5,h6,p,span,label,div,button,li,dt,dd) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-filter-clean][role="dialog"] :is(svg,[data-lucide]) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html body [data-filter-clean][role="dialog"] :is(input,textarea,select,button[role="combobox"]) {
+  background: #FFFFFF !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-filter-clean][role="dialog"] :is(input,textarea)::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+  opacity: 1 !important;
+}
+/* Active/selected chips + emerald metallic pills keep pure white text + emerald bg */
+html body [data-filter-clean][role="dialog"] [data-state="checked"],
+html body [data-filter-clean][role="dialog"] [data-state="active"],
+html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
+
+
+  background: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+html body [data-filter-clean][role="dialog"] [data-state="checked"] :is(svg,span,p,div),
+html body [data-filter-clean][role="dialog"] [data-state="active"] :is(svg,span,p,div),
+html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic :is(svg,span,p,div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Convert dark emerald surface cards to white cards on the champagne panel */
+html body [data-filter-clean][role="dialog"] [class*="bg-\[\#021611\]"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/7"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/12"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/14"],
+html body [data-filter-clean][role="dialog"] [class*="bg-black\/10"] {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+html body [data-filter-clean][role="dialog"] [class*="border-white\/"] {
+  border-color: rgba(184,149,85,0.50) !important;
+}
+
+/* ============================================================
+   PASS 240 — Advanced Filter Panel: champagne + ink standard
+   Site-wide dropdown standard. AI tools excluded via scope.
+   ============================================================ */
+
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]),
+/* All descendant text defaults to ink black */
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(
+  h1, h2, h3, h4, p, span, div, label, button, a, li, small, strong, em
+){
+  color: #1A1A1A !important;
+}
+
+/* All icons default to ink */
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(svg) {
+  color: #1A1A1A !important;
+  stroke: currentColor;
+}
+
+/* EXCEPTION 1 — emerald metallic pills keep pure white text/icons */
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic *,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic * {
+  color: #FFFFFF !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* EXCEPTION 2 — inputs on champagne need white background + ink text */
+html body [role="dialog"][data-advanced-filter-panel="true"] input,
+html body [role="dialog"][data-advanced-filter-panel="true"] select,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+}
+
+/* Convert dark emerald surface panels to champagne cards */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-\[\#021611\]"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/7"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/12"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/14"] {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Borders: convert white-on-emerald borders to gold hairline */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white\/"] {
+  border-color: rgba(184,149,85,0.50) !important;
+}
+
+/* Section-title bottom border */
+html body [role="dialog"][data-advanced-filter-panel="true"] .bg-black\/10 {
+  background-color: rgba(255,255,255,0.40) !important;
+}
+
+/* Hover rows inside developer/area popovers */
+html body [role="dialog"][data-advanced-filter-panel="true"] button:hover:not(.jj-pill-emerald-metallic) {
+  background-color: rgba(6,78,59,0.06) !important;
+}
+
+/* PASS 241 — refine champagne conversion for Advanced Filter Panel header/labels */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-black/10"] {
+  background-color: rgba(184,149,85,0.10) !important;
+  background-image: none !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white/"] {
+  border-color: rgba(184,149,85,0.40) !important;
+}
+/* Force all text (including .text-white and .allow-white spans) to ink, EXCEPT
+   emerald-metallic pills, active/checked chips, and lucide icons inside dark triggers */
+html body [role="dialog"][data-advanced-filter-panel="true"] :where(h1,h2,h3,h4,p,span,label,button,div,li,dt,dd,small,strong,em,b):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *):not([role="combobox"]):not([role="combobox"] *):not([data-radix-select-trigger]):not([data-radix-select-trigger] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] :where(svg):not(.jj-pill-emerald-metallic svg):not([data-state="active"] svg):not([role="combobox"] svg):not([data-radix-select-trigger] svg) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+/* PASS 242 — Final ink override for Advanced Filter Panel: any text-white / allow-white
+   inside the champagne panel must render as ink. Emerald pills keep their own white. */
+html body [role="dialog"][data-advanced-filter-panel="true"] *:not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
+}
+/* Header top strip: light champagne tint, not dark */
+html body [role="dialog"][data-advanced-filter-panel="true"] > div:first-child {
+  background-color: rgba(184,149,85,0.08) !important;
+  background-image: none !important;
+  border-bottom-color: rgba(184,149,85,0.35) !important;
+}
+
+/* PASS 243 — Header filter modal final row contract.
+   Champagne rows idle with ink; only the row being hovered/focused turns emerald
+   with pure white text/icons, matching the account dropdown. */
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:not(:hover):not(:focus):not(:focus-visible),
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:not(:hover):not(:focus):not(:focus-visible) :is(span, div, svg, path, line, polyline, polygon, rect, circle) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) :is(span, div, svg, path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body [role="dialog"][data-advanced-filter-panel="true"] > button {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 0 !important;
+}
+
+html body [role="dialog"][data-advanced-filter-panel="true"] > button :is(svg, path, line, polyline) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body [role="dialog"][data-advanced-filter-panel="true"][data-header-anchored-panel="true"] {
+  max-height: calc(100dvh - var(--app-content-top, 88px) - 16px) !important;
+}
+
+/* Dialog content instant open/close */
+[data-state="open"][role="dialog"],
+[data-state="closed"][role="dialog"],
+[data-radix-dialog-overlay] {
+  animation-duration: 0ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0ms !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"],
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h1,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h2,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h3,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h4,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] label {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible),
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) div,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) svg {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] svg {
+  background: transparent !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"][data-state="checked"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"] > span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"] > span[data-state] {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* ============================================================
+   PASS 283 — BACKEND PORTAL SURFACE (LOCKED)
+   While the owner is inside the back office (body[data-jbj-backend]),
+   every portalled dialog / sheet / menu uses the backend surface
+   (white card + emerald ink), never the public champagne surface,
+   and never black text on an emerald fill.
+   ============================================================ */
+html body[data-jbj-backend="true"] [role="dialog"]:not([data-radix-dialog-overlay]),
+html body[data-jbj-backend="true"] [role="alertdialog"] {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  border-color: rgba(6, 78, 59, 0.14) !important;
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
+}
+html body[data-jbj-backend="true"] [role="dialog"] :where(h1, h2, h3, label, p, span, div, td, th) {
+  color: #0F172A;
+  -webkit-text-fill-color: #0F172A;
+}
+html body[data-jbj-backend="true"] [role="dialog"] :where(input, textarea, select, [role="combobox"]) {
+  background: #FFFFFF !important;
+  border-color: rgba(6, 78, 59, 0.18) !important;
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
+}
+/* Emerald-filled controls inside backend portals keep white ink. */
+html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[class*="#064E3B"],
+html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[data-state="active"],
+html body[data-jbj-backend="true"] [role="dialog"] .jj-surface-emerald {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[class*="#064E3B"] svg,
+html body[data-jbj-backend="true"] [role="dialog"] .jj-surface-emerald svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}

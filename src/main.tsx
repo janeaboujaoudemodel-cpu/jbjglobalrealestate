@@ -13,6 +13,7 @@ import"./styles/sidebar.css";
 import"./styles/cards.css";
 import"./styles/buttons-ctas.css";
 import"./styles/hero-video.css";
+import"./styles/modals.css";
 import"./styles/theme-moon.css";
 import"./styles/pass-302-emerald-polish.css";
 import"./styles/pass-303-skin-parity.css";
@@ -130,24 +131,21 @@ if (typeof window !=="undefined") {
  const msg = e?.message ||"";
  const src = (e?.filename as string) ||"";
  if (msg || src) {
- // eslint-disable-next-line no-console
  console.warn("[boot-diag] window.error", { msg, src, lineno: e.lineno, colno: e.colno });
  captureToSentry("window.error", e?.error ?? msg, { src, lineno: e.lineno, colno: e.colno });
  }
  });
 
  window.addEventListener("unhandledrejection", (e) => {
- const reason: any = (e as any)?.reason;
- const msg = reason?.message || String(reason ||"");
- // eslint-disable-next-line no-console
- console.warn("[boot-diag] unhandledrejection", { msg, stack: reason?.stack });
+ const reason: unknown = e?.reason;
+ const msg = reason instanceof Error ? reason.message : String(reason ||"");
+ console.warn("[boot-diag] unhandledrejection", { msg, stack: reason instanceof Error ? reason.stack : undefined });
  captureToSentry("unhandledrejection", reason ?? msg);
  });
 
  // Vite emits this when a dynamic import fails (chunk hash changed mid-session).
  // Auto-reload once per minute so users never see the error card for stale bundles.
  window.addEventListener("vite:preloadError", (event: Event) => {
- // eslint-disable-next-line no-console
  console.warn("[boot-diag] vite:preloadError — reloading once", event);
  try {
   const k ="jbj_recovery_reload_at";
