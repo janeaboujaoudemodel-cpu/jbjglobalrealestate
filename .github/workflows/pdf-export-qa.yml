@@ -29,7 +29,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y poppler-utils
 
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        # check-exports.mjs calls the raw `chromium.launch()` API (not the
+        # @playwright/test runner), which on this Playwright version resolves
+        # to the separate chromium-headless-shell binary by default. Installing
+        # only "chromium" leaves that binary missing and launch() fails with
+        # "Executable doesn't exist at .../chromium_headless_shell-*/...".
+        run: npx playwright install --with-deps chromium chromium-headless-shell
 
       - name: Build app
         run: npm run build
