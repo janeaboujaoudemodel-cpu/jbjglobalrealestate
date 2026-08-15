@@ -7518,9 +7518,6 @@ html body [data-chrome="sidebar"] :is([data-sidebar-section-label], [data-sideba
   -webkit-text-fill-color: var(--emerald-ink) !important;
   stroke: var(--emerald-ink) !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-section] {
-  color: var(--emerald-ink) !important;
-}
 
 /* ════════════════════════════════════════════════════════════════
    PASS 11 — HERO SEARCH + STAY IN THE LOOP + EMERALD CTA LOCK
@@ -7621,37 +7618,6 @@ html body .jj-emerald-card :is(svg, .lucide) * {
   stroke: #FFFFFF !important;
 }
 
-/* Sidebar — section header rows: emerald-ombre fill, white text/icon */
-html body [data-chrome="sidebar"] [data-sidebar-section] {
-  background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(4,78,59,0.45) !important;
-  border-radius: 8px !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section] [data-sidebar-section-label],
-html body [data-chrome="sidebar"] [data-sidebar-section] [data-sidebar-section-icon],
-html body [data-chrome="sidebar"] [data-sidebar-section] svg {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* Sidebar — subitem rows: white surface, ink label, emerald icon */
-html body [data-chrome="sidebar"] [data-sidebar-subitem] {
-  background-color: #FFFFFF !important;
-  border: 1px solid #FFFFFF !important;
-  border-radius: 8px !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] {
-  color: var(--emerald-ink) !important;
-  stroke: var(--emerald-ink) !important;
-}
-
 /* Support launcher — emerald glow (not gold). Desktop edge rail stays hidden above. */
 html body [aria-label="Contact us"] {
   border-color: rgba(4,78,59,0.45) !important;
@@ -7738,117 +7704,6 @@ html body .jj-newsletter-emerald button.jj-newsletter-emerald,
 html body .jj-newsletter-emerald > [class*="jj-newsletter"] {
   border: 0 !important;
 }
-
-/* ────────────────────────────────────────────────────────────────
-   SIDEBAR PASS 12 — emerald categories, no gold hover anywhere,
-   subitem rows lose the white pill fill and use an emerald-bordered
-   icon tile with a white label.
-   ──────────────────────────────────────────────────────────────── */
-
-/* Top-level highlight rows (AI Home Finder, List Your Property,
-   Careers, Resale Properties) and main section headers: lock to
-   white text + white icons on the emerald-ombre pill at rest AND
-   hover. Beats the old `text-[#B89555]` inline classes. */
-html body [data-chrome="sidebar"] [data-sidebar-section],
-html body [data-chrome="sidebar"] [data-sidebar-section]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-section]:focus,
-html body [data-chrome="sidebar"] [data-sidebar-section] *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:hover *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:focus * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.18) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: 0 6px 16px -10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10);
-  transition: transform 220ms ease, box-shadow 220ms ease, background-image 220ms ease;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section]:hover {
-  background-image: var(--jj-emerald-ombre-hover) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-}
-/* Inside icon tile on the section row: translucent white tile,
-   white glyph — NEVER gold. */
-html body [data-chrome="sidebar"] [data-sidebar-section] > div:first-child {
-  background-color: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.35) !important;
-}
-
-/* Subitem rows: NO white pill background. Transparent row, white
-   label, emerald-tinted icon inside a thin emerald border tile. */
-html body [data-chrome="sidebar"] [data-sidebar-subitem] {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  border-radius: 8px !important;
-  transition: background-color 180ms ease, transform 180ms ease;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem],
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] a[data-sidebar-subitem].group,
-html body [data-chrome="sidebar"] a[data-sidebar-subitem].group [data-sidebar-subitem-label] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-/* Icon tile inside subitem row: emerald-glow hairline border, transparent
-   center, emerald icon. On hover the tile fills with emerald-ombre and
-   the icon flips white (3D reverse). */
-html body [data-chrome="sidebar"] [data-sidebar-subitem] > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 1px solid rgba(52, 211, 153, 0.65) !important;
-  box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 0 10px rgba(4,78,59,0.45);
-  transition: background-image 200ms ease, box-shadow 200ms ease, transform 200ms ease;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon] *{
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover {
-  background-color: rgba(4,78,59,0.45) !important;
-  transform: translateX(2px);
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover > span:first-child {
-  background-image: var(--jj-emerald-ombre) !important;
-  box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 0 16px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-  transform: translateY(-1px);
-}
-
-/* Sidebar highlight rows (AI Home Finder, List Your Property,
-   Careers, Resale Properties) — same emerald-pill treatment as the
-   section header rows. They live directly inside the sidebar nav
-   <div> but DON'T carry [data-sidebar-section]; tag them via the
-   first-anchor selector. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  color: #FFFFFF !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  box-shadow: 0 6px 16px -10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10);
-  transition: transform 220ms ease, box-shadow 220ms ease, background-image 220ms ease;
-}
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:hover {
-  background-image: var(--jj-emerald-ombre-hover) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-}
 html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] *,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] *,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/join"] *,
@@ -7858,15 +7713,6 @@ html body span.jj-pill-emerald *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-/* Highlight-row icon tile — translucent white square, white glyph. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"] > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] > span:first-child {
-  background-color: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.35) !important;
 }
 
 /* ────────────────────────────────────────────────────────────────
@@ -8047,27 +7893,6 @@ html body footer p:last-child {
   stroke: #FFFFFF !important;
 }
 
-/* ============================================================
-   PASS 14 — Emerald Sidebar Lock (Batch B)
-   Scope: [data-sidebar-emerald] only — never leaks elsewhere.
-   Rules:
-   - Main category labels (highlights + section accordion buttons): emerald-ombre text
-   - Icon tiles (main + sub): FILLED emerald-ombre with WHITE glyph + white hairline ring
-   - Hover: 3D emerald glow lift, never gold
-   - Subitem labels: ink #1A1A1A (readable on champagne), white on hover-emerald tile
-   - No gold borders/dividers anywhere inside the sidebar nav rows
-   ============================================================ */
-
-/* Sidebar shell fill guard — the inner emerald column MUST fill the 320px
-   fixed sidebar container. If left as flex-item auto width it shrinks to
-   its content and exposes a champagne strip between the sidebar and the
-   main content area. Lock to 100% width so that gap can never come back. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] {
-  width: 100% !important;
-  min-width: 0 !important;
-  flex: 1 1 auto !important;
-}
-
 /* Gold left-border on expanded section column */
 [data-sidebar-emerald] .border-l,
 html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l{ border-left-color: rgba(184, 149, 85, 0.45) !important; }
@@ -8188,64 +8013,6 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l{ border-left-
 [data-sidebar-emerald] [aria-hidden="true"][style*="rgba(184,149,85"] {
   background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.35) 50%, transparent 100%) !important;
 }
-
-/* ============================================================
-   PASS 15 — Final emerald lock (overrides PASS 12 high-specificity)
-   ============================================================ */
-
-/* Sidebar subitem icon tiles — FILLED emerald-ombre with WHITE glyph at
-   all states. Outranks PASS 12's `html body [data-chrome="sidebar"] …`. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover > span:first-child {
-  background-color: transparent !important;
-  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow:
-    0 1px 2px rgba(4, 120, 87, 0.35),
-    inset 0 0 0 1px rgba(16, 185, 129, 0.25) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-icon] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-icon] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover > span:first-child {
-  transform: translateY(-1px) !important;
-  box-shadow:
-    0 4px 10px -2px rgba(4, 120, 87, 0.55),
-    0 0 0 2px rgba(16, 185, 129, 0.35),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
-}
-/* Subitem labels — ink at rest, readable on champagne row */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
-  color: #047857 !important;
-  -webkit-text-fill-color: #047857 !important;
-}
-
-/* Sidebar logo header strip — mother-of-pearl white with emerald hairline */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
-  background-image: linear-gradient(180deg, #FFFFFF 0%, #FBFCFB 60%, #F5F9F6 100%) !important;
-}
-
-/* Sidebar footer bottom block (Contact/Support/Sign Out) — mother-of-pearl */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto > div[class*="bg-gradient-to-t"] {
-  background-image: linear-gradient(180deg, #FBFCFB 0%, #F5F9F6 100%) !important;
-}
-
-/* Sidebar Contact / Support pinned buttons — emerald accents (no gold) */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] {
-  color: #047857 !important;
-  border-color: rgba(4, 120, 87, 0.5) !important;
-  background-color: #FFFFFF !important;
-}
 html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg,
 html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg,
 html body [data-jj-utility-bar] button[style*="#B89555"],
@@ -8302,160 +8069,6 @@ html body .jj-emerald-metallic :is(p, span, a, svg, .lucide) *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-
-/* ============================================================
-   PASS 16 — Sidebar premium pearl + active-only emerald pill
-   Outranks PASSES 5/12/13/14/15. Scope: [data-sidebar-emerald].
-   ============================================================ */
-
-/* ── Shell: champagne base to match listing cards ───────── */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] {
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 60%, #F2EBDC 100%) !important;
-  background-color: #F7F2EA !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 60%, #F2EBDC 100%) !important;
-}
-/* Restore premium gold hairlines on the sidebar logo strip (right edge + bottom). */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::before,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::after {
-  background: linear-gradient(180deg, transparent 0%, #B89555 50%, transparent 100%) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::after {
-  background: linear-gradient(90deg, transparent 0%, #B89555 50%, transparent 100%) !important;
-}
-/* Gold left-border on expanded subitem column */
-
-
-/* ── Section header — IDLE (no [data-active]) ─────────────
-   Transparent, ink-emerald label, emerald-tile icon. Matches
-   the "AI Home Finder" reference. Overrides PASS 12 fill. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) * {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-  stroke: #064E3B !important;
-  border-color: transparent !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child {
-  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.85) !important;
-  box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-/* Hover on idle section → subtle emerald wash, NEVER gold */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover {
-  background-color: rgba(4,120,87,0.06) !important;
-  background-image: none !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover * {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-  stroke: #064E3B !important;
-}
-
-/* ── Section header — ACTIVE only ───────────────────────── */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.18) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child {
-  background-color: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.40) !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover {
-  background-image: var(--jj-emerald-ombre-hover) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18) !important;
-}
-
-/* Kill underline pseudo on section labels — clean look */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] [data-sidebar-section-label]::after,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label]::after{
-  display: none !important;
-}
-
-/* ── Highlight hubs (AI Home Finder, List Your Property,
-        Careers, Resale Properties) — match idle section style. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] {
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 10px !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child {
-  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.85) !important;
-  box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > svg.lucide-chevron-right {
-  color: #047857 !important;
-  stroke: #047857 !important;
-}
-/* Hover on highlight row → subtle emerald wash, ink stays ink, NO gold */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover {
-  background-color: rgba(4,120,87,0.06) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover [data-sidebar-highlight-label] {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-}
-/* Suppress any leftover gold underline pseudo on highlight labels */
-
-
-/* ── Pulse dot when section closed but has active child → emerald */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] span.animate-pulse {
-  background-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) span.animate-pulse {
-  background-color: #047857 !important;
-}
-
-/* ── Sidebar logo wordmark — ink text always */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child a span {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 /* ============================================================
@@ -8757,40 +8370,6 @@ html body footer[data-jj-minimal-footer] a:hover {
   opacity: 0.85 !important;
 }
 
-/* 3) Sidebar bottom panel — champagne (kills white seam) */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto > div[class*="bg-gradient-to-t"] {
-  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
-  background-color: #F7F2EA !important;
-}
-
-/* 4) Contact + Support pinned buttons — BLACK text + BLACK icon on champagne */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border-color: rgba(184,149,85,0.55) !important;
-  background-color: transparent !important;
-  background-image: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] * {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg * {
-  color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"]:hover {
-  background-color: #EFE6D6 !important;
-  background-image: none !important;
-  border-color: #B89555 !important;
-}
-
 /* 5) Collapse button — EMERALD METALLIC at idle AND hover, white icon */
 html body [data-sidebar-collapse-control],
 html body [data-sidebar-collapse-control] *,
@@ -8824,22 +8403,6 @@ html body [data-sidebar-collapse-control]:not(.jj-side-tile):hover {
   background-size: 100% 100% !important;
   border: 0 !important;
   box-shadow: 0 8px 20px -6px rgba(4,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.22) !important;
-}
-
-/* 6) Highlight items (first 4 categories: AI Home Finder, List Your
-      Property, Careers, Resale Properties) — hover must match section
-      idle hover: subtle wash only, NEVER a full green fill. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:active {
-  background-color: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover {
-  background-color: rgba(184,149,85,0.08) !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -9020,51 +8583,6 @@ html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-c
   text-shadow: 0 1px 0 rgba(0,0,0,0.25) !important;
 }
 
-
-/* ════════════════════════════════════════════════════════════════
-   PASS 24 — Sidebar active section: SOLID white title + icon
-   The emerald text-gradient (background-clip:text + transparent fill)
-   was eating the white when a section row is active/green. Re-assert
-   true white with the highest cascade.
-   ──────────────────────────────────────────────────────────────── */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] [data-sidebar-section-label],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover [data-sidebar-section-label] {
-  background: none !important;
-  background-image: none !important;
-  background-clip: initial !important;
-  -webkit-background-clip: initial !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  font-weight: 800 !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child svg *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] svg.lucide-chevron-down {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-/* Active subitem (current route inside an open section) → solid white pill */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem].is-active {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem].is-active [data-sidebar-subitem-label] {
-  background: none !important;
-  background-image: none !important;
-  -webkit-background-clip: initial !important;
-  background-clip: initial !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  font-weight: 700 !important;
-}
-
 /* ════════════════════════════════════════════════════════════════
    PASS 25 — Global accordion chevron visibility + Tab dividers
    ──────────────────────────────────────────────────────────────── */
@@ -9176,53 +8694,6 @@ html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-c
 html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
-}
-
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] > span:first-child {
-  background: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.40) !important;
-}
-
-/* PASS 28 — final expanded-sidebar active section contrast lock. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] [data-sidebar-section-label] {
-  background: none !important;
-  background-image: none !important;
-  background-clip: initial !important;
-  -webkit-background-clip: initial !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] > div:first-child {
-  background: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.40) !important;
 }
 
 html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] :is([data-on-dark], .allow-white, .allow-white *) {
@@ -9354,18 +8825,6 @@ html body :is(
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-
-/* Collapsed vertical sidebar — every icon tile + section trigger
-   should render as emerald-ombre with white icons (not flat green). */
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section],
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section] > div:first-child,
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-subitem] > span:first-child,
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight] > span:first-child {
-  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  color: #FFFFFF !important;
-}
 body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section] :is(svg, .lucide),
 body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-subitem] :is(svg, .lucide),
 body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight] :is(svg, .lucide) {
@@ -9481,40 +8940,12 @@ html body .jj-icon-emerald * {
   stroke: #047857 !important;
   fill: none !important;
 }
-
-/* PASS 31 — final emerald override for collapse control only.
-   Contact/Support are now governed by the sidebar hierarchy rule:
-   emerald only when their route is active. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control]:hover {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border-color: rgba(255,255,255,0.22) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] *,
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, .lucide),
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, .lucide) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-/* Contact / Support pinned buttons — active-aware. Inactive = champagne+ink;
-   active = canonical emerald-ombre + white. Both expanded and collapsed icon
-   variants are covered. */
-html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) {
-  background: transparent !important;
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(184,149,85,0.45) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  box-shadow: none !important;
 }
 html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]) *,
 html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) *,
@@ -9526,24 +8957,6 @@ html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   fill: none !important;
-}
-html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]):hover {
-  background: rgba(239,230,214,0.65) !important;
-  background-color: rgba(239,230,214,0.65) !important;
-  background-image: none !important;
-  border-color: rgba(184,149,85,0.65) !important;
-  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
-}
-html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"],
-html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"] *,
 html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] *,
@@ -10233,36 +9646,6 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
   0%   { background-position: -80% 0, 0 0; }
   100% { background-position: 180% 0, 0 0; }
 }
-
-
-/* ── Sidebar Highlight Unification (Pass) ──
-   AI Home Finder / List Your Property / Careers / Resale Properties must
-   render with the SAME idle + hover style as every other sidebar row
-   (transparent background, ink label, subtle champagne wash on hover).
-   The emerald-filled treatment is reserved exclusively for the
-   [data-active="true"] state, which is handled by the active rule above. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):focus-visible {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(26,26,26,0.045) !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover [data-sidebar-highlight-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
 /* Keep the emerald icon tile + white glyph inside the tile regardless of row state. */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child :is(svg, .lucide),
 html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child :is(svg, .lucide) * {
@@ -10761,12 +10144,6 @@ html body [data-sidebar-emerald] a[data-sidebar-subitem] svg[data-sidebar-subite
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body .jj-side-tile.is-active svg,
-html body .jj-side-tile.is-active svg * {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: none !important;
-}
 
 /* Emerald band ("Open Positions" / Live Roles section) — white text */
 html body [data-emerald-band],
@@ -10895,52 +10272,6 @@ html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sideb
 }
 html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sidebar-section][data-active="true"] {
   background-image: var(--jj-emerald-ombre) !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   DESIGN SYSTEM v1 — CONTRAST CONTRACT (single source of truth)
-
-   Replaces PASS 47 + PASS 48 + their absurd repeated-attribute
-   duplicates. ONE rule per concern. No animation on resting active
-   states. No MutationObserver paint loops.
-
-   Rule: Emerald / dark surface → WHITE fg.
-         Champagne / gold / light surface → INK #1A1A1A fg.
-   ──────────────────────────────────────────────────────────────── */
-
-/* —— Sidebar active row —————————————————————————————————————— */
-[data-chrome="sidebar"] [data-active="true"] {
-  background-image: linear-gradient(135deg, #064E3B 0%, #0A6B4E 100%) !important;
-  background-color: #064E3B !important;
-  color: #FFFFFF !important;
-  animation: none !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 1px 0 rgba(0, 0, 0, 0.18),
-    0 6px 14px -10px rgba(6, 78, 59, 0.55);
-}
-[data-chrome="sidebar"] [data-active="true"]:hover {
-  background-image: linear-gradient(135deg, #075f48 0%, #0B7857 100%) !important;
-}
-[data-chrome="sidebar"] [data-active="true"]::before,
-[data-chrome="sidebar"] [data-active="true"]::after {
-  content: none !important;
-  animation: none !important;
-  background: none !important;
-}
-[data-chrome="sidebar"] [data-active="true"],
-[data-chrome="sidebar"] [data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-[data-chrome="sidebar"] .jj-tab-active-metallic,
-[data-chrome="sidebar"] .jj-emerald-metallic,
-[data-chrome="sidebar"] [data-emerald-shimmer],
-[data-chrome="sidebar"] .jbj-shimmer-champagne,
-[data-chrome="sidebar"] .animate-shimmer {
-  animation: none !important;
-  background-position: 0 0 !important;
 }
 
 /* —— Tabs / segmented controls active state ——————————————————
@@ -12302,225 +11633,6 @@ html body :is(
   color: #FFFFFF !important;
 }
 
-
-/* ════════════════════════════════════════════════════════════════
-   SIDEBAR VISUAL HIERARCHY — final cascade lock.
-   Rule: EMERALD background reserved for the currently-active row
-   (and the collapse button). All other rows render on champagne
-   with BLACK text/icons. Hover = subtle champagne, never emerald.
-   This block intentionally appears LAST so it beats earlier passes.
-   ════════════════════════════════════════════════════════════════ */
-
-/* ── 1. INACTIVE SECTION HEADER ROWS ──────────────────────────── */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-icon]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) svg:not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  fill: none !important;
-}
-/* Inactive section row hover: subtle champagne, NEVER emerald. */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(239, 230, 214, 0.65) !important;
-  transform: none !important;
-  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
-  border-color: rgba(184,149,85,0.18) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-label]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-icon]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover svg:not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-/* Inactive section row stays champagne, but the emerald icon tile keeps white glyphs. */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-
-/* ── 2. INACTIVE HIGHLIGHT ROWS (AI Home Finder, List Property,
-       Careers, Resale Properties, Broker/Investor/Developer Portal) ── */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  fill: none !important;
-}
-
-/* Inactive highlight hover: subtle champagne. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(239, 230, 214, 0.65) !important;
-  transform: none !important;
-  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
-  border-color: rgba(184,149,85,0.18) !important;
-}
-/* Inactive highlight rows stay champagne, but emerald icon tiles keep white glyphs. */
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-
-/* ── 3. INACTIVE SUBITEMS — already champagne, just enforce ink + no emerald hover ── */
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon] *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon] *{
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover {
-  background-color: rgba(239, 230, 214, 0.55) !important;
-  background-image: none !important;
-  transform: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-  transform: none !important;
-}
-
-/* ── 4. ACTIVE row treatment (canonical emerald-ombre, white FG) ── */
-html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-highlight][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.15) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-highlight][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   SIDEBAR HIERARCHY EXTENSION — Mode Portal CTA + Contact/Support
-   Same rule as section/highlight rows: emerald ONLY when active.
-   ════════════════════════════════════════════════════════════════ */
-
-/* ── INACTIVE: Mode Portal (Broker / Investor / Developer) + Contact + Support ── */
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(1,8,6,0.72) !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  fill: none !important;
-}
-/* Subtle champagne hover — never emerald. */
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(239, 230, 214, 0.65) !important;
-   border-color: rgba(1,8,6,0.72) !important;
-  transform: none !important;
-   box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-
-/* ── ACTIVE: canonical emerald-ombre + white FG ── */
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.15) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
 /* ════════════════════════════════════════════════════════════════
    GLOBAL EMERALD ICON CONTRACT — final cascade.
    Rule: any icon rendered inside an emerald surface is pure white
@@ -12569,54 +11681,6 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > spa
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
-}
-
-/* Highest-specificity duplicate to beat earlier :not([data-active]) light-green stops. */
-
-
-/* 🔒 ABSOLUTE LAST RULE — official dark emerald icon tiles only.
-   Older sidebar passes used lighter #047857/#10b981 stops and white rings,
-   which made the icons read as green-filled. This end-of-file lock removes
-   the light treatment and forces the canonical ombre everywhere. */
-
-
-
-/* 🔒 ABSOLUTE LAST RULE — no light-green sidebar/icon-tile fills.
-   Cause fixed: older rules and collapsed-sidebar inline styles used white
-   rings/shadows plus lighter #047857/#10b981 stops, so screenshots read as
-   green-filled instead of official dark emerald. */
-
-
-
-/* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
-   Must remain after all inactive-sidebar black repaint rules. */
-html body [data-chrome="sidebar"] [data-emerald-icon-surface],
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:hover,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus-visible,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:active,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:disabled {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] .lucide,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] .lucide *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
 }
 /* Path-level lock so an inherited fill/stroke can't repaint icon strokes. */
 
@@ -16557,24 +15621,6 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   opacity: 1 !important;
   mix-blend-mode: normal !important;
 }
-
-/* Sidebar tiles: ALWAYS emerald box with pure white icons (PASS 127 — restore emerald). */
-html body .jj-side-tile:not(.is-active) {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
-}
-html body .jj-side-tile:not(.is-active):hover {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  border-color: rgba(184,149,85,0.55) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important;
-}
 html body .jj-side-tile :is(svg, .lucide),
 html body .jj-side-tile :is(svg, .lucide) * {
   color: #FFFFFF !important;
@@ -17258,15 +16304,6 @@ body :where([data-sidebar-highlight-tile], [data-emerald-icon-surface], .jj-side
   flex: 0 0 auto !important;
 }
 
-body :where(.jj-side-tile) {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
-  padding: 0 !important;
-  border-radius: 12px !important;
-}
-
 body :where([data-sidebar-highlight-tile], [data-sidebar-section] [data-emerald-icon-surface], [data-sidebar-subitem] [data-emerald-icon-surface]) {
   width: 32px !important;
   height: 32px !important;
@@ -17464,12 +16501,6 @@ html body #root [data-jj-utility-bar] .jj-avatar-metallic .jj-avatar-spinner {
   filter: drop-shadow(0 0 4px rgba(184,149,85,0.28)) !important;
 }
 
-html body #root [data-chrome="sidebar"] [data-sidebar-section-label] {
-  word-break: normal !important;
-  overflow-wrap: normal !important;
-  hyphens: manual !important;
-}
-
 html body #root [data-jj-utility-bar] .jj-avatar-metallic span {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -17477,23 +16508,6 @@ html body #root [data-jj-utility-bar] .jj-avatar-metallic span {
 
 html body #root [data-jj-utility-bar] .jj-avatar-metallic > span:not(.jj-avatar-spinner) span:last-child {
   text-shadow: 0 1px 2px rgba(0,0,0,0.72) !important;
-}
-
-/* FINAL SIDEBAR REPAIR — live vertical rail only.
-   Shared sizing + official emerald fill in collapsed and expanded states. */
-html body #root [data-chrome="sidebar"] :is(.jj-side-tile) {
-  width: 32px !important;
-  height: 32px !important;
-  min-width: 32px !important;
-  min-height: 32px !important;
-  border-radius: 10px !important;
-  padding: 0 !important;
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
-  border: 0 !important;
-  box-shadow: 0 8px 18px -13px rgba(6,78,59,0.9), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html body #root [data-chrome="sidebar"] :is(.jj-side-tile) :is(svg, .lucide, [data-lucide]) {
@@ -17532,28 +16546,6 @@ html body #root [data-chrome="sidebar"] [data-sidebar-emerald] :is([data-emerald
   stroke: currentColor !important;
   stroke-width: 2.1 !important;
   opacity: 1 !important;
-}
-
-
-
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] {
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-}
-
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] [data-sidebar-section-label],
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight] > span:nth-child(2),
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] [data-sidebar-subitem-label] {
-  min-width: 0 !important;
-  line-height: 1.12 !important;
-}
-
-/* Sidebar label crop lock — portal/sidebar labels must wrap, never ellipsize. */
-
-
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] > nav > div > div {
-  justify-content: space-between !important;
-  gap: 6px !important;
 }
 
 
@@ -18759,35 +17751,6 @@ html body select[data-no-contrast-guard]:not(#jj-ink-honour),
 html body select[data-no-contrast-guard]:not(#jj-ink-honour) option {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
-}
-
-
-/* ════════════════════════════════════════════════════════════════
-   PASS 127 FINAL LOCK — Sidebar tiles ALWAYS emerald metallic with
-   pure white glyphs (active = adds gold ring). Wins all prior rules.
-   ════════════════════════════════════════════════════════════════ */
-html body #root .jj-side-tile,
-html body .jj-side-tile {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body #root .jj-side-tile:hover,
-html body #root .jj-side-tile:focus-visible,
-html body .jj-side-tile:hover,
-html body .jj-side-tile:focus-visible {
-  border-color: rgba(184,149,85,0.55) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 10px 22px -12px rgba(4,120,87,0.78), inset 0 1px 0 rgba(255,255,255,0.24) !important;
-}
-html body #root .jj-side-tile.is-active,
-html body .jj-side-tile.is-active {
-  border-color: #B89555 !important;
-  box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.5) !important;
 }
 html body #root .jj-side-tile :is(svg, .lucide, path, circle, rect, line, polyline, polygon, ellipse, g),
 html body #root .jj-side-tile :is(svg, .lucide) *,
@@ -21090,25 +20053,6 @@ html body[data-page-scope~="aihf"] footer[data-jj-minimal-footer] p,
 html body[data-page-scope~="interior-ai"] footer[data-jj-minimal-footer] p {
   margin-top: 8px !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] {
-  min-height: 68px !important;
-  height: 68px !important;
-  aspect-ratio: auto !important;
-}
-
-html body [data-chrome="sidebar"] a[href="/auth"]:not([data-sidebar-auth-control]) {
-  min-height: 40px !important;
-  max-height: 40px !important;
-}
-
-html body [data-chrome="sidebar"] a[href="/auth"][data-sidebar-auth-control],
-html body [data-chrome="sidebar"] button[data-sidebar-auth-control],
-html body [data-chrome="sidebar"] [data-sidebar-auth-control] {
-  height: 42px !important;
-  min-height: 42px !important;
-  max-height: 42px !important;
-  border-radius: 8px !important;
-}
 
 html body.jj-vertical-nav-collapsed [data-sidebar-auth-control] {
   width: 40px !important;
@@ -22704,34 +21648,6 @@ html body #root [data-hero-dark] :is(h1, p).allow-white {
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
 }
-/* END PASS 170 */
-
-/* PASS 171 — INSIGHTS/GUIDES FINAL EDGE + EMERALD ACCENT LOCK
-   Fixes the reported drift on Area Intelligence and guide pages without
-   changing page content: full-bleed heroes, no hero gold frame, stable TOC
-   active rows, emerald icon accents with pure-white glyphs, and no legacy
-   neon/purple overlays inside the insights wrapper. */
-
-
-
-
-
-
-
-
-
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
 /* END PASS 171 */
 
 /* PASS 172 — INSIGHTS/GUIDES REBUILD BASELINE
@@ -23518,12 +22434,6 @@ html body :is(.aihf-root, [data-interior-design-ai], [data-business-card-scanner
 html body :is(.aihf-root, [data-interior-design-ai], [data-business-card-scanner], [data-list-property-page]) :is(input, textarea, select, button, [role="tab"], [role="combobox"], [data-searchable-trigger]) {
   box-shadow: none !important;
   outline-color: transparent !important;
-}
-
-/* PASS 189 — sidebar border-left direct override (beats older .border-l pass). */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [class*="border-l"] {
-  border-left-color: rgba(1, 8, 6, 0.72) !important;
 }
 
 
@@ -27481,27 +26391,6 @@ html body [data-filter-dropdown="true"][data-surface] [class*="text-white"]:not(
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-/* ============================================================
-   OWNER FIX — terminal locks for the reported sidebar, hero,
-   filter, and animation regressions. Keep this at the end.
-   ============================================================ */
-
-/* Expanded owner sidebar: start lower below the logo, then distribute the
-   visible categories down the rail so Help & Support no longer leaves a
-   dead empty block above the footer. */
-html body [data-chrome="sidebar"] nav > div.px-3 {
-  padding-top: 56px !important;
-}
-html body [data-chrome="sidebar"] nav > div.px-3 > div.flex.flex-col {
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  justify-content: flex-start !important;
-  gap: 9px !important;
-}
-html body [data-chrome="sidebar"] [id="nav-section-help-&-support"] {
-  margin-top: 0 !important;
-}
-
 /* Homepage hero search: remove the visible white top divider. */
 html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::before {
   background: var(--jj-emerald-ombre) !important;
@@ -27786,11 +26675,6 @@ html body [data-filter-dropdown="true"] [role="tab"].jj-pill-emerald-metallic * 
   stroke: #1A1A1A !important;
 }
 
-/* Final owner-requested nav/footer/filter closure. */
-html body [data-chrome="sidebar"] nav > div.px-3 {
-  padding-top: 32px !important;
-}
-
 
 
 @media (min-width: 640px) {
@@ -27907,11 +26791,6 @@ html body [data-filter-dropdown="true"] [data-filter-ink-label][data-filter-ink-
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
   opacity: 1 !important;
-}
-
-/* Request closure — lift Owner Portal slightly without changing sidebar rhythm. */
-html body [data-chrome="sidebar"] nav > div.px-3 {
-  padding-top: 24px !important;
 }
 
 /* Fast, deterministic filter dropdowns: no delayed entry animation/collision work
