@@ -24,7 +24,20 @@ const BASE_URL =
   process.env.BASE_URL ||
   'https://jbjglobalrealestate.lovable.app';
 
-const OUT_DIR = '/mnt/documents';
+// /mnt/documents is a writable mount in the Lovable/Claude sandbox where this
+// report is normally generated interactively. CI runners (GitHub Actions)
+// have no such mount and previously crashed here with EACCES before writing
+// anything — fall back to a repo-local dir (the one the CI workflow already
+// uploads as the `pass-142-report` artifact) when it isn't available.
+function resolveOutDir() {
+  try {
+    fs.mkdirSync('/mnt/documents', { recursive: true });
+    return '/mnt/documents';
+  } catch {
+    return path.join(process.cwd(), 'artifacts', 'pass-142');
+  }
+}
+const OUT_DIR = resolveOutDir();
 const HTML_OUT = path.join(OUT_DIR, 'pass-142-report.html');
 const JSON_OUT = path.join(OUT_DIR, 'pass-142-report.json');
 
