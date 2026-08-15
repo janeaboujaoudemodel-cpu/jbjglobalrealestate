@@ -342,7 +342,7 @@ export const PublicRoutes = () => (
     <Route path="/seller-faq" element={<InsightsPageScope><SellerFAQ /></InsightsPageScope>} />
     <Route path="/landlord-faq" element={<InsightsPageScope><LandlordFAQ /></InsightsPageScope>} />
     <Route path="/tenant-faq" element={<InsightsPageScope><TenantFAQ /></InsightsPageScope>} />
-    <Route path="/broker-faq" element={<InsightsPageScope><BrokerFAQ /></InsightsPageScope>} />
+    <Route path="/broker-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/guides/buying" element={<Navigate to="/guides/buyer" replace />} />
     <Route path="/guides/renting" element={<Navigate to="/rent-guide" replace />} />
     <Route path="/guides/selling" element={<Navigate to="/guides/seller" replace />} />

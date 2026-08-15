@@ -139,7 +139,6 @@ export const GUIDE_LINKS: GuideLink[] = [
   { title: "Golden Visa Guide", path: "/guides/golden-visa-uae", description: "Residency through property investment" },
   { title: "Investor Education", path: "/guides/invest", description: "Investment framework" },
   { title: "Broker Education", path: "/broker-education", description: "Professional broker training" },
-  { title: "Broker FAQ", path: "/broker-faq", description: "Professional broker questions answered" },
   { title: "FAQ", path: "/faq", description: "Common questions answered" },
 ];
 
