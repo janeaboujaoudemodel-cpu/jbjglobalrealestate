@@ -29,6 +29,34 @@ vi.mock("@/hooks/useUserRole", () => ({
   useUserRole: () => ({ hasSelectedRole: true, role: "investor" }),
 }));
 
+// ModeSwitcher reads `user` from AuthContext and owner status from
+// useIsAppOwner (which itself needs AuthContext + a QueryClient). Mocking
+// both keeps this file focused on ModeSwitcher's own color/placement
+// contract instead of pulling in auth/session and react-query plumbing.
+// `isOwner: true` keeps the full mode-picker branch rendering (the one
+// with per-mode rows this file asserts against) rather than the read-only
+// "request a mode change" panel ModeSwitcher shows non-owners.
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuth: () => ({ user: { id: "test-user", email: "test@example.com" } }),
+}));
+
+vi.mock("@/hooks/useIsAppOwner", () => ({
+  useIsAppOwner: () => ({ isOwner: true, isLoading: false }),
+}));
+
+// ModeSwitcher also calls useNavigate/useLocation on mount (for the
+// mode-change redirect), which throw outside a <Router>. None of these
+// tests exercise navigation, so a lightweight mock is enough — same
+// approach as the AuthContext/useIsAppOwner mocks above.
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<any>("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+    useLocation: () => ({ pathname: "/" }),
+  };
+});
+
 vi.mock("sonner", () => ({
   toast: { success: vi.fn() },
 }));
