@@ -6673,6 +6673,14 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-color: rgba(167,139,250,0.35) !important;
 }
 
+/* Auto-upgrade common shadcn card surfaces inside a neon page */
+[data-neon-page] .rounded-2xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]),
+[data-neon-page] .rounded-xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]) {
+  background: linear-gradient(180deg, rgba(10,16,32,0.86) 0%, rgba(6,10,24,0.94) 100%) !important;
+  border-color: rgba(167,139,250,0.25) !important;
+  color: #F6FBF8 !important;
+}
+
 /* Accordion (FAQ) styling inside neon page */
 [data-neon-page] [data-radix-accordion-item],
 [data-neon-page] [data-state] > [data-radix-accordion-trigger] {
