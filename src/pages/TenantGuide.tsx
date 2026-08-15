@@ -527,7 +527,7 @@ const TenantGuide = () => {
       {/* Guide Navigation */}
       <div className="jj-section-champagne py-12">
         <div className="container mx-auto px-4">
-          <GuideNavigation current="/tenant-guide" guides={GUIDE_LINKS} />
+          <GuideNavigation current="/guides/tenant" guides={GUIDE_LINKS} />
         </div>
       </div>
     </div>
