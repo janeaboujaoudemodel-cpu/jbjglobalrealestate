@@ -70,7 +70,7 @@ const InquiryFormModal = ({
   const [emailVerified, setEmailVerified] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<InquiryFormData | null>(null);
   const { t, isRTL } = useLanguage();
-  const { honeypot, setHoneypot } = useHoneypot();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
   
   const countries = getCountryList('en');
   const languages = getLanguageList();
@@ -152,6 +152,15 @@ const InquiryFormModal = ({
   };
 
   const completeSubmission = async (data: InquiryFormData) => {
+    if (isBot) {
+      // Anti-spam honeypot triggered: pretend success without touching the
+      // CRM lead, the inquiries table, or sending the admin notification
+      // email — this handler has multiple side effects beyond capture-lead
+      // (inquiries insert, send-inquiry-email), so the short-circuit has to
+      // happen here rather than relying on any single call's own guard.
+      setIsSuccess(true);
+      return;
+    }
     setIsSubmitting(true);
     try {
       // Validate phone using PhoneInput validation

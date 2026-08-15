@@ -418,10 +418,18 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   // Select service and create conversation
   const handleSelectService = useCallback(async (serviceId: string) => {
     setSelectedService(serviceId);
-    
+
+    // Anti-spam honeypot triggered: skip creating the chat session, saving
+    // the lead, and alerting the owner — a filled trap field means this
+    // wasn't driven by the ChatLeadForm/ChatConversationalCollect UI.
+    if (chatHoneypot.trim()) {
+      setStep('agent_joining');
+      return;
+    }
+
     const fullName = `${userInfo.firstName} ${userInfo.lastName}`.trim();
     const pageSource = window.location.pathname;
-    
+
     try {
       const { data, error } = await supabase.functions.invoke('chat-session', {
         body: {
@@ -441,7 +449,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       // Use backend edge function to save lead (bypasses RLS)
       const normalizedEmail = userInfo.email.toLowerCase().trim();
       const normalizedPhone = userInfo.phone?.replace(/[\s\-\(\)]/g, '') || null;
-      
+
       const { error: captureError } = await supabase.functions.invoke('capture-lead', {
         body: {
           email: normalizedEmail,
@@ -482,7 +490,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
     // Show agent joining animation
     setStep('agent_joining');
-  }, [userInfo]);
+  }, [userInfo, chatHoneypot]);
 
   // When agent is ready, start the chat
   const handleAgentReady = () => {

@@ -94,7 +94,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
     preferredLanguage: 'English',
     interestedService: '',
   });
-  const { honeypot, setHoneypot } = useHoneypot();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
 
   // Check if user already submitted contact details
   useEffect(() => {
@@ -199,28 +199,32 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
         throw new Error(errorData.error || 'Submission failed');
       }
 
-      // Update visitor session with masked contact info via secure RPC
-      await supabase.rpc('track_visitor_session_update', {
-        p_session_id: sessionId,
-        p_patch: {
-          contact_details: {
-            name: formData.fullName.split(' ')[0] + ' ***',
-            email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'),
-            hasPhone: true,
-            nationality: formData.nationality,
-          },
-          is_converted: true,
-        } as never,
-      });
+      if (!isBot) {
+        // Update visitor session with masked contact info via secure RPC.
+        // Skipped for the honeypot case: submit-contact-gating already
+        // no-op'd the encrypted storage, so this shouldn't mark the
+        // session as converted or record fabricated contact details either.
+        await supabase.rpc('track_visitor_session_update', {
+          p_session_id: sessionId,
+          p_patch: {
+            contact_details: {
+              name: formData.fullName.split(' ')[0] + ' ***',
+              email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'),
+              hasPhone: true,
+              nationality: formData.nationality,
+            },
+            is_converted: true,
+          } as never,
+        });
 
-
-      // Mark as completed in localStorage (no full PII stored client-side)
-      localStorage.setItem('contact_gating_completed', 'true');
-      localStorage.setItem('contact_gating_data', JSON.stringify({
-        ...formData,
-        email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'),
-        phone: formData.phone.slice(0, 4) + '****' + formData.phone.slice(-2),
-      }));
+        // Mark as completed in localStorage (no full PII stored client-side)
+        localStorage.setItem('contact_gating_completed', 'true');
+        localStorage.setItem('contact_gating_data', JSON.stringify({
+          ...formData,
+          email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'),
+          phone: formData.phone.slice(0, 4) + '****' + formData.phone.slice(-2),
+        }));
+      }
 
       setStep('complete');
       

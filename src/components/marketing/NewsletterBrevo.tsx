@@ -63,6 +63,7 @@ export const NewsletterBrevo = ({
           page_source: window.location.pathname,
           listId,
           gdpr_consent: true,
+          honeypot,
         },
       });
 

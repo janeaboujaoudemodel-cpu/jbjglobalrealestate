@@ -48,6 +48,7 @@ export function NewsletterSection() {
           phone: phone || undefined,
           source: 'project_detail',
           page_source: location.pathname,
+          honeypot,
         },
       });
 

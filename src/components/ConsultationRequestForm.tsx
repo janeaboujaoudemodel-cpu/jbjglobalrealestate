@@ -158,7 +158,7 @@ export const ConsultationRequestForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
-  const { honeypot, setHoneypot } = useHoneypot();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
   const isPropertyManagement = variant === "property-management" || formSource === "property-management-proposal";
   const serviceLabels = useMemo(
     () => serviceOptions && serviceOptions.length ? serviceOptions : SERVICE_OPTIONS.map((opt) => opt.label),
@@ -192,6 +192,12 @@ export const ConsultationRequestForm = ({
   });
 
   const onSubmit = async (data: ConsultationFormData) => {
+    if (isBot) {
+      // Anti-spam honeypot triggered: pretend success without saving the
+      // lead or sending the admin notification email.
+      setIsSuccess(true);
+      return;
+    }
     setIsSubmitting(true);
     try {
       const source = formSource || (projectId 

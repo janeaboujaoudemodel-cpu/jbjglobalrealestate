@@ -81,7 +81,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
-  const { honeypot, setHoneypot } = useHoneypot();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
 
   const countries = getCountryList();
 
@@ -121,6 +121,12 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
   };
 
   const onSubmit = async (data: MeetingFormData) => {
+    if (isBot) {
+      // Anti-spam honeypot triggered: pretend success without saving the
+      // lead or sending the admin notification email.
+      setIsSuccess(true);
+      return;
+    }
     setIsSubmitting(true);
     try {
       // Capture lead

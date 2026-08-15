@@ -499,7 +499,7 @@ const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { isLeadCaptured, captureLead, checkLead } = useLeadCapture();
-  const { honeypot, setHoneypot } = useHoneypot();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
   // AI Home Finder is free but limited to ONE run per user/device.
   // A subscription is required for any subsequent run.
   const { hasUsedFreeQuiz, markFreeUsed: persistFreeUsed } = useQuizUsage();
@@ -1078,23 +1078,28 @@ const Quiz = () => {
       const top = recommendations.slice(0, 3);
       const sessionId = `quiz-${(crypto as any)?.randomUUID ? (crypto as any).randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`}`;
 
-      // Always persist the submission so owner can review every lead (anon allowed).
+      // Always persist the submission so owner can review every lead (anon
+      // allowed) — except when the honeypot caught a bot; captureLead()
+      // already no-op'd the CRM record, so this table shouldn't get the
+      // fabricated submission either.
       try {
-        await supabase.from("matchmaker_submissions" as any).insert({
-          session_id: sessionId,
-          user_id: user?.id ?? null,
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          nationality: formData.nationality || null,
-          preferred_language: formData.preferredLanguage || null,
-          answers,
-          recommended_slugs: top.map((p) => p.slug),
-          recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
-          result_tier: tier,
-          user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-          referrer: typeof document !== "undefined" ? document.referrer || null : null,
-        });
+        if (!isBot) {
+          await supabase.from("matchmaker_submissions" as any).insert({
+            session_id: sessionId,
+            user_id: user?.id ?? null,
+            full_name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            nationality: formData.nationality || null,
+            preferred_language: formData.preferredLanguage || null,
+            answers,
+            recommended_slugs: top.map((p) => p.slug),
+            recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
+            result_tier: tier,
+            user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+            referrer: typeof document !== "undefined" ? document.referrer || null : null,
+          });
+        }
       } catch (e) {
         console.warn("matchmaker_submissions insert failed", e);
       }
