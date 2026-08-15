@@ -37,10 +37,19 @@ if (!fs.existsSync(path.join(DIST, "index.html"))) {
 const routes = JSON.parse(fs.readFileSync(path.join(__dirname, "routes.json"), "utf8"));
 
 const server = spawn(
-  "bunx",
+  "npx",
   ["vite", "preview", "--port", String(PORT), "--strictPort", "--host", "127.0.0.1"],
   { cwd: ROOT, stdio: "ignore" },
 );
+
+// Without this, a spawn failure (missing binary, bad PATH, ...) is an
+// uncaught 'error' event that crashes the whole process — bypassing the
+// try/catch in main() below and defeating the "soft fail" this script is
+// documented to do. Route it through the same soft-fail path instead.
+server.on("error", (err) => {
+  console.log("[prerender] skipped: preview server failed to start:", String(err).slice(0, 200));
+  process.exit(0);
+});
 
 const stop = () => {
   try {
