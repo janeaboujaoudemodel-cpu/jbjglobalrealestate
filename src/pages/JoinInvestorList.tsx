@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 import { toast } from "sonner";
 
 const DRAFT_KEY = "jbj_investor_join_draft";
@@ -47,6 +48,7 @@ const emptyForm = {
 const JoinInvestorList = () => {
   const navigate = useNavigate();
   const { captureLead } = useLeadCapture();
+  const { honeypot, setHoneypot } = useHoneypot();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Load draft from localStorage
@@ -97,6 +99,7 @@ const JoinInvestorList = () => {
           fullName: formData.fullName,
           phone: formData.phone,
           nationality: formData.nationality || undefined,
+          honeypot,
         },
         "investors-join"
       );
@@ -202,6 +205,7 @@ const JoinInvestorList = () => {
                 onSubmit={handleSubmit}
                 className="bg-[#FDFBF7] shadow-lg border border-[#B89555]/30 p-6 md:p-8 space-y-6"
               >
+                <HoneypotField value={honeypot} onChange={setHoneypot} name="investor_company_website" />
                 {/* Contact Details */}
                 <div className="space-y-1 mb-4">
                   <h3 className="text-lg font-bold text-foreground tracking-wide uppercase flex items-center gap-2">

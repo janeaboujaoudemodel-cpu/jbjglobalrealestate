@@ -16,6 +16,7 @@ import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -31,6 +32,7 @@ const SellWithUs = () => {
   const valuationRef = useRef<HTMLDivElement>(null);
   const listingRef = useRef<HTMLDivElement>(null);
   const { captureLead } = useLeadCapture();
+  const { honeypot, setHoneypot } = useHoneypot();
 
   // Quick valuation state
   const [valCommunity, setValCommunity] = useState('');
@@ -96,6 +98,7 @@ const SellWithUs = () => {
         email: listEmail || `${listPhone.replace(/\D/g, '')}@listing-lead.jbj.ae`,
         fullName: listName,
         phone: listPhone,
+        honeypot,
       }, 'sell-page-listing', 'client');
       setListSubmitted(true);
       toast.success("Listing request submitted! Our team will contact you shortly.");
@@ -366,6 +369,7 @@ const SellWithUs = () => {
               <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08]">
                 {!listSubmitted ? (
                   <div className="space-y-5">
+                    <HoneypotField value={honeypot} onChange={setHoneypot} name="sell_company_website" />
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Full Name</Label>

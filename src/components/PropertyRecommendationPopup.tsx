@@ -133,6 +133,7 @@ const PropertyRecommendationPopup = () => {
     const baseFilter = (q: any) =>
       q
         .eq("is_published", true)
+        .is("deleted_at", null)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .not("sale_status", "ilike", "%sold%");
 

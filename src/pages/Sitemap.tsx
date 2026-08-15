@@ -433,7 +433,7 @@ const Sitemap = () => {
               className="max-w-4xl mx-auto"
             >
               <motion.div variants={fadeInUp} className="mb-6 flex justify-center">
-                <Badge className="bg-white/10 text-white border border-white/25 px-4 py-1.5 text-xs uppercase tracking-[0.2em] rounded-full">
+                <Badge className="bg-[rgba(255,255,255,0.10)] text-white border border-white/25 px-4 py-1.5 text-xs uppercase tracking-[0.2em] rounded-full">
                   <Map className="w-3.5 h-3.5 mr-1.5" />
                   Sitemap
                 </Badge>

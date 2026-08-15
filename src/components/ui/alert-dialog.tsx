@@ -35,14 +35,16 @@ const AlertDialogContent = React.forwardRef<
       ref={ref}
       data-surface="light"
       className={cn(
-        "fixed top-[50%] z-[10110] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg",
+        "fixed z-[10110] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg",
         className,
       )}
       {...props}
       style={{
         /* PASS 374 — centred on the visible content viewport, not the window. */
-        left: "calc(var(--jj-modal-inset-left, 0px) + (100vw - var(--jj-modal-inset-left, 0px)) / 2)",
-        maxWidth: "calc(100vw - var(--jj-modal-inset-left, 0px) - 2rem)",
+        left: "calc(var(--jj-modal-inset-left, 0px) + (100vw - var(--jj-modal-inset-left, 0px) - var(--jj-modal-inset-right, 0px)) / 2)",
+        top: "calc(var(--jj-modal-inset-top, 0px) + (100dvh - var(--jj-modal-inset-top, 0px) - var(--jj-modal-inset-bottom, 0px)) / 2)",
+        maxWidth: "calc(100vw - var(--jj-modal-inset-left, 0px) - var(--jj-modal-inset-right, 0px) - 2rem)",
+        maxHeight: "calc(100dvh - var(--jj-modal-inset-top, 0px) - var(--jj-modal-inset-bottom, 0px) - 2rem)",
         ...((props as { style?: React.CSSProperties }).style || {}),
       }}
     />

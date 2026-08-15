@@ -38,6 +38,9 @@ interface LeadCaptureRequest {
   partnerConsentGiven?: boolean;
   message?: string;
   context?: Record<string, unknown>;
+  // Anti-spam honeypot: real users never populate this (see
+  // src/components/forms/HoneypotField.tsx). Non-empty means bot.
+  honeypot?: string;
 }
 
 function escapeHtml(input: string | null | undefined): string {
@@ -311,6 +314,16 @@ serve(async (req: Request): Promise<Response> => {
     }
 
     const data: LeadCaptureRequest = await req.json();
+
+    // Anti-spam honeypot: a filled trap field means a bot blindly populated
+    // every input. Return a fake success so scrapers don't learn they were
+    // caught, without touching the leads/CRM tables.
+    if (data.honeypot) {
+      return new Response(
+        JSON.stringify({ success: true, message: "Lead captured successfully" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Validate required fields
     if (!data.email || !data.source) {

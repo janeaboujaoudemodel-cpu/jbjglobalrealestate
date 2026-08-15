@@ -19,6 +19,7 @@ import LightSearchableSelect from "@/components/signup/LightSearchableSelect";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -157,6 +158,7 @@ export const ConsultationRequestForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
   const isPropertyManagement = variant === "property-management" || formSource === "property-management-proposal";
   const serviceLabels = useMemo(
     () => serviceOptions && serviceOptions.length ? serviceOptions : SERVICE_OPTIONS.map((opt) => opt.label),
@@ -190,6 +192,12 @@ export const ConsultationRequestForm = ({
   });
 
   const onSubmit = async (data: ConsultationFormData) => {
+    if (isBot) {
+      // Anti-spam honeypot triggered: pretend success without saving the
+      // lead or sending the admin notification email.
+      setIsSuccess(true);
+      return;
+    }
     setIsSubmitting(true);
     try {
       const source = formSource || (projectId 
@@ -220,6 +228,7 @@ export const ConsultationRequestForm = ({
           projectName,
           projectId,
         },
+        honeypot,
       }, source, "client");
 
       if (!leadCaptured) {
@@ -356,6 +365,7 @@ export const ConsultationRequestForm = ({
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" data-form-shell>
+          <HoneypotField value={honeypot} onChange={setHoneypot} name="consultation_company_website" />
           <FormField
             control={form.control}
             name="fullName"

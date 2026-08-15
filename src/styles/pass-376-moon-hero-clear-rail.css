@@ -1,0 +1,65 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PASS 376 — MOON HERO-CLEAR RAIL STAYS TRANSPARENT (LOCKED)
+
+   PASS 335 already made the collapsed rail transparent while the page sits
+   on a photographic hero (body[data-jj-hero-chrome="clear"]). PASS 310 and
+   PASS 366 later repainted the Moon rail with a deep emerald gradient using
+   higher-specificity selectors that carry no hero-clear exclusion, so on
+   the Moon skin the rail read as a filled emerald column over the hero.
+
+   This pass restores the clear state with selectors that outrank both, in
+   the collapsed rail and every surface layer inside it. Scroll past the
+   hero (chrome flips to "solid") and the emerald gradient returns exactly
+   as PASS 366 defines it. Sun and the owner back end are untouched.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  html:not([data-jbj-backend-lock="1"])
+    body[data-jj-hero-chrome="clear"][data-jj-hero-chrome][data-jj-hero-chrome]
+    div#root
+    div[data-chrome="sidebar"]:has([data-rail-state="collapsed"]),
+  html:not([data-jbj-backend-lock="1"])
+    body[data-jj-hero-chrome="clear"][data-jj-hero-chrome][data-jj-hero-chrome]
+    div#root
+    div[data-chrome="sidebar"]:has([data-rail-state="collapsed"])
+    :is(
+      nav,
+      aside,
+      .jj-rail-stack,
+      .jj-rail-brand-band,
+      .jj-rail-emerald-edge,
+      [data-sidebar-emerald],
+      [data-sidebar-brand-row],
+      [data-sidebar-emerald][data-sidebar-emerald]
+    ),
+  html:not([data-jbj-backend-lock="1"])
+    body[data-jj-hero-chrome="clear"][data-jj-hero-chrome][data-jj-hero-chrome]
+    div#root
+    div[data-chrome="sidebar"]:has([data-rail-state="collapsed"]) > :is(div, aside) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Hairlines only, matching the transparent horizontal header above. */
+  html:not([data-jbj-backend-lock="1"])
+    body[data-jj-hero-chrome="clear"][data-jj-hero-chrome][data-jj-hero-chrome]
+    div#root
+    div[data-chrome="sidebar"]:has([data-rail-state="collapsed"])
+    .jj-rail-emerald-edge {
+    border-right: 1px solid rgba(255, 255, 255, 0.22) !important;
+  }
+
+  /* Ink stays pure white over the hero (dark-surface contract). */
+  html:not([data-jbj-backend-lock="1"])
+    body[data-jj-hero-chrome="clear"][data-jj-hero-chrome][data-jj-hero-chrome]
+    div#root
+    div[data-chrome="sidebar"]:has([data-rail-state="collapsed"])
+    :is(a, button, span, svg, svg *) {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+}
