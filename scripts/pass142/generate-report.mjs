@@ -9,8 +9,14 @@
  * as base64 (so it can be emailed / uploaded / opened offline).
  *
  * Output:
- *   /mnt/documents/pass-142-report.html      (shareable, single file)
- *   /mnt/documents/pass-142-report.json      (raw results, machine-readable)
+ *   <OUT_DIR>/pass-142-report.html      (shareable, single file)
+ *   <OUT_DIR>/pass-142-report.json      (raw results, machine-readable)
+ *
+ * OUT_DIR is /mnt/documents when that mount is available and writable
+ * (the sandbox this script was originally authored in); everywhere else —
+ * including GitHub Actions runners, which have no such mount — it falls
+ * back to artifacts/pass-142 in the repo, which the CI workflow already
+ * creates and uploads.
  *
  * Usage:
  *   PREVIEW_URL=http://localhost:8080 node scripts/pass142/generate-report.mjs
@@ -18,13 +24,27 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const BASE_URL =
   process.env.PREVIEW_URL ||
   process.env.BASE_URL ||
   'https://jbjglobalrealestate.lovable.app';
 
-const OUT_DIR = '/mnt/documents';
+function resolveOutDir() {
+  const preferred = '/mnt/documents';
+  try {
+    fs.mkdirSync(preferred, { recursive: true });
+    return preferred;
+  } catch {
+    const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+    const fallback = path.join(repoRoot, 'artifacts', 'pass-142');
+    fs.mkdirSync(fallback, { recursive: true });
+    return fallback;
+  }
+}
+
+const OUT_DIR = resolveOutDir();
 const HTML_OUT = path.join(OUT_DIR, 'pass-142-report.html');
 const JSON_OUT = path.join(OUT_DIR, 'pass-142-report.json');
 
@@ -271,11 +291,15 @@ function renderHtml(results, meta) {
 }
 
 (async () => {
-  fs.mkdirSync(OUT_DIR, { recursive: true });
   console.log(`[pass-142] base=${BASE_URL} routes=${ROUTES.length} viewports=${VIEWPORTS.length}`);
+  console.log(`[pass-142] writing report to ${OUT_DIR}`);
+  // No hardcoded executablePath by default: let Playwright resolve whichever
+  // chromium build `playwright install` put in its own cache (same
+  // resolution check-exports.mjs relies on). CHROMIUM_PATH remains a manual
+  // override for environments (like the original sandbox) that need one.
   const browser = await chromium.launch({
     headless: true,
-    executablePath: process.env.CHROMIUM_PATH || '/bin/chromium',
+    executablePath: process.env.CHROMIUM_PATH || undefined,
     args: ['--no-sandbox'],
   });
   const results = [];

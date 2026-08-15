@@ -74,7 +74,13 @@ jobs:
 
       # ---------- Layer 2: rendered Playwright sweep ----------
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        # scripts/pass142/generate-report.mjs calls the raw chromium.launch()
+        # API (like PDF Export QA's check-exports.mjs), which needs the
+        # separate chromium-headless-shell binary — "chromium" alone isn't
+        # enough. tests/dark-surface-heading-contrast.spec.ts runs via the
+        # @playwright/test runner and doesn't need it, but installing it here
+        # too is harmless and keeps both Playwright users in this job covered.
+        run: npx playwright install --with-deps chromium chromium-headless-shell
 
       - name: Build app
         run: npm run build
