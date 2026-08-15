@@ -15,6 +15,12 @@ jobs:
     name: Contrast PR Gate (blocks merges)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Default GITHUB_TOKEN in this repo is read-only, so the "Post PR
+    # summary" step's issues.createComment call 403s on every run
+    # ("Resource not accessible by integration") without this.
+    permissions:
+      contents: read
+      issues: write
 
     steps:
       - name: Checkout
