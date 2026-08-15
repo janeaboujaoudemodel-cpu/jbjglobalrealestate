@@ -18,6 +18,14 @@ import { useLocation } from "react-router-dom";
  */
 
 const MAX_INSET = 340;
+const DEFAULT_HEADER_HEIGHT = 56;
+
+type ContentViewport = {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+};
 
 /**
  * PASS 375 — measure the LIVE content column instead of the rail element.
@@ -27,15 +35,40 @@ const MAX_INSET = 340;
  * every rail state (collapsed 59px, expanded 264px) and on every viewport
  * (phone chrome resolves to 0).
  */
-function measureInset(): number {
-  if (typeof document === "undefined") return 0;
+function measureContentViewport(): ContentViewport {
+  if (typeof document === "undefined") {
+    return { left: 0, top: 0, right: 0, bottom: 0 };
+  }
+
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
 
   const shell = document.querySelector<HTMLElement>(
-    "main.jj-main-shell:not(.jj-main-shell--standalone), .jc-app .jc-content, main[data-owner-content]",
+    "[data-net-content], main.jj-main-shell:not(.jj-main-shell--standalone), .jc-app .jc-content, main[data-owner-content]",
   );
   if (shell) {
     const rect = shell.getBoundingClientRect();
-    if (rect.width > 0) return Math.round(Math.min(Math.max(rect.left, 0), MAX_INSET));
+    if (rect.width > 0) {
+      const shellHeader = shell.querySelector<HTMLElement>(":scope > header");
+      const shellHeaderRect = shellHeader?.getBoundingClientRect();
+      const utilityBar = document.querySelector<HTMLElement>(
+        ".jj-utility-shell, [data-chrome='utility-bar']",
+      );
+      const utilityRect = utilityBar?.getBoundingClientRect();
+      const top = Math.max(
+        rect.top,
+        shellHeaderRect && shellHeaderRect.height > 0 ? shellHeaderRect.bottom : 0,
+        utilityRect && utilityRect.height > 0 ? utilityRect.bottom : 0,
+        DEFAULT_HEADER_HEIGHT,
+      );
+
+      return {
+        left: Math.round(Math.min(Math.max(rect.left, 0), MAX_INSET)),
+        top: Math.round(Math.min(Math.max(top, 0), viewportHeight)),
+        right: Math.round(Math.min(Math.max(viewportWidth - rect.right, 0), MAX_INSET)),
+        bottom: Math.round(Math.max(viewportHeight - Math.min(rect.bottom, viewportHeight), 0)),
+      };
+    }
   }
 
   // Fallback: the shell engine variable published on <body>.
@@ -44,8 +77,12 @@ function measureInset(): number {
     .getPropertyValue("--jj-shell-sidebar-w")
     .trim();
   const parsed = Number.parseFloat(raw);
-  if (Number.isFinite(parsed)) return Math.round(Math.min(Math.max(parsed, 0), MAX_INSET));
-  return 0;
+  return {
+    left: Number.isFinite(parsed) ? Math.round(Math.min(Math.max(parsed, 0), MAX_INSET)) : 0,
+    top: DEFAULT_HEADER_HEIGHT,
+    right: 0,
+    bottom: 0,
+  };
 }
 
 
@@ -54,14 +91,19 @@ export function useModalViewportInset(): void {
 
   React.useEffect(() => {
     let raf = 0;
-    let last = -1;
+    let last = "";
 
     const apply = () => {
       raf = 0;
-      const next = measureInset();
-      if (next === last) return;
-      last = next;
-      document.documentElement.style.setProperty("--jj-modal-inset-left", `${next}px`);
+      const next = measureContentViewport();
+      const signature = `${next.left}:${next.top}:${next.right}:${next.bottom}`;
+      if (signature === last) return;
+      last = signature;
+      const root = document.documentElement.style;
+      root.setProperty("--jj-modal-inset-left", `${next.left}px`);
+      root.setProperty("--jj-modal-inset-top", `${next.top}px`);
+      root.setProperty("--jj-modal-inset-right", `${next.right}px`);
+      root.setProperty("--jj-modal-inset-bottom", `${next.bottom}px`);
     };
 
     const schedule = () => {
