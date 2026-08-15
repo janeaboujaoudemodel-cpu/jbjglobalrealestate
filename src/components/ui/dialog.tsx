@@ -106,7 +106,7 @@ const DialogContent = React.forwardRef<
         ref={ref}
         data-surface="light"
         className={cn(
-          "fixed top-[50%] grid translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#064E3B]/30 bg-[#FBF6EC] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
+          "fixed grid translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#064E3B]/30 bg-[#FBF6EC] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg overflow-y-auto sm:max-w-lg",
           className,
         )}
         /* Stacking is enforced inline so a consumer utility class (e.g. `z-[80]`)
@@ -119,8 +119,10 @@ const DialogContent = React.forwardRef<
           /* PASS 374 — centre inside the VISIBLE content viewport (window minus
              the docked rail), never the raw window, so the panel reads centred
              in every rail state: expanded, collapsed and closed. */
-          width: "calc(100vw - var(--jj-modal-inset-left, 0px) - 2rem)",
-          left: "calc(var(--jj-modal-inset-left, 0px) + (100vw - var(--jj-modal-inset-left, 0px)) / 2)",
+          width: "calc(100vw - var(--jj-modal-inset-left, 0px) - var(--jj-modal-inset-right, 0px) - 2rem)",
+          left: "calc(var(--jj-modal-inset-left, 0px) + (100vw - var(--jj-modal-inset-left, 0px) - var(--jj-modal-inset-right, 0px)) / 2)",
+          top: "calc(var(--jj-modal-inset-top, 0px) + (100dvh - var(--jj-modal-inset-top, 0px) - var(--jj-modal-inset-bottom, 0px)) / 2)",
+          maxHeight: "calc(100dvh - var(--jj-modal-inset-top, 0px) - var(--jj-modal-inset-bottom, 0px) - 2rem)",
           ...((props as { style?: React.CSSProperties }).style || {}),
           zIndex: 120001,
         }}

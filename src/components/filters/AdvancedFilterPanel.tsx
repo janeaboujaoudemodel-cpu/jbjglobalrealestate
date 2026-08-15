@@ -273,32 +273,13 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "text-sm text-[#1A1A1A] group-hover:text-white group-focus:text-white text-left leading-[1.15] line-clamp-2";
   const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
 
-  const PANEL_WIDTH = 768;
-  const HEADER_BOTTOM_Y = 88;
-  const panelLeft = (() => {
-    if (typeof window === 'undefined' || !anchorRect) return undefined;
-    const margin = 16;
-    const width = Math.min(PANEL_WIDTH, window.innerWidth - margin * 2);
-    const triggerCenter = anchorRect.left + anchorRect.width / 2;
-    return Math.max(margin, Math.min(triggerCenter - width / 2, window.innerWidth - width - margin));
-  })();
-
-  // Header filter panel: attached below the horizontal header divider and aligned
-  // to the clicked filter control, matching the AED dropdown origin behavior.
+  // All filter panels use the shared net-content viewport centre. The trigger
+  // location must never pull the panel toward the rail or a viewport edge.
   const headerAnchoredPanelStyle = {
     ['--slider-track-bg' as any]: 'rgba(6,78,59,0.14)',
     ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
     ['--slider-thumb-bg' as any]: '#FFFFFF',
     ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
-    ...(panelLeft !== undefined
-      ? {
-          left: `${panelLeft}px`,
-          top: `${HEADER_BOTTOM_Y}px`,
-          width: `min(${PANEL_WIDTH}px, calc(100vw - 32px))`,
-          transform: 'none',
-          maxHeight: `calc(100dvh - ${HEADER_BOTTOM_Y + 16}px)`,
-        }
-      : {}),
   } as CSSProperties;
 
 
