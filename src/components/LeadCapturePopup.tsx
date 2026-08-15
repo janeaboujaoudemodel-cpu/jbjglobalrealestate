@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { useSmartPopupStrategy } from "@/hooks/useSmartPopupStrategy";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const NATIONALITIES = [
   "UAE", "India", "Pakistan", "United Kingdom", "Russia", "China",
@@ -47,6 +48,7 @@ const LeadCapturePopup = () => {
   const { requestToShow, dismiss, isVisible } = usePopupVisibility('lead-intent-modal');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasRequested, setHasRequested] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -96,6 +98,7 @@ const LeadCapturePopup = () => {
             service: formData.service,
             preferredContactTime: formData.contactTime || null,
           },
+          honeypot,
         },
       });
       if (error) throw error;
@@ -156,6 +159,7 @@ const LeadCapturePopup = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="p-6 space-y-3">
+              <HoneypotField value={honeypot} onChange={setHoneypot} name="popup_company_website" />
               <Input
                 placeholder="Full Name *"
                 value={formData.name}

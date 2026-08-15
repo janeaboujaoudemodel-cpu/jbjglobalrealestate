@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useDevelopers, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
 import { cn } from "@/lib/utils";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 interface ProjectInquiryFormProps {
   projectId: string;
@@ -98,6 +99,7 @@ export function ProjectInquiryForm({
     contactMethod: "",
     message: ""
   });
+  const { honeypot, setHoneypot } = useHoneypot();
 
   // Developer combobox state
   const [developerOpen, setDeveloperOpen] = useState(false);
@@ -256,6 +258,7 @@ export function ProjectInquiryForm({
       // email alert and AI-prepared first response draft.
       const { error } = await supabase.functions.invoke("capture-lead", {
         body: {
+          honeypot,
           email: formData.email,
           fullName: formData.name,
           phone: formData.phone,
@@ -351,6 +354,7 @@ export function ProjectInquiryForm({
       )}
 
       <form onSubmit={handleSubmit} className={cn("space-y-4", compact ? "w-full" : "max-w-md mx-auto")} data-form-shell>
+        <HoneypotField value={honeypot} onChange={setHoneypot} name="project_inquiry_company_website" />
 
         {/* Name */}
         <div className="space-y-2">

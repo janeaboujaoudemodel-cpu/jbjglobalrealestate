@@ -11,6 +11,7 @@ import Field from "@/components/signup/Field";
 import NationalityPicker from "@/components/crm/pickers/NationalityPicker";
 import PhoneInputWithCountry from "@/components/crm/pickers/PhoneInputWithCountry";
 import { LANGUAGES } from "@/data/languages";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const ADVISOR_FORM_STYLE = `
 html body [data-advisor-popover],
@@ -304,6 +305,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
   const [services, setServices] = useState<string[]>([]);
   const [otherService, setOtherService] = useState("");
   const [loading, setLoading] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -313,7 +315,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
         ? [...services, `Other: ${otherService.trim()}`]
         : services;
       const { data, error } = await supabase.functions.invoke("submit-lead", {
-        body: { ...form, services: finalServices, source_page: sourcePage ?? window.location.pathname },
+        body: { ...form, services: finalServices, source_page: sourcePage ?? window.location.pathname, honeypot },
       });
       if (error || (data && (data as any).error)) {
         throw new Error((data as any)?.error ?? error?.message ?? "Submission failed");
@@ -341,6 +343,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
           </DialogDescription>
         </DialogHeader>
         <form data-advisor-form onSubmit={submit} autoComplete="on" className="grid gap-5 mt-2">
+          <HoneypotField value={honeypot} onChange={setHoneypot} name="advisor_company_website" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Full name" required>
               <Input required autoComplete="name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />

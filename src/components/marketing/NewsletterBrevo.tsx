@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import SubscriptionSuccessModal from '@/components/marketing/SubscriptionSuccessModal';
 import NewsletterDetailModal from '@/components/marketing/NewsletterDetailModal';
 import { useTypewriter } from '@/hooks/useTypewriter';
+import { HoneypotField, useHoneypot } from '@/components/forms/HoneypotField';
 
 const NEWSLETTER_TYPEWRITER_PHRASES = [
   'Enter your email for early listings',
@@ -37,6 +38,7 @@ export const NewsletterBrevo = ({
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
   // Pause typewriter when the user focuses the field or has typed something.
   const animatedPlaceholder = useTypewriter(NEWSLETTER_TYPEWRITER_PHRASES, {
     paused: isEmailFocused || email.length > 0,
@@ -61,12 +63,14 @@ export const NewsletterBrevo = ({
           page_source: window.location.pathname,
           listId,
           gdpr_consent: true,
+          honeypot,
         },
       });
 
       // Fire capture-lead in background (non-blocking)
       supabase.functions.invoke('capture-lead', {
         body: {
+          honeypot,
           email: normalizedEmail,
           fullName: name || null,
           source: 'newsletter',
@@ -138,6 +142,7 @@ export const NewsletterBrevo = ({
     return (
       <>
         <form onSubmit={handleSubmit} className={className}>
+          <HoneypotField value={honeypot} onChange={setHoneypot} name="newsletter_brevo_company_website" />
           {/* ONE unified emerald pill — input + button share the SAME surface,
               wrapped by a single 1px emerald hairline (no triple borders,
               no halo, no overflowing placeholder). */}
@@ -248,6 +253,7 @@ export const NewsletterBrevo = ({
     return (
       <>
         <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
+          <HoneypotField value={honeypot} onChange={setHoneypot} name="newsletter_brevo_company_website" />
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="animated-border flex-1 rounded-lg">
               <Input
@@ -302,6 +308,7 @@ export const NewsletterBrevo = ({
   return (
     <>
       <form onSubmit={handleSubmit} className={`space-y-3 ${className}`}>
+        <HoneypotField value={honeypot} onChange={setHoneypot} name="newsletter_brevo_company_website" />
         <div className="animated-border rounded-lg">
           <Input
             type="email"

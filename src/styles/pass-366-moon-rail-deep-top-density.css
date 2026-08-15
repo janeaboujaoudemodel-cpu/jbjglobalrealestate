@@ -10,16 +10,8 @@
  * Sun and the owner/backend shell are untouched.
  */
 
-:root {
-  --jj-rail-deep-v: linear-gradient(
-    180deg,
-    #01120b 0%,
-    #021610 14%,
-    #043726 50%,
-    #021610 78%,
-    #000000 100%
-  );
-}
+/* Custom-property token for this pass (--jj-rail-deep-v)
+   now lives in src/styles/theme-tokens.css — see CSS token consolidation. */
 
 /* ── 1. One gradient for collapsed rail + expanded panel ───────────────── */
 html[data-jbj-theme="moon"]:not([data-jbj-backend-lock="1"])

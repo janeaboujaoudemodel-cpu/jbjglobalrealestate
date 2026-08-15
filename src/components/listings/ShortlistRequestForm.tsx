@@ -20,6 +20,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { trackingEvents, type LeadTimeline } from '@/types/blueprint';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { HoneypotField, useHoneypot } from '@/components/forms/HoneypotField';
 
 interface ShortlistRequestFormProps {
   transactionType: 'buy' | 'rent';
@@ -55,6 +56,7 @@ export const ShortlistRequestForm = ({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,6 +86,7 @@ export const ShortlistRequestForm = ({
       const leadEmail = `phone-${formData.phone.replace(/\D/g, '').slice(-14) || Date.now()}@lead.jbj.local`;
       const { error } = await supabase.functions.invoke('capture-lead', {
         body: {
+          honeypot,
           email: leadEmail,
           fullName: formData.name,
           phone: formData.phone,
@@ -168,6 +171,7 @@ export const ShortlistRequestForm = ({
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        <HoneypotField value={honeypot} onChange={setHoneypot} name="shortlist_company_website" />
         <Input
           placeholder="Full Name *"
           value={formData.name}

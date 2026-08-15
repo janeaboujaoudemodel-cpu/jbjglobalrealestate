@@ -14,6 +14,9 @@ interface SubscribeRequest {
   page_source?: string;
   gdpr_consent?: boolean;
   listId?: number;
+  // Anti-spam honeypot: real users never populate this (see
+  // src/components/forms/HoneypotField.tsx). Non-empty means bot.
+  honeypot?: string;
 }
 
 serve(async (req: Request): Promise<Response> => {
@@ -39,6 +42,16 @@ serve(async (req: Request): Promise<Response> => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const data: SubscribeRequest = await req.json();
+
+    // Anti-spam honeypot: a filled trap field means a bot blindly populated
+    // every input. Return a fake success so scrapers don't learn they were
+    // caught, without subscribing anything.
+    if (data.honeypot) {
+      return new Response(
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     if (!data.email) {
       return new Response(

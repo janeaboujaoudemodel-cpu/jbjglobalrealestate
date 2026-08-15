@@ -13,6 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { trackingEvents } from '@/types/blueprint';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { HoneypotField, useHoneypot } from '@/components/forms/HoneypotField';
 
 interface ViewingRequestModalProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export const ViewingRequestModal = ({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,6 +69,7 @@ export const ViewingRequestModal = ({
       // Every collected viewing detail travels with it — nothing is dropped.
       const { data, error } = await supabase.functions.invoke('capture-lead', {
         body: {
+          honeypot,
           email: formData.email.trim(),
           fullName: formData.name.trim(),
           phone: formData.phone.trim(),
@@ -171,6 +174,7 @@ export const ViewingRequestModal = ({
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    <HoneypotField value={honeypot} onChange={setHoneypot} name="viewing_company_website" />
                     <Input
                       placeholder="Full Name *"
                       value={formData.name}

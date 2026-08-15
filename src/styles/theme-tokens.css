@@ -71,6 +71,52 @@
   --t-careers-complete: #E9DDC8;
   --t-careers-card-top: #FFFDF9;
   --t-careers-card-bottom: #F3EBDD;
+
+  /* ── Consolidated from src/styles/pass-303-skin-parity.css ───────
+   * Approved emerald pair — weighted dark so it never reads as green. */
+  --jj-emerald-approved: linear-gradient(180deg, #064E3B 0%, #042c1c 38%, #000000 100%);
+  --jj-emerald-approved-h: linear-gradient(90deg, #064E3B 0%, #042c1c 42%, #000000 100%);
+  --jj-emerald-approved-d: linear-gradient(135deg, #064E3B 0%, #042c1c 40%, #000000 100%);
+  --jj-champagne-chrome: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%);
+  --jj-champagne-chrome-h: linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%);
+
+  /* ── Consolidated from src/styles/pass-305-sun-champagne-parity.css ──
+   * Long surfaces (rail, header, marquee): already-deep start, no bright top. */
+  --jj-long-emerald-v: linear-gradient(180deg, #04382a 0%, #032015 46%, #000000 100%);
+  --jj-long-emerald-h: linear-gradient(90deg, #04382a 0%, #032015 50%, #000000 100%);
+  --jj-long-emerald-d: linear-gradient(160deg, #04382a 0%, #032015 52%, #000000 100%);
+  --jj-champagne-long-v: linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-champagne-long-h: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-champagne-long-d: linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+
+  /* ── Consolidated from src/styles/pass-348-sun-champagne-dominant-chrome.css ──
+   * Champagne equivalents of the emerald pair, matching the Sun sidebar. */
+  --jj-sun-band-h: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-sun-band-v: linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-sun-band-d: linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
+  --jj-sun-ink: #1A1A1A;
+  --jj-sun-line: rgba(184, 149, 85, 0.42);
+
+  /* ── Consolidated from src/styles/pass-349-sun-emerald-accents-and-gold-borders.css ── */
+  --jj349-emerald: linear-gradient(160deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj349-gold: #B89555;
+
+  /* ── Consolidated from src/styles/pass-366-moon-rail-deep-top-density.css ── */
+  --jj-rail-deep-v: linear-gradient(
+    180deg,
+    #01120b 0%,
+    #021610 14%,
+    #043726 50%,
+    #021610 78%,
+    #000000 100%
+  );
+
+  /* ── Consolidated from src/styles/pass-374-form-modal-system.css ── */
+  --jj-form-surface: #FBF6EC;
+  --jj-form-hairline: rgba(184, 149, 85, 0.38);
+  --jj-form-ink: #1A1A1A;
+  --jj-pill-rest-bg: #F1E7D4;
+  --jj-pill-rest-border: #B89555;
 }
 
 
