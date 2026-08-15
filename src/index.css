@@ -1,15 +1,4 @@
-/* =============================================================
-   PASS 213 — OWNER BATCH A-F REGRESSION GUARD
-   Screenshot-proven fixes: no letter-stacked labels, no dark ink
-   on emerald surfaces, no clipped owner workspaces, and minimum
-   button/tab geometry for owner backend pages.
-   ============================================================= */
 
-
-html body #root :where([data-jbj-card], [data-jbj-card] *) {
-  box-sizing: border-box;
-  min-width: 0;
-}
 
 html body #root [data-jbj-card] :where(.flex, [class*="flex"], [class*="items-"], [class*="justify-"], [class*="gap-"]) {
   min-width: 0;
@@ -620,70 +609,6 @@ body {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
-}
-
-
-
-
-
-
-
-/* Premium glassmorphic gold-hairline hero action pills.
-   Editorial luxury: dark ink glass + ultra-thin gold hairline,
-   refined Inter uppercase label, soft inner highlight + ambient shadow. */
-.jj-hero-action-card {
-  background: rgba(253, 251, 247, 0.10) !important;
-  border: 1px solid rgba(212, 184, 150, 0.55) !important;
-  border-radius: 999px !important;
-  color: #FDFBF7;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 8px 22px rgba(0, 0, 0, 0.32);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
-  transition: background 300ms ease, border-color 300ms ease, box-shadow 300ms ease, transform 250ms ease;
-}
-
-/* Hover: crystal champagne tint + bright gold hairline, NEVER a darker black wash */
-.jj-hero-action-card:hover,
-.jj-hero-action-card:focus-visible {
-  background: rgba(253, 251, 247, 0.22) !important;
-  border-color: #E2C9A0 !important;
-  color: #FDFBF7;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 0 0 1px rgba(226, 201, 160, 0.65),
-    0 14px 32px rgba(0, 0, 0, 0.40),
-    0 0 22px rgba(226, 201, 160, 0.22) !important;
-  transform: translateY(-1px);
-}
-.jj-hero-action-card:hover .jj-hero-action-label,
-.jj-hero-action-card:focus-visible .jj-hero-action-label {
-  color: #FDFBF7;
-}
-.jj-hero-action-card:hover .jj-hero-action-icon,
-.jj-hero-action-card:focus-visible .jj-hero-action-icon {
-  color: #E2C9A0;
-  stroke: #E2C9A0;
-  opacity: 1 !important;
-}
-
-.jj-hero-action-card .jj-hero-action-label {
-  color: #FDFBF7;
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-}
-
-.jj-hero-action-card .jj-hero-action-icon {
-  color: #D4B896;
-  stroke: #D4B896;
-  opacity: 0.95 !important;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
-  transition: opacity 250ms ease, color 250ms ease, stroke 250ms ease;
 }
 
 
@@ -1444,9 +1369,6 @@ All colors MUST be HSL.
 }
 .jj-auth-panel-wrap {
   max-width: min(36rem, calc(100vw - 1.5rem));
-}
-.jj-auth-card {
-  overflow: visible;
 }
 .jj-passkey-cta,
 .jj-passkey-cta * {
@@ -5067,20 +4989,6 @@ button:hover .jj-role-icon {
   opacity: 1 !important;
 }
 
-/* Hero glass cards — keep glass on hover, never become solid white */
-.jj-hero-glass-card,
-.jj-hero-glass-card * {
-  color: #FDFBF7;
-}
-.jj-hero-glass-card svg.lucide {
-  color: #E9C97A;
-  stroke: #E9C97A;
-  opacity: 1 !important;
-}
-.jj-hero-glass-card:hover {
-  border-color: #B89555 !important;
-}
-
 /* Role-card Continue must stay gold at rest and on hover */
 .group .jj-role-icon-tile ~ *,
 button:hover [data-no-contrast-guard] [style*="#B89555"],
@@ -6765,38 +6673,6 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-color: rgba(167,139,250,0.35) !important;
 }
 
-/* Dark glass card primitive */
-.jj-neon-card {
-  position: relative;
-  background:
-    linear-gradient(180deg, rgba(10,16,32,0.92) 0%, rgba(6,10,24,0.96) 100%) !important;
-  border: 1px solid rgba(167,139,250,0.28) !important;
-  border-radius: 1rem;
-  box-shadow:
-    0 0 0 1px rgba(34,211,238,0.08),
-    0 24px 60px -28px rgba(34,211,238,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-  color: #F6FBF8;
-  backdrop-filter: blur(8px);
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-}
-.jj-neon-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(34,211,238,0.55) !important;
-  box-shadow:
-    0 0 0 1px rgba(34,211,238,0.20),
-    0 30px 70px -24px rgba(236,72,153,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-/* Auto-upgrade common shadcn card surfaces inside a neon page */
-[data-neon-page] .rounded-2xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]),
-[data-neon-page] .rounded-xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]) {
-  background: linear-gradient(180deg, rgba(10,16,32,0.86) 0%, rgba(6,10,24,0.94) 100%) !important;
-  border-color: rgba(167,139,250,0.25) !important;
-  color: #F6FBF8 !important;
-}
-
 /* Accordion (FAQ) styling inside neon page */
 [data-neon-page] [data-radix-accordion-item],
 [data-neon-page] [data-state] > [data-radix-accordion-trigger] {
@@ -7596,21 +7472,6 @@ html body .jj-loop-block * {
 }
 html body .jj-loop-block .jj-loop-divider {
   background-color: rgba(255,255,255,0.35) !important;
-}
-
-.jj-emerald-card {
-  background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(4,78,59,0.45) !important;
-  box-shadow:
-    0 0 0 1px rgba(4,78,59,0.45),
-    0 0 28px rgba(4,78,59,0.45),
-    0 18px 38px rgba(0,0,0,0.30),
-    inset 0 1px 0 rgba(255,255,255,0.10) !important;
-}
-html body .jj-emerald-card,
-html body .jj-emerald-card * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 html body .jj-emerald-card :is(svg, .lucide),
 html body .jj-emerald-card :is(svg, .lucide) * {
@@ -13148,14 +13009,6 @@ html body #root section#ready-to-get-started {
   padding-bottom: clamp(3rem, 5vw, 5rem) !important;
 }
 
-html body #root section#ready-to-get-started .jj-emerald-card {
-  width: 100% !important;
-  border-radius: 28px !important;
-  padding: clamp(1.5rem, 3vw, 3rem) !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-}
-
 html body #root section#ready-to-get-started .jj-emerald-card,
 html body #root section#ready-to-get-started .jj-emerald-card *,
 html body #root section#ready-to-get-started .jj-emerald-card :where(svg, .lucide, [data-lucide]),
@@ -15202,11 +15055,6 @@ main {
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
-}
-
-/* Prevent inline-flex rows of pills/chips from forcing horizontal overflow */
-.jj-card [class*="flex"]:not([class*="flex-col"]) {
-  flex-wrap: wrap;
 }
 
 /* Tables inside cards: allow internal horizontal scroll, never bleed out */
@@ -20512,14 +20360,6 @@ html body #root .jj-map-card-close {
   transition: transform 120ms ease, background-image 120ms ease, box-shadow 120ms ease !important;
 }
 
-html body #root .jj-map-card-close {
-  position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
-  z-index: 10 !important;
-  border-radius: 999px !important;
-}
-
 html body #root .jj-map-square-control:hover,
 html body #root .jj-map-card-close:hover {
   background: var(--jj-map-emerald-hover) !important;
@@ -22653,13 +22493,6 @@ html body #root a.jj-services-emerald-cta.allow-white.inline-flex.rounded-xl.fon
   stroke: #FFFFFF !important;
 }
 
-html body #root .jj-service-card-animated {
-  position: relative !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(6,78,59,0.26) !important;
-  box-shadow: 0 18px 38px -28px rgba(4,44,28,0.42), inset 0 1px 0 rgba(255,255,255,0.72) !important;
-}
-
 html body #root [data-brand-emerald-page] #services-grid[data-no-section-frame] {
   width: 100% !important;
   max-width: none !important;
@@ -22711,61 +22544,10 @@ html body #root [data-brand-emerald-page] #services-grid .jj-services-grid > * {
   height: 100% !important;
 }
 
-html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
-  min-height: 390px !important;
-  height: 100% !important;
-  background: #FDFBF7 !important;
-  background-image: none !important;
-  border-radius: 16px !important;
-}
-
-html body #root [data-brand-emerald-page] #services-grid .jj-service-card-content {
-  display: flex !important;
-  height: 100% !important;
-  min-height: 0 !important;
-}
-
-@media (max-width: 759px) {
-  html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
-    min-height: 0 !important;
-  }
-}
-
-html body #root .jj-service-card-animated::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(120deg, rgba(6,78,59,0.14), rgba(110,231,183,0.78), rgba(6,78,59,0.16), rgba(184,149,85,0.26));
-  background-size: 260% 260%;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  animation: jj-services-emerald-border 5.5s linear infinite;
-}
-
-html body #root .jj-service-card-animated:hover {
-  transform: translateY(-3px) !important;
-  border-color: rgba(6,78,59,0.52) !important;
-  box-shadow: 0 22px 44px -28px rgba(4,44,28,0.62), inset 0 1px 0 rgba(255,255,255,0.82) !important;
-}
-
 html body #root .jj-service-check,
 html body #root .jj-service-check * {
   color: #064E3B !important;
   stroke: #064E3B !important;
-}
-
-html body #root .jj-disclaimer-card {
-  border: 1px solid rgba(6,78,59,0.34) !important;
-  box-shadow: 0 14px 30px -24px rgba(4,44,28,0.58), inset 0 1px 0 rgba(255,255,255,0.78) !important;
-}
-
-html body #root .jj-scope-card {
-  border: 1px solid rgba(6,78,59,0.34) !important;
-  box-shadow: 0 14px 34px -24px rgba(4,44,28,0.62), inset 0 1px 0 rgba(255,255,255,0.78) !important;
 }
 
 html body #root .jj-disclaimer-card,
@@ -22781,13 +22563,6 @@ html body #root section.jj-services-final-cta {
   background-image: none !important;
   padding-top: 24px !important;
   padding-bottom: 56px !important;
-}
-
-html body #root section.jj-services-final-cta .jj-emerald-card {
-  width: 100% !important;
-  max-width: 1100px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
 }
 
 html body #root section.jj-services-final-cta .jj-content-track {
@@ -26035,17 +25810,6 @@ html body .jj-home-area-corner {
   border-color: rgba(184,149,85,0.48) !important;
 }
 
-html body .jj-home-area-card {
-  background: #EFE6D6 !important;
-  border: 1px solid rgba(184,149,85,0.70) !important;
-  box-shadow: 0 10px 26px rgba(184,149,85,0.16), inset 0 1px 0 rgba(255,255,255,0.78) !important;
-}
-
-html body .jj-home-area-card:hover {
-  border-color: #B89555 !important;
-  box-shadow: 0 18px 40px rgba(184,149,85,0.24), inset 0 1px 0 rgba(255,255,255,0.86) !important;
-}
-
 html body .jj-home-area-caption {
   background: linear-gradient(180deg, rgba(253,251,247,0.94) 0%, rgba(239,230,214,0.98) 100%) !important;
   background-color: #EFE6D6 !important;
@@ -28090,16 +27854,6 @@ html body #root .leaflet-popup-content-wrapper,
 html body #root .leaflet-popup-tip {
   background: transparent !important;
   box-shadow: none !important;
-}
-
-html body #root .jj-map-popup-card {
-  overflow: hidden !important;
-  border: 1px solid rgba(184,149,85,0.46) !important;
-  border-radius: 14px !important;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
-  box-shadow: 0 18px 48px rgba(0,0,0,0.22) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 html body #root .jj-map-popup-card :is(a, button, p, div, span),
@@ -30927,17 +30681,6 @@ html body :is(section, div):has(> .jj-content-track > .jj-card-grid) {
 }
 .jj-light-metallic > * { position: relative; z-index: 1; }
 
-/* PASS 272 — Canonical card grid column count wins over the legacy
-   auto-fill fallback in @layer components (4-up areas rail). */
-@media (min-width: 1024px) {
-  html body .jj-card-grid.jj-card-grid--4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-  html body .jj-card-grid.jj-card-grid--3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
    PASS 273 — DEVELOPER LOGO PLATE STANDARD (LOCKED)
    Every developer logo plate across the site (cards, similar developers,
@@ -31470,10 +31213,6 @@ html body #root:not(#\9) button:is(.mir-pill, .mir-solid, [data-status-pill]) {
     linear-gradient(160deg, #FFFFFF 0%, #FFFCF6 44%, #FBF6EC 100%);
 }
 html body #root .jj-surface-pearl { background: var(--jj-pearl-band); }
-html body #root .jj-card-pearl {
-  background: var(--jj-pearl-card);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 40px -28px rgba(4,44,28,0.28);
-}
 
 /* Developer name gold must stay READABLE — the light sheen stop is darkened
    so the wordmark never disappears against pearl/champagne surfaces. */
@@ -31567,34 +31306,4 @@ html body [data-chrome="sidebar"] [data-jbj-monogram="dark"] {
 @keyframes jj-card-edge-sweep {
   0%   { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
-}
-html body .jj-card-emerald-edge {
-  border-color: rgba(6, 78, 59, 0.34) !important;
-}
-html body .jj-card-emerald-edge::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(90deg, #064E3B, #0a6b52, #042c1c, #064E3B);
-  background-size: 200% auto;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 220ms ease;
-  pointer-events: none;
-  z-index: 3;
-}
-html body .jj-card-emerald-edge:hover::after,
-html body .jj-card-emerald-edge:focus-within::after {
-  opacity: 1;
-  animation: jj-card-edge-sweep 2.6s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  html body .jj-card-emerald-edge:hover::after { animation: none; }
-}
-html[data-jbj-theme="moon"] body .jj-card-emerald-edge {
-  border-color: rgba(255, 255, 255, 0.28) !important;
 }
