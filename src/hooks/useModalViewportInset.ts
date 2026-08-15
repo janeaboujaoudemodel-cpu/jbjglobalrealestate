@@ -44,18 +44,23 @@ function measureContentViewport(): ContentViewport {
   const viewportHeight = window.innerHeight;
 
   const shell = document.querySelector<HTMLElement>(
-    "main.jj-main-shell:not(.jj-main-shell--standalone), .jc-app .jc-content, main[data-owner-content]",
+    "[data-net-content], main.jj-main-shell:not(.jj-main-shell--standalone), .jc-app .jc-content, main[data-owner-content]",
   );
   if (shell) {
     const rect = shell.getBoundingClientRect();
     if (rect.width > 0) {
+      const shellHeader = shell.querySelector<HTMLElement>(":scope > header");
+      const shellHeaderRect = shellHeader?.getBoundingClientRect();
       const utilityBar = document.querySelector<HTMLElement>(
         ".jj-utility-shell, [data-chrome='utility-bar']",
       );
       const utilityRect = utilityBar?.getBoundingClientRect();
-      const top = utilityRect && utilityRect.height > 0
-        ? Math.max(utilityRect.bottom, 0)
-        : DEFAULT_HEADER_HEIGHT;
+      const top = Math.max(
+        rect.top,
+        shellHeaderRect && shellHeaderRect.height > 0 ? shellHeaderRect.bottom : 0,
+        utilityRect && utilityRect.height > 0 ? utilityRect.bottom : 0,
+        DEFAULT_HEADER_HEIGHT,
+      );
 
       return {
         left: Math.round(Math.min(Math.max(rect.left, 0), MAX_INSET)),

@@ -265,6 +265,8 @@ const OwnerDashboardShell = () => {
 
       {/* Main Content */}
       <main
+        data-net-content
+        data-owner-content
         className={cn(
           "flex-1 min-w-0 overflow-x-hidden transition-all duration-300 overscroll-contain",
           isMobile || fullscreen ? "ml-0" : ""
