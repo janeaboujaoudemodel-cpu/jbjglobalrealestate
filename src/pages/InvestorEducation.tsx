@@ -396,7 +396,7 @@ const InvestorEducation = () => {
         </section>
 
         <div className="mt-12">
-          <GuideNavigation current="/investor-education" guides={GUIDE_LINKS} showStartHere />
+          <GuideNavigation current="/guides/invest" guides={GUIDE_LINKS} showStartHere />
         </div>
       </ContentPageShell>
     </>

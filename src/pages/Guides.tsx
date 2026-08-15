@@ -29,7 +29,10 @@ const staggerContainer = {
   }
 };
 
-const allGuideBooks = INVESTOR_BOOKS.filter(b => b.title !== 'Guides Library');
+// Market Intelligence Report and Company Profile already have their own homes
+// (Insights, Company) and are excluded here so the library only lists guides.
+const NON_GUIDE_TITLES = ['Guides Library', 'Market Intelligence Report', 'Company Profile'];
+const allGuideBooks = INVESTOR_BOOKS.filter(b => !NON_GUIDE_TITLES.includes(b.title));
 
 const learningTopics = [
   { icon: FileText, title: "Transaction structure and roles", description: "Understand the step-by-step process and who does what" },
@@ -112,19 +115,12 @@ const Guides = () => {
 
           {/* Books Grid — canonical BookCard, no caption (title is on cover) */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto">
-            {allGuideBooks.filter(b => b.title !== 'Company Profile').map((book) => (
+            {allGuideBooks.map((book) => (
               <motion.div key={book.title} variants={fadeInUp}>
                 <BookCard book={book} size="sm" onClick={() => setSelectedBook(book)} />
               </motion.div>
             ))}
           </div>
-
-          {/* Company Profile — separate row, faded gold hairline */}
-          {allGuideBooks.filter(b => b.title === 'Company Profile').map((book) => (
-            <motion.div key={book.title} variants={fadeInUp} className="flex justify-center mt-10 pt-8" style={{ borderTop: "1px solid rgba(184,149,85,0.20)" }}>
-              <BookCard book={book} size="sm" onClick={() => setSelectedBook(book)} />
-            </motion.div>
-          ))}
         </motion.div>
       </section>
 
