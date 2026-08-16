@@ -22,6 +22,7 @@ Based on the CTO technical review of jbjglobalrealestate (jbj.ae), the Aug 12 fu
 
 | ID | Date (UTC) | Author | Change | Item(s) | Commit / PR |
 |---|---|---|---|---|---|
+| RM-023 | 2026-08-16 | Claude Code session | Documented the JBJ-019 self-verification decision in CLAUDE.md as a new "PR review process" section (near where PR #17's roadmap-tracking section lands); updated JBJ-019 status to fully resolved | JBJ-019 | `pending`, new PR |
 | RM-022 | 2026-08-16 | Jane (decision) | Decided both open governance/scope questions: JBJ-005 migrates all 45 modals onto the shared Dialog wrapper (full migration, not per-component patching); JBJ-019 formally accepts self-verification as the PR review process, documented as a real tradeoff rather than a silent gap | JBJ-005, JBJ-019 | — |
 | RM-021 | 2026-08-15 | Claude Code session (PR #4) | Merged and published Guide Consolidation Stage 1 live — nested canonical guide URLs, FAQ consolidation, old routes redirected. Required a temporary branch-protection bypass to merge (self-approval block); re-enabled and re-verified after. Surfaced JBJ-019 (no genuine second reviewer available) as an open governance question affecting all future PRs. | JBJ-018, JBJ-019 | `1b7555c`, PR #4 |
 | RM-020 | 2026-08-16 | Claude Code session (PR #17) | Added roadmap-tracking conventions section to CLAUDE.md (item-ID format, Changelog format, evidence-before-resolved discipline, when to route through a human) — branched clean off the just-merged CLAUDE.md commit, not stacking on stale code | — | `4410be7`, PR #17 (open, not merged) |
@@ -132,7 +133,7 @@ Measured directly from the codebase — 531 pages, 1,417 components, 506 Supabas
 | JBJ-016 | Inconsistent live project count (hero-section number unconfirmed) | Partially resolved — open question remains | Near-term |
 | JBJ-017 | Pass-file `!important` audit (54 `pass-NNN-*.css` files, ~1,962 declarations) | New — identified, not scoped or started; needs its own engagement | Future (post-Step 5) |
 | JBJ-018 | Guide consolidation, Stage 1 (nav/routing + FAQ) | **MERGED & live** (`1b7555c`) — Stage 2 (Rental Guide content split) not started | Resolved (Stage 1) |
-| JBJ-019 | Second-reviewer / self-approval governance gap | **Decided (Aug 16)** — self-verification formally accepted as the process; needs documenting in CLAUDE.md | Near-term |
+| JBJ-019 | Second-reviewer / self-approval governance gap | **Resolved (Aug 16)** — self-verification formally accepted as the process, documented in CLAUDE.md | Resolved |
 
 ---
 
@@ -295,7 +296,7 @@ The panel's undercount (PostgREST's 1,000-row cap truncating the query) was alre
 
   **Decision: self-verification is the accepted process here, explicitly, not by default.** The standard going forward is what JBJ-018 already did in practice — re-running checks, diffing against a clean pre-PR base, confirming diff scope matches what's claimed — plus a human read of the diff when practical. This is a real, documented tradeoff, not a gap being quietly accepted: there is no independent reviewer catching what self-verification misses. If that changes (a second human reviewer joins, or a genuinely distinct AI reviewing identity becomes available), this decision should be revisited — it's the current answer, not a permanent one.
 
-  **Still needs doing:** this decision should be written into `CLAUDE.md` itself (not just this doc), so every future Claude Code session knows self-verification is the accepted bar rather than something to flag as a blocker each time. Not yet done — see §7 near-term.
+  **Done (Aug 16):** written into `CLAUDE.md` itself as a new "PR review process" section, so every future Claude Code session knows self-verification is the accepted bar rather than something to flag as a blocker each time. Fully closed.
 
 - [ ] **CI infrastructure gap, ticketed separately.** 3 of the known-failing CI checks (see JBJ-011) trace to the runner itself missing Playwright browsers and `bunx` — infrastructure, not code. A GitHub issue was opened for this specifically, alongside the existing issue #5 tracking the 485-violation a11y baseline drift. Worth linking both issues here once numbers are confirmed, so this doc and GitHub's own issue tracker don't drift apart.
 
