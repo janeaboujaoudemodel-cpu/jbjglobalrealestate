@@ -1,0 +1,302 @@
+/* ============================================================
+   CARDS — extracted from src/index.css
+   Step 5, area 2 of 6 (CTO CSS-debt audit). Scope: rules whose selector
+   list is exclusively card-scoped — every comma-separated alternative,
+   at any nesting depth (including inside :is()/:where() groups), matches
+   [data-jbj-card] or a .jj-*card* class (jj-card, jj-card-inner family,
+   jj-emerald-card, jj-hero-action-card, jj-map-*-card, etc.). Rules that
+   mix a card selector with unrelated selectors in the same list (e.g.
+   shared emerald-action/CTA :is(...) rules that happen to also list a
+   card class as one of many alternatives) were intentionally left in
+   index.css — extracting those would change their behavior for the
+   non-card elements they also target, not just their location.
+
+   Original rule order is preserved. Imported in main.tsx immediately
+   after index.css and sidebar.css, before all pass-*.css overrides, to
+   keep the exact same cascade position these rules had before extraction.
+   ============================================================ */
+
+/* =============================================================
+   PASS 213 — OWNER BATCH A-F REGRESSION GUARD
+   Screenshot-proven fixes: no letter-stacked labels, no dark ink
+   on emerald surfaces, no clipped owner workspaces, and minimum
+   button/tab geometry for owner backend pages.
+   ============================================================= */
+
+
+html body #root :where([data-jbj-card], [data-jbj-card] *) {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+
+
+
+
+
+
+/* Premium glassmorphic gold-hairline hero action pills.
+   Editorial luxury: dark ink glass + ultra-thin gold hairline,
+   refined Inter uppercase label, soft inner highlight + ambient shadow. */
+.jj-hero-action-card {
+  background: rgba(253, 251, 247, 0.10) !important;
+  border: 1px solid rgba(212, 184, 150, 0.55) !important;
+  border-radius: 999px !important;
+  color: #FDFBF7;
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 8px 22px rgba(0, 0, 0, 0.32);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  transition: background 300ms ease, border-color 300ms ease, box-shadow 300ms ease, transform 250ms ease;
+}
+
+/* Hover: crystal champagne tint + bright gold hairline, NEVER a darker black wash */
+.jj-hero-action-card:hover,
+.jj-hero-action-card:focus-visible {
+  background: rgba(253, 251, 247, 0.22) !important;
+  border-color: #E2C9A0 !important;
+  color: #FDFBF7;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 0 0 1px rgba(226, 201, 160, 0.65),
+    0 14px 32px rgba(0, 0, 0, 0.40),
+    0 0 22px rgba(226, 201, 160, 0.22) !important;
+  transform: translateY(-1px);
+}
+.jj-hero-action-card:hover .jj-hero-action-label,
+.jj-hero-action-card:focus-visible .jj-hero-action-label {
+  color: #FDFBF7;
+}
+.jj-hero-action-card:hover .jj-hero-action-icon,
+.jj-hero-action-card:focus-visible .jj-hero-action-icon {
+  color: #E2C9A0;
+  stroke: #E2C9A0;
+  opacity: 1 !important;
+}
+
+.jj-hero-action-card .jj-hero-action-label {
+  color: #FDFBF7;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.jj-hero-action-card .jj-hero-action-icon {
+  color: #D4B896;
+  stroke: #D4B896;
+  opacity: 0.95 !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+  transition: opacity 250ms ease, color 250ms ease, stroke 250ms ease;
+}
+.jj-auth-card {
+  overflow: visible;
+}
+
+/* Hero glass cards — keep glass on hover, never become solid white */
+.jj-hero-glass-card,
+.jj-hero-glass-card * {
+  color: #FDFBF7;
+}
+.jj-hero-glass-card svg.lucide {
+  color: #E9C97A;
+  stroke: #E9C97A;
+  opacity: 1 !important;
+}
+.jj-hero-glass-card:hover {
+  border-color: #B89555 !important;
+}
+
+/* Dark glass card primitive */
+.jj-neon-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(10,16,32,0.92) 0%, rgba(6,10,24,0.96) 100%) !important;
+  border: 1px solid rgba(167,139,250,0.28) !important;
+  border-radius: 1rem;
+  box-shadow:
+    0 0 0 1px rgba(34,211,238,0.08),
+    0 24px 60px -28px rgba(34,211,238,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  color: #F6FBF8;
+  backdrop-filter: blur(8px);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.jj-neon-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34,211,238,0.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(34,211,238,0.20),
+    0 30px 70px -24px rgba(236,72,153,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.jj-emerald-card {
+  background-image: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(4,78,59,0.45) !important;
+  box-shadow:
+    0 0 0 1px rgba(4,78,59,0.45),
+    0 0 28px rgba(4,78,59,0.45),
+    0 18px 38px rgba(0,0,0,0.30),
+    inset 0 1px 0 rgba(255,255,255,0.10) !important;
+}
+html body .jj-emerald-card,
+html body .jj-emerald-card * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root section#ready-to-get-started .jj-emerald-card {
+  width: 100% !important;
+  border-radius: 28px !important;
+  padding: clamp(1.5rem, 3vw, 3rem) !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Prevent inline-flex rows of pills/chips from forcing horizontal overflow */
+.jj-card [class*="flex"]:not([class*="flex-col"]) {
+  flex-wrap: wrap;
+}
+
+html body #root .jj-map-card-close {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+  border-radius: 999px !important;
+}
+
+html body #root .jj-service-card-animated {
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(6,78,59,0.26) !important;
+  box-shadow: 0 18px 38px -28px rgba(4,44,28,0.42), inset 0 1px 0 rgba(255,255,255,0.72) !important;
+}
+
+html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
+  min-height: 390px !important;
+  height: 100% !important;
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  border-radius: 16px !important;
+}
+
+html body #root [data-brand-emerald-page] #services-grid .jj-service-card-content {
+  display: flex !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+@media (max-width: 759px) {
+  html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
+    min-height: 0 !important;
+  }
+}
+
+html body #root .jj-service-card-animated::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(6,78,59,0.14), rgba(110,231,183,0.78), rgba(6,78,59,0.16), rgba(184,149,85,0.26));
+  background-size: 260% 260%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: jj-services-emerald-border 5.5s linear infinite;
+}
+
+html body #root .jj-service-card-animated:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(6,78,59,0.52) !important;
+  box-shadow: 0 22px 44px -28px rgba(4,44,28,0.62), inset 0 1px 0 rgba(255,255,255,0.82) !important;
+}
+
+html body #root .jj-disclaimer-card {
+  border: 1px solid rgba(6,78,59,0.34) !important;
+  box-shadow: 0 14px 30px -24px rgba(4,44,28,0.58), inset 0 1px 0 rgba(255,255,255,0.78) !important;
+}
+
+html body #root .jj-scope-card {
+  border: 1px solid rgba(6,78,59,0.34) !important;
+  box-shadow: 0 14px 34px -24px rgba(4,44,28,0.62), inset 0 1px 0 rgba(255,255,255,0.78) !important;
+}
+
+html body #root section.jj-services-final-cta .jj-emerald-card {
+  width: 100% !important;
+  max-width: 1100px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+html body .jj-home-area-card {
+  background: #EFE6D6 !important;
+  border: 1px solid rgba(184,149,85,0.70) !important;
+  box-shadow: 0 10px 26px rgba(184,149,85,0.16), inset 0 1px 0 rgba(255,255,255,0.78) !important;
+}
+
+html body .jj-home-area-card:hover {
+  border-color: #B89555 !important;
+  box-shadow: 0 18px 40px rgba(184,149,85,0.24), inset 0 1px 0 rgba(255,255,255,0.86) !important;
+}
+
+html body #root .jj-map-popup-card {
+  overflow: hidden !important;
+  border: 1px solid rgba(184,149,85,0.46) !important;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.22) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* PASS 272 — Canonical card grid column count wins over the legacy
+   auto-fill fallback in @layer components (4-up areas rail). */
+@media (min-width: 1024px) {
+  html body .jj-card-grid.jj-card-grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  html body .jj-card-grid.jj-card-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+html body #root .jj-card-pearl {
+  background: var(--jj-pearl-card);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 40px -28px rgba(4,44,28,0.28);
+}
+html body .jj-card-emerald-edge {
+  border-color: rgba(6, 78, 59, 0.34) !important;
+}
+html body .jj-card-emerald-edge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(90deg, #064E3B, #0a6b52, #042c1c, #064E3B);
+  background-size: 200% auto;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  pointer-events: none;
+  z-index: 3;
+}
+html body .jj-card-emerald-edge:hover::after,
+html body .jj-card-emerald-edge:focus-within::after {
+  opacity: 1;
+  animation: jj-card-edge-sweep 2.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .jj-card-emerald-edge:hover::after { animation: none; }
+}
+html[data-jbj-theme="moon"] body .jj-card-emerald-edge {
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}

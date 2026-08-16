@@ -1,0 +1,635 @@
+/* ============================================================
+   FORMS — extracted from src/index.css
+   Step 5, area 6 of 6, last area (CTO CSS-debt audit). Scope: rules whose
+   selector list is exclusively form-scoped — every top-level comma-
+   separated alternative (nested :is()/:where() argument lists are NOT
+   top-level alternatives), with :not(...) exclusion clauses stripped
+   before the check, requires .jbj-form-field, [data-jbj-field],
+   .jbj-form-shell, [data-form-shell], a bare <form> element, or a bare
+   input/textarea/select element (word-boundary guarded so e.g.
+   "[data-radix-select-trigger]" or ".filter-search-pill-input" never
+   false-match) — either directly, or via a :is()/:where() group all of
+   whose own branches independently carry one of those tokens.
+
+   input/textarea/select were included deliberately, unlike the more
+   conservative role/attribute-only vocabulary Modals used: this
+   codebase's own Input/Textarea/Select primitives always set
+   .jbj-form-field, but a large share of the real form-field styling in
+   this file (borders, focus rings, containment, placeholder color,
+   mortgage range sliders, native date pickers) is written directly
+   against the native tag rather than the marker class, and none of it
+   is reachable without treating the tag itself as a token.
+
+   That inclusion required one additional guard: a homogeneous trailing
+   :is(input, input:hover, input:focus, ...) tag list can make an
+   alternative look form-pure even when its real, specific ancestor is
+   e.g. .jj-hero-search-bar or .jj-newsletter-emerald input.jj-hero-
+   search-input — rules the Hero/video pass's own (less refined) comma-
+   splitter already considered and deliberately left mixed. Any
+   alternative containing a token already claimed by Sidebar, Cards,
+   Buttons/CTAs, Hero/video, or Modals (.jj-rail-*, [data-chrome
+   ="sidebar"], [data-jbj-card] / .jj-*card*, .jj-cta-* / [data-cta] /
+   [data-jbj-button], .jj-hero-*, [role="dialog"] / [data-radix-dialog-*]
+   / [data-advanced-filter-panel], etc.) is unconditionally disqualified
+   from Forms regardless of what any trailing group looks like — that
+   ancestor is the rule's real owner.
+
+   One rule was included as a manual, individually-reviewed exception to
+   the token rule above: the iOS "prevent auto-zoom on form inputs" media
+   query, which lists native text-input types, select, and textarea with
+   zero ancestor scoping (applies unconditionally site-wide) and is
+   self-documented by its own comment as a form-input fix — there is no
+   other area it could plausibly belong to.
+
+   Rules mixing a form alternative with an unrelated alternative in the
+   same selector list (generic focusable-element focus rings shared with
+   buttons/links, checkbox/switch ARIA-role selectors, filter-dropdown
+   container rules bundled with an input placeholder rule, class names
+   that merely end in "-input" without being verifiably an <input>
+   element) were deliberately left in index.css.
+
+   Original rule order is preserved. Imported in main.tsx immediately
+   after modals.css, before all pass-*.css overrides, to keep the exact
+   same cascade position these rules held before extraction. This is the
+   sixth and final area of the six-area extraction pass.
+   ============================================================ */
+
+
+
+/* Prevent auto-zoom on form inputs (iOS) */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Native <select> / <option> hover (Chrome/Firefox) */
+.crm-scope select:focus,
+.crm-scope select option:checked,
+.crm-scope select option:hover {
+  background-color: #EFE6D6;
+  color: #1A1A1A;
+}
+
+/* Checkboxes / radios — gold accent */
+.crm-scope input[type="checkbox"],
+.crm-scope input[type="radio"] {
+  accent-color: #1A1A1A;
+}
+[data-phone-country-command] input[cmdk-input],
+[data-phone-country-command] input[cmdk-input]:hover,
+[data-phone-country-command] input[cmdk-input]:focus,
+[data-phone-country-command] input[cmdk-input]:focus-visible {
+  width: 100% !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+}
+[data-radix-popper-content-wrapper] input[cmdk-input]::placeholder {
+  color: rgba(26, 26, 26, 0.55);
+  opacity: 1 !important;
+}
+input#propertyName.property-measurement-name-input,
+input#propertyName.property-measurement-name-input::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+[data-tool-darkbody="true"] input::placeholder,
+[data-tool-darkbody="true"] textarea::placeholder {
+  color: rgba(255,255,255,0.55) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
+  opacity: 1 !important;
+}
+[data-tool-darkbody="true"] input[data-no-contrast-guard],
+[data-tool-darkbody="true"] input[data-no-contrast-guard]:focus,
+[data-tool-darkbody="true"] input[data-no-contrast-guard]:focus-visible {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+[data-neon-page] input::placeholder,
+[data-neon-page] textarea::placeholder {
+  color: rgba(246,251,248,0.5) !important;
+}
+[data-neon-page] input:focus,
+[data-neon-page] textarea:focus {
+  border-color: #22D3EE !important;
+  box-shadow: 0 0 0 3px rgba(34,211,238,0.25) !important;
+  outline: none !important;
+}
+
+html body .jj-newsletter-emerald input::placeholder {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html body .jj-newsletter-emerald input,
+html body .jj-newsletter-emerald input:focus,
+html body .jj-newsletter-emerald input:hover {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+.jj-emerald-pill input::placeholder {
+  color: rgba(255,255,255,0.78) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+}
+
+/* Compare Two Bank Rates slider — canonical deep emerald only */
+html body input[type="range"][data-mortgage-slider="Compare rate"] {
+  background-image: linear-gradient(90deg, #064E3B 0%, #042c1c 100%) !important;
+}
+html body input[type="range"][data-mortgage-slider="Compare rate"]::-webkit-slider-thumb,
+html body input[type="range"][data-mortgage-slider="Compare rate"]::-moz-range-thumb{
+  background: #FFFFFF !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
+}
+
+html body input.mortgage-range-input {
+  --mortgage-range-thumb: #FFFFFF !important;
+  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
+}
+html body input.mortgage-range-input {
+  --mortgage-range-thumb: #FFFFFF !important;
+  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
+  accent-color: #064E3B !important;
+}
+html body input[type="range"][data-mortgage-slider]::-webkit-slider-runnable-track {
+  background-color: transparent !important;
+}
+
+/* PASS 44b — Mortgage sliders: approved deep emerald only, no inner oval lines, reliable drag hit-area. */
+html body input.mortgage-range-input {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  height: 44px !important;
+  border-radius: 9999px !important;
+  cursor: ew-resize !important;
+  touch-action: pan-y !important;
+  accent-color: #064E3B !important;
+  --mortgage-range-thumb: radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%) !important;
+  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50) !important;
+}
+html body input.mortgage-range-input::-webkit-slider-runnable-track,
+html body input.mortgage-range-input::-moz-range-track{
+  height: 8px !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+html body input.mortgage-range-input {
+  height: 44px !important;
+  border-radius: 9999px !important;
+  accent-color: #064E3B !important;
+  background-color: #EFE6D6 !important;
+  --mortgage-range-thumb: #FFFFFF !important;
+  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 0 18px rgba(6,78,59,0.68), 0 4px 14px rgba(4,44,28,0.42) !important;
+}
+html body input.mortgage-range-input::-webkit-slider-thumb,
+html body input.mortgage-range-input::-moz-range-thumb{
+  width: 24px !important;
+  height: 24px !important;
+  border: 0 !important;
+  border-radius: 9999px !important;
+  background: var(--mortgage-range-thumb) !important;
+  box-shadow: var(--mortgage-range-thumb-shadow) !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  height: 44px !important;
+  border-radius: 9999px !important;
+  cursor: ew-resize !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  accent-color: #064E3B !important;
+  background:
+    var(--mortgage-range-fill, linear-gradient(90deg, #064E3B 0%, #042C1C 58%, #000000 100%)) 0 / var(--mortgage-range-progress, 0%) 100% no-repeat,
+    var(--mortgage-range-track, #EFE6D6) !important;
+  box-shadow: none !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-webkit-slider-runnable-track {
+  height: 8px !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-webkit-slider-thumb {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  margin-top: -8px !important;
+  border: 0 !important;
+  border-radius: 9999px !important;
+  background: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.72),
+    0 0 18px rgba(6,78,59,0.65),
+    0 4px 14px rgba(4,44,28,0.45) !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-moz-range-track {
+  height: 8px !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-moz-range-thumb {
+  width: 24px !important;
+  height: 24px !important;
+  border: 0 !important;
+  border-radius: 9999px !important;
+  background: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.72),
+    0 0 18px rgba(6,78,59,0.65),
+    0 4px 14px rgba(4,44,28,0.45) !important;
+}
+
+
+
+html body #root :where(input, textarea, select, [data-jbj-field], .jbj-form-field) {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+html body #root textarea,
+html body #root .jbj-form-field:is(textarea) {
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* PASS 47b — Slider thumb: remove the inner emerald oval ring.
+   Every previous override pinned `0 0 0 2px #064E3B inset` which
+   rendered as a small line inside the white knob. Drop the inset
+   so only the outer halo remains, on all mortgage range inputs. */
+html body input.mortgage-range-input {
+  --mortgage-range-thumb: #FFFFFF !important;
+  --mortgage-range-thumb-shadow:
+    0 0 0 1px rgba(255,255,255,0.85),
+    0 2px 6px rgba(4,44,28,0.35),
+    0 0 14px rgba(6,78,59,0.45) !important;
+}
+html body input.mortgage-range-input::-webkit-slider-thumb,
+html body input.mortgage-range-input::-moz-range-thumb{
+  background: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.85),
+    0 2px 6px rgba(4,44,28,0.35),
+    0 0 14px rgba(6,78,59,0.45) !important;
+  cursor: grab !important;
+}
+html body input.mortgage-range-input:active::-webkit-slider-thumb,
+html body input.mortgage-range-input:active::-moz-range-thumb {
+  cursor: grabbing !important;
+}
+html body .jbj-form-field:has([data-developer-name]) {
+  height: auto !important;
+  min-height: 2.5rem !important;
+}
+:where(input:not([data-no-contrast-guard]), textarea:not([data-no-contrast-guard]))::placeholder {
+  color: rgba(26, 26, 26, 0.58);
+  -webkit-text-fill-color: rgba(26, 26, 26, 0.58);
+}
+
+html body #root input[data-careers-position-search][data-careers-position-search] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+  padding-left: 4rem !important;
+  padding-right: 1.25rem !important;
+  border: 0 !important;
+  opacity: 1 !important;
+}
+
+html body #root input[data-careers-position-search][data-careers-position-search]::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root#root [data-careers-position-search-wrap][data-careers-position-search-wrap] input[data-careers-position-search][data-careers-position-search] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+  padding-left: 4rem !important;
+}
+
+html body #root#root [data-careers-position-search-wrap][data-careers-position-search-wrap] input[data-careers-position-search][data-careers-position-search]::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Native <select>/<option>: many browsers paint the closed select using the
+   computed color of the SELECT element itself. Make sure data-no-contrast-guard
+   selects on light backgrounds always paint ink, regardless of any global
+   `.allow-white` force-white rule above. */
+html body select[data-no-contrast-guard]:not(#jj-ink-honour),
+html body select[data-no-contrast-guard]:not(#jj-ink-honour) option {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+/* Native <input type="date"|"datetime-local"|"time"|"month"|"week"> accent. */
+:where(html) body input[type="date"],
+:where(html) body input[type="datetime-local"],
+:where(html) body input[type="month"],
+:where(html) body input[type="week"],
+:where(html) body input[type="time"] {
+  accent-color: var(--emerald-1, #064E3B) !important;
+  color-scheme: light;
+}
+:where(html) body input[type="date"]:focus,
+:where(html) body input[type="datetime-local"]:focus,
+:where(html) body input[type="month"]:focus,
+:where(html) body input[type="time"]:focus,
+:where(html) body select:focus,
+:where(html) body textarea:focus,
+:where(html) body input:focus {
+  border-color: var(--emerald-1, #064E3B) !important;
+  --tw-ring-color: rgba(6,78,59,.22) !important;
+  outline-color: var(--emerald-1, #064E3B) !important;
+}
+
+/* 7. Native date / time inputs — emerald accent + emerald focus. */
+:where(html) body input[type="date"],
+:where(html) body input[type="datetime-local"],
+:where(html) body input[type="month"],
+:where(html) body input[type="week"],
+:where(html) body input[type="time"] {
+  accent-color: #064E3B !important;
+  color-scheme: light !important;
+  caret-color: #064E3B !important;
+}
+:where(html) body input[type="date"]:focus,
+:where(html) body input[type="date"]:focus-visible,
+:where(html) body input[type="datetime-local"]:focus,
+:where(html) body input[type="datetime-local"]:focus-visible,
+:where(html) body input[type="month"]:focus,
+:where(html) body input[type="week"]:focus,
+:where(html) body input[type="time"]:focus {
+  border-color: #064E3B !important;
+  outline-color: #064E3B !important;
+  --tw-ring-color: rgba(6,78,59,0.25) !important;
+  box-shadow: 0 0 0 2px rgba(6,78,59,0.18) !important;
+}
+/* Webkit calendar picker indicator — subtle emerald tint. */
+:where(html) body input[type="date"]::-webkit-calendar-picker-indicator,
+:where(html) body input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+:where(html) body input[type="month"]::-webkit-calendar-picker-indicator,
+:where(html) body input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(22%) sepia(54%) saturate(640%) hue-rotate(115deg) brightness(60%) !important;
+  cursor: pointer;
+}
+html body #root .aihf-root :is(input, textarea)::placeholder {
+  color: rgba(255,255,255,0.58) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.58) !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-compare-content-frame] :is(input,textarea)::placeholder,
+html body #root [data-ai-property-analyzer] :is(input,textarea)::placeholder {
+  color: rgba(255,255,255,0.62) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.62) !important;
+}
+
+html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) input::placeholder {
+  color: rgba(255,255,255,0.78) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+  opacity: 1 !important;
+}
+
+/* Any inline blue focus ring on inputs across popovers → emerald */
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus-visible,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(6,78,59,0.55) !important;
+  border-color: rgba(6,78,59,0.55) !important;
+}
+/* END PASS 205 */
+
+/* Force pure-white placeholders on the AI Competitor Analysis form (overrides tool-darkbody guard) */
+html body #root [data-comp-analysis-form] input::placeholder,
+html body #root [data-comp-analysis-form] textarea::placeholder {
+  color: rgba(255,255,255,0.72) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.72) !important;
+  opacity: 1 !important;
+}
+
+html body #root .jj-newsletter-emerald input,
+html body #root .jj-newsletter-emerald input:focus,
+html body #root .jj-newsletter-emerald input:active {
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(input, textarea)::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
+  opacity: 1 !important;
+}
+
+html body :is(form, [data-form-shell], .jbj-form-shell) :is(.jbj-form-field, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]) {
+  border-width: 1px !important;
+  border-color: rgba(184,149,85,0.36) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.58), 0 1px 0 rgba(184,149,85,0.08) !important;
+  transition: border-color 80ms ease, box-shadow 80ms ease, background-color 80ms ease, color 80ms ease !important;
+}
+
+html body :is(form, [data-form-shell], .jbj-form-shell) :is(.jbj-form-field, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]):is(:hover,:focus,:focus-visible) {
+  border-color: rgba(184,149,85,0.72) !important;
+  box-shadow: 0 0 0 2px rgba(184,149,85,0.12), inset 0 1px 0 rgba(255,255,255,0.7) !important;
+}
+
+html body :is(form, [data-form-shell], .jbj-form-shell) :is(.rounded-xl.border, .rounded-2xl.border):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
+  padding: max(1rem, var(--jj-form-inner-pad, 1rem)) !important;
+}
+
+html body input[type="checkbox"]:checked + * {
+  background: transparent !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body :is(.jbj-form-shell, [data-form-shell]) :is(.rounded-xl.border, .rounded-2xl.border, [data-field-group], .form-field-group):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
+  padding: clamp(1rem, 1.8vw, 1.35rem) !important;
+  border-width: 1px !important;
+  border-color: rgba(184,149,85,0.30) !important;
+}
+
+html body input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid #FFFFFF;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+html body [data-filter-bar-gold] input[type="text"],
+html body [data-filter-bar-gold] input[type="search"] {
+  background: transparent !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border: none !important;
+}
+html body [data-filter-bar-gold] input::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+}
+html body #root [data-filter-dropdown="true"] :is(input, select, textarea),
+html body [data-filter-dropdown="true"][data-surface] :is(input, select, textarea) {
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+}
+html body [data-filter-clean][data-filter-bar-gold] input,
+html body [data-filter-clean][data-filter-bar-gold] input * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"] :is(input,select,textarea) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+}
+html body [data-filter-menu="true"] :is(input,select,textarea) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PASS 209 — Radix Checkbox duplicate-box fix.
+   Radix's <Checkbox> renders a visible button[role="checkbox"] AND a hidden
+   native <input type="checkbox" aria-hidden="true"> sibling for form
+   submission. Global checkbox skinning rules (borders / background / size /
+   transform: none) were forcing that hidden input to render as a second
+   empty box next to the real emerald one. Hide it hard, everywhere.
+   ───────────────────────────────────────────────────────────────────────── */
+html body input[type="checkbox"][aria-hidden="true"],
+html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald-ok="checkbox"]) + input[type="checkbox"][aria-hidden="true"],
+html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald-ok="checkbox"]) ~ input[type="checkbox"][aria-hidden="true"] {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  transform: translateX(-100%) !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  flex: 0 0 1px !important;
+}
+html body [data-owner-search] input,
+html body .owner-search-shell input,
+html body [data-header-search] input {
+  writing-mode: horizontal-tb !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+html body #root .jj-newsletter-emerald input:-webkit-autofill,
+html body #root .jj-newsletter-emerald input:-webkit-autofill:hover,
+html body #root .jj-newsletter-emerald input:-webkit-autofill:focus,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill:hover,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  transition: background-color 999999s ease-out 0s !important;
+}
+
+/* Remove Chrome autofill blue background/text */
+[data-jbj-signup] input:-webkit-autofill,
+[data-jbj-signup] input:-webkit-autofill:hover,
+[data-jbj-signup] input:-webkit-autofill:focus,
+[data-jbj-signup] input:-webkit-autofill:active,
+[data-jbj-signup] textarea:-webkit-autofill,
+[data-jbj-signup] select:-webkit-autofill {
+  -webkit-text-fill-color: #1A1A1A !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #064E3B !important;
+}
+[data-jbj-signup] select option {
+  color: #1A1A1A;
+  background: #ffffff;
+}
+
+html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] input::placeholder {
+  color: rgba(255,255,255,0.82) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
+  opacity: 1 !important;
+}
+html body #root .jj-filter-rail input::placeholder {
+  color: rgba(255, 255, 255, 0.78) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.78) !important;
+}
+html body input[type="text"]::selection,
+html body input[type="search"]::selection,
+html body input:not([type])::selection {
+  background: rgba(120, 120, 120, 0.22) !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}

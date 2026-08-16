@@ -1,0 +1,314 @@
+/* ============================================================
+   BUTTONS / CTAs — extracted from src/index.css
+   Step 5, area 3 of 6 (CTO CSS-debt audit). Scope: rules whose selector
+   list is exclusively CTA-scoped — every comma-separated alternative, at
+   any nesting depth, and with :not(...) exclusion clauses stripped before
+   the check (an exclusion mention isn't a target), matches .jj-cta-*,
+   [data-cta="primary"|"outline"|"dark"|"champagne"], [data-cta-card],
+   [data-cta-label], [data-cta-lock], or [data-jbj-button]. [data-jbj-button]
+   and [data-cta] are set by the shared <Button> UI primitive
+   (src/components/ui/button.tsx) on every instance.
+
+   Rules that mix a CTA selector with unrelated selectors in the same list,
+   or that only reference a CTA class inside a :not() exclusion (e.g. an
+   icon-color rule that excludes CTA descendants rather than targeting
+   them), were deliberately left in index.css.
+
+   Original rule order is preserved. Imported in main.tsx immediately
+   after cards.css, before all pass-*.css overrides, to keep the exact
+   same cascade position these rules held before extraction.
+   ============================================================ */
+
+
+
+.jj-cta-outline {
+  background-color: transparent !important;
+  border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
+  border-radius: 0.75rem;
+}
+.jj-cta-gold-metallic {
+  position: relative !important;
+  isolation: isolate;
+  color: #3a2a08 !important;
+  background-image: linear-gradient(
+    120deg,
+    #d8b86a 0%,
+    #f4e3a8 25%,
+    #b89555 50%,
+    #f4e3a8 75%,
+    #d8b86a 100%
+  ) !important;
+  background-size: 220% 220% !important;
+  /* NOTE: do NOT set background-position with !important here — it would
+     override the jj-metal-sheen keyframe and freeze the animation
+     (matches sqft pill behaviour which has no static position override). */
+  border: 1px solid rgba(184, 149, 85, 0.65) !important;
+  border-radius: 0.75rem !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 210, 0.45),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.18),
+    0 6px 18px -8px rgba(184, 149, 85, 0.55) !important;
+  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease !important;
+  overflow: hidden;
+  animation: jj-metal-sheen 4.5s ease-in-out infinite !important;
+}
+.jj-cta-gold-metallic:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(184, 149, 85, 0.95) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 210, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.22),
+    0 12px 30px -10px rgba(184, 149, 85, 0.7) !important;
+}
+.jj-cta-gold-metallic:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  animation: none !important;
+}
+.jj-cta-gold-metallic > * {
+  position: relative;
+  z-index: 1;
+  color: #3a2a08 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-cta-gold-metallic { animation: none !important; }
+}
+
+/* Premium 3D float hover for primary emerald CTAs */
+.jj-cta-float {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 220ms ease;
+  box-shadow: 0 6px 18px -8px rgba(4, 120, 87, 0.35),
+              0 2px 6px rgba(0, 0, 0, 0.10);
+  will-change: transform, box-shadow;
+}
+.jj-cta-float:hover {
+  transform: translateY(-2px) scale(1.012);
+  box-shadow: 0 16px 36px -10px rgba(4, 120, 87, 0.50),
+              0 6px 14px rgba(0, 0, 0, 0.18);
+}
+.jj-cta-float:active {
+  transform: translateY(0) scale(1);
+  box-shadow: 0 4px 12px -6px rgba(4, 120, 87, 0.30);
+}
+
+
+/* --- Secondary / Outline CTA: champagne fill + emerald ink + emerald hairline --- */
+.jj-cta-outline,
+[data-cta="outline"] {
+  background-color: #FDFBF7 !important;
+  color: var(--emerald-1) !important;
+  border: 1px solid rgba(6,78,59,0.45) !important;
+}
+.jj-cta-outline:hover,
+[data-cta="outline"]:hover {
+  background-color: var(--emerald-soft-bg) !important;
+  color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+}
+.jj-cta-outline svg,
+[data-cta="outline"] svg {
+  color: var(--emerald-1) !important;
+  stroke: var(--emerald-1) !important;
+}
+
+/* PASS XX-D contrast hard-stop: beats legacy light-surface locks with exact primitive specificity. */
+html body button.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
+html body a.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
+html body .jj-cta-primary.jj-cta-champagne[data-surface="emerald"],
+html body .jj-cta-primary[data-cta="primary"],
+html body [data-surface="emerald"][data-cta="primary"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 6. Idle/Hover SWAP for mortgage-advisor & sibling emerald CTAs:
+   per brand spec, the DEEPER emerald is idle and the LIGHTER tone is hover. */
+.jj-cta-emerald-metallic,
+.jj-cta-emerald {
+  background-image: var(--jj-emerald-ombre) !important;
+}
+.jj-cta-emerald-metallic:hover,
+.jj-cta-emerald:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+}
+
+/* Project-detail exceptions requested by owner: true metallic gold developer
+   logo frames stay gold, while pros rows on emerald panels keep readable ink. */
+html body #root [data-keep-gold].jj-cta-gold-metallic {
+  background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%) !important;
+  background-size: 220% 220% !important;
+  background-color: #d8b86a !important;
+  border-color: rgba(184, 149, 85, 0.80) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  animation: jj-metal-sheen 2.8s ease-in-out infinite !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 210, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.16),
+    0 12px 28px -10px rgba(184, 149, 85, 0.72) !important;
+}
+
+/* Premium 3D animated metallic-gold developer logo box.
+   - Solid rich metallic gold base
+   - Animated bright shine sweep via ::before pseudo (transform — GPU)
+   - Animated specular highlight via ::after (slow drift)
+   - Strong inner bevel + outer drop shadow for 3D depth. */
+html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic {
+  position: relative;
+  background-color: #c89a48 !important;
+  background-image:
+    linear-gradient(155deg,
+      #8e6e36 0%,
+      #d8b86a 18%,
+      #fff1c2 34%,
+      #b89555 50%,
+      #fff1c2 66%,
+      #d8b86a 82%,
+      #8e6e36 100%) !important;
+  background-size: 100% 100% !important;
+  border: 1px solid rgba(142,110,54,0.85) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,250,225,0.9),
+    inset 0 -2px 0 rgba(70,48,14,0.6),
+    inset 0 -14px 22px rgba(70,48,14,0.45),
+    inset 0 14px 22px rgba(255,244,210,0.32),
+    0 18px 36px -12px rgba(142,110,54,0.75),
+    0 2px 6px rgba(0,0,0,0.20) !important;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+/* Sweeping bright shine — diagonal band continuously moving L→R */
+html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(115deg,
+    rgba(255,255,255,0) 40%,
+    rgba(255,250,225,0.55) 47%,
+    rgba(255,255,255,0.95) 50%,
+    rgba(255,250,225,0.55) 53%,
+    rgba(255,255,255,0) 60%);
+  transform: translateX(-100%);
+  animation: jj-dev-logo-shine 2.6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+/* Secondary slow specular drift for depth */
+html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 30% 0%,
+    rgba(255,250,225,0.55) 0%,
+    rgba(255,250,225,0) 55%);
+  animation: jj-dev-logo-drift 5.5s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::before,
+  html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::after {
+    animation: none !important;
+  }
+}
+
+/* About page — allow inline background-image on opted-in media tiles.
+   Overrides the insights-hub bg-image:none guard on rounded/bordered divs.
+   Component sets --about-media-src to the resolved URL. */
+
+
+
+/* -------------------------------------------------------------------------
+ * Shared CTA container/layout lock
+ * -------------------------------------------------------------------------
+ * Some routes nest MIPreFooterCard inside prose containers, sidebar shells,
+ * or narrow columns that shrink the CTA below its intended width. This lock
+ * uses the full-bleed technique so the CTA breaks out of any parent width
+ * constraint on every route (service pages and non-service pages alike),
+ * while the inner `maxWidthClass` still governs the actual card width.
+ * ----------------------------------------------------------------------- */
+html body #root [data-cta-lock].jj-cta-lock {
+  /* Break out of nested max-width wrappers, but align to the app shell width
+     instead of raw 100vw so fixed desktop chrome cannot make the CTA wider
+     than the FAQ/content cards. */
+  width: var(--jj-shell-main-w, 100vw) !important;
+  max-width: var(--jj-shell-main-w, 100vw) !important;
+  margin-left: calc((100% - var(--jj-shell-main-w, 100vw)) / 2) !important;
+  margin-right: calc((100% - var(--jj-shell-main-w, 100vw)) / 2) !important;
+  /* Reset any inherited constraints from parents */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+  position: relative;
+  /* Guard against parents that clip children */
+  float: none !important;
+  clear: both;
+}
+
+/* Keep the inner alignment column intact — parents can't shrink it either. */
+html body #root [data-cta-lock].jj-cta-lock > div {
+  width: 100%;
+  max-width: var(--jj-global-container-max, 1760px) !important;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--jj-global-container-px-mobile, 16px) !important;
+  padding-right: var(--jj-global-container-px-mobile, 16px) !important;
+}
+
+@media (min-width: 768px) {
+  html body #root [data-cta-lock].jj-cta-lock > div {
+    padding-left: var(--jj-global-container-px-tablet, 24px) !important;
+    padding-right: var(--jj-global-container-px-tablet, 24px) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  html body #root [data-cta-lock].jj-cta-lock > div {
+    padding-left: var(--jj-global-container-px-desktop, 32px) !important;
+    padding-right: var(--jj-global-container-px-desktop, 32px) !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  html body #root [data-cta-lock].jj-cta-lock > div {
+    padding-left: var(--jj-global-container-px-xl, 40px) !important;
+    padding-right: var(--jj-global-container-px-xl, 40px) !important;
+  }
+}
+
+html body #root [data-cta-lock].jj-cta-lock [data-cta-card] {
+  width: 100%;
+}
+
+/* Safety: if a scroll container clips the breakout, fall back to full width
+ * without the viewport breakout so the CTA still renders at the container
+ * edge instead of being squeezed. */
+@supports not (width: 100vw) {
+  html body #root [data-cta-lock].jj-cta-lock {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PASS 269 — NO CROPPED WORDS, NO ELLIPSIS ON LABELS (LOCKED)
+   No button/label/badge on the platform may clip a word or fall
+   back to a "…" ellipsis. Labels wrap and shrink to the available
+   width instead of being cut off.
+   ───────────────────────────────────────────────────────────── */
+html body #root [data-cta-label],
+html body #root button [data-cta-label],
+html body #root a [data-cta-label] {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere;
+  word-break: normal !important;
+  max-width: 100%;
+}
+html body #root [data-cta-label].truncate { text-overflow: clip !important; }
