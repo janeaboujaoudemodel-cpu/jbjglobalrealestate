@@ -175,6 +175,9 @@ const InquiryRequestSchema = z.object({
   source: z.string().max(100).optional(),
   propertyName: z.string().max(200).optional(),
   context: z.record(z.string()).optional(),
+  // Anti-spam honeypot: real users never populate this (see
+  // src/components/forms/HoneypotField.tsx). Non-empty means bot.
+  honeypot: z.string().optional(),
 });
 
 // HTML escape function
@@ -278,6 +281,15 @@ const handler = async (req: Request): Promise<Response> => {
         }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    if (parseResult.data.honeypot) {
+      // Bot filled the trap field — return a fake success so scrapers don't
+      // learn they were caught, without sending any email.
+      return new Response(JSON.stringify({ success: true, emailSent: false }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const { fullName, email, phone, nationality, language, message, source, propertyName, context } = parseResult.data;

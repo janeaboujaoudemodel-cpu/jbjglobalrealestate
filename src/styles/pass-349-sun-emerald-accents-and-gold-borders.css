@@ -19,10 +19,8 @@
      · MOON is untouched.
    ═══════════════════════════════════════════════════════════════════ */
 
-:root {
-  --jj349-emerald: linear-gradient(160deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj349-gold: #B89555;
-}
+/* Custom-property tokens for this pass (--jj349-emerald, --jj349-gold)
+   now live in src/styles/theme-tokens.css — see CSS token consolidation. */
 
 /* ═══════════ 1. ACCENTS KEEP THE EMERALD OMBRE + WHITE INK ═══════════ */
 html[data-jbj-theme="sun"] body #root#root#root#root#root#root#root#root

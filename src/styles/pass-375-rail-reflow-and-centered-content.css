@@ -1,0 +1,64 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PASS 375 — RAIL IS ALWAYS LAYOUT, NEVER A COVER (LOCKED)
+
+   The vertical rail must never sit on top of page content. Whatever the
+   rail state is (collapsed 59px or expanded 264px), the content column
+   starts AFTER the rail and the page/section/form/modal centre is
+   computed from that remaining net area — equal padding on both edges.
+
+   PASS 341 deliberately let the EXPANDED rail overlay the page below
+   1024px so the page would not reflow. The owner reversed that call:
+   from tablet width up, opening the rail resizes and re-centres the
+   content instead of hiding it. Only true phone chrome (< 768px, where
+   264px would leave no usable column) keeps the overlay drawer.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  html body:not([data-jj-chrome-mode="phone"]).jj-vertical-nav-active {
+    --jj-shell-sidebar-w: 264px !important;
+    --jj-shell-main-w: calc(100vw - 264px) !important;
+    --jj-content-gutter-l: 0px;
+    --jj-content-gutter-r: 0px;
+    --jj-content-gutter: 0px;
+  }
+
+  /* The rail is layout now, so it no longer casts the full-page scrim. */
+  html body:not([data-jj-chrome-mode="phone"]).jj-vertical-nav-active
+    #root
+    [data-chrome="sidebar"] {
+    box-shadow: none !important;
+  }
+}
+
+/* Content column, utility bar and footer measure from the live rail width
+   at EVERY viewport where the rail is docked (the vars above / PASS 341 /
+   the desktop shell engine all resolve into these three rules). */
+@media (min-width: 768px) {
+  html body:not([data-jj-chrome-mode="phone"])
+    #root
+    main.jj-main-shell:not(.jj-main-shell--standalone),
+  html body:not([data-jj-chrome-mode="phone"]) #root .jj-footer-shell,
+  html body:not([data-jj-chrome-mode="phone"]) #root .jj-utility-shell {
+    left: var(--jj-shell-sidebar-w) !important;
+    margin-left: 0 !important;
+    width: var(--jj-shell-main-w) !important;
+    max-width: var(--jj-shell-main-w) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Centred tracks inside the net area: symmetric gutters, no rail-safe
+     asymmetry, because the rail is no longer overlapping anything. */
+  html body:not([data-jj-chrome-mode="phone"])
+    #root
+    main.jj-main-shell
+    [data-content-gutter="1"] {
+    margin-inline: auto;
+  }
+}
+
+/* Fixed overlays that centre on the window (dialogs, sheets, popovers that
+   opt in via the inset var) get the measured content-viewport inset from
+   useModalViewportInset — nothing to do here, but keep the fallback sane. */
+:root {
+  --jj-modal-inset-left: var(--jj-modal-inset-left, 0px);
+}

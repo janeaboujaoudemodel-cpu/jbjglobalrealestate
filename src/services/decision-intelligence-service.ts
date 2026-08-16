@@ -73,7 +73,7 @@ class DecisionIntelligenceService {
       const convertedLeads = convertedResult.count || 0;
 
       // Fetch real project data
-      const projectsResult = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
+      const projectsResult = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true).is('deleted_at', null);
       const totalProjects = projectsResult.count || 0;
 
       // Fetch broker data
@@ -275,7 +275,7 @@ class DecisionIntelligenceService {
     }
 
     if (queryLower.includes('project') || queryLower.includes('listing')) {
-      const r1 = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
+      const r1 = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true).is('deleted_at', null);
       const published = r1.count || 0;
       const r2 = await (supabase as any).from('pending_project_imports').select('*', { count: 'exact', head: true }).eq('status', 'pending');
       const pending = r2.count || 0;

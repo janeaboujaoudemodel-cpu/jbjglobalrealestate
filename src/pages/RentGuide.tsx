@@ -405,15 +405,15 @@ const RentGuide = () => {
             <p className="text-[#1A1A1A]/70">Explore more resources for tenants and landlords</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link 
-              to="/tenant-guide"
+            <Link
+              to="/guides/tenant"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
               <span className="text-[#1A1A1A] font-semibold">Tenant Guide</span>
               <ArrowUpRight className="w-4 h-4 text-[#1A1A1A]" />
             </Link>
-            <Link 
-              to="/landlord-guide"
+            <Link
+              to="/guides/landlord"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
               <span className="text-[#1A1A1A] font-semibold">Landlord Guide</span>

@@ -1,0 +1,54 @@
+name: Unit Tests
+
+# Runs the Vitest unit test suite (src/**/*.test.ts, src/**/*.spec.ts) on
+# every push/PR touching source. Added Aug 2026 alongside the first
+# business-logic tests (payment schedule, brokerage revenue) — previously
+# there was no general-purpose workflow that ran `vitest run` at all; the
+# only existing CI use of Vitest was scoped to two specific contrast-guard
+# files inside pass-142-heading-contrast.yml.
+#
+# This workflow reports pass/fail on every PR but does not by itself block
+# merges — see the CTO report's note on confirming GitHub branch protection
+# / required status checks if you want it to gate merges.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "package.json"
+      - "vitest.config.ts"
+      - ".github/workflows/unit-tests.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "package.json"
+      - "vitest.config.ts"
+      - ".github/workflows/unit-tests.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Vitest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test

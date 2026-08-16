@@ -1,6 +1,11 @@
 import { StrictMode } from"react";
 import { createRoot } from"react-dom/client";
 import App from"./App";
+import { initSentry, captureToSentry } from"@/lib/sentry";
+
+// Must run before anything else renders or throws, so early errors are
+// captured too. No-op if VITE_SENTRY_DSN isn't set (see src/lib/sentry.ts).
+initSentry();
 
 import"./styles/theme-tokens.css";
 import"./index.css";
@@ -56,6 +61,9 @@ import"./styles/pass-369-ai-tools-sun-champagne.css";
 import"./styles/pass-371-backoffice-phone-layout.css";
 import"./styles/pass-372-ai-gate-contrast.css";
 import"./styles/pass-373-sun-org-picker-ink.css";
+import"./styles/pass-374-form-modal-system.css";
+import"./styles/pass-375-rail-reflow-and-centered-content.css";
+import"./styles/pass-376-moon-hero-clear-rail.css";
 
 
 
@@ -120,6 +128,7 @@ if (typeof window !=="undefined") {
  if (msg || src) {
  // eslint-disable-next-line no-console
  console.warn("[boot-diag] window.error", { msg, src, lineno: e.lineno, colno: e.colno });
+ captureToSentry("window.error", e?.error ?? msg, { src, lineno: e.lineno, colno: e.colno });
  }
  });
 
@@ -128,6 +137,7 @@ if (typeof window !=="undefined") {
  const msg = reason?.message || String(reason ||"");
  // eslint-disable-next-line no-console
  console.warn("[boot-diag] unhandledrejection", { msg, stack: reason?.stack });
+ captureToSentry("unhandledrejection", reason ?? msg);
  });
 
  // Vite emits this when a dynamic import fails (chunk hash changed mid-session).

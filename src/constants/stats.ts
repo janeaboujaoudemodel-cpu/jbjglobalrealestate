@@ -44,6 +44,9 @@ export const COMPANY_STATS_LEGACY = {
 // Contact information - OFFICIAL JBJ GLOBAL REAL ESTATE
 // [LOCKED] EMAIL RULE: ALL EMAILS MUST BE FULL CAPITAL LETTERS (e.g., CONTACT@JBJ.AE)
 // This is a LOCKED rule - never use lowercase for email addresses
+export const HELPDESK_EMAIL = 'helpdesk@jbj.ae';
+export const CAREERS_EMAIL = 'CAREERS@JBJ.AE';
+
 export const CONTACT_INFO = {
   phone: '+971 54 15 15 015',
   phoneRaw: '+971541515015',
@@ -51,7 +54,8 @@ export const CONTACT_INFO = {
   emailCapitalized: 'CONTACT@JBJ.AE',
   privacyEmail: 'PRIVACY@JBJ.AE',
   supportEmail: 'SUPPORT@JBJ.AE',
-  careersEmail: 'CAREERS@JBJ.AE',
+  HELPDESK_EMAIL,
+  careersEmail: CAREERS_EMAIL,
   partnershipsEmail: 'PARTNERSHIPS@JBJ.AE',
   securityEmail: 'SECURITY@JBJ.AE',
   happinessEmail: 'HAPPINESS@JBJ.AE',

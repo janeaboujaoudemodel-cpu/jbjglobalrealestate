@@ -22,6 +22,7 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { TeamMember } from '@/config/team-members';
+import { HoneypotField, useHoneypot } from '@/components/forms/HoneypotField';
 
 interface TeamContactFormProps {
   member: TeamMember | null;
@@ -56,6 +57,7 @@ const SERVICES = [
 
 const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -90,6 +92,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
           nationality: formData.nationality || undefined,
           language: formData.preferredLanguage || undefined,
           currentLocation: formData.currentLocation || undefined,
+          honeypot,
         },
       });
 
@@ -137,6 +140,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          <HoneypotField value={honeypot} onChange={setHoneypot} name="team_contact_company_website" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-[#1A1A1A] font-medium">Full Name *</Label>

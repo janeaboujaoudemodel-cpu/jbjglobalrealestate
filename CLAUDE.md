@@ -35,7 +35,7 @@ Claude Code cannot hold or use this project's GitHub credentials — a human per
 
 ## Package manager — pick one, don't add a third
 
-`lovable.toml` uses `bun`, `.replit` uses `npm`, and the repo has `bun.lock`, `bun.lockb`, AND `package-lock.json` all committed simultaneously. This is known, unresolved drift (CTO audit, Aug 2026), not something to "fix" by picking a third tool. If your local environment already has one working, stick with it and don't introduce another lockfile in the same PR as an unrelated change.
+`lovable.toml` uses `bun`, `.replit` uses `npm`, and the repo still has `bun.lock`, `bun.lockb`, AND `package-lock.json` all committed simultaneously — that three-way coexistence itself is still unresolved drift (CTO audit, Aug 2026), not something to "fix" by picking a third tool. The functional breakage this caused is fixed, though: `package-lock.json` had 21 entries pinned to Lovable's private npm mirror, which made `npm install`/`npm ci` fail outside Lovable's own sandbox (including on a GitHub Actions runner). That was corrected in PR #1 (merged) — a clean install straight from the committed lockfile is now confirmed working outside Lovable. If your local environment already has one lockfile working, stick with it and don't introduce another in the same PR as an unrelated change.
 
 ## Testing
 
@@ -53,7 +53,7 @@ Before any visual/CSS change, run `npm run check:contrast:pr-gate` and `npm run 
 
 - New public-facing edge functions: call `enforceRateLimit` from `supabase/functions/_shared/rate-limit-middleware.ts` (DB-backed, windowed, per-IP-hashed). See `advisory-desk-request/index.ts` for the reference pattern.
 - Owner-only edge functions: use `requireOwnerAuth` from `_shared/owner-auth-middleware.ts`.
-- RLS: this repo has been through several hardening passes (`SECURITY_PHASE3_P0_CHANGELOG.md` through `PHASE6`) — deny-by-default, `service_role`-only where appropriate, `WITH CHECK` constraints. Read the existing policy on a table before adding a new one to it.
+- RLS: this repo has been through several hardening passes (`SECURITY_PHASE3_P0_CHANGELOG.md` through `PHASE6`) — deny-by-default, `service_role`-only where appropriate, `WITH CHECK` constraints. Read the existing policy on a table before adding a new one to it. Note: `service_role` bypasses RLS entirely regardless of policy count (confirmed at the DB level, `rolbypassrls = true`) — a table with RLS enabled and zero policies is not necessarily broken if every access path uses a service-role client; check which client a given edge function actually uses before assuming a zero-policy table is failing silently.
 - Never render unsanitized HTML from user/DB input — this class of bug was found and patched across 5 files in Aug 2026; check for an existing sanitizer (`src/utils/__tests__/contentSanitizer.test.ts`) before adding raw `dangerouslySetInnerHTML`.
 
 ## Error monitoring
@@ -62,6 +62,8 @@ Before any visual/CSS change, run `npm run check:contrast:pr-gate` and `npm run 
 
 ## Known open items (see the full CTO report for detail/priority order)
 
-- GitHub branch protection / required-status-check enforcement on the contrast-check workflows is unconfirmed — don't assume a failing check actually blocks merge.
+Current roadmap status, item tracking, and changelog live in `ROADMAP.md` at the repo root — check there before assuming an item's status from this file.
+
+- GitHub branch protection / required-status-check enforcement: partially confirmed — PR #1 merged successfully via the GitHub API with 4 known-failing checks present (Vitest, Footer ModeSwitcher, Validate PDF exports, Contrast PR Gate) and no admin override needed, meaning those specific checks are not configured as required/blocking. Not confirmed for every check in the repo — don't assume a failing check on a *different* workflow also won't block merge without checking.
 - The default payment plan in the Unit Comparison tool (`DEFAULT_PLAN_RULES` in `buildSchedule.ts`) only totals 100% of the purchase price at one specific handover distance; at typical 1-3 year handover windows it under-covers by 15-40 percentage points, and the UI doesn't currently surface the warning `buildSchedule()` already returns. Flagged, not yet fixed — needs a product decision.
 - Server-side money paths (`crm-broker-commission-create`, `crm-broker-commission-sign`) have no test harness yet — no `deno test` setup exists in this repo. Reasonable next step, not yet built.

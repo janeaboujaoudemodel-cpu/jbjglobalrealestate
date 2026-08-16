@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { COMPANY_NAP } from "@/config/companyNAP";
 import { openWhatsApp, openTel } from "@/utils/contactActions";
 import { toast } from "sonner";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const EMERALD_PAIR = "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)";
 const COMPANY_PHONE = "+971 54 15 15 015";
@@ -36,6 +37,7 @@ export default function SearchFallbackContact({ open, onOpenChange, query }: Pro
   const [name, setName] = useState("");
   const [message, setMessage] = useState(() => buildMessage(query));
   const [sending, setSending] = useState(false);
+  const { honeypot, setHoneypot } = useHoneypot();
 
   useEffect(() => {
     if (open) setMessage(buildMessage(query));
@@ -62,6 +64,7 @@ export default function SearchFallbackContact({ open, onOpenChange, query }: Pro
           contactType: "visitor",
           message: message.trim().slice(0, 2000),
           context: { searchQuery: query.slice(0, 300) },
+          honeypot,
         },
       });
       if (error) throw error;
@@ -89,6 +92,7 @@ export default function SearchFallbackContact({ open, onOpenChange, query }: Pro
         </DialogHeader>
 
         <div className="grid gap-3">
+          <HoneypotField value={honeypot} onChange={setHoneypot} name="search_fallback_company_website" />
           <div className="grid gap-2 sm:grid-cols-2">
             <Input placeholder="Your name (optional)" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
             <Input

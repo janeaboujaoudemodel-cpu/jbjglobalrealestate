@@ -1,6 +1,6 @@
 import { Mail, Phone, MessageCircle, Sparkles } from "lucide-react";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
-import { CONTACT_INFO } from "@/constants/stats";
+import { CAREERS_EMAIL, CONTACT_INFO } from "@/constants/stats";
 import IconTile from "@/components/ui/icon-tile";
 
 /**
@@ -12,8 +12,8 @@ export default function CareersContactBlock() {
     {
       icon: Mail,
       label: "Email Careers",
-      value: "careers@JBJ.ae",
-      href: "mailto:careers@JBJ.ae",
+      value: CAREERS_EMAIL,
+      href: `mailto:${CAREERS_EMAIL}`,
       tag: "Replies within 24h",
     },
     {

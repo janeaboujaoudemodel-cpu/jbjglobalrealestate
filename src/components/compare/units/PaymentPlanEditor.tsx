@@ -17,8 +17,8 @@ const RULE_PRESETS: { label: string; build: () => PlanRule }[] = [
 
 const inputBase: React.CSSProperties = {
   background: "#F7F2EA",
-  border: "1px solid rgba(255,255,255,0.18)",
-  color: "#FFFFFF",
+  border: "1px solid rgba(184,149,85,0.35)",
+  color: "#1A1A1A",
 };
 
 export default function PaymentPlanEditor({ rules, onChange, compact }: Props) {

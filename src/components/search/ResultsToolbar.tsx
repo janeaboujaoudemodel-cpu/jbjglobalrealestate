@@ -226,7 +226,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
       <Dialog open={alertOpen} onOpenChange={setAlertOpen}>
         <DialogContent
           className="max-w-md z-[80]"
-          style={{ background: "#FFFFFF", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }}
+          style={{ background: "#FBF6EC", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }}
         >
           <DialogHeader>
             <DialogTitle>Create alert</DialogTitle>
@@ -239,7 +239,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
             value={alertName}
             onChange={(e) => setAlertName(e.target.value)}
             placeholder={`Properties for ${purposeWord} in ${locationName}`}
-            className="h-10 rounded-lg px-3 text-sm bg-[#FDFBF7] border border-[#B89555]/35 outline-none"
+            className="h-10 rounded-lg px-3 text-sm bg-transparent border border-[#B89555]/35 outline-none"
           />
           <label className="text-xs font-semibold uppercase tracking-wider opacity-70">Receive updates</label>
           <div className="flex gap-1.5">

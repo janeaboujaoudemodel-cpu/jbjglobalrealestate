@@ -64,6 +64,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   const [step, setStep] = useState<ChatStep>('welcome_choice');
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
+  const [chatHoneypot, setChatHoneypot] = useState('');
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -417,10 +418,18 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
   // Select service and create conversation
   const handleSelectService = useCallback(async (serviceId: string) => {
     setSelectedService(serviceId);
-    
+
+    // Anti-spam honeypot triggered: skip creating the chat session, saving
+    // the lead, and alerting the owner — a filled trap field means this
+    // wasn't driven by the ChatLeadForm/ChatConversationalCollect UI.
+    if (chatHoneypot.trim()) {
+      setStep('agent_joining');
+      return;
+    }
+
     const fullName = `${userInfo.firstName} ${userInfo.lastName}`.trim();
     const pageSource = window.location.pathname;
-    
+
     try {
       const { data, error } = await supabase.functions.invoke('chat-session', {
         body: {
@@ -440,7 +449,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       // Use backend edge function to save lead (bypasses RLS)
       const normalizedEmail = userInfo.email.toLowerCase().trim();
       const normalizedPhone = userInfo.phone?.replace(/[\s\-\(\)]/g, '') || null;
-      
+
       const { error: captureError } = await supabase.functions.invoke('capture-lead', {
         body: {
           email: normalizedEmail,
@@ -454,6 +463,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           subSource: `Chat - ${serviceId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`,
           pageSource: pageSource,
           contactType: 'client',
+          honeypot: chatHoneypot,
         },
       });
 
@@ -480,7 +490,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
     // Show agent joining animation
     setStep('agent_joining');
-  }, [userInfo]);
+  }, [userInfo, chatHoneypot]);
 
   // When agent is ready, start the chat
   const handleAgentReady = () => {
@@ -1302,6 +1312,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
             onSubmit={() => setStep('shortcuts')}
             formErrors={formErrors}
             setFormErrors={setFormErrors}
+            honeypot={chatHoneypot}
+            onHoneypotChange={setChatHoneypot}
           />
         )}
 

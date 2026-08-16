@@ -136,12 +136,12 @@ export const NAV_ITEMS: NavItem[] = [
 
   // ── Guides ──
   { label: "Guides Library", href: "/guides", icon: BookOpen, megaMenu: 'guides', section: "GUIDES" },
-  { label: "Buyer's Guide", href: "/buyer-guide", icon: FileText },
-  { label: "Seller's Guide", href: "/seller-guide", icon: FileText },
+  { label: "Buyer's Guide", href: "/guides/buyer", icon: FileText },
+  { label: "Seller's Guide", href: "/guides/seller", icon: FileText },
   { label: "Rental Guide", href: "/rent-guide", icon: FileText },
-  { label: "Tenant Guide", href: "/tenant-guide", icon: FileText },
-  { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
-  { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
+  { label: "Tenant Guide", href: "/guides/tenant", icon: FileText },
+  { label: "Landlord Guide", href: "/guides/landlord", icon: FileText },
+  { label: "Investor Education", href: "/guides/invest", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
   // "Books Library" retired — merged into Guides Library above. /education-hub now 301s to /guides.
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
@@ -207,7 +207,7 @@ export const NAV_ITEMS: NavItem[] = [
   // ── Help & Support ──
   { label: "Contact Us", href: "/contact", icon: Phone, section: "HELP & SUPPORT" },
   { label: "Support Center", href: "/ticket-hub", icon: Ticket },
-  { label: "FAQs", href: "/faqs", icon: Lightbulb },
+  { label: "FAQs", href: "/faq", icon: Lightbulb },
   { label: "Customer Happiness", href: "/services/customer-happiness-center", icon: SmilePlus },
   { label: "Complaint Procedures", href: "/services/complaint-procedures", icon: ScrollText },
   { label: "Testimonials", href: "/services/testimonials", icon: Heart },

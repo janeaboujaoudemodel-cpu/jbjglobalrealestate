@@ -1,0 +1,97 @@
+/**
+ * PASS 374 — FORM & MODAL SYSTEM (LOCKED)
+ * ---------------------------------------------------------------------------
+ * Owner brief (task 4): every form and every modal on the site, both skins.
+ *
+ *  A. One deliberate premium surface — the old two-tone champagne stack
+ *     (#FDFBF7 → #F7F2EA → #EFE6D6 with a brighter #FDFBF7 panel on top of it)
+ *     is replaced by a single pearl surface.
+ *  B. No middle frame — the outer modal/panel border stays, each field keeps its
+ *     own hairline, the border that wrapped the WHOLE field block is removed.
+ *  C. Real pill contrast — inactive selection pills were beige ink on beige.
+ *     They are now #1A1A1A (ink) on #F1E7D4 (pearl-champagne) with a solid gold
+ *     hairline: contrast ratio 13.9:1 (WCAG AAA, min required 4.5:1).
+ *     Active pills stay the locked emerald pair gradient with pure white ink.
+ *  D. Modal centring uses `--jj-modal-inset-left` (see useModalViewportInset)
+ *     so the panel is centred in the visible content viewport, not the window.
+ *
+ * Scoped file — nothing here touches emerald filter panels or the back office
+ * data grids, and no new globals are added to index.css.
+ */
+
+/* Custom-property tokens for this pass (--jj-form-*, --jj-pill-rest-*)
+   now live in src/styles/theme-tokens.css — see CSS token consolidation. */
+
+/* ── A. ONE SURFACE ─────────────────────────────────────────────────────── */
+html body [role="dialog"]:not([data-advanced-filter-panel="true"]):not([data-preserve-surface]):not([data-jbj-preserve-surface]),
+html body .jbj-form-shell,
+html body [data-form-shell] {
+  background-image: none;
+  background-color: var(--jj-form-surface);
+}
+
+/* ── B. NO MIDDLE FRAME AROUND A FIELD GROUP ───────────────────────────── */
+html body [data-field-group] {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* Fields sit directly on the surface, with normal rhythm between groups. */
+html body [data-field-group] > * + * {
+  margin-top: 10px;
+}
+
+/* ── C. SELECTION PILLS ────────────────────────────────────────────────── */
+html body .jbj-pill-inactive {
+  background: var(--jj-pill-rest-bg);
+  background-image: none;
+  border: 1px solid var(--jj-pill-rest-border);
+  color: var(--jj-form-ink);
+  -webkit-text-fill-color: var(--jj-form-ink);
+}
+
+html body .jbj-pill-inactive:hover {
+  background: #E9DCC2;
+  border-color: #A5843F;
+  color: var(--jj-form-ink);
+  -webkit-text-fill-color: var(--jj-form-ink);
+}
+
+html body .jbj-pill-inactive:focus-visible {
+  outline: 2px solid #064e3b;
+  outline-offset: 2px;
+}
+
+html body .jbj-pill-active {
+  background-image: linear-gradient(135deg, #064e3b 0%, #042c1c 58%, #000000 100%);
+  border: 0;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+html body .jbj-pill-active svg,
+html body .jbj-pill-active span {
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+/* ── C2. BUTTON STATES INSIDE FORMS / MODALS ───────────────────────────── */
+html body [role="dialog"]:not([data-advanced-filter-panel="true"]) button:disabled,
+html body .jbj-form-shell button:disabled,
+html body [data-form-shell] button:disabled {
+  opacity: 1;
+  background-image: none;
+  background-color: #EDE4D4;
+  border: 1px solid rgba(26, 26, 26, 0.28);
+  color: #4A4034;
+  -webkit-text-fill-color: #4A4034;
+  cursor: not-allowed;
+}
+
+/* ── D. SPACING / SHAPE CONSISTENCY ────────────────────────────────────── */
+html body .jbj-form-shell,
+html body [data-form-shell] {
+  border-radius: 16px;
+}

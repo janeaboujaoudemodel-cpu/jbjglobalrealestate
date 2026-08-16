@@ -16,6 +16,7 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constan
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Link } from "react-router-dom";
@@ -92,6 +93,7 @@ const Contact = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const { t } = useLanguage();
   const { captureLead } = useLeadCapture();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
   
   const countries = getCountryList();
   const languages = getLanguageList();
@@ -117,6 +119,13 @@ const Contact = () => {
   });
 
   const onSubmit = async (data: ConsultationFormData) => {
+    if (isBot) {
+      // Anti-spam honeypot triggered: pretend success without saving the
+      // lead, recording a referral usage, or notifying the inbox.
+      setIsSuccess(true);
+      form.reset();
+      return;
+    }
     setIsSubmitting(true);
     try {
       // 1) Capture lead - saves to BOTH leads AND crm_leads tables (CRITICAL)
@@ -127,6 +136,7 @@ const Contact = () => {
         nationality: data.nationality,
         language: data.language,
         currentLocation: data.currentLocation,
+        honeypot,
       }, "contact-consultation", "client");
 
       if (!leadCaptured) {
@@ -180,6 +190,7 @@ const Contact = () => {
               referralCode: data.referralCode || "None",
             },
             message: data.message,
+            honeypot,
           },
         });
       } catch (notifyErr) {
@@ -433,6 +444,7 @@ END:VCARD`;
 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                    <HoneypotField value={honeypot} onChange={setHoneypot} name="contact_company_website" />
 
                     {/* Personal Information */}
                     <div className="space-y-4">

@@ -55,9 +55,9 @@ const guidesLibraryBook: BookData = {
   /** Maps each TOC chapter to a direct href for cross-page navigation */
   _chapterHrefs: [
     '/guides#guides-library',
-    '/buyer-guide',
-    '/seller-guide',
-    '/landlord-guide',
+    '/guides/buyer',
+    '/guides/seller',
+    '/guides/landlord',
     '/rent-guide',
     '/guides/golden-visa-uae',
     '/market-intelligence',
@@ -69,7 +69,7 @@ const guidesLibraryBook: BookData = {
 const investorEducationBook: BookData = {
   title: 'Investor Education Guide',
   cover: investorEducationCover,
-  href: '/investor-education',
+  href: '/guides/invest',
   category: 'education',
   coverLocked: true,
   tableOfContents: [
@@ -129,7 +129,7 @@ const goldenVisaBook: BookData = {
 const buyerGuideBook: BookData = {
   title: "Buyer's Guide",
   cover: buyerGuideCover,
-  href: '/buyer-guide',
+  href: '/guides/buyer',
   category: 'guide',
   coverLocked: true,
   tableOfContents: [
@@ -149,7 +149,7 @@ const buyerGuideBook: BookData = {
 const sellerGuideBook: BookData = {
   title: "Seller's Guide",
   cover: sellerGuideCover,
-  href: '/seller-guide',
+  href: '/guides/seller',
   category: 'guide',
   coverLocked: true,
   tableOfContents: [
@@ -169,7 +169,7 @@ const sellerGuideBook: BookData = {
 const landlordGuideBook: BookData = {
   title: 'Landlord Guide',
   cover: landlordGuideCover,
-  href: '/landlord-guide',
+  href: '/guides/landlord',
   category: 'guide',
   coverLocked: true,
   tableOfContents: [
@@ -355,7 +355,7 @@ const rentGuideBook: BookData = {
 const tenantGuideBook: BookData = {
   title: 'Tenant Guide',
   cover: tenantGuideCover,
-  href: '/tenant-guide',
+  href: '/guides/tenant',
   category: 'guide',
   coverLocked: true,
   tableOfContents: [

@@ -23,6 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { LeadFormType, LeadTimeline, FormFieldConfig } from "@/types/blueprint";
 import { supabase } from "@/integrations/supabase/client";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 interface LeadFormModuleProps {
   formType: LeadFormType;
@@ -55,7 +56,8 @@ const LeadFormModule = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
+
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -117,7 +119,15 @@ const LeadFormModule = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (isBot) {
+      // Anti-spam honeypot triggered: pretend success without touching
+      // crm_leads. This form inserts directly (no edge-function backstop),
+      // so this client-side check is the only gate.
+      setIsSuccess(true);
+      return;
+    }
+
     if (!validateForm()) {
       toast({
         title: t('form.validationError', 'Please check the form'),
@@ -260,6 +270,7 @@ const LeadFormModule = ({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <HoneypotField value={honeypot} onChange={setHoneypot} name="lead_form_company_website" />
         {fields.map((field) => (
           <div key={field.name}>
             <Label htmlFor={field.name} className="text-[#1A1A1A] text-sm font-medium">

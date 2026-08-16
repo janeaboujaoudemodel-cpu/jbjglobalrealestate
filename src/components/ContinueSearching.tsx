@@ -107,6 +107,7 @@ const ContinueSearching = ({
       .from("projects")
       .select("id, name, slug, cover_image_url, card_image_url, gallery_start_image_url, developer_name, developer:developers(name, logo_url, logo_url_processed)")
       .eq("is_published", true)
+      .is("deleted_at", null)
       .or("listing_kind.is.null,listing_kind.neq.leasing")
       .not("cover_image_url", "is", null)
       .order("is_featured", { ascending: false })

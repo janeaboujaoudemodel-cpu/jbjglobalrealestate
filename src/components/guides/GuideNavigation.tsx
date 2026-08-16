@@ -41,8 +41,8 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
             <p className="text-[#1A1A1A]/70 text-sm mb-5 max-w-md mx-auto leading-relaxed">
               Start with our Buyer Guide to understand the fundamentals of purchasing property in the UAE.
             </p>
-            <Link 
-              to="/buyer-guide"
+            <Link
+              to="/guides/buyer"
               data-surface="emerald"
               className="jj-cta-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all text-sm font-semibold hover:-translate-y-1"
             >
@@ -130,17 +130,15 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
 
 // Standardized guide links
 export const GUIDE_LINKS: GuideLink[] = [
-  { title: "Buyer Guide", path: "/buyer-guide", description: "Complete guide to purchasing property" },
-  { title: "Seller Guide", path: "/seller-guide", description: "How to sell property successfully" },
+  { title: "Buyer Guide", path: "/guides/buyer", description: "Complete guide to purchasing property" },
+  { title: "Seller Guide", path: "/guides/seller", description: "How to sell property successfully" },
   { title: "Rent Guide", path: "/rent-guide", description: "How renting works in Dubai" },
-  { title: "Tenant Guide", path: "/tenant-guide", description: "Tenant rights & responsibilities" },
-  { title: "Landlord Guide", path: "/landlord-guide", description: "List your property for rent" },
+  { title: "Tenant Guide", path: "/guides/tenant", description: "Tenant rights & responsibilities" },
+  { title: "Landlord Guide", path: "/guides/landlord", description: "List your property for rent" },
   { title: "Area Guides", path: "/areas", description: "Explore Dubai's communities" },
   { title: "Golden Visa Guide", path: "/guides/golden-visa-uae", description: "Residency through property investment" },
-  { title: "Investor Education", path: "/investor-education", description: "Investment framework" },
-  { title: "Investor FAQ", path: "/investor-faq", description: "Investment questions answered" },
+  { title: "Investor Education", path: "/guides/invest", description: "Investment framework" },
   { title: "Broker Education", path: "/broker-education", description: "Professional broker training" },
-  { title: "Broker FAQ", path: "/broker-faq", description: "Professional broker questions answered" },
   { title: "FAQ", path: "/faq", description: "Common questions answered" },
 ];
 

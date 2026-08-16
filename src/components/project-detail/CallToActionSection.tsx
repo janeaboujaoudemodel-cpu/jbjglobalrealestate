@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 import { getLanguageList, LANGUAGE_FLAGS } from "@/constants/localeOptions";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { MessageCircle, Phone, Send, Loader2, CheckCircle, Clock, Calendar } from "lucide-react";
@@ -49,6 +50,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
+  const { honeypot, setHoneypot } = useHoneypot();
   const languageOptions = getLanguageList();
 
   const form = useForm<CTAFormData>({
@@ -73,6 +75,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
         fullName: data.fullName,
         phone: data.phone,
         language: data.language,
+        honeypot,
       }, `project-cta-${projectId || projectName}`, "client");
 
       setIsSuccess(true);
@@ -154,6 +157,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
             ) : (
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <HoneypotField value={honeypot} onChange={setHoneypot} name="project_cta_company_website" />
                   <FormField
                     control={form.control}
                     name="fullName"
