@@ -981,7 +981,7 @@ body :where(.jj-side-tile) {
 html body #root [data-chrome="sidebar"] [data-sidebar-section-label] {
   word-break: normal !important;
   overflow-wrap: normal !important;
-  hyphens: manual !important;
+  hyphens: manual;
 }
 
 /* FINAL SIDEBAR REPAIR — live vertical rail only.
@@ -1054,7 +1054,7 @@ html body .jj-side-tile.is-active {
 html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] {
   min-height: 68px !important;
   height: 68px !important;
-  aspect-ratio: auto !important;
+  aspect-ratio: auto;
 }
 
 html body [data-chrome="sidebar"] a[href="/auth"]:not([data-sidebar-auth-control]) {
