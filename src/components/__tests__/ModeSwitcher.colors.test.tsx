@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, fireEvent } from "@testing-library/react";
+import { render as rtlRender, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import type { ReactElement } from "react";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import type { UserMode } from "@/contexts/UserModeContext";
 
@@ -113,6 +115,8 @@ const findRowByLabel = (label: string): HTMLElement => {
   if (!row) throw new Error(`Could not find menuitem row for "${label}"`);
   return row;
 };
+
+const render = (ui: ReactElement) => rtlRender(<MemoryRouter>{ui}</MemoryRouter>);
 
 const openDropdown = () => {
   const trigger = getTrigger();
