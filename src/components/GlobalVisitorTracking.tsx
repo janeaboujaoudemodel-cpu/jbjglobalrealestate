@@ -149,10 +149,12 @@ export const GlobalVisitorTracking = () => {
         is_authenticated: !!user,
       } as any);
     } catch {
-      await supabase.from('user_sessions').update({
-        user_id: user?.id || null,
-        is_authenticated: !!user,
-      } as any).eq('session_id', sessionId);
+      // Anonymous visitors have no UPDATE grant on user_sessions —
+      // go through the security-definer RPC instead.
+      await supabase.rpc('track_user_session_update' as any, {
+        p_session_id: sessionId,
+        p_patch: {} as never,
+      });
     }
   }, [user]);
 
@@ -225,9 +227,10 @@ export const GlobalVisitorTracking = () => {
       });
 
 
-      void supabase.from('user_sessions')
-        .update({ pages_visited: pagesVisited } as any)
-        .eq('session_id', sessionId);
+      void supabase.rpc('track_user_session_update' as any, {
+        p_session_id: sessionId,
+        p_patch: { pages_visited: pagesVisited } as never,
+      });
     } catch { /* silent */ }
   }, [location.pathname, queueUserEvent]);
 
@@ -274,8 +277,8 @@ export const GlobalVisitorTracking = () => {
     if (supabaseUrl && supabaseKey) {
       // Single keepalive call to update session
       try {
-        fetch(`${supabaseUrl}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
-          method: 'PATCH',
+        fetch(`${supabaseUrl}/rest/v1/rpc/track_user_session_update`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': supabaseKey,
@@ -283,8 +286,11 @@ export const GlobalVisitorTracking = () => {
             'Prefer': 'return=minimal',
           },
           body: JSON.stringify({
-            ended_at: new Date().toISOString(),
-            duration_seconds: totalTimeSpent,
+            p_session_id: sessionId,
+            p_patch: {
+              ended_at: new Date().toISOString(),
+              duration_seconds: totalTimeSpent,
+            },
           }),
           keepalive: true,
         });
@@ -336,9 +342,10 @@ export const GlobalVisitorTracking = () => {
   useEffect(() => {
     if (!user?.id) return;
     const sessionId = getSessionId();
-    void supabase.from('user_sessions')
-      .update({ user_id: user.id, is_authenticated: true } as any)
-      .eq('session_id', sessionId);
+    void supabase.rpc('track_user_session_update' as any, {
+      p_session_id: sessionId,
+      p_patch: {} as never,
+    });
     void supabase.rpc('track_visitor_session_update', {
       p_session_id: sessionId,
       p_patch: {} as never,
@@ -365,9 +372,10 @@ export const GlobalVisitorTracking = () => {
       const sessionId = getSessionId();
       const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
       const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
-      void supabase.from('user_sessions')
-        .update({ duration_seconds: totalTimeSpent, ended_at: new Date().toISOString() } as any)
-        .eq('session_id', sessionId);
+      void supabase.rpc('track_user_session_update' as any, {
+        p_session_id: sessionId,
+        p_patch: { duration_seconds: totalTimeSpent, ended_at: new Date().toISOString() } as never,
+      });
     }, 120000);
 
     return () => {
