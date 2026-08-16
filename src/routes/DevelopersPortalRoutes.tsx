@@ -52,7 +52,13 @@ const ownerDestinationFor = (pathname: string) => {
   return "/owner/developers";
 };
 
-const PortalEntry = () => {
+// Exported so its interaction with OwnerGuard's own owner-mode redirect can
+// be tested directly (see src/test/preview-redirect-guards.test.tsx) - the
+// two guards previously formed an infinite redirect loop for a registered
+// owner in Developer mode: this component sends them to /owner/developers,
+// OwnerGuard used to consider that destination off-limits outside Owner
+// mode and bounced them straight back here.
+export const PortalEntry = () => {
   const { role, isLoading } = usePortalRole();
   const location = useLocation();
   if (isLoading) return <PageLoader />;
