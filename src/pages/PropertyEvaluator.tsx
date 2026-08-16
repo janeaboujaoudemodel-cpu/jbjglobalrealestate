@@ -1562,7 +1562,7 @@ const PropertyEvaluator = () => {
                         </div>
                       </div>
                       <p className="text-sm text-[#1A1A1A]/70 mt-2">Property is in the original condition from developer handover.</p>
-                      {property.hasModifications === 'stock' && <Badge className="absolute top-2 right-2 bg-[#1A1A1A] text-[#1A1A1A]">Selected</Badge>}
+                      {property.hasModifications === 'stock' && <Badge className="absolute top-2 right-2 bg-[#1A1A1A] text-white">Selected</Badge>}
                     </label>
 
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
@@ -1579,7 +1579,7 @@ const PropertyEvaluator = () => {
                         </div>
                       </div>
                       <p className="text-sm text-[#1A1A1A]/70 mt-2">Property has been modified with renovations, fit-outs, or upgrades.</p>
-                      {property.hasModifications === 'modified' && <Badge className="absolute top-2 right-2 bg-[#1A1A1A] text-[#1A1A1A]">Selected</Badge>}
+                      {property.hasModifications === 'modified' && <Badge className="absolute top-2 right-2 bg-[#1A1A1A] text-white">Selected</Badge>}
                     </label>
                   </RadioGroup>
 

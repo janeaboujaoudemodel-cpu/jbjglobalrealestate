@@ -9,6 +9,20 @@
  * style recalculation — the measured cost behind slow dropdown open/close.
  *
  * The sheet is appended after index.css, so cascade order is unchanged.
+ *
+ * LOADING TRIGGER — read before adding a route here.
+ * The sheet is scoped by DOM tokens (`[data-insights-page]`, comparison shells),
+ * but this component can only see the URL. Those two views of "does this page
+ * need the sheet?" drifted badly: `InsightsPageScope` came to wrap ~55 paths
+ * that render `data-insights-page`, while the prefix list below still named
+ * seven, so pages like /faq, /about, /market-intelligence and /company-profile
+ * rendered the scope token and loaded none of the ~280 rules written for it.
+ *
+ * The fix is for whoever mounts the scope to request the sheet directly, via
+ * `ensureRouteSurfaceStyles()`. The prefix list stays for shells that use the
+ * sheet without going through `InsightsPageScope` (comparison, blog, library) —
+ * it is a supplement now, not the only trigger, so it cannot silently
+ * under-cover again.
  */
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -29,15 +43,25 @@ export function isRouteSurfacePath(pathname: string) {
   return ROUTE_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/"));
 }
 
+/**
+ * Load `route-surfaces.css` once per session. Idempotent and safe to call from
+ * render or an effect; a failed import resets the latch so a later navigation
+ * retries.
+ */
+export function ensureRouteSurfaceStyles(): void {
+  if (loaded) return;
+  loaded = true;
+  import("@/styles/route-surfaces.css").catch(() => {
+    loaded = false;
+  });
+}
+
 export default function RouteSurfaceStyles() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (loaded || !isRouteSurfacePath(pathname)) return;
-    loaded = true;
-    import("@/styles/route-surfaces.css").catch(() => {
-      loaded = false;
-    });
+    if (!isRouteSurfacePath(pathname)) return;
+    ensureRouteSurfaceStyles();
   }, [pathname]);
 
   return null;

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Award,
@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import MIPageShell, { type MIShellTocItem } from "@/components/shell/MIPageShell";
 import PageScope from "@/components/util/PageScope";
+import { ensureRouteSurfaceStyles } from "@/components/util/RouteSurfaceStyles";
 
 /**
  * InsightsPageScope
@@ -241,7 +242,19 @@ const getCategoryShellConfig = (pathname: string): CategoryShellConfig | null =>
 export function InsightsPageScope({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
 
-  if (pathname === "/contact" || pathname === "/services" || pathname.startsWith("/services/")) {
+  // /contact and /services/* opt out of the scope entirely — they render their
+  // own shells and must not inherit the insights surface contract.
+  const optedOut =
+    pathname === "/contact" || pathname === "/services" || pathname.startsWith("/services/");
+
+  // Everything else renders `data-insights-page`, so it needs the sheet those
+  // rules live in. Requesting it here rather than from a URL prefix list is
+  // what keeps the two in step — see RouteSurfaceStyles for the history.
+  useEffect(() => {
+    if (!optedOut) ensureRouteSurfaceStyles();
+  }, [optedOut]);
+
+  if (optedOut) {
     return <>{children}</>;
   }
 

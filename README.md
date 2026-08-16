@@ -5,7 +5,7 @@ Enterprise-grade Dubai real estate brokerage platform with AI-powered tools, CRM
 ## Tech Stack
 
 - **Frontend**: React 18, TypeScript 5, Vite 5, Tailwind CSS 3, Framer Motion
-- **Backend**: Supabase (PostgreSQL + PostGIS), 260+ Deno Edge Functions
+- **Backend**: Supabase (PostgreSQL + PostGIS), 506 Deno Edge Functions
 - **AI**: Gemini 2.5, GPT-5, ElevenLabs, VAPI, Perplexity
 - **Maps**: Leaflet / React Leaflet
 - **Charts**: Recharts
@@ -78,8 +78,8 @@ src/
 └── styles/           # Global styles
 
 supabase/
-├── functions/        # 260+ Deno Edge Functions
-├── migrations/       # 578 database migrations
+├── functions/        # 506 Deno Edge Functions
+├── migrations/       # 1,154 database migrations
 └── config.toml       # Supabase configuration
 ```
 

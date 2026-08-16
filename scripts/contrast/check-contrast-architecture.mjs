@@ -8,7 +8,10 @@ const root = path.resolve(__dirname, '..', '..');
 
 const appTsx = path.join(root, 'src', 'App.tsx');
 const contrastGuard = path.join(root, 'src', 'utils', 'contrastGuard.ts');
-const css = path.join(root, 'src', 'index.css');
+// `--css=<path>` points the stylesheet checks at a fixture so the guard's own
+// regression tests can prove it still fails on a genuinely leaking rule.
+const cssOverride = process.argv.find((a) => a.startsWith('--css='))?.slice('--css='.length);
+const css = cssOverride ? path.resolve(cssOverride) : path.join(root, 'src', 'index.css');
 
 const violations = [];
 
@@ -45,43 +48,80 @@ if (presentFinalContracts.length !== 1 || presentFinalContracts[0] !== 'GLOBAL S
   violations.push(`src/index.css must contain exactly one final contrast contract: GLOBAL SEMANTIC CONTRAST CONTRACT. Found: ${presentFinalContracts.join(', ') || 'none'}.`);
 }
 
-const finalContractIndex = stylesheet.lastIndexOf('GLOBAL SEMANTIC CONTRAST CONTRACT');
-const finalContractEnd = stylesheet.indexOf('/* PASS 200', finalContractIndex);
-const finalContract = finalContractIndex >= 0
-  ? stylesheet.slice(finalContractIndex, finalContractEnd >= 0 ? finalContractEnd : undefined)
-  : '';
+// The contract runs from its own boxed header to the start of the next boxed
+// section. Do NOT pin this to a named pass ("/* PASS 200"): the section that
+// happens to follow gets renamed and reformatted by every contrast pass, and a
+// sentinel that stops matching silently widens the slice to end-of-file — which
+// then flags every unrelated rule in the rest of the stylesheet.
+const CONTRACT_LABEL = 'GLOBAL SEMANTIC CONTRAST CONTRACT';
+const BOXED_SECTION = /\/\*[\s*]*={6,}/g;
+
+function sliceFinalContract(source) {
+  const start = source.lastIndexOf(CONTRACT_LABEL);
+  if (start < 0) return '';
+  // Step past the contract's own boxed header, or its closing `====== */`
+  // would immediately terminate the slice.
+  const headerEnd = source.indexOf('*/', start);
+  BOXED_SECTION.lastIndex = headerEnd >= 0 ? headerEnd + 2 : start + CONTRACT_LABEL.length;
+  const next = BOXED_SECTION.exec(source);
+  // No following boxed section means the contract really is the last block.
+  return source.slice(start, next ? next.index : undefined);
+}
+
+// Comment prose contains braces, colons and words like `div`, so a naive
+// `split('}')` parse reads it as selectors and bodies. Strip comments first.
+const stripComments = (source) => source.replace(/\/\*[\s\S]*?\*\//g, ' ');
+
+const finalContract = stripComments(sliceFinalContract(stylesheet));
 if (/\[data-on-dark\][^{]*\{[^}]*color:\s*#fff(?:fff)?\s*!important/i.test(finalContract)) {
   violations.push('[data-on-dark] must not be a broad final paint rule; own dark surfaces decide white foregrounds.');
 }
 
-const unsafeFinalRules = finalContract
-  .split('}')
-  .map((rule) => {
+const rulesOf = (block) =>
+  block.split('}').map((rule) => {
     const [selector = '', body = ''] = rule.split('{');
     return { selector, body };
-  })
-  .filter(({ selector, body }) => {
-    const positiveSelector = selector.replace(/:not\([^)]*\)/g, '');
-    return /color:\s*(?:#fff(?:fff)?|#1a1a1a|var\(--jj-contrast-on-(?:light|dark)\))\s*!important/i.test(body)
-      && /\bdiv\b|\[role/.test(positiveSelector);
   });
-if (unsafeFinalRules.length) {
-  violations.push('The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.');
+
+// Declarations that hand an element an explicit foreground. `inherit` and
+// `currentColor` are the opposite of a paint — they defer to the nearest
+// surface — so they never count as one.
+const DECLARATION = /(?:^|[;{\s])(-webkit-text-fill-color|color)\s*:\s*([^;!]+?)\s*!important/gi;
+const DEFERRING = /^(?:inherit|currentColor|unset|revert)$/i;
+
+function paintsExplicitForeground(body) {
+  DECLARATION.lastIndex = 0;
+  let m;
+  while ((m = DECLARATION.exec(body)) !== null) {
+    if (!DEFERRING.test(m[2])) return true;
+  }
+  return false;
 }
 
-const surfaceDescendantPaint = finalContract
-  .split('}')
-  .map((rule) => {
-    const [selector = '', body = ''] = rule.split('{');
-    return { selector, body };
-  })
-  .filter(({ selector, body }) =>
-    /\[data-surface\]/.test(selector)
-    && /\s:(?:where|is)\(/.test(selector)
-    && /(?:color|-webkit-text-fill-color):\s*(?!inherit\b|currentColor\b)[^;]+!important/i.test(body)
+const summarise = (rule) => rule.selector.trim().replace(/\s+/g, ' ').slice(0, 160);
+
+const unsafeFinalRules = rulesOf(finalContract).filter(({ selector, body }) => {
+  const positiveSelector = selector.replace(/:not\([^)]*\)/g, '');
+  return /color:\s*(?:#fff(?:fff)?|#1a1a1a|var\(--jj-contrast-on-(?:light|dark)\))\s*!important/i.test(body)
+    && /\bdiv\b|\[role/.test(positiveSelector);
+});
+if (unsafeFinalRules.length) {
+  violations.push(
+    'The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.',
+    ...unsafeFinalRules.map((r) => `    ↳ ${summarise(r)}`),
   );
+}
+
+const surfaceDescendantPaint = rulesOf(finalContract).filter(({ selector, body }) =>
+  /\[data-surface\]/.test(selector)
+  && /\s:(?:where|is)\(/.test(selector)
+  && paintsExplicitForeground(body)
+);
 if (surfaceDescendantPaint.length) {
-  violations.push('Surface contrast must paint the surface boundary only; descendant paint leaks across nested surfaces.');
+  violations.push(
+    'Surface contrast must paint the surface boundary only; descendant paint leaks across nested surfaces.',
+    ...surfaceDescendantPaint.map((r) => `    ↳ ${summarise(r)}`),
+  );
 }
 
 if (violations.length) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSchedule, DEFAULT_PLAN_RULES, type PlanInput } from "./buildSchedule";
+import { buildSchedule, DEFAULT_PLAN_RULES, planCoverage, type PlanInput } from "./buildSchedule";
 
 /**
  * Money-path coverage (CTO audit priority #2, Aug 2026).
@@ -247,5 +247,64 @@ describe("buildSchedule — DEFAULT_PLAN_RULES", () => {
     });
     expect(result.totals.totalPct).toBeCloseTo(100, 1);
     expect(result.warnings.some((w) => /should equal 100/i.test(w))).toBe(false);
+  });
+});
+
+describe("planCoverage — default plan under-coverage", () => {
+  const price = 2_000_000;
+  const build = (monthsToHandover: number) => {
+    const handover = new Date();
+    handover.setMonth(handover.getMonth() + monthsToHandover);
+    return buildSchedule({
+      totalPriceAED: price,
+      handoverDate: handover.toISOString().slice(0, 10),
+      rules: DEFAULT_PLAN_RULES,
+    });
+  };
+
+  it("returns null when the plan balances to 100%", () => {
+    const sch = buildSchedule({
+      totalPriceAED: price,
+      handoverDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 400).toISOString().slice(0, 10),
+      rules: [
+        { kind: "down_payment", pct: 20 },
+        { kind: "on_handover", pct: 80 },
+      ],
+    });
+    expect(sch.totals.totalPct).toBeCloseTo(100, 5);
+    expect(planCoverage(sch, price)).toBeNull();
+  });
+
+  it("reports the shortfall the default plan leaves at realistic handover windows", () => {
+    for (const months of [12, 24, 36]) {
+      const sch = build(months);
+      const coverage = planCoverage(sch, price);
+      expect(coverage, `default plan should not balance at ${months} months`).not.toBeNull();
+      expect(coverage!.shortfallPct).toBeGreaterThan(10);
+      expect(coverage!.totalPct).toBeLessThan(100);
+      // The unscheduled amount must be real money, matching the percentage.
+      expect(coverage!.unscheduledAED).toBeCloseTo((coverage!.shortfallPct / 100) * price, 0);
+      expect(coverage!.message).toContain("not covered by any instalment");
+    }
+  });
+
+  it("shortfall shrinks as handover moves further out", () => {
+    const short = planCoverage(build(12), price)!;
+    const long = planCoverage(build(36), price)!;
+    expect(long.shortfallPct).toBeLessThan(short.shortfallPct);
+  });
+
+  it("describes an over-covering plan differently", () => {
+    const sch = buildSchedule({
+      totalPriceAED: price,
+      handoverDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 400).toISOString().slice(0, 10),
+      rules: [
+        { kind: "down_payment", pct: 60 },
+        { kind: "on_handover", pct: 60 },
+      ],
+    });
+    const coverage = planCoverage(sch, price)!;
+    expect(coverage.shortfallPct).toBeLessThan(0);
+    expect(coverage.message).toContain("more than the unit costs");
   });
 });

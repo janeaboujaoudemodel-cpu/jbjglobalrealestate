@@ -1496,7 +1496,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 <p className="text-crm-text-muted">{selectedCV.phone_e164 || 'No phone number available'}</p>
               </div>
 
-              <Button className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-white font-bold" onClick={openEmailComposerFromContact}>
+              <Button className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] font-bold" onClick={openEmailComposerFromContact}>
                 <Mail className="h-4 w-4 mr-2" /> Send Email
               </Button>
 

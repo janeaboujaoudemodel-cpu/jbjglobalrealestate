@@ -9,18 +9,24 @@
 import { execSync } from "child_process";
 
 // NOTE: `(?!\/)` after each bg/text token excludes alpha-tinted variants
-// (e.g. `bg-[#1A1A1A]/5`). `(?<![:\w-])` before each `text-…` token excludes
+// (e.g. `bg-[#1A1A1A]/5`). `(?<![:\w-])(?<!:!)` before each token excludes
 // state-prefixed swaps (e.g. `hover:text-[#1A1A1A]` paired with a non-ink bg
 // on hover). Those represent legitimate hover/focus/data-state inversions,
 // not static same-tone bugs.
+//
+// `(?<!:!)` extends that to variants carrying the `!` important modifier —
+// `hover:[&_svg]:!text-white`. The character before the token there is `!`,
+// not `:`, so the lookbehind above let it through and reported a correct
+// hover inversion as an invisible label. A bare `!text-white` with no variant
+// is still flagged, because that one really is same-tone.
 const PATTERNS = [
-  { id: "fg-fg",      re: /(?<![:\w-])bg-foreground(?!\/)[^"'`]*(?<![:\w-])text-foreground(?!\/)/g, msg: "bg-foreground + text-foreground" },
-  { id: "primary-primary", re: /(?<![:\w-])bg-primary(?!-foreground)(?!\/)[^"'`]*(?<![:\w-])text-primary(?!-foreground)(?!\/)/g, msg: "bg-primary + text-primary" },
-  { id: "ink-ink",    re: /(?<![:\w-])bg-\[#1A1A1A\](?!\/)[^"'`]*(?<![:\w-])text-\[#1A1A1A\](?!\/)/gi, msg: "bg-[#1A1A1A] + text-[#1A1A1A]" },
-  { id: "champ-champ", re: /(?<![:\w-])bg-\[#FDFBF7\](?!\/)[^"'`]*(?<![:\w-])text-\[#FDFBF7\](?!\/)/gi, msg: "bg-[#FDFBF7] + text-[#FDFBF7]" },
-  { id: "champ-champ-7", re: /(?<![:\w-])bg-\[#F7F2EA\](?!\/)[^"'`]*(?<![:\w-])text-\[#F7F2EA\](?!\/)/gi, msg: "bg-[#F7F2EA] + text-[#F7F2EA]" },
-  { id: "black-black", re: /(?<![:\w-])bg-black(?!\/)[^"'`]*(?<![:\w-])text-black(?!\/)/g, msg: "bg-black + text-black" },
-  { id: "white-white", re: /(?<![:\w-])bg-white(?!\/)[^"'`]*(?<![:\w-])text-white(?!\/)/g, msg: "bg-white + text-white" },
+  { id: "fg-fg",      re: /(?<![:\w-])(?<!:!)bg-foreground(?!\/)[^"'`]*(?<![:\w-])(?<!:!)text-foreground(?!\/)/g, msg: "bg-foreground + text-foreground" },
+  { id: "primary-primary", re: /(?<![:\w-])(?<!:!)bg-primary(?!-foreground)(?!\/)[^"'`]*(?<![:\w-])(?<!:!)text-primary(?!-foreground)(?!\/)/g, msg: "bg-primary + text-primary" },
+  { id: "ink-ink",    re: /(?<![:\w-])(?<!:!)bg-\[#1A1A1A\](?!\/)[^"'`]*(?<![:\w-])(?<!:!)text-\[#1A1A1A\](?!\/)/gi, msg: "bg-[#1A1A1A] + text-[#1A1A1A]" },
+  { id: "champ-champ", re: /(?<![:\w-])(?<!:!)bg-\[#FDFBF7\](?!\/)[^"'`]*(?<![:\w-])(?<!:!)text-\[#FDFBF7\](?!\/)/gi, msg: "bg-[#FDFBF7] + text-[#FDFBF7]" },
+  { id: "champ-champ-7", re: /(?<![:\w-])(?<!:!)bg-\[#F7F2EA\](?!\/)[^"'`]*(?<![:\w-])(?<!:!)text-\[#F7F2EA\](?!\/)/gi, msg: "bg-[#F7F2EA] + text-[#F7F2EA]" },
+  { id: "black-black", re: /(?<![:\w-])(?<!:!)bg-black(?!\/)[^"'`]*(?<![:\w-])(?<!:!)text-black(?!\/)/g, msg: "bg-black + text-black" },
+  { id: "white-white", re: /(?<![:\w-])(?<!:!)bg-white(?!\/)[^"'`]*(?<![:\w-])(?<!:!)text-white(?!\/)/g, msg: "bg-white + text-white" },
 ];
 
 let files = [];

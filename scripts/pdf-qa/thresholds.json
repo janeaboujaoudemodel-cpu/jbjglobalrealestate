@@ -1,5 +1,10 @@
 {
+  "_doc": {
+    "checkEdgeCoverage": "Counts non-white pixels in the margin band. This detects app chrome (cookie banner, sidebar, sticky header) leaking into a PDF the app renders from a live page. It presumes a white page with clear margins, so it is meaningless for a designed full-bleed asset and MUST be set false for one — otherwise it reports ~100% on every page forever and says nothing about quality.",
+    "minImageDpi": "Effective placed resolution (image pixels / placed size), as reported by `pdfimages -list`. 150 is the print bar; a screen-only deliverable can justify less, but lower it deliberately and record why."
+  },
   "defaults": {
+    "checkEdgeCoverage": true,
     "edgeMarginPt": 36,
     "edgePixelTolerancePct": 0.5,
     "minImageDpi": 150,
@@ -7,8 +12,8 @@
   },
   "exports": {
     "company-profile": {
-      "edgeMarginPt": 36,
-      "edgePixelTolerancePct": 0.5,
+      "_note": "Static designer-authored brochure (pdf-lib/Ghostscript), served from public/documents — not rendered by the app. Every page is full-bleed on the champagne brand ground (#FEF5E7), so there is no margin band to police: measured edge coverage is 99.19-100% on all 18 pages by design. Page count and image DPI are the checks that carry meaning here.",
+      "checkEdgeCoverage": false,
       "minImageDpi": 150,
       "expectedPages": 18,
       "minPages": 18,

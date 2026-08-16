@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project uses PostgreSQL (via Supabase) with PostGIS extensions. The schema is defined across **578 migration files** in `supabase/migrations/`.
+This project uses PostgreSQL (via Supabase) with PostGIS extensions. The schema is defined across **1,154 migration files** in `supabase/migrations/`.
 
 ## Reconnecting to a New Supabase Instance
 

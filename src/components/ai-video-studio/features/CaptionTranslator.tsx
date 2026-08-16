@@ -1000,7 +1000,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 <p className="text-xs text-[#1A1A1A]/70 font-medium mb-2">Position</p>
                 <div className="flex gap-1.5">
                   {(['top', 'center', 'bottom'] as const).map(pos => (
-                    <button key={pos} onClick={() => setCaptionStyle(p => ({ ...p, position: pos }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.position === pos ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-transparent'}`}>{pos}</button>
+                    <button key={pos} onClick={() => setCaptionStyle(p => ({ ...p, position: pos }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.position === pos ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-white/70 hover:text-white border border-transparent'}`}>{pos}</button>
                   ))}
                 </div>
               </div>
@@ -1032,7 +1032,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 <p className="text-xs text-[#1A1A1A]/70 font-medium mb-2">Fade-In/Out Animation</p>
                 <div className="flex gap-1.5">
                   {(['slow', 'normal', 'fast'] as const).map(speed => (
-                    <button key={speed} onClick={() => setCaptionStyle(p => ({ ...p, speed }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.speed === speed ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-transparent'}`}>
+                    <button key={speed} onClick={() => setCaptionStyle(p => ({ ...p, speed }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.speed === speed ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-white/70 hover:text-white border border-transparent'}`}>
                       {speed}<span className="block text-[9px] opacity-60">{speed === 'slow' ? '600ms' : speed === 'normal' ? '300ms' : '80ms'}</span>
                     </button>
                   ))}
@@ -1058,9 +1058,9 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                   <div className="bg-[#1A1A1A]/50 rounded-lg p-2 border border-[#1A1A1A] mb-2">
                     <p className="text-[10px] text-[#1A1A1A]/70 mb-1.5">Preview language</p>
                     <div className="flex flex-wrap gap-1">
-                      <button onClick={() => setBurnLang('')} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${!burnLang ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70'}`}>Original</button>
+                      <button onClick={() => setBurnLang('')} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${!burnLang ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-white/70'}`}>Original</button>
                       {translatedLangs.map(lc => (
-                        <button key={lc} onClick={() => setBurnLang(lc)} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${burnLang === lc ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70'}`}>
+                        <button key={lc} onClick={() => setBurnLang(lc)} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${burnLang === lc ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-white/70'}`}>
                           {FLAG_EMOJIS[lc]} {SUPPORTED_LANGUAGES.find(l => l.code === lc)?.name}
                         </button>
                       ))}
@@ -1182,9 +1182,9 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       <div>
                         <p className="text-[10px] text-[#1A1A1A]/70 mb-1">Burn which language?</p>
                         <div className="flex flex-wrap gap-1">
-                          <button onClick={() => setBurnLang('')} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${!burnLang ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70'}`}>Original</button>
+                          <button onClick={() => setBurnLang('')} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${!burnLang ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-white/70'}`}>Original</button>
                           {translatedLangs.map(lc => (
-                            <button key={lc} onClick={() => setBurnLang(lc)} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${burnLang === lc ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70'}`}>
+                            <button key={lc} onClick={() => setBurnLang(lc)} className={`px-2 py-0.5 rounded text-[10px] transition-colors ${burnLang === lc ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-white/70'}`}>
                               {FLAG_EMOJIS[lc]} {SUPPORTED_LANGUAGES.find(l => l.code === lc)?.name}
                             </button>
                           ))}

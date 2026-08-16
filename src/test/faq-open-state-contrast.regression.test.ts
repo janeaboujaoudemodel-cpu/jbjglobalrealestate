@@ -1,8 +1,27 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-const css = readFileSync(resolve(__dirname, "..", "index.css"), "utf8");
+/**
+ * Read the whole shipped stylesheet, not just its entry point.
+ *
+ * `src/index.css` used to be the only sheet, so guards like this one read it
+ * directly. The CSS-debt work then extracted route-scoped rules into
+ * `src/styles/*.css` (loaded by RouteSurfaceStyles), and this guard's subject —
+ * the Insights bright-card ink guard — moved to `route-surfaces.css`. The rule
+ * and its `:not(.jj-faq-item *)` exclusion were both intact; only the guard's
+ * hard-coded path was stale, which failed the whole Vitest job.
+ *
+ * Reading every sheet keeps the contract asserted wherever extraction puts it.
+ */
+const STYLE_DIR = resolve(__dirname, "..", "styles");
+
+const css = [
+  readFileSync(resolve(__dirname, "..", "index.css"), "utf8"),
+  ...readdirSync(STYLE_DIR)
+    .filter((f) => f.endsWith(".css"))
+    .map((f) => readFileSync(resolve(STYLE_DIR, f), "utf8")),
+].join("\n");
 
 describe("FAQ open-state contrast cascade", () => {
   it("excludes FAQ descendants from the Insights bright-card ink guard", () => {

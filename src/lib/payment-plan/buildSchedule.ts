@@ -159,10 +159,58 @@ export function buildSchedule(input: PlanInput): BuiltSchedule {
   return { rows, totals, warnings };
 }
 
-/** Convenient default plan: 10% down, 10% after 1mo, 1% monthly to handover, 30% on handover. */
+/**
+ * Convenient default plan: 10% down, 10% after 1mo, 1% monthly to handover, 30% on handover.
+ *
+ * NOTE — this reaches exactly 100% only when handover is ~51 months out
+ * (10 + 10 + 30 fixed = 50%, plus one point per month from month 2). At the
+ * handover windows JBJ actually sells into it under-covers:
+ *
+ *   handover in 12 months → 61% of price scheduled (39pp short)
+ *   handover in 24 months → 73% (27pp short)
+ *   handover in 36 months → 85% (15pp short)
+ *
+ * `buildSchedule` reports that as a warning; `planCoverage` below turns it into
+ * something a surface can render. Whether the defaults themselves should be
+ * reshaped is a product decision and is still open.
+ */
 export const DEFAULT_PLAN_RULES: PlanRule[] = [
   { kind: "down_payment", pct: 10 },
   { kind: "milestone", pct: 10, offsetMonths: 1 },
   { kind: "monthly", pct: 1, startMonth: 2 },
   { kind: "on_handover", pct: 30 },
 ];
+
+export interface PlanCoverage {
+  totalPct: number;
+  /** Positive when the plan leaves part of the price unscheduled. */
+  shortfallPct: number;
+  unscheduledAED: number;
+  /** Short sentence suitable for a banner or a PDF footnote. */
+  message: string;
+}
+
+/**
+ * Describe how much of the purchase price a built schedule actually covers.
+ *
+ * Returns null when the plan balances, so a caller can render nothing in the
+ * normal case. Anything else is a figure a client must not be shown without a
+ * caveat: a schedule that totals 73% looks like a complete payment plan, and the
+ * missing 27% is real money the buyer still owes.
+ */
+export function planCoverage(schedule: BuiltSchedule, totalPriceAED: number): PlanCoverage | null {
+  const totalPct = schedule.totals.totalPct;
+  if (Math.abs(totalPct - 100) <= 0.01) return null;
+
+  const shortfallPct = 100 - totalPct;
+  const unscheduledAED = round0((shortfallPct / 100) * totalPriceAED);
+  const message =
+    shortfallPct > 0
+      ? `This plan schedules ${totalPct.toFixed(1)}% of the purchase price. ` +
+        `${shortfallPct.toFixed(1)}% (about AED ${Math.abs(unscheduledAED).toLocaleString("en-AE")}) ` +
+        `is not covered by any instalment above.`
+      : `This plan schedules ${totalPct.toFixed(1)}% of the purchase price — ` +
+        `${Math.abs(shortfallPct).toFixed(1)}% more than the unit costs.`;
+
+  return { totalPct, shortfallPct, unscheduledAED, message };
+}

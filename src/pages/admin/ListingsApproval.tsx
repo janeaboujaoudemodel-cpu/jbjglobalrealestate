@@ -213,7 +213,7 @@ const ListingsApproval = () => {
             <h3 className="font-semibold text-[#0F172A]">{p.name || "Untitled"}</h3>
             <MediaStatusBadge status={status} />
             {p.is_published ? (
-              <Badge className="bg-[#B89555] text-white border-0 gap-1">
+              <Badge className="bg-[#B89555] text-[#1A1A1A] border-0 gap-1">
                 <CheckCircle2 className="h-3 w-3" /> Approved
               </Badge>
             ) : (
