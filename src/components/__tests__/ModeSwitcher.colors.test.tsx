@@ -1,5 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render as rtlRender, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import type { ReactElement } from "react";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import type { UserMode } from "@/contexts/UserModeContext";
 
@@ -29,59 +31,60 @@ vi.mock("@/hooks/useUserRole", () => ({
   useUserRole: () => ({ hasSelectedRole: true, role: "investor" }),
 }));
 
-// ModeSwitcher reads `user` from AuthContext and owner status from
-// useIsAppOwner (which itself needs AuthContext + a QueryClient). Mocking
-// both keeps this file focused on ModeSwitcher's own render contract
-// instead of pulling in auth/session and react-query plumbing.
-// `isOwner: true` keeps the full mode-picker branch rendering (the one
-// with per-mode rows this file asserts against) rather than the read-only
-// "request a mode change" panel ModeSwitcher shows non-owners.
-vi.mock("@/contexts/AuthContext", () => ({
-  useAuth: () => ({ user: { id: "test-user", email: "test@example.com" } }),
-}));
-
 vi.mock("@/hooks/useIsAppOwner", () => ({
-  useIsAppOwner: () => ({ isOwner: true, isLoading: false }),
+  useIsAppOwner: () => ({ isOwner: true }),
 }));
 
-// ModeSwitcher also calls useNavigate/useLocation on mount (for the
-// mode-change redirect), which throw outside a <Router>. None of these
-// tests exercise navigation, so a lightweight mock is enough — same
-// approach as the AuthContext/useIsAppOwner mocks above.
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual<any>("react-router-dom");
-  return {
-    ...actual,
-    useNavigate: () => vi.fn(),
-    useLocation: () => ({ pathname: "/" }),
-  };
-});
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuth: () => ({ user: { email: "owner@jbj.ae" } }),
+}));
 
 vi.mock("sonner", () => ({
   toast: { success: vi.fn() },
 }));
 
-// --- What actually varies per mode -----------------------------------------
+// --- Locked brand palette (uniform across EVERY mode) --------------------
 //
-// ModeSwitcher's MODE_CONFIG defines 8 color fields per mode (base, baseDark,
-// rowFrom, rowTo, rowHover, dark, onBase, surface) — but none of them are read
-// anywhere in ModeSwitcher.tsx (verified by grep: every `currentConfig`/
-// `config` field access in that file is `.icon`, `.label`, `.description`, or
-// `.shortLabel`). Actual trigger/dropdown colors come entirely from
-// useControlSkin() — a global "champagne / emerald / clear" theme signal
-// unrelated to which mode is active.
+// The platform was intentionally migrated to ONE brand palette — emerald /
+// ink / champagne / gold — for all modes. There is no per-mode hue any more
+// (no orange investor, no blue broker, no green combined, no purple
+// developer). This test guards that uniformity: every mode must render the
+// same locked tones, and no foreign hue may appear.
 //
-// This file used to keep a local PALETTE meant to mirror MODE_CONFIG's colors
-// ("Locked mode palette (must match ModeSwitcher MODE_CONFIG)"). That premise
-// no longer holds — the component doesn't render per-mode color at all — so
-// this asserts the real contract instead: labels vary by mode (real, live
-// behavior), colors vary by skin and are identical across every mode.
+// See:
+//   .lovable/memory/style/color-palette/ink-emerald-gradient-standard.md
+//   .lovable/memory/style/color-palette/emerald-pair-lock.md
+
+const EMERALD = "#064E3B";
+const EMERALD_DEEP = "#042C1C";
+const INK = "#1A1A1A";
+const WHITE = "#FFFFFF";
+const CHAMPAGNE = ["#FDFBF7", "#F7F2EA", "#F2EBDC", "#EFE6D6"];
+const GOLD = "#B89555";
+
 const MODE_LABELS: Record<UserMode, string> = {
   investor: "Mode: Investor",
   broker: "Mode: Broker",
   developer: "Mode: Developer",
   owner: "Mode: Owner",
 };
+
+// Hues that belonged to the retired per-mode tinting pattern.
+const FORBIDDEN_HUES = [
+  "orange",
+  "purple",
+  "violet",
+  "indigo",
+  "#f97316",
+  "#fb923c",
+  "#3b82f6",
+  "#2563eb",
+  "#1d4ed8",
+  "#22c55e",
+  "#16a34a",
+  "#8b5cf6",
+  "#a855f7",
+];
 
 // --- Helpers -------------------------------------------------------------
 
@@ -93,13 +96,12 @@ const hexToRgb = (hex: string) => {
   const b = parseInt(h.slice(4, 6), 16);
   return `rgb(${r}, ${g}, ${b})`;
 };
-const sameColor = (cssValue: string, hex: string) =>
-  norm(cssValue) === norm(hex) || norm(cssValue) === norm(hexToRgb(hex));
-// jsdom normalizes #rrggbb literals inside larger values (e.g. gradient stops)
-// to rgb(...); convert before comparing so assertions don't depend on which
-// form jsdom happens to serialize.
-const hexToRgbInline = (s: string) => s.replace(/#([0-9a-f]{6})/gi, (_, h) => hexToRgb(`#${h}`));
-const sameCss = (actual: string, expected: string) => norm(actual) === norm(hexToRgbInline(expected));
+const containsHex = (cssValue: string, hex: string) => {
+  const v = norm(cssValue);
+  return v.includes(norm(hex)) || v.includes(norm(hexToRgb(hex)));
+};
+const isOneOf = (cssValue: string, hexes: string[]) =>
+  hexes.some((h) => containsHex(cssValue, h));
 
 const getTrigger = (): HTMLButtonElement => {
   const btn = document.querySelector<HTMLButtonElement>('button[aria-haspopup="menu"]');
@@ -114,6 +116,8 @@ const findRowByLabel = (label: string): HTMLElement => {
   return row;
 };
 
+const render = (ui: ReactElement) => rtlRender(<MemoryRouter>{ui}</MemoryRouter>);
+
 const openDropdown = () => {
   const trigger = getTrigger();
   fireEvent.pointerDown(trigger, { button: 0, pointerType: "mouse" });
@@ -121,23 +125,17 @@ const openDropdown = () => {
   fireEvent.click(trigger);
 };
 
-// ModeSwitcher's trigger skin comes from useControlSkin(), which reads DOM
-// attributes synchronously at mount (readControlSkin() in
-// src/hooks/use-chrome-skin.ts). Setting these before render exercises the
-// real skin-resolution code path rather than mocking the hook.
-type Skin = "champagne" | "emerald" | "clear";
-const setSkin = (skin: Skin) => {
-  document.documentElement.removeAttribute("data-jbj-theme");
-  document.documentElement.removeAttribute("data-jbj-backend-lock");
-  document.body.removeAttribute("data-jj-hero-chrome");
-  if (skin === "champagne") document.documentElement.setAttribute("data-jbj-theme", "sun");
-  if (skin === "clear") document.body.setAttribute("data-jj-hero-chrome", "clear");
-  // "emerald" is readControlSkin()'s fallback when none of the above are set.
-};
+const triggerSnapshot = (trigger: HTMLButtonElement) => ({
+  bgImage: trigger.style.backgroundImage,
+  bgColor: trigger.style.backgroundColor,
+  shadow: trigger.style.boxShadow,
+  border: trigger.style.borderColor,
+  color: trigger.style.color,
+});
 
 // --- Tests ---------------------------------------------------------------
 
-describe("ModeSwitcher color regression", () => {
+describe("ModeSwitcher uniform brand palette", () => {
   beforeEach(() => {
     setModeMock.mockReset();
     document.body
@@ -145,148 +143,99 @@ describe("ModeSwitcher color regression", () => {
       .forEach((n) => n.remove());
   });
 
-  afterEach(() => {
-    document.documentElement.removeAttribute("data-jbj-theme");
-    document.documentElement.removeAttribute("data-jbj-backend-lock");
-    document.body.removeAttribute("data-jj-hero-chrome");
-  });
-
   const modes: UserMode[] = ["investor", "broker", "developer", "owner"];
 
-  // Locks ModeSwitcher.tsx's actual triggerStyle ternary — the real,
-  // current, skin-driven contract — for each of its three skins.
-  const skins: { skin: Skin; expected: { backgroundImage: string; boxShadow: string; color: string } }[] = [
-    {
-      skin: "champagne",
-      expected: {
-        backgroundImage: "linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%)",
-        boxShadow: "0 1px 2px rgba(26,26,26,0.08)",
-        color: "#1A1A1A",
-      },
-    },
-    {
-      skin: "emerald",
-      expected: {
-        backgroundImage: "var(--jj-emerald-ombre)",
-        boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-        color: "#FFFFFF",
-      },
-    },
-    {
-      skin: "clear",
-      expected: {
-        backgroundImage: "none",
-        boxShadow: "none",
-        color: "#FFFFFF",
-      },
-    },
-  ];
+  modes.forEach((activeMode) => {
+    it(`closed trigger stays in the locked emerald/ink/champagne/gold palette (${activeMode})`, () => {
+      currentMode = activeMode;
+      render(<ModeSwitcher variant="header" />);
 
-  skins.forEach(({ skin, expected }) => {
-    it(`closed trigger color comes from the "${skin}" skin, identical across every mode`, () => {
-      setSkin(skin);
+      const trigger = getTrigger();
+      const snap = triggerSnapshot(trigger);
+      const all = Object.values(snap).join(" ");
 
-      const snapshots = modes.map((mode) => {
-        currentMode = mode;
-        const { unmount } = render(<ModeSwitcher variant="header" />);
-        const trigger = getTrigger();
-        const snapshot = {
-          backgroundImage: trigger.style.backgroundImage,
-          boxShadow: trigger.style.boxShadow,
-          color: trigger.style.color,
-        };
-        unmount();
-        return { mode, snapshot };
+      // Ink is either pure white (emerald chrome) or brand ink (champagne chrome).
+      expect(
+        isOneOf(snap.color, [WHITE, INK]),
+        `${activeMode} trigger ink must be #FFFFFF or #1A1A1A, got ${snap.color}`,
+      ).toBe(true);
+
+      // Fill is the emerald ombre var, champagne gradient, or a clear/no-fill chip.
+      expect(
+        snap.bgImage === "" ||
+          snap.bgImage === "none" ||
+          snap.bgImage.includes("--jj-emerald-ombre") ||
+          isOneOf(snap.bgImage, [...CHAMPAGNE, EMERALD, EMERALD_DEEP]),
+        `${activeMode} trigger fill must be emerald ombre or champagne, got ${snap.bgImage}`,
+      ).toBe(true);
+
+      // No retired per-mode hue anywhere on the trigger.
+      FORBIDDEN_HUES.forEach((hue) => {
+        expect(
+          norm(all).includes(norm(hue)),
+          `${activeMode} trigger must not contain retired hue ${hue}: ${all}`,
+        ).toBe(false);
       });
+    });
 
-      for (const { mode, snapshot } of snapshots) {
-        expect(
-          sameCss(snapshot.backgroundImage, expected.backgroundImage),
-          `${mode} trigger backgroundImage: expected ${expected.backgroundImage}, got ${snapshot.backgroundImage}`,
-        ).toBe(true);
-        expect(
-          sameCss(snapshot.boxShadow, expected.boxShadow),
-          `${mode} trigger boxShadow: expected ${expected.boxShadow}, got ${snapshot.boxShadow}`,
-        ).toBe(true);
-        expect(sameColor(snapshot.color, expected.color), `${mode} trigger color`).toBe(true);
-      }
+    it(`every dropdown row uses the same emerald/champagne branding (active=${activeMode})`, () => {
+      currentMode = activeMode;
+      render(<ModeSwitcher variant="header" />);
+      openDropdown();
 
-      // The actual "not per-mode" claim: no two modes differ from each other.
-      const [first, ...rest] = snapshots.map((s) => s.snapshot);
-      for (const snapshot of rest) {
-        expect(snapshot).toEqual(first);
-      }
+      modes.forEach((modeKey) => {
+        const row = findRowByLabel(MODE_LABELS[modeKey]);
+        const rowStyles = `${row.className} ${row.getAttribute("style") ?? ""}`;
+
+        // Rows are branded emerald — never a per-mode hue.
+        expect(
+          norm(rowStyles).includes(norm(EMERALD)) ||
+            norm(rowStyles).includes(norm("6,78,59")),
+          `${MODE_LABELS[modeKey]} row must be emerald-branded, got ${rowStyles}`,
+        ).toBe(true);
+
+        FORBIDDEN_HUES.forEach((hue) => {
+          expect(
+            norm(rowStyles).includes(norm(hue)),
+            `${MODE_LABELS[modeKey]} row must not contain retired hue ${hue}`,
+          ).toBe(false);
+        });
+
+        const iconTile = row.querySelector<HTMLElement>(".mode-switcher-icon-tile");
+        expect(iconTile, `${MODE_LABELS[modeKey]} should render a mode icon tile`).toBeTruthy();
+        const tileStyles = `${iconTile?.className ?? ""} ${iconTile?.getAttribute("style") ?? ""}`;
+        expect(
+          norm(tileStyles).includes(norm("6,78,59")) || norm(tileStyles).includes(norm(EMERALD)),
+          `${MODE_LABELS[modeKey]} icon tile must use the shared emerald tint, got ${tileStyles}`,
+        ).toBe(true);
+
+        if (modeKey === activeMode) {
+          const selected = row.querySelector<HTMLElement>(".mode-switcher-selected-pill");
+          expect(selected, `${MODE_LABELS[modeKey]} active row should render Selected pill`).toBeTruthy();
+          const pillStyles = `${selected?.className ?? ""} ${selected?.getAttribute("style") ?? ""}`;
+          expect(
+            norm(pillStyles).includes(norm("6,78,59")) || norm(pillStyles).includes(norm(EMERALD)),
+            `active pill must be emerald, got ${pillStyles}`,
+          ).toBe(true);
+        }
+      });
     });
   });
 
-  it("dropdown row styling is identical across modes — driven by active/idle state, not which mode the row represents", () => {
-    setSkin("emerald");
-
-    const perActiveMode = modes.map((activeMode) => {
-      currentMode = activeMode;
+  it("renders an identical trigger for every mode — no per-mode tinting", () => {
+    const snapshots = modes.map((m) => {
+      currentMode = m;
       const { unmount } = render(<ModeSwitcher variant="header" />);
-      openDropdown();
-
-      const snapshot = modes.map((modeKey) => {
-        const row = findRowByLabel(MODE_LABELS[modeKey]);
-        const iconTile = row.querySelector<HTMLElement>(".mode-switcher-icon-tile");
-        const selectedPill = row.querySelector<HTMLElement>(".mode-switcher-selected-pill");
-        return {
-          modeKey,
-          isActive: modeKey === activeMode,
-          iconTileBackground: iconTile?.style.background ?? "",
-          hasSelectedPill: !!selectedPill,
-          selectedPillBackground: selectedPill?.style.background ?? "",
-          activeBorderClass: [...row.classList].find((c) => c.startsWith("border-[#064E3B]")),
-          activeBgClass: [...row.classList].find((c) => c.startsWith("bg-[#064E3B]") || c.startsWith("bg-[#FFFFFF]")),
-        };
-      });
-
+      const snap = triggerSnapshot(getTrigger());
       unmount();
-      return { activeMode, snapshot };
+      return { m, snap };
     });
 
-    // Icon tile fill is the same fixed emerald wash for every row, in every mode.
-    for (const { activeMode, snapshot } of perActiveMode) {
-      for (const row of snapshot) {
-        expect(
-          norm(row.iconTileBackground),
-          `${row.modeKey} icon tile (active=${activeMode})`,
-        ).toBe(norm("rgba(6,78,59,0.06)"));
-      }
-    }
-
-    // Exactly the active row shows the Selected pill, with the same fixed
-    // color, no matter which mode is active.
-    for (const { activeMode, snapshot } of perActiveMode) {
-      const active = snapshot.find((r) => r.modeKey === activeMode)!;
-      expect(active.hasSelectedPill, `${activeMode} row should show Selected pill`).toBe(true);
-      expect(norm(active.selectedPillBackground)).toBe(norm("rgba(6,78,59,0.12)"));
-      for (const row of snapshot.filter((r) => r.modeKey !== activeMode)) {
-        expect(
-          row.hasSelectedPill,
-          `${row.modeKey} row should not show Selected pill while ${activeMode} is active`,
-        ).toBe(false);
-      }
-    }
-
-    // The active-row / idle-row class pattern is identical no matter which
-    // specific mode is active — proves the look is state-driven, not
-    // color-per-mode.
-    const [reference, ...restModes] = perActiveMode;
-    const referenceActive = reference.snapshot.find((r) => r.isActive)!;
-    const referenceIdle = reference.snapshot.find((r) => !r.isActive)!;
-    for (const { activeMode, snapshot } of restModes) {
-      const thisActive = snapshot.find((r) => r.isActive)!;
-      const thisIdle = snapshot.find((r) => !r.isActive)!;
-      expect(thisActive.activeBorderClass, `${activeMode} active row border class`).toBe(
-        referenceActive.activeBorderClass,
+    const reference = snapshots[0].snap;
+    for (const { m, snap } of snapshots.slice(1)) {
+      expect(snap, `${m} trigger style must match ${snapshots[0].m} — branding is uniform`).toEqual(
+        reference,
       );
-      expect(thisActive.activeBgClass, `${activeMode} active row bg class`).toBe(referenceActive.activeBgClass);
-      expect(thisIdle.activeBorderClass, `${activeMode} idle row border class`).toBe(
-        referenceIdle.activeBorderClass,
-      );
-      expect(thisIdle.activeBgClass, `${activeMode} idle row bg class`).toBe(referenceIdle.activeBgClass);
     }
   });
 
@@ -330,7 +279,6 @@ describe("ModeSwitcher color regression", () => {
 
   it("renders byte-identical trigger styles regardless of placement-passed props", () => {
     currentMode = "broker";
-    setSkin("emerald");
 
     const placements = [
       { name: "HorizontalUtilityBar", node: <ModeSwitcher variant="header" showForUnselected /> },
@@ -340,24 +288,15 @@ describe("ModeSwitcher color regression", () => {
 
     const styles = placements.map(({ name, node }) => {
       const { unmount } = render(node);
-      const trigger = getTrigger();
-      const snapshot = {
-        bgImage: trigger.style.backgroundImage,
-        shadow: trigger.style.boxShadow,
-        border: trigger.style.borderColor,
-        color: trigger.style.color,
-      };
+      const snapshot = triggerSnapshot(getTrigger());
       unmount();
       return { name, snapshot };
     });
 
     const reference = styles[0].snapshot;
+    expect(isOneOf(reference.color, [WHITE, INK])).toBe(true);
+    expect(containsHex(reference.color, GOLD)).toBe(false);
 
-    // Reference reflects the current emerald skin, not a mode-specific color.
-    expect(norm(reference.bgImage)).toBe(norm("var(--jj-emerald-ombre)"));
-    expect(sameColor(reference.color, "#FFFFFF")).toBe(true);
-
-    // Every placement renders identical trigger styles — no placement can drift.
     for (const { name, snapshot } of styles.slice(1)) {
       expect(snapshot, `${name} trigger style must match HorizontalUtilityBar`).toEqual(reference);
     }

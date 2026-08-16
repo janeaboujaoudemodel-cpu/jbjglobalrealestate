@@ -17,6 +17,7 @@ import OTPVerificationModal from '@/components/OTPVerificationModal';
 import { PhoneInput, getPhoneValidation } from '@/components/ui/phone-input';
 import { CONTACT_INFO } from '@/constants/stats';
 import { useFormAutoSave } from '@/hooks/useFormAutoSave';
+import { HoneypotField, useHoneypot } from '@/components/forms/HoneypotField';
 
 // Stricter email validation
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -69,6 +70,7 @@ const InquiryFormModal = ({
   const [emailVerified, setEmailVerified] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<InquiryFormData | null>(null);
   const { t, isRTL } = useLanguage();
+  const { honeypot, setHoneypot, isBot } = useHoneypot();
   
   const countries = getCountryList('en');
   const languages = getLanguageList();
@@ -150,6 +152,15 @@ const InquiryFormModal = ({
   };
 
   const completeSubmission = async (data: InquiryFormData) => {
+    if (isBot) {
+      // Anti-spam honeypot triggered: pretend success without touching the
+      // CRM lead, the inquiries table, or sending the admin notification
+      // email — this handler has multiple side effects beyond capture-lead
+      // (inquiries insert, send-inquiry-email), so the short-circuit has to
+      // happen here rather than relying on any single call's own guard.
+      setIsSuccess(true);
+      return;
+    }
     setIsSubmitting(true);
     try {
       // Validate phone using PhoneInput validation
@@ -205,6 +216,7 @@ const InquiryFormModal = ({
           preferredContact: data.preferredContact,
           buyingService: data.buyingService,
           message: data.message,
+          honeypot,
         },
       });
 
@@ -421,6 +433,8 @@ const InquiryFormModal = ({
 
               <Form {...form}>
                 <form data-jbj-form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <HoneypotField value={honeypot} onChange={setHoneypot} name="inquiry_company_website" />
+
                   {/* ROLE SELECTION - Mandatory */}
                   <FormField
                     control={form.control}

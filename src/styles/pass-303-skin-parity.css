@@ -10,14 +10,8 @@
       and carries the same padding/gap.
    ═══════════════════════════════════════════════════════════════════ */
 
-:root {
-  /* Approved emerald pair — weighted dark so it never reads as green. */
-  --jj-emerald-approved: linear-gradient(180deg, #064E3B 0%, #042c1c 38%, #000000 100%);
-  --jj-emerald-approved-h: linear-gradient(90deg, #064E3B 0%, #042c1c 42%, #000000 100%);
-  --jj-emerald-approved-d: linear-gradient(135deg, #064E3B 0%, #042c1c 40%, #000000 100%);
-  --jj-champagne-chrome: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%);
-  --jj-champagne-chrome-h: linear-gradient(90deg, #FDFBF7 0%, #F7F2EA 52%, #F2EBDC 100%);
-}
+/* Custom-property tokens for this pass (--jj-emerald-approved*, --jj-champagne-chrome*)
+   now live in src/styles/theme-tokens.css — see CSS token consolidation. */
 
 /* ── 3. No plates behind sidebar icons (both skins, both states) ───── */
 html body #root [data-chrome="sidebar"] :is(

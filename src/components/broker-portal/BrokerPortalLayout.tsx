@@ -10,6 +10,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
 import { useUserMode } from "@/hooks/useUserMode";
+import { useModalViewportInset } from "@/hooks/useModalViewportInset";
 
 /**
  * Broker Portal shell — mirrors the structural pattern of OwnerDashboardShell:
@@ -19,6 +20,7 @@ import { useUserMode } from "@/hooks/useUserMode";
  *  - No public-site chrome (header/footer hidden upstream by MainLayout)
  */
 export default function BrokerPortalLayout() {
+  useModalViewportInset();
   const navigate = useNavigate();
   const location = useLocation();
   const { isOwner, isLoading: roleLoading } = useUserRole();
@@ -105,7 +107,7 @@ export default function BrokerPortalLayout() {
               <div className="h-9 w-9 rounded-full bg-[#EFE6D6] border border-[#B89555]/40" />
             </div>
           </header>
-          <main className="flex-1 min-w-0 w-full overflow-x-hidden" role="main">
+          <main data-net-content className="flex-1 min-w-0 w-full overflow-x-hidden" role="main">
             <PageLoader />
             <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto min-w-0 w-full">
               <div className="grid gap-4 md:grid-cols-3">
@@ -208,7 +210,7 @@ export default function BrokerPortalLayout() {
 
         {/* Owner preview banner removed — owner-mode users no longer land here. */}
 
-        <main className="flex-1 min-w-0 w-full overflow-x-hidden" role="main">
+        <main data-net-content className="flex-1 min-w-0 w-full overflow-x-hidden" role="main">
           <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto min-w-0 w-full">
             <Suspense fallback={<PageLoader />}>
               <Outlet />

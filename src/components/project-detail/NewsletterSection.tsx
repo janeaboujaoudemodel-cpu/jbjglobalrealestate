@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Mail, Loader2, CheckCircle, User, Phone } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { HoneypotField, useHoneypot } from "@/components/forms/HoneypotField";
 
 const newsletterSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name"),
@@ -24,6 +25,7 @@ export function NewsletterSection() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [phone, setPhone] = useState("");
   const location = useLocation();
+  const { honeypot, setHoneypot } = useHoneypot();
 
   const form = useForm<NewsletterFormData>({
     resolver: zodResolver(newsletterSchema),
@@ -46,11 +48,13 @@ export function NewsletterSection() {
           phone: phone || undefined,
           source: 'project_detail',
           page_source: location.pathname,
+          honeypot,
         },
       });
 
       supabase.functions.invoke('capture-lead', {
         body: {
+          honeypot,
           email: normalizedEmail,
           fullName: data.fullName.trim(),
           phone: phone || null,
@@ -105,6 +109,7 @@ export function NewsletterSection() {
           ) : (
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 max-w-md mx-auto">
+                <HoneypotField value={honeypot} onChange={setHoneypot} name="newsletter_section_company_website" />
                 {/* Full Name */}
                 <FormField
                   control={form.control}

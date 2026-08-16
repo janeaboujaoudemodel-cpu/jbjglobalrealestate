@@ -12,6 +12,8 @@ interface LeadData {
   ageRange?: string;
   message?: string;
   context?: Record<string, unknown>;
+  /** Anti-spam trap value from <HoneypotField>/useHoneypot(); leave empty for real users. */
+  honeypot?: string;
 }
 
 interface UseLeadCaptureResult {
@@ -87,6 +89,7 @@ export const useLeadCapture = (): UseLeadCaptureResult => {
           source: source,
           pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
           contactType: contactType,
+          honeypot: data.honeypot,
         },
       });
 

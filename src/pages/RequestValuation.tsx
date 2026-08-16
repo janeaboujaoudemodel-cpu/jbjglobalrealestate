@@ -10,6 +10,7 @@ import SEOHead from '@/components/SEOHead';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLeadCapture } from '@/hooks/useLeadCapture';
+import { HoneypotField, useHoneypot } from '@/components/forms/HoneypotField';
 import { toast } from 'sonner';
 import { ToolHero } from '@/components/tools/ToolHero';
 import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from '@/components/tools/toolThemes';
@@ -111,6 +112,7 @@ const outputRows = [
 
 const RequestValuation = () => {
   const { captureLead } = useLeadCapture();
+  const { honeypot, setHoneypot } = useHoneypot();
   const [confirmed, setConfirmed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -133,6 +135,7 @@ const RequestValuation = () => {
         email: form.email.trim(),
         fullName: form.fullName.trim(),
         phone: form.phone.trim(),
+        honeypot,
       }, 'valuation_request');
       toast.success('Valuation request submitted. Our team will be in touch.');
       setForm({ fullName: '', email: '', phone: '', propertyType: '', developer: '', community: '', unitSize: '', bedrooms: '', currentStatus: '', purpose: '' });
@@ -289,6 +292,7 @@ const RequestValuation = () => {
             <SectionHeader icon={Send} eyebrow="05 · Request" title="Request Professional Valuation" />
             <ChampagneCard>
               <form onSubmit={handleSubmit} className="space-y-5">
+                <HoneypotField value={honeypot} onChange={setHoneypot} name="valuation_company_website" />
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Full Name *</label>

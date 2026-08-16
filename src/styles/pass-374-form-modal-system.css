@@ -19,13 +19,8 @@
  * data grids, and no new globals are added to index.css.
  */
 
-:root {
-  --jj-form-surface: #FBF6EC;
-  --jj-form-hairline: rgba(184, 149, 85, 0.38);
-  --jj-form-ink: #1A1A1A;
-  --jj-pill-rest-bg: #F1E7D4;
-  --jj-pill-rest-border: #B89555;
-}
+/* Custom-property tokens for this pass (--jj-form-*, --jj-pill-rest-*)
+   now live in src/styles/theme-tokens.css — see CSS token consolidation. */
 
 /* ── A. ONE SURFACE ─────────────────────────────────────────────────────── */
 html body [role="dialog"]:not([data-advanced-filter-panel="true"]):not([data-preserve-surface]):not([data-jbj-preserve-surface]),

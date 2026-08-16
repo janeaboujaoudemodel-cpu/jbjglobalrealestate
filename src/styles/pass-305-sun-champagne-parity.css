@@ -14,15 +14,8 @@
    6) ANIMATED RAIL EDGE = dark emerald → black only, never bright green.
    ═══════════════════════════════════════════════════════════════════ */
 
-:root {
-  /* Long surfaces (rail, header, marquee): already-deep start, no bright top. */
-  --jj-long-emerald-v: linear-gradient(180deg, #04382a 0%, #032015 46%, #000000 100%);
-  --jj-long-emerald-h: linear-gradient(90deg, #04382a 0%, #032015 50%, #000000 100%);
-  --jj-long-emerald-d: linear-gradient(160deg, #04382a 0%, #032015 52%, #000000 100%);
-  --jj-champagne-long-v: linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
-  --jj-champagne-long-h: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
-  --jj-champagne-long-d: linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
-}
+/* Custom-property tokens for this pass (--jj-long-emerald-*, --jj-champagne-long-*)
+   now live in src/styles/theme-tokens.css — see CSS token consolidation. */
 
 /* ═══════════ 1. SUN — champagne chrome, black ink ═══════════ */
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root [data-chrome="sidebar"] [data-sidebar-emerald],

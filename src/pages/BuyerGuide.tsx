@@ -790,7 +790,7 @@ const BuyerGuide = () => {
       {/* Guide Navigation - Active Layer Background */}
       <section data-surface="emerald" className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
-          <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
+          <GuideNavigation current="/guides/buyer" guides={GUIDE_LINKS} showStartHere={false} />
         </div>
       </section>
     </div>

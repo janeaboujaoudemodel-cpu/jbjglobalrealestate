@@ -297,8 +297,14 @@ export const PublicRoutes = () => (
     <Route path="/projects/:slug" element={<RedirectWithParams to="/project" />} />
 
     {/* ── Guides & Education ── */}
-    <Route path="/buyer-guide" element={<InsightsPageScope><BuyerGuide /></InsightsPageScope>} />
-    <Route path="/seller-guide" element={<InsightsPageScope><SellerGuide /></InsightsPageScope>} />
+    {/* Canonical per-audience guide pages, nested under /guides/* for URL consistency. */}
+    <Route path="/guides/buyer" element={<InsightsPageScope><BuyerGuide /></InsightsPageScope>} />
+    <Route path="/guides/seller" element={<InsightsPageScope><SellerGuide /></InsightsPageScope>} />
+    <Route path="/guides/tenant" element={<InsightsPageScope><TenantGuide /></InsightsPageScope>} />
+    <Route path="/guides/landlord" element={<InsightsPageScope><LandlordGuide /></InsightsPageScope>} />
+    <Route path="/guides/invest" element={<InsightsPageScope><InvestorEducation /></InsightsPageScope>} />
+    <Route path="/buyer-guide" element={<Navigate to="/guides/buyer" replace />} />
+    <Route path="/seller-guide" element={<Navigate to="/guides/seller" replace />} />
     <Route path="/seller-listing" element={<Navigate to="/list-property?mode=manual" replace />} />
     <Route path="/guides" element={<InsightsPageScope><Guides /></InsightsPageScope>} />
     <Route path="/guides/golden-visa-uae" element={<Navigate to="/services/golden-visa" replace />} />
@@ -321,11 +327,13 @@ export const PublicRoutes = () => (
     {/* Books Library consolidated into Guides Library — single canonical hub. */}
     <Route path="/education-hub" element={<Navigate to="/guides" replace />} />
     <Route path="/books-library" element={<Navigate to="/guides" replace />} />
+    {/* Rent Guide stays at its current URL for now — its content splits into the
+        Tenant and Landlord guides in Stage 2, so the route isn't remapped until then. */}
     <Route path="/rent-guide" element={<InsightsPageScope><RentGuide /></InsightsPageScope>} />
-    <Route path="/tenant-guide" element={<InsightsPageScope><TenantGuide /></InsightsPageScope>} />
-    <Route path="/landlord-guide" element={<InsightsPageScope><LandlordGuide /></InsightsPageScope>} />
+    <Route path="/tenant-guide" element={<Navigate to="/guides/tenant" replace />} />
+    <Route path="/landlord-guide" element={<Navigate to="/guides/landlord" replace />} />
     <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
-    <Route path="/investor-education" element={<InsightsPageScope><InvestorEducation /></InsightsPageScope>} />
+    <Route path="/investor-education" element={<Navigate to="/guides/invest" replace />} />
     <Route path="/broker-education" element={<Navigate to="/jbj-academy" replace />} />
     <Route path="/connect" element={<ConnectAgent />} />
     <Route path="/faq" element={<InsightsPageScope><FAQ /></InsightsPageScope>} />
@@ -334,11 +342,11 @@ export const PublicRoutes = () => (
     <Route path="/seller-faq" element={<InsightsPageScope><SellerFAQ /></InsightsPageScope>} />
     <Route path="/landlord-faq" element={<InsightsPageScope><LandlordFAQ /></InsightsPageScope>} />
     <Route path="/tenant-faq" element={<InsightsPageScope><TenantFAQ /></InsightsPageScope>} />
-    <Route path="/broker-faq" element={<InsightsPageScope><BrokerFAQ /></InsightsPageScope>} />
-    <Route path="/guides/buying" element={<Navigate to="/buyer-guide" replace />} />
+    <Route path="/broker-faq" element={<Navigate to="/faq" replace />} />
+    <Route path="/guides/buying" element={<Navigate to="/guides/buyer" replace />} />
     <Route path="/guides/renting" element={<Navigate to="/rent-guide" replace />} />
-    <Route path="/guides/selling" element={<Navigate to="/seller-guide" replace />} />
-    <Route path="/guides/landlords" element={<Navigate to="/landlord-guide" replace />} />
+    <Route path="/guides/selling" element={<Navigate to="/guides/seller" replace />} />
+    <Route path="/guides/landlords" element={<Navigate to="/guides/landlord" replace />} />
 
     {/* ── Market Intelligence ── */}
     <Route path="/market-report" element={<InsightsPageScope><MarketReport /></InsightsPageScope>} />

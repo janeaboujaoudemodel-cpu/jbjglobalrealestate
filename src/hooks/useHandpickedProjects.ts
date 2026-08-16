@@ -196,6 +196,7 @@ async function tierInterestForm(userId: string | undefined, email: string | unde
     .from("projects")
     .select(SELECT)
     .eq("is_published", true)
+    .is("deleted_at", null)
     .not("cover_image_url", "is", null)
     .neq("cover_image_url", "");
 
@@ -239,6 +240,7 @@ async function tierFavorites(userId: string | undefined): Promise<Project[]> {
     .from("projects")
     .select(SELECT)
     .eq("is_published", true)
+    .is("deleted_at", null)
     .not("cover_image_url", "is", null)
     .neq("cover_image_url", "")
     .not("id", "in", `(${favIds.join(",")})`);
@@ -268,6 +270,7 @@ async function tierBrowsingHistory(): Promise<Project[]> {
     .from("projects")
     .select(SELECT)
     .eq("is_published", true)
+    .is("deleted_at", null)
     .not("cover_image_url", "is", null)
     .neq("cover_image_url", "");
 
@@ -295,6 +298,7 @@ async function tierEliteFallback(mode: string | null): Promise<Project[]> {
     .select(SELECT)
     .in("developer_name", ELITE_DEVELOPERS)
     .eq("is_published", true)
+    .is("deleted_at", null)
     .not("cover_image_url", "is", null)
     .neq("cover_image_url", "")
     .order("price_from", { ascending: false, nullsFirst: false })
@@ -341,6 +345,7 @@ async function tierPublishedFallback(): Promise<Project[]> {
     .from("projects")
     .select(SELECT)
     .eq("is_published", true)
+    .is("deleted_at", null)
     .not("cover_image_url", "is", null)
     .neq("cover_image_url", "")
     .order("is_premium", { ascending: false, nullsFirst: false })

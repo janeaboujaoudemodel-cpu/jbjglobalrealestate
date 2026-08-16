@@ -74,6 +74,14 @@ Enforced in three places:
 
 The mirror rule — `text-black` (or `text-zinc-900`, `#1A1A1A`, …) on dark surfaces — is enforced by `scripts/contrast/check-black-on-dark.mjs` + the matching CSS guard `[data-surface="dark"] .text-black`.
 
+### Blind spot: raw inline `style={{ color, background }}`
+
+All three enforcement layers above key off the Tailwind utility class tokens (`text-white`, `bg-white`, `.text-white`) — none of them parse a React inline `style={{ color: "#FFFFFF", background: "#F7F2EA" }}` object. Inline styles also win the cascade over the CSS guard in §3.2, so even the runtime backstop can't override them.
+
+This is not hypothetical: `PaymentPlanEditor.tsx` shipped an `inputBase` style object pairing `color: "#FFFFFF"` with `background: "#F7F2EA"` (near-1:1 contrast) on `data-no-contrast-guard` inputs — invisible to every layer described above, and to the runtime sweep by design (the `data-no-contrast-guard` opt-out exists precisely to let intentional white-on-dark gradients through, which also means it silently lets accidental white-on-light through). It went undetected until a manual pass caught it.
+
+**If a component sets text/background color via inline `style={}` instead of Tailwind classes or a `--jj-*`/`--t-*` token, none of the automated gates check it.** Prefer Tailwind classes or CSS custom properties so the static + runtime layers can do their job; if a raw inline color pairing is unavoidable, verify the contrast ratio by hand (`scripts/contrast/wcag.mjs` exports the ratio helper) and note it in the PR description.
+
 ---
 
 ## 4. The opacity rule
