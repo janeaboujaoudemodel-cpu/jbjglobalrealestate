@@ -232,7 +232,7 @@ export default function ReportsManagementPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Reports Management</h2>
+          <h2 className="label text-2xl font-bold text-white">Reports Management</h2>
           <p className="text-[#1A1A1A]/70 text-sm">
             View and manage all employee reports with advanced filtering
           </p>

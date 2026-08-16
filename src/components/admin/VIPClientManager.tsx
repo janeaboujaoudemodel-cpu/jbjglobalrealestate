@@ -254,7 +254,7 @@ const VIPClientManager = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          <h2 className="label text-2xl font-bold text-foreground flex items-center gap-2">
             <Crown className="h-6 w-6 text-[#1A1A1A]" />
             VIP Client Management
           </h2>

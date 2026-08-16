@@ -180,7 +180,7 @@ export default function ResearchUsersPanel() {
             <Users className="w-5 h-5 text-[#8A7356]" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE Research Users</h2>
+            <h2 className="label text-xl font-bold text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE Research Users</h2>
             <p className="text-sm text-[#1A1A1A]/70">{filtered.length} users found</p>
           </div>
         </div>

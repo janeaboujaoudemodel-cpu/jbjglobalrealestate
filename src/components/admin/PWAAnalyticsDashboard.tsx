@@ -131,7 +131,7 @@ const PWAAnalyticsDashboard = () => {
             <Smartphone className="w-6 h-6 text-[#1A1A1A]" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#1A1A1A]">PWA Analytics</h2>
+            <h2 className="label text-2xl font-bold text-[#1A1A1A]">PWA Analytics</h2>
             <p className="text-[#1A1A1A]/60 text-sm">Track app downloads and user engagement</p>
           </div>
         </div>
