@@ -38,6 +38,7 @@ import {
 import { buildPropertyPresentationParagraphs, findAmenityPhotoUrl } from "@/utils/matchmakerProse";
 import ReportPreviewModal, { type ReportBranding } from "@/components/ai-home-finder/ReportPreviewModal";
 import { renderReportToPdf } from "@/utils/renderReportToPdf";
+import { logClientError } from "@/utils/clientErrorLogger";
 import type { ReportProject as ReportEngineProject } from "@/components/ai-home-finder/report/ReportEngine";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
@@ -767,7 +768,18 @@ const QuizResults = () => {
   const [lastPdf, setLastPdf] = useState<{ blob: Blob; filename: string } | null>(null);
 
   const generateAndCachePdf = async (branding?: ReportBranding) => {
-    const built = await buildPdf(branding);
+    // buildPdf() returns null when there is simply nothing to render, but it
+    // can also throw — html2canvas failures surface that way. Only the null
+    // case was handled, so a throw became an unhandled rejection: the client
+    // pressed Download, no file arrived, and nothing said why. Report both.
+    let built: { blob: Blob; filename: string } | null = null;
+    try {
+      built = await buildPdf(branding);
+    } catch (err) {
+      logClientError("ai-home-finder/report-pdf", err, { branding: branding?.mode });
+      toast.error("The report could not be generated. Please try again.");
+      return null;
+    }
     if (!built) {
       toast.error("Could not generate the report yet.");
       return null;
