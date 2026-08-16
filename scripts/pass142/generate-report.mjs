@@ -24,7 +24,20 @@ const BASE_URL =
   process.env.BASE_URL ||
   'https://jbjglobalrealestate.lovable.app';
 
-const OUT_DIR = '/mnt/documents';
+// /mnt/documents is a writable mount in the Lovable/Claude sandbox where this
+// report is normally generated interactively. CI runners (GitHub Actions)
+// have no such mount and previously crashed here with EACCES before writing
+// anything — fall back to a repo-local dir (the one the CI workflow already
+// uploads as the `pass-142-report` artifact) when it isn't available.
+function resolveOutDir() {
+  try {
+    fs.mkdirSync('/mnt/documents', { recursive: true });
+    return '/mnt/documents';
+  } catch {
+    return path.join(process.cwd(), 'artifacts', 'pass-142');
+  }
+}
+const OUT_DIR = resolveOutDir();
 const HTML_OUT = path.join(OUT_DIR, 'pass-142-report.html');
 const JSON_OUT = path.join(OUT_DIR, 'pass-142-report.json');
 
@@ -273,9 +286,16 @@ function renderHtml(results, meta) {
 (async () => {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   console.log(`[pass-142] base=${BASE_URL} routes=${ROUTES.length} viewports=${VIEWPORTS.length}`);
+  // '/bin/chromium' only exists in the sandbox this script was originally
+  // authored in. Everywhere else - including GitHub Actions runners - it
+  // doesn't exist, so hardcoding it here overrides Playwright's own browser
+  // resolution and crashes launch() regardless of what the workflow's
+  // install step actually put in its cache. Falling back to undefined lets
+  // Playwright resolve its own installed binary, same as check-exports.mjs
+  // already does. CHROMIUM_PATH remains available as a manual override.
   const browser = await chromium.launch({
     headless: true,
-    executablePath: process.env.CHROMIUM_PATH || '/bin/chromium',
+    executablePath: process.env.CHROMIUM_PATH || undefined,
     args: ['--no-sandbox'],
   });
   const results = [];

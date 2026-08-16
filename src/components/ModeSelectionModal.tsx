@@ -110,6 +110,7 @@ export const ModeSelectionModal = () => {
   return (
     <Dialog open={isVisible} onOpenChange={(open) => { if (!open) dismiss(); }}>
       <DialogContent
+        onEscapeKeyDown={(e) => e.preventDefault()}
         className={cn(
           'w-[calc(100vw-1.5rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]',
           'max-h-[calc(100svh-2rem)] flex flex-col',

@@ -29,7 +29,19 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y poppler-utils
 
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        # `npx playwright` resolves to node_modules/.bin/playwright, which npm
+        # points at @playwright/test's CLI (pinned separately in package.json,
+        # currently an older minor than the `playwright` package). That CLI
+        # downloads browsers for its own version's manifest. But
+        # check-exports.mjs below does `import { chromium } from "playwright"`
+        # — the standalone `playwright` package, a different, newer pinned
+        # version with its own browsers.json revision (including a separate
+        # chromium-headless-shell binary chromium.launch() needs at runtime).
+        # Installing via the wrong CLI leaves that revision's headless-shell
+        # binary missing, so the launch fails with "Executable doesn't exist".
+        # Invoke the `playwright` package's own CLI directly so the installed
+        # browser always matches what this job actually launches.
+        run: node node_modules/playwright/cli.js install --with-deps chromium
 
       - name: Build app
         run: npm run build
