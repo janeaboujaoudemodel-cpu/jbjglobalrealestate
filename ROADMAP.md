@@ -75,7 +75,7 @@ Measured directly from the codebase — 512 pages, 1,350 components, 507 Supabas
 | **Custom-rolled modal audit (~45 components)** | **NEW — not started, needs approach sign-off** | **Near-term** |
 | **Rate limiting on public functions** | **Corrected — flat limiter exists but doesn't differentiate gated vs. public** | **Near-term** |
 | **Business-logic test coverage** | **MERGED & verified — 32/32 new tests pass** | **Resolved** |
-| **index.css consolidation (32,721 lines)** | **Open — not started** | **Near / mid-term** |
+| **index.css consolidation (32,721 lines)** | **PR #15 open — all six areas extracted (32,721 → 29,854 lines); see Section 7 for the !important-removal finding** | **Near / mid-term** |
 | **Lockfile drift (3 lockfiles present)** | **MERGED & verified — clean install confirmed outside Lovable sandbox** | **Resolved** |
 | **CI for contrast / a11y checks** | **Open — no workflow yet** | **Near-term** |
 | **Storage & edge-function auth audit** | **Not started** | **Mid-term** |
@@ -285,20 +285,25 @@ Once analytics has an explicit date range wired up, future feature decisions can
 - For each group, report how many separate non-adjacent locations in the file define rules for it, and how many use !important — output the report only, no code changes yet
 - This report is what determines the actual priority order for the scoping pass below, rather than guessing at which six areas matter most
 
-**Scope global CSS by feature area**
+**Scope global CSS by feature area — DONE, PR #15 open (not yet merged)**
 
-- Move component-specific CSS out of the global index.css into CSS modules or Tailwind @layer components, one area at a time, highest !important usage first (per the mapping report above):
-  - (1) Sidebar / vertical nav → (2) Cards → (3) Buttons/CTAs → (4) Hero/video sections → (5) Modals/dialogs/drawers → (6) Forms
-- Also worth checking during this pass: the spacing system in tailwind.config.ts is well-designed (explicit 8px-based scale, marked "LOCKED") but with a file this large it's likely individual pages have drifted from these tokens with one-off pixel values — grep for raw px values outside the token list as part of this cleanup
-- After each area: screenshot the pages that use it, confirm no visual change, run check:quality, before moving to the next area
-- Stop and report back if any move causes a visible regression rather than guessing at a fix
+- All six areas extracted, in the planned order: (1) Sidebar → (2) Cards → (3) Buttons/CTAs → (4) Hero/video → (5) Modals → (6) Forms, into `src/styles/{sidebar,cards,buttons-ctas,hero-video,modals,forms}.css`. `src/index.css` goes from 32,721 → 29,854 lines.
+- Each area's rule list was verified byte-exact against the pre-extraction file (every original chunk accounted for in exactly one output file — nothing lost, duplicated, or reordered) and confirmed with a screenshot pixel-diff plus real CI (`Contrast Regression Check`) after every commit, not just local checks.
+- Three real selector-classifier bugs were found and fixed while building the six areas' scoping rules (not just line-moving) — see PR #15's description for the full detail: a naive comma-splitting bug that let shared rules leak into the wrong area (Cards), a `:not()`-exclusion bug that mistook an exclusion clause for a target (caught building Buttons/CTAs, retroactively re-verified against the already-shipped Sidebar/Cards), and a trailing `:is()` ancestor-scoping gap that rejected legitimately-pure rules (Modals) which then needed an explicit cross-area-contamination guard once Forms reused the same pattern with looser tokens.
+- The tailwind.config.ts raw-px-value drift check mentioned above was not done in this pass — still open, folded into the "still open" list below.
 
-**Remove !important once each area is scoped**
+**Remove !important once each area is scoped — STARTED, STOPPED after Sidebar (see new backlog item below)**
 
-- Follows directly behind the CSS scoping work, same six areas in the same order
-- Rely on normal cascade/specificity instead of !important
-- Same verification per area: screenshot, confirm no visual change, run check:quality
-- Stop and report back on any regression rather than guessing at a fix
+- Ran the full process on Sidebar only: real cascade math (a spec-correct specificity calculator, shorthand/longhand-aware property-conflict detection, cross-referenced against the actual resolved load order — not just a visual diff) on all 445 `!important` declarations across Sidebar's 130 rules. Only 2 were provably safe to remove; both removed and verified. Result and why it doesn't extrapolate into a fast mechanical pass: see the new backlog item immediately below.
+- Cards/Buttons-CTAs/Hero-video/Modals/Forms were not attempted — the Sidebar result made clear this needs a different-shaped task first.
+
+**Pass-file !important audit (NEW — split out of the per-area removal attempt above)**
+
+- The Sidebar removal pass found 992 of 994 `!important` declarations (445 raw, expanded per selector-alternative) have a real, later, equal-or-higher-specificity competitor somewhere in the cascade — meaning the flag is genuinely load-bearing, not leftover caution. Only 2 were dead weight. That 2/445 yield means per-area removal is not a viable strategy on its own: the real `!important` debt does not live in the six area files, it lives downstream of them.
+- Where it actually lives: the 54 `pass-NNN-*.css` override files (loaded after all six area files, before nothing) contain 1,962 more `!important` declarations between them — many explicitly written to beat an earlier rail/card/CTA/etc. rule, which is exactly why removing the earlier rule's own flag is safe in isolation but doesn't reduce total `!important` usage; the override just keeps winning either way. `src/styles/private-surfaces.css` (owner/CRM/admin-only, dynamically imported) adds another 926 on top of that.
+- A real fix here has to target the pass-file layer directly, not the area files: for each pass-NNN file, identify which earlier rule (in index.css or an area file) it was written to override, check whether that earlier rule has since been fixed/removed/consolidated (many of these pass files stack chronologically — a later pass may have already made an earlier one's specific override redundant), and only then evaluate whether the override's own `!important` is still load-bearing. This is a different, larger task than "remove !important area by area" — closer in shape to the CSS token consolidation item above (which already flags the same 54-pass-file sprawl as a duplicate-definition problem) than to the scoping pass that just finished.
+- Two real, previously-unknown cascade participants surfaced while building the analysis tooling, worth carrying into whoever picks this up: `src/styles/private-surfaces.css` and `src/styles/route-surfaces.css` are live, currently-shipping stylesheets that never appear in `main.tsx`'s static imports — they're injected via `dynamic import()` from `<PrivateSurfaceStyles>`/`<RouteSurfaceStyles>` (mounted in `App.tsx`), landing after the entire synchronous bundle on the routes where they apply (private-surfaces.css on `/owner`, `/admin`, `/crm`, etc.; route-surfaces.css on `/insights`, `/guides`, `/compare`). Any cascade/specificity analysis built only from `main.tsx`'s import list will silently miss both.
+- Not started. Report the pass-file override map before removing anything, same discipline as the area-by-area pass.
 
 **Diagnose prerendering before fixing it (NEW — split from the fix)**
 
