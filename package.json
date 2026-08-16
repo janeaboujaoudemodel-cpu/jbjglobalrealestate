@@ -174,6 +174,7 @@
     "vitest": "^4.1.9"
   },
   "overrides": {
-    "lodash": "https://npm.aikido.io/2091d9930d76860b425e2/lodash@4.17.21-aikido.2"
+    "lodash": "https://npm.aikido.io/2091d9930d76860b425e2/lodash@4.17.21-aikido.2",
+    "brace-expansion": "1.1.18"
   }
 }
