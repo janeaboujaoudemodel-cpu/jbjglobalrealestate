@@ -46169,6 +46169,10 @@ export type Database = {
         Args: { p_existing_id: string; p_row: Json }
         Returns: string
       }
+      track_user_session_update: {
+        Args: { p_patch: Json; p_session_id: string }
+        Returns: undefined
+      }
       track_visitor_session_update: {
         Args: { p_patch: Json; p_session_id: string }
         Returns: undefined
