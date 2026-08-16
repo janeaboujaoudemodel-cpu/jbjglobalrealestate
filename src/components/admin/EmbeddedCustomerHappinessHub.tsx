@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { EmbeddedSupportTickets } from "./EmbeddedSupportTickets";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Review {
   id: string;
@@ -465,7 +466,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                             className="mt-1 h-4 w-4 rounded border-[#B89555]/30 text-[#1A1A1A] focus:ring-gold"
                           />
                           {/* Content */}
-                          <div className="flex-1 cursor-pointer" onClick={() => setSelectedReview(review)}>
+                          <ClickableDiv className="flex-1 cursor-pointer" onClick={() => setSelectedReview(review)}>
                             <div className="flex items-center gap-3 mb-1 flex-wrap">
                               <span className="font-semibold text-[#1A1A1A]">{review.full_name}</span>
                               {renderStars(review.rating)}
@@ -483,7 +484,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                               <span>{new Date(review.created_at).toLocaleDateString()}</span>
                               {review.publish_requested && <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-xs">Wants publishing</Badge>}
                             </div>
-                          </div>
+                          </ClickableDiv>
                           <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A]" onClick={() => setSelectedReview(review)}>
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -571,7 +572,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
                     {ideas?.map((idea) => (
-                      <div
+                      <ClickableDiv
                         key={idea.id}
                         className="p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer"
                         onClick={() => setSelectedIdea(idea)}
@@ -612,7 +613,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>
-                      </div>
+                      </ClickableDiv>
                     ))}
                     {(!ideas || ideas.length === 0) && (
                       <p className="text-center text-[#1A1A1A]/70 py-8">No ideas submitted yet</p>

@@ -9,6 +9,7 @@ import {
   Wand2, Loader2, X, Check, Trash2, Copy, ChevronLeft
 } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface StampVariationsPanelProps {
   variations: StampDesignConcept[];
@@ -92,7 +93,7 @@ export function StampVariationsPanel({
             {variations.map(v => {
               const isSelected = selectedVarId === v.id;
               return (
-                <div key={v.id}
+                <ClickableDiv key={v.id}
                   className={`group bg-card/80 rounded-xl border-2 transition-all shadow-sm hover:shadow-md cursor-pointer ${isSelected ? 'border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold)/0.5)]'}`}
                   onClick={() => setSelectedVarId(v.id)}
                 >
@@ -126,7 +127,7 @@ export function StampVariationsPanel({
                       </button>
                     </div>
                   </div>
-                </div>
+                </ClickableDiv>
               );
             })}
           </div>

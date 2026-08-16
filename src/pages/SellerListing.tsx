@@ -26,6 +26,7 @@ import {
 import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Dialog,
   DialogContent,
@@ -683,7 +684,7 @@ Requirements:
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
 
               {STEPS.map((step, index) => (
-                <div 
+                <ClickableDiv 
                   key={step.number}
                   data-no-contrast-guard
                   className="flex flex-col items-center min-w-[80px] cursor-pointer transition-all"
@@ -718,7 +719,7 @@ Requirements:
                       fontWeight: currentStep === step.number ? 600 : 400,
                     }}
                   >{STEPS_LABELS[step.number as keyof typeof STEPS_LABELS] ?? step.title}</span>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           </div>

@@ -21,6 +21,7 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 type Source = "reminder" | "action" | "touchpoint";
 
@@ -475,9 +476,9 @@ export default function AgencyActivityLog() {
                           <TooltipContent>History entries can't be modified</TooltipContent>
                         </Tooltip>
                       ) : (
-                        <div onClick={(e) => { e.stopPropagation(); toggleOne(r, e); }}>
+                        <ClickableDiv onClick={(e) => { e.stopPropagation(); toggleOne(r, e); }}>
                           <Checkbox checked={isSelected} aria-label="Select row" />
-                        </div>
+                        </ClickableDiv>
                       )}
                     </div>
                     <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center shrink-0">

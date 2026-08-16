@@ -4,6 +4,7 @@ import {
   useRestoreBrokerEvent, useDeleteBrokerEvent, type BrokerEvent,
 } from "@/hooks/useBrokerPersonalCalendar";
 import { Plus, Trash2, MapPin, RotateCcw, Copy, Bell, Bot, CalendarDays } from "lucide-react";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 function startOfMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth(), 1); }
 function endOfMonth(d: Date)   { return new Date(d.getFullYear(), d.getMonth() + 1, 0); }
@@ -155,7 +156,7 @@ export default function BrokerCalendar() {
       )}
 
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/45 flex items-center justify-center p-4" onClick={closeModal}>
+        <ClickableDiv className="fixed inset-0 z-50 bg-black/45 flex items-center justify-center p-4" onClick={closeModal}>
           <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/35 p-5 w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto jj-scrollbar-gold shadow-[0_30px_90px_-48px_rgba(0,0,0,.8)]" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between gap-3 mb-4"><div><h3 className="text-lg font-bold text-[#1A1A1A]">New event</h3><p className="text-xs text-[#1A1A1A]/60">Tell AI what you need, choose date/month/year, repetition and reminders.</p></div><button onClick={closeModal} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]">✕</button></div>
             <div className="grid md:grid-cols-2 gap-3">
@@ -170,7 +171,7 @@ export default function BrokerCalendar() {
             </div>
             <div className="flex justify-end gap-2 mt-5"><button onClick={closeModal} className="px-4 py-2 rounded-xl text-sm border border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#EFE6D6]">Cancel</button><button onClick={submit} className="jj-surface-emerald allow-white px-4 py-2 rounded-xl text-sm font-semibold text-white border border-white/20 hover:-translate-y-0.5 hover:brightness-110" data-surface="emerald"><Bell className="inline h-4 w-4 mr-1" /> Create</button></div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
     </div>
   );

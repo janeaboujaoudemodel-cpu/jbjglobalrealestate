@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { toast } from 'sonner';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const CONCEPTS_PER_PAGE = 6;
 
@@ -177,7 +178,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
                 This is your protected base design. It will never be overwritten by AI generation.
               </p>
               {/* Large standard render */}
-              <div className="bg-[hsl(var(--pearl-1))] rounded-xl border-2 border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)] p-4 flex items-center justify-center cursor-pointer hover:shadow-md transition-all"
+              <ClickableDiv className="bg-[hsl(var(--pearl-1))] rounded-xl border-2 border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)] p-4 flex items-center justify-center cursor-pointer hover:shadow-md transition-all"
                 onClick={() => props.onSelect(props.standardConcept!)}>
                 <StampSVGRenderer
                   svgSource={props.svgOverrides[props.standardConcept.id] || props.standardConcept.svgSource}
@@ -191,7 +192,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
                   inkMode={props.inkMode}
                   size={160}
                 />
-              </div>
+              </ClickableDiv>
               <div className="space-y-1">
                 <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{props.standardConcept.label}</p>
                 <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Template: {props.standardConcept.templateKey}</p>
@@ -250,7 +251,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
                 <Shield size={10} className="text-[hsl(var(--gold))]" />
                 <span className="text-[9px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Standard Model</span>
               </div>
-              <div
+              <ClickableDiv
                 className="bg-card/80 rounded-xl border-2 border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)] cursor-pointer transition-all hover:shadow-md"
                 onClick={() => props.onSelect(props.standardConcept!)}
               >
@@ -277,7 +278,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
                 <div className="p-1.5">
                   <p className="text-[8px] font-medium text-[hsl(var(--foreground))] truncate">{props.standardConcept.label}</p>
                 </div>
-              </div>
+              </ClickableDiv>
             </div>
           )}
 
@@ -920,7 +921,7 @@ function ConceptCard({
     : 'border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold)/0.5)]';
 
   return (
-    <div
+    <ClickableDiv
       className={`group bg-card/80 rounded-xl border-2 transition-all shadow-sm hover:shadow-md cursor-pointer ${borderClasses}`}
       onClick={() => onSelect(concept)}
     >
@@ -996,6 +997,6 @@ function ConceptCard({
           </button>
         </div>
       </div>
-    </div>
+    </ClickableDiv>
   );
 }

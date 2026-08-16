@@ -19,6 +19,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useVideoProcessor, ResizeJob } from '@/hooks/useVideoProcessor';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const EXPORT_FORMATS = [
   { id: 'reels',    name: 'Reels / TikTok', aspect: '9:16',  width: 1080, height: 1920, icon: Smartphone },
@@ -112,7 +113,7 @@ export function VideoResizePanel() {
           <h4 className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase tracking-widest mb-2">Export Formats</h4>
           <div className="space-y-1.5">
             {EXPORT_FORMATS.map((format) => (
-              <div
+              <ClickableDiv
                 key={format.id}
                 onClick={() => !isLoading && toggleFormat(format.id)}
                 className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all border ${
@@ -134,7 +135,7 @@ export function VideoResizePanel() {
                 {selectedFormats.includes(format.id) && (
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#1A1A1A] shrink-0" />
                 )}
-              </div>
+              </ClickableDiv>
             ))}
           </div>
         </div>
@@ -152,7 +153,7 @@ export function VideoResizePanel() {
         <div>
           <h4 className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase tracking-widest mb-2">Upload Source (Optional)</h4>
           {!uploadedVideo ? (
-            <div
+            <ClickableDiv
               className="border border-dashed border-[#1A1A1A] rounded-lg p-4 text-center hover:border-amber-500/40 transition-colors cursor-pointer"
               onClick={() => document.getElementById('resize-video-input')?.click()}
             >
@@ -160,7 +161,7 @@ export function VideoResizePanel() {
               <p className="text-xs text-[#1A1A1A]/70">Upload a separate video to process</p>
               <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5">MP4, MOV, WebM · max 500MB</p>
               <input id="resize-video-input" type="file" accept="video/*" onChange={handleFileSelect} className="hidden" />
-            </div>
+            </ClickableDiv>
           ) : (
             <div className="p-2.5 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] space-y-1.5">
               <div className="flex items-center gap-2">

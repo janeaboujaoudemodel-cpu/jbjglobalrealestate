@@ -14,6 +14,7 @@ import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Home,
   Upload,
@@ -253,7 +254,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                 <RadioGroup value={roomType} onValueChange={(v) => setRoomType(v as RoomType)}>
                   <div className="grid grid-cols-2 gap-2">
                     {ROOM_TYPES.map(room => (
-                      <div
+                      <ClickableDiv
                         key={room.id}
                         className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer border transition-all ${
  roomType === room.id
@@ -267,7 +268,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         <Label htmlFor={room.id} className="text-white text-sm cursor-pointer">
                           {room.name}
                         </Label>
-                      </div>
+                      </ClickableDiv>
                     ))}
                   </div>
                 </RadioGroup>
@@ -282,7 +283,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                 <RadioGroup value={designStyle} onValueChange={(v) => setDesignStyle(v as DesignStyle)}>
                   <div className="space-y-2">
                     {DESIGN_STYLES.map(style => (
-                      <div
+                      <ClickableDiv
                         key={style.id}
                         className={`p-3 rounded-lg cursor-pointer border transition-all ${
  designStyle === style.id
@@ -298,7 +299,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                           </Label>
                         </div>
                         <p className="text-[#1A1A1A]/70 text-xs mt-1">{style.description}</p>
-                      </div>
+                      </ClickableDiv>
                     ))}
                   </div>
                 </RadioGroup>
@@ -331,7 +332,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
               </CardHeader>
               <CardContent>
                 {!uploadedImage ? (
-                  <div
+                  <ClickableDiv
                     onClick={() => fileInputRef.current?.click()}
                     className="border-2 border-dashed border-[#B89555]/30 rounded-xl p-12 text-center cursor-pointer hover:border-[#B89555]/50 transition-colors"
                   >
@@ -345,7 +346,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                       className="hidden"
                       onChange={handleImageUpload}
                     />
-                  </div>
+                  </ClickableDiv>
                 ) : (
                   <div className="space-y-4">
                     {/* Comparison View */}
@@ -440,7 +441,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                 <CardContent>
                   <div className="grid grid-cols-4 gap-2">
                     {history.slice(0, 8).map((item) => (
-                      <div
+                      <ClickableDiv
                         key={item.id}
                         className="relative aspect-square bg-[#1A1A1A] rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-gold transition-all"
                         onClick={() => {
@@ -458,7 +459,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-1">
                           <p className="text-white text-[10px] truncate">{item.roomType}</p>
                         </div>
-                      </div>
+                      </ClickableDiv>
                     ))}
                   </div>
                 </CardContent>

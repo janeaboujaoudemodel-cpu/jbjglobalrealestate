@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 export type AssetType = "monogram" | "logo" | "signature" | "stamp";
 
@@ -448,7 +449,7 @@ export function BrandAssetLibrary({
           {filteredAssets.map(asset => {
             const isSelected = selectedUrl === asset.file_url;
             return (
-              <div
+              <ClickableDiv
                 key={asset.id}
                 className={`relative group rounded-xl border-2 overflow-hidden cursor-pointer transition-all ${
                   isSelected
@@ -485,7 +486,7 @@ export function BrandAssetLibrary({
                 >
                   <Trash2 size={9} />
                 </button>
-              </div>
+              </ClickableDiv>
             );
           })}
 

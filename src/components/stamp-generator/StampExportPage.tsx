@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import JSZip from 'jszip';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Download, ArrowLeft, Stamp, CheckCircle2, Loader2,
   FileImage, FileText, File, Package, Palette, X, Plus, Image, PenTool,
@@ -1198,10 +1199,10 @@ export default function StampExportPage() {
                   <Package size={14} className="text-[hsl(var(--gold))]"/> Multi-Color Pack
                 </p>
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <div onClick={() => setMultiColorMode(v => !v)}
+                  <ClickableDiv onClick={() => setMultiColorMode(v => !v)}
                     className={`w-9 h-5 rounded-full transition-colors relative flex-shrink-0 ${multiColorMode ? 'bg-[hsl(var(--gold))]' : 'bg-[hsl(var(--muted))]'}`}>
                     <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-[#FDFBF7] shadow transition-all ${multiColorMode ? 'left-4' : 'left-0.5'}`}/>
-                  </div>
+                  </ClickableDiv>
                   <span className="text-xs text-[hsl(var(--muted-foreground))]">Enable</span>
                 </label>
               </div>

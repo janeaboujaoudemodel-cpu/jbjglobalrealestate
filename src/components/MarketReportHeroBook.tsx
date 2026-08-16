@@ -4,6 +4,7 @@ import { Sparkles } from "lucide-react";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import { FounderContent } from "@/components/FounderContent";
 import BookDownloadDialog from "@/components/BookDownloadDialog";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 type MarketReportHeroBookProps = {
   className?: string;
@@ -25,7 +26,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
         whileHover={{ y: -5 }}
         transition={{ duration: 0.3 }}
       >
-        <div
+        <ClickableDiv
           className="relative group cursor-pointer"
           onClick={() => setDownloadOpen(true)}
           onMouseMove={(e) => {
@@ -136,7 +137,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
           >
             <span className="text-xs font-bold uppercase tracking-wider">Free Download</span>
           </motion.div>
-        </div>
+        </ClickableDiv>
       </motion.div>
 
       <BookDownloadDialog

@@ -23,6 +23,7 @@ import {
   Key,
 } from "lucide-react";
 import ClientMarketSnapshot from "@/components/client-intelligence/ClientMarketSnapshot";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface SavedArea {
   id: string;
@@ -241,7 +242,7 @@ const ClientPortal = () => {
                 <CardContent>
                   <div className="space-y-3">
                     {preferences.preferredAreas.map((area) => (
-                      <div
+                      <ClickableDiv
                         key={area.id}
                         className="flex items-center justify-between p-4 rounded-lg bg-muted/30 border border-border/50 hover:bg-muted/50 transition-colors cursor-pointer"
                         onClick={() => navigate(`/market-intelligence/areas/${area.name.toLowerCase().replace(/\s+/g, "-")}`)}
@@ -261,7 +262,7 @@ const ClientPortal = () => {
                             {area.trend}
                           </Badge>
                         </div>
-                      </div>
+                      </ClickableDiv>
                     ))}
                   </div>
                 </CardContent>

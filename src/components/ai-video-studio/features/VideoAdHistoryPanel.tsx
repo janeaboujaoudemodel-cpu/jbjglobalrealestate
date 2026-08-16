@@ -10,6 +10,7 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { VOICE_OPTIONS, SUPPORTED_LANGUAGES } from '../types';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -156,7 +157,7 @@ function DetailDrawer({ ad, isPlaying, onPlay, onClose, onRestore, onLoadAndExpo
   const dur = ad.project_data.voiceover?.duration ?? s.scriptDuration ?? 60;
 
   const content = (
-    <div
+    <ClickableDiv
       className="fixed inset-0 z-[99999] flex items-end justify-center"
       style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}
@@ -319,7 +320,7 @@ function DetailDrawer({ ad, isPlaying, onPlay, onClose, onRestore, onLoadAndExpo
           </button>
         </div>
       </div>
-    </div>
+    </ClickableDiv>
   );
 
   return ReactDOM.createPortal(content, document.body);

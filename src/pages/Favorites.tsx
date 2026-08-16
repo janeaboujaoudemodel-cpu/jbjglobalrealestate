@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 
@@ -345,7 +346,7 @@ const Favorites = () => {
                   {favoriteProjects.map((project) => (
                     <div key={project.id} className="relative">
                       <div className="absolute top-2 left-2 z-20">
-                        <div
+                        <ClickableDiv
                           className={`w-6 h-6 rounded-md flex items-center justify-center cursor-pointer transition-all ${
                             selectedFavorites.includes(project.id)
                               ? "bg-[#EFE6D6] text-[#1A1A1A]"
@@ -358,7 +359,7 @@ const Favorites = () => {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           )}
-                        </div>
+                        </ClickableDiv>
                       </div>
                       <ProjectCard project={project} currency="AED" sizeUnit="sqft" />
                     </div>

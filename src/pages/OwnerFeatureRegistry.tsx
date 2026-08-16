@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Search,
   ExternalLink,
@@ -647,7 +648,7 @@ export default function OwnerFeatureRegistry() {
                           </h3>
                           <div className="space-y-2 ml-4">
                             {FEATURES.filter(f => f.category === cat.name).map((feature, idx) => (
-                              <div 
+                              <ClickableDiv 
                                 key={`${feature.name}-nav-${idx}`}
                                 className="flex items-center justify-between p-3 rounded-lg border border-[#B89555]/10 bg-[#FDFBF7] hover:bg-[#EFE6D6]/5 cursor-pointer"
                                 onClick={() => {
@@ -669,7 +670,7 @@ export default function OwnerFeatureRegistry() {
                                   </code>
                                   <ExternalLink className="h-3 w-3 text-[#1A1A1A]/70" />
                                 </div>
-                              </div>
+                              </ClickableDiv>
                             ))}
                           </div>
                         </div>

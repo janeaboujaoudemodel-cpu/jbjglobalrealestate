@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
 import { SEOHead } from "@/components/SEOHead";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface CalendarEvent {
   id: string;
@@ -639,7 +640,7 @@ const AICalendar = () => {
                     const isSelected = date.toDateString() === selectedDate.toDateString();
                     
                     return (
-                      <div
+                      <ClickableDiv
                         key={i}
                         onClick={() => setSelectedDate(date)}
                         className={`aspect-square p-1 rounded-lg cursor-pointer transition-all ${
@@ -664,7 +665,7 @@ const AICalendar = () => {
                             <p className="text-[10px] text-[#1A1A1A]/70">+{dayEvents.length - 2} more</p>
                           )}
                         </div>
-                      </div>
+                      </ClickableDiv>
                     );
                   })}
                 </div>

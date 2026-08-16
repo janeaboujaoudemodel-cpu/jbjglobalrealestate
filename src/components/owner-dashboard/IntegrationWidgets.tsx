@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format, formatDistanceToNow, isToday, isTomorrow } from "date-fns";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 export default function IntegrationWidgets() {
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ export default function IntegrationWidgets() {
         ) : upcomingEvents && upcomingEvents.length > 0 ? (
           <div className="space-y-2">
             {upcomingEvents.slice(0, 4).map((event) => (
-              <div 
+              <ClickableDiv 
                 key={event.id}
                 className="flex items-center justify-between p-3 rounded-xl bg-[#FDFBF7] hover:bg-[#EFE6D6]/60 transition-colors cursor-pointer border border-[#B89555]/20"
                 onClick={openOwnerCalendar}
@@ -101,7 +102,7 @@ export default function IntegrationWidgets() {
                 <span className="text-xs text-[#1A1A1A]/70 ml-2">
                   {event.due_at ? formatEventDate(event.due_at) : 'No date'}
                 </span>
-              </div>
+              </ClickableDiv>
             ))}
           </div>
         ) : (
@@ -148,7 +149,7 @@ export default function IntegrationWidgets() {
             <span className="allow-white text-sm text-white">Add Quick Note</span>
           </Button>
 
-          <div 
+          <ClickableDiv 
             className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7] cursor-pointer hover:bg-[#B89555]/5 transition-colors border border-[#B89555]/10"
             onClick={() => navigate('/automations')}
           >
@@ -159,7 +160,7 @@ export default function IntegrationWidgets() {
             <span className="text-sm font-medium text-[#064E3B]">
               {loadingAutomations ? '...' : automationsCount}
             </span>
-          </div>
+          </ClickableDiv>
         </div>
       </div>
     </div>

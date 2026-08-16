@@ -14,6 +14,7 @@ import {
 import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type CenterContentMode, type CenterIconType } from '@/lib/stampOfficialTemplate';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface HitZone {
   id: string;
@@ -352,7 +353,7 @@ export function StampInteractivePreview({
   const selectedLang = selected ? getLanguageFromElement(selected) : null;
 
   return (
-    <div
+    <ClickableDiv
       ref={containerRef}
       className="relative cursor-crosshair"
       style={{ width: size, height: size }}
@@ -605,7 +606,7 @@ export function StampInteractivePreview({
           Click letter · Double-click full arc
         </div>
       )}
-    </div>
+    </ClickableDiv>
   );
 }
 

@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -542,7 +543,7 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
   };
 
   return (
-    <div 
+    <ClickableDiv
       className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] hover:bg-[#EFE6D6]/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
@@ -559,13 +560,13 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
         <Badge className="bg-[#EFE6D6] text-[#1A1A1A] text-xs">{thread.unread_count}</Badge>
       )}
       <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70" />
-    </div>
+    </ClickableDiv>
   );
 }
 
 function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) {
   return (
-    <div 
+    <ClickableDiv
       className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] hover:bg-[#EFE6D6]/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
@@ -583,7 +584,7 @@ function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) 
         {lead.pipeline_stage || 'new'}
       </Badge>
       <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70" />
-    </div>
+    </ClickableDiv>
   );
 }
 

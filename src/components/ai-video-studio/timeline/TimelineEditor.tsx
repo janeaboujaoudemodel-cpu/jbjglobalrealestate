@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { Track, Clip, TimelineMode } from '../types';
 import { ShortcutCheatSheet } from '../layout/ShortcutCheatSheet';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ── Transition definitions for the context menu ─────────────────────────────
 const QUICK_TRANSITIONS = [
@@ -443,7 +444,7 @@ export function TimelineEditor({
           >
             <div style={{ width: timelineWidth, minWidth: '100%' }}>
               {/* Time Ruler */}
-              <div 
+              <ClickableDiv 
                 className="h-8 border-b border-[#1A1A1A] relative bg-[#1A1A1A]/80 sticky top-0 z-10"
                 onClick={handleTimelineClick}
               >
@@ -467,11 +468,11 @@ export function TimelineEditor({
                 >
                   <div className="absolute -top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#EFE6D6] rotate-45" />
                 </div>
-              </div>
+              </ClickableDiv>
 
               {/* Track Rows */}
               {tracks.map((track) => (
-                <div
+                <ClickableDiv
                   key={track.id}
                   className="relative border-b border-[#1A1A1A]/50"
                   style={{ 
@@ -646,7 +647,7 @@ export function TimelineEditor({
                     className="absolute top-0 h-full w-0.5 bg-[#EFE6D6]/50 pointer-events-none"
                     style={{ left: currentTime * pixelsPerSecond }}
                   />
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           </div>

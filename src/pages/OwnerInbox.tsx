@@ -47,6 +47,7 @@ import InboxBulkActionsBar from "@/components/owner-inbox/InboxBulkActionsBar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CATEGORY_META, clientCategorize } from "@/hooks/useCommAITriage";
 import useCommAITriage from "@/hooks/useCommAITriage";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const channelIcons: Record<string, React.ReactNode> = {
   whatsapp: <MessageSquare className="h-4 w-4 text-green-500" />,
@@ -630,9 +631,9 @@ function ThreadListItem({
     >
       <div className="flex items-start gap-3">
         {onToggleCheck && (
-          <div onClick={(e) => { e.stopPropagation(); onToggleCheck(); }} className="pt-2">
+          <ClickableDiv onClick={(e) => { e.stopPropagation(); onToggleCheck(); }} className="pt-2">
             <Checkbox checked={!!isChecked} className="h-4 w-4" />
-          </div>
+          </ClickableDiv>
         )}
         <div className="relative">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">

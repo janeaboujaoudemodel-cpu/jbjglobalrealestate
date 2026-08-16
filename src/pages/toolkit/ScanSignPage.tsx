@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
 import { SaveProjectBar } from '@/components/toolkit/SaveProjectBar';
 import { InlineStampGenerator } from '@/components/toolkit/InlineStampGenerator';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Camera, Upload, FileText, Pen, Download, Trash2, RotateCw,
   Loader2, CheckCircle2, Plus, Image as ImageIcon, Save, Sparkles, Wand2, X,
@@ -539,12 +540,12 @@ export default function ScanSignPage() {
               ) : (
                 <div className="space-y-3" onDrop={handleDropUpload} onDragOver={e => e.preventDefault()}>
                   <PrimaryBtn onClick={startCamera} className="w-full"><Camera className="w-4 h-4" /> Open Camera</PrimaryBtn>
-                  <div className="w-full rounded-xl p-4 text-center cursor-pointer transition-all border-2 border-dashed border-[color:var(--emerald-1)]/30 jj-emerald-soft/30 hover:border-[color:var(--emerald-1)]/30"
+                  <ClickableDiv className="w-full rounded-xl p-4 text-center cursor-pointer transition-all border-2 border-dashed border-[color:var(--emerald-1)]/30 jj-emerald-soft/30 hover:border-[color:var(--emerald-1)]/30"
                     onClick={() => fileInputRef.current?.click()}>
                     <Upload className="w-6 h-6 mx-auto mb-1.5 text-[color:var(--emerald-1)]" />
                     <p className="text-xs font-medium text-[#1A1A1A]">Upload Images / PDF</p>
                     <p className="text-[10px] mt-0.5 text-[#1A1A1A]/70">Drag & drop · JPG, PNG, PDF</p>
-                  </div>
+                  </ClickableDiv>
                   <input ref={fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={handleFileUpload} />
                 </div>
               )}
@@ -616,7 +617,7 @@ export default function ScanSignPage() {
               <PanelTitle icon={ImageIcon}>Pages ({pages.length})</PanelTitle>
               <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1">
                 {pages.map((page, index) => (
-                  <div key={page.id} onClick={() => setSelectedPageIndex(index)}
+                  <ClickableDiv key={page.id} onClick={() => setSelectedPageIndex(index)}
                     className={`relative cursor-pointer rounded-xl overflow-hidden transition-all border-2 ${
  selectedPageIndex === index ? 'border-[color:var(--emerald-1)]/30 shadow-sm shadow-emerald-500/20' : 'border-[#B89555]/30 hover:border-[color:var(--emerald-1)]/30'
  }`}>
@@ -631,7 +632,7 @@ export default function ScanSignPage() {
                         <CheckCircle2 className="w-2.5 h-2.5 text-white" />
                       </div>
                     )}
-                  </div>
+                  </ClickableDiv>
                 ))}
                 {pages.length === 0 && (
                   <div className="col-span-3 text-center py-6 text-[#1A1A1A]/70">

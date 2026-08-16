@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import { 
   Play, 
   Pause, 
@@ -215,7 +216,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
       )}
 
       {/* Preview / Fullscreen Mode */}
-      <div 
+      <ClickableDiv 
         ref={scrollRef}
         className={`flex-1 overflow-y-auto bg-[#1A1A1A] p-4 ${isFullscreen ? 'cursor-pointer' : ''}`}
         style={{
@@ -268,7 +269,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
             </Button>
           </div>
         )}
-      </div>
+      </ClickableDiv>
     </div>
   );
 }

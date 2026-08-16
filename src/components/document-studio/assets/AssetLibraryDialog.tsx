@@ -11,6 +11,7 @@ import { Plus, Star, Trash2, Check } from "lucide-react";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./useOwnerAssets";
 import SignatureCapture from "./SignatureCapture";
 import StampUpload from "./StampUpload";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Props {
   open: boolean;
@@ -113,7 +114,7 @@ function AssetGrid({
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
       {assets.map((a) => (
         <div key={a.id} className="relative group rounded-md border border-[#B89555]/30 overflow-hidden bg-[#F7F2EA]">
-          <div
+          <ClickableDiv
             className={["h-24 flex items-center justify-center p-2 cursor-pointer",
               bgWhite ? "bg-white" : "bg-[#FDFBF7]"].join(" ")}
             onClick={() => onPick?.(a)}
@@ -124,7 +125,7 @@ function AssetGrid({
             ) : (
               <div className="text-[10px] text-[#1A1A1A]/40">loading…</div>
             )}
-          </div>
+          </ClickableDiv>
           <div className="px-2 py-1.5 flex items-center gap-1 border-t border-[#B89555]/20">
             <div className="text-[11px] text-[#1A1A1A] truncate flex-1">{a.label}</div>
             {a.is_default && <Star className="w-3 h-3 text-[#B89555] fill-[#B89555]" />}

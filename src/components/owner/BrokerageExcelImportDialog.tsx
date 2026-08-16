@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Database, FileSpreadsheet, FolderOpen, GitCompareArrows, Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 type Row = Record<string, string>;
 type MappingValue = string | null;
@@ -181,13 +182,13 @@ export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone 
         </DialogHeader>
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
           {!rows.length ? (
-            <div onClick={() => fileRef.current?.click()} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); const f = Array.from(e.dataTransfer.files).find((x) => /\.(xlsx|xls|csv)$/i.test(x.name)); if (f) handleFile(f); }} className="rounded-xl border-2 border-dashed border-[#B89555]/50 hover:bg-[#F7F2EA] p-14 text-center cursor-pointer">
+            <ClickableDiv onClick={() => fileRef.current?.click()} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); const f = Array.from(e.dataTransfer.files).find((x) => /\.(xlsx|xls|csv)$/i.test(x.name)); if (f) handleFile(f); }} className="rounded-xl border-2 border-dashed border-[#B89555]/50 hover:bg-[#F7F2EA] p-14 text-center cursor-pointer">
               <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[#064E3B] text-white"><FolderOpen className="h-7 w-7" /></div>
               <p className="text-base font-semibold text-[#1A1A1A]">Drop or choose a brokerage database</p>
               <p className="mt-1 text-xs text-[#1A1A1A]/70">Review first. Nothing saves until Save Database is clicked.</p>
               <Button type="button" variant="outline" className="mt-4 border-[#B89555]/50 bg-[#FDFBF7] text-[#1A1A1A]"><Upload className="w-4 h-4 mr-1" /> Choose file</Button>
-            </div>
+            </ClickableDiv>
           ) : (
             <>
               <div className="rounded-xl bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-4 grid grid-cols-2 md:grid-cols-4 gap-3">

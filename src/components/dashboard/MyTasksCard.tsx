@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import TaskCreationModal from "./TaskCreationModal";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Task {
   id: string;
@@ -351,7 +352,7 @@ export default function MyTasksCard() {
               const isCompleted = task.status === "completed";
               const isSelected = selectedIds.has(task.id);
               return (
-                <div
+                <ClickableDiv
                   key={task.id}
                   onClick={(e) => { 
                     if (selectionMode) { toggleSelect(task.id, e); }
@@ -450,7 +451,7 @@ export default function MyTasksCard() {
                       </div>
                     </div>
                   )}
-                </div>
+                </ClickableDiv>
               );
             })}
           </div>

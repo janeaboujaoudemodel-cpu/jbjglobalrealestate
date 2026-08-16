@@ -12,6 +12,7 @@ import { SUPPORTED_LANGUAGES, SUBTITLE_STYLES, VOICE_OPTIONS } from '../types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -1046,11 +1047,11 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 </p>
 
                 {!previewSource && (
-                  <div onClick={() => burnFileInputRef.current?.click()} className="border-2 border-dashed border-[#B89555]/30 hover:border-amber-400/50 rounded-xl p-4 text-center cursor-pointer transition-colors bg-[#1A1A1A]/30 mb-2">
+                  <ClickableDiv onClick={() => burnFileInputRef.current?.click()} className="border-2 border-dashed border-[#B89555]/30 hover:border-amber-400/50 rounded-xl p-4 text-center cursor-pointer transition-colors bg-[#1A1A1A]/30 mb-2">
                     <Film className="w-5 h-5 mx-auto mb-1.5 text-[#1A1A1A]/70" />
                     <p className="text-xs text-[#1A1A1A]/70 font-medium">Select video to preview captions on</p>
                     <p className="text-xs text-[#1A1A1A]/70 mt-0.5">MP4, MOV, WebM</p>
-                  </div>
+                  </ClickableDiv>
                 )}
 
                 {/* Language selector for preview */}
@@ -1166,7 +1167,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                     </div>
                     <p className="text-xs text-[#1A1A1A]/70">Bakes captions permanently into the video with your Style settings + audio preserved.</p>
 
-                    <div onClick={() => burnFileInputRef.current?.click()} className="border border-dashed border-[#B89555]/30 hover:border-amber-400/50 rounded-lg p-3 text-center cursor-pointer transition-colors">
+                    <ClickableDiv onClick={() => burnFileInputRef.current?.click()} className="border border-dashed border-[#B89555]/30 hover:border-amber-400/50 rounded-lg p-3 text-center cursor-pointer transition-colors">
                       {burnVideoFile ? (
                         <div className="flex items-center gap-2">
                           <Film className="w-4 h-4 text-[#1A1A1A]" />
@@ -1176,7 +1177,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       ) : (
                         <><Film className="w-5 h-5 mx-auto mb-1 text-[#1A1A1A]/70" /><p className="text-xs text-[#1A1A1A]/70">Click to select video</p></>
                       )}
-                    </div>
+                    </ClickableDiv>
 
                     {translatedLangs.length > 0 && (
                       <div>

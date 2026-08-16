@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { X, Keyboard } from 'lucide-react';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface ShortcutCheatSheetProps {
   open: boolean;
@@ -82,7 +83,7 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
 
   return (
     /* Backdrop */
-    <div
+    <ClickableDiv
       className="fixed inset-0 z-[99999] flex items-center justify-center"
       style={{ background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}
@@ -160,6 +161,6 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
           <p className="text-[#1A1A1A]/80 text-[10px]">Press <Kbd label="?" /> or <Kbd label="Esc" /> to dismiss</p>
         </div>
       </div>
-    </div>
+    </ClickableDiv>
   );
 }

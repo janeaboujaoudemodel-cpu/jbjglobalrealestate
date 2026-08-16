@@ -14,6 +14,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { format, formatDistanceToNow } from 'date-fns';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
@@ -526,7 +527,7 @@ const VisitorInsightsDashboard = () => {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {selectedVisitor.sessions.map((session) => (
-                    <div key={session.id}
+                    <ClickableDiv key={session.id}
                       onClick={() => loadSessionDetails(session.session_id)}
                       className={`p-3 rounded-lg border cursor-pointer transition-all ${
  selectedSessionId === session.session_id
@@ -555,7 +556,7 @@ const VisitorInsightsDashboard = () => {
                       {session.landing_page && (
                         <p className="text-[#1A1A1A]/40 text-xs mt-1 truncate">Landing: {session.landing_page}</p>
                       )}
-                    </div>
+                    </ClickableDiv>
                   ))}
                 </CardContent>
               </Card>

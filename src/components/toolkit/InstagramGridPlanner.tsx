@@ -17,6 +17,7 @@ import { format, addMinutes, startOfMinute } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ── Design tokens (match BeautyFilters.tsx) ──────────────────────────────────
 const I = {
@@ -486,7 +487,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
       {mode === 'preview' && (
         <div className="space-y-4">
           {photos.length === 0 ? (
-            <div
+            <ClickableDiv
               className="rounded-2xl p-12 text-center cursor-pointer"
               style={{ border: `2px dashed ${I.border}`, background: I.surface }}
               onClick={() => gridFileInputRef.current?.click()}>
@@ -499,7 +500,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                 style={{ background: I.btnGrad, boxShadow: I.btnShadow }}>
                 <Upload className="h-4 w-4" /> Upload Photos
               </span>
-            </div>
+            </ClickableDiv>
           ) : (
             <>
               {/* Grid */}
@@ -734,7 +735,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
 
           {/* Photos queue */}
           {photos.length === 0 ? (
-            <div className="rounded-2xl p-8 text-center cursor-pointer"
+            <ClickableDiv className="rounded-2xl p-8 text-center cursor-pointer"
               style={{ border: `2px dashed ${I.border}`, background: I.surface }}
               onClick={() => gridFileInputRef.current?.click()}>
               <ImageIcon className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(99,102,241,0.4)" }} />
@@ -746,7 +747,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                 style={{ background: I.btnGrad }}>
                 <Upload className="h-4 w-4" /> Add Photos
               </span>
-            </div>
+            </ClickableDiv>
           ) : (
             <div className="space-y-3">
               <SectionLabel>📤 Publishing Queue ({photos.length} photo{photos.length !== 1 ? 's' : ''})</SectionLabel>

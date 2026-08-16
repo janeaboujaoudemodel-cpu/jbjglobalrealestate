@@ -1,5 +1,6 @@
 import { CheckCircle, MapPin, Star, Flame, Award, Briefcase, Lock, Pause, XCircle, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 export type JobCardTag =
   | "top-opportunity"
@@ -121,7 +122,7 @@ export default function PremiumJobCard({
   if (status === "urgent" && !computedTags.includes("urgent")) computedTags.unshift("urgent");
 
   return (
-    <div
+    <ClickableDiv
       onClick={() => isOpenForApply && onSelect?.(id)}
       data-careers-job-card
       data-surface="champagne"
@@ -283,6 +284,6 @@ export default function PremiumJobCard({
           )}
         </div>
       </div>
-    </div>
+    </ClickableDiv>
   );
 }

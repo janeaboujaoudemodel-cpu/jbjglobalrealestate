@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import QuickCalendarWidget from "@/components/shared/QuickCalendarWidget";
 import QuickNoteWidget from "@/components/shared/QuickNoteWidget";
 import EmailAutomationPanel from "@/components/email/EmailAutomationPanel";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Email {
   id: string;
@@ -201,14 +202,14 @@ export default function EmailProductivityPanel({
                 <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider mb-2">Tasks from Emails</p>
                 <div className="space-y-1">
                   {allActionItems.map((ai, i) => (
-                    <div
+                    <ClickableDiv
                       key={i}
                       className="text-xs text-[#1A1A1A]/70 flex items-start gap-2 px-2 py-1.5 rounded-lg hover:bg-[#B89555]/5 cursor-pointer"
                       onClick={() => onSelectEmail(ai.emailId)}
                     >
                       <CheckCircle2 className="w-3 h-3 text-[#B89555] mt-0.5 flex-shrink-0" />
                       <span>{ai.item}</span>
-                    </div>
+                    </ClickableDiv>
                   ))}
                 </div>
               </div>

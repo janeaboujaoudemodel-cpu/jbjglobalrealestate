@@ -18,6 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Loader2, Mic, MicOff, Link2, Upload, Phone, Calendar as CalendarIcon,
   Flag, FolderOpen, X, Plus, FileText, CheckCircle2, Users, UserPlus, Search,
@@ -602,7 +603,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
             <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
               <Upload className="w-3.5 h-3.5 text-[#1A1A1A]" /> Attachments
             </Label>
-            <div
+            <ClickableDiv
               onClick={() => fileInputRef.current?.click()}
               className="border-2 border-dashed border-[#B89555]/30 rounded-xl p-4 text-center cursor-pointer hover:border-[#B89555]/60 hover:bg-[#EFE6D6]/5 transition-all"
             >
@@ -625,7 +626,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   Click to upload documents (PDF, images, spreadsheets)
                 </div>
               )}
-            </div>
+            </ClickableDiv>
 
             {/* Uploaded files list */}
             {attachments.length > 0 && (

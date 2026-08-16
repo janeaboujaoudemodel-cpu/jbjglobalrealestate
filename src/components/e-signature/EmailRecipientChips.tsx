@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const isValidEmail = (e: string) => EMAIL_RE.test(e.trim());
@@ -60,7 +61,7 @@ export function EmailRecipientChips({ value, onChange, placeholder, ariaLabel }:
   };
 
   return (
-    <div
+    <ClickableDiv
       className="flex flex-wrap items-center gap-1.5 min-h-[40px] w-full rounded-md border border-[#B89555]/40 bg-white px-2 py-1.5"
       onClick={(e) => {
         const input = (e.currentTarget as HTMLDivElement).querySelector("input");
@@ -97,6 +98,6 @@ export function EmailRecipientChips({ value, onChange, placeholder, ariaLabel }:
         aria-label={ariaLabel}
         className="flex-1 min-w-[140px] h-7 border-0 shadow-none px-1 text-sm focus-visible:ring-0 bg-transparent"
       />
-    </div>
+    </ClickableDiv>
   );
 }

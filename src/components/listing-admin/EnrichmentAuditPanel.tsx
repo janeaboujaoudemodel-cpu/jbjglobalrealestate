@@ -10,6 +10,7 @@ import {
   FileText, Image, Loader2, RefreshCw, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface EnrichmentSuggestion {
   id: string;
@@ -101,7 +102,7 @@ const SuggestionCard = ({ item, onApprove, onReject }: { item: EnrichmentSuggest
 
   return (
     <Card className="border border-border">
-      <div
+      <ClickableDiv
         className="flex items-center gap-3 p-3 cursor-pointer hover:bg-muted/30 transition-colors"
         onClick={() => setExpanded(!expanded)}
       >
@@ -130,7 +131,7 @@ const SuggestionCard = ({ item, onApprove, onReject }: { item: EnrichmentSuggest
         {item.status === "approved" && <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Approved</Badge>}
         {item.status === "rejected" && <Badge className="bg-red-100 text-red-800 border-red-300">Rejected</Badge>}
         {expanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
-      </div>
+      </ClickableDiv>
       {expanded && (
         <CardContent className="pt-0 pb-3 px-3 border-t border-border">
           <div className="mt-2">

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { toast } from 'sonner';
 import { Loader2, Check, X, Package } from 'lucide-react';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 type BrandAssetType = 'stamp' | 'logo' | 'business_card' | 'signature' | 'letterhead' | 'email_signature';
 
@@ -98,7 +99,7 @@ export function BrandAssetPicker({ filterType, onSelect, onClose }: BrandAssetPi
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {filtered.map(asset => (
-                <div key={asset.id}
+                <ClickableDiv key={asset.id}
                   className="group bg-card/80 rounded-xl border-2 border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold)/0.5)] transition-all cursor-pointer"
                   onClick={() => onSelect(asset)}>
                   <div className="p-2 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl min-h-[90px]">
@@ -119,7 +120,7 @@ export function BrandAssetPicker({ filterType, onSelect, onClose }: BrandAssetPi
                       <Check size={7} /> Select
                     </Button>
                   </div>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           )}

@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Upload, Trash2, GripVertical, Play, Film, ChevronUp, ChevronDown, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { TRANSITION_TYPES } from '../types';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ─── Ken Burns animation presets ─────────────────────────────────────────────
 const KEN_BURNS_PRESETS = [
@@ -238,11 +239,11 @@ export function BatchPhotoVideoPanel({ onBuildTimeline }: BatchPhotoVideoPanelPr
               style={{ background: C.bgCard, border: `1px solid ${previewIdx === idx ? C.borderAccent : C.borderSubtle}` }}>
               <div className="flex items-center gap-2">
                 {/* Thumbnail */}
-                <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 cursor-pointer"
+                <ClickableDiv className="w-12 h-12 rounded overflow-hidden flex-shrink-0 cursor-pointer"
                   onClick={() => setPreviewIdx(previewIdx === idx ? null : idx)}
                   style={{ border: `1px solid ${C.borderSubtle}` }}>
                   <img src={photo.url} alt={photo.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
-                </div>
+                </ClickableDiv>
 
                 <div className="flex-1 min-w-0">
                   <div className="text-xs truncate">{photo.name}</div>

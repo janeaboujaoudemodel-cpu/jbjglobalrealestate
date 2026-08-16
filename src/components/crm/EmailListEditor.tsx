@@ -2,6 +2,7 @@ import { useState, KeyboardEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Check, Plus, Trash2 } from "lucide-react";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
@@ -46,7 +47,7 @@ export function PrimarySenderEditor({
         {saved.map((email) => {
           const isActive = email === active;
           return (
-            <div
+            <ClickableDiv
               key={email}
               className={`group inline-flex items-center gap-1 pl-2.5 pr-1 h-8 rounded-full border text-xs font-medium transition-colors cursor-pointer ${
                 isActive
@@ -69,7 +70,7 @@ export function PrimarySenderEditor({
               >
                 <Trash2 className="w-3 h-3" />
               </button>
-            </div>
+            </ClickableDiv>
           );
         })}
       </div>
@@ -135,7 +136,7 @@ export function CcListEditor({
         {saved.map((email) => {
           const isActive = active.includes(email);
           return (
-            <div
+            <ClickableDiv
               key={email}
               className={`group inline-flex items-center gap-1 pl-2.5 pr-1 h-8 rounded-full border text-xs font-medium transition-colors cursor-pointer ${
                 isActive
@@ -158,7 +159,7 @@ export function CcListEditor({
               >
                 <Trash2 className="w-3 h-3" />
               </button>
-            </div>
+            </ClickableDiv>
           );
         })}
       </div>
