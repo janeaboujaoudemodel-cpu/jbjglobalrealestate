@@ -321,6 +321,6 @@ Once analytics has an explicit date range wired up, future feature decisions can
 
 **Consolidate overlapping guide pages**
 
-- Merge /rent-guide, /tenant-guide, /landlord-guide, and the routes redirecting to /dubai-rental-yield (/rental-yield, /dubai-rental-yield) into fewer, richer pages with clear on-page sections per audience
-- Every merged-away URL must 301-redirect to its new canonical destination — none may 404, since some carry backlinks or ad traffic
-- Show the proposed consolidated structure before merging any content or removing any routes
+- **Stage 1 — SHIPPED**: merged via PR #4 (1b7555c) and published live on jbj.ae. Buyer, Seller, Tenant, Landlord, and Investor guides moved to canonical `/guides/*` URLs (`/guides/buyer`, `/guides/seller`, `/guides/tenant`, `/guides/landlord`, `/guides/invest`), with every old flat URL (`/buyer-guide`, `/seller-guide`, `/tenant-guide`, `/landlord-guide`, `/investor-education`) redirecting to its new home. Broker FAQ (`/broker-faq`) now redirects to `/faq` — no guide page exists to merge it into, since Broker Education already lives at `/jbj-academy`, out of scope for this consolidation. The `/guides` library was trimmed to guides only.
+- **Stage 2 — scoped, not started**: fold each audience's standalone FAQ page (Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ) into its guide as an in-page accordion, and split Rental Guide's content between the Tenant and Landlord guides, retiring `/rent-guide` as a standalone page. Every merged-away URL still needs a redirect to its new canonical destination — none may 404, since some carry backlinks or ad traffic. Show the proposed consolidated structure before merging any content or removing any routes.
+- Not addressed by Stage 1 or Stage 2, still open: the `/rental-yield` and `/dubai-rental-yield` redirect chain — tracked separately under "Audit legacy redirect chains" above.
