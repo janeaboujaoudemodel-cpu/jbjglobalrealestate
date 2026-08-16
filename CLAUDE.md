@@ -60,6 +60,21 @@ Before any visual/CSS change, run `npm run check:contrast:pr-gate` and `npm run 
 
 `src/lib/sentry.ts` wires Sentry into `src/utils/clientErrorLogger.ts`'s `logClientError()` — every existing error boundary already calls that function, so anything that reports through it is automatically covered. No-op until `VITE_SENTRY_DSN` is set. Prefer reporting new errors through `logClientError(surface, error, extra)` rather than a fresh `console.error` so they're covered too.
 
+## Roadmap tracking — read this before touching ROADMAP.md
+
+`ROADMAP.md` at the repo root is the single source of truth for project status — not this file, not a chat log, not a `.docx` someone sent around. If you fix something, find something, or change the status of anything tracked there, **update it yourself as part of the same PR** — don't leave it to be relayed secondhand later.
+
+**Item IDs (`JBJ-###`).** Every tracked item has a stable ID, assigned once and never reused or renumbered. Reference items by ID in commit messages and PR descriptions (`fixes JBJ-009`) instead of re-describing them. Adding a new trackable item (a new bug, a new backlog task worth tracking long-term)? Take the next unused number — check the status table in §3 for the current highest ID before assigning one.
+
+**Changelog (`RM-###`).** Every edit to `ROADMAP.md` gets a row in the Changelog table, newest at the top. Columns: ID, date (UTC — use the actual current date, not a guess), author, one-line description, item ID(s) touched, commit/PR reference. For "author," be honest about what actually made the change — "Claude Code session (PR #N)" is correct when that's what happened; don't attribute an automated or session-driven change to a person who didn't make it. Use `pending` for the commit column if you're adding the entry before the commit exists yet (e.g. mid-PR) — don't leave it blank.
+
+**The one hard rule: don't mark anything "Resolved" without something to cite.** A commit hash, a test-run output, a screenshot, a deployment ID — something a skeptical reader could go check. This file has already caught several false "done" claims by enforcing this; the discipline is the point, not a formality. If you're not sure something's actually fixed — verified in the deployed/live code, not just committed — say so explicitly rather than rounding up.
+
+**What to route through a human/chat instead of just committing directly:**
+- Anything that reconciles conflicting claims across two different sessions' work (you don't have visibility into what another session did in parallel — flag the conflict rather than silently picking one version)
+- External documents landing outside git entirely (an audit `.docx`, a review someone forwarded) — these need a human decision on whether/how they fold in, not an automatic merge
+- Anything where "Resolved" would depend on a check you structurally can't perform (e.g. a live login with credentials no session has) — mark it accurately as blocked/pending instead of guessing at the outcome
+
 ## Known open items (see the full CTO report for detail/priority order)
 
 Current roadmap status, item tracking, and changelog live in `ROADMAP.md` at the repo root — check there before assuming an item's status from this file.
