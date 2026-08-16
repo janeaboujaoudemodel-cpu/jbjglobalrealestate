@@ -637,7 +637,7 @@ const SellerGuide = () => {
         {/* Guide Navigation - Active Champagne Layer */}
         <section className="jj-section-champagne py-12">
           <div className="container mx-auto px-4">
-            <GuideNavigation current="/seller-guide" guides={GUIDE_LINKS} showStartHere={false} />
+            <GuideNavigation current="/guides/seller" guides={GUIDE_LINKS} showStartHere={false} />
           </div>
         </section>
       </main>

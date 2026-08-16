@@ -113,7 +113,7 @@ export default function BookHubDashboard() {
             <BookOpen className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-[#1A1A1A] tracking-tight">Book Hub</h2>
+            <h2 className="label text-xl font-bold text-[#1A1A1A] tracking-tight">Book Hub</h2>
             <p className="text-sm text-[#1A1A1A]/50">Download analytics & tracking</p>
           </div>
         </div>

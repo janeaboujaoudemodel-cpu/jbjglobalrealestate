@@ -76,12 +76,21 @@ describe("ModeSelectionModal", () => {
 
   it("does not render Radix's built-in close (X) button", () => {
     render(<ModeSelectionModal />);
-    // Radix Dialog's built-in close has aria-label="Close" and is hidden via
-    // [&>button]:hidden — querying confirms no visible close affordance exists.
+    // Radix Dialog's built-in close (aria-label="Close") is hidden via the
+    // consumer's `[&>button]:hidden` class targeting it as a direct child.
+    // jsdom has no compiled Tailwind stylesheet loaded (see src/test/setup.ts),
+    // so it can't compute that CSS effect — toBeVisible() would report the
+    // raw <button> as visible regardless of the class. Assert the structural
+    // precondition CSS relies on instead: the close button is a direct child
+    // of the element carrying the hiding class.
     const closes = screen
       .queryAllByRole("button")
       .filter((b) => /close/i.test(b.getAttribute("aria-label") || ""));
-    closes.forEach((c) => expect(c).not.toBeVisible());
+    expect(closes.length).toBeGreaterThan(0);
+    closes.forEach((c) => {
+      expect(c.parentElement?.className).toContain("[&>button]:hidden");
+      expect(c.parentElement?.children).toContain(c);
+    });
   });
 
   it("Escape key does NOT dismiss the dialog", async () => {

@@ -114,9 +114,30 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return <Navigate to="/403" replace />;
   }
 
+  // Exception: PortalEntry (src/routes/DevelopersPortalRoutes.tsx) deliberately
+  // routes a registered owner from /developers-portal to /owner/developers/* —
+  // that richer owner's-eye view IS the intended Developer-mode destination,
+  // not a leak. Without this carve-out, the block below treated it as
+  // off-limits and bounced back to /developers-portal, which PortalEntry
+  // immediately routed to /owner/developers again: an infinite redirect loop
+  // for every registered owner switching to Developer mode. Scoped tightly to
+  // that one subtree only — every other /owner/* path (crm, inbox, data-hub,
+  // etc.) is still off-limits in Developer mode, same as Broker/Investor mode,
+  // and Broker/Investor mode have no equivalent "intentional /owner/*
+  // destination" today (confirmed: OwnerRedirectGuard never routes brokers to
+  // /owner/* while mode !== "owner"; InvestorDashboard has no owner-role
+  // redirect at all), so this exception does not need to cover those modes.
+  const isIntentionalDeveloperModeDestination =
+    mode === "developer" &&
+    (location.pathname === "/owner/developers" || location.pathname.startsWith("/owner/developers/"));
+
   // A cached owner verification must never leak /owner or /admin while the active
-  // perspective is Investor/Broker/Developer.
-  if (user && mode !== "owner" && !isRegisteredOwnerEmail) {
+  // perspective is Investor/Broker/Developer — including for registered owner
+  // emails: the block above only returns for NON-registered emails, so without
+  // this check a registered owner browsing in Broker/Developer/Investor mode
+  // would fall all the way through to "REGISTERED OWNER → allowed" below and
+  // see Owner content regardless of their active mode.
+  if (user && mode !== "owner" && isRegisteredOwnerEmail && !isIntentionalDeveloperModeDestination) {
     const destination =
       mode === "broker" ? "/broker-dashboard" :
       mode === "developer" ? "/developers-portal" :

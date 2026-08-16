@@ -76,7 +76,6 @@ const FAQ = () => {
     { label: "Seller FAQ", href: "/seller-faq", icon: Banknote },
     { label: "Landlord FAQ", href: "/landlord-faq", icon: Key },
     { label: "Tenant FAQ", href: "/tenant-faq", icon: Users },
-    { label: "Broker FAQ", href: "/broker-faq", icon: Building2 },
   ];
 
   return (

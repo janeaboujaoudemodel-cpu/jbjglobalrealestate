@@ -382,7 +382,7 @@ export const SecurityDashboardSummary = () => {
   </div>
   
   <div class="section">
-    <h2 class="section-title">🚫 Blocked IPs</h2>
+    <h2 class="section-title label">🚫 Blocked IPs</h2>
     <table>
       <thead>
         <tr>
@@ -409,7 +409,7 @@ export const SecurityDashboardSummary = () => {
   </div>
   
   <div class="section">
-    <h2 class="section-title">⚡ Recent Security Events</h2>
+    <h2 class="section-title label">⚡ Recent Security Events</h2>
     <table>
       <thead>
         <tr>
@@ -509,7 +509,7 @@ export const SecurityDashboardSummary = () => {
       {/* Header - Premium Champagne Theme */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-[#1A1A1A] text-xl font-semibold flex items-center gap-2">
+          <h2 className="label text-[#1A1A1A] text-xl font-semibold flex items-center gap-2">
             <Shield className="w-5 h-5 text-[#1A1A1A]" />
             Security Overview
           </h2>
