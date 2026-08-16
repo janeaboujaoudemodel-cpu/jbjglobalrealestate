@@ -1,0 +1,114 @@
+/* PASS 377 — SUN SKIN: RECOMMENDATION POPUP FOLLOWS THE SKIN + CTA DIVIDERS IN BLACK (LOCKED)
+ *
+ * 1. "Recommended for You" popup
+ *    Moon → emerald ombre with pure white ink (PASS 358 / PASS 360 stay in force).
+ *    Sun  → champagne surface with BLACK ink (#1A1A1A) and gold hairlines.
+ *      The earlier passes pinned the emerald gradient in BOTH skins, which made
+ *      the popup an emerald island on the champagne day theme. Sun now matches
+ *      the skin. Rule 1 of the contrast contract: champagne surface => black ink.
+ *
+ * 2. "Ready to Get Started" band dividers
+ *    The hairline + centre dot are white on the Moon emerald band, but on the
+ *    Sun champagne band they must be BLACK — a white hairline on champagne is
+ *    invisible and breaks Rule 1.
+ *
+ * Selectors are deliberately heavier than PASS 358/360 (#root x12) so the Sun
+ * repaint wins, and are scoped strictly to these two surfaces.
+ */
+
+/* ─────────── 1. SUN: popup surface = champagne ─────────── */
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"].jj-rec-popup {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  background-color: #FDFBF7 !important;
+  border-color: rgba(184, 149, 85, 0.45) !important;
+}
+
+/* Ink + glyphs: black in every state. */
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"],
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] *,
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] *::before,
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] *::after {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184, 149, 85, 0.38) !important;
+  text-decoration-color: rgba(26, 26, 26, 0.6) !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] :is(svg, path, line, polyline, polygon, rect, circle, ellipse, g),
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] button svg,
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] button svg * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+/* Rows, CTA and hover fills: light champagne tints, never white-on-white. */
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] .jj-rec-row {
+  background: rgba(184, 149, 85, 0.08) !important;
+  background-color: rgba(184, 149, 85, 0.08) !important;
+  background-image: none !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] .jj-rec-row:hover {
+  background-color: rgba(184, 149, 85, 0.18) !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] .jj-rec-thumb {
+  background-color: rgba(184, 149, 85, 0.16) !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] button.jj-rec-cta {
+  background: rgba(184, 149, 85, 0.22) !important;
+  background-color: rgba(184, 149, 85, 0.22) !important;
+  background-image: none !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] button.jj-rec-cta:hover {
+  background-color: rgba(184, 149, 85, 0.34) !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] button:hover,
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root#root#root
+  [data-jj-rec-popup="true"] [role="button"]:hover {
+  background-color: rgba(184, 149, 85, 0.18) !important;
+}
+
+/* ─────────── 2. SUN: CTA band hairline + dot in black ─────────── */
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root
+  .jj-loop-block .jj-loop-divider {
+  background: linear-gradient(90deg, transparent, rgba(26, 26, 26, 0.55), transparent) !important;
+  background-color: transparent !important;
+}
+html[data-jbj-theme="sun"] body
+  #root#root#root#root#root#root#root#root#root#root#root#root
+  .jj-loop-block .jj-loop-dot {
+  background: #1A1A1A !important;
+  background-color: #1A1A1A !important;
+}
