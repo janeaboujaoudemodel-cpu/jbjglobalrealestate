@@ -59,6 +59,18 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
 
   useEffect(() => {
     async function checkBrokerStatus() {
+      // Re-arm the loading gate on every re-check, not just the first one.
+      // Without this, isLoading stays false (its terminal value from the
+      // previous run) across effect re-runs triggered by an in-place
+      // navigation (location.pathname changing while the guard stays
+      // mounted) or a user-reference change (e.g. token refresh) - so the
+      // render gate below wouldn't cover the window between isOwner being
+      // reset and isBroker being reconfirmed (see the comment on isOwner's
+      // declaration above), letting a stale isBroker=true combine with a
+      // freshly-reset isOwner=false and fire the forbidden-prefix redirect
+      // on a real owner mid-recheck.
+      setIsLoading(true);
+
       if (authLoading) {
         brokerLog("guard", "waiting for auth", { authLoading });
         return;
