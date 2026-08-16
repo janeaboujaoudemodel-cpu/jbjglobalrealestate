@@ -75,6 +75,17 @@ Before any visual/CSS change, run `npm run check:contrast:pr-gate` and `npm run 
 - External documents landing outside git entirely (an audit `.docx`, a review someone forwarded) — these need a human decision on whether/how they fold in, not an automatic merge
 - Anything where "Resolved" would depend on a check you structurally can't perform (e.g. a live login with credentials no session has) — mark it accurately as blocked/pending instead of guessing at the outcome
 
+## PR review process
+
+This repo cannot get independent AI review on Claude Code-authored PRs — GitHub blocks self-approval, and there's no second reviewing identity distinct from the authoring session. As of Aug 16, 2026, the accepted process is **self-verification**, not independent review:
+
+- Re-run the relevant checks (tests, build, `check:quality`) against the PR branch directly, don't just trust a green checkmark
+- Diff against a clean pre-PR base (`git stash` or equivalent) to confirm any failing checks are pre-existing and unrelated, not introduced by this PR
+- Confirm the diff scope matches what's claimed in the PR description — file count, which files, nothing unexpected
+- A human (Jane) reads the diff when practical, as an additional pass, not a replacement for the above
+
+**This is a documented tradeoff, not a silently-accepted gap.** There is no independent reviewer catching what self-verification misses. If a second human reviewer or a genuinely distinct AI reviewing identity becomes available later, revisit this — it's the current answer, not a permanent one. See ROADMAP.md JBJ-019 for the full context of why this became necessary (surfaced during PR #4's merge, which required a temporary branch-protection bypass for the same reason).
+
 ## Known open items (see the full CTO report for detail/priority order)
 
 Current roadmap status, item tracking, and changelog live in `ROADMAP.md` at the repo root — check there before assuming an item's status from this file.

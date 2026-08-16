@@ -441,7 +441,7 @@ const SupportTicketBox = () => {
                     </div>
                     <div>
                       <span className="text-xs uppercase tracking-[0.2em] text-foreground font-semibold">24/7 Support</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+                      <h2 className="label text-2xl md:text-3xl font-bold text-[#1A1A1A]">
                         Need Help?
                       </h2>
                     </div>

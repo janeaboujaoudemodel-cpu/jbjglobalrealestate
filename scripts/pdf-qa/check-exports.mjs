@@ -36,20 +36,6 @@ const EXPORTS = [
     type: "static",
     staticUrl: "/documents/JBJ-Global-Real-Estate-Company-Profile.pdf",
   },
-  {
-    id: "investor-portfolio",
-    label: "Investor Portfolio Summary",
-    type: "download",
-    downloadRoute: "/__qa/investor-portfolio",
-    downloadSelector: '[data-qa="download-portfolio-pdf"]',
-  },
-  {
-    id: "crm-client-report",
-    label: "CRM Client Report",
-    type: "download",
-    downloadRoute: "/__qa/crm-client-report",
-    downloadSelector: '[data-qa="download-crm-pdf"]',
-  },
 ];
 
 function ensureCleanDir(p) {

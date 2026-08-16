@@ -69,7 +69,7 @@ const TeamMemberDetailDialog = ({
           {/* Details */}
           <div className="flex-1 space-y-4">
             <div>
-              <h2 className="text-2xl font-bold text-[#1A1A1A]">{member.name}</h2>
+              <h2 className="label text-2xl font-bold text-[#1A1A1A]">{member.name}</h2>
               <p
                 className="text-lg font-semibold mt-1"
                 style={{

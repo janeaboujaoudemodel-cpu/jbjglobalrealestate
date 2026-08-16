@@ -267,7 +267,7 @@ const VisitorInsightsDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-3">
+          <h2 className="label text-2xl font-bold text-[#1A1A1A] flex items-center gap-3">
             <Eye className="h-7 w-7 text-[#1A1A1A]" />
             Visitor Insights
           </h2>

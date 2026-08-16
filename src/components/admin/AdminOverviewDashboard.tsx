@@ -283,7 +283,7 @@ export const AdminOverviewDashboard = () => {
       {/* Header with refresh */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-[#1A1A1A]">Dashboard Overview</h2>
+          <h2 className="label text-2xl font-bold text-[#1A1A1A]">Dashboard Overview</h2>
           <p className="text-[#1A1A1A]/70 text-sm">
             Last updated: {formatDistanceToNow(lastUpdated, { addSuffix: true })}
           </p>

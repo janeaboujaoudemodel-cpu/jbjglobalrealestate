@@ -178,7 +178,7 @@ export const MarketingSettingsDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-[#1A1A1A] text-2xl font-bold">Marketing Integrations</h2>
+          <h2 className="label text-[#1A1A1A] text-2xl font-bold">Marketing Integrations</h2>
           <p className="text-[#1A1A1A]/60 text-sm mt-1">
             Configure analytics, advertising, and automation tools
           </p>

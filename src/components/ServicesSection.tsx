@@ -312,8 +312,8 @@ const ServicesSection = () => {
           <span data-label-emerald-only className="inline-block px-5 py-2 jj-pill-emerald-metallic allow-white border-0 rounded-full text-white text-sm font-medium mb-6 backdrop-blur-sm">
             JBJ Global Real Estate
           </span>
-          <h2 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+          <h2
+            className="label text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
           >
             How We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Help</span>
           </h2>
@@ -363,8 +363,8 @@ const ServicesSection = () => {
           <span data-label-emerald-only className="inline-block px-5 py-2 jj-pill-emerald-metallic allow-white border-0 rounded-full text-white text-sm font-medium mb-6 backdrop-blur-sm">
             Partner Network
           </span>
-          <h2 
-            className="text-3xl md:text-4xl font-bold text-white mb-4"
+          <h2
+            className="label text-3xl md:text-4xl font-bold text-white mb-4"
           >
             Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Introductions</span>
           </h2>

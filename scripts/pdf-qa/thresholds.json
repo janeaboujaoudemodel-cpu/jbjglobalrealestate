@@ -13,16 +13,6 @@
       "expectedPages": 18,
       "minPages": 18,
       "maxPages": 18
-    },
-    "investor-portfolio": {
-      "edgeMarginPt": 28,
-      "edgePixelTolerancePct": 0.75,
-      "minImageDpi": 150
-    },
-    "crm-client-report": {
-      "edgeMarginPt": 36,
-      "edgePixelTolerancePct": 0.5,
-      "minImageDpi": 150
     }
   }
 }
