@@ -36,6 +36,10 @@ const authState = {
 };
 const modeState = { mode: "investor" as UserMode };
 const appOwnerState = { isOwner: false, isLoading: false };
+const portalRoleState: { role: "owner" | "portal_developer" | "portal_rep" | null; isLoading: boolean } = {
+  role: null,
+  isLoading: false,
+};
 
 vi.mock("@/contexts/AuthContext", () => ({
   useAuth: () => authState,
@@ -46,11 +50,16 @@ vi.mock("@/contexts/UserModeContext", () => ({
 vi.mock("@/hooks/useIsAppOwner", () => ({
   useIsAppOwner: () => appOwnerState,
 }));
+vi.mock("@/hooks/usePortalRole", () => ({
+  usePortalRole: () => portalRoleState,
+}));
 
 // OwnerGuard pulls in shadcn Button + lucide icons; both are jsdom-safe.
 import OwnerGuard from "@/components/OwnerGuard";
 import OwnerRedirectGuard from "@/components/broker-portal/OwnerRedirectGuard";
 import { OwnerAwareBrokerRedirect } from "@/routes/PublicRoutes";
+import PortalGuard from "@/components/developers-portal/PortalGuard";
+import { PortalEntry } from "@/routes/DevelopersPortalRoutes";
 
 const OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
 const NON_OWNER_EMAIL = "someone.else@example.com";
@@ -64,6 +73,8 @@ beforeEach(() => {
   modeState.mode = "investor";
   appOwnerState.isOwner = false;
   appOwnerState.isLoading = false;
+  portalRoleState.role = null;
+  portalRoleState.isLoading = false;
   try { sessionStorage.clear(); localStorage.clear(); } catch {}
 });
 
@@ -297,5 +308,127 @@ describe("composed guards — owner-role + Broker mode does not loop", () => {
 
     expect(screen.getByText("BROKER_PORTAL_CONTENT")).toBeInTheDocument();
     expect(screen.queryByText("OWNER_CONTENT")).not.toBeInTheDocument();
+  });
+});
+
+// ──────────────────────────────────────────────────────────────────────────────
+// No-loop invariant — owner-role + Developer mode.
+//
+// PortalEntry (src/routes/DevelopersPortalRoutes.tsx) deliberately routes a
+// registered owner from /developers-portal to /owner/developers — that
+// richer owner's-eye view IS the intended Developer-mode destination. Before
+// the fix, OwnerGuard treated every /owner/* path as off-limits outside
+// Owner mode with no exception, so it bounced /owner/developers straight
+// back to /developers-portal, which PortalEntry immediately routed to
+// /owner/developers again: an infinite redirect loop (React throws "Maximum
+// update depth exceeded" when this actually happens, which is exactly what
+// the "confirms it loops" revert step below observes).
+//
+// The fix scopes an exception to /owner/developers specifically when mode is
+// Developer. The two tests before the composed one confirm that scoping:
+// every OTHER /owner/* path must still redirect away in Developer mode,
+// same as before - only this one subtree is carved out.
+// ──────────────────────────────────────────────────────────────────────────────
+
+describe("OwnerGuard — Developer-mode /owner/developers carve-out", () => {
+  it("still redirects a registered owner in Developer mode away from OTHER /owner/* paths (carve-out is scoped, not general)", () => {
+    authState.user = { id: "u1", email: OWNER_EMAIL };
+    authState.isOwner = true;
+    modeState.mode = "developer";
+
+    render(
+      <MemoryRouter initialEntries={["/owner/crm"]}>
+        <Routes>
+          <Route path="/developers-portal" element={<div>DEVELOPERS_PORTAL</div>} />
+          <Route
+            path="/owner/crm"
+            element={<OwnerGuard><div>OWNER_CRM_CONTENT</div></OwnerGuard>}
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("DEVELOPERS_PORTAL")).toBeInTheDocument();
+    expect(screen.queryByText("OWNER_CRM_CONTENT")).not.toBeInTheDocument();
+  });
+
+  it("allows a registered owner in Developer mode to render /owner/developers directly (the intentional destination)", () => {
+    authState.user = { id: "u1", email: OWNER_EMAIL };
+    authState.isOwner = true;
+    modeState.mode = "developer";
+
+    render(
+      <MemoryRouter initialEntries={["/owner/developers"]}>
+        <Routes>
+          <Route path="/developers-portal" element={<div>DEVELOPERS_PORTAL</div>} />
+          <Route
+            path="/owner/developers"
+            element={<OwnerGuard><div>OWNER_DEVELOPERS_CONTENT</div></OwnerGuard>}
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("OWNER_DEVELOPERS_CONTENT")).toBeInTheDocument();
+    expect(screen.queryByText("DEVELOPERS_PORTAL")).not.toBeInTheDocument();
+  });
+});
+
+// Circuit breaker for the composed-loop test below. Confirmed by hand while
+// developing this test that the pre-fix version of this exact scenario does
+// NOT throw React's own "Maximum update depth exceeded" guard: PortalEntry
+// and OwnerGuard are two DIFFERENT components alternately <Navigate>-ing
+// each other via two DISTINCT <Route> entries, so each hop mounts a brand
+// new component instance - there's no single component re-rendering itself
+// for React's per-component render-count detector to catch. The result is a
+// genuine unbounded synchronous loop: it hung the test process indefinitely
+// (still consuming CPU past 60s, well beyond Vitest's default test timeout,
+// with zero output - confirmed by manually killing it during development).
+// A `timeout` option on `it()` can't help either: Vitest's timeout can't
+// preempt a fully synchronous, non-yielding loop on a single-threaded
+// worker. This wrapper is a self-contained fast-fail instead: every mount of
+// either route increments a shared counter, and it throws a clear error well
+// before a real loop could hang anything.
+let devModeLoopHopCount = 0;
+const MAX_DEV_MODE_LOOP_HOPS = 20;
+function CountedRoute({ children }: { children: React.ReactNode }) {
+  devModeLoopHopCount += 1;
+  if (devModeLoopHopCount > MAX_DEV_MODE_LOOP_HOPS) {
+    throw new Error(
+      `Possible infinite redirect loop: exceeded ${MAX_DEV_MODE_LOOP_HOPS} mounts alternating ` +
+        "between /developers-portal and /owner/developers.",
+    );
+  }
+  return <>{children}</>;
+}
+
+describe("composed guards — owner-role + Developer mode does not loop", () => {
+  beforeEach(() => {
+    devModeLoopHopCount = 0;
+  });
+
+  it("settles at /owner/developers in one redirect hop, using the real PortalGuard + PortalEntry + OwnerGuard chain", () => {
+    authState.user = { id: "u1", email: OWNER_EMAIL };
+    authState.isOwner = true;
+    modeState.mode = "developer";
+    portalRoleState.role = "owner";
+    portalRoleState.isLoading = false;
+
+    render(
+      <MemoryRouter initialEntries={["/developers-portal"]}>
+        <Routes>
+          <Route
+            path="/developers-portal"
+            element={<CountedRoute><PortalGuard><PortalEntry /></PortalGuard></CountedRoute>}
+          />
+          <Route
+            path="/owner/developers"
+            element={<CountedRoute><OwnerGuard><div>OWNER_DEVELOPERS_CONTENT</div></OwnerGuard></CountedRoute>}
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("OWNER_DEVELOPERS_CONTENT")).toBeInTheDocument();
   });
 });
