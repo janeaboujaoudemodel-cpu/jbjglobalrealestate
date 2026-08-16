@@ -30,18 +30,21 @@ jobs:
 
       - name: Install Playwright Chromium
         # `npx playwright` resolves to node_modules/.bin/playwright, which npm
-        # points at @playwright/test's CLI (pinned separately in package.json,
-        # currently an older minor than the `playwright` package). That CLI
-        # downloads browsers for its own version's manifest. But
-        # check-exports.mjs below does `import { chromium } from "playwright"`
-        # — the standalone `playwright` package, a different, newer pinned
-        # version with its own browsers.json revision (including a separate
-        # chromium-headless-shell binary chromium.launch() needs at runtime).
-        # Installing via the wrong CLI leaves that revision's headless-shell
-        # binary missing, so the launch fails with "Executable doesn't exist".
-        # Invoke the `playwright` package's own CLI directly so the installed
-        # browser always matches what this job actually launches.
-        run: node node_modules/playwright/cli.js install --with-deps chromium
+        # points at @playwright/test's CLI. Even though package.json now pins
+        # `playwright` and `@playwright/test` to the same version, invoking
+        # the `playwright` package's own CLI directly is still the more
+        # robust choice — it guarantees the installed browser always matches
+        # what check-exports.mjs actually launches via
+        # `import { chromium } from "playwright"`, regardless of any future
+        # version drift between the two packages.
+        #
+        # Separately: check-exports.mjs calls the raw `chromium.launch()` API
+        # (not the @playwright/test runner), which resolves to the separate
+        # chromium-headless-shell binary by default. Installing only
+        # "chromium" leaves that binary missing and launch() fails with
+        # "Executable doesn't exist at .../chromium_headless_shell-*/...", so
+        # both targets must be requested explicitly.
+        run: node node_modules/playwright/cli.js install --with-deps chromium chromium-headless-shell
 
       - name: Build app
         run: npm run build

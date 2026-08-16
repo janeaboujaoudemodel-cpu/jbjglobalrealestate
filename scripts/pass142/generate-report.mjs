@@ -9,8 +9,14 @@
  * as base64 (so it can be emailed / uploaded / opened offline).
  *
  * Output:
- *   /mnt/documents/pass-142-report.html      (shareable, single file)
- *   /mnt/documents/pass-142-report.json      (raw results, machine-readable)
+ *   <OUT_DIR>/pass-142-report.html      (shareable, single file)
+ *   <OUT_DIR>/pass-142-report.json      (raw results, machine-readable)
+ *
+ * OUT_DIR is /mnt/documents when that mount is available and writable
+ * (the sandbox this script was originally authored in); everywhere else —
+ * including GitHub Actions runners, which have no such mount — it falls
+ * back to artifacts/pass-142 in the repo, which the CI workflow already
+ * creates and uploads.
  *
  * Usage:
  *   PREVIEW_URL=http://localhost:8080 node scripts/pass142/generate-report.mjs
@@ -293,6 +299,7 @@ function renderHtml(results, meta) {
 
 (async () => {
   console.log(`[pass-142] base=${BASE_URL} routes=${ROUTES.length} viewports=${VIEWPORTS.length}`);
+  console.log(`[pass-142] writing report to ${OUT_DIR}`);
   // '/bin/chromium' only exists in the sandbox this script was originally
   // authored in. Everywhere else - including GitHub Actions runners - it
   // doesn't exist, so hardcoding it here overrides Playwright's own browser
