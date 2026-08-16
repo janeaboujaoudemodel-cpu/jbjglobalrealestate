@@ -126,7 +126,7 @@
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.61.1",
+    "react-hook-form": "^7.81.0",
     "react-icons": "^5.5.0",
     "react-leaflet": "^4.2.1",
     "react-markdown": "^10.1.0",
@@ -138,7 +138,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "xlsx": "^0.18.5",
-    "zod": "3.25.76"
+    "zod": "4.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -174,9 +174,16 @@
     "vitest": "^4.1.9"
   },
   "overrides": {
-    "lodash": "https://npm.aikido.io/2091d9930d76860b425e2/lodash@4.17.21-aikido.2",
+    "lodash": "4.18.1",
     "brace-expansion": "1.1.18",
     "browserslist": "4.28.7",
-    "glob": "https://npm.aikido.io/2091d9930d76860b425e2/glob@10.4.5-aikido.4"
+    "glob": "10.5.0",
+    "rollup": "4.22.4",
+    "nanoid": "5.1.16",
+    "js-yaml": "4.3.1",
+    "yaml": "2.8.3",
+    "picomatch": "2.3.2",
+    "recharts": "3.9.2",
+    "ajv": "6.15.0"
   }
 }
