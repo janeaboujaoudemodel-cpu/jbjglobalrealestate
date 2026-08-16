@@ -58,11 +58,6 @@ const InvestorEducation = lazy(() => import("@/pages/InvestorEducation"));
 // BrokerEducation removed — content merged into JBJ Academy (/jbj-academy)
 const FAQ = lazy(() => import("@/pages/FAQ"));
 const ConnectAgent = lazy(() => import("@/pages/ConnectAgent"));
-const InvestorFAQ = lazy(() => import("@/pages/InvestorFAQ"));
-const BuyerFAQ = lazy(() => import("@/pages/BuyerFAQ"));
-const SellerFAQ = lazy(() => import("@/pages/SellerFAQ"));
-const LandlordFAQ = lazy(() => import("@/pages/LandlordFAQ"));
-const TenantFAQ = lazy(() => import("@/pages/TenantFAQ"));
 const BrokerFAQ = lazy(() => import("@/pages/BrokerFAQ"));
 
 // ── Market Intelligence ──
@@ -337,11 +332,15 @@ export const PublicRoutes = () => (
     <Route path="/broker-education" element={<Navigate to="/jbj-academy" replace />} />
     <Route path="/connect" element={<ConnectAgent />} />
     <Route path="/faq" element={<InsightsPageScope><FAQ /></InsightsPageScope>} />
-    <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
-    <Route path="/buyer-faq" element={<InsightsPageScope><BuyerFAQ /></InsightsPageScope>} />
-    <Route path="/seller-faq" element={<InsightsPageScope><SellerFAQ /></InsightsPageScope>} />
-    <Route path="/landlord-faq" element={<InsightsPageScope><LandlordFAQ /></InsightsPageScope>} />
-    <Route path="/tenant-faq" element={<InsightsPageScope><TenantFAQ /></InsightsPageScope>} />
+    {/* Stage 2: the five standalone audience FAQ pages were folded into an
+        accordion section on their matching guide page — redirect to the
+        anchor instead of the retired standalone page, same pattern PR #4
+        used for /broker-faq → /faq. */}
+    <Route path="/investor-faq" element={<Navigate to="/guides/invest#faq" replace />} />
+    <Route path="/buyer-faq" element={<Navigate to="/guides/buyer#faq" replace />} />
+    <Route path="/seller-faq" element={<Navigate to="/guides/seller#faq" replace />} />
+    <Route path="/landlord-faq" element={<Navigate to="/guides/landlord#faq" replace />} />
+    <Route path="/tenant-faq" element={<Navigate to="/guides/tenant#faq" replace />} />
     <Route path="/broker-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/guides/buying" element={<Navigate to="/guides/buyer" replace />} />
     <Route path="/guides/renting" element={<Navigate to="/rent-guide" replace />} />

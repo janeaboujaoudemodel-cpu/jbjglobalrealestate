@@ -16,13 +16,6 @@ import brokerEducationCover from '@/assets/books/broker-education-cover.jpg';
 import brokerCertificationCover from '@/assets/books/broker-certification-cover.jpg';
 import brokerFaqCover from '@/assets/books/broker-faq-cover.jpg';
 
-// Book cover imports - FAQs
-import investorFaqCover from '@/assets/books/investor-faq-cover.jpg';
-import landlordFaqCover from '@/assets/books/landlord-faq-cover.jpg';
-import sellerFaqCover from '@/assets/books/seller-faq-cover.jpg';
-import buyerFaqCover from '@/assets/books/buyer-faq-cover.jpg';
-import tenantFaqCover from '@/assets/books/tenant-faq-cover.jpg';
-
 // Book cover imports - Legal
 import termsOfServiceCover from '@/assets/books/terms-of-service-cover.jpg';
 import privacyPolicyCover from '@/assets/books/privacy-policy-cover.jpg';
@@ -372,92 +365,6 @@ const tenantGuideBook: BookData = {
   ],
 };
 
-// ─── FAQ Books ───
-
-const investorFaqBook: BookData = {
-  title: 'Investor FAQ',
-  cover: investorFaqCover,
-  href: '/investor-faq',
-  category: 'faq',
-  coverLocked: true,
-  tableOfContents: [
-    { title: 'General Investment Questions', duration: '10 min' },
-    { title: 'Legal & Ownership FAQs', duration: '15 min' },
-    { title: 'Financing & Mortgage FAQs', duration: '15 min' },
-    { title: 'Off-Plan Investment FAQs', duration: '10 min' },
-    { title: 'Rental Income & ROI FAQs', duration: '10 min' },
-    { title: 'Tax & Fee FAQs', duration: '10 min' },
-    { title: 'Visa & Residency FAQs', duration: '10 min' },
-    { title: 'Property Management FAQs', duration: '10 min' },
-  ],
-};
-
-const buyerFaqBook: BookData = {
-  title: 'Buyer FAQ',
-  cover: buyerFaqCover,
-  href: '/buyer-faq',
-  category: 'faq',
-  coverLocked: true,
-  tableOfContents: [
-    { title: 'Before You Buy: Common Questions', duration: '10 min' },
-    { title: 'Pricing & Negotiation FAQs', duration: '10 min' },
-    { title: 'Legal Process FAQs', duration: '15 min' },
-    { title: 'Financing & Payment FAQs', duration: '15 min' },
-    { title: 'Off-Plan Purchase FAQs', duration: '10 min' },
-    { title: 'Handover & Snagging FAQs', duration: '10 min' },
-    { title: 'Post-Purchase FAQs', duration: '10 min' },
-  ],
-};
-
-const sellerFaqBook: BookData = {
-  title: 'Seller FAQ',
-  cover: sellerFaqCover,
-  href: '/seller-faq',
-  category: 'faq',
-  coverLocked: true,
-  tableOfContents: [
-    { title: 'Getting Ready to Sell: FAQs', duration: '10 min' },
-    { title: 'Pricing & Valuation FAQs', duration: '10 min' },
-    { title: 'Marketing & Listing FAQs', duration: '10 min' },
-    { title: 'Legal & Transfer Process FAQs', duration: '15 min' },
-    { title: 'Fees & Costs FAQs', duration: '10 min' },
-    { title: 'Tenanted Property FAQs', duration: '10 min' },
-  ],
-};
-
-const landlordFaqBook: BookData = {
-  title: 'Landlord FAQ',
-  cover: landlordFaqCover,
-  href: '/landlord-faq',
-  category: 'faq',
-  coverLocked: true,
-  tableOfContents: [
-    { title: 'Getting Started as a Landlord: FAQs', duration: '10 min' },
-    { title: 'Tenant Management FAQs', duration: '15 min' },
-    { title: 'Rental Pricing & Increases FAQs', duration: '10 min' },
-    { title: 'Maintenance & Repairs FAQs', duration: '10 min' },
-    { title: 'Legal & Disputes FAQs', duration: '15 min' },
-    { title: 'Tax & Financial FAQs', duration: '10 min' },
-  ],
-};
-
-const tenantFaqBook: BookData = {
-  title: 'Tenant FAQ',
-  cover: tenantFaqCover,
-  href: '/tenant-faq',
-  category: 'faq',
-  coverLocked: true,
-  tableOfContents: [
-    { title: 'Renting Basics: FAQs', duration: '10 min' },
-    { title: 'Contract & Ejari FAQs', duration: '10 min' },
-    { title: 'Payment & Deposit FAQs', duration: '10 min' },
-    { title: 'Maintenance & Repairs FAQs', duration: '10 min' },
-    { title: 'Rental Increase & Renewal FAQs', duration: '10 min' },
-    { title: 'Disputes & Eviction FAQs', duration: '15 min' },
-    { title: 'Moving Out FAQs', duration: '10 min' },
-  ],
-};
-
 // ─── Broker-Only Books ───
 
 const brokerTrainingBook: BookData = {
@@ -654,12 +561,6 @@ export const INVESTOR_BOOKS: BookData[] = [
   landlordGuideBook,
   rentGuideBook,
   tenantGuideBook,
-  // FAQs
-  investorFaqBook,
-  buyerFaqBook,
-  sellerFaqBook,
-  landlordFaqBook,
-  tenantFaqBook,
   // Company
   companyProfileBook,
 ];
@@ -679,12 +580,6 @@ export const BROKER_BOOKS: BookData[] = [
   landlordGuideBook,
   rentGuideBook,
   tenantGuideBook,
-  // FAQs
-  investorFaqBook,
-  buyerFaqBook,
-  sellerFaqBook,
-  landlordFaqBook,
-  tenantFaqBook,
   // Company
   companyProfileBook,
 ];
@@ -735,12 +630,6 @@ export {
   guidesLibraryBook,
   investorEducationBook,
   marketIntelligenceBook,
-  // FAQ books
-  investorFaqBook,
-  buyerFaqBook,
-  sellerFaqBook,
-  landlordFaqBook,
-  tenantFaqBook,
   brokerFaqBook,
   // Broker books
   brokerTrainingBook,
