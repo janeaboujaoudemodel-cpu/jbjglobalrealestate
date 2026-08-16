@@ -40,13 +40,19 @@ jobs:
       - name: Install node deps
         run: npm ci
 
-      - name: Build + start preview server
+      # The harness this snapshot targets, /__report-contrast, is registered
+      # behind `import.meta.env.DEV` in src/routes/PublicRoutes.tsx so the debug
+      # route never ships in a production bundle. This step used to `npm run
+      # build` and serve the result with `vite preview`, where DEV is false — so
+      # the route did not exist, `[data-report-page]` never appeared, and all
+      # three viewports timed out. Run the dev server, which is what
+      # scripts/report-pill-snapshot/run.py documents as its host.
+      - name: Start dev server
         run: |
-          npm run build
-          npx vite preview --port 8080 --host 127.0.0.1 &
-          for i in {1..40}; do
+          npm run dev -- --host 127.0.0.1 --port 8080 &
+          for i in {1..60}; do
             curl -sf http://127.0.0.1:8080 >/dev/null && break
-            sleep 1
+            sleep 2
           done
 
       - name: Run pill snapshot test
