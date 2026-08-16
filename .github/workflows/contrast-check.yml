@@ -15,6 +15,9 @@ jobs:
     name: Contrast PR Gate (blocks merges)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout
