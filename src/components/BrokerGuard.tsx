@@ -48,6 +48,12 @@ interface BrokerGuardProps {
 const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
   const { user, loading: authLoading } = useAuth();
   const [isBroker, setIsBroker] = useState(false);
+  // Tracked separately from isBroker: the owner short-circuit below sets
+  // isBroker=true for owners too (owners always have broker access), so
+  // isBroker alone can't distinguish a pure broker from an owner. The
+  // forbidden-prefix redirect further down needs that distinction to
+  // actually let owners bypass it, per this file's own header comment.
+  const [isOwner, setIsOwner] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
@@ -61,6 +67,7 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
       if (!user) {
         brokerLog("guard", "no user → will redirect to /auth", { path: location.pathname }, "warn");
         setIsBroker(false);
+        setIsOwner(false);
         setIsLoading(false);
         return;
       }
@@ -80,9 +87,11 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
         });
         if (ownerResp.data?.isOwner) {
           setIsBroker(true);
+          setIsOwner(true);
           setIsLoading(false);
           return;
         }
+        setIsOwner(false);
 
         // 2. CRM-invited broker (with self-heal by email)
         let { data: brokerRow, error: brokerErr } = await supabase
@@ -152,6 +161,7 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
         brokerLog("guard", "broker verification threw", { err: String(err) }, "error");
         console.error('Broker verification failed:', err);
         setIsBroker(false);
+        setIsOwner(false);
       } finally {
         setIsLoading(false);
       }
@@ -184,12 +194,16 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
   }
 
   // Pure-broker path guard: brokers hitting an owner/admin area get bounced
-  // to their workspace instead of an AccessDenied page.
+  // to their workspace instead of an AccessDenied page. Owners are excluded
+  // via the dedicated isOwner flag (not just !isBroker, which is false for
+  // them too) so they actually get the bypass this block's intent promises,
+  // instead of being redirected to /broker/crm like a pure broker would be.
   // Note: this only fires for routes wrapped in BrokerGuard. Owner routes
   // use OwnerGuard separately. The list is exported for cross-checking.
   if (
     user &&
     isBroker &&
+    !isOwner &&
     BROKER_FORBIDDEN_PREFIXES.some((p) => location.pathname.startsWith(p))
   ) {
     return <Navigate to="/broker/crm" replace />;
