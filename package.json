@@ -176,6 +176,7 @@
   "overrides": {
     "lodash": "https://npm.aikido.io/2091d9930d76860b425e2/lodash@4.17.21-aikido.2",
     "brace-expansion": "1.1.18",
-    "browserslist": "4.28.7"
+    "browserslist": "4.28.7",
+    "glob": "https://npm.aikido.io/2091d9930d76860b425e2/glob@10.4.5-aikido.4"
   }
 }
