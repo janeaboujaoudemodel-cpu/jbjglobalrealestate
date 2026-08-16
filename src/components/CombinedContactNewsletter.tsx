@@ -73,7 +73,7 @@ const CombinedContactNewsletter = ({
         </h2>
         <div className="mx-auto mt-1 mb-2 flex items-center justify-center gap-2">
           <span className="jj-loop-divider h-px w-12" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
+          <span className="jj-loop-dot h-1.5 w-1.5 rounded-full bg-white/70" />
           <span className="jj-loop-divider h-px w-12" />
         </div>
         <p data-no-contrast-guard className="text-xs md:text-sm max-w-lg mx-auto" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
@@ -127,7 +127,7 @@ const CombinedContactNewsletter = ({
       {/* Divider */}
       <div className="relative flex items-center gap-3 max-w-2xl mx-auto mb-5">
         <div className="jj-loop-divider flex-1 h-px" />
-        <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
+        <span className="jj-loop-dot h-1.5 w-1.5 rounded-full bg-white/70" />
         <div className="jj-loop-divider flex-1 h-px" />
       </div>
 
