@@ -26,7 +26,6 @@
           "openWorldHint": false
         },
         "inputSchema": {
-          "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
           "properties": {
             "text": {
@@ -37,7 +36,9 @@
           },
           "required": [
             "text"
-          ]
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
         },
         "outputSchema": null
       },
@@ -51,38 +52,39 @@
           "openWorldHint": false
         },
         "inputSchema": {
-          "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
           "properties": {
             "query": {
-              "description": "Free-text keyword matched against project name, developer name, and location.",
-              "type": "string"
+              "type": "string",
+              "description": "Free-text keyword matched against project name, developer name, and location."
             },
             "emirate": {
-              "description": "Emirate filter — 'Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah', 'Ajman', 'Umm Al Quwain', 'Fujairah'.",
-              "type": "string"
+              "type": "string",
+              "description": "Emirate filter — 'Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah', 'Ajman', 'Umm Al Quwain', 'Fujairah'."
             },
             "min_price": {
-              "description": "Minimum starting price in AED.",
-              "type": "number"
+              "type": "number",
+              "description": "Minimum starting price in AED."
             },
             "max_price": {
-              "description": "Maximum starting price in AED.",
-              "type": "number"
+              "type": "number",
+              "description": "Maximum starting price in AED."
             },
             "bedrooms": {
-              "description": "Bedroom count that must appear in the project's available layouts (0 = studio).",
               "type": "integer",
               "minimum": 0,
-              "maximum": 10
+              "maximum": 10,
+              "description": "Bedroom count that must appear in the project's available layouts (0 = studio)."
             },
             "limit": {
-              "description": "Max results (1-20, default 10).",
               "type": "integer",
               "minimum": 1,
-              "maximum": 20
+              "maximum": 20,
+              "description": "Max results (1-20, default 10)."
             }
-          }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
         },
         "outputSchema": null
       },
@@ -96,7 +98,6 @@
           "openWorldHint": false
         },
         "inputSchema": {
-          "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
           "properties": {
             "slug": {
@@ -107,7 +108,9 @@
           },
           "required": [
             "slug"
-          ]
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
         },
         "outputSchema": null
       },
@@ -121,20 +124,21 @@
           "openWorldHint": false
         },
         "inputSchema": {
-          "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
           "properties": {
             "query": {
-              "description": "Optional keyword filter matched against developer name.",
-              "type": "string"
+              "type": "string",
+              "description": "Optional keyword filter matched against developer name."
             },
             "limit": {
-              "description": "Max results (1-50, default 25).",
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
+              "maximum": 50,
+              "description": "Max results (1-50, default 25)."
             }
-          }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
         },
         "outputSchema": null
       }
