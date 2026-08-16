@@ -177,7 +177,7 @@ const AIAnalyticsDashboard = () => {
             <Brain className="w-6 h-6 text-[#1A1A1A]" />
           </div>
           <div>
-            <h2 className="text-[#1A1A1A] text-xl font-semibold">AI Analytics</h2>
+            <h2 className="label text-[#1A1A1A] text-xl font-semibold">AI Analytics</h2>
             <p className="text-[#1A1A1A]/60 text-sm">Usage metrics and performance insights</p>
           </div>
         </div>

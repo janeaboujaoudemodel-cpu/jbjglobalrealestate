@@ -155,7 +155,7 @@ export function ChatHistoryAdmin() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-2">
+          <h2 className="label text-2xl font-bold text-[#1A1A1A] flex items-center gap-2">
             <MessageSquare className="w-6 h-6 text-[#1A1A1A]" />
             Chat History Monitor
           </h2>

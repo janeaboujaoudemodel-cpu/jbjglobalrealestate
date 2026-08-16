@@ -230,7 +230,7 @@ export const RateLimitDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 className="text-[#1A1A1A] text-xl font-semibold flex items-center gap-2">
+          <h2 className="label text-[#1A1A1A] text-xl font-semibold flex items-center gap-2">
             <Shield className="w-5 h-5 text-[#1A1A1A]" />
             Rate Limit Monitor
           </h2>

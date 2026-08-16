@@ -113,8 +113,8 @@ const WelcomeModal = () => {
 
             {/* Full Company Name - Large and Prominent - Full Width */}
             <div className="text-center mb-6">
-              <h2 
-                className="text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.12em] text-[#1A1A1A] uppercase leading-tight"
+              <h2
+                className="label text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.12em] text-[#1A1A1A] uppercase leading-tight"
               >
                 JBJ GLOBAL REAL ESTATE
               </h2>

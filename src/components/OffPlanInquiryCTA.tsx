@@ -110,7 +110,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
                 <HelpCircle className="w-6 h-6 text-white" />
               </div>
               
-              <h2 className="allow-white text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
+              <h2 className="label allow-white text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
                 Confused About Where to Buy or Invest in Dubai?
               </h2>
               
