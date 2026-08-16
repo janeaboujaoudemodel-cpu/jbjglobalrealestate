@@ -309,7 +309,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   >
                     JBJ GLOBAL REAL ESTATE
                   </h3>
-                  <h2 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-2">
+                  <h2 className="label text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-2">
                     How Can We Help You?
                   </h2>
                   <p className="text-[#1A1A1A]/70 text-sm">
@@ -390,7 +390,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">
+                <h2 className="label text-2xl font-bold text-[#1A1A1A] mb-4">
                   Important Notice for Brokers
                 </h2>
 
@@ -476,7 +476,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3">
+                <h2 className="label text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3">
                   {selectedRoleData.welcomeTitle}
                 </h2>
 
@@ -577,7 +577,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
+                <h2 className="label text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                   Welcome Onboard!
                 </h2>
                 

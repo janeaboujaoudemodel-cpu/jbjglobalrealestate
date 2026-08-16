@@ -4,6 +4,14 @@ Automated print/PDF check that runs in CI on every push and pull request.
 Generates each registered PDF export, validates it against edge-coverage
 and DPI thresholds, and **fails the build** when violations are reported.
 
+Only the Company Profile static PDF is currently registered. The
+Investor Portfolio Summary and CRM Client Report entries were removed
+(Aug 2026) — both pointed at `/__qa/investor-portfolio` and
+`/__qa/crm-client-report` routes that were never built anywhere in the
+app, so every run failed on a download timeout, not a real export
+defect. Re-add them once those QA harness routes actually exist, per
+the pattern under "Adding a new export" below.
+
 ## What it checks
 
 For every export listed in `check-exports.mjs`:
@@ -64,7 +72,7 @@ overrides go under `exports.<id>`:
 {
   "defaults":   { "edgeMarginPt": 36, "edgePixelTolerancePct": 0.5, "minImageDpi": 150 },
   "exports": {
-    "investor-portfolio": { "edgeMarginPt": 28, "edgePixelTolerancePct": 0.75 }
+    "my-export": { "edgeMarginPt": 28, "edgePixelTolerancePct": 0.75 }
   }
 }
 ```

@@ -42,10 +42,10 @@ const server = spawn(
   { cwd: ROOT, stdio: "ignore" },
 );
 
-// Without this, a spawn failure (missing binary, bad PATH, ...) is an
-// uncaught 'error' event that crashes the whole process — bypassing the
-// try/catch in main() below and defeating the "soft fail" this script is
-// documented to do. Route it through the same soft-fail path instead.
+// A spawn failure (missing binary, bad PATH, ...) is an uncaught 'error'
+// event by default, which crashes the whole process and bypasses the
+// try/catch soft-fail this script documents above. Route it through the
+// same soft-fail path instead.
 server.on("error", (err) => {
   console.log("[prerender] skipped: preview server failed to start:", String(err).slice(0, 200));
   process.exit(0);

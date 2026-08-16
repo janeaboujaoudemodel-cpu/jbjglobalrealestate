@@ -11,8 +11,8 @@ const WhyDubaiSection = () => {
           <span className="inline-block px-4 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium mb-4">
             Investment Insights
           </span>
-          <h2 
-            className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4"
+          <h2
+            className="label text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4"
           >
             Why Invest in the <span className="text-[#1A1A1A]">UAE</span>?
           </h2>
