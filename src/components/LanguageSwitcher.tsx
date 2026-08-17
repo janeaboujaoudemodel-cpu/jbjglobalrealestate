@@ -52,7 +52,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
             <Globe className="w-3 h-3 text-[#1A1A1A] group-hover:text-[#1A1A1A]-light transition-colors duration-200" />
           </button>
         ) : (
-          <Button
+          <Button aria-label="Website"
             variant="ghost"
             size="sm"
             className="h-10 lg:h-11 px-3 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#064E3B]/20 hover:border-[#064E3B]/50 hover:bg-[#064E3B]/10 transition-all duration-300 group gap-2"

@@ -514,7 +514,7 @@ const RentalIndex = () => {
                 <MessageCircle className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={BRAND_ICON_STYLE} />
                 WhatsApp Us
               </a>
-              <a
+              <a aria-label="Call"
                 href={`tel:${CONTACT_INFO.phone}`}
                 data-no-contrast-guard
                 className="allow-white inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors border border-white/45 bg-white/10 hover:bg-white/15"

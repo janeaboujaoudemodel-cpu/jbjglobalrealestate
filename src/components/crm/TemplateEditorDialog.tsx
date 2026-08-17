@@ -366,7 +366,7 @@ export const TemplateEditorDialog = ({
                 </div>
               </div>
               <div>
-                <Button aria-label="Send"
+                <Button
                   onClick={handleSendTest}
                   disabled={sendTestPending}
                   className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
@@ -403,7 +403,7 @@ export const TemplateEditorDialog = ({
             Close
           </Button>
           {isLocked ? (
-            <Button aria-label="Unlock template"
+            <Button
               onClick={handleUnlock}
               disabled={unlock.isPending}
               className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"

@@ -639,7 +639,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   placeholder="Search by keyword... Search anything"
                   className="w-full h-12 pl-14 pr-12 bg-transparent border-0 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
-                <button
+                <button aria-label="Close"
                   onClick={onClose}
                   className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 inline-flex items-center justify-center rounded-full jj-pill-emerald-metallic text-white border-0 transition-none"
                 >

@@ -310,7 +310,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             </div>
           </div>
 
-          <button aria-label="Send verification code"
+          <button
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
@@ -337,7 +337,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             className={inputBase + " mx-auto max-w-[230px] text-center tracking-[0.28em] text-[17px] font-semibold"}
             autoFocus
           />
-          <button aria-label="Next"
+          <button
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard

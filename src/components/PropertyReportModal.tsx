@@ -322,7 +322,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                 onChange={(e) => setUserEmail(e.target.value)}
                 className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 flex-1"
               />
-              <Button
+              <Button aria-label="Send"
                 onClick={handleShareToEmail}
                 variant="outline"
                 className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]"

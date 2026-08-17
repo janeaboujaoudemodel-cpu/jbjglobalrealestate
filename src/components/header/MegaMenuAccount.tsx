@@ -346,7 +346,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             {/* Premium User Header - Horizontal Layout */}
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-[#B89555]/30">
               {/* Fixed-size avatar container - clickable to profile */}
-              <Link to="/profile" onClick={onClose} className="w-16 h-16 flex-shrink-0 cursor-pointer group">
+              <Link aria-label="Profile" to="/profile" onClick={onClose} className="w-16 h-16 flex-shrink-0 cursor-pointer group">
                 <Avatar className="h-16 w-16 border border-[#B89555]/30 bg-transparent group-hover:border-[#B89555]/80 transition-all group-hover:ring-2 group-hover:ring-[#B89555]/30">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
                   <AvatarFallback className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 border border-[#B89555]/30 text-[#1A1A1A] text-xl font-bold">
@@ -384,7 +384,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
                 {/* Mode selector card */}
-                <div 
+                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} 
                   className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B89555]/30 bg-gradient-to-br from-gray-50 via-gray-50 to-gray-50"
                   onClick={(e) => e.stopPropagation()} 
                   onPointerDown={(e) => e.stopPropagation()}
@@ -629,7 +629,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                     <Search className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                   </button>
                   {showSearchDropdown && (
-                    <div
+                    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                       className="absolute right-0 top-10 w-72 rounded-xl border-2 border-[#B89555]/30 shadow-2xl z-[10001] overflow-hidden"
                       style={{ background: '#FFFFFF' }}
                       onClick={(e) => e.stopPropagation()}
@@ -787,7 +787,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 <ChevronRight className={cn("w-3.5 h-3.5 text-[#1A1A1A] transition-transform", showLangDropdown && "rotate-90")} />
               </button>
               {showLangDropdown && (
-                <div
+                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                   className="absolute left-0 right-0 bottom-full mb-1 rounded-xl border-2 border-[#B89555]/30 shadow-2xl z-[10001] p-2 max-h-64 overflow-y-auto"
                   style={{ background: '#FFFFFF' }}
                   onClick={(e) => e.stopPropagation()}

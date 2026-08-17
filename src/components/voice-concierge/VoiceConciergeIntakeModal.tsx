@@ -274,7 +274,7 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
             </label>
           </div>
 
-          <Button type="submit" disabled={submitting} aria-label="Start the call" className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+          <Button type="submit" disabled={submitting} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
             {submitting ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Opening line…</>) : (<>Start the call</>)}
           </Button>
         </form>

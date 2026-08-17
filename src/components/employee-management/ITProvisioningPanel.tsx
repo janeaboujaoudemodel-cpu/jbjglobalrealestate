@@ -264,7 +264,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               HR-approved joiners ready for email, credentials, and CRM access
             </CardDescription>
           </div>
-          <Button variant="ghost" size="sm" onClick={fetchPendingApplications}>
+          <Button aria-label="Refresh" variant="ghost" size="sm" onClick={fetchPendingApplications}>
             <RefreshCw className="w-4 h-4" />
           </Button>
         </CardHeader>

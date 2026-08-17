@@ -65,7 +65,7 @@ const ShortlistCard = () => {
           <>
             <div className="space-y-3">
               {shortlistProjects?.map(project => (
-                <Link 
+                <Link aria-label="Company" 
                   key={project.id}
                   to={`/project/${project.slug || project.id}`}
                   className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/20 hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/5 transition-all group"

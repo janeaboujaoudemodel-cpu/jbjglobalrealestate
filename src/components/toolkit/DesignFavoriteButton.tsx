@@ -62,7 +62,7 @@ const DesignFavoriteButton = ({
     <div className={`flex items-center gap-2 ${className}`}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <button
+          <button aria-label="Save to favourites"
             onClick={handleFav}
             disabled={toggle.isPending}
             data-surface="emerald"
@@ -84,7 +84,7 @@ const DesignFavoriteButton = ({
       {showShortlist && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <button
+            <button aria-label="Confirm"
               onClick={handleShortlist}
               disabled={toggle.isPending}
               data-surface="emerald"

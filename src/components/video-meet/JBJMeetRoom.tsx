@@ -517,7 +517,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
       {/* Controls bar */}
       <div className="flex items-center justify-center gap-4 px-4 py-4 bg-[#FDFBF7] border-t border-[#1A1A1A]">
         {/* Mic */}
-        <Button
+        <Button aria-label="Stop recording"
           size="lg"
           variant={isMuted ? 'destructive' : 'outline'}
           onClick={toggleMute}
@@ -527,7 +527,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
         </Button>
 
         {/* Video */}
-        <Button
+        <Button aria-label="Stop video"
           size="lg"
           variant={!isVideoOn ? 'destructive' : 'outline'}
           onClick={toggleVideo}
@@ -537,7 +537,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
         </Button>
 
         {/* Screen share */}
-        <Button
+        <Button aria-label="Share screen"
           size="lg"
           variant="outline"
           onClick={handleShareScreen}

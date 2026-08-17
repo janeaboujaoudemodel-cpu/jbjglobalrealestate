@@ -612,7 +612,7 @@ const Footer = () => {
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>Dubai, UAE</span>
             </div>
-            <a
+            <a aria-label="Call"
               href={getCallUrl()}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] uppercase tracking-[0.12em] text-white/95 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
             >
@@ -628,7 +628,7 @@ const Footer = () => {
               <MessageCircle className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>WhatsApp</span>
             </a>
-            <a
+            <a aria-label="Email"
               href={getEmailUrl()}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] uppercase tracking-[0.12em] text-white/95 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
             >

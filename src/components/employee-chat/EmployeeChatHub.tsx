@@ -316,7 +316,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
             {/* Chat Header */}
             <div className="p-3 sm:p-4 border-b border-[#B89555]/10 bg-[#FDFBF7]/80 backdrop-blur-sm flex items-center gap-3">
               {/* Back button on mobile */}
-              <Button
+              <Button aria-label="Back"
                 variant="ghost"
                 size="icon"
                 onClick={handleBackToList}
@@ -352,13 +352,13 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   <Building2 className="h-3 w-3 mr-1" />
                   {selectedEmployeeData.department}
                 </Badge>
-                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
+                <Button aria-label="Call" variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
                   <Phone className="h-4 w-4 text-[#1A1A1A]/60" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
+                <Button aria-label="Video" variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
                   <Video className="h-4 w-4 text-[#1A1A1A]/60" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10">
+                <Button aria-label="More options" variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10">
                   <MoreVertical className="h-4 w-4 text-[#1A1A1A]/60" />
                 </Button>
               </div>
@@ -475,11 +475,11 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                     onKeyDown={handleKeyPress}
                     className="bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 pr-10 focus-visible:ring-[#B89555]/30"
                   />
-                  <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 hover:bg-[#B89555]/10 hidden sm:flex">
+                  <Button aria-label="Insert emoji" variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 hover:bg-[#B89555]/10 hidden sm:flex">
                     <Smile className="h-4 w-4 text-[#1A1A1A]/40" />
                   </Button>
                 </div>
-                <Button 
+                <Button aria-label="Send" 
                   onClick={handleSendMessage}
                   disabled={!messageInput.trim() || isTyping}
                   className="h-9 w-9 shrink-0 bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#957539] text-white shadow-sm"

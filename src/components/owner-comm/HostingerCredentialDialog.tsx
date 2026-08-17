@@ -261,7 +261,7 @@ export default function HostingerCredentialDialog() {
           <Button variant="outline" onClick={() => setOpen(false)} disabled={testing}>
             Cancel
           </Button>
-          <Button aria-label="Verified"
+          <Button
             onClick={handleSubmit}
             disabled={testing || !form.email.trim() || !form.password.trim()}
             className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90"

@@ -139,7 +139,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2 mb-3">
                     <Input value={generatedLink} readOnly className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] flex-1" />
-                    <Button size="icon" variant="outline" onClick={handleCopyLink} className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10"><Copy className="w-4 h-4" /></Button>
+                    <Button aria-label="Copy" size="icon" variant="outline" onClick={handleCopyLink} className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10"><Copy className="w-4 h-4" /></Button>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button size="sm" onClick={() => navigate(`/video-meeting/${generatedLink.split('/').pop()}`)} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white"><Video className="w-4 h-4 mr-2" />Join Now</Button>

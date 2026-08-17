@@ -490,7 +490,7 @@ export default function AIToolsControlPanel() {
                     <CardHeader className="cursor-pointer py-4">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <div onClick={e => e.stopPropagation()}>
+                          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} onClick={e => e.stopPropagation()}>
                             <Checkbox
                               checked={isSelected}
                               onCheckedChange={() => toggleSelect(tool.id)}

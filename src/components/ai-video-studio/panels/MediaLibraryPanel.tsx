@@ -186,7 +186,7 @@ export function MediaLibraryPanel({
           {/* Uploads Tab */}
           <TabsContent value="uploads" className="mt-0 p-2">
             {/* Upload Zone */}
-            <div
+            <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
               className="border-2 border-dashed border-[#1A1A1A] hover:border-[#B89555]/50 rounded-lg p-4 text-center cursor-pointer transition-colors mb-3"
@@ -382,7 +382,7 @@ export function MediaLibraryPanel({
       {/* Preview Modal */}
       {previewAsset && (
         <ClickableDiv className="fixed inset-0 bg-[#1A1A1A]/80 z-50 flex items-center justify-center p-4" onClick={() => setPreviewAsset(null)}>
-          <div className="bg-[#1A1A1A] rounded-lg max-w-2xl w-full p-4" onClick={(e) => e.stopPropagation()}>
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="bg-[#1A1A1A] rounded-lg max-w-2xl w-full p-4" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">{previewAsset.name}</h3>
               <Button size="sm" variant="ghost" onClick={() => setPreviewAsset(null)}>
@@ -494,7 +494,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
           Preview
         </Button>
         {onDelete && !isStock && (
-          <Button
+          <Button aria-label="Close"
             size="sm"
             variant="ghost"
             className="text-red-400 hover:text-red-300 h-7"

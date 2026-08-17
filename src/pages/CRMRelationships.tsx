@@ -490,7 +490,7 @@ const BrokerageContactLinks = ({ r }: { r: any }) => {
         </a>
       )}
       {mapHref && (
-        <a aria-label="Map" href={mapHref} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={link} onClick={stop}>
+        <a href={mapHref} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={link} onClick={stop}>
           <MapPin className="w-3 h-3" />{address || "Map"}
         </a>
       )}

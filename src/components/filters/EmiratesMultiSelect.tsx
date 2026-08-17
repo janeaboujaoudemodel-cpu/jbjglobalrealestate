@@ -69,7 +69,7 @@ export function EmiratesMultiSelect({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
+        <Button aria-label="Open in Maps"
           variant="outline"
           role="combobox"
           aria-expanded={open}

@@ -542,7 +542,7 @@ const DeveloperLiveEditor = () => {
                 className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold">
                 {bulkBusy === "unpublish" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><XCircle className="w-3.5 h-3.5 mr-1" /> Unpublish</>}
               </Button>
-              <Button aria-label="Bulk enrich developers" size="sm" onClick={bulkEnrich} disabled={!!bulkBusy}
+              <Button size="sm" onClick={bulkEnrich} disabled={!!bulkBusy}
                 className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold">
                 {bulkBusy === "enrich" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Sparkles className="w-3.5 h-3.5 mr-1" /> Enrich</>}
               </Button>

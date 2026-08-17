@@ -288,7 +288,7 @@ const VIPClientManager = () => {
                     onChange={(e) => setUserSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && searchUsers()}
                   />
-                  <Button onClick={searchUsers} disabled={searchingUsers} variant="outline">
+                  <Button aria-label="Search" onClick={searchUsers} disabled={searchingUsers} variant="outline">
                     <Search className="h-4 w-4" />
                   </Button>
                 </div>

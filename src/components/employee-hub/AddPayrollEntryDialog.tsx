@@ -404,7 +404,7 @@ export function AddPayrollEntryDialog({ open, onOpenChange, mode, onSaved }: Pro
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}
             className="border-[#B89555]/40">Cancel</Button>
-          <Button aria-label="Save payroll entry" onClick={handleSave} disabled={saving} variant="gold">
+          <Button onClick={handleSave} disabled={saving} variant="gold">
             {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
             {mode === "salary" ? "Save Salary" : "Save Commission"}
           </Button>

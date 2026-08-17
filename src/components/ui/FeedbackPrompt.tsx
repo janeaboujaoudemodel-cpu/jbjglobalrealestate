@@ -114,7 +114,7 @@ export const FeedbackPrompt = ({
                 <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                 <span className="font-semibold text-[#1A1A1A] text-sm">Quick Feedback</span>
               </div>
-              <button
+              <button aria-label="Close"
                 onClick={handleDismiss}
                 className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
               >

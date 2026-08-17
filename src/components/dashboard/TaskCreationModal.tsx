@@ -449,6 +449,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   <PopoverTrigger asChild>
                     <Button
                       type="button"
+                      aria-label="Pick a due date"
                       variant="outline"
                       className="h-10 w-10 p-0 border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                     >

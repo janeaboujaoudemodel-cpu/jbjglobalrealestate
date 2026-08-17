@@ -839,7 +839,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <>
             <Popover open={sortOpen} onOpenChange={setSortOpen}>
               <PopoverTrigger asChild>
-                <button aria-label="Sort" className={cn(pillBase, "px-2.5 py-1.5", filters.sortBy ? pillActive : pillInactiveCls)}>
+                <button className={cn(pillBase, "px-2.5 py-1.5", filters.sortBy ? pillActive : pillInactiveCls)}>
                   <ArrowUpDown className="w-3.5 h-3.5 text-white" />
                   <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                     {filters.sortBy
@@ -1002,7 +1002,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
                   <p className="text-[10px] text-[#1A1A1A]/70">{new Date(sf.createdAt).toLocaleDateString()}</p>
                 </div>
                 {confirmDeleteIndex === idx ? (
-                  <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                  <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                     <span className="text-[10px] text-[#1A1A1A] font-semibold whitespace-nowrap">Delete?</span>
                     <button
                       onClick={() => deleteSavedFilter(idx)}

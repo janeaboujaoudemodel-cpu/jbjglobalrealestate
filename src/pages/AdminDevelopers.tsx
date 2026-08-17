@@ -631,10 +631,10 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
             <Button variant="ghost" size="sm" onClick={onAddRep} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <Plus className="w-4 h-4 mr-1" /> Add Rep
             </Button>
-            <Button variant="ghost" size="icon" onClick={onEdit} className="text-muted-foreground hover:text-foreground">
+            <Button aria-label="Edit" variant="ghost" size="icon" onClick={onEdit} className="text-muted-foreground hover:text-foreground">
               <Pencil className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={onDelete} className="text-red-500 hover:text-red-600 hover:bg-red-50">
+            <Button aria-label="Delete" variant="ghost" size="icon" onClick={onDelete} className="text-red-500 hover:text-red-600 hover:bg-red-50">
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>

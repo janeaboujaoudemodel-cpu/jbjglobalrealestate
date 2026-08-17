@@ -227,8 +227,8 @@ export function StampTextEditor({ svgSource, onSvgChange, onSaveVersion, onAiAct
         <p className="text-xs text-[hsl(var(--muted-foreground))] italic">No editable text found.</p>
         {(canUndo || canRedo) && (
           <div className="flex gap-1">
-            <button onClick={undo} disabled={!canUndo} className="p-1.5 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30"><Undo2 size={13}/></button>
-            <button onClick={redo} disabled={!canRedo} className="p-1.5 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30"><Redo2 size={13}/></button>
+            <button aria-label="Undo" onClick={undo} disabled={!canUndo} className="p-1.5 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30"><Undo2 size={13}/></button>
+            <button aria-label="Redo" onClick={redo} disabled={!canRedo} className="p-1.5 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30"><Redo2 size={13}/></button>
           </div>
         )}
       </div>

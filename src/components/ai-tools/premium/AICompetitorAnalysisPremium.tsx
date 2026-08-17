@@ -264,7 +264,7 @@ const AICompetitorAnalysisPremium = () => {
                     <Sparkles className="w-5 h-5 text-emerald-300" />
                     <h4 className="text-white font-semibold">Full Analysis</h4>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-white/70 hover:text-white">
+                  <Button aria-label="Confirm" variant="ghost" size="sm" onClick={copyToClipboard} className="text-white/70 hover:text-white">
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>

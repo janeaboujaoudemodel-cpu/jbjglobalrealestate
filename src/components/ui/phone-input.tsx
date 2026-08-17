@@ -575,6 +575,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             <PopoverTrigger asChild>
               <button
                 type="button"
+                aria-label="Select country dialling code"
                 aria-expanded={codeOpen}
                 aria-haspopup="dialog"
                 disabled={disabled}

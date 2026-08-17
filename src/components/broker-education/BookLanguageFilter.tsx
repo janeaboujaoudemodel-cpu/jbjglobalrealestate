@@ -31,7 +31,7 @@ export function BookLanguageFilter({ value, onChange, className }: BookLanguageF
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
+        <Button aria-label="Website"
           variant="outline"
           className={cn(
             "border-[#B89555]/40 bg-[#FDFBF7]/80 hover:bg-[#EFE6D6]/10 text-[#1A1A1A] gap-2",

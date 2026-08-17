@@ -154,7 +154,7 @@ const AIMeetingSummarizer = ({ onResponse }: AIMeetingSummarizerProps) => {
 
             <div className="flex items-center justify-between">
               <h4 className="font-semibold">Full Summary</h4>
-              <Button variant="outline" size="sm" onClick={copyToClipboard}>
+              <Button aria-label="Confirm" variant="outline" size="sm" onClick={copyToClipboard}>
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
             </div>

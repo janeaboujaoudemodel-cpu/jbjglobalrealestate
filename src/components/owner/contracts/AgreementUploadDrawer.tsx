@@ -236,7 +236,7 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
           )}
 
           {file && !extracted && (
-            <Button aria-label="AI assist" onClick={analyze} disabled={analyzing} variant="gold" className="w-full">
+            <Button onClick={analyze} disabled={analyzing} variant="gold" className="w-full">
               {analyzing ? (<><Loader2 className="h-4 w-4 mr-2 animate-spin" />Reading contract…</>)
                 : (<><Sparkles className="h-4 w-4 mr-2" />Analyze with AI</>)}
             </Button>

@@ -111,7 +111,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-[#1A1A1A]/70 h-8 w-8">
+                <Button aria-label="More options" variant="ghost" size="icon" className="text-[#1A1A1A]/70 h-8 w-8">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -161,7 +161,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
               <Mail className="h-4 w-4 mr-1" />
               Email
             </Button>
-            <Button
+            <Button aria-label="Call"
               size="sm"
               onClick={handleCallClick}
               disabled={!lead.phone}

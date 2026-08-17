@@ -95,7 +95,12 @@ const DISCOVER_FN = `() => {
 // ---------- helpers ----------
 function parseRgb(str) {
   if (!str) return null;
-  const m = str.match(/rgba?\\((\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)/);
+  // Single-escaped: this is real Node code, not the browser-side string in
+  // DISCOVER_FN above (where `\\b` is correct because it is emitted into a
+  // template literal). Here `\\(` meant a literal backslash followed by an
+  // unclosed group, so the file threw SyntaxError on import and the audit
+  // could never run at all.
+  const m = str.match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
   if (!m) return null;
   return { r: +m[1], g: +m[2], b: +m[3] };
 }
@@ -155,7 +160,7 @@ async function main() {
   let routesScanned = 0;
 
   for (const route of ROUTES) {
-    const url = BASE.replace(/\\/$/, "") + route;
+    const url = BASE.replace(/\/$/, "") + route;
     try {
       await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
       await page.waitForTimeout(800);

@@ -159,7 +159,7 @@ export function ListingApprovalCard({
         <CardTitle className="text-lg text-[#1A1A1A]/70 flex items-start justify-between gap-2">
           <span className="line-clamp-2">{project.name || "Untitled Project"}</span>
           {sourceUrl && (
-            <a
+            <a aria-label="Open in a new tab"
               href={sourceUrl}
               target="_blank"
               rel="noopener noreferrer"

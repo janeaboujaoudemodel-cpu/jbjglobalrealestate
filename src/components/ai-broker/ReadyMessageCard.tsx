@@ -32,7 +32,7 @@ export default function ReadyMessageCard({ message, leadName, leadPhone, leadWha
         <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 font-semibold">
           Ready to send {leadName ? `to ${leadName.split(" ")[0]}` : ""}
         </div>
-        <button aria-label="Copy message"
+        <button
           type="button"
           onClick={handleCopy}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"

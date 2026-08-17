@@ -422,7 +422,7 @@ export const DeveloperApprovalQueue = () => {
                       </p>
 
                       {/* Action buttons */}
-                      <div
+                      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                         className="flex items-center gap-2 pt-3 border-t border-[#B89555]/30 mt-auto"
                         onClick={(e) => e.stopPropagation()}
                       >

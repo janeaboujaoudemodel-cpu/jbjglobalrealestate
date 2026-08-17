@@ -1418,7 +1418,7 @@ function MediaSection({
                 ) : kind === "video" ? (
                   <video src={m.url} className="w-full h-28 object-cover" />
                 ) : (
-                  <a aria-label="Open" href={m.url} target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center h-28 text-[#1A1A1A]/70">
+                  <a href={m.url} target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center h-28 text-[#1A1A1A]/70">
                     <FileText className="w-8 h-8" />
                     <span className="text-xs mt-1 px-2 truncate w-full text-center">{m.caption || "Open"}</span>
                   </a>

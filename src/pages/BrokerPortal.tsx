@@ -312,7 +312,7 @@ export default function BrokerPortal() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {PORTAL_TOOLS.map((tool) => (
                     <motion.div key={tool.href} variants={fadeInUp}>
-                      <Link to={tool.href}>
+                      <Link aria-label="Next" to={tool.href}>
                         <Card className={`h-full hover:border-[hsl(36,40%,70%)] transition-all duration-300 group cursor-pointer ${tool.accent ? "border-[hsl(36,40%,70%)] bg-gradient-to-br from-[hsl(36,40%,70%)]/10 to-transparent" : "border-[hsl(36,40%,70%)]/20"}`}>
                           <CardContent className="p-4 flex flex-col items-start gap-2">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${tool.accent ? "bg-[hsl(36,40%,70%)]/20" : "bg-[hsl(36,40%,70%)]/10"}`}>

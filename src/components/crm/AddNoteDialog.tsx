@@ -67,6 +67,7 @@ export default function AddNoteDialog({ leadId, leadName, trigger }: AddNoteDial
       <DialogTrigger asChild onClick={(e) => e.stopPropagation()}>
         {trigger || (
           <Button
+            aria-label="Add note"
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]"

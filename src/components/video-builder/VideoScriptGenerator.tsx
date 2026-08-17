@@ -199,7 +199,7 @@ const VideoScriptGenerator = ({ project, onUpdate, onNext }: VideoScriptGenerato
                 <Badge variant="outline" className="text-xs">
                   ~{estimatedReadTime} min read
                 </Badge>
-                <Button variant="ghost" size="sm" onClick={handleCopyScript}>
+                <Button aria-label="Copy" variant="ghost" size="sm" onClick={handleCopyScript}>
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>

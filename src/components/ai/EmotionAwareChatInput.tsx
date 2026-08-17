@@ -117,7 +117,7 @@ export function EmotionAwareChatInput({
           className="min-h-[60px] max-h-[200px] resize-none"
           rows={2}
         />
-        <Button
+        <Button aria-label="Send"
           onClick={handleSend}
           disabled={disabled || !message.trim()}
           size="icon"

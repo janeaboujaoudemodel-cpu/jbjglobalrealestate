@@ -409,7 +409,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
               <StepHeader n={1} title="Upload Media" sub="Images (JPG, PNG, WEBP) and PDFs — drag & drop or click" />
 
               {/* Drop Zone */}
-              <div
+              <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                 className="relative rounded-xl p-10 text-center cursor-pointer transition-all duration-300 mt-5"
                 style={{
                   border: `2px dashed ${dragActive ? G.gold : G.border}`,

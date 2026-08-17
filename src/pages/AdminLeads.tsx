@@ -977,7 +977,7 @@ const AdminLeads = () => {
                           </TableCell>
                           <TableCell>
                             {lead.email_lower ? (
-                              <a href={`mailto:${lead.email_lower}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
+                              <a aria-label="Email" href={`mailto:${lead.email_lower}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
                                 <Mail className="w-3 h-3 text-[#B89555]" />
                                 {lead.email_lower}
                               </a>
@@ -987,7 +987,7 @@ const AdminLeads = () => {
                           </TableCell>
                           <TableCell>
                             {lead.phone_e164 ? (
-                              <a href={`tel:${lead.phone_e164}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
+                              <a aria-label="Call" href={`tel:${lead.phone_e164}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
                                 <Phone className="w-3 h-3 text-[#B89555]" />
                                 {lead.phone_e164}
                               </a>
@@ -1104,14 +1104,14 @@ const AdminLeads = () => {
                       <TableRow key={chat.id} className="border-t border-[#B89555]/15 hover:bg-[#B89555]/5 transition-colors">
                         <TableCell><p className="text-[#1A1A1A] font-medium">{chat.user_name || "Anonymous"}</p></TableCell>
                         <TableCell>
-                          <a href={`mailto:${chat.user_email}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
+                          <a aria-label="Email" href={`mailto:${chat.user_email}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
                             <Mail className="w-3 h-3 text-[#B89555]" />
                             {chat.user_email}
                           </a>
                         </TableCell>
                         <TableCell>
                           {chat.user_phone ? (
-                            <a href={`tel:${chat.user_phone}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
+                            <a aria-label="Call" href={`tel:${chat.user_phone}`} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm hover:text-[#B89555] transition-colors cursor-pointer">
                               <Phone className="w-3 h-3 text-[#B89555]" />
                               {chat.user_phone}
                             </a>
@@ -1160,7 +1160,7 @@ const AdminLeads = () => {
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <a href={`mailto:${chat.user_email}`}
+                                  <a aria-label="Email" href={`mailto:${chat.user_email}`}
                                     className={`p-1.5 rounded-lg transition-all text-purple-600 hover:bg-purple-100 cursor-pointer`}>
                                     <Mail className="w-4 h-4" />
                                   </a>

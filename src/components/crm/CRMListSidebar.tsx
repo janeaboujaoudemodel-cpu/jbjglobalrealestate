@@ -112,7 +112,7 @@ function HorizontalBar({
 
       <Popover open={openLists} onOpenChange={setOpenLists}>
         <PopoverTrigger asChild>
-          <button aria-label="Databases" type="button" className={pillClass(value.kind === "list")}>
+          <button type="button" className={pillClass(value.kind === "list")}>
             <Folder className="w-3.5 h-3.5" />
             {activeList ? activeList.name : "Databases"}
             <span className={badgeClass()}>{lists.length}</span>

@@ -337,7 +337,7 @@ function BookingCard({ b, onAction }: { b: Booking; onAction: (b: Booking, k: "a
         )}
         {b.attachment_url && (
           <div className="md:col-span-2">
-            <a aria-label="Attached file" href={b.attachment_url} target="_blank" rel="noopener noreferrer"
+            <a href={b.attachment_url} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]">
               <FileText className="w-4 h-4 text-[#B89555]" /> {b.attachment_name ?? "Attached file"}
             </a>

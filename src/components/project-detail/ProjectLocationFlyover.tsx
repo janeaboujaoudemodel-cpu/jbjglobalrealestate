@@ -356,7 +356,7 @@ export default function ProjectLocationFlyover({
       {/* Play / Replay button */}
       {!isPlaying && (
         <div className="absolute inset-0 flex items-center justify-center z-[999]">
-          <Button
+          <Button aria-label="Undo"
             onClick={animationDone ? handleReplay : handlePlay}
             className="bg-[#1A1A1A]/60 backdrop-blur-sm text-white hover:bg-[#1A1A1A]/80 rounded-full h-16 w-16 p-0"
           >

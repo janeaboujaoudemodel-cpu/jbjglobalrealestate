@@ -138,7 +138,7 @@ export default function DataIntegrityCheck() {
               after upload and sync.
             </p>
           </div>
-          <Button aria-label="Refresh" onClick={runCheck} disabled={running} variant="gold">
+          <Button onClick={runCheck} disabled={running} variant="gold">
             {running ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Running…

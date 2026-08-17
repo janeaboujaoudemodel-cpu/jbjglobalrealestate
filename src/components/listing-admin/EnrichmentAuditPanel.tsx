@@ -119,7 +119,7 @@ const SuggestionCard = ({ item, onApprove, onReject }: { item: EnrichmentSuggest
           </div>
         </div>
         {item.status === "pending" && (
-          <div className="flex gap-1.5" onClick={e => e.stopPropagation()}>
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="flex gap-1.5" onClick={e => e.stopPropagation()}>
             <Button size="sm" variant="outline" className="h-7 text-xs border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft" onClick={() => onApprove(item.id)}>
               <CheckCircle2 className="w-3 h-3 mr-1" /> Approve
             </Button>
@@ -216,7 +216,7 @@ export const EnrichmentAuditPanel = () => {
             {q}
           </Button>
         ))}
-        <Button size="sm" variant="ghost" onClick={fetchData} className="ml-auto">
+        <Button aria-label="Refresh" size="sm" variant="ghost" onClick={fetchData} className="ml-auto">
           <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin")} />
         </Button>
       </div>

@@ -115,14 +115,14 @@ const InlineEditCell = ({
           className="h-6 text-xs bg-muted border-border px-1 py-0 w-28"
           disabled={saving}
         />
-        <button
+        <button aria-label="Confirm"
           onClick={handleSave}
           className="p-0.5 hover:jj-surface-emerald-soft rounded text-green-500"
           disabled={saving}
         >
           <Check className="h-3 w-3" />
         </button>
-        <button
+        <button aria-label="Close"
           onClick={handleCancel}
           className="p-0.5 hover:bg-red-500/20 rounded text-red-500"
         >

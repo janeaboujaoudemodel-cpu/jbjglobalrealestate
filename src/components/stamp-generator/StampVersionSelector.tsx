@@ -81,7 +81,7 @@ export function StampVersionSelector({
             <Button size="sm" variant="outline" onClick={onUploadNew} className="h-7 text-[10px] gap-1 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))]">
               <Upload size={10} /> Upload New
             </Button>
-            <button onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[hsl(var(--muted))] flex items-center justify-center">
+            <button aria-label="Close" onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[hsl(var(--muted))] flex items-center justify-center">
               <X size={14} />
             </button>
           </div>

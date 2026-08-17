@@ -396,7 +396,7 @@ export default function SignDocument() {
             <p className="text-sm text-[#1A1A1A]/70 mb-4">
               Once DocuSign has finalised the document, send the signed PDF to:
             </p>
-            <a
+            <a aria-label="Email"
               href={`mailto:${SIGNED_RETURN_EMAIL}?subject=${encodeURIComponent(`Signed agreement — ${data?.envelope.name || ""}`)}`}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#1A1A1A] text-white text-sm font-medium hover:bg-[#1A1A1A]/90"
             >

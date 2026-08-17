@@ -732,11 +732,11 @@ export default function JoinApplication() {
             </Card>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-[#1A1A1A]/70">
-              <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+              <a aria-label="Call" href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
                 <Phone className="w-4 h-4 text-[#1A1A1A]" />
                 {CONTACT_INFO.phone}
               </a>
-              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+              <a aria-label="Email" href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
                 <Mail className="w-4 h-4 text-[#1A1A1A]" />
                 {CONTACT_INFO.email}
               </a>

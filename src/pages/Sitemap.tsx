@@ -351,7 +351,7 @@ const HubCard = ({
       <ul className="space-y-0.5">
         {filteredLinks.map((link, index) => (
           <li key={`${link.href}-${index}`}>
-            <Link
+            <Link aria-label="Next"
               to={link.href}
               className="group flex items-center justify-between py-2 px-2 rounded-md hover:bg-white/[0.06] transition-colors"
             >
@@ -575,7 +575,7 @@ const Sitemap = () => {
               ].map((card, i) => {
                 const Icon = card.icon;
                 return (
-                  <Link key={card.to} to={card.to} className="block">
+                  <Link aria-label="Next" key={card.to} to={card.to} className="block">
                     <motion.div
                       data-surface="emerald"
                       data-emerald="true"

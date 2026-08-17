@@ -439,7 +439,7 @@ export const AIMarketAnalyzer = ({
                 disabled={isChatLoading}
                 className="flex-1"
               />
-              <Button
+              <Button aria-label="Send"
                 type="submit"
                 variant="primary"
                 disabled={isChatLoading || !chatInput.trim()}

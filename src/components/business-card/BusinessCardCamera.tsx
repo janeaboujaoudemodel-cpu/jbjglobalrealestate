@@ -500,7 +500,7 @@ const BusinessCardCamera = ({
               </p>
             )}
 
-            <Button aria-label="Try again"
+            <Button
               onClick={startCamera}
               disabled={starting}
               data-allow-dark-cta

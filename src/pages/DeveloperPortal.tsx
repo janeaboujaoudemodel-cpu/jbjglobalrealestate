@@ -1838,7 +1838,7 @@ const DeveloperPortal = () => {
                                   {s.event_files && (s.event_files as any[]).length > 0 && (
                                     <div className="flex flex-wrap gap-1 mt-2">
                                       {(s.event_files as any[]).map((f: any, idx: number) => (
-                                        <a key={idx} href={f.url} target="_blank" rel="noopener noreferrer"
+                                        <a aria-label="Open document" key={idx} href={f.url} target="_blank" rel="noopener noreferrer"
                                           className="text-[10px] text-[#1A1A1A] hover:underline flex items-center gap-1">
                                           <FileText className="w-3 h-3" /> {f.name}
                                         </a>

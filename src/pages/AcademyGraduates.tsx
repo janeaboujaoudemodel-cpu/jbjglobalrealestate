@@ -145,7 +145,7 @@ export default function AcademyGraduates() {
                     onKeyDown={(e) => e.key === "Enter" && handleLookup()}
                     className="border-[#B89555]/20"
                   />
-                  <Button onClick={handleLookup} disabled={lookupLoading} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
+                  <Button aria-label="Search" onClick={handleLookup} disabled={lookupLoading} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
                     {lookupLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                   </Button>
                 </div>

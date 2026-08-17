@@ -365,7 +365,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
                     {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                     {isPlaying ? 'Pause' : 'Play'}
                   </button>
-                  <button
+                  <button aria-label="Download"
                     onClick={handleDownload}
                     className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-medium bg-[#1A1A1A] border border-[#B89555]/30 text-white hover:bg-[#1A1A1A] transition-all"
                   >

@@ -372,7 +372,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
               }
             }}
           />
-          <Button
+          <Button aria-label="Send"
             onClick={handleSendMessage}
             disabled={isGenerating || (!inputMessage.trim() && !uploadedImage)}
             className="bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500"

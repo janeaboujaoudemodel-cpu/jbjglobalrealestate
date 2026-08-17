@@ -187,7 +187,7 @@ Help the user complete their listing form and answer questions about the selling
             <p className="text-[#1A1A1A]/70 text-xs">Here to help you list your property</p>
           </div>
         </div>
-        <Button
+        <Button aria-label="Close"
           variant="ghost"
           size="icon"
           onClick={onClose}
@@ -289,7 +289,7 @@ Help the user complete their listing form and answer questions about the selling
               />
             </div>
           </div>
-          <Button
+          <Button aria-label="Send"
             type="submit"
             disabled={!input.trim() || isLoading}
             variant="primary"

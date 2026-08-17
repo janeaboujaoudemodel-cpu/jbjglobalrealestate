@@ -149,7 +149,7 @@ export const ViewingRequestModal = ({
                   </h3>
                   <p className="text-sm text-[#1A1A1A]/70 truncate max-w-[280px]">{listingName}</p>
                 </div>
-                <button
+                <button aria-label="Close"
                   onClick={handleClose}
                   className="w-8 h-8 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555]/30 transition-colors"
                 >

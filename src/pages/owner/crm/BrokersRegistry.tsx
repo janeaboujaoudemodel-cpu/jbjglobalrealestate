@@ -912,7 +912,7 @@ export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean;
             className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1 min-h-[72px]"
           />
 
-          <Button aria-label="Add broker" onClick={submit} disabled={saving} variant="gold" className="w-full mt-4">
+          <Button onClick={submit} disabled={saving} variant="gold" className="w-full mt-4">
             {saving ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving…</>) : "Add broker"}
           </Button>
         </div>

@@ -356,7 +356,7 @@ export default function CVBuilder() {
                 onHardDelete={hardDelete}
               />
             )}
-            <Button aria-label="Update" variant="outline" size="sm" onClick={handleSaveCV} disabled={savingRow}>
+            <Button variant="outline" size="sm" onClick={handleSaveCV} disabled={savingRow}>
               {savingRow ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Save className="w-4 h-4 mr-1.5" />}
               {currentRowId ? "Update" : "Save"}
             </Button>

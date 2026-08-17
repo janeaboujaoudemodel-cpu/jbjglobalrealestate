@@ -267,13 +267,13 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-white/70 hover:text-white">
+          <Button aria-label="Call" variant="ghost" size="icon" className="text-white/70 hover:text-white">
             <Phone className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-white/70 hover:text-white">
+          <Button aria-label="Video" variant="ghost" size="icon" className="text-white/70 hover:text-white">
             <Video className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-white/70 hover:text-white">
+          <Button aria-label="Close" variant="ghost" size="icon" onClick={onClose} className="text-white/70 hover:text-white">
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -355,7 +355,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       {/* Input Area */}
       <div className="p-4 border-t border-[#1A1A1A] bg-[#FDFBF7]">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-white/70 hover:text-white shrink-0">
+          <Button aria-label="Attach a file" variant="ghost" size="icon" className="text-white/70 hover:text-white shrink-0">
             <Paperclip className="h-4 w-4" />
           </Button>
           
@@ -370,6 +370,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
               disabled={isLoading}
             />
             <Button 
+              aria-label="Insert emoji"
               variant="ghost" 
               size="icon" 
               className="absolute right-1 top-1/2 -translate-y-1/2 text-white/70 hover:text-white h-7 w-7"
@@ -386,7 +387,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             className="shrink-0 text-white/70 hover:text-white"
           />
           
-          <Button
+          <Button aria-label="Send"
             onClick={sendMessage}
             disabled={!inputValue.trim() || isLoading}
             size="icon"

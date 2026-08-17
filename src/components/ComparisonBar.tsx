@@ -155,7 +155,7 @@ const ComparisonBar = () => {
                         <div className="absolute top-3 left-3 z-10">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                              <button aria-label="Show comparison badge" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                                 badgeInfo 
                                   ? `${badgeInfo.color} border` 
                                   : 'bg-[#1A1A1A]/60 text-white hover:bg-[#1A1A1A]/80'

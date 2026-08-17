@@ -643,7 +643,7 @@ const HeroSearchBar = () => {
         {/* Currency Dropdown - Opens upward with scroll */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-[#FDFBF7]/10 backdrop-blur-sm border border-[#B89555]/40 text-white hover:bg-[#FDFBF7]/20 transition-all text-sm font-semibold min-w-[64px] justify-center">
+            <button aria-label="Expand" className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-[#FDFBF7]/10 backdrop-blur-sm border border-[#B89555]/40 text-white hover:bg-[#FDFBF7]/20 transition-all text-sm font-semibold min-w-[64px] justify-center">
               <span className="text-base leading-none">{currentCurrency.flag}</span>
               <span className="font-semibold">{currentCurrency.code}</span>
               <ChevronDown className="w-3 h-3 text-white/90" />
@@ -734,7 +734,7 @@ const HeroSearchBar = () => {
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
+              <button aria-label="Expand" className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-[#1A1A1A]" />
               </button>
@@ -768,7 +768,7 @@ const HeroSearchBar = () => {
           {/* Price Range Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
+              <button aria-label="Expand" className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
                 {getPriceLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-[#1A1A1A]" />
               </button>

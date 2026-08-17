@@ -123,7 +123,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
 
   return (
     <ClickableDiv className="fixed inset-0 z-[10100] flex items-center justify-center bg-[#1A1A1A]/50 backdrop-blur-sm" onClick={onClose}>
-      <div
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
         className="bg-[#FDFBF7] rounded-2xl shadow-2xl border border-[#B89555]/30 w-[90vw] max-w-[420px] overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
@@ -133,7 +133,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
             <Paperclip className="w-4 h-4 text-[#B89555]" />
             <span className="font-semibold text-sm text-[#1A1A1A]">Attach Document or Asset</span>
           </div>
-          <button onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[#B89555]/10 flex items-center justify-center">
+          <button aria-label="Close" onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[#B89555]/10 flex items-center justify-center">
             <X className="w-4 h-4 text-[#1A1A1A]/60" />
           </button>
         </div>
@@ -258,7 +258,7 @@ export function AttachmentChip({ attachment, onRemove }: { attachment: DocumentA
           <p className="text-[9px] text-muted-foreground">File</p>
         )}
       </div>
-      <button
+      <button aria-label="Close"
         onClick={onRemove}
         className="w-5 h-5 rounded-full hover:bg-destructive/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
       >
@@ -392,7 +392,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
         )}
       </div>
       {attachment.content && (
-        <a href={attachment.content} download={attachment.name} className="shrink-0">
+        <a aria-label="Download" href={attachment.content} download={attachment.name} className="shrink-0">
           <Download className="w-4 h-4 text-[#B89555] hover:text-[#A68444]" />
         </a>
       )}

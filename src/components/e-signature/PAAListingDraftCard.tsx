@@ -200,7 +200,7 @@ export default function PAAListingDraftCard({ envelopeId, category }: Props) {
               </Link>
             </Button>
           )}
-          <Button aria-label="Unpublish listing"
+          <Button
             variant="gold"
             size="sm"
             className="h-8 text-[11px] w-full justify-center"

@@ -657,7 +657,7 @@ const Favorites = () => {
               <Label htmlFor="email" className="text-[#1A1A1A]/60">Email a copy to yourself</Label>
               <div className="flex gap-2 mt-1">
                 <Input id="email" type="email" placeholder="your.email@example.com" value={shareEmail} onChange={(e) => setShareEmail(e.target.value)} className="bg-[#F7F2EA] border-[#B89555]/20 text-[#1A1A1A]" />
-                <Button onClick={handleEmailShare} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 shrink-0">
+                <Button aria-label="Email" onClick={handleEmailShare} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 shrink-0">
                   <Mail className="w-4 h-4" />
                 </Button>
               </div>

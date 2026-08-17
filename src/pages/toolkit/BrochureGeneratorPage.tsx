@@ -843,7 +843,7 @@ export default function BrochureGeneratorPage() {
                   <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Features</Label>
                   <div className="flex gap-1.5 mb-1.5">
                     <CleanInput value={newFeature} onChange={e => setNewFeature(e.target.value)} placeholder="Add feature…" onKeyDown={e => e.key === 'Enter' && addFeature()} />
-                    <button onClick={addFeature} className="px-2.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 hover:bg-blue-100">
+                    <button aria-label="Add" onClick={addFeature} className="px-2.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 hover:bg-blue-100">
                       <Plus className="w-3.5 h-3.5" />
                     </button>
                   </div>

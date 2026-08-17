@@ -191,7 +191,7 @@ export const AdminAIAssistant = () => {
             placeholder="Ask about leads, campaigns, analytics..."
             className="bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/50 focus:border-[#B89555] focus:ring-gold/20"
           />
-          <Button
+          <Button aria-label="Send"
             onClick={handleAskAI}
             disabled={loading || !query.trim()}
             className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white shadow-lg"

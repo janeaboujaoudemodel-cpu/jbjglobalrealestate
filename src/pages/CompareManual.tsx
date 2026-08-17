@@ -476,7 +476,7 @@ const CompareManual = () => {
               <Sparkles className="w-4 h-4 mr-1.5 text-[#B89555]" /> Add via link / PDF (AI fill)
             </Button>
           </div>
-          <button aria-label="AI assist"
+          <button
             onClick={generate}
             disabled={isGenerating}
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555]/60 hover:bg-[#2a2a2a] disabled:opacity-60 transition font-semibold"

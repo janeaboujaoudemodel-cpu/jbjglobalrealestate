@@ -287,7 +287,7 @@ export default function ExportEnvelopeDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>Cancel</Button>
-          <Button aria-label="Download ZIP" variant="gold" onClick={handleExport} disabled={busy || !selectedCount}>
+          <Button variant="gold" onClick={handleExport} disabled={busy || !selectedCount}>
             {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : willZip && selectedCount > 1 ? <Archive className="w-4 h-4 mr-2" /> : <Download className="w-4 h-4 mr-2" />}
             {busy ? "Exporting…" : willZip && selectedCount > 1 ? "Download ZIP" : "Download"}
           </Button>

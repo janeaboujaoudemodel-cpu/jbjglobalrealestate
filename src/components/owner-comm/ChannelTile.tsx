@@ -396,7 +396,7 @@ export default function ChannelTile({
             </Button>
           </>
         ) : (
-          <Button variant="gold" size="sm" aria-label="Connect channel" className="col-span-2 w-full" onClick={onConnect} disabled={isConnecting}>
+          <Button variant="gold" size="sm" className="col-span-2 w-full" onClick={onConnect} disabled={isConnecting}>
             {isConnecting ? (
               <><Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> Connecting…</>
             ) : (

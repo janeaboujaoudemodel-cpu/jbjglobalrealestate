@@ -993,7 +993,7 @@ export default function GlobalVerticalNav() {
 
       return (
         <>
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             className="fixed inset-0 z-[9999] bg-[#1A1A1A]/30 backdrop-blur-sm"
             style={{ left: sidebarWidth }}
             onClick={closeMegaMenu}
@@ -1002,7 +1002,7 @@ export default function GlobalVerticalNav() {
               className="fixed z-[10000] flex items-start justify-start pointer-events-none"
  style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           >
-            <div
+            <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
               className="pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-3 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-72px)]"
               onClick={(e) => e.stopPropagation()}
             >
@@ -1016,7 +1016,7 @@ export default function GlobalVerticalNav() {
                   <h3 className="text-sm font-bold text-[#1A1A1A] tracking-tight">{title}</h3>
                   <span className="text-[10px] text-[#1A1A1A]/50 font-medium">({curatedItems.length})</span>
                 </div>
-                <button
+                <button aria-label="Close"
                   onClick={closeMegaMenu}
                   className="w-6 h-6 rounded-full bg-[#FDFBF7] border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
                 >
@@ -1030,7 +1030,7 @@ export default function GlobalVerticalNav() {
                   const entryHref = isDev ? `/developer/${entry.slug}` : `/area/${entry.slug}`;
                   const linkActive = isRouteActive(entryHref);
                   return (
-                    <Link
+                    <Link aria-label={entry.name}
                       key={entry.slug}
                       to={entryHref}
                       onClick={collapseAfterNavigation}
@@ -1048,7 +1048,7 @@ export default function GlobalVerticalNav() {
 
                 {/* Divider + View All CTA */}
                 <hr className="border-[#B89555]/30 my-2" />
-                <Link
+                <Link aria-label="View"
                   to={viewAllHref}
                   onClick={collapseAfterNavigation}
                   data-sidebar-view-all-tools
@@ -1084,7 +1084,7 @@ export default function GlobalVerticalNav() {
 
     return (
       <>
-        <div
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
           className="fixed inset-0 z-[9999] bg-[#1A1A1A]/30 backdrop-blur-sm"
           style={{ left: sidebarWidth }}
           onClick={closeMegaMenu}
@@ -1093,7 +1093,7 @@ export default function GlobalVerticalNav() {
           className="fixed z-[10000] flex items-start justify-start pointer-events-none"
 style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         >
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             className={`pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-3 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-72px)]' : 'max-h-[calc(100vh-112px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -1105,7 +1105,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 </span>
                 <h3 className="text-sm font-bold text-[#1A1A1A] tracking-tight">{title}</h3>
               </div>
-              <button
+              <button aria-label="Close"
                 onClick={closeMegaMenu}
                 className="w-6 h-6 rounded-full bg-[#FDFBF7] border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
               >
@@ -1117,7 +1117,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
                 const Icon = link.icon;
                 const linkActive = isRouteActive(link.href);
                 return (
-                  <Link
+                  <Link aria-label={link.label}
                     key={link.href + link.label}
                     to={link.href}
                     onClick={collapseAfterNavigation}
@@ -1544,7 +1544,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               return (
                 <Tooltip key={item.href + item.label + i}>
                   <TooltipTrigger asChild>
-                    <Link
+                    <Link aria-label={item.label}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
@@ -1612,7 +1612,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link
+                  <Link aria-label="Contact"
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
@@ -1625,7 +1625,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link
+                  <Link aria-label="Ticket Hub"
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
@@ -1642,7 +1642,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               {session && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
+                    <button aria-label="Sign out"
                       type="button"
                       data-sidebar-auth-control
                       data-no-contrast-guard
@@ -1657,7 +1657,7 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
               )}
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button
+                  <button aria-label="Toggle collapse"
                     type="button"
                     data-sidebar-collapse-control
                     data-no-contrast-guard

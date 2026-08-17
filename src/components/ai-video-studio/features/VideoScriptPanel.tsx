@@ -177,10 +177,10 @@ export function VideoScriptPanel() {
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white">Generated Script</span>
               <div className="flex gap-1">
-                <Button variant="ghost" size="sm" onClick={copyScript} className="h-6 w-6 p-0 text-[#1A1A1A]/70 hover:text-white">
+                <Button aria-label="Confirm" variant="ghost" size="sm" onClick={copyScript} className="h-6 w-6 p-0 text-[#1A1A1A]/70 hover:text-white">
                   {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={downloadScript} className="h-6 w-6 p-0 text-[#1A1A1A]/70 hover:text-white">
+                <Button aria-label="Download" variant="ghost" size="sm" onClick={downloadScript} className="h-6 w-6 p-0 text-[#1A1A1A]/70 hover:text-white">
                   <Download className="h-3 w-3" />
                 </Button>
               </div>

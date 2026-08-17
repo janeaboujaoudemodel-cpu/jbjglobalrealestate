@@ -476,7 +476,7 @@ const CRMCommunicationPanel = () => {
                       placeholder="Type a message... Use @ to mention"
                       className="h-8 text-xs bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                     />
-                    <Button 
+                    <Button aria-label="Send" 
                       size="icon" 
                       className="h-8 w-8 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                       onClick={sendMessage}

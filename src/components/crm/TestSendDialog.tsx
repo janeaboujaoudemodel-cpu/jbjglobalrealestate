@@ -272,7 +272,7 @@ export const TestSendDialog = ({
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setStep("review")} disabled={sending}>← Back to edit</Button>
-              <Button aria-label="Send"
+              <Button
                 onClick={handleSend}
                 disabled={sending}
                 className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90"

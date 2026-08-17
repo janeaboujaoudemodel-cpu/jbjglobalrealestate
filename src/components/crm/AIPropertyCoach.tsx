@@ -250,7 +250,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
               <Headphones className="h-4 w-4 mr-1" />
               {listeningMode ? "Listening..." : "Listen to Call"}
             </Button>
-            <Button
+            <Button aria-label="Refresh"
               variant="ghost"
               size="sm"
               onClick={generateInitialSuggestions}
@@ -334,7 +334,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
                 }
               }}
             />
-            <Button
+            <Button aria-label="Send"
               onClick={handleAskCoach}
               disabled={loading || !question.trim()}
               variant="primary"

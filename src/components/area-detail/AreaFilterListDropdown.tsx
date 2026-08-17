@@ -133,7 +133,7 @@ export const AreaFilterListDropdown = ({ scope, label, active, onScope, onQuery 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button aria-label="Expand"
+        <button
           type="button"
           data-active={active ? "true" : "false"}
           data-no-contrast-guard

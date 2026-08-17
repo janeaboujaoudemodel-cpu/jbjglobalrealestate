@@ -790,7 +790,7 @@ export default function StampGalleryPage() {
           {/* Lightbox header */}
           <div className="flex-shrink-0 bg-[#1A1A1A]/60 backdrop-blur-sm px-4 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
-              <button onClick={closeLightbox} className="p-1.5 rounded-lg bg-[#FDFBF7]/10 hover:bg-[#FDFBF7]/20 text-white transition-colors shrink-0">
+              <button aria-label="Close" onClick={closeLightbox} className="p-1.5 rounded-lg bg-[#FDFBF7]/10 hover:bg-[#FDFBF7]/20 text-white transition-colors shrink-0">
                 <X size={18}/>
               </button>
               <div className="min-w-0">
@@ -843,14 +843,14 @@ export default function StampGalleryPage() {
             </div>
 
             {/* Nav arrows — always show, disabled when only 1 design */}
-            <button
+            <button aria-label="Previous"
               onClick={goPrev}
               disabled={designs.length <= 1}
               className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#FDFBF7]/10 hover:bg-[#FDFBF7]/25 text-white transition-colors backdrop-blur-sm disabled:opacity-20 disabled:cursor-default"
             >
               <ChevronLeft size={22}/>
             </button>
-            <button
+            <button aria-label="Next"
               onClick={goNext}
               disabled={designs.length <= 1}
               className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[#FDFBF7]/10 hover:bg-[#FDFBF7]/25 text-white transition-colors backdrop-blur-sm disabled:opacity-20 disabled:cursor-default"

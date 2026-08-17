@@ -257,7 +257,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
               className="flex-1 bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-purple-500"
               disabled={isLoading}
             />
-            <Button
+            <Button aria-label="Send"
               onClick={sendMessage}
               disabled={!input.trim() || isLoading}
               size="icon"

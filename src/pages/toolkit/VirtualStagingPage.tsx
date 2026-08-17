@@ -419,7 +419,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         </Button>
                       )}
                       
-                      <Button
+                      <Button aria-label="Delete"
                         onClick={clearImage}
                         variant="outline"
                         className="text-white border-red-500/80 bg-red-500/30 hover:bg-red-500/50"

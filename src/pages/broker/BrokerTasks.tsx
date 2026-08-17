@@ -159,7 +159,7 @@ export default function BrokerTasks() {
       {/* Bulk action bar */}
       {visible.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 px-3 py-2">
-          <button aria-label="Deselect all"
+          <button
             type="button"
             onClick={toggleAllVisible}
             className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1A1A1A] hover:text-[color:var(--emerald-1)]"

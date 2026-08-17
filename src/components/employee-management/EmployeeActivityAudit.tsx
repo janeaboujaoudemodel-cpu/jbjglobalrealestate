@@ -201,7 +201,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                 Real-time performance monitoring
               </CardDescription>
             </div>
-            <Button variant="ghost" size="sm" onClick={fetchEmployeeSummaries}>
+            <Button aria-label="Refresh" variant="ghost" size="sm" onClick={fetchEmployeeSummaries}>
               <RefreshCw className="w-4 h-4" />
             </Button>
           </CardHeader>

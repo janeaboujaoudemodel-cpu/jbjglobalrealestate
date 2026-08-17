@@ -363,7 +363,7 @@ const DigitalCard = () => {
                 <Briefcase className="w-4 h-4" style={{ color: GOLD.primary }} />
                 <span className="text-sm font-semibold text-[#1A1A1A]">{CONTACT_INFO.title}</span>
               </div>
-              <Link 
+              <Link aria-label="Company" 
                 to="/about"
                 className="flex items-center justify-center gap-2 transition-colors group"
                 style={{ color: GOLD.primary }}
@@ -534,6 +534,7 @@ const DigitalCard = () => {
                   <p className="text-xs font-semibold text-[#1A1A1A]/60 mb-3 uppercase tracking-wider">JBJ Global Real Estate</p>
                   <div className="flex justify-center gap-3">
                     <a
+                      aria-label="LinkedIn (company)"
                       href={CONTACT_INFO.linkedinCompany}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -543,6 +544,7 @@ const DigitalCard = () => {
                       <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
                     </a>
                     <a
+                      aria-label="Instagram (company)"
                       href={CONTACT_INFO.instagramCompany}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -552,6 +554,7 @@ const DigitalCard = () => {
                       <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
                     </a>
                     <a
+                      aria-label="TikTok (company)"
                       href={CONTACT_INFO.tiktokCompany}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -561,6 +564,7 @@ const DigitalCard = () => {
                       <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
                     </a>
                     <a
+                      aria-label="Facebook (company)"
                       href={CONTACT_INFO.facebookCompany}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -583,6 +587,7 @@ const DigitalCard = () => {
                   <p className="text-xs font-semibold text-[#1A1A1A]/60 mb-3 uppercase tracking-wider">Connect with the Founder</p>
                   <div className="flex justify-center gap-3">
                     <a
+                      aria-label="LinkedIn (personal)"
                       href={CONTACT_INFO.linkedinPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -592,6 +597,7 @@ const DigitalCard = () => {
                       <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
                     </a>
                     <a
+                      aria-label="Instagram (personal)"
                       href={CONTACT_INFO.instagramPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -601,6 +607,7 @@ const DigitalCard = () => {
                       <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
                     </a>
                     <a
+                      aria-label="Facebook (personal)"
                       href={CONTACT_INFO.facebookPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -610,6 +617,7 @@ const DigitalCard = () => {
                       <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
                     </a>
                     <a
+                      aria-label="TikTok (personal)"
                       href={CONTACT_INFO.tiktokPersonal}
                       target="_blank"
                       rel="noopener noreferrer"

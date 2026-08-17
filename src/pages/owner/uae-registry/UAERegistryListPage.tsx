@@ -202,7 +202,7 @@ export default function UAERegistryListPage({ type }: { type: RegistryRecordType
                 <span><Badge className={STATUS_COLOR[r.outreach_status] ?? "bg-[#F7F2EA] text-[#1A1A1A]"}>{r.outreach_status}</Badge></span>
                 <span style={{ color: "#1A1A1A" }}>{r.verification_status}</span>
                 <div className="flex gap-1 flex-wrap">
-                  {phoneDigits && <a href={`tel:${phoneDigits}`} title="Call"><Button size="sm" variant="outline" className="h-7 w-7 p-0"><Phone className="h-3 w-3" /></Button></a>}
+                  {phoneDigits && <a href={`tel:${phoneDigits}`} title="Call"><Button aria-label="Call" size="sm" variant="outline" className="h-7 w-7 p-0"><Phone className="h-3 w-3" /></Button></a>}
                   {email && <a href={`mailto:${email}`} title="Email"><Button aria-label="Email" size="sm" variant="outline" className="h-7 w-7 p-0"><Mail className="h-3 w-3" /></Button></a>}
                   {phoneDigits && <a href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer" title="WhatsApp"><Button aria-label="WhatsApp" size="sm" variant="outline" className="h-7 w-7 p-0"><MessageCircle className="h-3 w-3" /></Button></a>}
                   {r.website && <a href={r.website} target="_blank" rel="noreferrer" title="Website"><Button aria-label="Website" size="sm" variant="outline" className="h-7 w-7 p-0"><ExternalLink className="h-3 w-3" /></Button></a>}

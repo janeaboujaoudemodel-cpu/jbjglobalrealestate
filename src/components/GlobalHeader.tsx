@@ -1078,7 +1078,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {activeMegaMenu && !['search', 'language', 'account'].includes(activeMegaMenu) && (
                 <>
                   {/* Backdrop blur overlay - matches utility menus */}
-                  <div 
+                  <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} 
                     className="fixed inset-0 z-40 bg-[#1A1A1A]/40 backdrop-blur-sm"
                     style={{ top: 'var(--header-height, 128px)' }}
                     onClick={closeMegaMenu}
@@ -1184,7 +1184,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           {!shouldUseMobileHeader && (activeMegaMenu === 'language' || activeMegaMenu === 'account' || activeMegaMenu === 'search' || activeMegaMenu === 'notifications') && (
             <>
               {/* Backdrop only - click to close */}
-              <div 
+              <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} 
                 className="fixed inset-0 z-[9997] bg-[#1A1A1A]/40 backdrop-blur-sm"
                 style={{ top: 'var(--header-height, 128px)' }}
                 onClick={(e) => {

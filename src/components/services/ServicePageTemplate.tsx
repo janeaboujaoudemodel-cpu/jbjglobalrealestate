@@ -258,7 +258,7 @@ function HeroButton({ to, children }: { to: string; children: ReactNode }) {
     );
   }
   return (
-    <Link aria-label="Open"
+    <Link
       to={to}
       data-pm-emerald
       data-no-contrast-guard

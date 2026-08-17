@@ -453,7 +453,7 @@ const Documents = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Input value={title} onChange={e => setTitle(e.target.value)} className="text-sm font-medium border-[hsl(var(--gold)/0.3)] bg-[#FDFBF7]/60 focus-visible:ring-[hsl(var(--gold)/0.5)] max-w-[240px] h-8" placeholder="Document title" />
-                <Button variant="outline" size="sm" className="border-[hsl(var(--gold)/0.3)] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] h-8" onClick={handlePrint}><Printer className="h-4 w-4" /></Button>
+                <Button aria-label="Print" variant="outline" size="sm" className="border-[hsl(var(--gold)/0.3)] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] h-8" onClick={handlePrint}><Printer className="h-4 w-4" /></Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild><Button variant="outline" size="sm" className="border-[hsl(var(--gold)/0.3)] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] h-8"><Download className="h-4 w-4 mr-1" /> Export</Button></DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-[hsl(var(--popover))] border-[hsl(var(--border))]">
@@ -647,7 +647,7 @@ const Documents = () => {
               <div className="w-px h-5 bg-[hsl(var(--gold)/0.2)] mx-0.5" />
 
               <DropdownMenu>
-                <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" className="h-7 w-7 p-0 hover:bg-[hsl(var(--gold)/0.1)]"><Type className="h-3.5 w-3.5" /></Button></DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild><Button aria-label="Change font" variant="ghost" size="sm" className="h-7 w-7 p-0 hover:bg-[hsl(var(--gold)/0.1)]"><Type className="h-3.5 w-3.5" /></Button></DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-[hsl(var(--popover))] border-[hsl(var(--border))]">
                   <DropdownMenuItem onClick={() => execCommand('formatBlock', 'p')} className="text-[hsl(var(--popover-foreground))]">Normal Text</DropdownMenuItem>
                   <DropdownMenuSeparator />

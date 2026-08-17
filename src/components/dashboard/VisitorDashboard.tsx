@@ -140,7 +140,7 @@ const VisitorDashboard = () => {
               {QUICK_ACCESS.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <Link key={item.title} to={item.href}>
+                  <Link aria-label={item.title} key={item.title} to={item.href}>
                     <Card className="bg-[#FDFBF7]/30 border-[#1A1A1A] hover:border-[#1A1A1A] transition-all group cursor-pointer">
                       <CardContent className="flex items-center gap-4 p-5">
                         <div className="w-12 h-12 rounded-lg bg-[#1A1A1A] flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors">

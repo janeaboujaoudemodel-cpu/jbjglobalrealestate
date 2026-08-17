@@ -381,7 +381,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           </div>
           <h2 className="text-sm font-semibold text-[#1A1A1A] truncate">{ticket.subject}</h2>
         </div>
-        <Button
+        <Button aria-label="Close"
           variant="ghost"
           size="icon"
           onClick={onClose}
@@ -422,7 +422,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4 text-[#1A1A1A]" />
-                <button
+                <button aria-label="Open in a new tab"
                   onClick={handleEmailClick}
                   className="text-[#1A1A1A] hover:underline flex items-center gap-1"
                 >
@@ -686,7 +686,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               </button>
             </div>
           </div>
-          <Button
+          <Button aria-label="Maximize reply editor"
             onClick={handleSendReply}
             disabled={!replyMessage.trim() || sendReply.isPending}
             className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] self-end"

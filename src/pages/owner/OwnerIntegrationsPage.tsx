@@ -204,7 +204,7 @@ const OwnerIntegrationsPage = () => {
                         variant="outline"
                         className="flex-1 border-[#B89555]/40 bg-[#EFE6D6] hover:bg-[#E6DAC2] text-[#1A1A1A]"
                       >
-                        <Link aria-label="Open integration" to={integration.connectHref}>
+                        <Link to={integration.connectHref}>
                           <Settings className="w-4 h-4 mr-1.5" />
                           {status === "connected" ? "Configure" : "Connect"}
                         </Link>

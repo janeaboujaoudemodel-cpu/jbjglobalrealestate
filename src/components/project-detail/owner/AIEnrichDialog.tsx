@@ -207,7 +207,7 @@ export default function AIEnrichDialog({
               <Button variant="outline" onClick={() => handleClose(false)} className="flex-1">
                 <X className="w-4 h-4" /> Cancel
               </Button>
-              <Button aria-label="AI assist" variant="primary" onClick={handleAnalyze} disabled={loading} className="flex-1">
+              <Button variant="primary" onClick={handleAnalyze} disabled={loading} className="flex-1">
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" /> Analyzing…
@@ -315,7 +315,7 @@ export default function AIEnrichDialog({
               <Button variant="outline" onClick={() => setResult(null)} className="flex-1">
                 Back
               </Button>
-              <Button aria-label="Confirm" variant="primary" onClick={handleApply} disabled={applying} className="flex-1">
+              <Button variant="primary" onClick={handleApply} disabled={applying} className="flex-1">
                 {applying ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" /> Applying…

@@ -520,7 +520,7 @@ const CompanyProfile = () => {
                 { title: 'Company Snapshot', anchor: 'snapshot' },
                 { title: 'Download Company Profile', anchor: 'download' },
               ].map((item, index) => (
-                <a
+                <a aria-label="Next"
                   key={index}
                   href={`#${item.anchor}`}
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors group"

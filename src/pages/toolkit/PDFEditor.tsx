@@ -60,7 +60,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
         <ToolContentWrapper accentColor={G.gold}>
         {ed.pages.length === 0 ? (
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             className="max-w-2xl mx-auto rounded-2xl p-12 text-center cursor-pointer transition-all duration-300"
             style={{ border: `2px dashed ${G.border}`, background: G.bg }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = G.borderHover; (e.currentTarget as HTMLElement).style.background = G.bgHover; }}

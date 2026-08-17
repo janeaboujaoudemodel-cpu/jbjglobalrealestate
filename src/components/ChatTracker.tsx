@@ -135,7 +135,7 @@ const ChatTracker = ({ leadId, phoneNumber: initialPhone, onChatLogged }: ChatTr
                 onChange={(e) => setContactNumber(e.target.value)}
                 className="flex-1"
               />
-              <Button 
+              <Button aria-label="Send" 
                 variant="secondary" 
                 size="icon"
                 onClick={openWhatsApp}

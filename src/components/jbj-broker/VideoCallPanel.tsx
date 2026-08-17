@@ -230,7 +230,7 @@ export function VideoCallPanel({
 
             {/* Call Controls */}
             <div className="flex items-center justify-center gap-4">
-              <Button
+              <Button aria-label="Record"
                 variant="outline"
                 size="icon"
                 onClick={toggleAudio}
@@ -243,7 +243,7 @@ export function VideoCallPanel({
                 {isAudioEnabled ? <Mic className="h-6 w-6" /> : <MicOff className="h-6 w-6" />}
               </Button>
               
-              <Button
+              <Button aria-label="Video"
                 variant="outline"
                 size="icon"
                 onClick={toggleVideo}
@@ -256,7 +256,7 @@ export function VideoCallPanel({
                 {isVideoEnabled ? <Video className="h-6 w-6" /> : <VideoOff className="h-6 w-6" />}
               </Button>
               
-              <Button
+              <Button aria-label="Toggle screen share"
                 variant="outline"
                 size="icon"
                 onClick={toggleScreenShare}
@@ -269,7 +269,7 @@ export function VideoCallPanel({
                 <MonitorUp className="h-6 w-6" />
               </Button>
               
-              <Button
+              <Button aria-label="End call"
                 onClick={endCall}
                 className="h-14 w-14 rounded-full bg-red-500 hover:bg-red-600 text-white"
               >

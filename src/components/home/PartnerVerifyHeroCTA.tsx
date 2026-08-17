@@ -44,7 +44,7 @@ export default function PartnerVerifyHeroCTA() {
             <p className="text-[#1A1A1A]/70 text-xs sm:text-sm truncate">{sub}</p>
           </div>
         </div>
-        <Link aria-label="Open Portal"
+        <Link
           to="/partners"
           className="jj-cta-dark text-sm shrink-0"
           data-cta="dark"

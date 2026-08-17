@@ -621,7 +621,7 @@ const VideoMeeting = () => {
                   </div>
                 )}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  <Button
+                  <Button aria-label="Video"
                     variant={videoEnabled ? "secondary" : "destructive"}
                     size="icon"
                     onClick={toggleVideo}
@@ -629,7 +629,7 @@ const VideoMeeting = () => {
                   >
                     {videoEnabled ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
                   </Button>
-                  <Button
+                  <Button aria-label="Record"
                     variant={audioEnabled ? "secondary" : "destructive"}
                     size="icon"
                     onClick={toggleAudio}
@@ -862,7 +862,7 @@ const VideoMeeting = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
+          <Button aria-label="Copy"
             variant="ghost"
             size="sm"
             onClick={copyMeetingLink}
@@ -901,7 +901,7 @@ const VideoMeeting = () => {
           >
             <Grid className="w-4 h-4" />
           </Button>
-          <Button
+          <Button aria-label="Minimise"
             variant="ghost"
             size="icon"
             onClick={toggleFullscreen}
@@ -923,7 +923,7 @@ const VideoMeeting = () => {
           {isHost && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white/70 hover:text-white">
+                <Button aria-label="Settings" variant="ghost" size="icon" className="text-white/70 hover:text-white">
                   <Settings className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -1132,7 +1132,7 @@ const VideoMeeting = () => {
                   placeholder="Type a message..."
                   className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                 />
-                <Button size="icon" onClick={sendChatMessage} className="bg-red-500 hover:bg-red-600">
+                <Button aria-label="Send" size="icon" onClick={sendChatMessage} className="bg-red-500 hover:bg-red-600">
                   <Send className="w-4 h-4" />
                 </Button>
               </div>

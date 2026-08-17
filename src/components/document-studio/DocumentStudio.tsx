@@ -2840,7 +2840,7 @@ function StudioShell({
           style={{ zIndex: 2147483100 }}
           onClick={() => setSaveDialogOpen(false)}
         >
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/40 p-5 w-[420px] shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
@@ -2881,7 +2881,7 @@ function StudioShell({
           style={{ zIndex: 2147483100 }}
           onClick={() => !aiPageBusy && setAddPageAfterIndex(null)}
         >
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/40 p-5 w-[520px] shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >

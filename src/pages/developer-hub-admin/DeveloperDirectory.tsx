@@ -465,7 +465,7 @@ export default function DeveloperDirectory() {
           {onlyBroken ? "Showing broken only" : "Show broken only"}
         </Button>
 
-        <Button aria-label="Unselect all" size="sm" variant="outline" onClick={toggleAll}>
+        <Button size="sm" variant="outline" onClick={toggleAll}>
           {allSelected ? <CheckSquare className="size-4 mr-1" /> : <Square className="size-4 mr-1" />}
           {allSelected ? "Unselect all" : "Select all loaded"}
         </Button>

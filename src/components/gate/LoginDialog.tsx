@@ -76,7 +76,7 @@ export default function LoginDialog({ open, onOpenChange }: Props) {
               </button>
             </div>
           </Field>
-          <Button aria-label="Log in"
+          <Button
             type="submit"
             variant="primary"
             disabled={loading}
