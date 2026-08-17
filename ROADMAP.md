@@ -22,6 +22,7 @@ Based on the CTO technical review of jbjglobalrealestate (jbj.ae), the Aug 12 fu
 
 | ID | Date (UTC) | Author | Change | Item(s) | Commit / PR |
 |---|---|---|---|---|---|
+| RM-025 | 2026-08-17 | Claude Code session | Media Ingestion Engine Audit: fixed 3.2 (unauthenticated `process-drive-upload` impersonation + AI spend), 3.3 (no upload validation — added shared validator with magic-byte sniffing plus bucket `allowed_mime_types`/`file_size_limit`), 3.5 (all twelve `rel_*` tables readable by any authenticated user), 3.6 (seller step tabs silently ignored forward clicks). Investigated 3.1 (blank owner portal) across 3 routes x 3 auth states — not reproducible on current `main`; added a Playwright regression spec and recorded the likely publish-lag explanation rather than claiming a fix. Logged 3.7 as a product decision. | JBJ-021, JBJ-022, JBJ-023 | `ff671a7` |
 | RM-024 | 2026-08-16 | Claude Code session | Guide Consolidation Stage 2, part 1: folded five standalone FAQ pages into their matching guide pages (accordion section, old routes redirect to `#faq` anchors), removed the now-empty FAQ hub audience picker, fixed a hash-scroll gap in `ScrollToTopOnMount` that anchor redirects depend on. Stage 2 part 2 (Rental Guide → Tenant/Landlord split) deferred — found Tenant/Landlord Guide already independently cover the same ground as `RentGuide.tsx`'s content-mapping table; flagged rather than resolved unilaterally. Added JBJ-020 for the landlord rental-content gap this surfaced. | JBJ-018, JBJ-020 | `dd27252`, PR #37 |
 | RM-023 | 2026-08-16 | Claude Code session | Documented the JBJ-019 self-verification decision in CLAUDE.md as a new "PR review process" section (near where PR #17's roadmap-tracking section lands); updated JBJ-019 status to fully resolved | JBJ-019 | `pending`, new PR |
 | RM-022 | 2026-08-16 | Jane (decision) | Decided both open governance/scope questions: JBJ-005 migrates all 45 modals onto the shared Dialog wrapper (full migration, not per-component patching); JBJ-019 formally accepts self-verification as the PR review process, documented as a real tradeoff rather than a silent gap | JBJ-005, JBJ-019 | — |
@@ -310,6 +311,35 @@ The panel's undercount (PostgREST's 1,000-row cap truncating the query) was alre
   **Decision: self-verification is the accepted process here, explicitly, not by default.** The standard going forward is what JBJ-018 already did in practice — re-running checks, diffing against a clean pre-PR base, confirming diff scope matches what's claimed — plus a human read of the diff when practical. This is a real, documented tradeoff, not a gap being quietly accepted: there is no independent reviewer catching what self-verification misses. If that changes (a second human reviewer joins, or a genuinely distinct AI reviewing identity becomes available), this decision should be revisited — it's the current answer, not a permanent one.
 
   **Done (Aug 16):** written into `CLAUDE.md` itself as a new "PR review process" section, so every future Claude Code session knows self-verification is the accepted bar rather than something to flag as a blocker each time. Fully closed.
+
+- [x] **JBJ-021 — Media ingestion audit: unauthenticated edge function, unvalidated uploads, open CRM read. RESOLVED (Aug 17).**
+
+  From the Media Ingestion Engine Audit (Aug 17 2026), findings 3.2 / 3.3 / 3.5 / 3.6.
+
+  - **3.2 (High)** `process-drive-upload` read `userId` from the request body and wrote it with a service-role client, after spending AI Gateway credits, with no auth check. Supabase's `verify_jwt` would not have caught this — the anon key is a valid JWT and ships in the frontend bundle. Caller is now resolved via `auth.getUser()`; `userId` left the request contract entirely. Rate limit added.
+  - **3.3 (Medium)** Listing-media uploads had no size or type validation at all. Added `src/lib/media/validateUpload.ts` (size caps, MIME allowlist, extension cross-check, magic-byte sniff, filename sanitisation; 15 tests) plus a migration setting `allowed_mime_types` / `file_size_limit` on `rel-media` and `rel-logos`, which had neither.
+  - **3.5 (Medium)** All twelve `rel_*` tables were `SELECT ... USING (true)` — contacts, deals, payments and email history readable by any authenticated account. Scoped to `rel_is_owner()` after confirming every frontend read of these tables is under `src/pages/owner/*`.
+  - **3.6 (Low)** Seller-form step tabs dropped forward clicks silently; now navigate as far as the form allows and name the blocking fields.
+
+  **Evidence:** commit `ff671a7`; 432/432 vitest, all 8 contrast gate steps green.
+
+  **Left open deliberately:** the `rel-media` / `rel-logos` buckets stay public-read. They are public buckets, so any already-shared object URL breaks the moment they are made private — a product decision, not a straight security fix.
+
+- [ ] **JBJ-022 — Media ingestion audit 3.1: blank `/owner/*` portal. NOT REPRODUCIBLE from source; needs a check against the deployed bundle.**
+
+  The audit's launch-blocking finding: every `/owner/*` route and `/admin/media-ingestion` rendering blank in production for the owner's own account, with the container collapsing to zero height.
+
+  **Did not reproduce** against current `main` (Aug 17). Driven in a real browser with a stubbed owner session across three routes (`/owner/media-ingest`, `/owner/crm/jbj/home`, `/admin/media-ingestion`) and three verification states (cached owner, cold + slow `verify-owner`, cold + failing `verify-owner`). Every combination rendered at full height with content present.
+
+  One measurement note worth recording, because it may explain the original diagnosis: `#root`'s first two children are legitimately zero-height portal anchors, so inspecting `#root > *` reports `height: 0` on a perfectly healthy page. The real content is a later sibling.
+
+  **Most likely explanation, and the next step:** publishing to jbj.ae is a separate manual step in Lovable, so production can be running an older bundle than `main`. Re-check the live site after the next publish. `tests/owner-shell-renders.spec.ts` now locks the invariant so a genuine regression is caught by CI rather than by hand.
+
+- [ ] **JBJ-023 — "Google Drive integration" is link-parsing, not an integration (audit 3.7). Needs a product decision.**
+
+  No `googleapis` / OAuth / Picker code exists anywhere in the repo. Drive support means: paste a `drive.google.com` URL, regex-confirm it looks like one, ask an AI model to guess the contents. No folder browsing, no scoped access, no check that the link is even reachable.
+
+  That is a legitimate lightweight design — but if the expectation is "connect your Drive and pick files", it does not exist and would need building from scratch (OAuth consent screen, Picker API, token storage). Recorded so the ambiguity is settled deliberately rather than assumed either way.
 
 - [ ] **CI infrastructure gap, ticketed separately.** 3 of the known-failing CI checks (see JBJ-011) trace to the runner itself missing Playwright browsers and `bunx` — infrastructure, not code. A GitHub issue was opened for this specifically, alongside the existing issue #5 tracking the 485-violation a11y baseline drift. Worth linking both issues here once numbers are confirmed, so this doc and GitHub's own issue tracker don't drift apart.
 
