@@ -18,6 +18,7 @@ import {
 } from "@/lib/vault";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeOpen } from "@/utils/safeUrl";
 
 const CATEGORIES: { v: VaultCategory; label: string; help: string }[] = [
   { v: "identity",  label: "Identity",   help: "Passport, Emirates ID, visa, national ID, driving licence" },
@@ -78,7 +79,7 @@ export default function MyVault() {
   async function openDoc(doc: VaultDocument) {
     try {
       const { url } = await getVaultSignedUrl(doc.id);
-      window.open(url, "_blank", "noopener,noreferrer");
+      safeOpen(url);
     } catch (e) {
       toast.error((e as Error).message);
     }

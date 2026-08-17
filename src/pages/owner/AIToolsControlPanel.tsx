@@ -18,6 +18,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import { isApprovedPublicToolId } from "@/config/publicToolAccess";
+import { safeOpen } from "@/utils/safeUrl";
 
 // ─── Tool Registry (mirrors AIHub.tsx) ───────────────────────────────────────
 type ToolCategory = "property" | "productivity" | "marketing" | "design" | "corporate";
@@ -314,7 +315,7 @@ export default function AIToolsControlPanel() {
   const testTool = async (toolId: string, toolUrl: string) => {
     const latestVersion = versions.find(v => v.tool_id === toolId && (v.status === "applied" || v.status === "tested"));
     // Open tool in new tab
-    window.open(toolUrl, "_blank");
+    safeOpen(toolUrl);
     // Create test log
     const { error } = await (supabase.from("ai_tool_test_logs") as any).insert({
       tool_id: toolId,

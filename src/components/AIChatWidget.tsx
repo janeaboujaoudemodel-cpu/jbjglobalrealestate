@@ -38,6 +38,7 @@ import ChatThreadsPanel from './chat/ChatThreadsPanel';
 import ChatAuroraBackground from './chat/ChatAuroraBackground';
 import { SUPABASE_URL } from "@/config/backend";
 import { consumeChatPrefill, notifyOwnerOfHandoff } from "@/lib/searchIntent";
+import { safeNavigate } from "@/utils/safeUrl";
 
 
 interface AIChatWidgetProps {
@@ -1023,7 +1024,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
     if (navigationMap[shortcut]) {
       // Navigate directly - close chat widget
-      window.location.href = navigationMap[shortcut]!;
+      safeNavigate(navigationMap[shortcut]!);
       return;
     }
     

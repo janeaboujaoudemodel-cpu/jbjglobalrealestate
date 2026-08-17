@@ -43,6 +43,16 @@
     invisible: "Invisible",
     color_on_color: "Color-on-color",
   };
+
+  // Route names, selectors and labels are scraped from the pages under audit,
+  // so they are attacker-influenceable content, not trusted template data.
+  // Everything interpolated into innerHTML below goes through esc().
+  const esc = (v) => String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
   document.getElementById("meta").textContent =
     DATA.run_label + " · " + DATA.environment + " · " + new Date(DATA.created_at).toLocaleString() + " · " + DATA.base;
 
@@ -53,12 +63,12 @@
     ["Pass rate", DATA.tiles_scanned ? Math.round((DATA.tiles_scanned - DATA.total_failures) / DATA.tiles_scanned * 100) + "%" : "—"],
   ];
   document.getElementById("summary").innerHTML = stats.map(([l,v]) =>
-    '<div class="stat"><div class="l">' + l + '</div><div class="v">' + v + '</div></div>'
+    '<div class="stat"><div class="l">' + esc(l) + '</div><div class="v">' + esc(v) + '</div></div>'
   ).join("");
 
   document.getElementById("pills").innerHTML = Object.entries(RULE_LABELS).map(([k,l]) => {
     const n = DATA.failures_by_rule[k] || 0;
-    return '<span class="pill ' + (n > 0 ? 'bad' : '') + '">' + l + ': ' + n + '</span>';
+    return '<span class="pill ' + (n > 0 ? 'bad' : '') + '">' + esc(l) + ': ' + esc(n) + '</span>';
   }).join("");
 
   const routesEl = document.getElementById("routes");
@@ -68,15 +78,15 @@
     const byRoute = {};
     for (const f of DATA.failures) (byRoute[f.route] = byRoute[f.route] || []).push(f);
     routesEl.innerHTML = Object.entries(byRoute).map(([route, list]) =>
-      '<section class="route"><h2>' + route + ' — ' + list.length + ' failure(s)</h2>' +
+      '<section class="route"><h2>' + esc(route) + ' — ' + list.length + ' failure(s)</h2>' +
       list.map(f =>
         '<div class="tile">' +
-          '<div><div class="meta-col">Default</div>' + (f.crop_default_b64 ? '<img src="data:image/png;base64,' + f.crop_default_b64 + '">' : '—') + '</div>' +
-          '<div><div class="meta-col">Failing (' + (f.state || 'default') + ')</div>' + (f.crop_failing_b64 ? '<img src="data:image/png;base64,' + f.crop_failing_b64 + '">' : '—') + '</div>' +
+          '<div><div class="meta-col">Default</div>' + (f.crop_default_b64 ? '<img src="data:image/png;base64,' + encodeURIComponent(f.crop_default_b64) + '">' : '—') + '</div>' +
+          '<div><div class="meta-col">Failing (' + esc(f.state || 'default') + ')</div>' + (f.crop_failing_b64 ? '<img src="data:image/png;base64,' + encodeURIComponent(f.crop_failing_b64) + '">' : '—') + '</div>' +
           '<div class="meta-col">' +
-            '<span class="rule">' + (RULE_LABELS[f.rule] || f.rule) + '</span><br>' +
-            '<div class="label">' + (f.label || '(no label)') + '</div>' +
-            'Selector: <code>' + f.selector + '</code><br>' +
+            '<span class="rule">' + esc(RULE_LABELS[f.rule] || f.rule) + '</span><br>' +
+            '<div class="label">' + esc(f.label || '(no label)') + '</div>' +
+            'Selector: <code>' + esc(f.selector) + '</code><br>' +
             (f.contrast != null ? 'Contrast: ' + Number(f.contrast).toFixed(2) + '<br>' : '') +
             (f.bbox ? 'bbox: ' + Math.round(f.bbox.x) + ',' + Math.round(f.bbox.y) + ' ' + Math.round(f.bbox.w) + '×' + Math.round(f.bbox.h) : '') +
           '</div>' +

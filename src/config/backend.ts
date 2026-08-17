@@ -10,10 +10,11 @@
  * crash with "supabaseUrl is required" even if env injection fails.
  */
 
-const FALLBACK_URL = "https://mdafrewypkkrildjgtey.supabase.co";
-const FALLBACK_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0";
-const FALLBACK_PROJECT_ID = "mdafrewypkkrildjgtey";
+import {
+  DEFAULT_SUPABASE_ANON_KEY as FALLBACK_KEY,
+  DEFAULT_SUPABASE_PROJECT_ID as FALLBACK_PROJECT_ID,
+  DEFAULT_SUPABASE_URL as FALLBACK_URL,
+} from "./backendDefaults";
 
 /**
  * Public-facing domain used when building shareable links (signing URLs,

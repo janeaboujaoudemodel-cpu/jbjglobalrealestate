@@ -277,7 +277,18 @@ async function main() {
 
   const tplPath = path.join(__dirname, "report-template.html");
   const tpl = await fs.readFile(tplPath, "utf8");
-  const html = tpl.replace("__DATA__", JSON.stringify(summary));
+  // The summary carries selectors and labels scraped from the audited pages.
+  // A literal `</script` in any of them would terminate the inline script
+  // block early and inject markup into the report, so escape the angle
+  // brackets — JSON parsers resolve </> back to the same string.
+  const dataJson = JSON.stringify(summary)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+  // Function replacement: `$&`, `$'` etc. in the JSON are otherwise treated as
+  // replacement patterns by String.replace.
+  const html = tpl.replace("__DATA__", () => dataJson);
   await fs.writeFile(path.join(outDir, "icon-tile-audit.html"), html);
   console.log(`[icon-audit] wrote ${outDir}/icon-tile-audit.{html,json}`);
   console.log(

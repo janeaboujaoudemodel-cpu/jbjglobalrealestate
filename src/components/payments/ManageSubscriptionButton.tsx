@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { toast } from "sonner";
 import { useBrokerStripeTier } from "@/hooks/useBrokerStripeTier";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface ManageSubscriptionButtonProps {
   className?: string;
@@ -38,7 +39,7 @@ export function ManageSubscriptionButton({
         },
       });
       if (error || !data?.url) throw new Error(error?.message || "Could not open the billing portal");
-      window.open(data.url, "_blank", "noopener,noreferrer");
+      safeOpen(data.url);
     } catch (e) {
       toast.error((e as Error).message);
     } finally {

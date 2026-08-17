@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Loader2, Upload, ImageIcon, Building2, User, Phone, Mail, MessageCircle, Save } from "lucide-react";
+import { safeFileExtension } from "@/utils/storagePath";
 
 const BUCKET = "broker-brand";
 const SIGNED_URL_TTL = 60 * 60 * 24 * 365; // 1 year
@@ -70,7 +71,7 @@ export default function BrokerBrandProfile() {
     if (file.size > 5 * 1024 * 1024) { toast.error("Max 5 MB"); return; }
     setUploading(kind);
     try {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+      const ext = safeFileExtension(file.name, 'png');
       const path = `${user.id}/${kind}-${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
       if (upErr) throw upErr;

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 export default function RegisterBroker() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function RegisterBroker() {
     try {
       let cvUrl: string | null = null;
       if (cvFile) {
-        const path = `${user.id}/cv-${Date.now()}-${cvFile.name}`;
+        const path = `${user.id}/cv-${Date.now()}-${safeStorageFileName(cvFile.name, 'cv')}`;
         const { error: upErr } = await supabase.storage.from("broker-documents").upload(path, cvFile, { upsert: true });
         if (upErr) {
           // bucket may not exist for this account, fallback silently

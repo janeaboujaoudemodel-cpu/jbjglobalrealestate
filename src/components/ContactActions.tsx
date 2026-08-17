@@ -4,6 +4,7 @@
  */
 
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
+import { safeNavigate, safeOpen } from "@/utils/safeUrl";
 
 interface ContactActionOptions {
   /** Custom message for WhatsApp */
@@ -25,14 +26,14 @@ export function openWhatsApp(options: ContactActionOptions = {}) {
   const url = getWhatsAppUrl(whatsappMessage);
   
   // Use window.open to avoid iframe/popup blocking issues
-  window.open(url, '_blank', 'noopener,noreferrer');
+  safeOpen(url);
 }
 
 /**
  * Initiate a phone call
  */
 export function openCall() {
-  window.location.href = getCallUrl();
+  safeNavigate(getCallUrl());
 }
 
 /**
@@ -55,7 +56,7 @@ export function openEmail(options: ContactActionOptions = {}) {
     url += `?${params.join('&')}`;
   }
   
-  window.location.href = url;
+  safeNavigate(url);
 }
 
 /**

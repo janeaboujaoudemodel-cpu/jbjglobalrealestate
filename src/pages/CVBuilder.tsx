@@ -28,6 +28,7 @@ import { useUserCVs, type SavedCVRow } from "@/hooks/useUserCVs";
 import { SavedCVsMenu } from "@/components/cv-builder/SavedCVsMenu";
 import { CVAIAssistant } from "@/components/cv-builder/CVAIAssistant";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeFileExtension } from "@/utils/storagePath";
 
 /* ────────────── Types ────────────── */
 
@@ -155,7 +156,7 @@ export default function CVBuilder() {
       // If signed in, also upload to bucket for sharing/download stability.
       if (user?.id) {
         try {
-          const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+          const ext = safeFileExtension(file.name, 'png');
           const path = `${user.id}/${Date.now()}.${ext}`;
           const { error } = await supabase.storage.from("cv-photos").upload(path, file, { upsert: true });
           if (!error) {

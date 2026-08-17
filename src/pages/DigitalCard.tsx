@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 // Import CEO photo - same as used in team/leadership
 import janePhoto from '@/assets/ceo/jane-ceo-private-jet.jpg';
+import { safeNavigate } from '@/utils/safeUrl';
 
 
 // Contact info constants - LOCKED (from BRAND_LOCK)
@@ -136,7 +137,7 @@ const openWhatsApp = (phone: string) => {
   const whatsappUrl = `whatsapp://send?phone=${phone}&text=${message}`;
   
   // Try native first, fallback to web
-  window.location.href = whatsappUrl;
+  safeNavigate(whatsappUrl);
   
   // No fallback needed - window.location.href handles it
 };

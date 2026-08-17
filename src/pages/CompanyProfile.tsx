@@ -49,6 +49,7 @@ import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 import { SEOHead } from "@/components/SEOHead";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeNavigate } from "@/utils/safeUrl";
 
 function SectionShell({
   children,
@@ -398,7 +399,7 @@ const CompanyProfile = () => {
   };
 
   const handleWhatsApp = () => {
-    window.location.href = getWhatsAppUrl("Hello, I would like to request a private consultation.");
+    safeNavigate(getWhatsAppUrl("Hello, I would like to request a private consultation."));
   };
 
   const handleCall = () => {

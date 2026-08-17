@@ -28,6 +28,7 @@ import {
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import BrandedEmailDashboard, { type CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
 import { format } from "date-fns";
+import { safeFileExtension } from "@/utils/storagePath";
 
 const TAB_STYLE = "text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[hsl(36,40%,70%)]/40 rounded-lg";
 
@@ -199,7 +200,7 @@ function DocumentVerificationSection() {
 
   const handleDocUpload = async (docType: "rera" | "id", file: File) => {
     if (!user || !profile) return;
-    const ext = file.name.split(".").pop();
+    const ext = safeFileExtension(file.name);
     const path = `broker-docs/${user.id}/${docType}-${Date.now()}.${ext}`;
     const { error: uploadError } = await supabase.storage.from("broker-documents").upload(path, file, { cacheControl: "3600", upsert: true });
     if (uploadError) { toast.error("Upload service unavailable. Please try again later."); return; }

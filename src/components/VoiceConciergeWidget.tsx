@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import VoiceConciergeIntakeModal from "@/components/voice-concierge/VoiceConciergeIntakeModal";
 import { COMPANY_NAP } from "@/config/companyNAP";
+import { safeOpen } from "@/utils/safeUrl";
 
 const LEAD_STORAGE_KEY = "voice_concierge_lead";
 const LEAD_TTL_MS = 30 * 24 * 60 * 60 * 1000;
@@ -300,7 +301,7 @@ const VoiceConciergeWidget = () => {
 
   const handleOpenWhatsApp = useCallback(() => {
     setChoiceOpen(false);
-    window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+    safeOpen(WHATSAPP_URL);
   }, []);
 
   const handleIntakeSuccess = useCallback((leadId: string) => {

@@ -1,3 +1,8 @@
+-- NOTE: the publishable (anon) key that used to be written inline here was
+-- replaced by public.edge_function_anon_key(). This migration is already
+-- applied and is kept only as history; migration
+-- 20260817160000_edge_function_key_indirection.sql recreates every object
+-- below with the accessor, so a fresh bootstrap ends in the correct state.
 
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 CREATE EXTENSION IF NOT EXISTS pg_net;
@@ -15,7 +20,7 @@ BEGIN
       url := 'https://mdafrewypkkrildjgtey.supabase.co/functions/v1/background-enrichment-runner',
       headers := jsonb_build_object(
         'Content-Type', 'application/json',
-        'apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0'
+        'apikey', 'REPLACED_BY_edge_function_anon_key'
       ),
       body := jsonb_build_object('action', 'start', 'reason', 'project_published', 'project_id', NEW.id)
     );

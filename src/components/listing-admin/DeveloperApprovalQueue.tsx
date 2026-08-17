@@ -27,6 +27,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeOpen } from "@/utils/safeUrl";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -455,7 +456,7 @@ export const DeveloperApprovalQueue = () => {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => window.open(developer.provident_link || "#", "_blank")}
+                          onClick={() => safeOpen(developer.provident_link || "#")}
                           disabled={!developer.provident_link}
                           className="w-8 h-8 p-0 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                           title="View Source"

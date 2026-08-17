@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { safeNavigate } from "@/utils/safeUrl";
 
 /**
  * OAuth 2.1 consent screen for the app's MCP server.
@@ -48,7 +49,11 @@ export default function OAuthConsent() {
         }
         const immediate = data?.redirect_url ?? data?.redirect_to;
         if (immediate && !data?.client) {
-          window.location.href = immediate;
+          // The authorization server picks this redirect; validate the scheme so a
+          // malicious client registration cannot turn consent into a javascript: sink.
+          if (!safeNavigate(immediate)) {
+            setError("The authorization server returned an unsupported redirect URL.");
+          }
           return;
         }
         setDetails(data);
@@ -79,7 +84,10 @@ export default function OAuthConsent() {
         setError("No redirect returned by the authorization server.");
         return;
       }
-      window.location.href = target;
+      if (!safeNavigate(target)) {
+        setBusy(false);
+        setError("The authorization server returned an unsupported redirect URL.");
+      }
     } catch (e: any) {
       setBusy(false);
       setError(e?.message ?? "Failed to complete authorization");

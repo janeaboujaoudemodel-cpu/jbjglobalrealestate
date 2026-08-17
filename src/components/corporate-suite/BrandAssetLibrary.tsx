@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeFileExtension } from "@/utils/storagePath";
 
 export type AssetType = "monogram" | "logo" | "signature" | "stamp";
 
@@ -257,7 +258,7 @@ export function BrandAssetLibrary({
     setUploading(true);
     try {
       // Upload to brand-assets bucket
-      const ext = file.name.split(".").pop();
+      const ext = safeFileExtension(file.name);
       const path = `${user.id}/${activeType}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("brand-assets")

@@ -40,6 +40,7 @@ import ReportPreviewModal, { type ReportBranding } from "@/components/ai-home-fi
 import { renderReportToPdf } from "@/utils/renderReportToPdf";
 import { logClientError } from "@/utils/clientErrorLogger";
 import type { ReportProject as ReportEngineProject } from "@/components/ai-home-finder/report/ReportEngine";
+import { toSafeUrl } from "@/utils/safeUrl";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
@@ -802,10 +803,12 @@ const QuizResults = () => {
     const inFrame = typeof window !== "undefined" && window.top !== window.self;
     if (isMail) {
       // Most reliable across browsers: navigate top frame directly.
+      const safe = toSafeUrl(url);
+      if (!safe) return;
       try {
-        if (inFrame && window.top) { window.top.location.href = url; return; }
+        if (inFrame && window.top) { window.top.location.href = safe; return; }
       } catch { /* cross-origin top — fall through to anchor */ }
-      window.location.href = url;
+      window.location.href = safe;
       return;
     }
     const a = document.createElement("a");

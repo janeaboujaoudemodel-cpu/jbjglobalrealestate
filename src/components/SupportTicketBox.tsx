@@ -48,6 +48,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import VoiceNoteRecorder from "@/components/crm/VoiceNoteRecorder";
 import { CONTACT_INFO } from "@/constants/stats";
+import { safeFileExtension } from "@/utils/storagePath";
 
 const SERVICE_CATEGORIES = [
   "Inquiry Request",
@@ -225,7 +226,7 @@ const SupportTicketBox = () => {
         const file = attachments[i];
         setUploadStatuses(prev => ({ ...prev, [i]: 'uploading' }));
         
-        const fileExt = file.name.split('.').pop();
+        const fileExt = safeFileExtension(file.name);
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         const filePath = `${fileName}`;
 

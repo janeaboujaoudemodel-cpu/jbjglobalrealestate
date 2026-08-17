@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Download, Mail, Send, MessageCircle, FileText, Loader2, Check, Phone, Eye, X, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface PropertyReportModalProps {
   open: boolean;
@@ -350,7 +351,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                 {project.documents.map((doc, idx) => (
                   <button
                     key={idx}
-                    onClick={() => window.open(doc.file_url, "_blank")}
+                    onClick={() => safeOpen(doc.file_url)}
                     className="w-full flex items-center gap-3 p-3 rounded-lg bg-[#F7F2EA] hover:bg-[#F7F2EA] transition-colors text-left border border-[#B89555]/30"
                   >
                     <div className="w-8 h-8 rounded bg-[#1A1A1A] flex items-center justify-center">

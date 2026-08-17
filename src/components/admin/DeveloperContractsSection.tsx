@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { FileText, Upload, Download, Trash2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { safeOpen } from "@/utils/safeUrl";
 
 type Props = {
   developerId: string;
@@ -103,7 +104,7 @@ export default function DeveloperContractsSection({ developerId, developerName, 
       toast.error(`Download failed: ${error?.message || "no url"}`);
       return;
     }
-    window.open(data.signedUrl, "_blank", "noopener");
+    safeOpen(data.signedUrl);
   };
 
   const handleDelete = async (c: ContractRow) => {

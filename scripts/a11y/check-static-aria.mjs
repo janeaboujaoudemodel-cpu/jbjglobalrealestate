@@ -27,6 +27,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
+import { tryResolveWithinRoot } from '../lib/safePath.mjs';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..', '..');
@@ -47,8 +48,10 @@ const exts = new Set(['.tsx', '.jsx']);
 const TARGETS = process.argv
   .slice(2)
   .filter((a) => !a.startsWith('-'))
-  .map((a) => path.resolve(root, a))
-  .filter((p) => exts.has(path.extname(p)) && fs.existsSync(p));
+  // Confined to the repo — a forwarded filename must not be able to point the
+  // scanner at a file outside the working tree.
+  .map((a) => tryResolveWithinRoot(root, a))
+  .filter((p) => p && exts.has(path.extname(p)) && fs.existsSync(p));
 const SCOPED = TARGETS.length > 0;
 
 /**

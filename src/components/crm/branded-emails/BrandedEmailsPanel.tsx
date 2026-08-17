@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import jbjMonogramCropped from "@/assets/jbj-monogram-cropped.png";
+import { safeOpen } from "@/utils/safeUrl";
 
 export type BrandedAudienceKind = "developers" | "brokerages" | "clients";
 
@@ -462,7 +463,7 @@ function makePreviewHtmlSafe(html: string) {
     if (/^https:\/\/(drive\.google\.com|calendar\.google\.com|calendar\.app\.google)\//i.test(href)) {
       event.preventDefault();
       event.stopPropagation();
-      window.open(href, '_blank', 'noopener,noreferrer');
+      safeOpen(href);
     }
   }, true);
 </script>`;

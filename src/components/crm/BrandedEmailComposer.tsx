@@ -11,6 +11,7 @@
  *   Cc    = infoo.jane@gmail.com (default, removable per send)
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { sanitizeRichHtml } from "@/utils/safeHtml";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ import {
 } from "@/hooks/useEmailTemplateLibrary";
 import { useEmailSignatures, renderSignatureHtml } from "@/hooks/useEmailSignatures";
 import EmailChipInput from "@/components/crm/EmailChipInput";
+import { openPrintWindow } from "@/utils/printWindow";
 
 type Template = {
   id: string; name: string; subject: string; body_html: string; brief: string | null;
@@ -378,8 +380,7 @@ export function BrandedEmailComposer() {
     buildEmlFile({ from: JBJ_FROM_EMAIL, fromName: JBJ_FROM_NAME, to: toEmails.length ? toEmails : ["recipient@example.com"], cc: ccEmails, subject: subject || "JBJ Email", html: fullStandalone }),
   );
   const openInTab = () => {
-    const w = window.open("", "_blank");
-    if (w) { w.document.write(fullStandalone); w.document.close(); }
+    openPrintWindow(fullStandalone, { autoPrint: false });
   };
 
   // === Rendering =====================================================
@@ -687,7 +688,7 @@ export function BrandedEmailComposer() {
                 <div
                   className="p-4 max-h-[520px] overflow-auto prose prose-sm max-w-none"
                   // eslint-disable-next-line react/no-danger
-                  dangerouslySetInnerHTML={{ __html: composedHtml || `<p style="color:#1A1A1A;opacity:0.4;font-style:italic">Compose a body to see the preview…</p>` }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(composedHtml) || `<p style="color:#1A1A1A;opacity:0.4;font-style:italic">Compose a body to see the preview…</p>` }}
                 />
               </div>
             </div>

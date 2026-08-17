@@ -1,5 +1,5 @@
 import { Building2, Cpu, Palette, Heart, Briefcase, User, Scale, Sparkles, UtensilsCrossed } from "lucide-react";
-import DOMPurify from 'dompurify';
+import { sanitizeSvgMarkup } from '@/utils/safeHtml';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 export interface LogoData {
@@ -86,13 +86,7 @@ export const EXPORT_SIZES: ExportSize[] = [
 // ─── SVG Logo Renderer ────────────────────────────────────────────────────────
 export function LogoPreview({ svgContent, size = 200 }: { svgContent: string; size?: number }) {
   if (!svgContent) return null;
-  const clean = typeof window !== 'undefined'
-    ? DOMPurify.sanitize(svgContent, {
-        USE_PROFILES: { svg: true, svgFilters: true },
-        FORBID_TAGS: ['script'],
-        FORBID_ATTR: ['onload', 'onerror', 'onclick'],
-      })
-    : svgContent;
+  const clean = sanitizeSvgMarkup(svgContent);
   return (
     <div
       style={{ width: size, height: size }}

@@ -5,6 +5,7 @@ import { useProjects, useDevelopers, useCommunities, useProjectsTotalCount } fro
 import { useAreas } from "@/hooks/useAreas";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 export interface ProjectDocument {
   id: string;
@@ -119,7 +120,7 @@ export function useAdmin() {
     try {
       for (const file of Array.from(files)) {
         try {
-          const fileName = `${selectedProject.id}/${Date.now()}-${file.name}`;
+          const fileName = `${selectedProject.id}/${Date.now()}-${safeStorageFileName(file.name)}`;
           const { error: uploadError } = await supabase.storage.from("project-files").upload(fileName, file);
           if (uploadError) { failCount++; continue; }
 

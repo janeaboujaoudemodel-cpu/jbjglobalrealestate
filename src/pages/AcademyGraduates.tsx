@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { sanitizeSvgMarkup } from "@/utils/safeHtml";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -247,7 +248,7 @@ export default function AcademyGraduates() {
                                   const qr = qrcode(0, "M");
                                   qr.addData(`${window.location.origin}/verify-certificate/${cert.verification_token}`);
                                   qr.make();
-                                  return qr.createSvgTag(2, 0);
+                                  return sanitizeSvgMarkup(qr.createSvgTag(2, 0));
                                 })(),
                               }}
                             />

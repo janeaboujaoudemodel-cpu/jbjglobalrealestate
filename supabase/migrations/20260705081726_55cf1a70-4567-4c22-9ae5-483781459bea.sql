@@ -1,3 +1,8 @@
+-- NOTE: the publishable (anon) key that used to be written inline here was
+-- replaced by public.edge_function_anon_key(). This migration is already
+-- applied and is kept only as history; migration
+-- 20260817160000_edge_function_key_indirection.sql recreates every object
+-- below with the accessor, so a fresh bootstrap ends in the correct state.
 
 -- Phase 3: push CRM events (notes, calls, assignments) to Zoho via edge function
 
@@ -10,7 +15,7 @@ AS $$
 DECLARE
   v_kind text := TG_ARGV[0];
   v_url text := 'https://mdafrewypkkrildjgtey.supabase.co/functions/v1/sync-crm-event-to-zoho';
-  v_anon text := 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0';
+  v_anon text := 'REPLACED_BY_edge_function_anon_key';
   v_body jsonb;
 BEGIN
   -- Skip if we're inside a sync-driven write to avoid loops
@@ -71,8 +76,8 @@ BEGIN
       url := 'https://mdafrewypkkrildjgtey.supabase.co/functions/v1/sync-crm-event-to-zoho',
       headers := jsonb_build_object(
         'Content-Type', 'application/json',
-        'apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0',
-        'Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0'
+        'apikey', 'REPLACED_BY_edge_function_anon_key',
+        'Authorization', 'Bearer REPLACED_BY_edge_function_anon_key'
       ),
       body := jsonb_build_object('kind', 'assignment', 'record', to_jsonb(NEW), 'old_record', to_jsonb(OLD))
     );

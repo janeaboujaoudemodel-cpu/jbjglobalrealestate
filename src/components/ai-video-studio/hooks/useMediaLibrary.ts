@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { MediaAsset, StockAsset } from '../types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { safeFileExtension } from '@/utils/storagePath';
 
 const generateId = () => crypto.randomUUID();
 const getSessionId = () => {
@@ -46,7 +47,7 @@ export function useMediaLibrary() {
       }
 
       // Generate unique file path
-      const fileExt = file.name.split('.').pop();
+      const fileExt = safeFileExtension(file.name);
       const filePath = `video-studio/${sessionId}/${generateId()}.${fileExt}`;
 
       // Upload to Supabase Storage

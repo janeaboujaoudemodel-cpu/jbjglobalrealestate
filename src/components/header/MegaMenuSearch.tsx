@@ -24,6 +24,7 @@ import {
 } from '@/components/header/mega-menu-primitives';
 import { cn } from '@/lib/utils';
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from '@/constants/stats';
+import { safeOpen } from '@/utils/safeUrl';
 
 interface MegaMenuSearchProps {
   onClose: () => void;
@@ -184,7 +185,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                       e.preventDefault();
                       onClose();
                       setTimeout(() => {
-                        window.open(link.href, '_blank', 'noopener,noreferrer');
+                        safeOpen(link.href);
                       }, 100);
                     }}
                     className={cn(

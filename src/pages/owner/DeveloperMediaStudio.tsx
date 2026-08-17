@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { safeFileExtension } from "@/utils/storagePath";
 import {
   Archive,
   CheckCircle2,
@@ -475,7 +476,7 @@ function MediaRow({
     setUploading(kind);
     try {
       const bucket = kind === "cover" ? "developer-assets" : "developer-logos";
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const ext = safeFileExtension(file.name, 'jpg');
       const path = `${dev.slug || dev.id}/${kind}-${Date.now()}.${ext}`;
       const { error } = await supabase.storage.from(bucket).upload(path, file, {
         contentType: file.type,

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { sanitizeRichHtml } from "@/utils/safeHtml";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -360,7 +361,7 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
               <div className="bg-[#F7F2EA] p-4">
                 <div 
                   className="bg-[#FDFBF7] shadow-lg mx-auto max-w-[600px]"
-                  dangerouslySetInnerHTML={{ __html: generateEmailHtml() }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(generateEmailHtml()) }}
                 />
               </div>
             </div>

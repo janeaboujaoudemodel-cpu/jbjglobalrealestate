@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { safeFileExtension } from "@/utils/storagePath";
 
 interface MeetingConsentSectionProps {
   meetingTitle: string;
@@ -133,7 +134,7 @@ const MeetingConsentSection = ({
       // Upload ID photo if provided
       let idPhotoUrl: string | null = null;
       if (idPhotoFile) {
-        const ext = idPhotoFile.name.split(".").pop() || "jpg";
+        const ext = safeFileExtension(idPhotoFile.name, 'jpg');
         const path = `consent-ids/${user.id}/${Date.now()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("consent-documents")

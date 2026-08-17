@@ -28,6 +28,7 @@ import DeveloperCustomFieldsSection from "@/components/owner/DeveloperCustomFiel
 import DeveloperFocusProjectCard from "@/components/owner/DeveloperFocusProjectCard";
 import DeveloperProjectsFootprint from "@/components/owner/DeveloperProjectsFootprint";
 import { fieldToText, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
+import { safeFileExtension } from "@/utils/storagePath";
 
 interface Developer {
   id: string;
@@ -468,7 +469,7 @@ export default function DeveloperProfilePage() {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const uploadLogo = async (file: File) => {
     if (!developer) return;
-    const ext = file.name.split(".").pop() || "png";
+    const ext = safeFileExtension(file.name, 'png');
     const path = `${developer.id}/logo-${Date.now()}.${ext}`;
     const { error: upErr } = await supabase.storage
       .from("developer-assets")
@@ -488,7 +489,7 @@ export default function DeveloperProfilePage() {
   /* ---------- Media upload ---------- */
   const uploadMedia = async (file: File, kind: string) => {
     if (!developer) return;
-    const ext = file.name.split(".").pop() || "bin";
+    const ext = safeFileExtension(file.name, 'bin');
     const path = `${developer.id}/${kind}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const { error: upErr } = await supabase.storage
       .from("developer-assets")

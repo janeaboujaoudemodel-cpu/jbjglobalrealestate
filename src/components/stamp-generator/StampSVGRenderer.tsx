@@ -3,7 +3,7 @@
  * Supports primary + secondary + accent color, font-family, font-weight, font-style, and font-size overrides.
  */
 import React from 'react';
-import DOMPurify from 'dompurify';
+import { sanitizeSvgMarkup } from '@/utils/safeHtml';
 
 interface Props {
   svgSource: string;
@@ -97,30 +97,11 @@ export function StampSVGRenderer({
   tinted = tinted.replace(/href="#([^"]+)"/g, (_, id) => `href="#${instanceId}-${id}"`);
   tinted = tinted.replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${instanceId}-${id})`);
 
-  // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi, image href
-  // Allow data: URIs for uploaded logos (DOMPurify strips them by default)
-  const clean = typeof window !== 'undefined'
-    ? DOMPurify.sanitize(tinted, {
-        USE_PROFILES: { svg: true, svgFilters: true },
-        ADD_TAGS: [
-          'image', 'filter', 'feTurbulence', 'feColorMatrix', 'feComponentTransfer',
-          'feFuncA', 'feFuncR', 'feFuncG', 'feFuncB',
-          'feComposite', 'feGaussianBlur', 'feMorphology', 'feFlood', 'feMerge', 'feMergeNode',
-        ],
-        ADD_ATTR: [
-          'clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override',
-          'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style',
-          'href', 'xlink:href', 'preserveAspectRatio', 'textLength', 'lengthAdjust',
-          'filter', 'flood-color', 'flood-opacity', 'stdDeviation', 'baseFrequency',
-          'numOctaves', 'seed', 'type', 'values', 'operator', 'radius', 'in', 'in2', 'result',
-          'tableValues', 'x', 'y', 'width', 'height', 'opacity',
-          'data-stamp-element',
-        ],
-        ADD_DATA_URI_TAGS: ['image'],
-        ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],
-        FORCE_BODY: false,
-      })
-    : tinted;
+  // Sanitize SVG before rendering. sanitizeSvgMarkup keeps the attributes the
+  // stamp templates need (bidi/letter-spacing for Arabic arc text, filter
+  // primitives, data: image hrefs for uploaded logos) and returns '' rather
+  // than raw markup when there is no DOM.
+  const clean = sanitizeSvgMarkup(tinted);
 
   return (
     <div

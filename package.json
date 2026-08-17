@@ -190,6 +190,8 @@
     "zod": "$zod",
     "nanoid": "5.1.16",
     "react-hook-form": "$react-hook-form",
-    "recharts": "$recharts"
+    "recharts": "$recharts",
+    "@xmldom/xmldom": "0.8.14",
+    "unzipper": "0.12.5"
   }
 }

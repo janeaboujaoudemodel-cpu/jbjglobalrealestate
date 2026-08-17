@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Calendar } from 'lucide-react';
+import { safeOpen } from '@/utils/safeUrl';
 
 interface CalendlyEmbedProps {
   url?: string;
@@ -50,7 +51,7 @@ export const CalendlyEmbed = ({
       });
     } else {
       // Fallback: open in new tab
-      window.open(url, '_blank');
+      safeOpen(url);
     }
   };
 

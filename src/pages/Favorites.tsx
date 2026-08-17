@@ -33,6 +33,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeNavigate } from "@/utils/safeUrl";
 
 const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 
@@ -204,7 +205,7 @@ const Favorites = () => {
     const mailtoLink = to
       ? `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
       : `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
+    safeNavigate(mailtoLink);
   };
 
   const handleEmailShare = () => {
@@ -224,7 +225,7 @@ const Favorites = () => {
   const handleShareWhatsApp = () => {
     if (!shortlistedProjects?.length) return;
     const { whatsapp } = buildShortlistShareText();
-    window.location.href = getWhatsAppUrl(whatsapp);
+    safeNavigate(getWhatsAppUrl(whatsapp));
   };
 
   const handleCopyShortlist = async () => {

@@ -6,6 +6,7 @@ import { Download, FileText, Loader2, ExternalLink, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { generateCompanyProfilePDF } from "@/utils/generateCompanyProfilePDF";
 import { logExportEvent } from "@/utils/dlpExportLogger";
+import { safeOpen } from "@/utils/safeUrl";
 
 export const CompanyProfileDownload = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -41,7 +42,7 @@ export const CompanyProfileDownload = () => {
     const params = new URLSearchParams(location.search);
     params.set("print", "1");
     const url = `${location.pathname}?${params.toString()}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    safeOpen(url);
   };
 
   return (

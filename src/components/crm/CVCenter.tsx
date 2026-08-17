@@ -34,6 +34,8 @@ import {
 } from "@/components/crm/ApplicantStatusPill";
 import ApplicantProfileDrawer from "@/components/crm/ApplicantProfileDrawer";
 import HRPill from "@/components/careers-portal/HRPill";
+import { safeOpen } from "@/utils/safeUrl";
+import { safeFileExtension } from "@/utils/storagePath";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
@@ -564,7 +566,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       const inlineExtAllowList = ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt', 'rtf', 'svg'];
 
       const loadPreviewBlob = async (url: string) => {
-        const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
+        const ext = safeFileExtension((cv.cv_url || '').split('?')[0]);
 
         // Try authenticated blob download first (bypasses CORS/auth issues)
         let rawPath = cv.cv_url?.replace(/^\/+/, '') || '';
@@ -878,7 +880,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               let uploaded = 0;
               for (const file of Array.from(files)) {
                 try {
-                  const ext = file.name.split('.').pop()?.toLowerCase() || 'pdf';
+                  const ext = safeFileExtension(file.name, 'pdf');
                   const safeName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
                   const storagePath = `cv-uploads/${safeName}`;
                   const { error: uploadErr } = await supabase.storage.from('hr-documents').upload(storagePath, file, { upsert: false });
@@ -1435,7 +1437,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               <Button variant="outline" className="gap-2" onClick={() => {
                 // Use blob URL if available (avoids cross-origin blocking), otherwise proxy with inline disposition
                 const url = cvPreviewUrl || maybeProxyStorageUrl(cvDirectUrl, { disposition: 'inline' });
-                window.open(url, '_blank');
+                safeOpen(url);
               }}>
                 <ExternalLink className="h-4 w-4" /> Open in new tab
               </Button>
@@ -1465,11 +1467,10 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               </Button>
               {cvPreviewUrl && (
                 <Button variant="outline" className="gap-2 ml-auto" onClick={() => {
-                  const win = window.open('', '_blank');
-                  if (win) {
-                    win.document.write(`<!DOCTYPE html><html><head><title>CV - ${selectedCV?.full_name || 'Preview'}</title><style>body{margin:0;overflow:hidden}iframe{width:100vw;height:100vh;border:none}</style></head><body><iframe src="${cvPreviewUrl}"></iframe></body></html>`);
-                    win.document.close();
-                  }
+                  // The old markup nested the CV in an <iframe> written via
+                  // document.write; the sanitizer strips iframes, so open the
+                  // (validated) preview URL directly instead.
+                  safeOpen(cvPreviewUrl);
                 }}>
                   <Eye className="h-4 w-4" /> Maximize
                 </Button>

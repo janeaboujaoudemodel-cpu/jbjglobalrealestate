@@ -14,6 +14,7 @@
  *    bottom-left over a line, stamp bottom-right).
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { sanitizeRichHtml } from "@/utils/safeHtml";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -606,7 +607,7 @@ export default function BlankLetterStudio() {
                 <div
                   className="bg-white shadow-2xl mx-auto relative"
                   style={{ width: 794, minHeight: 1123 }}
-                  dangerouslySetInnerHTML={{ __html: previewHtml }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(previewHtml) }}
                 />
                 {placementMode && activeSignature && placedSig && (
                   <div onMouseDown={(e) => startDrag("sig", e)}

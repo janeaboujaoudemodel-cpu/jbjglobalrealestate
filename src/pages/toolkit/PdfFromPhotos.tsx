@@ -406,7 +406,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
 
             {/* ── Step 1: Upload ── */}
             <GoldCard>
-              <StepHeader n={1} title="Upload Media" sub="Images (JPG, PNG, WEBP) and PDFs — drag &amp; drop or click" />
+              <StepHeader n={1} title="Upload Media" sub="Images (JPG, PNG, WEBP) and PDFs — drag & drop or click" />
 
               {/* Drop Zone */}
               <div
@@ -952,8 +952,7 @@ function StepHeader({ n, title, sub, noMb }: { n: number; title: string; sub: st
       </div>
       <div>
         <h3 className="text-[#1A1A1A] font-semibold text-base">{title}</h3>
-        <p className="text-sm mt-0.5 text-[#1A1A1A]/70"
-          dangerouslySetInnerHTML={{ __html: sub }} />
+        <p className="text-sm mt-0.5 text-[#1A1A1A]/70">{sub}</p>
       </div>
     </div>
   );

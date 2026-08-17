@@ -2,6 +2,7 @@
 // Uses Firecrawl scrape + summary; never writes to the DB.
 import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 import { firecrawlScrape } from "../_shared/firecrawl.ts";
+import { isPublicHttpUrl } from "../_shared/ssrf-guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -17,7 +18,7 @@ Deno.serve(async (req) => {
 
   try {
     const { url } = await req.json();
-    if (!url || typeof url !== "string" || !/^https?:\/\//i.test(url)) {
+    if (!url || typeof url !== "string" || !isPublicHttpUrl(url)) {
       return new Response(JSON.stringify({ error: "Valid url required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

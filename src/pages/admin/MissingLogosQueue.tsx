@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { safeFileExtension } from "@/utils/storagePath";
 import {
   Sparkles,
   Upload,
@@ -114,7 +115,7 @@ export default function MissingLogosQueue() {
   async function uploadLogo(devId: string, file: File) {
     setBusyId(devId);
     try {
-      const ext = (file.name.split(".").pop() || "png").toLowerCase();
+      const ext = safeFileExtension(file.name, 'png');
       const path = `${devId}/${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage
         .from("developer-logos")

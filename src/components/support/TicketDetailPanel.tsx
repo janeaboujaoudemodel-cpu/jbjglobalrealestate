@@ -41,6 +41,7 @@ import { useAITicketSuggestions, type AISuggestion } from "@/hooks/useAITicketSu
 import { useSignedAttachmentUrl, isImageUrl, getFilenameFromUrl } from "@/hooks/useTicketAttachments";
 import { cn } from "@/lib/utils";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface TicketDetailPanelProps {
   ticketId: string | null;
@@ -102,13 +103,13 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
       URL.revokeObjectURL(downloadUrl);
     } catch {
       // Fallback: open in new tab
-      window.open(signedUrl, '_blank', 'noopener,noreferrer');
+      safeOpen(signedUrl);
     }
   };
 
   const handleView = () => {
     if (signedUrl) {
-      window.open(signedUrl, '_blank', 'noopener,noreferrer');
+      safeOpen(signedUrl);
     }
   };
 

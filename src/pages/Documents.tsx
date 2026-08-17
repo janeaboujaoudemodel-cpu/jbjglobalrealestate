@@ -24,6 +24,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { escapeHtml, openPrintWindow } from "@/utils/printWindow";
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* CONSTANTS                                                                  */
@@ -378,14 +379,12 @@ const Documents = () => {
 
   const handlePrint = () => {
     const content = editorRef.current?.innerHTML;
-    const printWindow = window.open('', '_blank');
-    if (printWindow && content) {
-      const headerStyle = showHeaderBand ? `<div style="height:8px;background:${getGradientStyle()};margin-bottom:20px;border-radius:4px;"></div>` : '';
-      const footerStyle = showFooterBand ? `<div style="height:8px;background:${getGradientStyle()};margin-top:20px;border-radius:4px;"></div>` : '';
-      printWindow.document.write(`<!DOCTYPE html><html><head><title>${title}</title><link href="https://fonts.googleapis.com/css2?family=${GOOGLE_FONTS_IMPORT}&display=swap" rel="stylesheet"><style>body{font-family:${fontFamily};padding:40px;}img{max-width:100%;}</style></head><body>${headerStyle}${content}${footerStyle}</body></html>`);
-      printWindow.document.close();
-      printWindow.print();
-    }
+    if (!content) return;
+    const headerStyle = showHeaderBand ? `<div style="height:8px;background:${getGradientStyle()};margin-bottom:20px;border-radius:4px;"></div>` : '';
+    const footerStyle = showFooterBand ? `<div style="height:8px;background:${getGradientStyle()};margin-top:20px;border-radius:4px;"></div>` : '';
+    // The sanitizer drops <link rel=stylesheet>, so the Google Fonts family is
+    // requested with @import from the inline <style> it does keep.
+    openPrintWindow(`<!DOCTYPE html><html><head><title>${escapeHtml(title)}</title><style>@import url("https://fonts.googleapis.com/css2?family=${GOOGLE_FONTS_IMPORT}&display=swap");body{font-family:${fontFamily};padding:40px;}img{max-width:100%;}</style></head><body>${headerStyle}${content}${footerStyle}</body></html>`);
   };
 
   const exportToHTML = () => {

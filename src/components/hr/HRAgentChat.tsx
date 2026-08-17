@@ -15,6 +15,7 @@ import { PhoneInput } from '@/components/ui/phone-input';
 import { getCountryList, getLanguageList } from '@/constants/localeOptions';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { safeFileExtension } from '@/utils/storagePath';
 
 const NATIONALITIES = [
   "Afghan","Albanian","Algerian","American","Andorran","Angolan","Argentine","Armenian","Australian","Austrian",
@@ -304,7 +305,7 @@ export default function HRAgentChat() {
     setSubmittingApp(true);
     try {
       // 1) Upload to hr-documents bucket (same path scheme as JoinApplication)
-      const ext = cvFile.name.split('.').pop();
+      const ext = safeFileExtension(cvFile.name);
       const path = `${user.id}/cv-${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage
         .from('hr-documents')

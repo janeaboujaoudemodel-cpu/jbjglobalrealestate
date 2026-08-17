@@ -1,3 +1,8 @@
+-- NOTE: the publishable (anon) key that used to be written inline here was
+-- replaced by public.edge_function_anon_key(). This migration is already
+-- applied and is kept only as history; migration
+-- 20260817160000_edge_function_key_indirection.sql recreates every object
+-- below with the accessor, so a fresh bootstrap ends in the correct state.
 
 -- RPC: upsert a jbj_leads row with the sync guard flag set
 CREATE OR REPLACE FUNCTION public.sync_upsert_jbj_lead(
@@ -164,7 +169,7 @@ DECLARE
   v_op text := lower(TG_OP);
   v_record jsonb;
   v_url text := 'https://mdafrewypkkrildjgtey.supabase.co/functions/v1/sync-lead-tri';
-  v_anon text := 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0';
+  v_anon text := 'REPLACED_BY_edge_function_anon_key';
 BEGIN
   -- Skip if this write itself came from the sync worker (prevents ping-pong)
   IF public.is_lead_sync_in_progress() THEN
