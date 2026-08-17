@@ -86,9 +86,20 @@ jobs:
               return;
             }
             const body = fs.readFileSync(path, 'utf8');
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body,
-            });
+            // Posting the summary is reporting, not gating. A transient GitHub
+            // API failure here (500 "No server is currently available", or the
+            // 403 this repo hits when workflow permissions are tight) used to
+            // fail the whole job, marking a gate that PASSED as red — which is
+            // how a green Contrast gate and a passing PDF QA both showed up as
+            // failures on PR #44. Warn and carry on; the gate's own result is
+            // decided by the steps above.
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            } catch (err) {
+              core.warning(`Could not post the PR summary comment: ${err.message}. The gate result above is unaffected.`);
+            }
