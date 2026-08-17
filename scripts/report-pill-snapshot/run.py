@@ -121,7 +121,22 @@ async def snapshot_viewport(page, label: str, w: int, h: int):
         }"""
     )
 
-    # Element screenshots for preview side.
+    # Preview crops, taken as clipped page screenshots rather than element
+    # screenshots.
+    #
+    # ElementHandle.screenshot() scrolls its target into view first. The report
+    # page is a fixed 794px wide, so at the 414px mobile viewport it overflows
+    # horizontally and every capture triggers a scroll. That made the mobile
+    # run report five false breaches: the crops came back as one identical flat
+    # champagne image (mean 229,218,195, stddev 29.9) for pills whose real
+    # colours are emerald and near-white — the page ground, not the pill. The
+    # same instability also surfaced as intermittent
+    # "Element is not attached to the DOM" failures mid-run.
+    #
+    # Clipping a page screenshot to the element's own bounding box needs no
+    # scrolling and no per-element handle, so what is captured is exactly the
+    # rectangle that was measured. Full-page capture keeps elements below the
+    # fold in frame.
     handles_pill = await page.query_selector_all("[data-report-page] [data-report-pill]")
     handles_btn  = await page.query_selector_all("[data-aihf-include-btn]")
 
@@ -129,10 +144,28 @@ async def snapshot_viewport(page, label: str, w: int, h: int):
     for t in targets:
         slug = f"{t['kind']}_p{t['pageIndex']}_i{t['indexInPage']}"
         path = art / f"preview_{slug}.png"
+        handle = handles_pill[pill_i] if t["kind"] == "pill" else handles_btn[btn_i]
         if t["kind"] == "pill":
-            await handles_pill[pill_i].screenshot(path=str(path)); pill_i += 1
+            pill_i += 1
         else:
-            await handles_btn[btn_i].screenshot(path=str(path)); btn_i += 1
+            btn_i += 1
+
+        box = await handle.bounding_box()
+        if box and box["width"] >= 1 and box["height"] >= 1:
+            await page.screenshot(
+                path=str(path),
+                full_page=True,
+                clip={
+                    "x": box["x"] + await page.evaluate("() => window.scrollX"),
+                    "y": box["y"] + await page.evaluate("() => window.scrollY"),
+                    "width": box["width"],
+                    "height": box["height"],
+                },
+            )
+        else:
+            # Zero-sized box (display:none / detached) — fall back so the run
+            # still produces a comparable artefact instead of aborting.
+            await handle.screenshot(path=str(path))
         t["previewPath"] = str(path)
 
     # 2. Export PDF via harness button.
