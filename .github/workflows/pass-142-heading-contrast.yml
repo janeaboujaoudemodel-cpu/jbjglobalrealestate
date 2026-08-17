@@ -40,7 +40,13 @@ jobs:
   heading-contrast:
     name: PASS 142 Heading Contrast Gate
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # 30, not 20: this job builds the app and runs a Playwright sweep over
+    # 13 routes x 3 viewports. On 2026-08-17 it took 20m35s and GitHub
+    # cancelled it at the 20-minute mark *after* both gates had already
+    # reported success -- a passing gate showing up as a red 'cancelled'
+    # check. The work is genuinely ~20 minutes, so the ceiling has to sit
+    # above it rather than on top of it.
+    timeout-minutes: 30
     # Default GITHUB_TOKEN in this repo is read-only, so the "Post PR
     # summary" step's issues.createComment call 403s on every run
     # ("Resource not accessible by integration") without this.

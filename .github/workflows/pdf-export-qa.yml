@@ -10,7 +10,10 @@ jobs:
   pdf-qa:
     name: Validate PDF exports
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # 30, not 20: measured 17m43s on 2026-08-17, against a sibling job that
+    # was cancelled at the 20-minute ceiling on the same run. Rendering and
+    # rasterising every PDF export is not getting faster.
+    timeout-minutes: 30
 
     steps:
       - name: Checkout

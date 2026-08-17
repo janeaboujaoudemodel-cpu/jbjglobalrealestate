@@ -14,7 +14,11 @@ jobs:
     # same-tone (vs the committed baseline) — blocks the merge button.
     name: Contrast PR Gate (blocks merges)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # 30, not 20: same build + Playwright shape as PASS 142, which was
+    # cancelled mid-report at exactly 20 minutes on 2026-08-17. This job
+    # measured 17m58s on the same run -- two minutes of headroom is not
+    # headroom, it is a coin flip on runner speed.
+    timeout-minutes: 30
     # Default GITHUB_TOKEN in this repo is read-only, so the "Post PR
     # summary" step's issues.createComment call 403s on every run
     # ("Resource not accessible by integration") without this.
