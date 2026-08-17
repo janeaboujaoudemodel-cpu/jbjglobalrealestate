@@ -17,6 +17,7 @@ import {
 } from "@/hooks/useIncidentReadiness";
 import { useGateHistory, useRunDeploymentGate, type GateCheck } from "@/hooks/useDeploymentGate";
 import { supabase } from "@/integrations/supabase/client";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const statusIcon = (s: string) => {
   if (s === "pass" || s === "healthy" || s === "completed" || s === "verified") return <CheckCircle2 className="w-4 h-4 text-emerald-500" />;
@@ -344,7 +345,7 @@ export default function IncidentReadinessPanel() {
               <div className="space-y-1.5">
                 {gateHistory.data.map((run) => (
                   <div key={run.id}>
-                    <div
+                    <ClickableDiv
                       className="flex items-center justify-between p-2.5 rounded-lg border border-border/50 hover:bg-muted/30 cursor-pointer"
                       onClick={() => setExpandedGateRun(expandedGateRun === run.id ? null : run.id)}
                     >
@@ -356,7 +357,7 @@ export default function IncidentReadinessPanel() {
                       {run.blocked_reasons.length > 0 && (
                         <Badge variant="destructive" className="text-xs">{run.blocked_reasons.length} blocker(s)</Badge>
                       )}
-                    </div>
+                    </ClickableDiv>
                     {expandedGateRun === run.id && (
                       <div className="ml-6 mt-1 space-y-1 pb-2">
                         {(run.checks as GateCheck[]).map((c, i) => (
@@ -394,7 +395,7 @@ export default function IncidentReadinessPanel() {
           ) : latestChecklist ? (
             <div className="space-y-2">
               {(latestChecklist.checks as Array<{ name: string; status: string; severity: string; details: string }>).map((check, i) => (
-                <div
+                <ClickableDiv
                   key={i}
                   className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:bg-muted/30 cursor-pointer"
                   onClick={() => setExpandedCheck(expandedCheck === check.name ? null : check.name)}
@@ -411,7 +412,7 @@ export default function IncidentReadinessPanel() {
                       <span className="text-xs text-muted-foreground max-w-xs truncate">{check.details}</span>
                     )}
                   </div>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           ) : (

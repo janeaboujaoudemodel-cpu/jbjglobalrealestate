@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import SignatureDesigner from "@/components/referral/SignatureDesigner";
 import { useScanSignDocuments } from "@/pages/useScanSignDocuments";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const ScanSignDocuments = () => {
   const h = useScanSignDocuments();
@@ -151,13 +152,13 @@ const ScanSignDocuments = () => {
                 <CardHeader><CardTitle className="text-white text-sm">My Documents ({h.scannedDocs.length})</CardTitle></CardHeader>
                 <CardContent className="space-y-2 max-h-48 overflow-y-auto">
                   {h.scannedDocs.map(doc => (
-                    <div key={doc.id} onClick={() => h.setCurrentDoc(doc)} className={`p-3 rounded-lg cursor-pointer transition-all ${h.currentDoc?.id === doc.id ? 'jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/50' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'}`}>
+                    <ClickableDiv key={doc.id} onClick={() => h.setCurrentDoc(doc)} className={`p-3 rounded-lg cursor-pointer transition-all ${h.currentDoc?.id === doc.id ? 'jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/50' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'}`}>
                       <div className="flex items-center justify-between">
                         <p className="text-sm text-white truncate flex-1">{doc.name}</p>
                         <span className={`text-xs px-2 py-0.5 rounded ${doc.isColor ? 'bg-blue-500/20 text-blue-400' : 'bg-[#1A1A1A]/20 text-white/70'}`}>{doc.isColor ? 'Color' : 'B&W'}</span>
                       </div>
                       <p className="text-xs text-white/90">{doc.timestamp.toLocaleTimeString()}</p>
-                    </div>
+                    </ClickableDiv>
                   ))}
                 </CardContent>
               </Card>

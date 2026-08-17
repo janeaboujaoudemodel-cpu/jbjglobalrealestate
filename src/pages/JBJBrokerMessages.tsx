@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   MessageSquare,
   Phone,
@@ -297,7 +298,7 @@ export default function JBJBrokerMessages() {
 
           <ScrollArea className="flex-1">
             {filteredLeads.map((lead) => (
-              <div
+              <ClickableDiv
                 key={lead.id}
                 onClick={() => setSelectedLead(lead)}
                 className={`p-4 border-b border-[#B89555]/10 cursor-pointer transition-all hover:bg-[#EFE6D6]/5 ${
@@ -329,7 +330,7 @@ export default function JBJBrokerMessages() {
                     {lead.status}
                   </Badge>
                 </div>
-              </div>
+              </ClickableDiv>
             ))}
           </ScrollArea>
         </div>

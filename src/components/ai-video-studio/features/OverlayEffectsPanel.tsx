@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Plus, Lock, Eye } from 'lucide-react';
 import { MiniParticlePreview } from '../preview/MiniParticlePreview';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface OverlayEffect {
   id: string;
@@ -86,7 +87,7 @@ export function OverlayEffectsPanel({
                 {OVERLAY_EFFECTS.filter(e => e.category === cat).map(effect => {
                   const isLocked = lockedEffect === effect.id;
                   return (
-                    <div
+                    <ClickableDiv
                       key={effect.id}
                       onClick={() => handleCardClick(effect)}
                       onMouseEnter={() => handleMouseEnter(effect.id)}
@@ -135,7 +136,7 @@ export function OverlayEffectsPanel({
                           Add
                         </button>
                       </div>
-                    </div>
+                    </ClickableDiv>
                   );
                 })}
               </div>

@@ -9,6 +9,7 @@ import {
   Sparkles, FileText, CheckCircle2
 } from "lucide-react";
 import { toast } from "sonner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface FollowUpReminder {
   id: string;
@@ -127,7 +128,7 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
           <ScrollArea className="max-h-28">
             <div className="space-y-1">
               {pendingFollowUps.map(f => (
-                <div
+                <ClickableDiv
                   key={f.id}
                   className="flex items-center gap-2 bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2 cursor-pointer hover:bg-[#B89555]/5"
                   onClick={() => onSelectEmail?.(f.emailId)}
@@ -145,7 +146,7 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
                   >
                     <CheckCircle2 className="w-3 h-3 text-[color:var(--emerald-1)]" />
                   </Button>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           </ScrollArea>

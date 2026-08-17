@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { MessageSquare, Loader2, Upload, FileText, X, Send } from 'lucide-react';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface DeveloperMessageFormProps {
   representativeId: string;
@@ -132,7 +133,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
         {/* File Upload */}
         <div className="space-y-2">
           <Label>Attachments</Label>
-          <div
+          <ClickableDiv
             className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-4 text-center hover:border-[#B89555]/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileInputRef.current?.click()}
           >
@@ -141,7 +142,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
             <input ref={fileInputRef} type="file" className="hidden" multiple
               accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.xlsx"
               onChange={handleFileUpload} />
-          </div>
+          </ClickableDiv>
           {uploadingFiles && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="w-4 h-4 animate-spin" /> Uploading...

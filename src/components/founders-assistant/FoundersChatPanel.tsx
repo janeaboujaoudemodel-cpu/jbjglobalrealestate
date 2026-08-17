@@ -46,6 +46,7 @@ import { useFileUpload, formatFileSize, UploadedFile } from '@/hooks/useFileUplo
 import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 import { useFounderChatSessions } from '@/hooks/useFounderChatSessions';
 import { formatDistanceToNow } from 'date-fns';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Message {
   id: string;
@@ -718,7 +719,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             ) : (
               <div className="space-y-2 pb-4">
                 {sessions.map((session) => (
-                  <div
+                  <ClickableDiv
                     key={session.id}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all ${
  activeSessionId === session.id
@@ -768,7 +769,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     )}
-                  </div>
+                  </ClickableDiv>
                 ))}
               </div>
             )}

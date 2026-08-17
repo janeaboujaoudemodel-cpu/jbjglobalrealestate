@@ -17,6 +17,7 @@ import {
   BILINGUAL_LANGUAGES, TEMPLATES, CARD_SHAPES,
 } from "./businessCardTypes";
 import { CardFace } from "./BusinessCardPreview";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface BusinessCardLeftPanelProps {
   // Card Shape
@@ -260,7 +261,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
               ) : (
                 <div className="space-y-1.5 max-h-[280px] overflow-y-auto">
                   {savedDesigns.map(design => (
-                    <div
+                    <ClickableDiv
                       key={design.id}
                       className="flex items-center gap-2 p-2.5 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] hover:bg-[hsl(var(--muted)/0.5)] transition-all cursor-pointer group"
                       onClick={() => handleRestoreSaved(design.metadata)}
@@ -282,7 +283,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
                       >
                         {isDeletingSaved === design.id ? <RefreshCw size={10} className="animate-spin" /> : <Trash2 size={10} />}
                       </button>
-                    </div>
+                    </ClickableDiv>
                   ))}
                 </div>
               )}
@@ -450,7 +451,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
                       const isFav = galleryFavorites.includes(design.id);
                       return (
                         <div key={design.id} className="relative group">
-                          <div
+                          <ClickableDiv
                             className={`rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${
                               isFav ? "border-amber-400 shadow-md" : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)]"
                             }`}
@@ -474,7 +475,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
                             <p className="text-[8px] font-semibold text-center py-1 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] truncate px-1">
                               {design.name}
                             </p>
-                          </div>
+                          </ClickableDiv>
                           <button
                             onClick={(e) => { e.stopPropagation(); toggleGalleryFavorite(design.id); }}
                             className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center shadow-sm transition-all ${

@@ -27,6 +27,7 @@ import MainLayout from "@/components/MainLayout";
 import SignaturePad from "@/components/referral/SignaturePad";
 import AISignatureGenerator from "@/components/signature/AISignatureGenerator";
 import { format } from "date-fns";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface ReferralPartner {
   id: string;
@@ -362,7 +363,7 @@ export default function ReferralAdmin() {
                   ) : (
                     <div className="space-y-3">
                       {allPartners.map((partner) => (
-                        <div
+                        <ClickableDiv
                           key={partner.id}
                           className="p-4 bg-muted/30 rounded-xl border border-border hover:border-[#B89555]/50 transition-colors cursor-pointer"
                           onClick={() => {
@@ -385,7 +386,7 @@ export default function ReferralAdmin() {
                               {getStatusBadge(partner.status)}
                             </div>
                           </div>
-                        </div>
+                        </ClickableDiv>
                       ))}
                     </div>
                   )}

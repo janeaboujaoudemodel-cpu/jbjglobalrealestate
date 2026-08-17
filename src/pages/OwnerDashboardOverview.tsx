@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // Lazy-load heavy tab components
 const CRMLeadsTableV2 = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
@@ -101,7 +102,7 @@ interface LeadRowProps {
 
 function LeadRow({ lead, onOpen }: LeadRowProps) {
   return (
-    <div 
+    <ClickableDiv 
       className="p-4 rounded-lg bg-[#FDFBF7] hover:bg-[#B89555]/5 transition-colors cursor-pointer group border border-[#B89555]/20 hover:border-[#B89555]/40"
       onClick={() => onOpen(lead.id)}
     >
@@ -146,7 +147,7 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
           Open <ExternalLink className="h-3 w-3 ml-1" />
         </Button>
       </div>
-    </div>
+    </ClickableDiv>
   );
 }
 

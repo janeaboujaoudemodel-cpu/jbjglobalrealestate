@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { LucideIcon, Sparkles, TrendingUp, TrendingDown, Minus, Command, Search } from 'lucide-react';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 /**
  * Premium Backend Design System v2.0
@@ -95,7 +96,7 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
   };
 
   return (
-    <div 
+    <ClickableDiv 
       className={cn(
         'rounded-2xl p-6 transition-all duration-300',
         variants[variant],
@@ -107,7 +108,7 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
       onClick={onClick}
     >
       {children}
-    </div>
+    </ClickableDiv>
   );
 };
 
@@ -186,7 +187,7 @@ export const PremiumStatCard: React.FC<PremiumStatCardProps> = ({
   const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus;
   
   return (
-    <div 
+    <ClickableDiv 
       onClick={onClick}
       className={cn(
         'rounded-2xl p-5 border-2 transition-all duration-300',
@@ -223,7 +224,7 @@ export const PremiumStatCard: React.FC<PremiumStatCardProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </ClickableDiv>
   );
 };
 

@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Message {
   id: string;
@@ -199,7 +200,7 @@ export function MeetingAIAssistant({
       exit={{ opacity: 0, x: 20 }}
       className={`fixed right-4 bottom-24 w-80 bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl shadow-2xl z-50 overflow-hidden ${isMinimized ? 'h-12' : 'h-[500px]'}`}
     >
-      <div
+      <ClickableDiv
         className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-gold/20 to-gold/10 border-b border-[#B89555]/20 cursor-pointer"
         onClick={() => setIsMinimized(!isMinimized)}
       >
@@ -218,7 +219,7 @@ export function MeetingAIAssistant({
             </>
           )}
         </div>
-      </div>
+      </ClickableDiv>
 
       {!isMinimized && (
         <>

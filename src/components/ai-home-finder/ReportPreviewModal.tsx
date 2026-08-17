@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 import { ReportEngine, type ReportProject } from "./report/ReportEngine";
 import { REPORT_PAGE_PX, PAGE_SEP_VAR } from "./report/tokens";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 
 export type ReportRole = "investor" | "broker" | "developer" | "owner" | "consultant";
@@ -459,7 +460,7 @@ export default function ReportPreviewModal({
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs font-semibold" style={{ color: C.ink }}>Your photo</Label>
-                <div
+                <ClickableDiv
                   onClick={() => photoInput.current?.click()}
                   className="mt-1 h-20 rounded-md flex items-center justify-center cursor-pointer overflow-hidden"
                   style={{ background: "#FFFFFF", border: `1px dashed ${C.goldSoft}` }}
@@ -471,7 +472,7 @@ export default function ReportPreviewModal({
                       <UserIcon className="w-5 h-5 mb-1" />Upload
                     </div>
                   )}
-                </div>
+                </ClickableDiv>
                 <input ref={photoInput} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={(e) => handlePhoto(e.target.files?.[0] || null)} />
                 {branding.photoDataUrl && (
                   <div className="flex items-center gap-3 mt-1">
@@ -484,7 +485,7 @@ export default function ReportPreviewModal({
               </div>
               <div>
                 <Label className="text-xs font-semibold" style={{ color: C.ink }}>Company logo</Label>
-                <div
+                <ClickableDiv
                   onClick={() => logoInput.current?.click()}
                   className="mt-1 h-20 rounded-md flex items-center justify-center cursor-pointer overflow-hidden"
                   style={{ background: "#FFFFFF", border: `1px dashed ${C.goldSoft}` }}
@@ -496,7 +497,7 @@ export default function ReportPreviewModal({
                       <Upload className="w-5 h-5 mb-1" />Upload
                     </div>
                   )}
-                </div>
+                </ClickableDiv>
                 <input ref={logoInput} type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" className="hidden" onChange={(e) => handleLogo(e.target.files?.[0] || null)} />
                 {branding.logoDataUrl && (
                   <div className="flex items-center gap-3 mt-1">

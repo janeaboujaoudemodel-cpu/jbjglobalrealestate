@@ -37,6 +37,7 @@ import { SUPABASE_URL } from "@/config/backend";
 import { normalizeToSignablePdf } from "@/utils/normalizeToSignablePdf";
 import { exportPreviewPdf } from "@/utils/exportPreviewPdf";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Recipient {
   id: string;
@@ -629,7 +630,7 @@ export default function CreateEnvelope() {
                   </p>
                   <div className="mt-2 space-y-3">
                     {/* Drop zone */}
-                    <div
+                    <ClickableDiv
                       onDragEnter={handleDragEnter}
                       onDragLeave={handleDragLeave}
                       onDragOver={handleDragOver}
@@ -657,7 +658,7 @@ export default function CreateEnvelope() {
                         Any document — PDF, photos, scans, JPG/PNG/HEIC, TXT, HTML, RTF (max 100MB each).
                         Non-PDFs are auto-converted to a signable PDF.
                       </p>
-                    </div>
+                    </ClickableDiv>
 
                     {/* Uploaded files list */}
                     {uploadedFiles.length > 0 && (

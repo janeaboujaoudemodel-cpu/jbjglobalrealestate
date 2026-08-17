@@ -5,6 +5,7 @@ import { Lock, CheckCircle, Clock, ArrowRight, Sparkles } from "lucide-react";
 import type { EducationBook, BookProgress } from "@/hooks/useBrokerEducation";
 import { PremiumBook3D } from "@/components/broker-education/PremiumBook3D";
 import { PremiumLockBadge } from "@/components/broker-education/PremiumLock";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Book3DCardProps {
   book: EducationBook;
@@ -58,7 +59,7 @@ export function Book3DCard({
       transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.35 }}
       className="group h-full"
     >
-      <div
+      <ClickableDiv
         className={`flex h-full flex-col bg-transparent ${effectivelyLocked && !canPreviewLocked ? "cursor-default" : "cursor-pointer"}`}
         onClick={() => {
           if (!effectivelyLocked || canPreviewLocked) onOpen(book);
@@ -119,7 +120,7 @@ export function Book3DCard({
             </Button>
           </div>
         </div>
-      </div>
+      </ClickableDiv>
     </motion.div>
   );
 }

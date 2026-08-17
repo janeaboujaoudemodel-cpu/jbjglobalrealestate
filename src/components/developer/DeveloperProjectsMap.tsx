@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyDisposeMap, safelyRemoveLayer } from "@/utils/leafletSafety";
 import "leaflet/dist/leaflet.css";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface DeveloperProject {
   id: string;
@@ -298,7 +299,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         />
         {/* Click to enable overlay */}
         {!mapInteractive && (
-          <div
+          <ClickableDiv
             className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#03251F]/10"
             onClick={() => {
               setMapInteractive(true);
@@ -311,7 +312,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
             <div className="jj-map-enable-chip px-4 py-2 rounded-full text-sm font-medium">
               {t('map.clickToEnable')}
             </div>
-          </div>
+          </ClickableDiv>
         )}
         <MapNavigationControlsStandalone
           key={mapReadyTick}

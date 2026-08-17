@@ -13,6 +13,7 @@ import { UserCheck, Loader2, Building2, Briefcase, Upload, FileText, X, ShieldAl
 import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
 import { PhoneInputWithCountry } from '@/components/ui/phone-input-with-country';
 import { NationalitySelect } from '@/components/developer-portal/NationalitySelect';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // LOCKED: Full company name — never abbreviate
 const COMPANY_FULL_NAME = 'JBJ GLOBAL REAL ESTATE';
@@ -257,7 +258,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
             </button>
           </div>
         ) : (
-          <div
+          <ClickableDiv
             className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-4 text-center hover:border-[#B89555]/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileRef.current?.click()}
           >
@@ -279,7 +280,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               accept=".jpg,.jpeg,.png,.pdf,.webp"
               onChange={(e) => handleDocUpload(e, docType, urlKey, nameKey, fileRef)}
             />
-          </div>
+          </ClickableDiv>
         )}
       </div>
     );

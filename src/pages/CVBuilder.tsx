@@ -27,6 +27,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useUserCVs, type SavedCVRow } from "@/hooks/useUserCVs";
 import { SavedCVsMenu } from "@/components/cv-builder/SavedCVsMenu";
 import { CVAIAssistant } from "@/components/cv-builder/CVAIAssistant";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 /* ────────────── Types ────────────── */
 
@@ -373,7 +374,7 @@ export default function CVBuilder() {
             {/* Photo */}
             <div className="flex items-center gap-3 mb-3">
               <div className="relative">
-                <div
+                <ClickableDiv
                   className="w-16 h-16 rounded-full overflow-hidden border border-[#B89555]/40 bg-[#EFE6D6] flex items-center justify-center cursor-pointer"
                   onClick={() => photoInputRef.current?.click()}
                 >
@@ -382,7 +383,7 @@ export default function CVBuilder() {
                   ) : (
                     <UserIcon className="w-6 h-6 text-[#1A1A1A]/40" />
                   )}
-                </div>
+                </ClickableDiv>
                 <input
                   ref={photoInputRef}
                   type="file"

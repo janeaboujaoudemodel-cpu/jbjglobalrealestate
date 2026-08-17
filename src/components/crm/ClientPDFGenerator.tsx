@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { FileText, Loader2, Download, Building2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Lead {
   id: string;
@@ -142,7 +143,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
             <Label className="text-base font-semibold">Include Sections</Label>
             <div className="grid grid-cols-2 gap-3">
               {AVAILABLE_SECTIONS.map((section) => (
-                <div
+                <ClickableDiv
                   key={section.id}
                   className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
                     selectedSections.includes(section.id)
@@ -156,7 +157,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
                     onCheckedChange={() => toggleSection(section.id)}
                   />
                   <span className="text-sm">{section.label}</span>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           </div>
@@ -173,7 +174,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
                 <ScrollArea className="h-48 border rounded-lg">
                   <div className="p-3 space-y-2">
                     {projects.map((project) => (
-                      <div
+                      <ClickableDiv
                         key={project.id}
                         className={`flex items-center gap-3 p-2 rounded cursor-pointer transition-all ${
                           selectedProjects.includes(project.id)
@@ -196,7 +197,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
                             From AED {(project.price_from / 1000000).toFixed(1)}M
                           </span>
                         )}
-                      </div>
+                      </ClickableDiv>
                     ))}
                   </div>
                 </ScrollArea>

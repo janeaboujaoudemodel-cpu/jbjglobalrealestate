@@ -25,6 +25,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ── Design tokens (Champagne-Gold on dark canvas) ──
 const C = {
@@ -1157,7 +1158,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   </h3>
                   {/* Video Upload */}
                   {!videoFile ? (
-                    <div
+                    <ClickableDiv
                       onClick={() => videoInputRef.current?.click()}
                       className="rounded-xl p-10 text-center cursor-pointer transition-all"
                       style={{ border: `2px dashed ${C.border}`, background: "rgba(184,149,85,0.03)" }}
@@ -1169,7 +1170,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                         style={{ background: C.btnPrimary }}>
                         <Upload className="h-4 w-4" /> Browse Video
                       </div>
-                    </div>
+                    </ClickableDiv>
                   ) : (
                     <div className="space-y-3">
                       <div className="grid md:grid-cols-2 gap-4">

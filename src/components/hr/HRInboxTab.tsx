@@ -7,6 +7,7 @@ import { Inbox, Mail, ExternalLink, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface NotificationRow {
   id: string;
@@ -92,7 +93,7 @@ export function HRInboxTab() {
           <ScrollArea className="h-[500px]">
             <div className="space-y-2">
               {items.map((row) => (
-                <div
+                <ClickableDiv
                   key={row.id}
                   className={`p-4 rounded-lg border cursor-pointer hover:shadow-sm transition-all ${
                     !row.is_read
@@ -120,7 +121,7 @@ export function HRInboxTab() {
                       )}
                     </div>
                   </div>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           </ScrollArea>

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { PDFDocument, rgb, degrees } from "pdf-lib";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -528,7 +529,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                               }}
                             >
                               {/* Checkbox */}
-                              <div
+                              <ClickableDiv
                                 className="w-4 h-4 rounded border flex items-center justify-center shrink-0 cursor-pointer"
                                 style={{
                                   borderColor: isSel ? G.gold : "rgba(255,255,255,0.28)",
@@ -541,7 +542,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                                     <path d="M1 4L3.5 6.5L9 1" stroke="#0E1018" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
                                   </svg>
                                 )}
-                              </div>
+                              </ClickableDiv>
 
                               <GripVertical className="h-4 w-4 shrink-0" style={{ color: "rgba(255,255,255,0.2)" }} />
 

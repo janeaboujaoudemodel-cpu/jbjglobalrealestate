@@ -23,6 +23,7 @@ import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type Separator
 import { StampPresetLibrary, saveCustomPreset, type PresetConfig } from '@/components/stamp-generator/StampPresetLibrary';
 import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS, type MonogramLetterColors } from '@/components/stamp-generator/MonogramColorEditor';
 import { StampLetterEditor, type LetterSelection } from '@/components/stamp-generator/StampLetterEditor';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
@@ -1392,7 +1393,7 @@ export default function StampProjectWizard() {
         </div>
 
         {/* Center: Fixed preview area — takes remaining space */}
-        <div className="flex-1 flex items-center justify-center min-h-0 p-6 bg-[hsl(var(--pearl-1)/0.3)]"
+        <ClickableDiv className="flex-1 flex items-center justify-center min-h-0 p-6 bg-[hsl(var(--pearl-1)/0.3)]"
           onClick={(e) => {
             // Only clear selection on genuine outside clicks, not bubbled element clicks
             if ((e.target as HTMLElement).closest('[data-stamp-element]')) return;
@@ -1416,7 +1417,7 @@ export default function StampProjectWizard() {
               ) : <span className="italic">Enter company name to see live preview</span>}
             </p>
           </div>
-        </div>
+        </ClickableDiv>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { CheckSquare, Pencil, Stamp } from "lucide-react";
 import DOMPurify from "dompurify";
 import type { SignatureField, Recipient } from "./documentFieldTypes";
 import { fieldTypes, getInitials, recipientColorStyles } from "./documentFieldTypes";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface FieldContentRendererProps {
   field: SignatureField;
@@ -78,7 +79,7 @@ export default function FieldContentRenderer({
 
   if (field.type === "checkbox") {
     return (
-      <div
+      <ClickableDiv
         className={`flex items-center justify-center h-full cursor-pointer ${style.text}`}
         onClick={(e) => {
           e.stopPropagation();
@@ -90,7 +91,7 @@ export default function FieldContentRenderer({
         ) : (
           <div className={`w-5 h-5 border-2 rounded ${style.border}`} />
         )}
-      </div>
+      </ClickableDiv>
     );
   }
 
@@ -129,7 +130,7 @@ export default function FieldContentRenderer({
     const sigUrl = field.value?.startsWith("data:") ? field.value : savedSignatureUrl;
     if (sigUrl) {
       return (
-        <div
+        <ClickableDiv
           className="flex items-center justify-center h-full w-full overflow-hidden cursor-pointer"
           onClick={(e) => { e.stopPropagation(); onOpenDraw(field.id); }}
         >
@@ -139,17 +140,17 @@ export default function FieldContentRenderer({
             className={`max-w-full max-h-full object-contain ${!field.value?.startsWith("data:") ? "opacity-80" : ""}`}
             draggable={false}
            loading="lazy" decoding="async" />
-        </div>
+        </ClickableDiv>
       );
     }
     return (
-      <div
+      <ClickableDiv
         className={`flex items-center justify-center gap-1 h-full px-2 cursor-pointer ${style.text}`}
         onClick={(e) => { e.stopPropagation(); onOpenDraw(field.id); }}
       >
         <Pencil className="w-4 h-4 shrink-0" />
         <span className="text-xs font-semibold truncate">Click to sign</span>
-      </div>
+      </ClickableDiv>
     );
   }
 

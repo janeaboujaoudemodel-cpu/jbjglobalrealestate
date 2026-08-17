@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { statusColor, BROKERAGE_REGISTRATION_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 import type { CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const GROUP_OPTIONS = [
   { value: "pending_group_status", label: "Pending group" },
@@ -408,7 +409,7 @@ function DldSyncHistoryPanel() {
               <p className="text-sm text-[#4B5D55] mt-1">Click to expand. New DLD brokerages are labeled untouched until the first outreach email is logged.</p>
             </div>
           </div>
-          <div className="flex rounded-md border border-[#064E3B]/20 bg-white p-1 shrink-0" onClick={(e) => e.preventDefault()}>
+          <ClickableDiv className="flex rounded-md border border-[#064E3B]/20 bg-white p-1 shrink-0" onClick={(e) => e.preventDefault()}>
             {(["daily", "all"] as const).map((value) => (
               <button
                 key={value}
@@ -424,7 +425,7 @@ function DldSyncHistoryPanel() {
                 {value === "daily" ? "Today" : "See all"}
               </button>
             ))}
-          </div>
+          </ClickableDiv>
         </summary>
         <div className="px-5 pb-5 grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-4">
         <div className="rounded-lg border border-[#064E3B]/15 overflow-hidden bg-[#F8FAF9]">

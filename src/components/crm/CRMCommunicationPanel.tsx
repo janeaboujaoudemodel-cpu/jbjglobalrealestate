@@ -22,6 +22,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { allTeamMembers, teamByDepartment, type TeamMember as ConfigTeamMember } from "@/config/team-members";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface TeamMember {
   id: string;
@@ -645,7 +646,7 @@ const CRMCommunicationPanel = () => {
               <div className="space-y-2">
                 <p className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wide mb-2">Recent Files</p>
                 {RECENT_FILES.map(file => (
-                  <div 
+                  <ClickableDiv 
                     key={file.id}
                     className="flex items-center justify-between p-2.5 rounded-lg bg-[#F7F2EA] hover:bg-[#F7F2EA] transition-colors cursor-pointer"
                     onClick={() => toast.info(`Opening ${file.name}...`)}
@@ -660,7 +661,7 @@ const CRMCommunicationPanel = () => {
                       </div>
                     </div>
                     <ExternalLink className="h-4 w-4 text-[#1A1A1A]/70" />
-                  </div>
+                  </ClickableDiv>
                 ))}
                 
                 <Button variant="outline" className="w-full mt-3 border-dashed border-[#B89555]/30 text-[#1A1A1A]/70">

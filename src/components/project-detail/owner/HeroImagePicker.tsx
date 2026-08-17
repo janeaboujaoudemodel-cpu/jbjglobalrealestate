@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCanEdit } from "@/hooks/useEffectiveOwner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface ImageRow {
   id: string;
@@ -140,7 +141,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
       </div>
 
       {open && (
-        <div
+        <ClickableDiv
           className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setOpen(false)}
         >
@@ -255,7 +256,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
               <strong>Cover</strong> = the big hero on this project page · <strong>Profile</strong> = the thumbnail shown on listing cards across the site.
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
     </>
   );

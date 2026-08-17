@@ -18,6 +18,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface ClonedVoice {
   voice_id: string;
@@ -295,7 +296,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
 
           <div className="space-y-1.5">
             {clonedVoices.map(voice => (
-              <div
+              <ClickableDiv
                 key={voice.voice_id}
                 className={`flex items-center gap-2 p-2.5 rounded-lg border transition-all cursor-pointer ${
                   selectedVoice?.voice_id === voice.voice_id
@@ -317,7 +318,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
-              </div>
+              </ClickableDiv>
             ))}
           </div>
         </section>

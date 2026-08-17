@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import JSZip from "jszip";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // ─── Size Presets ───────────────────────────────────────────
 const SIZE_PRESETS = [
@@ -512,7 +513,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
             <div className="space-y-4">
               {/* Upload Zone (shown when no images) */}
               {!hasImages && (
-                <div
+                <ClickableDiv
                   className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 border-2 border-dashed border-[#B89555]/30 hover:border-[#B89555]/60 bg-[#FDFBF7]/60 hover:bg-[#FDFBF7]/80"
                   onClick={() => fileInputRef.current?.click()}
                   onDrop={(e) => { e.preventDefault(); handleFileSelect(e.dataTransfer.files); }}
@@ -522,7 +523,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   <p className="text-foreground font-semibold text-lg mb-1">Drop images here or click to upload</p>
                   <p className="text-muted-foreground text-sm">JPG, PNG, WebP — unlimited photos</p>
                   <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileSelect(e.target.files)} />
-                </div>
+                </ClickableDiv>
               )}
 
               {/* Live Preview Area */}
@@ -692,7 +693,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   </div>
                   <div ref={thumbnailStripRef} className="flex gap-2 overflow-x-auto pb-1 jj-scrollbar-gold-x">
                     {images.map(img => (
-                      <div
+                      <ClickableDiv
                         key={img.id}
                         onClick={() => setActiveImageId(img.id)}
                         className={cn(
@@ -709,7 +710,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         >
                           <Trash2 className="h-2.5 w-2.5 text-white" />
                         </button>
-                      </div>
+                      </ClickableDiv>
                     ))}
                   </div>
                   <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileSelect(e.target.files)} />
@@ -764,7 +765,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                     const selected = selectedPresets.includes(preset.id);
                     const isActive = activePreviewPreset === preset.id;
                     return (
-                      <div
+                      <ClickableDiv
                         key={preset.id}
                         className={cn(
                           "flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-pointer transition-all text-sm",
@@ -787,7 +788,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         >
                           <ZoomIn className="h-3.5 w-3.5" />
                         </button>
-                      </div>
+                      </ClickableDiv>
                     );
                   })}
                 </div>

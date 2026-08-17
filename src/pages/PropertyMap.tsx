@@ -19,6 +19,7 @@ import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyRemoveLayer } from "@/utils/leafletSafety";
 import "leaflet/dist/leaflet.css";
 import { SEOHead } from "@/components/SEOHead";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; language: string }) {
   const map = useMap();
@@ -555,7 +556,7 @@ const PropertyMap = () => {
       </div>
 
       {/* ── MAP CONTAINER ── */}
-      <div ref={mapContainerRef} className="flex-1 relative overflow-hidden" data-map-main-stage onClick={(e) => { if (e.target === e.currentTarget) { setSelectedProject(null); setHoveredProject(null); } }}>
+      <ClickableDiv ref={mapContainerRef} className="flex-1 relative overflow-hidden" data-map-main-stage onClick={(e) => { if (e.target === e.currentTarget) { setSelectedProject(null); setHoveredProject(null); } }}>
         <MapContainer
           center={center}
           zoom={11}
@@ -847,7 +848,7 @@ const PropertyMap = () => {
           </div>
         </div>
         )}
-      </div>
+      </ClickableDiv>
 
       </div>
     </>

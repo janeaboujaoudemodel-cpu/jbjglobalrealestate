@@ -21,6 +21,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 // Types
 interface UploadedVideo {
@@ -808,7 +809,7 @@ const VideoResizePack = () => {
                             {EXPORT_FORMATS.map((format) => {
                               const isSelected = selectedFormats.includes(format.id);
                               return (
-                                <div
+                                <ClickableDiv
                                   key={format.id}
                                   className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all ${
  isSelected 
@@ -831,7 +832,7 @@ const VideoResizePack = () => {
                                   <Badge variant="outline" className="mt-2 text-xs border-white/20 text-white/90">
                                     {format.platform}
                                   </Badge>
-                                </div>
+                                </ClickableDiv>
                               );
                             })}
                           </div>

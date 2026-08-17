@@ -17,6 +17,7 @@ import {
   FileText, RefreshCw, Eye, ExternalLink, MapPin, Building2, Calendar,
 } from "lucide-react";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Message {
   id: string;
@@ -691,7 +692,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       : listing.unitTypes?.length ? listing.unitTypes.join(" • ") : null;
 
     return (
-      <div
+      <ClickableDiv
         className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
         onClick={() => {
           if (listing.viewUrl.startsWith("http")) window.open(listing.viewUrl, "_blank");
@@ -857,7 +858,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             </Button>
           </div>
         </div>
-      </div>
+      </ClickableDiv>
     );
   };
 

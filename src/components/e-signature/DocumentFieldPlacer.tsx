@@ -23,6 +23,7 @@ import ESignaturePad from "./ESignaturePad";
 import PdfPageCanvas from "./PdfPageCanvas";
 import FieldContentRenderer from "./FieldContentRenderer";
 import { BrandAssetPicker } from "@/components/brand-assets/BrandAssetPicker";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   type SignatureField, type DocumentFieldPlacerProps,
   fieldTypes, recipientColorStyles, getInitials, getRecipientStyle,
@@ -719,7 +720,7 @@ export default function DocumentFieldPlacer({
                   onPointerLeave={handleOverlayPointerUp}
                 >
                   {/* Page-sized positioned box: ALL field % coords are relative to this. */}
-                  <div
+                  <ClickableDiv
                     ref={pageRef}
                     className="relative"
                     style={{
@@ -820,7 +821,7 @@ export default function DocumentFieldPlacer({
                         </div>
                       );
                     })}
-                  </div>
+                  </ClickableDiv>
                 </div>
 
                 {/* Page navigation bar */}
@@ -877,7 +878,7 @@ export default function DocumentFieldPlacer({
                       const isOnCurrentPage = field.pageNumber === currentPage;
 
                       return (
-                        <div
+                        <ClickableDiv
                           key={field.id}
                           className={`flex items-center justify-between p-2 rounded-lg transition-colors cursor-pointer ${
                             isOnCurrentPage
@@ -912,7 +913,7 @@ export default function DocumentFieldPlacer({
                           >
                             <Trash2 className="w-3 h-3 text-red-500" />
                           </Button>
-                        </div>
+                        </ClickableDiv>
                       );
                     })}
                   </div>

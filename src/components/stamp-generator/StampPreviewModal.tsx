@@ -10,6 +10,7 @@ import { StampTextEditor } from './StampTextEditor';
 import { Button } from '@/components/ui/button';
 import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw, Scroll, Stamp, BookOpen, Layers, Lock, Unlock, PenTool, Book, AlignLeft, AlignCenter, AlignRight, Palette } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Props {
   concept: StampDesignConcept;
@@ -144,7 +145,7 @@ export function StampPreviewModal({
             >
               <Maximize2 size={14}/>
             </button>
-            <div
+            <ClickableDiv
               className="cursor-zoom-in select-none flex items-center justify-center"
               style={{ transform: `scale(${logoScale})`, transition: 'transform 0.15s ease', transformOrigin: 'center' }}
               onClick={() => {
@@ -171,7 +172,7 @@ export function StampPreviewModal({
                 fontSize={fontSize}
                 size={220}
               />
-            </div>
+            </ClickableDiv>
           </div>
           {/* Stamp size slider with lock */}
           <div className="w-full space-y-2">
@@ -632,7 +633,7 @@ export function StampPreviewModal({
 
       {/* Fullscreen stamp overlay with editing toolbar */}
       {stampFullscreen && (
-        <div
+        <ClickableDiv
           className="fixed inset-0 z-[10100] bg-[#1A1A1A]/90 flex items-center justify-center"
           onClick={() => setStampFullscreen(false)}
         >
@@ -682,7 +683,7 @@ export function StampPreviewModal({
             <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Expand for better editing</p>
           </div>
           <p className="absolute bottom-6 text-white/85 text-xs">Click outside to close</p>
-        </div>
+        </ClickableDiv>
       )}
     </div>
   );

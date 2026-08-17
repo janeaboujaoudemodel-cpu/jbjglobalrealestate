@@ -39,6 +39,7 @@ import {
 import { useAITicketSuggestions, type AISuggestion } from "@/hooks/useAITicketSuggestions";
 import { useSignedAttachmentUrl, isImageUrl, getFilenameFromUrl } from "@/hooks/useTicketAttachments";
 import { cn } from "@/lib/utils";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface TicketDetailPanelProps {
   ticketId: string | null;
@@ -131,7 +132,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
   return (
     <div className="flex flex-col gap-2">
       {imagePreview && (
-        <div 
+        <ClickableDiv 
           onClick={handleView}
           className="cursor-pointer rounded-lg overflow-hidden border border-[#B89555]/20 hover:border-[#B89555] transition-colors"
         >
@@ -140,7 +141,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
             alt={filename}
             className="max-w-full max-h-32 object-cover"
            loading="lazy" decoding="async" />
-        </div>
+        </ClickableDiv>
       )}
       <div className="flex gap-1">
         <button
@@ -209,7 +210,7 @@ const SuggestionCard = ({
 
       {/* Expanded Preview Modal */}
       {expanded && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
+        <ClickableDiv className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
           <div
             className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
@@ -250,7 +251,7 @@ const SuggestionCard = ({
               </Button>
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
     </>
   );
@@ -704,7 +705,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
       {/* Maximized Reply Editor Modal */}
       {replyMaximized && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
+        <ClickableDiv className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
           <div
             className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
@@ -766,7 +767,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               </Button>
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
     </div>
   );
