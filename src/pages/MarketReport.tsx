@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight, BookOpen, CheckCircle, Check, Download, FileText,
@@ -14,6 +15,7 @@ import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 import { useMarketReport } from "./useMarketReport";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import PageScope from "@/components/util/PageScope";
+import { ensureRouteSurfaceStyles } from "@/components/util/RouteSurfaceStyles";
 
 /**
  * Market Report — white-page premium book rebuild.
@@ -29,6 +31,12 @@ import PageScope from "@/components/util/PageScope";
  *  - All titles, subtitles, quote, signatures = ink. No more white-on-cream.
  */
 const MarketReport = () => {
+  // This page renders `data-insights-page` without going through
+  // InsightsPageScope, so it has to request the scoped sheet itself.
+  useEffect(() => {
+    ensureRouteSurfaceStyles();
+  }, []);
+
   const {
     countries, languages, form, setForm,
     isSubmitting, isGeneratingPdf, showThankYou,

@@ -660,7 +660,7 @@ const GoldenVisaGuide = () => {
             <p className="text-[#6B6B6B] mb-8 max-w-lg mx-auto">
               Our licensed advisors are ready to assist you with your Golden Visa application, documentation, and eligibility assessment.
             </p>
-            <Button className="bg-[#EFE6D6] hover:bg-[#B89650] text-white font-bold text-lg px-10 py-6 rounded-xl shadow-lg shadow-[#B89555]/30 transition-all hover:scale-[1.02]" asChild>
+            <Button className="bg-[#EFE6D6] hover:bg-[#B89650] text-[#1A1A1A] font-bold text-lg px-10 py-6 rounded-xl shadow-lg shadow-[#B89555]/30 transition-all hover:scale-[1.02]" asChild>
               <Link to="/contact?type=golden-visa-consultation">
                 <Phone className="w-5 h-5 mr-3" />
                 Contact Our Team

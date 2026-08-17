@@ -187,9 +187,9 @@
     "@hono/node-server": "2.0.5",
     "raw-body": "4.0.0",
     "inline-style-parser": "0.2.9",
-    "zod": "4.4.0",
+    "zod": "$zod",
     "nanoid": "5.1.16",
-    "react-hook-form": "7.81.0",
-    "recharts": "3.9.2"
+    "react-hook-form": "$react-hook-form",
+    "recharts": "$recharts"
   }
 }

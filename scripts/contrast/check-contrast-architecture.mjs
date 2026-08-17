@@ -8,7 +8,10 @@ const root = path.resolve(__dirname, '..', '..');
 
 const appTsx = path.join(root, 'src', 'App.tsx');
 const contrastGuard = path.join(root, 'src', 'utils', 'contrastGuard.ts');
-const css = path.join(root, 'src', 'index.css');
+// `--css=<path>` points the stylesheet checks at a fixture so the guard's own
+// regression tests can prove it still fails on a genuinely leaking rule.
+const cssOverride = process.argv.find((a) => a.startsWith('--css='))?.slice('--css='.length);
+const css = cssOverride ? path.resolve(cssOverride) : path.join(root, 'src', 'index.css');
 
 const violations = [];
 
@@ -45,64 +48,79 @@ if (presentFinalContracts.length !== 1 || presentFinalContracts[0] !== 'GLOBAL S
   violations.push(`src/index.css must contain exactly one final contrast contract: GLOBAL SEMANTIC CONTRAST CONTRACT. Found: ${presentFinalContracts.join(', ') || 'none'}.`);
 }
 
-const finalContractIndex = stylesheet.lastIndexOf('GLOBAL SEMANTIC CONTRAST CONTRACT');
-
-// Scope the scan to just this banner's own block: from its own closing banner
-// line (a line of "====" ending in "*/") to the next banner-open line (a line
-// starting "/* ====") after that. This tracks the banner structure itself
-// rather than a specific PASS-number string, so it keeps working as later
-// banners are renumbered, inserted, or reordered.
+// Scope the scan to the contract's own block: from its closing banner line (a
+// line of "====" ending in "*/") to the next banner-open line ("/* ====").
+// Do NOT pin this to a named pass — the section that follows gets renamed and
+// reformatted by every contrast pass, and when the old "/* PASS 200" sentinel
+// stopped matching, indexOf returned -1 and the slice silently widened to
+// end-of-file, auditing the whole stylesheet as if it were the contract.
 const bannerCloseLineRe = /^[ \t]*=+[ \t]*\*\/[ \t]*$/m;
 const bannerOpenLineRe = /^\/\*[ \t]*=+[ \t]*$/m;
-let finalContractEnd = -1;
-if (finalContractIndex >= 0) {
-  const closeMatch = bannerCloseLineRe.exec(stylesheet.slice(finalContractIndex));
-  if (closeMatch) {
-    const closeEnd = finalContractIndex + closeMatch.index + closeMatch[0].length;
-    const nextOpenMatch = bannerOpenLineRe.exec(stylesheet.slice(closeEnd));
-    finalContractEnd = nextOpenMatch ? closeEnd + nextOpenMatch.index : -1;
-  }
+
+function sliceFinalContract(source) {
+  const start = source.lastIndexOf('GLOBAL SEMANTIC CONTRAST CONTRACT');
+  if (start < 0) return '';
+  const closeMatch = bannerCloseLineRe.exec(source.slice(start));
+  if (!closeMatch) return source.slice(start);
+  const closeEnd = start + closeMatch.index + closeMatch[0].length;
+  const nextOpen = bannerOpenLineRe.exec(source.slice(closeEnd));
+  return source.slice(start, nextOpen ? closeEnd + nextOpen.index : undefined);
 }
-const finalContract = finalContractIndex >= 0
-  ? stylesheet.slice(finalContractIndex, finalContractEnd >= 0 ? finalContractEnd : undefined)
-  : '';
+
+// Comment prose contains braces, colons and words like `div`, so a naive
+// `split('}')` parse reads it as selectors and bodies. Strip comments first.
+const stripComments = (source) => source.replace(/\/\*[\s\S]*?\*\//g, ' ');
+
+const finalContract = stripComments(sliceFinalContract(stylesheet));
 if (/\[data-on-dark\][^{]*\{[^}]*color:\s*#fff(?:fff)?\s*!important/i.test(finalContract)) {
   violations.push('[data-on-dark] must not be a broad final paint rule; own dark surfaces decide white foregrounds.');
 }
 
-const unsafeFinalRules = finalContract
-  .split('}')
-  .map((rule) => {
+const rulesOf = (block) =>
+  block.split('}').map((rule) => {
     const [selector = '', body = ''] = rule.split('{');
     return { selector, body };
-  })
-  .filter(({ selector, body }) => {
-    const positiveSelector = selector.replace(/:not\([^)]*\)/g, '');
-    return /color:\s*(?:#fff(?:fff)?|#1a1a1a|var\(--jj-contrast-on-(?:light|dark)\))\s*!important/i.test(body)
-      && /\bdiv\b|\[role/.test(positiveSelector);
   });
-if (unsafeFinalRules.length) {
-  violations.push('The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.');
+
+// Declarations that hand an element an explicit foreground. `inherit` and
+// `currentColor` are the opposite of a paint — they defer to the nearest
+// surface — so they never count as one.
+const DECLARATION = /(?:^|[;{\s])(-webkit-text-fill-color|color)\s*:\s*([^;!]+?)\s*!important/gi;
+const DEFERRING = /^(?:inherit|currentColor|unset|revert)$/i;
+
+function paintsExplicitForeground(body) {
+  DECLARATION.lastIndex = 0;
+  let m;
+  while ((m = DECLARATION.exec(body)) !== null) {
+    if (!DEFERRING.test(m[2])) return true;
+  }
+  return false;
 }
 
-const surfaceDescendantPaint = finalContract
-  .split('}')
-  .map((rule) => {
-    const [selector = '', body = ''] = rule.split('{');
-    return { selector, body };
-  })
-  .filter(({ selector, body }) => {
-    if (!/\[data-surface\]/.test(selector) || !/\s:(?:where|is)\(/.test(selector)) return false;
-    // Capture each declaration's actual value and check it directly, rather than
-    // a lookahead a zero-width \s* match can dodge (matched "inherit" itself before).
-    const paints = [...body.matchAll(/(?:color|-webkit-text-fill-color):\s*([^;]+?)\s*!important/gi)];
-    return paints.some(([, value]) => {
-      const normalized = value.trim().toLowerCase();
-      return normalized !== 'inherit' && normalized !== 'currentcolor';
-    });
-  });
+const summarise = (rule) => rule.selector.trim().replace(/\s+/g, ' ').slice(0, 160);
+
+const unsafeFinalRules = rulesOf(finalContract).filter(({ selector, body }) => {
+  const positiveSelector = selector.replace(/:not\([^)]*\)/g, '');
+  return /color:\s*(?:#fff(?:fff)?|#1a1a1a|var\(--jj-contrast-on-(?:light|dark)\))\s*!important/i.test(body)
+    && /\bdiv\b|\[role/.test(positiveSelector);
+});
+if (unsafeFinalRules.length) {
+  violations.push(
+    'The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.',
+    ...unsafeFinalRules.map((r) => `    ↳ ${summarise(r)}`),
+  );
+}
+
+const surfaceDescendantPaint = rulesOf(finalContract).filter(({ selector, body }) =>
+  /\[data-surface\]/.test(selector)
+  && /\s:(?:where|is)\(/.test(selector)
+  && paintsExplicitForeground(body)
+);
 if (surfaceDescendantPaint.length) {
-  violations.push('Surface contrast must paint the surface boundary only; descendant paint leaks across nested surfaces.');
+  violations.push(
+    'Surface contrast must paint the surface boundary only; descendant paint leaks across nested surfaces.',
+    ...surfaceDescendantPaint.map((r) => `    ↳ ${summarise(r)}`),
+  );
 }
 
 if (violations.length) {

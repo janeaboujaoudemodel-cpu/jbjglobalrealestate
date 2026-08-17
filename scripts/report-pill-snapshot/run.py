@@ -137,11 +137,17 @@ async def snapshot_viewport(page, label: str, w: int, h: int):
 
     # 2. Export PDF via harness button.
     await page.click("[data-testid=harness-export-pdf]")
-    for _ in range(60):
+    # A full 9-page render measures ~26s on a warm dev server, so the old 30s
+    # budget left almost no headroom on a cold CI runner. The harness now
+    # reports `pdf error — …` on failure, so a genuine error is raised
+    # immediately rather than waiting out the whole window.
+    for _ in range(160):  # 80s
         await page.wait_for_timeout(500)
         status = await page.locator("[data-testid=harness-status]").text_content()
         if status and status.startswith("pdf ready"):
             break
+        if status and status.startswith("pdf error"):
+            raise RuntimeError(f"[{label}] PDF export failed — {status}")
     else:
         raise RuntimeError(f"[{label}] PDF export never completed (status={status!r})")
 

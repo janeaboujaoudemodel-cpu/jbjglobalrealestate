@@ -33,17 +33,49 @@ const root = path.resolve(__dirname, '..', '..');
 const SRC = path.join(root, 'src');
 const allowlistPath = path.join(__dirname, 'allowlist.json');
 const PRINT_BASELINE = process.argv.includes('--print-baseline');
-const stagedFileArgs = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 
+const exts = new Set(['.tsx', '.jsx']);
+
+/**
+ * File arguments, as lint-staged appends them.
+ *
+ * Without this the pre-commit hook scanned all of `src` on every commit, so a
+ * one-line change to one component was rejected for hundreds of pre-existing
+ * violations in files the author never touched — an unskippable hook that had
+ * to be bypassed to commit anything.
+ */
+const TARGETS = process.argv
+  .slice(2)
+  .filter((a) => !a.startsWith('-'))
+  .map((a) => path.resolve(root, a))
+  .filter((p) => exts.has(path.extname(p)) && fs.existsSync(p));
+const SCOPED = TARGETS.length > 0;
+
+/**
+ * Baseline of pre-existing hits, indexed two ways.
+ *
+ * Entries are `file:line:rule`, so they are invalidated by any edit that shifts
+ * a line — adding an import at the top of a file re-reported every violation
+ * below it as new. Exact keys are still matched first; what an exact match
+ * can't cover falls back to a per-(file, rule) budget, which survives line
+ * drift while still failing the moment a file gains *more* violations of a rule
+ * than the baseline recorded.
+ */
 let BASELINE = new Set();
+const BASELINE_BUDGET = new Map(); // `rel|rule` -> count
 try {
   const al = JSON.parse(fs.readFileSync(allowlistPath, 'utf8'));
   BASELINE = new Set(al.staticAriaBaseline?.entries ?? []);
+  for (const entry of BASELINE) {
+    const idx = entry.lastIndexOf(':');
+    const rule = entry.slice(idx + 1);
+    const rel = entry.slice(0, entry.indexOf(':'));
+    const k = `${rel}|${rule}`;
+    BASELINE_BUDGET.set(k, (BASELINE_BUDGET.get(k) ?? 0) + 1);
+  }
 } catch {
   // allowlist optional during initial bootstrap
 }
-
-const exts = new Set(['.tsx', '.jsx']);
 
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -55,13 +87,11 @@ function walk(dir, out = []) {
   return out;
 }
 
-// PRINT_BASELINE always scans the full tree — it's a manual baseline
+// PRINT_BASELINE always scans the full tree — it is a manual baseline
 // snapshot, not a pre-commit run, and needs every file to be meaningful.
-function targetFiles() {
-  if (PRINT_BASELINE || stagedFileArgs.length === 0) return walk(SRC);
-  return stagedFileArgs
-    .map((f) => path.resolve(f))
-    .filter((f) => exts.has(path.extname(f)) && fs.existsSync(f));
+function filesToScan() {
+  if (PRINT_BASELINE || !SCOPED) return walk(SRC);
+  return TARGETS;
 }
 
 /* ----------------------------- detectors ---------------------------------- */
@@ -159,7 +189,7 @@ function record(file, line, rule, snippet) {
   findings.push({ key, rel, line, rule, snippet: snippet.slice(0, 120) });
 }
 
-for (const file of targetFiles()) {
+for (const file of filesToScan()) {
   // Skip test files and the scanner's own dogfood targets.
   if (/\.(test|spec)\.(t|j)sx?$/.test(file)) continue;
   const source = maskComments(fs.readFileSync(file, 'utf8'));
@@ -229,7 +259,39 @@ if (PRINT_BASELINE) {
   process.exit(0);
 }
 
-const newFindings = findings.filter((f) => !BASELINE.has(f.key));
+/**
+ * Split findings into pre-existing and new.
+ *
+ * Exact `file:line:rule` matches are consumed first, so an untouched violation
+ * always matches itself. Whatever is left draws on the remaining per-(file,
+ * rule) budget, which is what absorbs line drift. A file that gains a violation
+ * beyond its recorded count still fails — the budget is spent, not ignored.
+ */
+function classify(all) {
+  const budget = new Map(BASELINE_BUDGET);
+  const fresh = [];
+  const exact = [];
+  for (const f of all) {
+    if (BASELINE.has(f.key)) {
+      exact.push(f);
+      const k = `${f.rel}|${f.rule}`;
+      budget.set(k, (budget.get(k) ?? 1) - 1);
+    }
+  }
+  for (const f of all) {
+    if (BASELINE.has(f.key)) continue;
+    const k = `${f.rel}|${f.rule}`;
+    const left = budget.get(k) ?? 0;
+    if (left > 0) {
+      budget.set(k, left - 1);
+      continue; // same file, same rule, moved line — not a new violation
+    }
+    fresh.push(f);
+  }
+  return { newFindings: fresh, driftTolerated: all.length - exact.length - fresh.length };
+}
+
+const { newFindings, driftTolerated } = classify(findings);
 
 const reportDir = path.join(root, 'artifacts', 'a11y');
 fs.mkdirSync(reportDir, { recursive: true });
@@ -238,8 +300,10 @@ fs.writeFileSync(
   JSON.stringify(
     {
       generatedAt: new Date().toISOString(),
+      scope: SCOPED ? TARGETS.map((p) => path.relative(root, p)) : 'src/**',
       total: findings.length,
       baseline: findings.length - newFindings.length,
+      driftTolerated,
       new: newFindings.length,
       findings,
     },
@@ -268,5 +332,7 @@ if (newFindings.length) {
 }
 
 console.log(
-  `✓ No new static a11y violations (${findings.length} baseline entries tolerated).`,
+  `✓ No new static a11y violations` +
+    ` (${SCOPED ? `${TARGETS.length} file(s) scanned` : 'src/** scanned'};` +
+    ` ${findings.length} pre-existing tolerated, ${driftTolerated} of them matched past a line shift).`,
 );

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { UNIT_FIELDS, type UnitFieldId } from "@/lib/compare/unitFieldsConfig";
-import { buildSchedule, type PlanRule } from "@/lib/payment-plan/buildSchedule";
+import { buildSchedule, planCoverage, type PlanRule } from "@/lib/payment-plan/buildSchedule";
 import type { UnitDraft } from "./AddUnitDialog";
 import type { PickedProject } from "./ProjectPicker";
 
@@ -27,9 +27,17 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
         rules,
       });
       const downPct = rules.find((r) => r.kind === "down_payment")?.pct ?? null;
-      return { u, sch, downPct };
+      return { u, sch, downPct, coverage: planCoverage(sch, u.priceAED) };
     });
   }, [units, sharedPlan, unitPlans, project.handover_date]);
+
+  // buildSchedule() has always flagged a plan that doesn't total 100%, but
+  // nothing rendered it, so a comparison could show a complete-looking payment
+  // plan covering 61-85% of the price with no indication anything was missing.
+  const underCovered = useMemo(
+    () => computed.filter((c) => c.coverage !== null),
+    [computed],
+  );
 
   // best-value: lowest price/sqft
   const bestPpsId = useMemo(() => {
@@ -98,6 +106,37 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
     (id === "monthlyInstallment" && c.u.id === bestMonthlyId);
 
   return (
+    <>
+      {underCovered.length > 0 && (
+        <div
+          role="status"
+          data-no-contrast-guard
+          data-payment-plan-warning
+          className="mb-3 rounded-2xl px-4 py-3 text-sm"
+          style={{
+            background: "rgba(180,83,9,0.16)",
+            border: "1px solid rgba(245,158,11,0.55)",
+            color: "#FDE68A",
+          }}
+        >
+          <div className="font-semibold" style={{ color: "#FCD34D" }}>
+            Payment plan does not total 100%
+          </div>
+          <ul className="mt-1 space-y-1">
+            {underCovered.map(({ u, coverage }) => (
+              <li key={u.id}>
+                <span className="font-semibold">
+                  {u.label || (u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`)}:
+                </span>{" "}
+                {coverage!.message}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-1.5 text-xs" style={{ color: "#FDE68A" }}>
+            Adjust the plan before sharing this comparison with a client.
+          </div>
+        </div>
+      )}
     <div
       className="overflow-x-auto rounded-2xl"
       style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(12px)" }}
@@ -161,5 +200,6 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
         </tbody>
       </table>
     </div>
+    </>
   );
 }

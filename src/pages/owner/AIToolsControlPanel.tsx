@@ -530,7 +530,7 @@ export default function AIToolsControlPanel() {
                               );
                             })}
                           </div>
-                          <Badge className="bg-[#F7F2EA] text-white/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
+                          <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
                           <StatusBadge status={status} />
                         </div>
                       </div>

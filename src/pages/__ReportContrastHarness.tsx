@@ -94,19 +94,31 @@ export default function ReportContrastHarness() {
 
   async function exportPdf() {
     setStatus("rendering…");
-    const out = await renderReportToPdf({
-      branding: { ...FIXTURE_BRANDING, mode: includeMode },
-      projects: FIXTURE_PROJECTS,
-      clientName: "Test Client",
-      clientRequirements: FIXTURE_REQUIREMENTS,
-    });
-    if (!out) {
-      setStatus("no pdf");
-      return;
+    // Without this catch a throw inside renderReportToPdf() rejects the click
+    // handler's promise and nothing else happens — the status stays
+    // "rendering…" forever. The pill-snapshot workflow then reports
+    // `PDF export never completed (status='rendering…')`, which is
+    // indistinguishable from a slow render and names no cause. Surface the
+    // error instead, on the element the snapshot script already reads.
+    try {
+      const out = await renderReportToPdf({
+        branding: { ...FIXTURE_BRANDING, mode: includeMode },
+        projects: FIXTURE_PROJECTS,
+        clientName: "Test Client",
+        clientRequirements: FIXTURE_REQUIREMENTS,
+      });
+      if (!out) {
+        setStatus("no pdf");
+        return;
+      }
+      (window as any).__pdfBlob = out.blob;
+      (window as any).__pdfArrayBuffer = await out.blob.arrayBuffer();
+      setStatus(`pdf ready (${out.blob.size} bytes)`);
+    } catch (err) {
+      const message = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+      (window as any).__pdfError = message;
+      setStatus(`pdf error — ${message}`);
     }
-    (window as any).__pdfBlob = out.blob;
-    (window as any).__pdfArrayBuffer = await out.blob.arrayBuffer();
-    setStatus(`pdf ready (${out.blob.size} bytes)`);
   }
 
   const includeOptions: Array<{ v: typeof includeMode; label: string }> = [

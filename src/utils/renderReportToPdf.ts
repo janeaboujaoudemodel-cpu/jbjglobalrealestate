@@ -211,7 +211,13 @@ export async function renderReportToPdf(
 
     const pages = Array.from(host.querySelectorAll<HTMLElement>("[data-report-page]"));
     if (!pages.length) throw new Error("No report pages rendered");
-    return captureReportRootToPdf(host, pages, filename);
+    // `await` is load-bearing, not stylistic. `return capture…()` hands back a
+    // pending promise, and `finally` runs the moment that expression is
+    // evaluated — so `host.remove()` below tore the offscreen tree out of the
+    // document while html2canvas was still cloning it, and every export died
+    // with "Unable to find element in cloned iframe". Awaiting here keeps the
+    // host mounted until the capture is finished.
+    return await captureReportRootToPdf(host, pages, filename);
   } finally {
     try {
       root?.unmount();

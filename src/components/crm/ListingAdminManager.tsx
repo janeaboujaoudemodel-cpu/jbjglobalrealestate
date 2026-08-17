@@ -281,7 +281,7 @@ const ListingAdminManager = () => {
                           Active
                         </Badge>
                       ) : (
-                        <Badge className="bg-[#EFE6D6] text-white/70 border-[#1A1A1A] text-xs">
+                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A]/70 border-[#1A1A1A] text-xs">
                           Inactive
                         </Badge>
                       )}

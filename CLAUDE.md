@@ -56,6 +56,31 @@ Before any visual/CSS change, run `npm run check:contrast:pr-gate` and `npm run 
 - RLS: this repo has been through several hardening passes (`SECURITY_PHASE3_P0_CHANGELOG.md` through `PHASE6`) — deny-by-default, `service_role`-only where appropriate, `WITH CHECK` constraints. Read the existing policy on a table before adding a new one to it. Note: `service_role` bypasses RLS entirely regardless of policy count (confirmed at the DB level, `rolbypassrls = true`) — a table with RLS enabled and zero policies is not necessarily broken if every access path uses a service-role client; check which client a given edge function actually uses before assuming a zero-policy table is failing silently.
 - Never render unsanitized HTML from user/DB input — this class of bug was found and patched across 5 files in Aug 2026; check for an existing sanitizer (`src/utils/__tests__/contentSanitizer.test.ts`) before adding raw `dangerouslySetInnerHTML`.
 
+## Roles & access control
+
+There are **two independent role systems** plus an email allow-list. They are not layered — knowing one tells you nothing about the other, and conflating them is the source of the redirect-loop and access-denied bugs this repo keeps producing.
+
+**1. Top-level UserMode** (`src/contexts/UserModeContext.tsx`) — `investor | broker | developer | owner`. A client-side presentation mode, persisted per-browser and switched from the header. It is *not* an authorization boundary: setting mode to `owner` does not grant owner access.
+
+**2. Developers-Portal role** (`src/hooks/usePortalRole.ts`, backed by the `user_roles` table) — `owner | portal_developer | portal_rep`. Resolved server-side: `isOwner` short-circuits to `owner`, otherwise the first matching row in `user_roles` wins (`owner`/`admin` → `owner`, then `portal_developer`, then `portal_rep`).
+
+**Owner is an email allow-list, not a role.** `OwnerGuard` (`src/components/OwnerGuard.tsx`) trusts the `verify-owner` edge function, which gates on the user's email being in `OWNER_BACKEND_EMAILS` (`src/config/ownerEmails.ts`). `app_settings.owner_email` can only *narrow* the set, never widen it — a configured value is honoured only if it is already in the hard-coded list. So granting owner access means editing `ownerEmails.ts` and deploying; there is no DB-only path.
+
+**BrokerGuard resolves broker access three ways** (`src/components/BrokerGuard.tsx`), in order: (1) owner bypass via `verify-owner` — owners always pass, and are tracked separately from `isBroker` so a mid-recheck window can't redirect a real owner; (2) an active row in `crm_brokers` (falling back to `link_broker_entity_by_email` and one retry if no row exists); (3) a legacy `broker_subscriptions` row.
+
+**The `app_role` enum values are all in use** — audited Aug 2026, resolving the open question from CTO report item #13. None are unused/reserved, and most are enforced in RLS policies that the Guard components never touch, so grepping `src/` alone will make them look dead:
+
+| Role | Where it is actually checked |
+| --- | --- |
+| `client` | app code + edge functions (widely used) |
+| `broker_jbj` | `useUserRole.ts`, `BrokerRequestAccessButton.tsx`, `ChatShortcuts.tsx`, `provision-employee-account` |
+| `broker_partner` | as above, plus the `visitor_role` enum and `StandardUserDashboard.tsx` |
+| `hr_admin` | RLS policies via `has_role(...)` in 11 migrations; `src/config/security-standards.ts` |
+| `support_ops` | RLS policies only (4 migrations) — no app-code check |
+| `auditor` | RLS policies (2 migrations) + `AuthContext.tsx` read-only flag |
+
+Before assuming a role is dead, grep `supabase/migrations` for `has_role(..., '<role>')` as well as `src/`.
+
 ## Error monitoring
 
 `src/lib/sentry.ts` wires Sentry into `src/utils/clientErrorLogger.ts`'s `logClientError()` — every existing error boundary already calls that function, so anything that reports through it is automatically covered. No-op until `VITE_SENTRY_DSN` is set. Prefer reporting new errors through `logClientError(surface, error, extra)` rather than a fresh `console.error` so they're covered too.

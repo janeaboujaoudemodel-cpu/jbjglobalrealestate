@@ -107,7 +107,17 @@ function edgeCoverage(ppmPath, marginPt, dpi = 150) {
   return { bandPx, nonWhite, ratioPct: bandPx ? (nonWhite / bandPx) * 100 : 0 };
 }
 
-/** Inspect embedded image DPI via `pdfimages -list`. */
+/**
+ * Inspect embedded image resolution via `pdfimages -list`.
+ *
+ * One record per image, keyed by page, taking the lower of the two axes. The
+ * previous version pushed x-ppi and y-ppi as separate entries into a flat list,
+ * so a document with ten under-resolution photos was reported as "20 embedded
+ * image(s) below 150 DPI" — double the real count, with no page to look at.
+ *
+ * `smask` rows are alpha channels for another image, not artwork of their own,
+ * so they are not counted.
+ */
 function imageDpis(pdfPath) {
   let out = "";
   try {
@@ -116,15 +126,18 @@ function imageDpis(pdfPath) {
     return [];
   }
   const lines = out.trim().split(/\r?\n/).slice(2);
-  const dpis = [];
+  const images = [];
   for (const line of lines) {
     const cols = line.trim().split(/\s+/);
+    const page = parseInt(cols[0], 10);
+    const type = cols[2];
     const xDpi = parseInt(cols[12], 10);
     const yDpi = parseInt(cols[13], 10);
-    if (Number.isFinite(xDpi)) dpis.push(xDpi);
-    if (Number.isFinite(yDpi)) dpis.push(yDpi);
+    if (type !== "image") continue;
+    if (!Number.isFinite(xDpi) || !Number.isFinite(yDpi)) continue;
+    images.push({ page, dpi: Math.min(xDpi, yDpi) });
   }
-  return dpis;
+  return images;
 }
 
 function pageCount(pdfPath) {
@@ -193,7 +206,14 @@ async function validateExport(browser, exp) {
     );
   }
 
-  // Edge coverage on every page
+  // Edge coverage on every page.
+  //
+  // This looks for app chrome that leaked into an export the app renders from a
+  // live page, so it only means anything on a document with white margins. A
+  // designed full-bleed asset paints its brand ground to the trim on every
+  // page, which reads as ~100% coverage no matter how good the PDF is — see
+  // `checkEdgeCoverage` in thresholds.json. Measure it either way so the report
+  // still carries the numbers; only the pass/fail is opt-out.
   const rasterDir = join(exportDir, "raster");
   let pageImages = [];
   try {
@@ -201,12 +221,13 @@ async function validateExport(browser, exp) {
   } catch (err) {
     failures.push(`rasterize failed: ${err.message}`);
   }
+  const edgeEnforced = t.checkEdgeCoverage !== false;
   const edgeReports = [];
   for (const img of pageImages) {
     try {
       const r = edgeCoverage(img, t.edgeMarginPt, 150);
-      edgeReports.push({ page: img.split("page-").pop(), ratioPct: +r.ratioPct.toFixed(3) });
-      if (r.ratioPct > t.edgePixelTolerancePct) {
+      edgeReports.push({ page: img.split("page-").pop(), ratioPct: +r.ratioPct.toFixed(3), enforced: edgeEnforced });
+      if (edgeEnforced && r.ratioPct > t.edgePixelTolerancePct) {
         failures.push(
           `edge coverage on ${img.split("/").pop()}: ${r.ratioPct.toFixed(2)}% > ${t.edgePixelTolerancePct}%`,
         );
@@ -217,10 +238,16 @@ async function validateExport(browser, exp) {
   }
 
   // DPI check
-  const dpis = imageDpis(pdfPath);
-  const lowDpi = dpis.filter((d) => d < t.minImageDpi);
+  const images = imageDpis(pdfPath);
+  const lowDpi = images.filter((i) => i.dpi < t.minImageDpi);
   if (lowDpi.length) {
-    failures.push(`${lowDpi.length} embedded image(s) below ${t.minImageDpi} DPI (min: ${Math.min(...dpis)})`);
+    const byPage = [...new Set(lowDpi.map((i) => i.page))].sort((a, b) => a - b);
+    failures.push(
+      `${lowDpi.length} of ${images.length} embedded image(s) below ${t.minImageDpi} DPI ` +
+        `(lowest ${Math.min(...lowDpi.map((i) => i.dpi))}; pages ${byPage.join(", ")}) — ` +
+        `re-export the source artwork at higher resolution, or lower minImageDpi in ` +
+        `scripts/pdf-qa/thresholds.json if this is a screen-only deliverable`,
+    );
   }
 
   // Cleanup raster dir to keep artifact small
@@ -231,7 +258,7 @@ async function validateExport(browser, exp) {
     label: exp.label,
     pass: failures.length === 0,
     reasons: failures,
-    metrics: { pages, edgeReports, imageDpis: dpis },
+    metrics: { pages, edgeReports, images, lowDpiImages: lowDpi },
   };
 }
 
@@ -254,7 +281,12 @@ function writeReport(results) {
 
 async function main() {
   ensureCleanDir(ARTIFACTS);
-  const browser = await chromium.launch();
+  // PW_CHROMIUM lets a local run point at an already-installed Chromium when
+  // the pinned browser revision isn't downloaded. Unset in CI, which installs
+  // the matching revision — see the install step in pdf-export-qa.yml.
+  const browser = await chromium.launch(
+    process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
+  );
   const results = [];
   for (const exp of EXPORTS) {
     process.stdout.write(`→ ${exp.label} ... `);

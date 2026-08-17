@@ -9,7 +9,7 @@ import jsPDF from "jspdf";
 import autoTable, { type RowInput } from "jspdf-autotable";
 import { BRAND } from "@/lib/brand-tokens";
 import { UNIT_FIELDS, type UnitFieldId } from "@/lib/compare/unitFieldsConfig";
-import { buildSchedule, type PlanRule } from "@/lib/payment-plan/buildSchedule";
+import { buildSchedule, planCoverage, type PlanRule } from "@/lib/payment-plan/buildSchedule";
 import type { UnitDraft } from "@/components/compare/units/AddUnitDialog";
 import type { PickedProject } from "@/components/compare/units/ProjectPicker";
 
@@ -213,8 +213,13 @@ export function exportUnitComparisonPdf(opts: ExportOpts): void {
       rules,
     });
     const downPct = rules.find((r) => r.kind === "down_payment")?.pct ?? null;
-    return { u, sch, downPct };
+    return { u, sch, downPct, coverage: planCoverage(sch, u.priceAED) };
   });
+
+  // A plan that doesn't total 100% must say so on the client-facing document,
+  // not only in the builder. The generic "indicative only" footer does not
+  // cover a schedule that silently omits part of the purchase price.
+  const underCovered = computed.filter((c) => c.coverage !== null);
 
   const head = [
     [
@@ -268,6 +273,32 @@ export function exportUnitComparisonPdf(opts: ExportOpts): void {
     alternateRowStyles: { fillColor: BRAND.page },
     styles: { lineColor: BRAND.goldFaint, lineWidth: 0.4 },
   });
+
+  if (underCovered.length) {
+    const afterTable = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable;
+    let noticeY = (afterTable?.finalY ?? cursorY) + 18;
+    if (noticeY > pageH - 90) {
+      doc.addPage();
+      noticeY = 60;
+    }
+    doc.setFillColor("#FEF3C7");
+    doc.setDrawColor("#B45309");
+    doc.setLineWidth(0.8);
+    const lines = underCovered.map(
+      ({ u, coverage }) =>
+        `${u.label || (u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`)}: ${coverage!.message}`,
+    );
+    const wrapped = lines.flatMap((l) => doc.splitTextToSize(l, pageW - 96) as string[]);
+    const boxH = 26 + wrapped.length * 11;
+    doc.rect(32, noticeY, pageW - 64, boxH, "FD");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor("#92400E");
+    doc.text("Payment plan does not total 100% of the purchase price", 44, noticeY + 15);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    wrapped.forEach((line, i) => doc.text(line, 44, noticeY + 28 + i * 11));
+  }
 
   // Footer on every page
   const pageCount = doc.getNumberOfPages();
