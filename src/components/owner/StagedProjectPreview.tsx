@@ -16,8 +16,9 @@
  */
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { X, ExternalLink, ImageOff, AlertTriangle, MapPin, Building2, CalendarClock } from "lucide-react";
+import { ExternalLink, ImageOff, AlertTriangle, MapPin, Building2, CalendarClock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 type Props = {
   stagedId: string | null;
@@ -237,22 +238,15 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
   }, [draft]);
 
 
-  if (!stagedId) return null;
-
   return (
-    <div
-      role="dialog"
-      aria-label="Staged project draft preview"
-      className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto p-6"
-      style={{ background: "rgba(10, 15, 13, 0.62)" }}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div
-        className="w-full max-w-[980px] overflow-hidden rounded-2xl bg-white shadow-2xl"
-        style={{ marginLeft: "var(--jc-content-left, 0px)" }}
+    <Dialog open={!!stagedId} onOpenChange={(next) => { if (!next) onClose(); }}>
+      <DialogContent
+        aria-label="Staged project draft preview"
+        className="w-full max-w-[980px] p-0 gap-0 overflow-hidden rounded-2xl bg-white border-0 shadow-2xl"
       >
+        {/* Visually-hidden accessible name — the emerald banner below is the visible title */}
+        <DialogTitle className="sr-only">{draft.name || "Staged project draft preview"}</DialogTitle>
+
         {/* Draft banner — this is not live */}
         <div className="flex items-center justify-between gap-4 px-6 py-4" style={{ background: EMERALD }}>
           <div>
@@ -274,15 +268,6 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
             ) : null}
 
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close draft preview"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-white"
-            style={{ background: "rgba(255,255,255,0.14)" }}
-          >
-            <X className="h-4 w-4" aria-hidden />
-          </button>
         </div>
 
         {isLoading ? (
@@ -421,7 +406,7 @@ export default function StagedProjectPreview({ stagedId, onClose }: Props) {
             ) : null}
           </div>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

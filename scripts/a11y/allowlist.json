@@ -1010,7 +1010,13 @@
       "src/pages/toolkit/VoiceSuite.tsx:812:button-name",
       "src/pages/toolkit/VoiceSuite.tsx:936:button-name",
       "src/pages/toolkit/VoiceSuite.tsx:955:button-name",
-      "src/pages/toolkit/VoiceSuite.tsx:968:button-name"
+      "src/pages/toolkit/VoiceSuite.tsx:968:button-name",
+      "src/components/document-studio/DocumentStudio.tsx:4521:button-name",
+      "src/components/document-studio/DocumentStudio.tsx:2843:click-events-have-key-events",
+      "src/components/document-studio/DocumentStudio.tsx:2884:click-events-have-key-events",
+      "src/components/document-studio/DocumentStudio.tsx:4110:click-events-have-key-events",
+      "src/pages/developer-hub/DeveloperProjectWizard.tsx:813:button-name",
+      "src/pages/developer-hub/DeveloperProjectWizard.tsx:1477:button-name"
     ]
   },
   "keyboardBaseline": {

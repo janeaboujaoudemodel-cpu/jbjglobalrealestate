@@ -6,6 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -481,93 +487,85 @@ export default function ReportsManagementPanel() {
       </Card>
 
       {/* Report Detail Modal */}
-      {selectedReport && (
-        <div className="fixed inset-0 bg-[#1A1A1A]/80 flex items-center justify-center z-50 p-4">
-          <Card className="bg-[#0E0E0E] border-[#B89555]/30 w-full max-w-2xl max-h-[80vh] overflow-auto">
-            <CardHeader className="border-b border-[#B89555]/20">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-white">Report Details</CardTitle>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedReport(null)}
-                  className="text-[#1A1A1A]/70"
-                >
-                  ✕
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-[#1A1A1A]/70">Employee</Label>
-                  <p className="text-white font-medium">{selectedReport.reporter_name}</p>
+      <Dialog open={!!selectedReport} onOpenChange={(next) => { if (!next) setSelectedReport(null); }}>
+        <DialogContent className="bg-[#0E0E0E] border-[#B89555]/30 max-w-2xl max-h-[80vh] overflow-auto">
+          {selectedReport && (
+            <>
+              <DialogHeader className="border-b border-[#B89555]/20 pb-4">
+                <DialogTitle className="text-white">Report Details</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-[#1A1A1A]/70">Employee</Label>
+                    <p className="text-white font-medium">{selectedReport.reporter_name}</p>
+                  </div>
+                  <div>
+                    <Label className="text-[#1A1A1A]/70">Department</Label>
+                    <p className="text-white">{selectedReport.department}</p>
+                  </div>
+                  <div>
+                    <Label className="text-[#1A1A1A]/70">Submitted</Label>
+                    <p className="text-white">
+                      {format(new Date(selectedReport.submitted_at), 'MMMM dd, yyyy HH:mm')}
+                    </p>
+                  </div>
+                  <div>
+                    <Label className="text-[#1A1A1A]/70">Status</Label>
+                    <p className="text-white flex items-center gap-2">
+                      {selectedReport.is_flagged ? (
+                        <Badge className="bg-red-500/20 text-red-400">
+                          <AlertTriangle className="h-3 w-3 mr-1" />
+                          Needs Attention
+                        </Badge>
+                      ) : (
+                        <Badge className="jj-surface-emerald-soft text-green-400">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Reviewed
+                        </Badge>
+                      )}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <Label className="text-[#1A1A1A]/70">Department</Label>
-                  <p className="text-white">{selectedReport.department}</p>
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A]/70">Submitted</Label>
-                  <p className="text-white">
-                    {format(new Date(selectedReport.submitted_at), 'MMMM dd, yyyy HH:mm')}
-                  </p>
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A]/70">Status</Label>
-                  <p className="text-white flex items-center gap-2">
-                    {selectedReport.is_flagged ? (
-                      <Badge className="bg-red-500/20 text-red-400">
-                        <AlertTriangle className="h-3 w-3 mr-1" />
-                        Needs Attention
-                      </Badge>
-                    ) : (
-                      <Badge className="jj-surface-emerald-soft text-green-400">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        Reviewed
-                      </Badge>
-                    )}
-                  </p>
-                </div>
-              </div>
 
-              <div className="border-t border-[#B89555]/20 pt-4">
-                <Label className="text-[#1A1A1A]/70">Report Content</Label>
-                <div className="mt-2 bg-[#1A1A1A] rounded-lg p-4 space-y-2">
-                  {Object.entries(selectedReport.content || {}).map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className="text-[#1A1A1A]/70 capitalize">{key.replace(/_/g, ' ')}:</span>
-                      <span className="text-white">{String(value)}</span>
-                    </div>
-                  ))}
+                <div className="border-t border-[#B89555]/20 pt-4">
+                  <Label className="text-[#1A1A1A]/70">Report Content</Label>
+                  <div className="mt-2 bg-[#1A1A1A] rounded-lg p-4 space-y-2">
+                    {Object.entries(selectedReport.content || {}).map(([key, value]) => (
+                      <div key={key} className="flex justify-between">
+                        <span className="text-[#1A1A1A]/70 capitalize">{key.replace(/_/g, ' ')}:</span>
+                        <span className="text-white">{String(value)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-4">
+                  <Button
+                    className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
+                    onClick={() => {
+                      toast.success('Report marked as reviewed');
+                      setSelectedReport(null);
+                    }}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Mark Reviewed
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-[#B89555]/30 text-[#1A1A1A]"
+                    onClick={() => {
+                      toast.info('Note added to report');
+                    }}
+                  >
+                    Add Note
+                  </Button>
                 </div>
               </div>
-
-              <div className="flex gap-2 pt-4">
-                <Button
-                  className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
-                  onClick={() => {
-                    toast.success('Report marked as reviewed');
-                    setSelectedReport(null);
-                  }}
-                >
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Mark Reviewed
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-[#B89555]/30 text-[#1A1A1A]"
-                  onClick={() => {
-                    toast.info('Note added to report');
-                  }}
-                >
-                  Add Note
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { X, Keyboard } from 'lucide-react';
-import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import React from 'react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { Keyboard } from 'lucide-react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface ShortcutCheatSheetProps {
   open: boolean;
@@ -69,34 +70,15 @@ function Kbd({ label }: { label: string }) {
 }
 
 export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
-  // Close on Escape
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [open, onClose]);
-
-  if (!open) return null;
-
   return (
-    /* Backdrop */
-    <ClickableDiv
-      className="fixed inset-0 z-[99999] flex items-center justify-center"
-      style={{ background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)' }}
-      onClick={onClose}
-    >
-      {/* Panel */}
-      <div
-        className="relative rounded-2xl overflow-hidden w-full max-w-sm mx-4 animate-scale-in"
+    <Dialog open={open} onOpenChange={(next) => { if (!next) onClose(); }}>
+      <DialogContent
+        className="max-w-sm p-0 rounded-2xl overflow-hidden"
         style={{
           background: 'linear-gradient(160deg, #0f172a 0%, #0c1120 100%)',
           border: '1px solid rgba(245,158,11,0.25)',
           boxShadow: '0 0 60px rgba(245,158,11,0.08), 0 24px 64px rgba(0,0,0,0.6)',
         }}
-        onClick={e => e.stopPropagation()}
       >
         {/* Gold top bar */}
         <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: 'linear-gradient(90deg, transparent, #F59E0B, transparent)' }} />
@@ -108,19 +90,12 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
               <Keyboard className="w-4 h-4 text-[#1A1A1A]" />
             </div>
             <div>
-              <h2 className="text-white text-sm font-bold leading-tight">Keyboard Shortcuts</h2>
+              <DialogPrimitive.Title asChild>
+                <h2 className="text-white text-sm font-bold leading-tight">Keyboard Shortcuts</h2>
+              </DialogPrimitive.Title>
               <p className="text-[#1A1A1A]/70 text-[10px] leading-tight">AI Video Studio</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
-          >
-            <X className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-          </button>
         </div>
 
         {/* Shortcut sections */}
@@ -160,7 +135,7 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
         <div className="px-5 pb-4 text-center">
           <p className="text-[#1A1A1A]/80 text-[10px]">Press <Kbd label="?" /> or <Kbd label="Esc" /> to dismiss</p>
         </div>
-      </div>
-    </ClickableDiv>
+      </DialogContent>
+    </Dialog>
   );
 }

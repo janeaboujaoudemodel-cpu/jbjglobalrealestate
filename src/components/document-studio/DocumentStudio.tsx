@@ -2828,6 +2828,12 @@ function StudioShell({
         onPick={pickAsset}
       />
 
+      {/* NOT migrated to shared Dialog — see JBJ-005 batch 1 PR description.
+          DialogContent's inline z-index (120001, dialog.tsx) is hardcoded and
+          cannot be overridden, and this editor overlay renders at 2147483000
+          (createPortal(..., document.body) above), so a plain Dialog here would
+          render invisibly behind the shell. Keeping the original explicit
+          z-index (2147483100) until that's resolved. */}
       {saveDialogOpen && (
         <ClickableDiv
           className="fixed inset-0 bg-black/40 flex items-center justify-center"
