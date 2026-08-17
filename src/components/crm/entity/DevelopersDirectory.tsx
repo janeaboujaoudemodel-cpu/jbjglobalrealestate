@@ -262,7 +262,7 @@ export default function DevelopersDirectory() {
                   </td>
                   <td className="px-4 py-3 text-xs whitespace-nowrap max-w-[200px]">
                     {websiteDomain && d.website_url ? (
-                      <a href={d.website_url} target="_blank" rel="noreferrer" onClick={stop}
+                      <a aria-label="Website" href={d.website_url} target="_blank" rel="noreferrer" onClick={stop}
                          className="inline-flex items-center gap-1 text-[#1A1A1A] hover:underline truncate">
                         <Globe className="h-3 w-3 shrink-0" />
                         <span className="truncate">{websiteDomain}</span>

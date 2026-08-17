@@ -249,7 +249,7 @@ export default function DeveloperCustomFieldsSection({
           <p className="text-[11px] text-[#1A1A1A]/60">
             {saving ? "Saving…" : dirty ? "Unsaved changes" : "All extended fields saved"}
           </p>
-          <Button
+          <Button aria-label="Save now"
             onClick={save}
             disabled={saving}
             className="bg-[#064E3B] text-white hover:bg-[#064E3B]/90"
@@ -466,7 +466,7 @@ function ManageFieldsPopover({
                 <option value="list">List</option>
                 <option value="date">Date</option>
               </select>
-              <Button
+              <Button aria-label="Add"
                 size="sm"
                 onClick={addField}
                 disabled={busy || !newLabel.trim()}

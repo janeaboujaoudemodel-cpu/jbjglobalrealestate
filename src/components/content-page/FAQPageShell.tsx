@@ -137,12 +137,12 @@ export function FAQPageShell({
               </Link>
             </Button>
             {cta?.guideHref && (
-              <Button
+              <Button aria-label="Read Guide"
                 asChild
                 variant="outline"
                 className="px-6 border-white/40 bg-white/[0.08] text-white hover:bg-white/15"
               >
-                <Link to={cta.guideHref}>
+                <Link aria-label="Read Guide" to={cta.guideHref}>
                   {cta.guideLabel ?? "Read Guide"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>

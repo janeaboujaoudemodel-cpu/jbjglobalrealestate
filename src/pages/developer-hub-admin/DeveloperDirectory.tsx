@@ -117,7 +117,7 @@ function DeveloperActivityMenu({ slug, name }: { slug: string; name: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 rounded-md border-[#B89555]/50 text-[#1A1A1A]">
+        <Button aria-label="More options" size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 rounded-md border-[#B89555]/50 text-[#1A1A1A]">
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -465,7 +465,7 @@ export default function DeveloperDirectory() {
           {onlyBroken ? "Showing broken only" : "Show broken only"}
         </Button>
 
-        <Button size="sm" variant="outline" onClick={toggleAll}>
+        <Button aria-label="Unselect all" size="sm" variant="outline" onClick={toggleAll}>
           {allSelected ? <CheckSquare className="size-4 mr-1" /> : <Square className="size-4 mr-1" />}
           {allSelected ? "Unselect all" : "Select all loaded"}
         </Button>

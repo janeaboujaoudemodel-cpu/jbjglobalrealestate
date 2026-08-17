@@ -127,7 +127,7 @@ function CalendarPopover({ leadId, leadName, leadPhone, leadEmail, userId }: Pro
           )}
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
           <Input type="datetime-local" value={startAt} onChange={(e) => setStartAt(e.target.value)} />
-          <Button onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+          <Button aria-label="Save" onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
           </Button>
         </div>
@@ -171,7 +171,7 @@ function NotePopover({ leadId, leadName, leadPhone, leadEmail, userId }: Props) 
             <div className="text-xs text-[#1A1A1A]/70">{[leadPhone, leadEmail].filter(Boolean).join(" · ")}</div>
           )}
           <Textarea value={body} onChange={(e) => setBody(e.target.value)} rows={4} placeholder="Type a note…" />
-          <Button onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+          <Button aria-label="Save note" onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save note"}
           </Button>
         </div>
@@ -221,7 +221,7 @@ function TaskPopover({ leadId, leadName, leadPhone, leadEmail, userId }: Props) 
           )}
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task title" />
           <Input type="datetime-local" value={dueAt} onChange={(e) => setDueAt(e.target.value)} />
-          <Button onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+          <Button aria-label="Save task" onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save task"}
           </Button>
         </div>

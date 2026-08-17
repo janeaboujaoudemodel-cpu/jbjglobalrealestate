@@ -540,7 +540,7 @@ export default function PositionManager() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditorOpen(false)} className="border-[#B89555]">Cancel</Button>
-            <Button
+            <Button aria-label="Save changes"
               data-allow-dark-cta data-no-contrast-guard
               onClick={save} disabled={saving}
               className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white"

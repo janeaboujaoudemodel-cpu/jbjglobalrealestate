@@ -173,7 +173,7 @@ export default function CRMAINextActions({ userId }: Props) {
             </div>
           </div>
         </div>
-        <button
+        <button aria-label="Refresh"
           type="button"
           onClick={runAI}
           disabled={loading}

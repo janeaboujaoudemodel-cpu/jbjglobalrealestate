@@ -1069,7 +1069,7 @@ export default function CreateEnvelope() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
-            <Button 
+            <Button aria-label="Send" 
               onClick={handleSubmit} 
               disabled={isSubmitting || !reviewConfirmed}
               className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90"

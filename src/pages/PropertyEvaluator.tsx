@@ -1730,7 +1730,7 @@ const PropertyEvaluator = () => {
 
             <div className="flex justify-center gap-4 mt-8">
               <Button onClick={() => setActiveTab('modifications')} variant="outline" className="border-[#B89555]/45">← Back</Button>
-              <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white font-medium px-8">
+              <Button aria-label="AI assist" onClick={evaluateProperty} disabled={isEvaluating} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white font-medium px-8">
                 {isEvaluating ? (
                   <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Evaluating Property...</>
                 ) : (

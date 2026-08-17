@@ -244,7 +244,7 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
               <Button variant="outline" onClick={() => handleClose(false)} disabled={busy}>
                 Cancel
               </Button>
-              <Button
+              <Button aria-label="Upload"
                 variant="gold"
                 disabled={busy || (mode === "file" ? !file : !pasteText.trim())}
                 onClick={handleUpload}

@@ -186,7 +186,7 @@ export default function BrokerActivate() {
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                 className="text-center tracking-[0.5em] text-lg font-semibold"
               />
-              <Button onClick={verifyOtp} disabled={busy} className="w-full">
+              <Button aria-label="Verify code" onClick={verifyOtp} disabled={busy} className="w-full">
                 {busy ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Verifying…</> : "Verify code"}
               </Button>
             </div>
@@ -202,7 +202,7 @@ export default function BrokerActivate() {
                 <li>• At least one number</li>
                 <li>• At least one symbol</li>
               </ul>
-              <Button onClick={setNewPassword} disabled={busy} className="w-full">
+              <Button aria-label="Verified" onClick={setNewPassword} disabled={busy} className="w-full">
                 {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
                 {busy ? "Activating…" : "Set password & enter CRM"}
               </Button>

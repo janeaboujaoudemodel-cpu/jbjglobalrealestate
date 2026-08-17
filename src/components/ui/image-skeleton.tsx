@@ -46,7 +46,7 @@ export function ImageWithSkeleton({
       {!loaded && !errored && (
         <Skeleton className={cn("absolute inset-0 w-full h-full", radius)} />
       )}
-      <img
+      <img alt=""
         {...imgProps}
         className={cn(
           "w-full h-full transition-opacity duration-300",

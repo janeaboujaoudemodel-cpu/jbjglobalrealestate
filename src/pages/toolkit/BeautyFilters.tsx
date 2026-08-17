@@ -446,7 +446,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
   // ── Upload Zone (shown only once at top if no image) ──
   const uploadZone = (
     <div className="max-w-2xl mx-auto">
-      <div
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
         onDragOver={e => e.preventDefault()} onDrop={handleFileDrop}
         onClick={() => fileInputRef.current?.click()}
         className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300"

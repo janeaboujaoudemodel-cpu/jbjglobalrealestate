@@ -635,7 +635,7 @@ const Footer = () => {
               <Mail className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.emailCapitalized}</span>
             </a>
-            <a
+            <a aria-label="Website"
               href={getWebsiteUrl()}
               target="_blank"
               rel="noopener noreferrer"

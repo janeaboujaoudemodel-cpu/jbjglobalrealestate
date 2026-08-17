@@ -347,6 +347,7 @@ export default function BlankLetterStudio() {
   const SectionToggle = ({ open, onToggle, label, icon: Icon }: any) => (
     <button
       onClick={onToggle}
+      aria-label={label}
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${
         open ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]" : "bg-white border-[#EFE6D6] text-[#1A1A1A]/80 hover:border-[#B89555]/60"
       }`}

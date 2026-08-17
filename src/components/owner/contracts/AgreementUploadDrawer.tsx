@@ -204,7 +204,7 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
 
         <div className="mt-6 space-y-4">
           {!file && (
-            <div
+            <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
               onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
@@ -229,14 +229,14 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
                 <p className="text-sm font-medium text-[#1A1A1A] truncate">{file.name}</p>
                 <p className="text-xs text-[#1A1A1A]/60">{(file.size / 1024).toFixed(0)} KB</p>
               </div>
-              <button onClick={reset} className="p-1 rounded hover:bg-[#EFE6D6]">
+              <button aria-label="Close" onClick={reset} className="p-1 rounded hover:bg-[#EFE6D6]">
                 <X className="h-4 w-4 text-[#1A1A1A]/60" />
               </button>
             </div>
           )}
 
           {file && !extracted && (
-            <Button onClick={analyze} disabled={analyzing} variant="gold" className="w-full">
+            <Button aria-label="AI assist" onClick={analyze} disabled={analyzing} variant="gold" className="w-full">
               {analyzing ? (<><Loader2 className="h-4 w-4 mr-2 animate-spin" />Reading contract…</>)
                 : (<><Sparkles className="h-4 w-4 mr-2" />Analyze with AI</>)}
             </Button>

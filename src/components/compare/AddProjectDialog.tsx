@@ -130,7 +130,7 @@ export default function AddProjectDialog({ open, onOpenChange, onAdd }: Props) {
               className="bg-white text-[#1A1A1A]"
             />
             <p className="text-xs text-[#1A1A1A]/65">AI will read the source and pre-fill price, sqft, handover, amenities, and yield.</p>
-            <Button onClick={submitLink} disabled={busy} className="w-full" data-cta="dark">
+            <Button aria-label="AI assist" onClick={submitLink} disabled={busy} className="w-full" data-cta="dark">
               {busy ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Extracting…</> : <><Sparkles className="w-4 h-4 mr-2" />Extract & Add</>}
             </Button>
           </TabsContent>

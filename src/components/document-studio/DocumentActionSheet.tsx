@@ -71,6 +71,7 @@ function Row({
     <button
       type="button"
       onClick={onClick}
+      aria-label={label}
       className={`w-full flex items-center gap-3 px-5 py-3 text-left text-sm border-b border-[#B89555]/15 last:border-0 transition-colors ${
         danger
           ? "text-[#7a1f1f] hover:bg-[#fbe9e9]"

@@ -1132,8 +1132,8 @@ export default function DeveloperProfilePage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      {r.phone_e164 && <a className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone_e164}`}><Phone className="w-3.5 h-3.5" /></a>}
-                      {r.email && <a className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
+                      {r.phone_e164 && <a aria-label="Call" className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone_e164}`}><Phone className="w-3.5 h-3.5" /></a>}
+                      {r.email && <a aria-label="Email" className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
                     </div>
                   </div>
                 ))}
@@ -1155,8 +1155,8 @@ export default function DeveloperProfilePage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      {r.phone && <a className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
-                      {r.email && <a className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
+                      {r.phone && <a aria-label="Call" className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
+                      {r.email && <a aria-label="Email" className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
                     </div>
                   </div>
                 ))}
@@ -1418,7 +1418,7 @@ function MediaSection({
                 ) : kind === "video" ? (
                   <video src={m.url} className="w-full h-28 object-cover" />
                 ) : (
-                  <a href={m.url} target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center h-28 text-[#1A1A1A]/70">
+                  <a aria-label="Open" href={m.url} target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center h-28 text-[#1A1A1A]/70">
                     <FileText className="w-8 h-8" />
                     <span className="text-xs mt-1 px-2 truncate w-full text-center">{m.caption || "Open"}</span>
                   </a>

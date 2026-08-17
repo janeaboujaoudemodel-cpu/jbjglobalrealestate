@@ -46,7 +46,7 @@ export default function PremiumPromptRoot() {
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={close}
     >
-      <div
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
         className="relative w-full max-w-md rounded-lg overflow-hidden shadow-2xl bg-[#FDFBF7] border border-[#B89555]/40"
         onClick={(e) => e.stopPropagation()}
       >

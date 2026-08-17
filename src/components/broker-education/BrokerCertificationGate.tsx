@@ -357,7 +357,7 @@ export default function BrokerCertificationGate() {
                 in certification being revoked.
               </span>
             </label>
-            <Button
+            <Button aria-label="Verified"
               type="button"
               onClick={handleSubmit}
               disabled={submitting || reflection.trim().length < 120 || !attest}
@@ -390,7 +390,7 @@ export default function BrokerCertificationGate() {
                 will flag the attempt for owner review.
               </span>
             </p>
-            <Button onClick={startQuiz} disabled={quizLoading} className="jj-pill-emerald-metallic" data-cta="cert-start-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <Button onClick={startQuiz} disabled={quizLoading} aria-label="Start the certification quiz" className="jj-pill-emerald-metallic" data-cta="cert-start-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {quizLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Loading quiz…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Start AI Quiz</>}
             </Button>
           </div>
@@ -426,7 +426,7 @@ export default function BrokerCertificationGate() {
                 </li>
               ))}
             </ol>
-            <Button onClick={submitQuiz} disabled={grading} className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <Button onClick={submitQuiz} disabled={grading} aria-label="Submit quiz answers" className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Grading…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Submit Quiz</>}
             </Button>
           </div>

@@ -356,7 +356,7 @@ export default function CVBuilder() {
                 onHardDelete={hardDelete}
               />
             )}
-            <Button variant="outline" size="sm" onClick={handleSaveCV} disabled={savingRow}>
+            <Button aria-label="Update" variant="outline" size="sm" onClick={handleSaveCV} disabled={savingRow}>
               {savingRow ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Save className="w-4 h-4 mr-1.5" />}
               {currentRowId ? "Update" : "Save"}
             </Button>
@@ -757,7 +757,7 @@ function SectionCard({
           <h3 className="text-[13px] font-semibold text-[#1A1A1A]">{title}</h3>
         </div>
         {onAdd && (
-          <button onClick={onAdd} className="text-[11px] font-medium text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1 rounded-md border border-[#B89555]/40 px-2 py-1 bg-[#FDFBF7]">
+          <button aria-label="Add" onClick={onAdd} className="text-[11px] font-medium text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1 rounded-md border border-[#B89555]/40 px-2 py-1 bg-[#FDFBF7]">
             <Plus className="w-3.5 h-3.5" /> {addLabel}
           </button>
         )}

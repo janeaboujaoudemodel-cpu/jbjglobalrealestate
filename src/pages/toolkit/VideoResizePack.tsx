@@ -992,7 +992,7 @@ const VideoResizePack = () => {
                   </CardHeader>
                   <CardContent>
                     {!uploadedVideo ? (
-                      <div
+                      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                         className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all cursor-pointer ${
  dragActive ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#B89555]/30 hover:border-[#B89555]/50"
  }`}

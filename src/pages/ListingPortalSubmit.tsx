@@ -833,7 +833,7 @@ const ListingPortalSubmit = () => {
                           Upload PDF brochures, floor plans, fact sheets, property photos, reservation forms, agreements — AI will extract everything
                         </p>
                         
-                        <div
+                        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
                           className="border-2 border-dashed border-white/40 rounded-xl p-8 text-center hover:border-white transition-all cursor-pointer"

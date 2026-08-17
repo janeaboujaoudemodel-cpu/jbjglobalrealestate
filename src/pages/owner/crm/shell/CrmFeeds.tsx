@@ -168,7 +168,7 @@ export default function CrmFeeds() {
                   <button type="button" data-active={p.liked} onClick={() => toggleLike(p.id)}>
                     <Heart size={15} /> <span>{p.likes}</span>
                   </button>
-                  <button type="button">
+                  <button aria-label="Message" type="button">
                     <MessageSquare size={15} /> <span>{p.comments}</span>
                   </button>
                   <button type="button">

@@ -311,7 +311,7 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           <p className="text-[11px] text-[#1A1A1A]/60">
             AI reads every source, rewrites the bio in premium magazine style, and drafts CEO / founder / HQ / notable projects for your review.
           </p>
-          <button
+          <button aria-label="Extract intel"
             type="button"
             id="jbj-extract-intel-btn"
             onClick={runIntelExtract}

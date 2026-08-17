@@ -611,7 +611,7 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
           <div className="flex items-center gap-3">
             <DeveloperLogo src={developer.logo_url} name={developer.name} alt={`${developer.name} logo`} variant="bare" size="micro" />
             <div>
-              <a href={`/admin/developers/profile/${developer.slug}`} className="hover:underline">
+              <a href={`/admin/developers/profile/${developer.slug}`} className="hover:underline" aria-label={developer.name}>
                 <CardTitle className="text-foreground text-lg cursor-pointer">{developer.name}</CardTitle>
               </a>
               <div className="flex items-center gap-2 mt-1">

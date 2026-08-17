@@ -310,7 +310,7 @@ export default function Signup() {
               </Button>
             )}
             {step === 2 && (
-              <Button
+              <Button aria-label="Next"
                 type="submit"
                 disabled={loading}
                 className="bg-[#064E3B] hover:bg-[#053929] text-white transition-all active:scale-[0.98] shadow-[0_10px_24px_-12px_rgba(6,78,59,0.55)]"
@@ -322,6 +322,7 @@ export default function Signup() {
               <Button
                 type="submit"
                 disabled={loading || otp.length !== 6}
+                aria-label="Verify code and create account"
                 className="bg-[#064E3B] hover:bg-[#053929] text-white transition-all active:scale-[0.98] shadow-[0_10px_24px_-12px_rgba(6,78,59,0.55)]"
               >
                 {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Verifying…</> : "Verify & create account"}

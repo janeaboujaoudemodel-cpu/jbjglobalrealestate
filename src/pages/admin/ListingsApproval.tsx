@@ -232,8 +232,8 @@ const ListingsApproval = () => {
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
           {p.slug && (
-            <Button asChild variant="outline" size="sm">
-              <Link to={`/project/${p.slug}`} target="_blank" rel="noreferrer">
+            <Button aria-label="Copy link" asChild variant="outline" size="sm">
+              <Link aria-label="Open in a new tab" to={`/project/${p.slug}`} target="_blank" rel="noreferrer">
                 <ExternalLink className="h-4 w-4" />
               </Link>
             </Button>

@@ -359,14 +359,14 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
               rows.map((r: OwnerCrmLead) => {
                 const on = selected.has(r.id);
                 return (
-                  <div
+                  <div tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                     key={r.id}
                     className="jc-list__row"
                     role="row"
                     data-selected={on}
                     onClick={() => navigate(`/owner/crm/jbj/${section}/${r.id}`)}
                   >
-                    <div className="jc-list__td jc-list__td--check" onClick={(e) => e.stopPropagation()}>
+                    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="jc-list__td jc-list__td--check" onClick={(e) => e.stopPropagation()}>
                       <input
                         type="checkbox"
                         checked={on}

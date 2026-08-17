@@ -622,7 +622,7 @@ export default function HRAgentChat() {
                 disabled={loading}
                 className="flex-1 border-[#B89555]/30 focus:border-[#B89555]"
               />
-              <Button
+              <Button aria-label="Send"
                 onClick={sendMessage}
                 disabled={!input.trim() || loading}
                 size="icon"

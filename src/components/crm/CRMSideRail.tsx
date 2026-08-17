@@ -66,7 +66,7 @@ export default function CRMSideRail() {
                 Shortcuts
               </SheetTitle>
               <div className="flex items-center gap-1.5">
-                <button
+                <button aria-label="Add"
                   type="button"
                   onClick={handlePrimary}
                   className="inline-flex items-center gap-1 h-8 px-3 rounded-full text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90"

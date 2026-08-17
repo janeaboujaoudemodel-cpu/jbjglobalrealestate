@@ -627,6 +627,7 @@ const BusinessCardScanner = () => {
                   ].map(({ onClick, Icon, label }) => (
                     <Button
                       key={label}
+                      aria-label={label}
                       size="sm"
                       data-allow-dark-cta
                       className="gap-2"

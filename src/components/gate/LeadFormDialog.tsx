@@ -172,7 +172,7 @@ function UserTypePicker({ value, onChange }: { value: string; onChange: (v: stri
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button
+        <button aria-label="Select role"
           type="button"
           className="w-full h-10 flex items-center justify-between gap-2 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/25"
         >
@@ -380,7 +380,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
           </Field>
 
           {/* Metallic emerald submit — animated shine on hover */}
-          <button
+          <button aria-label="Next"
             type="submit"
             disabled={loading}
             data-advisor-submit

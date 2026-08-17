@@ -369,6 +369,7 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
               <Button
                 onClick={handleExport}
                 disabled={isExporting}
+                aria-label="Generate presentation"
                 className="w-full bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555]/40"
                 data-allow-dark-cta
               >

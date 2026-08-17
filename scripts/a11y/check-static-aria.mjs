@@ -101,12 +101,51 @@ function filesToScan() {
 
 // Match a complete opening tag (single-line or multi-line) for a target name.
 // We capture the attributes blob between the tag name and the `>` (or `/>`).
+// Collect open tags and their FULL attribute text.
+//
+// This can't be a single regex. `[^>]*?` stops at the first `>` in the tag,
+// and in JSX that `>` is very often the arrow of an inline handler:
+//
+//   <div onClick={...} onKeyDown={(e) => { … }} role="button" tabIndex={0}>
+//                                      ^ attrs used to be truncated here
+//
+// so every attribute after the first arrow function became invisible. That
+// made the scan report `click-events-have-key-events` against elements that
+// already had role + tabIndex + onKeyDown — noise that teaches people to
+// ignore the check. Walk the tag instead, tracking brace depth and string
+// state, and stop only at a `>` that is genuinely at attribute level.
 function matchOpenTags(source, tagName) {
-  const re = new RegExp(`<${tagName}\\b([^>]*?)(/?>)`, 'gs');
+  const re = new RegExp(`<${tagName}\\b`, 'g');
   const out = [];
   let m;
   while ((m = re.exec(source)) !== null) {
-    out.push({ index: m.index, attrs: m[1], selfClosing: m[2] === '/>' });
+    let i = re.lastIndex;
+    let depth = 0;
+    let quote = null;
+    let end = -1;
+    while (i < source.length) {
+      const c = source[i];
+      if (quote) {
+        if (c === quote && source[i - 1] !== '\\') quote = null;
+      } else if (c === '"' || c === "'" || c === '`') {
+        quote = c;
+      } else if (c === '{') {
+        depth++;
+      } else if (c === '}') {
+        depth--;
+      } else if (c === '>' && depth === 0) {
+        end = i;
+        break;
+      }
+      i++;
+    }
+    if (end === -1) continue;
+    const attrs = source.slice(re.lastIndex, end);
+    out.push({
+      index: m.index,
+      attrs,
+      selfClosing: attrs.trimEnd().endsWith('/'),
+    });
   }
   return out;
 }
@@ -156,8 +195,16 @@ function attrsHave(attrs, names) {
   return names.some((n) => new RegExp(`\\b${n}\\s*=`).test(attrs));
 }
 
+// Identifiers that render user-visible text when interpolated. A control
+// whose body is `{children}` or `{label}` does have an accessible name — the
+// consumer supplies it — so treating the stripped-out expression as "no text"
+// reported real, correctly-labelled components as violations.
+const TEXT_EXPRESSIONS =
+  /\{\s*(children|label|title|text|name|ctaLabel|buttonText)\s*\}/;
+
 function bodyHasVisibleText(body) {
   if (!body) return false;
+  if (TEXT_EXPRESSIONS.test(body)) return true;
   // Strip JSX comments
   const stripped = body.replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, '');
   // Look for any text outside of JSX tags / expressions that is non-whitespace.

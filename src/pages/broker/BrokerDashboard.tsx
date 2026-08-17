@@ -10,7 +10,7 @@ import LoggingErrorBoundary from "@/components/LoggingErrorBoundary";
 
 function Stat({ icon: Icon, label, value, to }: any) {
   return (
-    <Link to={to} className="group block p-5 rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 hover:border-[#B89555]/50 transition">
+    <Link aria-label="Next" to={to} className="group block p-5 rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 hover:border-[#B89555]/50 transition">
       <div className="flex items-center justify-between">
         <IconTile icon={Icon} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
         <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">

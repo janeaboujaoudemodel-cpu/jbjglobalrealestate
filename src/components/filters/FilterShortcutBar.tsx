@@ -839,7 +839,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <>
             <Popover open={sortOpen} onOpenChange={setSortOpen}>
               <PopoverTrigger asChild>
-                <button className={cn(pillBase, "px-2.5 py-1.5", filters.sortBy ? pillActive : pillInactiveCls)}>
+                <button aria-label="Sort" className={cn(pillBase, "px-2.5 py-1.5", filters.sortBy ? pillActive : pillInactiveCls)}>
                   <ArrowUpDown className="w-3.5 h-3.5 text-white" />
                   <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                     {filters.sortBy

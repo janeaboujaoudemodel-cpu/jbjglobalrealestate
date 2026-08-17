@@ -220,7 +220,7 @@ export default function PaymentRequestDialog({ open, onOpenChange, context, sour
               </p>
             </div>
 
-            <button
+            <button aria-label="AI assist"
               type="submit"
               disabled={loading}
               className="relative overflow-hidden inline-flex w-full h-12 items-center justify-center gap-2 rounded-md text-sm font-bold uppercase tracking-[0.14em] !text-white [&_svg]:!text-white bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_16px_30px_-14px_rgba(6,78,59,0.85)] hover:brightness-110 transition disabled:opacity-70 before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent hover:before:translate-x-[300%] before:transition before:duration-[900ms]"

@@ -145,7 +145,7 @@ export default function CrmRecordPage() {
         </header>
 
         <section className="jc-record__biz">
-          <h2>Business Card <button type="button" className="jc-record__more"><ChevronDown size={14} /></button></h2>
+          <h2>Business Card <button aria-label="Expand" type="button" className="jc-record__more"><ChevronDown size={14} /></button></h2>
           <div className="jc-record__biz-grid">
             {schema.sections[0].fields.slice(0, 6).map((f) => (
               <div key={f.key} className="jc-record__biz-cell">

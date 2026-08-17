@@ -126,7 +126,7 @@ export default function PAAAICopilotDrawer({ envelopeId, currentValues, onApplyU
             className="min-h-[60px] resize-none"
             disabled={busy}
           />
-          <Button onClick={send} disabled={busy || !input.trim()} variant="gold" className="self-end">
+          <Button aria-label="Send" onClick={send} disabled={busy || !input.trim()} variant="gold" className="self-end">
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
           </Button>
         </div>

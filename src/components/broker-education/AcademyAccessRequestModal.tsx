@@ -109,6 +109,7 @@ export default function AcademyAccessRequestModal({ open, onOpenChange, item }: 
           <Button
             onClick={submit}
             disabled={submitting}
+            aria-label="Request academy access"
             className="jj-pill-emerald-metallic disabled:opacity-100 [&_svg]:!text-white [&_svg]:!stroke-white [&_*]:!text-white"
             data-cta="aa-submit"
             data-surface="emerald"

@@ -622,7 +622,7 @@ export default function StampGalleryPage() {
  }`}
                 >
                   {/* Stamp preview */}
-                  <div
+                  <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                     className={`relative flex items-center justify-center overflow-hidden mx-auto ${
  // Detect stamp shape from SVG — rect without circle = rectangular frame
  (design.svg_source.includes('<rect') && !design.svg_source.match(/<circle[^>]*r="(9|10|11)/))

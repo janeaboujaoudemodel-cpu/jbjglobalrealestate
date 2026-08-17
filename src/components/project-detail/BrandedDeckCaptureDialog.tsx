@@ -241,7 +241,7 @@ export default function BrandedDeckCaptureDialog({ open, onOpenChange, onSubmit 
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="jj-cta-outline" data-cta="outline">
                 Cancel
               </Button>
-              <Button
+              <Button aria-label="Generate presentation"
                 type="button"
                 onClick={handleGenerate}
                 disabled={submitting}

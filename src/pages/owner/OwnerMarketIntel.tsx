@@ -83,7 +83,7 @@ export default function OwnerMarketIntel() {
         <Card className="p-6 bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-semibold flex items-center gap-2"><Database className="h-4 w-4" />Sources</h2>
-            <Button size="sm" variant="ghost" onClick={load}><RefreshCw className="h-4 w-4" /></Button>
+            <Button aria-label="Refresh" size="sm" variant="ghost" onClick={load}><RefreshCw className="h-4 w-4" /></Button>
           </div>
           <div className="grid md:grid-cols-2 gap-3">
             {sources.filter(s => SOURCE_KEY[s.name]).map((s) => (

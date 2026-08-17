@@ -482,7 +482,7 @@ function ListWidget({
       <div className="jc-widget__head">
         <h3>{title}</h3>
         <div className="jc-widget__head-actions">
-          <button type="button" className="jc-widget__scope">
+          <button aria-label="Expand" type="button" className="jc-widget__scope">
             {scope} <ChevronDown size={13} />
           </button>
           <button type="button" className="jc-widget__icon" aria-label="Add">

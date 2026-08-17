@@ -278,14 +278,14 @@ async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
         name: TEMPLATE_META.client_buyer_follow_up.name,
         subject: "JBJ buyer follow-up",
         category: TEMPLATE_META.client_buyer_follow_up.category,
-        html: `<div style="background:#ffffff;padding:28px;font-family:Arial,sans-serif;color:#0F1A16"><div style="max-width:560px;margin:auto;border:1px solid #B89555;padding:24px"><div style="text-align:center"><img src="${BRAND_HEADER_BY_KIND.clients.url}" width="64" style="display:inline-block;margin-bottom:12px"/><div style="font-weight:800;letter-spacing:3px">JBJ GLOBAL REAL ESTATE</div></div><p>Dear {{client_name}},</p><p>Thank you for your interest. We are reviewing the best-fit opportunities and will share a focused next step shortly.</p><p>Regards,<br/>JBJ Team</p></div></div>`,
+        html: `<div style="background:#ffffff;padding:28px;font-family:Arial,sans-serif;color:#0F1A16"><div style="max-width:560px;margin:auto;border:1px solid #B89555;padding:24px"><div style="text-align:center"><img alt="" src="${BRAND_HEADER_BY_KIND.clients.url}" width="64" style="display:inline-block;margin-bottom:12px"/><div style="font-weight:800;letter-spacing:3px">JBJ GLOBAL REAL ESTATE</div></div><p>Dear {{client_name}},</p><p>Thank you for your interest. We are reviewing the best-fit opportunities and will share a focused next step shortly.</p><p>Regards,<br/>JBJ Team</p></div></div>`,
       },
       {
         variant: "client_seller_follow_up",
         name: TEMPLATE_META.client_seller_follow_up.name,
         subject: "JBJ seller follow-up",
         category: TEMPLATE_META.client_seller_follow_up.category,
-        html: `<div style="background:#ffffff;padding:28px;font-family:Arial,sans-serif;color:#0F1A16"><div style="max-width:560px;margin:auto;border:1px solid #B89555;padding:24px"><div style="text-align:center"><img src="${BRAND_HEADER_BY_KIND.clients.url}" width="64" style="display:inline-block;margin-bottom:12px"/><div style="font-weight:800;letter-spacing:3px">JBJ GLOBAL REAL ESTATE</div></div><p>Dear {{client_name}},</p><p>Thank you for connecting with JBJ. We are preparing the next step for your property and will follow up with a concise action plan.</p><p>Regards,<br/>JBJ Team</p></div></div>`,
+        html: `<div style="background:#ffffff;padding:28px;font-family:Arial,sans-serif;color:#0F1A16"><div style="max-width:560px;margin:auto;border:1px solid #B89555;padding:24px"><div style="text-align:center"><img alt="" src="${BRAND_HEADER_BY_KIND.clients.url}" width="64" style="display:inline-block;margin-bottom:12px"/><div style="font-weight:800;letter-spacing:3px">JBJ GLOBAL REAL ESTATE</div></div><p>Dear {{client_name}},</p><p>Thank you for connecting with JBJ. We are preparing the next step for your property and will follow up with a concise action plan.</p><p>Regards,<br/>JBJ Team</p></div></div>`,
       },
     ];
   }

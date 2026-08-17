@@ -663,6 +663,7 @@ function StatCard({ icon: Icon, label, value, active, onClick }: { icon: any; la
     <button
       type="button"
       onClick={onClick}
+      aria-label={label}
       data-no-contrast-guard="true"
       data-campaign-stat-card={active ? "active" : "inactive"}
       data-surface={active ? "emerald" : undefined}

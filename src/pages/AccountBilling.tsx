@@ -118,11 +118,11 @@ export default function AccountBilling() {
                 </p>
               )}
               <div className="mt-3 flex flex-wrap gap-2">
-                <Button asChild variant="primary">
+                <Button aria-label="Change plan" asChild variant="primary">
                   <Link to="/membership">{subscription ? "Change plan" : "Choose a plan"}</Link>
                 </Button>
                 {subscription ? (
-                  <Button variant="secondary" onClick={openPortal} disabled={openingPortal}>
+                  <Button aria-label="Open in a new tab" variant="secondary" onClick={openPortal} disabled={openingPortal}>
                     {openingPortal ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Opening…

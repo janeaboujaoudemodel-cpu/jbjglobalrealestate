@@ -271,7 +271,7 @@ export default function DeveloperEnrichmentQueue() {
 
         {stagedRows.length > 0 && (
           <div className="mt-3 pt-3 border-t border-[#B89555]/20 flex items-center gap-2 flex-wrap">
-            <Button size="sm" variant="outline" onClick={toggleAllStaged}>
+            <Button aria-label="Unselect all staged" size="sm" variant="outline" onClick={toggleAllStaged}>
               {allStagedSelected ? <CheckSquare className="size-4 mr-1" /> : <Square className="size-4 mr-1" />}
               {allStagedSelected ? "Unselect all staged" : "Select all staged"}
             </Button>

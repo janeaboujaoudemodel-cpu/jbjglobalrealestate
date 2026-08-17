@@ -196,7 +196,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                               className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/80 text-[#1A1A1A]"
                               asChild
                             >
-                              <Link to={`/broker/learning/book/${book.id}?module=${module.id}`} onClick={onClose}>
+                              <Link aria-label="Review Module" to={`/broker/learning/book/${book.id}?module=${module.id}`} onClick={onClose}>
                                 <Play className="w-3 h-3 mr-2" />
                                 {isCompleted ? 'Review Module' : 'Start Module'}
                               </Link>

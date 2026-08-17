@@ -37,7 +37,7 @@ export default function DeveloperHubAdminOverview() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
       {kpis.map((k) => (
-        <Link key={k.label} to={k.to}>
+        <Link key={k.label} to={k.to} aria-label={k.label}>
           <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555] transition-colors">
             <div className="flex items-start justify-between">
               <div>

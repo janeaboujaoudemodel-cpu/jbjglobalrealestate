@@ -109,7 +109,7 @@ export function SmartFillDropzone({ schemaHint, onExtracted, className }: Props)
 
   return (
     <div className={className}>
-      <div
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
         onDragOver={(e) => {
           e.preventDefault();
           setIsOver(true);

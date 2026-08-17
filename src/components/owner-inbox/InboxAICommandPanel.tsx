@@ -111,7 +111,7 @@ export default function InboxAICommandPanel({ threads, selectedIds, onApplyFilte
           className="flex-1 border-[#B89555]/30 bg-white"
           disabled={busy}
         />
-        <Button onClick={run} disabled={busy || !cmd.trim()} data-surface="emerald" className="jj-emerald-metallic allow-white text-white">
+        <Button aria-label="Run" onClick={run} disabled={busy || !cmd.trim()} data-surface="emerald" className="jj-emerald-metallic allow-white text-white">
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Run"}
         </Button>
       </div>

@@ -276,6 +276,7 @@ export default function PremiumJobCard({
               size="sm"
               disabled
               aria-disabled="true"
+              aria-label={ctaLabel}
               className="min-h-10 rounded-xl px-5 font-semibold bg-[#EFE6D6] text-[#1A1A1A]/70 border border-[#B89555]/60 cursor-not-allowed hover:bg-[#EFE6D6]"
             >
               {CtaIcon ? <CtaIcon className="w-3.5 h-3.5 mr-1.5" /> : null}

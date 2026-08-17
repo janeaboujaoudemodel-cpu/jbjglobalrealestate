@@ -536,7 +536,7 @@ export function BrandedEmailComposer() {
               <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-3">
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-xs flex items-center gap-1"><HistoryIcon className="w-3 h-3" /> Recent sends &amp; status</Label>
-                  <Button type="button" size="sm" variant="ghost" onClick={loadHistory} disabled={historyLoading} className="h-7">
+                  <Button aria-label="Refresh" type="button" size="sm" variant="ghost" onClick={loadHistory} disabled={historyLoading} className="h-7">
                     {historyLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
                   </Button>
                 </div>

@@ -614,7 +614,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   return (
         <>
           {/* Backdrop */}
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             className="fixed inset-0 bg-[#1A1A1A]/78 z-[10000]"
             onClick={onClose}
           />

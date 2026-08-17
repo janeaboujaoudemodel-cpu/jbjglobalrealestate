@@ -294,7 +294,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   const Chip = ({ value, onRemove }: { value: string; onRemove: () => void }) => (
     <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] gap-1 pl-2 pr-1">
       {value}
-      <button onClick={onRemove} className="ml-1 hover:bg-[#EFE6D6] rounded-sm p-0.5"><X className="w-3 h-3" /></button>
+      <button aria-label="Close" onClick={onRemove} className="ml-1 hover:bg-[#EFE6D6] rounded-sm p-0.5"><X className="w-3 h-3" /></button>
     </Badge>
   );
 

@@ -62,7 +62,7 @@ export default function ConciergeActionCard({
           </li>
         ))}
       </ol>
-      <Link
+      <Link aria-label="Confirm"
         to={action.cta.href}
         onClick={onNavigate}
         data-no-contrast-guard

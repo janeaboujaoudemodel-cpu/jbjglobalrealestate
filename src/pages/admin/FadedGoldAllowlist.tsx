@@ -247,7 +247,7 @@ export default function FadedGoldAllowlist() {
               />
             </div>
             <div className="flex items-end">
-              <Button onClick={addEntry} disabled={adding} className="gap-2">
+              <Button aria-label="Add" onClick={addEntry} disabled={adding} className="gap-2">
                 <Plus className="h-4 w-4" />
                 {adding ? "Adding…" : "Add"}
               </Button>
@@ -329,7 +329,7 @@ export default function FadedGoldAllowlist() {
               </p>
             </div>
             <div className="flex gap-2">
-              <Button
+              <Button aria-label="Copy value"
                 variant="outline"
                 size="sm"
                 onClick={copyJson}

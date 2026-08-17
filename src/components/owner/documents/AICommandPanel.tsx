@@ -200,7 +200,7 @@ export function AICommandPanel(props: AICommandPanelProps) {
           disabled={busy}
           className="h-9 text-sm bg-white"
         />
-        <Button type="submit" size="sm" variant="gold" disabled={busy || !input.trim()}>
+        <Button type="submit" size="sm" variant="gold" aria-label="Send command" disabled={busy || !input.trim()}>
           {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <SendIcon className="w-4 h-4" />}
         </Button>
       </form>

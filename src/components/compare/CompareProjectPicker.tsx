@@ -345,7 +345,7 @@ export default function CompareProjectPicker({
           </div>
           <Popover>
             <PopoverTrigger asChild>
-              <button type="button" className="h-12 w-full rounded-lg px-3 text-sm font-semibold inline-flex items-center justify-between gap-2" style={filterButtonStyle}>
+              <button aria-label="All developers" type="button" className="h-12 w-full rounded-lg px-3 text-sm font-semibold inline-flex items-center justify-between gap-2" style={filterButtonStyle}>
                 <span className="inline-flex items-center gap-2 min-w-0">
                   <Building2 className="w-4 h-4 text-[#064E3B] shrink-0" />
                   <span className="truncate">{selectedDeveloper?.name || "All developers"}</span>
@@ -376,7 +376,7 @@ export default function CompareProjectPicker({
           </Popover>
           <Popover>
             <PopoverTrigger asChild>
-              <button type="button" className="h-12 w-full rounded-lg px-3 text-sm font-semibold inline-flex items-center justify-between gap-2" style={filterButtonStyle}>
+              <button aria-label="Filter projects" type="button" className="h-12 w-full rounded-lg px-3 text-sm font-semibold inline-flex items-center justify-between gap-2" style={filterButtonStyle}>
                 <span className="inline-flex items-center gap-2 min-w-0">
                   <Globe2 className="w-4 h-4 text-[#064E3B] shrink-0" />
                   <span className="truncate">{countryFilter === "all" ? "All countries" : countryFilter}</span>
@@ -398,7 +398,7 @@ export default function CompareProjectPicker({
           </Popover>
           <Popover>
             <PopoverTrigger asChild>
-              <button type="button" className="h-12 w-full rounded-lg px-3 text-sm font-semibold inline-flex items-center justify-between gap-2" style={filterButtonStyle}>
+              <button aria-label="Filter projects" type="button" className="h-12 w-full rounded-lg px-3 text-sm font-semibold inline-flex items-center justify-between gap-2" style={filterButtonStyle}>
                 <span className="inline-flex items-center gap-2 min-w-0">
                   <MapPin className="w-4 h-4 text-[#064E3B] shrink-0" />
                   <span className="truncate">{emirateFilter === "all" ? "All emirates" : emirateFilter}</span>

@@ -46,7 +46,7 @@ export default function AiToolsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
           {tools.map(({ icon: Icon, title, desc, href, cta }) => (
-            <Link
+            <Link aria-label="Next"
               key={title}
               to={href}
               className="jj-pearl-card group flex h-full flex-col rounded-2xl border border-[#B89555]/30 p-5 transition-all hover:-translate-y-0.5 hover:shadow-[0_16px_34px_-18px_rgba(6,78,59,0.35)]"

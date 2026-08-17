@@ -1145,7 +1145,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button size="sm" variant="ghost"><MoreVertical className="w-4 h-4" /></Button>
+                      <Button aria-label="More options" size="sm" variant="ghost"><MoreVertical className="w-4 h-4" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="bg-white">
                       <DropdownMenuItem onClick={() => setAssetDefault(manageKind!, s.id)}><Star className="w-3.5 h-3.5 mr-2" /> Set as default</DropdownMenuItem>
