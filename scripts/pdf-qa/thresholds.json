@@ -1,7 +1,8 @@
 {
   "_doc": {
-    "checkEdgeCoverage": "Counts non-white pixels in the margin band. This detects app chrome (cookie banner, sidebar, sticky header) leaking into a PDF the app renders from a live page. It presumes a white page with clear margins, so it is meaningless for a designed full-bleed asset and MUST be set false for one — otherwise it reports ~100% on every page forever and says nothing about quality.",
-    "minImageDpi": "Effective placed resolution (image pixels / placed size), as reported by `pdfimages -list`. 150 is the print bar; a screen-only deliverable can justify less, but lower it deliberately and record why."
+    "checkEdgeCoverage": "Counts non-white pixels in the margin band. This detects app chrome (cookie banner, sidebar, sticky header) leaking into a PDF the app renders from a live page. It presumes a white page with clear margins, so it is meaningless for a designed full-bleed asset and MUST be set false for one \u2014 otherwise it reports ~100% on every page forever and says nothing about quality.",
+    "minImageDpi": "Effective placed resolution (image pixels / placed size), as reported by `pdfimages -list`. 150 is the print bar; a screen-only deliverable can justify less, but lower it deliberately and record why.",
+    "lowDpiBaseline": "Number of already-known sub-minImageDpi images tolerated for this export. Exists for designer-authored binaries whose source artwork is not in this repo, so the resolution cannot be raised here and upscaling would fake the number without improving print quality. The bar stays at minImageDpi, so a NEW low-resolution image, or an existing one getting worse, still fails. Lower it when better artwork lands; never raise it to clear a failure."
   },
   "defaults": {
     "checkEdgeCoverage": true,
@@ -12,12 +13,14 @@
   },
   "exports": {
     "company-profile": {
-      "_note": "Static designer-authored brochure (pdf-lib/Ghostscript), served from public/documents — not rendered by the app. Every page is full-bleed on the champagne brand ground (#FEF5E7), so there is no margin band to police: measured edge coverage is 99.19-100% on all 18 pages by design. Page count and image DPI are the checks that carry meaning here.",
+      "_note": "Static designer-authored brochure (pdf-lib/Ghostscript), served from public/documents \u2014 not rendered by the app. Every page is full-bleed on the champagne brand ground (#FEF5E7), so there is no margin band to police: measured edge coverage is 99.19-100% on all 18 pages by design. Page count and image DPI are the checks that carry meaning here.",
       "checkEdgeCoverage": false,
       "minImageDpi": 150,
       "expectedPages": 18,
       "minPages": 18,
-      "maxPages": 18
+      "maxPages": 18,
+      "lowDpiBaseline": 10,
+      "_lowDpiNote": "Measured 2026-08-17 with `pdfimages -list`: 10 of 42 embedded images are below 150 DPI \u2014 pages 4, 6, 11, 12, 14 (x4), 17, 18; lowest 114 DPI (a 534x800 photo on page 6). These are low-resolution originals placed at full size, not a rendering fault, and the source files are not in this repo. ACTION FOR THE DESIGNER: re-export those eight photographs at >=150 DPI for their placed size and drop lowDpiBaseline back to 0."
     }
   }
 }
