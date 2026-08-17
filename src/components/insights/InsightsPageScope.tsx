@@ -119,10 +119,10 @@ const helpItems = [
   { id: "help-contact", title: "Contact Us", href: "/contact", icon: Phone },
   { id: "help-support", title: "Support Center", href: "/ticket-hub", icon: Ticket },
   { id: "help-faq", title: "FAQs", href: "/faq", icon: HelpCircle },
-  { id: "help-buyer", title: "Buyer FAQ", href: "/buyer-faq", icon: FileText },
-  { id: "help-seller", title: "Seller FAQ", href: "/seller-faq", icon: FileText },
-  { id: "help-landlord", title: "Landlord FAQ", href: "/landlord-faq", icon: Building },
-  { id: "help-tenant", title: "Tenant FAQ", href: "/tenant-faq", icon: Key },
+  { id: "help-buyer", title: "Buyer FAQ", href: "/guides/buyer#faq", icon: FileText },
+  { id: "help-seller", title: "Seller FAQ", href: "/guides/seller#faq", icon: FileText },
+  { id: "help-landlord", title: "Landlord FAQ", href: "/guides/landlord#faq", icon: Building },
+  { id: "help-tenant", title: "Tenant FAQ", href: "/guides/tenant#faq", icon: Key },
   { id: "help-broker", title: "Broker FAQ", href: "/broker-faq", icon: Briefcase },
 ];
 

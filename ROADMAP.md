@@ -22,6 +22,7 @@ Based on the CTO technical review of jbjglobalrealestate (jbj.ae), the Aug 12 fu
 
 | ID | Date (UTC) | Author | Change | Item(s) | Commit / PR |
 |---|---|---|---|---|---|
+| RM-024 | 2026-08-16 | Claude Code session | Guide Consolidation Stage 2, part 1: folded five standalone FAQ pages into their matching guide pages (accordion section, old routes redirect to `#faq` anchors), removed the now-empty FAQ hub audience picker, fixed a hash-scroll gap in `ScrollToTopOnMount` that anchor redirects depend on. Stage 2 part 2 (Rental Guide → Tenant/Landlord split) deferred — found Tenant/Landlord Guide already independently cover the same ground as `RentGuide.tsx`'s content-mapping table; flagged rather than resolved unilaterally. Added JBJ-020 for the landlord rental-content gap this surfaced. | JBJ-018, JBJ-020 | `dd27252`, PR #37 |
 | RM-023 | 2026-08-16 | Claude Code session | Documented the JBJ-019 self-verification decision in CLAUDE.md as a new "PR review process" section (near where PR #17's roadmap-tracking section lands); updated JBJ-019 status to fully resolved | JBJ-019 | `pending`, new PR |
 | RM-022 | 2026-08-16 | Jane (decision) | Decided both open governance/scope questions: JBJ-005 migrates all 45 modals onto the shared Dialog wrapper (full migration, not per-component patching); JBJ-019 formally accepts self-verification as the PR review process, documented as a real tradeoff rather than a silent gap | JBJ-005, JBJ-019 | — |
 | RM-021 | 2026-08-15 | Claude Code session (PR #4) | Merged and published Guide Consolidation Stage 1 live — nested canonical guide URLs, FAQ consolidation, old routes redirected. Required a temporary branch-protection bypass to merge (self-approval block); re-enabled and re-verified after. Surfaced JBJ-019 (no genuine second reviewer available) as an open governance question affecting all future PRs. | JBJ-018, JBJ-019 | `1b7555c`, PR #4 |
@@ -132,8 +133,9 @@ Measured directly from the codebase — 531 pages, 1,417 components, 506 Supabas
 | JBJ-015 | Usage-driven analytics | Not started | Longer-term |
 | JBJ-016 | Inconsistent live project count (hero-section number unconfirmed) | Partially resolved — open question remains | Near-term |
 | JBJ-017 | Pass-file `!important` audit (54 `pass-NNN-*.css` files, ~1,962 declarations) | New — identified, not scoped or started; needs its own engagement | Future (post-Step 5) |
-| JBJ-018 | Guide consolidation, Stage 1 (nav/routing + FAQ) | **MERGED & live** (`1b7555c`) — Stage 2 (Rental Guide content split) not started | Resolved (Stage 1) |
+| JBJ-018 | Guide consolidation, Stage 1 (nav/routing + FAQ) + Stage 2 (FAQ fold-in / Rental Guide split) | Stage 1 **MERGED & live** (`1b7555c`). Stage 2's FAQ fold-in done, pending merge (see this PR) — five standalone FAQ pages folded into their guides' accordion sections, old routes redirect to anchors. Stage 2's Rental Guide → Tenant/Landlord content split **not done**: Tenant/Landlord Guides were found to already independently cover the same ground as `RentGuide.tsx`'s mapping table (rental-market, budgeting/costs, process steps, JBJ-support sections all pre-exist) — deferred pending a decision on how to reconcile rather than duplicating content | Resolved (Stage 1), Stage 2 partial |
 | JBJ-019 | Second-reviewer / self-approval governance gap | **Resolved (Aug 16)** — self-verification formally accepted as the process, documented in CLAUDE.md | Resolved |
+| JBJ-020 | Landlord-side rental content gap | Scoped, not started — see full write-up below | Near-term |
 
 ---
 
@@ -266,7 +268,8 @@ The panel's undercount (PostgREST's 1,000-row cap truncating the query) was alre
 
 ### Needs a product decision before starting
 
-- [x] **JBJ-018 — Consolidate overlapping guide pages — Stage 1 DONE (Aug 15), Stage 2 not started.** See full write-up below.
+- [x] **JBJ-018 — Consolidate overlapping guide pages — Stage 1 DONE (Aug 15). Stage 2 FAQ fold-in done (pending merge); Rental Guide split deferred.** See full write-up below.
+- [ ] **JBJ-020 — Landlord-side rental content gap.** Scoped, not started. See full write-up below.
 
 ### Needs its own scoped future engagement (not part of Step 5)
 
@@ -284,11 +287,21 @@ The panel's undercount (PostgREST's 1,000-row cap truncating the query) was alre
 
   Nav/routing restructuring shipped via PR #4: nested canonical URLs (`/guides/buyer`, `/guides/seller`, `/guides/tenant`, `/guides/landlord`, `/guides/invest`), old flat URLs redirect to the new canonical paths, the guide library trimmed to guides only, Broker FAQ redirected to `/faq` (matching the existing Investor FAQ precedent), and the redundant `/faqs` nav link removed in favor of `/faq` directly. 2 commits, 12 files. Independently re-verified twice before merge (typecheck, line-by-line a11y diff against a clean pre-PR base) — and confirmed live via a direct nav check against jbj.ae post-publish, not just assumed from sync status.
 
-  **Stage 2 — NOT STARTED, by design.** The Rental Guide remains at its original `/rent-guide` URL, untouched in Stage 1. Splitting its content into the new Tenant/Landlord structure is Stage 2 scope. **Unconfirmed:** whether the `/rental-yield`/`/dubai-rental-yield` redirect routes (part of the original task's scope) were addressed in Stage 1 — not mentioned in what shipped, worth a direct check before assuming either way.
+  **Stage 2, part 1 (FAQ fold-in) — DONE, pending merge.** Five standalone audience FAQ pages (`BuyerFAQ.tsx`, `SellerFAQ.tsx`, `TenantFAQ.tsx`, `LandlordFAQ.tsx`, `InvestorFAQ.tsx`) folded into an accordion section on their matching guide page, above `GuideNavigation`. Old routes (`/buyer-faq`, `/seller-faq`, `/tenant-faq`, `/landlord-faq`, `/investor-faq`) now redirect to the guide's `#faq` anchor instead of rendering a retired page — same preserve-the-link pattern Stage 1 used for `/broker-faq` → `/faq`. Required a supporting fix: `ScrollToTopOnMount` (`src/components/ScrollToTop.tsx`) previously force-scrolled to page-top on every route change regardless of URL hash, which would have silently broken every one of these anchor redirects — patched to scroll to the hash target instead, with retry for lazy-loaded route content. FAQ hub's "Browse by Audience" picker removed (all four entries it linked to no longer exist as standalone pages). `bookCollections.ts` updated to match: the five FAQ "book" entries removed from the Guides Library; Investor FAQ's own stale `/investor-faq` CTA link fixed to the in-page anchor.
+
+  **Stage 2, part 2 (Rental Guide → Tenant/Landlord split) — NOT DONE, deferred by explicit decision, not an oversight.** The original Stage 1 write-up assumed splitting `RentGuide.tsx`'s content into Tenant/Landlord Guide was a straightforward move. On review of the actual destination pages, it isn't: `TenantGuide.tsx` and `LandlordGuide.tsx` already have their own independently-authored sections covering the same ground as every row of `RentGuide.tsx`'s content-mapping table — rental-market fundamentals, a payment/cheque-structure and costs section, a multi-step rental-process walkthrough (Tenant Guide's is more granular than RentGuide's), and their own "How JBJ Supports You" sections. Moving RentGuide's sections in as literal additional blocks would create visible duplicate content (two cheque-structure sections, two process breakdowns, etc.) on the same page; reconciling them instead would mean rewriting/merging content, which is editorial judgment beyond a content move. Flagged rather than resolved unilaterally — needs a decision on which approach to take before Stage 2 part 2 proceeds. `RentGuide.tsx` and `/rent-guide` are untouched and still serve their full original content in the meantime.
+
+  **Unconfirmed:** whether the `/rental-yield`/`/dubai-rental-yield` redirect routes (part of the original task's scope) were addressed in Stage 1 — not mentioned in what shipped, worth a direct check before assuming either way.
 
   **Process finding, worth real attention — not a footnote:** merging PR #4 required a temporary branch-protection bypass. GitHub blocks self-approval, and the PR was authored under the same account that would need to approve it — so "Require a pull request before merging" was disabled, the PR merged, then immediately re-enabled with the full checkbox state re-verified against the original baseline (protection on, 1 approval required, dismiss-stale-approvals on, no force-push/deletion/bypass). **Presumably PR #1 and PR #9 hit the same constraint — not confirmed retroactively.** Worth checking directly rather than assuming, given how much of this roadmap's "Resolved" status depends on those two PRs specifically.
 
   **Decided (Aug 16) — see JBJ-019 for the resolution.**
+
+- [ ] **JBJ-020 — Landlord-side rental content gap.** Surfaced during Stage 2's FAQ fold-in (this PR) as the scope boundary called out explicitly in that PR's brief, not discovered incidentally.
+
+  Outside its own "For Landlords" bullet points, `RentGuide.tsx` — the content Stage 2 part 2 would otherwise have split into Tenant/Landlord Guide — is almost entirely tenant-perspective. There is no real landlord-side rental content anywhere in the codebase covering: the property listing process, tenant screening, the landlord's own Ejari obligations, DEWA transfer between tenancies, or RERA renewal/eviction notice rules. Landlord Guide's existing sections (rental pricing, costs, JBJ support) don't cover this ground either.
+
+  **Scoped, not started.** Needs real regulatory accuracy and Jane's input to write correctly — explicitly not something to draft speculatively. Whoever picks this up should also revisit JBJ-018 Stage 2 part 2 at the same time, since a real landlord-side content pass may change what (if anything) still needs to move over from `RentGuide.tsx`.
 
 - [x] **JBJ-019 — Who provides genuine independent PR review? DECIDED (Aug 16): self-verification, formally accepted.**
 

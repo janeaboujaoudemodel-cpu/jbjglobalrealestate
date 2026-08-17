@@ -11,7 +11,7 @@ interface SEOFaqSchemaProps {
 
 /**
  * Injects FAQPage JSON-LD structured data for Google rich snippets.
- * Use on FAQ pages: /faq, /buyer-faq, /seller-faq, /investor-faq, /landlord-faq, /tenant-faq
+ * Use on any page with a genuine FAQ section (e.g. /faq, /ai-hub).
  */
 export const SEOFaqSchema = ({ faqs }: SEOFaqSchemaProps) => {
   useEffect(() => {

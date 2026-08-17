@@ -560,7 +560,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/guides/golden-visa-uae", label: t('guides.goldenVisa') || "Golden Visa Guide", icon: Globe },
     { href: "/investor-education", label: t('header.investorEducation') || "Investor Education", icon: GraduationCap },
     { href: "/faq", label: t('header.generalFaq') || "General FAQ", icon: ClipboardCheck },
-    { href: "/investor-faq", label: t('header.investorFaq') || "Investor FAQ", icon: ClipboardCheck },
+    { href: "/guides/invest#faq", label: t('header.investorFaq') || "Investor FAQ", icon: ClipboardCheck },
     { href: "/broker-faq", label: t('header.brokerFaq') || "Broker FAQ", icon: ClipboardCheck },
   ];
 
@@ -718,7 +718,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/disclaimers", label: "Disclaimers", icon: FileText },
     { href: "/intellectual-property", label: "Intellectual Property", icon: FileText },
     { href: "/aml-kyc", label: "AML & KYC Policy", icon: Shield },
-    { href: "/investor-faq", label: "Investor FAQ", icon: ClipboardCheck },
+    { href: "/guides/invest#faq", label: "Investor FAQ", icon: ClipboardCheck },
     { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
   ];
 

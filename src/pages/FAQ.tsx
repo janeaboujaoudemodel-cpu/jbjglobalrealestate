@@ -1,8 +1,7 @@
 import { SEOHead } from "@/components/SEOHead";
 import {
-  HelpCircle, Home, Building2, Banknote, Key, Globe, Shield, Users, Phone, LucideIcon,
+  HelpCircle, Home, Building2, Banknote, Globe, Shield, Phone, LucideIcon,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { FAQPageShell } from "@/components/content-page/FAQPageShell";
 
 interface FAQCategory {
@@ -71,13 +70,6 @@ const FAQ = () => {
 
   const allFaqItems = categories.flatMap((cat) => cat.questions);
 
-  const audienceLinks = [
-    { label: "Buyer FAQ", href: "/buyer-faq", icon: Home },
-    { label: "Seller FAQ", href: "/seller-faq", icon: Banknote },
-    { label: "Landlord FAQ", href: "/landlord-faq", icon: Key },
-    { label: "Tenant FAQ", href: "/tenant-faq", icon: Users },
-  ];
-
   return (
     <>
       <SEOHead
@@ -101,33 +93,7 @@ const FAQ = () => {
           guideHref: "/buyer-guide",
           guideLabel: "Read Buyer Guide",
         }}
-      >
-        <section id="browse-by-audience" className="scroll-mt-28 mb-10 md:mb-14">
-          <div className="rounded-2xl border border-[#B89555]/35 bg-white/85 backdrop-blur-sm shadow-[0_10px_40px_-24px_rgba(6,78,59,0.25)] p-6 md:p-10">
-            <h2
-              className="text-2xl md:text-3xl font-semibold tracking-tight text-[#0d3a2b] text-center mb-2"
-              style={{ fontFamily: '"Cormorant Garamond","Playfair Display",Georgia,serif' }}
-            >
-              Browse by Audience
-            </h2>
-            <p className="text-center text-[#1A1A1A]/70 mb-6">
-              Pick the FAQ that matches your role for tailored answers.
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-              {audienceLinks.map((c) => (
-                <Link
-                  key={c.href}
-                  to={c.href}
-                  className="group flex flex-col items-center gap-2 p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/70 hover:shadow-md transition-all"
-                >
-                  <c.icon className="w-6 h-6 text-[#1A1A1A]" />
-                  <span className="text-sm font-medium text-[#1A1A1A] text-center">{c.label}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      </FAQPageShell>
+      />
     </>
   );
 };
