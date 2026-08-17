@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SafeImage } from "@/components/SafeImage";
 import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
 import { ProjectDuplicateCheck } from "@/components/projects/ProjectDuplicateCheck";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "floor_plan" | "payment_plan" | "document" }
 
@@ -1408,49 +1409,47 @@ const DeveloperProjectWizard = () => {
       </aside>
       </div>
 
-      {previewOpen && (
-        <div className="fixed inset-0 z-[10020] bg-[#1A1A1A]/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
-          <div className="mx-auto h-full max-w-5xl overflow-y-auto rounded-lg border border-[#B89555]/50 bg-[#FDFBF7] shadow-2xl">
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#B89555]/30 bg-[#FDFBF7]/95 px-4 py-3 backdrop-blur">
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Full listing preview</p>
-                <h2 className="text-lg font-semibold text-[#1A1A1A]">{basics.name || "Project name"}</h2>
-              </div>
-              <button type="button" onClick={() => setPreviewOpen(false)} className="rounded-full border border-[#B89555]/40 bg-white p-2"><X className="h-4 w-4 text-[#1A1A1A]" /></button>
+      <Dialog open={previewOpen} onOpenChange={(next) => { if (!next) setPreviewOpen(false); }}>
+        <DialogContent className="gap-0 max-w-5xl w-full p-0 rounded-lg border border-[#B89555]/50 bg-[#FDFBF7] shadow-2xl overflow-y-auto [&>button[aria-label='Close']]:hidden">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#B89555]/30 bg-[#FDFBF7]/95 px-4 py-3 backdrop-blur">
+            <div>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Full listing preview</p>
+              <DialogTitle className="text-lg font-semibold leading-normal tracking-normal text-[#1A1A1A]">{basics.name || "Project name"}</DialogTitle>
             </div>
-            <div className="aspect-[16/7] bg-[#064E3B]">
-              {cover?.url ? <SafeImage src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
-            </div>
-            {gallery.length > 0 && (
-              <div className="grid grid-cols-2 gap-2 p-4 md:grid-cols-4">
-                {gallery.map((item) => (
-                  <div key={fileKey(item)} className="overflow-hidden rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
-                    <div className="aspect-video bg-[#EFE6D6]">
-                      {item.type.startsWith("image/") ? <SafeImage src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
-                    </div>
-                    <p className="truncate px-2 py-1 text-xs font-semibold text-[#1A1A1A]">{item.name}</p>
+            <button type="button" onClick={() => setPreviewOpen(false)} className="rounded-full border border-[#B89555]/40 bg-white p-2"><X className="h-4 w-4 text-[#1A1A1A]" /></button>
+          </div>
+          <div className="aspect-[16/7] bg-[#064E3B]">
+            {cover?.url ? <SafeImage src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
+          </div>
+          {gallery.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 p-4 md:grid-cols-4">
+              {gallery.map((item) => (
+                <div key={fileKey(item)} className="overflow-hidden rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
+                  <div className="aspect-video bg-[#EFE6D6]">
+                    {item.type.startsWith("image/") ? <SafeImage src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
                   </div>
-                ))}
-              </div>
-            )}
-            <div className="grid gap-4 p-5 md:grid-cols-[1fr_320px]">
-              <div className="space-y-4 text-[#1A1A1A]">
-                <h3 className="text-2xl font-semibold">{basics.name || "Project name"}</h3>
-                <p className="text-sm text-[#1A1A1A]/70">{activeDeveloperName || "Developer"} · {basics.location || basics.emirate || "Location"}</p>
-                <p className="leading-relaxed text-[#1A1A1A]/80">{basics.description || basics.short_description || "Project description will appear here after extraction or manual entry."}</p>
-              </div>
-              <div className="flex flex-col gap-3 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4 text-sm text-[#1A1A1A]">
-                <div><span className="block text-xs text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
-                <div><span className="block text-xs text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
-                <div><span className="block text-xs text-[#1A1A1A]/60">Gallery</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
-                <div><span className="block text-xs text-[#1A1A1A]/60">Documents</span>{brochures.length}</div>
-                <PaymentPreview compact />
-                <ContactActionsPreview />
-              </div>
+                  <p className="truncate px-2 py-1 text-xs font-semibold text-[#1A1A1A]">{item.name}</p>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="grid gap-4 p-5 md:grid-cols-[1fr_320px]">
+            <div className="space-y-4 text-[#1A1A1A]">
+              <h3 className="text-2xl font-semibold">{basics.name || "Project name"}</h3>
+              <p className="text-sm text-[#1A1A1A]/70">{activeDeveloperName || "Developer"} · {basics.location || basics.emirate || "Location"}</p>
+              <p className="leading-relaxed text-[#1A1A1A]/80">{basics.description || basics.short_description || "Project description will appear here after extraction or manual entry."}</p>
+            </div>
+            <div className="flex flex-col gap-3 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4 text-sm text-[#1A1A1A]">
+              <div><span className="block text-xs text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
+              <div><span className="block text-xs text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
+              <div><span className="block text-xs text-[#1A1A1A]/60">Gallery</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
+              <div><span className="block text-xs text-[#1A1A1A]/60">Documents</span>{brochures.length}</div>
+              <PaymentPreview compact />
+              <ContactActionsPreview />
             </div>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
       <div className="sticky bottom-0 z-20 -mx-2 flex items-center justify-between rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/95 p-2 shadow-[0_-10px_30px_-24px_rgba(26,26,26,0.45)] backdrop-blur">
         <div className="flex items-center gap-2">

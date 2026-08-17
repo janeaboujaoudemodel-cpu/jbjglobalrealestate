@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  X, 
-  Check, 
-  ChevronRight, 
-  Mail, 
-  Phone, 
+import { motion } from 'framer-motion';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import {
+  Check,
+  ChevronRight,
+  Mail,
+  Phone,
   MessageSquare,
   ExternalLink,
   Copy,
@@ -13,6 +13,7 @@ import {
   AlertCircle,
   CheckCircle
 } from 'lucide-react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
@@ -187,24 +188,10 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
     toast.success('Copied to clipboard');
   };
 
-  if (!isOpen) return null;
-
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9500] bg-[#1A1A1A]/80 flex items-center justify-center p-4"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-lg bg-[#0E0E0E] border border-[#B89555]/30 rounded-2xl overflow-hidden"
-        >
+    <Dialog open={isOpen} onOpenChange={(next) => { if (!next) onClose(); }}>
+      <DialogContent className="bg-[#0E0E0E] border-[#B89555]/30 rounded-2xl p-0 overflow-hidden">
+        <div className="w-full">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#1A1A1A] to-[#0E0E0E] border-b border-[#B89555]/20 p-6">
             <div className="flex items-center justify-between">
@@ -213,16 +200,12 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                   <Icon className={`w-6 h-6 ${config.color}`} />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">{config.title}</h2>
+                  <DialogPrimitive.Title asChild>
+                    <h2 className="text-xl font-bold text-white">{config.title}</h2>
+                  </DialogPrimitive.Title>
                   <p className="text-[#1A1A1A]/70 text-sm">Step {currentStep + 1} of {config.steps.length}</p>
                 </div>
               </div>
-              <button
-                onClick={onClose}
-                className="w-8 h-8 rounded-full bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10 flex items-center justify-center transition-colors"
-              >
-                <X className="w-4 h-4 text-[#1A1A1A]/70" />
-              </button>
             </div>
 
             {/* Progress Bar */}
@@ -400,9 +383,9 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
               </Button>
             </div>
           )}
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

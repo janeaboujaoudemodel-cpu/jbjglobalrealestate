@@ -4,7 +4,7 @@ import {
   useRestoreBrokerEvent, useDeleteBrokerEvent, type BrokerEvent,
 } from "@/hooks/useBrokerPersonalCalendar";
 import { Plus, Trash2, MapPin, RotateCcw, Copy, Bell, Bot, CalendarDays } from "lucide-react";
-import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { Dialog, DialogContent, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 function startOfMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth(), 1); }
 function endOfMonth(d: Date)   { return new Date(d.getFullYear(), d.getMonth() + 1, 0); }
@@ -155,24 +155,22 @@ export default function BrokerCalendar() {
         </section>
       )}
 
-      {open && (
-        <ClickableDiv className="fixed inset-0 z-50 bg-black/45 flex items-center justify-center p-4" onClick={closeModal}>
-          <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/35 p-5 w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto jj-scrollbar-gold shadow-[0_30px_90px_-48px_rgba(0,0,0,.8)]" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-start justify-between gap-3 mb-4"><div><h3 className="text-lg font-bold text-[#1A1A1A]">New event</h3><p className="text-xs text-[#1A1A1A]/60">Tell AI what you need, choose date/month/year, repetition and reminders.</p></div><button onClick={closeModal} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]">✕</button></div>
-            <div className="grid md:grid-cols-2 gap-3">
-              <input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="Title" className="md:col-span-2 w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" />
-              <label className="block text-xs font-semibold text-[#1A1A1A]">Start<input type="datetime-local" value={draft.starts_at} onChange={(e) => setDraft({ ...draft, starts_at: e.target.value, ends_at: draft.ends_at || e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm mt-1 focus:outline-none focus:border-[color:var(--emerald-1)]" /></label>
-              <label className="block text-xs font-semibold text-[#1A1A1A]">End<input type="datetime-local" value={draft.ends_at} onChange={(e) => setDraft({ ...draft, ends_at: e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm mt-1 focus:outline-none focus:border-[color:var(--emerald-1)]" /></label>
-              <input value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} placeholder="Location (optional)" className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" />
-              <select value={draft.repeat} onChange={(e) => setDraft({ ...draft, repeat: e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]"><option value="none">Does not repeat</option><option value="daily">Repeat daily</option><option value="weekly">Repeat weekly</option><option value="monthly">Repeat monthly</option><option value="yearly">Repeat yearly</option></select>
-              <select value={draft.reminder} onChange={(e) => setDraft({ ...draft, reminder: e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]"><option value="email_10">Email reminder 10 minutes before</option><option value="email_30">Email reminder 30 minutes before</option><option value="email_60">Email reminder 1 hour before</option><option value="email_1440">Email reminder 1 day before</option></select>
-              <textarea value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} placeholder="Notes" className="md:col-span-2 w-full min-h-20 border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" />
-              <label className="md:col-span-2 block text-xs font-semibold text-[#1A1A1A]"><span className="inline-flex items-center gap-1"><Bot className="h-3.5 w-3.5 text-[color:var(--emerald-1)]" /> AI instruction</span><textarea value={draft.ai_instruction} onChange={(e) => setDraft({ ...draft, ai_instruction: e.target.value })} placeholder="Example: remind me every first Monday to follow up active investors" className="mt-1 w-full min-h-20 border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" /></label>
-            </div>
-            <div className="flex justify-end gap-2 mt-5"><button onClick={closeModal} className="px-4 py-2 rounded-xl text-sm border border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#EFE6D6]">Cancel</button><button onClick={submit} className="jj-surface-emerald allow-white px-4 py-2 rounded-xl text-sm font-semibold text-white border border-white/20 hover:-translate-y-0.5 hover:brightness-110" data-surface="emerald"><Bell className="inline h-4 w-4 mr-1" /> Create</button></div>
+      <Dialog open={open} onOpenChange={(next) => { if (!next) closeModal(); }}>
+        <DialogContent className="gap-0 bg-[#FDFBF7] rounded-2xl border border-[#B89555]/35 p-5 w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto jj-scrollbar-gold shadow-[0_30px_90px_-48px_rgba(0,0,0,.8)] [&>button[aria-label='Close']]:hidden">
+          <div className="flex items-start justify-between gap-3 mb-4"><div><DialogTitle className="text-lg font-bold leading-none tracking-normal text-[#1A1A1A]">New event</DialogTitle><p className="text-xs text-[#1A1A1A]/60">Tell AI what you need, choose date/month/year, repetition and reminders.</p></div><button onClick={closeModal} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]">✕</button></div>
+          <div className="grid md:grid-cols-2 gap-3">
+            <input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="Title" className="md:col-span-2 w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" />
+            <label className="block text-xs font-semibold text-[#1A1A1A]">Start<input type="datetime-local" value={draft.starts_at} onChange={(e) => setDraft({ ...draft, starts_at: e.target.value, ends_at: draft.ends_at || e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm mt-1 focus:outline-none focus:border-[color:var(--emerald-1)]" /></label>
+            <label className="block text-xs font-semibold text-[#1A1A1A]">End<input type="datetime-local" value={draft.ends_at} onChange={(e) => setDraft({ ...draft, ends_at: e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm mt-1 focus:outline-none focus:border-[color:var(--emerald-1)]" /></label>
+            <input value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} placeholder="Location (optional)" className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" />
+            <select value={draft.repeat} onChange={(e) => setDraft({ ...draft, repeat: e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]"><option value="none">Does not repeat</option><option value="daily">Repeat daily</option><option value="weekly">Repeat weekly</option><option value="monthly">Repeat monthly</option><option value="yearly">Repeat yearly</option></select>
+            <select value={draft.reminder} onChange={(e) => setDraft({ ...draft, reminder: e.target.value })} className="w-full border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]"><option value="email_10">Email reminder 10 minutes before</option><option value="email_30">Email reminder 30 minutes before</option><option value="email_60">Email reminder 1 hour before</option><option value="email_1440">Email reminder 1 day before</option></select>
+            <textarea value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} placeholder="Notes" className="md:col-span-2 w-full min-h-20 border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" />
+            <label className="md:col-span-2 block text-xs font-semibold text-[#1A1A1A]"><span className="inline-flex items-center gap-1"><Bot className="h-3.5 w-3.5 text-[color:var(--emerald-1)]" /> AI instruction</span><textarea value={draft.ai_instruction} onChange={(e) => setDraft({ ...draft, ai_instruction: e.target.value })} placeholder="Example: remind me every first Monday to follow up active investors" className="mt-1 w-full min-h-20 border border-[#B89555]/25 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[color:var(--emerald-1)]" /></label>
           </div>
-        </ClickableDiv>
-      )}
+          <DialogFooter className="flex flex-row justify-end gap-2 mt-5"><button onClick={closeModal} className="px-4 py-2 rounded-xl text-sm border border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#EFE6D6]">Cancel</button><button onClick={submit} className="jj-surface-emerald allow-white px-4 py-2 rounded-xl text-sm font-semibold text-white border border-white/20 hover:-translate-y-0.5 hover:brightness-110" data-surface="emerald"><Bell className="inline h-4 w-4 mr-1" /> Create</button></DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

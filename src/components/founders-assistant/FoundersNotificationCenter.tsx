@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  X,
+import { motion } from 'framer-motion';
+import {
   Bell,
   Mail,
   MessageSquare,
@@ -16,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -159,65 +159,44 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-[9998]"
-            onClick={onClose}
-          />
-
-          {/* Slide-over Panel - Champagne Gold Theme */}
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-l-2 border-[#B89555]/30 z-[9999] flex flex-col shadow-2xl"
-          >
-            {/* Header */}
-            <div className="p-4 border-b-2 border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#B89555]/10 border border-[#B89555]/30">
-                  <Bell className="w-5 h-5 text-[#B89555]" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-[#1A1A1A]">Notification Inbox</h2>
-                  <p className="text-xs text-[#1A1A1A]/70">
-                    {unreadCount > 0 ? (
-                      <span className="text-[#B89555] font-medium">{unreadCount} unread</span>
-                    ) : (
-                      'All caught up!'
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                {unreadCount > 0 && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={markAllAsRead}
-                    className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10 text-xs"
-                  >
-                    <Check className="w-3 h-3 mr-1" />
-                    Mark all read
-                  </Button>
-                )}
-                <button
-                  onClick={onClose}
-                  className="w-8 h-8 rounded-full bg-[#B89555]/10 hover:bg-[#B89555]/20 flex items-center justify-center transition-colors border border-[#B89555]/30"
-                >
-                  <X className="w-4 h-4 text-[#B89555]" />
-                </button>
-              </div>
+    <Sheet open={isOpen} onOpenChange={(next) => { if (!next) onClose(); }}>
+      <SheetContent
+        side="right"
+        className="flex flex-col p-0 gap-0 overflow-hidden w-full max-w-md sm:max-w-md border-0 border-l-2 border-[#B89555]/30 rounded-none bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-2xl"
+      >
+        {/* Header */}
+        <div className="p-4 pr-16 border-b-2 border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-[#B89555]/10 border border-[#B89555]/30">
+              <Bell className="w-5 h-5 text-[#B89555]" />
             </div>
+            <div>
+              <SheetTitle className="text-lg font-semibold text-[#1A1A1A]">Notification Inbox</SheetTitle>
+              <p className="text-xs text-[#1A1A1A]/70">
+                {unreadCount > 0 ? (
+                  <span className="text-[#B89555] font-medium">{unreadCount} unread</span>
+                ) : (
+                  'All caught up!'
+                )}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {unreadCount > 0 && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={markAllAsRead}
+                className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10 text-xs"
+              >
+                <Check className="w-3 h-3 mr-1" />
+                Mark all read
+              </Button>
+            )}
+          </div>
+        </div>
 
-            {/* Tabs - Champagne Gold */}
+        {/* Tabs - Champagne Gold */}
             <div className="px-3 py-2 border-b border-[#B89555]/20 flex gap-1 bg-[#FDFBF7]/60">
               {(['all', 'mentions', 'alerts', 'tasks'] as const).map((tab) => (
                 <button
@@ -326,10 +305,8 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                 )}
               </div>
             </ScrollArea>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+      </SheetContent>
+    </Sheet>
   );
 };
 

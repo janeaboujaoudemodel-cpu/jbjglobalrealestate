@@ -1,10 +1,16 @@
 import { useCallback, useState } from "react";
-import { ImageIcon, Loader2, Star, User, Upload, X, Check } from "lucide-react";
+import { ImageIcon, Loader2, Star, User, Upload, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCanEdit } from "@/hooks/useEffectiveOwner";
-import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface ImageRow {
   id: string;
@@ -140,31 +146,15 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
         </button>
       </div>
 
-      {open && (
-        <ClickableDiv
-          className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/40 shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col p-0 gap-0">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#B89555]/30 bg-[#F7F2EA]">
-              <div>
-                <h3 className="text-base font-semibold text-[#1A1A1A]">Select hero image</h3>
-                <p className="text-xs text-[#1A1A1A]/70 mt-0.5">
-                  Choose any gallery photo. <strong>Use as Cover</strong> sets the hero image · <strong>Use as Profile</strong> sets the listing-card thumbnail.
-                </p>
-              </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="w-8 h-8 rounded-md inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] border border-[#B89555]/40"
-                aria-label="Close"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+            <DialogHeader className="px-6 py-4 border-b border-[#B89555]/30 bg-[#F7F2EA] space-y-1 text-left">
+              <DialogTitle className="text-base font-semibold text-[#1A1A1A]">Select hero image</DialogTitle>
+              <DialogDescription className="text-xs text-[#1A1A1A]/70 mt-0.5">
+                Choose any gallery photo. <strong>Use as Cover</strong> sets the hero image · <strong>Use as Profile</strong> sets the listing-card thumbnail.
+              </DialogDescription>
+            </DialogHeader>
 
             {/* Upload */}
             <div className="px-6 py-3 border-b border-[#B89555]/20 bg-[#FDFBF7]">
@@ -255,9 +245,8 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
             <div className="px-6 py-3 border-t border-[#B89555]/20 bg-[#F7F2EA] text-[11px] text-[#1A1A1A]/70">
               <strong>Cover</strong> = the big hero on this project page · <strong>Profile</strong> = the thumbnail shown on listing cards across the site.
             </div>
-          </div>
-        </ClickableDiv>
-      )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
