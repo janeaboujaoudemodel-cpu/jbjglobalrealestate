@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface Props {
   developerId: string;
@@ -146,7 +147,7 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
     let ok = 0;
     for (const file of Array.from(files)) {
       try {
-        const path = `${developerId}/${crypto.randomUUID()}-${file.name}`;
+        const path = `${developerId}/${crypto.randomUUID()}-${safeStorageFileName(file.name)}`;
         const { error: upErr } = await supabase.storage
           .from(BUCKET)
           .upload(path, file, { contentType: file.type || "application/pdf" });

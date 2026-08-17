@@ -29,6 +29,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import DOMPurify from 'dompurify';
+import { safeStorageFileName } from '@/utils/storagePath';
 
 type CampaignType = 'email' | 'whatsapp' | 'social' | 'sms';
 type TargetAudience = 'all' | 'newsletter' | 'leads' | 'investors' | 'brokers' | 'custom';
@@ -259,7 +260,7 @@ const CampaignEditor: React.FC<CampaignEditorProps> = ({ campaign, onClose, onSa
 
     for (const file of Array.from(files)) {
       try {
-        const fileName = `${Date.now()}_${file.name}`;
+        const fileName = `${Date.now()}_${safeStorageFileName(file.name)}`;
         const { data, error } = await supabase.storage
           .from('public-assets')
           .upload(`marketing/${fileName}`, file, { cacheControl: '3600', upsert: false });

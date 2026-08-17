@@ -432,7 +432,7 @@ const ListingAdmin = () => {
     let successCount = 0;
     for (const file of Array.from(files)) {
       try {
-        const fileName = `${selectedProject.id}/${Date.now()}-${file.name}`;
+        const fileName = `${selectedProject.id}/${Date.now()}-${safeStorageFileName(file.name)}`;
 
         const { error: uploadError } = await supabase.storage
           .from("project-files")
