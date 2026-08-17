@@ -16,11 +16,12 @@ const AlertDialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Overlay
     className={cn(
-      "fixed inset-0 z-[10100] bg-[#1A1A1A]/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 bg-[#1A1A1A]/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
     )}
     {...props}
     ref={ref}
+    style={{ ...(props.style || {}), zIndex: 130000 }}
   />
 ));
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
@@ -35,7 +36,7 @@ const AlertDialogContent = React.forwardRef<
       ref={ref}
       data-surface="light"
       className={cn(
-        "fixed z-[10110] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg",
+        "fixed grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg",
         className,
       )}
       {...props}
@@ -46,6 +47,10 @@ const AlertDialogContent = React.forwardRef<
         maxWidth: "calc(100vw - var(--jj-modal-inset-left, 0px) - var(--jj-modal-inset-right, 0px) - 2rem)",
         maxHeight: "calc(100dvh - var(--jj-modal-inset-top, 0px) - var(--jj-modal-inset-bottom, 0px) - 2rem)",
         ...((props as { style?: React.CSSProperties }).style || {}),
+        /* Must stay above Dialog's inline z-index (120000/120001, see dialog.tsx)
+           so an AlertDialog opened from inside a Dialog — e.g. a delete-confirm
+           step — renders on top of it instead of underneath its overlay. */
+        zIndex: 130010,
       }}
     />
   </AlertDialogPortal>
