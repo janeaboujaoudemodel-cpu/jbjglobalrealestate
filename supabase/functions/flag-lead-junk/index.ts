@@ -27,7 +27,11 @@ Deno.serve(async (req) => {
     const { error } = await admin.from('crm_lead_assignments').update({
       status: 'junk', returned_at: new Date().toISOString(), returned_reason: reason ?? null, unassigned_at: new Date().toISOString(),
     }).eq('id', assignmentId);
-    if (error) return json({ error: error.message }, 500);
+    if (error) {
+      // Audit 6.1: log the driver message, return a static one.
+      console.error('[flag-lead-junk] update failed:', error.message);
+      return json({ error: 'An internal error occurred' }, 500);
+    }
 
     await admin.from('broker_activity_log').insert({
       broker_user_id: u.user.id, lead_id: row.lead_id, assignment_id: assignmentId,
@@ -36,7 +40,8 @@ Deno.serve(async (req) => {
 
     return json({ ok: true });
   } catch (e) {
-    return json({ error: (e as Error).message }, 500);
+    console.error('[flag-lead-junk] unexpected:', e);
+    return json({ error: 'An internal error occurred' }, 500);
   }
 });
 

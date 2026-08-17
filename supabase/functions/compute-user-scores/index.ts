@@ -1,12 +1,34 @@
+// compute-user-scores — recomputes intent/engagement/VIP scores. Invoked by
+// cron for the whole base, and on demand from the admin Intelligence page.
+//
+// SECURITY (backend audit 4.2): this reads across analytics, CRM leads and
+// scanned-card tables for an arbitrary `user_id` supplied in the body, using
+// a service-role client that bypasses RLS. It previously enforced no caller
+// check at all. Callers must now be either an internal/cron caller or an
+// authenticated staff/owner account.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { isInternalCaller } from "../_shared/internal-auth.ts";
+import { validateEmployeeAuth } from "../_shared/auth-utils.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cron-secret, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  if (!isInternalCaller(req).ok) {
+    const auth = await validateEmployeeAuth(req);
+    if (!auth.authenticated || !auth.isEmployee) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  }
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -16,6 +38,13 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json().catch(() => ({}));
     const targetUserId = body.user_id;
+
+    if (targetUserId !== undefined && (typeof targetUserId !== "string" || !UUID_RE.test(targetUserId))) {
+      return new Response(JSON.stringify({ error: "Invalid user_id" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Gather user IDs
     const userIdSet = new Set<string>();
@@ -335,7 +364,9 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), {
+    // Audit 6.1: log internally, return a static message to the caller.
+    console.error("[compute-user-scores] Error:", err);
+    return new Response(JSON.stringify({ error: "An internal error occurred" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

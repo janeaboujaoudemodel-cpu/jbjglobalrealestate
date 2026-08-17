@@ -1,14 +1,23 @@
 // crm-purge-trash — daily job that hard-deletes CRM rows trashed > 30 days ago.
 // Invoked by pg_cron via net.http_post.
+//
+// SECURITY (backend audit 4.2): this function performs an irreversible hard
+// delete and is cron-only. It previously enforced nothing, so any caller
+// holding the public anon key could trigger the purge. It now requires an
+// internal caller (service-role bearer or x-cron-secret).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.55.0";
+import { requireInternalCaller } from "../_shared/internal-auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, content-type, apikey, x-client-info",
+  "Access-Control-Allow-Headers": "authorization, content-type, apikey, x-client-info, x-cron-secret",
 };
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  const forbidden = requireInternalCaller(req, corsHeaders);
+  if (forbidden) return forbidden;
 
   const svc = createClient(
     Deno.env.get("SUPABASE_URL")!,
