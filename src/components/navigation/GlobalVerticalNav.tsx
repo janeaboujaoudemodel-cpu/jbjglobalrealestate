@@ -138,7 +138,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Guides Library", href: "/guides", icon: BookOpen, megaMenu: 'guides', section: "GUIDES" },
   { label: "Buyer's Guide", href: "/guides/buyer", icon: FileText },
   { label: "Seller's Guide", href: "/guides/seller", icon: FileText },
-  { label: "Rental Guide", href: "/rent-guide", icon: FileText },
+  { label: "Renting in Dubai", href: "/rent-guide", icon: FileText },
   { label: "Tenant Guide", href: "/guides/tenant", icon: FileText },
   { label: "Landlord Guide", href: "/guides/landlord", icon: FileText },
   { label: "Investor Education", href: "/guides/invest", icon: GraduationCap },
@@ -352,7 +352,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   guides: [
     { label: 'Buyer Guide', icon: FileText, href: '/buyer-guide' },
     { label: 'Seller Guide', icon: FileText, href: '/seller-guide' },
-    { label: 'Rent Guide', icon: FileText, href: '/rent-guide' },
+    { label: 'Renting in Dubai', icon: FileText, href: '/rent-guide' },
     { label: "Tenant Guide", icon: FileText, href: '/tenant-guide' },
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },

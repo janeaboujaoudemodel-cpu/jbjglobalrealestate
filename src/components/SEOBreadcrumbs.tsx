@@ -18,7 +18,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/faq': 'FAQ',
   '/buyer-guide': 'Buyer Guide',
   '/seller-guide': 'Seller Guide',
-  '/rent-guide': 'Rent Guide',
+  '/rent-guide': 'Renting in Dubai',
   '/mortgage-calculator': 'Mortgage Calculator',
   '/ai-hub': 'Broker Hub',
   '/team': 'Our Team',

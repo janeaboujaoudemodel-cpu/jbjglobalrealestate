@@ -66,7 +66,7 @@ const staticEntries: SitemapEntry[] = [
   // Guides / SEO content
   { path: "/buyer-guide", changefreq: "monthly", priority: "0.80" },
   { path: "/seller-guide", changefreq: "monthly", priority: "0.80" },
-  { path: "/rent-guide", changefreq: "monthly", priority: "0.80" },
+  { path: "/rent-guide", changefreq: "monthly", priority: "0.75" },
   { path: "/mortgage-calculator", changefreq: "monthly", priority: "0.80" },
   { path: "/golden-visa-guide", changefreq: "monthly", priority: "0.78" },
   { path: "/guides/dubai-rental-yield", changefreq: "monthly", priority: "0.85" },

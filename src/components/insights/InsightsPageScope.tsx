@@ -72,7 +72,7 @@ const guideItems = [
   { id: "guides-library", title: "Guides Library", href: "/guides", icon: BookOpen },
   { id: "guides-buyer", title: "Buyer's Guide", href: "/buyer-guide", icon: FileText },
   { id: "guides-seller", title: "Seller's Guide", href: "/seller-guide", icon: FileText },
-  { id: "guides-rental", title: "Rental Guide", href: "/rent-guide", icon: FileText },
+  { id: "guides-rental", title: "Renting in Dubai", href: "/rent-guide", icon: FileText },
   { id: "guides-tenant", title: "Tenant Guide", href: "/tenant-guide", icon: Key },
   { id: "guides-landlord", title: "Landlord Guide", href: "/landlord-guide", icon: Building },
   { id: "guides-investor", title: "Investor Education", href: "/investor-education", icon: GraduationCap },

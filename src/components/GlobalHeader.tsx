@@ -674,7 +674,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/guides", label: "Guides Library", icon: BookOpen },
     { href: "/buyer-guide", label: "Buyer's Guide", icon: FileText },
     { href: "/seller-guide", label: "Seller's Guide", icon: FileText },
-    { href: "/rent-guide", label: "Rental Guide", icon: FileText },
+    { href: "/rent-guide", label: "Renting in Dubai", icon: FileText },
     { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
     { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
     { href: "/investor-education", label: "Investor Education", icon: GraduationCap },

@@ -132,7 +132,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
 export const GUIDE_LINKS: GuideLink[] = [
   { title: "Buyer Guide", path: "/guides/buyer", description: "Complete guide to purchasing property" },
   { title: "Seller Guide", path: "/guides/seller", description: "How to sell property successfully" },
-  { title: "Rent Guide", path: "/rent-guide", description: "How renting works in Dubai" },
+  { title: "Renting in Dubai", path: "/rent-guide", description: "Find your Tenant or Landlord guide" },
   { title: "Tenant Guide", path: "/guides/tenant", description: "Tenant rights & responsibilities" },
   { title: "Landlord Guide", path: "/guides/landlord", description: "List your property for rent" },
   { title: "Area Guides", path: "/areas", description: "Explore Dubai's communities" },

@@ -322,8 +322,11 @@ export const PublicRoutes = () => (
     {/* Books Library consolidated into Guides Library — single canonical hub. */}
     <Route path="/education-hub" element={<Navigate to="/guides" replace />} />
     <Route path="/books-library" element={<Navigate to="/guides" replace />} />
-    {/* Rent Guide stays at its current URL for now — its content splits into the
-        Tenant and Landlord guides in Stage 2, so the route isn't remapped until then. */}
+    {/* Stage 2 part 2: RentGuide.tsx retired as a full content page — Tenant/Landlord
+        Guide already independently cover its content, and GSC showed zero organic
+        traffic to /rent-guide, /guides/tenant, /guides/landlord over 3 months, so no
+        content migration or 301 was warranted. Same URL now renders a lightweight
+        Tenant/Landlord audience picker instead. */}
     <Route path="/rent-guide" element={<InsightsPageScope><RentGuide /></InsightsPageScope>} />
     <Route path="/tenant-guide" element={<Navigate to="/guides/tenant" replace />} />
     <Route path="/landlord-guide" element={<Navigate to="/guides/landlord" replace />} />
