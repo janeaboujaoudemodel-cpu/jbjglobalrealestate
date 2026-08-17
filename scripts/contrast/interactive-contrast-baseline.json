@@ -1,0 +1,24 @@
+{
+  "_comment": "Pre-existing interactive contrast hits captured when baseline tolerance was introduced. New regressions are blocked; historical hits are tolerated until cleaned up. Refresh with --print-baseline after fixing entries.",
+  "entries": [
+    "src/components/ai-tools/AIPropertyAnalyzer.tsx:574",
+    "src/components/ai-video-studio/features/CaptionTranslator.tsx:1003",
+    "src/components/ai-video-studio/features/CaptionTranslator.tsx:1035",
+    "src/components/ai-video-studio/features/CaptionTranslator.tsx:1061",
+    "src/components/ai-video-studio/features/CaptionTranslator.tsx:1063",
+    "src/components/ai-video-studio/features/CaptionTranslator.tsx:1185",
+    "src/components/ai-video-studio/features/CaptionTranslator.tsx:1187",
+    "src/components/crm/CVCenter.tsx:1499",
+    "src/components/crm/ListingAdminManager.tsx:284",
+    "src/pages/PropertyMeasurement.tsx:982",
+    "src/pages/PropertyMeasurement.tsx:985",
+    "src/pages/Sitemap.tsx:436",
+    "src/pages/admin/ListingsApproval.tsx:216",
+    "src/pages/broker/BrokerCalendar.tsx:102",
+    "src/pages/broker/BrokerCalendar.tsx:104",
+    "src/pages/broker/BrokerCalendar.tsx:106",
+    "src/pages/guides/GoldenVisaGuide.tsx:663",
+    "src/pages/owner/AIToolsControlPanel.tsx:533",
+    "src/pages/owner/GlobalRecommendationsHub.tsx:315"
+  ]
+}

@@ -122,7 +122,7 @@ const hubSections: HubSection[] = [
       { href: "/areas", label: "Area Guides" },
       { href: "/investor-education", label: "Investor Education" },
       { href: "/faq", label: "General FAQ" },
-      { href: "/investor-faq", label: "Investor FAQ" },
+      { href: "/guides/invest#faq", label: "Investor FAQ" },
       { href: "/broker-faq", label: "Broker FAQ" },
       { href: "/guides/golden-visa-uae", label: "Golden Visa Guide" },
     ],
@@ -145,7 +145,7 @@ const hubSections: HubSection[] = [
     icon: Layers,
     links: [
       { href: "/investor-education", label: "Investor Education" },
-      { href: "/investor-faq", label: "Investor FAQs" },
+      { href: "/guides/invest#faq", label: "Investor FAQs" },
       { href: "/ai-hub", label: "Investor Tools" },
       { href: "/investor-dashboard", label: "Investor Dashboard" },
       { href: "/investor-dashboard/portfolio", label: "Portfolio Views" },

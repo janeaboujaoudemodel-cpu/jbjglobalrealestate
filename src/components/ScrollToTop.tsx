@@ -3,13 +3,33 @@ import { useLocation } from "react-router-dom";
 import { ArrowUpToLine } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Scrolls to top on route change
+// Scrolls to top on route change, or to the #hash target when one is present.
+// Lazy-loaded route content may not exist in the DOM yet on the first pass
+// (React.lazy + Suspense swap it in asynchronously), so retry briefly via
+// rAF instead of giving up and stranding the anchor link at the page top.
 export const ScrollToTopOnMount = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useLayoutEffect(() => {
+    if (hash) {
+      const id = hash.slice(1);
+      let attempts = 0;
+      let frame: number;
+      const tryScroll = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "instant", block: "start" });
+        } else if (attempts++ < 30) {
+          frame = requestAnimationFrame(tryScroll);
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+      };
+      tryScroll();
+      return () => cancelAnimationFrame(frame);
+    }
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 };

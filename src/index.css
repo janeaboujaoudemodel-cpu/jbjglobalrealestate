@@ -1,15 +1,4 @@
-/* =============================================================
-   PASS 213 — OWNER BATCH A-F REGRESSION GUARD
-   Screenshot-proven fixes: no letter-stacked labels, no dark ink
-   on emerald surfaces, no clipped owner workspaces, and minimum
-   button/tab geometry for owner backend pages.
-   ============================================================= */
 
-
-html body #root :where([data-jbj-card], [data-jbj-card] *) {
-  box-sizing: border-box;
-  min-width: 0;
-}
 
 html body #root [data-jbj-card] :where(.flex, [class*="flex"], [class*="items-"], [class*="justify-"], [class*="gap-"]) {
   min-width: 0;
@@ -319,65 +308,6 @@ html body #root [data-force-white-tick="true"] * {
 
 
 
-/* Advanced Filter Panel — champagne + ink standard (matches user account dropdown).
-   Emerald reserved for active pills/hovers via jj-pill-emerald-metallic. */
-html body [data-filter-clean][role="dialog"] {
-  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
-  border-color: rgba(184,149,85,0.55) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-filter-clean][role="dialog"] :is(h1,h2,h3,h4,h5,h6,p,span,label,div,button,li,dt,dd) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-filter-clean][role="dialog"] :is(svg,[data-lucide]) {
-  color: #1A1A1A !important;
-  stroke: currentColor !important;
-}
-html body [data-filter-clean][role="dialog"] :is(input,textarea,select,button[role="combobox"]) {
-  background: #FFFFFF !important;
-  border-color: rgba(184,149,85,0.55) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-filter-clean][role="dialog"] :is(input,textarea)::placeholder {
-  color: rgba(26,26,26,0.55) !important;
-  opacity: 1 !important;
-}
-/* Active/selected chips + emerald metallic pills keep pure white text + emerald bg */
-html body [data-filter-clean][role="dialog"] [data-state="checked"],
-html body [data-filter-clean][role="dialog"] [data-state="active"],
-html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
-
-
-  background: var(--jj-emerald-ombre) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: transparent !important;
-}
-html body [data-filter-clean][role="dialog"] [data-state="checked"] :is(svg,span,p,div),
-html body [data-filter-clean][role="dialog"] [data-state="active"] :is(svg,span,p,div),
-html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic :is(svg,span,p,div) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-/* Convert dark emerald surface cards to white cards on the champagne panel */
-html body [data-filter-clean][role="dialog"] [class*="bg-\[\#021611\]"],
-html body [data-filter-clean][role="dialog"] [class*="bg-white\/7"],
-html body [data-filter-clean][role="dialog"] [class*="bg-white\/12"],
-html body [data-filter-clean][role="dialog"] [class*="bg-white\/14"],
-html body [data-filter-clean][role="dialog"] [class*="bg-black\/10"] {
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-}
-html body [data-filter-clean][role="dialog"] [class*="border-white\/"] {
-  border-color: rgba(184,149,85,0.50) !important;
-}
-
-
-
 /* =====================================================================
    PASS 55 — DOCUMENT STUDIO SURFACE CONTRACT (scoped)
    Anything wrapped in [data-studio-surface="champagne"] forces ink
@@ -620,70 +550,6 @@ body {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
-}
-
-
-
-
-
-
-
-/* Premium glassmorphic gold-hairline hero action pills.
-   Editorial luxury: dark ink glass + ultra-thin gold hairline,
-   refined Inter uppercase label, soft inner highlight + ambient shadow. */
-.jj-hero-action-card {
-  background: rgba(253, 251, 247, 0.10) !important;
-  border: 1px solid rgba(212, 184, 150, 0.55) !important;
-  border-radius: 999px !important;
-  color: #FDFBF7;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 8px 22px rgba(0, 0, 0, 0.32);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
-  transition: background 300ms ease, border-color 300ms ease, box-shadow 300ms ease, transform 250ms ease;
-}
-
-/* Hover: crystal champagne tint + bright gold hairline, NEVER a darker black wash */
-.jj-hero-action-card:hover,
-.jj-hero-action-card:focus-visible {
-  background: rgba(253, 251, 247, 0.22) !important;
-  border-color: #E2C9A0 !important;
-  color: #FDFBF7;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 0 0 1px rgba(226, 201, 160, 0.65),
-    0 14px 32px rgba(0, 0, 0, 0.40),
-    0 0 22px rgba(226, 201, 160, 0.22) !important;
-  transform: translateY(-1px);
-}
-.jj-hero-action-card:hover .jj-hero-action-label,
-.jj-hero-action-card:focus-visible .jj-hero-action-label {
-  color: #FDFBF7;
-}
-.jj-hero-action-card:hover .jj-hero-action-icon,
-.jj-hero-action-card:focus-visible .jj-hero-action-icon {
-  color: #E2C9A0;
-  stroke: #E2C9A0;
-  opacity: 1 !important;
-}
-
-.jj-hero-action-card .jj-hero-action-label {
-  color: #FDFBF7;
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-}
-
-.jj-hero-action-card .jj-hero-action-icon {
-  color: #D4B896;
-  stroke: #D4B896;
-  opacity: 0.95 !important;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
-  transition: opacity 250ms ease, color 250ms ease, stroke 250ms ease;
 }
 
 
@@ -1209,23 +1075,6 @@ All colors MUST be HSL.
 }
 
 /* ============================================================
- * HERO-SCOPED CONTRAST OVERRIDE (all viewports)
- * Force eyebrow + faint copy inside the homepage hero to remain
- * crisp regardless of the video frame underneath.
- * ============================================================ */
-.jj-hero-fullscreen .text-white\/40,
-.jj-hero-fullscreen .text-white\/50,
-.jj-hero-fullscreen .text-white\/60,
-.jj-hero-fullscreen .text-white\/70,
-.jj-hero-fullscreen .text-white\/80,
-.jj-hero-fullscreen .text-white\/85,
-.jj-hero-fullscreen .text-white\/90 {
-  color: #ffffff;
-  opacity: 1 !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65) !important;
-}
-
-/* ============================================================
  * GLOBAL HERO CONTRAST RESCUE (non-homepage)
  * Any hero that opted into `.jj-hero-compact` lives over dark
  * video/imagery. Ink (#1A1A1A) text inside such hero overlays
@@ -1237,21 +1086,6 @@ All colors MUST be HSL.
 .jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class~="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *){
   color: #F7F2EA;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
-}
-.jj-hero-fullscreen.jj-hero-compact svg[class*="text-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
-  color: #F7F2EA;
-}
-
-/* Full-viewport hero — guides/FAQ/report pages. */
-.jj-hero-fullscreen.jj-hero-compact {
-  height: auto !important;
-  min-height: 100vh !important;
-  max-height: none !important;
-}
-@supports (height: 100dvh) {
-  .jj-hero-fullscreen.jj-hero-compact {
-    min-height: 100dvh !important;
-  }
 }
 
 
@@ -1444,9 +1278,6 @@ All colors MUST be HSL.
 }
 .jj-auth-panel-wrap {
   max-width: min(36rem, calc(100vw - 1.5rem));
-}
-.jj-auth-card {
-  overflow: visible;
 }
 .jj-passkey-cta,
 .jj-passkey-cta * {
@@ -3930,33 +3761,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   padding: 4px 8px !important;
 }
 
-/* ============================================================
- * FOLDABLE / FLIP PHONE ADAPTATION
- * Ensures content adapts when a foldable phone opens/closes
- * ============================================================ */
-@media (spanning: single-fold-vertical) {
-  .jj-hero-fullscreen {
-    /* Avoid placing content on the fold */
-    padding-left: env(viewport-segment-left 0 0, 0px);
-    padding-right: env(viewport-segment-right 1 0, 0px);
-  }
-}
-
-/* Prevent auto-zoom on form inputs (iOS) */
-@media screen and (max-width: 767px) {
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
-  input[type="password"],
-  input[type="search"],
-  input[type="url"],
-  select,
-  textarea {
-    font-size: 16px !important;
-  }
-}
-
 /* Responsive header height breakpoints */
 @media (min-width: 640px) {
   :root { --responsive-header-height: 112px; }
@@ -4609,13 +4413,6 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
 [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
-.jj-hero-fullscreen .text-white:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
-.jj-hero-fullscreen [class*="text-white"]:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
-.jj-hero-fullscreen h1:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
-.jj-hero-fullscreen h2:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
-  color: #FFFFFF;
-  opacity: 1 !important;
-}
 
 /* Legacy `.mi-hero-cta` champagne repaint removed.
    Market Intelligence hero CTAs are glass-on-dark (white text/icons),
@@ -5067,20 +4864,6 @@ button:hover .jj-role-icon {
   opacity: 1 !important;
 }
 
-/* Hero glass cards — keep glass on hover, never become solid white */
-.jj-hero-glass-card,
-.jj-hero-glass-card * {
-  color: #FDFBF7;
-}
-.jj-hero-glass-card svg.lucide {
-  color: #E9C97A;
-  stroke: #E9C97A;
-  opacity: 1 !important;
-}
-.jj-hero-glass-card:hover {
-  border-color: #B89555 !important;
-}
-
 /* Role-card Continue must stay gold at rest and on hover */
 .group .jj-role-icon-tile ~ *,
 button:hover [data-no-contrast-guard] [style*="#B89555"],
@@ -5150,14 +4933,6 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
   border-color: #B89555 !important;
 }
 
-/* Native <select> / <option> hover (Chrome/Firefox) */
-.crm-scope select:focus,
-.crm-scope select option:checked,
-.crm-scope select option:hover {
-  background-color: #EFE6D6;
-  color: #1A1A1A;
-}
-
 /* Calendar (react-day-picker) — kill default blue selected/today */
 .crm-scope .rdp-day_selected,
 .crm-scope .rdp-day_selected:focus,
@@ -5177,12 +4952,6 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
 .crm-scope .rdp-day:hover:not([disabled]):not([aria-selected="true"]) {
   background-color: #F7F2EA !important;
   color: #1A1A1A;
-}
-
-/* Checkboxes / radios — gold accent */
-.crm-scope input[type="checkbox"],
-.crm-scope input[type="radio"] {
-  accent-color: #1A1A1A;
 }
 
 /* Switch / toggle Radix data-state */
@@ -5604,26 +5373,6 @@ button[data-phone-code-trigger]:focus-visible :is(span, svg, .lucide) {
   stroke: #B89555;
   opacity: 1 !important;
 }
-[data-phone-country-command] input[cmdk-input],
-[data-phone-country-command] input[cmdk-input]:hover,
-[data-phone-country-command] input[cmdk-input]:focus,
-[data-phone-country-command] input[cmdk-input]:focus-visible {
-  width: 100% !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  outline: none !important;
-  --tw-ring-color: transparent !important;
-  --tw-ring-offset-color: transparent !important;
-  --tw-ring-shadow: 0 0 #0000 !important;
-  --tw-ring-offset-shadow: 0 0 #0000 !important;
-}
-[data-radix-popper-content-wrapper] input[cmdk-input]::placeholder {
-  color: rgba(26, 26, 26, 0.55);
-  opacity: 1 !important;
-}
 
 /* FINAL OVERRIDE — Sign Out is destructive and must remain red in both
    expanded and collapsed nav states, including hover. Keep this after all
@@ -5749,12 +5498,6 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   background-color: hsl(var(--jj-light-bg-hover)) !important;
 }
 
-.jj-cta-outline {
-  background-color: transparent !important;
-  border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
-  border-radius: 0.75rem;
-}
-
 /* --------------------------------------------------------------------------
  * Metallic Gold CTA primitive (.jj-cta-gold-metallic)
  * Used for inside-page primary CTAs (Register Interest, Request Consultation,
@@ -5776,55 +5519,8 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-.jj-cta-gold-metallic {
-  position: relative !important;
-  isolation: isolate;
-  color: #3a2a08 !important;
-  background-image: linear-gradient(
-    120deg,
-    #d8b86a 0%,
-    #f4e3a8 25%,
-    #b89555 50%,
-    #f4e3a8 75%,
-    #d8b86a 100%
-  ) !important;
-  background-size: 220% 220% !important;
-  /* NOTE: do NOT set background-position with !important here — it would
-     override the jj-metal-sheen keyframe and freeze the animation
-     (matches sqft pill behaviour which has no static position override). */
-  border: 1px solid rgba(184, 149, 85, 0.65) !important;
-  border-radius: 0.75rem !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 244, 210, 0.45),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.18),
-    0 6px 18px -8px rgba(184, 149, 85, 0.55) !important;
-  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease !important;
-  overflow: hidden;
-  animation: jj-metal-sheen 4.5s ease-in-out infinite !important;
-}
-.jj-cta-gold-metallic:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: rgba(184, 149, 85, 0.95) !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 244, 210, 0.55),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.22),
-    0 12px 30px -10px rgba(184, 149, 85, 0.7) !important;
-}
-.jj-cta-gold-metallic:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  animation: none !important;
-}
-.jj-cta-gold-metallic > * {
-  position: relative;
-  z-index: 1;
-  color: #3a2a08 !important;
-}
 .jj-cta-gold-metallic :where(svg, .lucide) {
   color: #3a2a08 !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  .jj-cta-gold-metallic { animation: none !important; }
 }
 
 /* --------------------------------------------------------------------------
@@ -6530,13 +6226,6 @@ html[data-tool-fullscreen="true"] [data-support-launcher],
 html[data-tool-fullscreen="true"] [data-web-developer-dock]{
   display: none !important;
 }
-input#propertyName.property-measurement-name-input,
-input#propertyName.property-measurement-name-input::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-  text-shadow: none !important;
-}
 html[data-tool-fullscreen="true"],
 html[data-tool-fullscreen="true"] body {
   padding-left: 0 !important;
@@ -6632,25 +6321,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-[data-tool-darkbody="true"] input::placeholder,
-[data-tool-darkbody="true"] textarea::placeholder {
-  color: rgba(255,255,255,0.55) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
-  opacity: 1 !important;
-}
 [data-tool-darkbody="true"] input:not([data-no-contrast-guard]):focus,
 [data-tool-darkbody="true"] textarea:not([data-no-contrast-guard]):focus,
 [data-tool-darkbody="true"] [role="combobox"]:not([data-no-contrast-guard]):focus {
   border-color: rgba(110,231,183,0.82) !important;
   box-shadow: 0 0 0 2px rgba(16,185,129,0.24) !important;
-  outline: none !important;
-}
-[data-tool-darkbody="true"] input[data-no-contrast-guard],
-[data-tool-darkbody="true"] input[data-no-contrast-guard]:focus,
-[data-tool-darkbody="true"] input[data-no-contrast-guard]:focus-visible {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
   outline: none !important;
 }
 
@@ -6765,30 +6440,6 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-color: rgba(167,139,250,0.35) !important;
 }
 
-/* Dark glass card primitive */
-.jj-neon-card {
-  position: relative;
-  background:
-    linear-gradient(180deg, rgba(10,16,32,0.92) 0%, rgba(6,10,24,0.96) 100%) !important;
-  border: 1px solid rgba(167,139,250,0.28) !important;
-  border-radius: 1rem;
-  box-shadow:
-    0 0 0 1px rgba(34,211,238,0.08),
-    0 24px 60px -28px rgba(34,211,238,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-  color: #F6FBF8;
-  backdrop-filter: blur(8px);
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-}
-.jj-neon-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(34,211,238,0.55) !important;
-  box-shadow:
-    0 0 0 1px rgba(34,211,238,0.20),
-    0 30px 70px -24px rgba(236,72,153,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
 /* Auto-upgrade common shadcn card surfaces inside a neon page */
 [data-neon-page] .rounded-2xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]),
 [data-neon-page] .rounded-xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]) {
@@ -6817,16 +6468,6 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   background: rgba(255,255,255,0.05) !important;
   border: 1px solid rgba(34,211,238,0.35) !important;
   color: #F6FBF8 !important;
-}
-[data-neon-page] input::placeholder,
-[data-neon-page] textarea::placeholder {
-  color: rgba(246,251,248,0.5) !important;
-}
-[data-neon-page] input:focus,
-[data-neon-page] textarea:focus {
-  border-color: #22D3EE !important;
-  box-shadow: 0 0 0 3px rgba(34,211,238,0.25) !important;
-  outline: none !important;
 }
 
 /* Make sure the page chrome (header/footer) stays above orbs */
@@ -7437,25 +7078,6 @@ html body .jj-pill-emerald:focus :is(svg, .lucide) * {
   color: #FFFFFF !important;
 }
 
-/* Premium 3D float hover for primary emerald CTAs */
-.jj-cta-float {
-  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1),
-              background-color 220ms ease;
-  box-shadow: 0 6px 18px -8px rgba(4, 120, 87, 0.35),
-              0 2px 6px rgba(0, 0, 0, 0.10);
-  will-change: transform, box-shadow;
-}
-.jj-cta-float:hover {
-  transform: translateY(-2px) scale(1.012);
-  box-shadow: 0 16px 36px -10px rgba(4, 120, 87, 0.50),
-              0 6px 14px rgba(0, 0, 0, 0.18);
-}
-.jj-cta-float:active {
-  transform: translateY(0) scale(1);
-  box-shadow: 0 4px 12px -6px rgba(4, 120, 87, 0.30);
-}
-
 /* FINAL LOCK — approved emerald/black ombre primitives. */
 html body .jj-emerald-fill,
 html body .jj-emerald-fill * {
@@ -7476,21 +7098,6 @@ html body .jj-emerald-fill :is(svg, .lucide) * {
   stroke: #FFFFFF !important;
 }
 
-html body .jj-hero-search-lock,
-html body .jj-hero-search-lock * {
-  opacity: 1 !important;
-}
-html body .jj-hero-search-lock input,
-html body .jj-hero-search-lock input:focus {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  caret-color: #064E3B !important;
-}
-html body .jj-hero-search-lock input::placeholder {
-  color: rgba(26,26,26,0.78) !important;
-  -webkit-text-fill-color: rgba(26,26,26,0.78) !important;
-}
-
 @keyframes jbj-placeholder-type {
   0%, 12% { content: ""; }
   18% { content: "E"; }
@@ -7503,11 +7110,6 @@ html body .jj-hero-search-lock input::placeholder {
   88% { content: "Enter"; }
   94%, 100% { content: ""; }
 }
-
-html body .jj-newsletter-emerald input::placeholder {
-  color: transparent !important;
-  -webkit-text-fill-color: transparent !important;
-}
 html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
   content: "Enter Your Email";
   animation: jbj-placeholder-type 4.8s steps(1, end) infinite;
@@ -7517,33 +7119,6 @@ html body [data-chrome="sidebar"] :is([data-sidebar-section-label], [data-sideba
   color: var(--emerald-ink) !important;
   -webkit-text-fill-color: var(--emerald-ink) !important;
   stroke: var(--emerald-ink) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section] {
-  color: var(--emerald-ink) !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   PASS 11 — HERO SEARCH + STAY IN THE LOOP + EMERALD CTA LOCK
-   ════════════════════════════════════════════════════════════════ */
-html body .jj-hero-search-bar,
-html body .jj-hero-search-bar *:not([data-allow-ink]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body .jj-hero-search-bar input,
-html body .jj-hero-search-bar input:focus,
-html body .jj-hero-search-bar input:hover {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  caret-color: #FFFFFF !important;
-  background: transparent !important;
-  border: 0 !important;
-  outline: 0 !important;
-  box-shadow: none !important;
-}
-html body .jj-hero-search-bar input::placeholder {
-  color: rgba(255,255,255,0.78) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
 }
 html body .jj-hero-search-bar :is(svg, .lucide),
 html body .jj-hero-search-bar :is(svg, .lucide) * {
@@ -7559,24 +7134,11 @@ html body .jj-hero-search-bar :is(svg, .lucide) * {
   64%, 78%  { content: "How much is rent in Marina?"; }
   80%, 98%  { content: "I'm looking for Golden Visa or mortgage"; }
 }
-html body .jj-hero-typewriter::before {
-  content: "Search projects, developers, areas, tools…";
-  animation: jbj-hero-typewriter 22s steps(1, end) infinite;
-}
 
 html body .jj-newsletter-emerald,
 html body .jj-newsletter-emerald * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-}
-html body .jj-newsletter-emerald input,
-html body .jj-newsletter-emerald input:focus,
-html body .jj-newsletter-emerald input:hover {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  caret-color: #FFFFFF !important;
-  background: transparent !important;
-  background-image: none !important;
 }
 
 html body .jj-newsletter-emerald input::placeholder,
@@ -7600,56 +7162,10 @@ html body .jj-loop-block * {
 html body .jj-loop-block .jj-loop-divider {
   background-color: rgba(255,255,255,0.35) !important;
 }
-
-.jj-emerald-card {
-  background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(4,78,59,0.45) !important;
-  box-shadow:
-    0 0 0 1px rgba(4,78,59,0.45),
-    0 0 28px rgba(4,78,59,0.45),
-    0 18px 38px rgba(0,0,0,0.30),
-    inset 0 1px 0 rgba(255,255,255,0.10) !important;
-}
-html body .jj-emerald-card,
-html body .jj-emerald-card * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
 html body .jj-emerald-card :is(svg, .lucide),
 html body .jj-emerald-card :is(svg, .lucide) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-/* Sidebar — section header rows: emerald-ombre fill, white text/icon */
-html body [data-chrome="sidebar"] [data-sidebar-section] {
-  background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(4,78,59,0.45) !important;
-  border-radius: 8px !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section] [data-sidebar-section-label],
-html body [data-chrome="sidebar"] [data-sidebar-section] [data-sidebar-section-icon],
-html body [data-chrome="sidebar"] [data-sidebar-section] svg {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* Sidebar — subitem rows: white surface, ink label, emerald icon */
-html body [data-chrome="sidebar"] [data-sidebar-subitem] {
-  background-color: #FFFFFF !important;
-  border: 1px solid #FFFFFF !important;
-  border-radius: 8px !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] {
-  color: var(--emerald-ink) !important;
-  stroke: var(--emerald-ink) !important;
 }
 
 /* Support launcher — emerald glow (not gold). Desktop edge rail stays hidden above. */
@@ -7738,117 +7254,6 @@ html body .jj-newsletter-emerald button.jj-newsletter-emerald,
 html body .jj-newsletter-emerald > [class*="jj-newsletter"] {
   border: 0 !important;
 }
-
-/* ────────────────────────────────────────────────────────────────
-   SIDEBAR PASS 12 — emerald categories, no gold hover anywhere,
-   subitem rows lose the white pill fill and use an emerald-bordered
-   icon tile with a white label.
-   ──────────────────────────────────────────────────────────────── */
-
-/* Top-level highlight rows (AI Home Finder, List Your Property,
-   Careers, Resale Properties) and main section headers: lock to
-   white text + white icons on the emerald-ombre pill at rest AND
-   hover. Beats the old `text-[#B89555]` inline classes. */
-html body [data-chrome="sidebar"] [data-sidebar-section],
-html body [data-chrome="sidebar"] [data-sidebar-section]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-section]:focus,
-html body [data-chrome="sidebar"] [data-sidebar-section] *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:hover *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:focus * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.18) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: 0 6px 16px -10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10);
-  transition: transform 220ms ease, box-shadow 220ms ease, background-image 220ms ease;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section]:hover {
-  background-image: var(--jj-emerald-ombre-hover) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-}
-/* Inside icon tile on the section row: translucent white tile,
-   white glyph — NEVER gold. */
-html body [data-chrome="sidebar"] [data-sidebar-section] > div:first-child {
-  background-color: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.35) !important;
-}
-
-/* Subitem rows: NO white pill background. Transparent row, white
-   label, emerald-tinted icon inside a thin emerald border tile. */
-html body [data-chrome="sidebar"] [data-sidebar-subitem] {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  border-radius: 8px !important;
-  transition: background-color 180ms ease, transform 180ms ease;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem],
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] a[data-sidebar-subitem].group,
-html body [data-chrome="sidebar"] a[data-sidebar-subitem].group [data-sidebar-subitem-label] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-/* Icon tile inside subitem row: emerald-glow hairline border, transparent
-   center, emerald icon. On hover the tile fills with emerald-ombre and
-   the icon flips white (3D reverse). */
-html body [data-chrome="sidebar"] [data-sidebar-subitem] > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 1px solid rgba(52, 211, 153, 0.65) !important;
-  box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 0 10px rgba(4,78,59,0.45);
-  transition: background-image 200ms ease, box-shadow 200ms ease, transform 200ms ease;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon] *{
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover {
-  background-color: rgba(4,78,59,0.45) !important;
-  transform: translateX(2px);
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover > span:first-child {
-  background-image: var(--jj-emerald-ombre) !important;
-  box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 0 16px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-  transform: translateY(-1px);
-}
-
-/* Sidebar highlight rows (AI Home Finder, List Your Property,
-   Careers, Resale Properties) — same emerald-pill treatment as the
-   section header rows. They live directly inside the sidebar nav
-   <div> but DON'T carry [data-sidebar-section]; tag them via the
-   first-anchor selector. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  color: #FFFFFF !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  box-shadow: 0 6px 16px -10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10);
-  transition: transform 220ms ease, box-shadow 220ms ease, background-image 220ms ease;
-}
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:hover {
-  background-image: var(--jj-emerald-ombre-hover) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-}
 html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] *,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] *,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/join"] *,
@@ -7858,15 +7263,6 @@ html body span.jj-pill-emerald *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-/* Highlight-row icon tile — translucent white square, white glyph. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"] > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] > span:first-child {
-  background-color: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.35) !important;
 }
 
 /* ────────────────────────────────────────────────────────────────
@@ -7988,10 +7384,6 @@ html body footer p:last-child {
   border: 0 !important;
   outline: none !important;
 }
-.jj-emerald-pill input::placeholder {
-  color: rgba(255,255,255,0.78) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
-}
 
 /* Animated metallic emerald tile (Call / WhatsApp / Email cards) */
 @keyframes jj-emerald-metallic-sweep {
@@ -8045,27 +7437,6 @@ html body footer p:last-child {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-/* ============================================================
-   PASS 14 — Emerald Sidebar Lock (Batch B)
-   Scope: [data-sidebar-emerald] only — never leaks elsewhere.
-   Rules:
-   - Main category labels (highlights + section accordion buttons): emerald-ombre text
-   - Icon tiles (main + sub): FILLED emerald-ombre with WHITE glyph + white hairline ring
-   - Hover: 3D emerald glow lift, never gold
-   - Subitem labels: ink #1A1A1A (readable on champagne), white on hover-emerald tile
-   - No gold borders/dividers anywhere inside the sidebar nav rows
-   ============================================================ */
-
-/* Sidebar shell fill guard — the inner emerald column MUST fill the 320px
-   fixed sidebar container. If left as flex-item auto width it shrinks to
-   its content and exposes a champagne strip between the sidebar and the
-   main content area. Lock to 100% width so that gap can never come back. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] {
-  width: 100% !important;
-  min-width: 0 !important;
-  flex: 1 1 auto !important;
 }
 
 /* Gold left-border on expanded section column */
@@ -8188,64 +7559,6 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l{ border-left-
 [data-sidebar-emerald] [aria-hidden="true"][style*="rgba(184,149,85"] {
   background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.35) 50%, transparent 100%) !important;
 }
-
-/* ============================================================
-   PASS 15 — Final emerald lock (overrides PASS 12 high-specificity)
-   ============================================================ */
-
-/* Sidebar subitem icon tiles — FILLED emerald-ombre with WHITE glyph at
-   all states. Outranks PASS 12's `html body [data-chrome="sidebar"] …`. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover > span:first-child {
-  background-color: transparent !important;
-  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow:
-    0 1px 2px rgba(4, 120, 87, 0.35),
-    inset 0 0 0 1px rgba(16, 185, 129, 0.25) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-icon] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-icon] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover > span:first-child {
-  transform: translateY(-1px) !important;
-  box-shadow:
-    0 4px 10px -2px rgba(4, 120, 87, 0.55),
-    0 0 0 2px rgba(16, 185, 129, 0.35),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
-}
-/* Subitem labels — ink at rest, readable on champagne row */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
-  color: #047857 !important;
-  -webkit-text-fill-color: #047857 !important;
-}
-
-/* Sidebar logo header strip — mother-of-pearl white with emerald hairline */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
-  background-image: linear-gradient(180deg, #FFFFFF 0%, #FBFCFB 60%, #F5F9F6 100%) !important;
-}
-
-/* Sidebar footer bottom block (Contact/Support/Sign Out) — mother-of-pearl */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto > div[class*="bg-gradient-to-t"] {
-  background-image: linear-gradient(180deg, #FBFCFB 0%, #F5F9F6 100%) !important;
-}
-
-/* Sidebar Contact / Support pinned buttons — emerald accents (no gold) */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] {
-  color: #047857 !important;
-  border-color: rgba(4, 120, 87, 0.5) !important;
-  background-color: #FFFFFF !important;
-}
 html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg,
 html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg,
 html body [data-jj-utility-bar] button[style*="#B89555"],
@@ -8277,17 +7590,6 @@ html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
   -webkit-text-fill-color: #047857 !important;
 }
 
-/* Compare Two Bank Rates slider — canonical deep emerald only */
-html body input[type="range"][data-mortgage-slider="Compare rate"] {
-  background-image: linear-gradient(90deg, #064E3B 0%, #042c1c 100%) !important;
-}
-html body input[type="range"][data-mortgage-slider="Compare rate"]::-webkit-slider-thumb,
-html body input[type="range"][data-mortgage-slider="Compare rate"]::-moz-range-thumb{
-  background: #FFFFFF !important;
-  border: 0 !important;
-  box-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
-}
-
 /* Page-nav arrow (triple chevron) — guarantee white glyph on emerald,
    regardless of which contrast guard runs. */
 html body button[data-jj-page-nav-arrow],
@@ -8302,160 +7604,6 @@ html body .jj-emerald-metallic :is(p, span, a, svg, .lucide) *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-
-/* ============================================================
-   PASS 16 — Sidebar premium pearl + active-only emerald pill
-   Outranks PASSES 5/12/13/14/15. Scope: [data-sidebar-emerald].
-   ============================================================ */
-
-/* ── Shell: champagne base to match listing cards ───────── */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] {
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 60%, #F2EBDC 100%) !important;
-  background-color: #F7F2EA !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 60%, #F2EBDC 100%) !important;
-}
-/* Restore premium gold hairlines on the sidebar logo strip (right edge + bottom). */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::before,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::after {
-  background: linear-gradient(180deg, transparent 0%, #B89555 50%, transparent 100%) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::after {
-  background: linear-gradient(90deg, transparent 0%, #B89555 50%, transparent 100%) !important;
-}
-/* Gold left-border on expanded subitem column */
-
-
-/* ── Section header — IDLE (no [data-active]) ─────────────
-   Transparent, ink-emerald label, emerald-tile icon. Matches
-   the "AI Home Finder" reference. Overrides PASS 12 fill. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) * {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-  stroke: #064E3B !important;
-  border-color: transparent !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child {
-  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.85) !important;
-  box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-/* Hover on idle section → subtle emerald wash, NEVER gold */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover {
-  background-color: rgba(4,120,87,0.06) !important;
-  background-image: none !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover * {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-  stroke: #064E3B !important;
-}
-
-/* ── Section header — ACTIVE only ───────────────────────── */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.18) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child {
-  background-color: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.40) !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover {
-  background-image: var(--jj-emerald-ombre-hover) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18) !important;
-}
-
-/* Kill underline pseudo on section labels — clean look */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] [data-sidebar-section-label]::after,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label]::after{
-  display: none !important;
-}
-
-/* ── Highlight hubs (AI Home Finder, List Your Property,
-        Careers, Resale Properties) — match idle section style. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] {
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 10px !important;
-  box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child {
-  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.85) !important;
-  box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > svg.lucide-chevron-right {
-  color: #047857 !important;
-  stroke: #047857 !important;
-}
-/* Hover on highlight row → subtle emerald wash, ink stays ink, NO gold */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover {
-  background-color: rgba(4,120,87,0.06) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover [data-sidebar-highlight-label] {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-}
-/* Suppress any leftover gold underline pseudo on highlight labels */
-
-
-/* ── Pulse dot when section closed but has active child → emerald */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] span.animate-pulse {
-  background-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) span.animate-pulse {
-  background-color: #047857 !important;
-}
-
-/* ── Sidebar logo wordmark — ink text always */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child a span {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 /* ============================================================
@@ -8608,60 +7756,6 @@ html body :is(a, button, span, div).jj-pill-emerald:is(:hover,:focus,:active) :i
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-
-/* PASS 19 — Task 1 verified hero/header segmentation lock.
-   One clean premium emerald shell; button segments are darker overlays,
-   not separate green/black blocks. Header icons match the same system. */
-html body .jj-hero-search-premium .jj-hero-search-bar {
-  background: linear-gradient(135deg, #075B45 0%, #064E3B 48%, #032419 100%) !important;
-  background-image: linear-gradient(135deg, #075B45 0%, #064E3B 48%, #032419 100%) !important;
-}
-html body .jj-hero-search-premium input,
-html body .jj-hero-search-premium input:focus,
-html body .jj-hero-search-premium input:hover {
-  background: transparent !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  caret-color: #FFFFFF !important;
-}
-html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]),
-html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):hover,
-html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):focus,
-html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):active {
-  background: linear-gradient(135deg, rgba(4, 120, 87, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%) !important;
-  background-image: linear-gradient(135deg, rgba(4, 120, 87, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%) !important;
-  border-left: 1px solid rgba(255,255,255,0.16) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):hover {
-  filter: brightness(1.12) saturate(1.08) !important;
-}
-/* Primary metallic emerald pill — keep inline gradient, just brighten on hover */
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="primary"]:hover {
-  filter: brightness(1.08) saturate(1.05) !important;
-}
-/* Champagne secondary pill — preserve inline champagne fill + emerald ink.
-   Uses ultra-high specificity (#root#root#root) to defeat the global
-   white-on-dark contrast guards that target [data-ink-emerald] descendants. */
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"],
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover,
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:focus,
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:active,
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] *,
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover *,
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg,
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg *,
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] span {
-  color: #0E4A38 !important;
-  -webkit-text-fill-color: #0E4A38 !important;
-  stroke: #0E4A38 !important;
-  border-left: 0 !important;
-}
-html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover {
-  filter: brightness(1.02) !important;
-}
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]),
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]):hover {
   background: linear-gradient(135deg, #075B45 0%, #064E3B 52%, #032419 100%) !important;
@@ -8757,40 +7851,6 @@ html body footer[data-jj-minimal-footer] a:hover {
   opacity: 0.85 !important;
 }
 
-/* 3) Sidebar bottom panel — champagne (kills white seam) */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto > div[class*="bg-gradient-to-t"] {
-  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
-  background-color: #F7F2EA !important;
-}
-
-/* 4) Contact + Support pinned buttons — BLACK text + BLACK icon on champagne */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border-color: rgba(184,149,85,0.55) !important;
-  background-color: transparent !important;
-  background-image: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] * {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg * {
-  color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"]:hover {
-  background-color: #EFE6D6 !important;
-  background-image: none !important;
-  border-color: #B89555 !important;
-}
-
 /* 5) Collapse button — EMERALD METALLIC at idle AND hover, white icon */
 html body [data-sidebar-collapse-control],
 html body [data-sidebar-collapse-control] *,
@@ -8824,22 +7884,6 @@ html body [data-sidebar-collapse-control]:not(.jj-side-tile):hover {
   background-size: 100% 100% !important;
   border: 0 !important;
   box-shadow: 0 8px 20px -6px rgba(4,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.22) !important;
-}
-
-/* 6) Highlight items (first 4 categories: AI Home Finder, List Your
-      Property, Careers, Resale Properties) — hover must match section
-      idle hover: subtle wash only, NEVER a full green fill. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:active {
-  background-color: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover {
-  background-color: rgba(184,149,85,0.08) !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -9020,51 +8064,6 @@ html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-c
   text-shadow: 0 1px 0 rgba(0,0,0,0.25) !important;
 }
 
-
-/* ════════════════════════════════════════════════════════════════
-   PASS 24 — Sidebar active section: SOLID white title + icon
-   The emerald text-gradient (background-clip:text + transparent fill)
-   was eating the white when a section row is active/green. Re-assert
-   true white with the highest cascade.
-   ──────────────────────────────────────────────────────────────── */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] [data-sidebar-section-label],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover [data-sidebar-section-label] {
-  background: none !important;
-  background-image: none !important;
-  background-clip: initial !important;
-  -webkit-background-clip: initial !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  font-weight: 800 !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child svg,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child svg *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] svg.lucide-chevron-down {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-/* Active subitem (current route inside an open section) → solid white pill */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem].is-active {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem].is-active [data-sidebar-subitem-label] {
-  background: none !important;
-  background-image: none !important;
-  -webkit-background-clip: initial !important;
-  background-clip: initial !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  font-weight: 700 !important;
-}
-
 /* ════════════════════════════════════════════════════════════════
    PASS 25 — Global accordion chevron visibility + Tab dividers
    ──────────────────────────────────────────────────────────────── */
@@ -9176,53 +8175,6 @@ html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-c
 html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
-}
-
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] > span:first-child {
-  background: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.40) !important;
-}
-
-/* PASS 28 — final expanded-sidebar active section contrast lock. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] [data-sidebar-section-label] {
-  background: none !important;
-  background-image: none !important;
-  background-clip: initial !important;
-  -webkit-background-clip: initial !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] > div:first-child {
-  background: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.40) !important;
 }
 
 html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] :is([data-on-dark], .allow-white, .allow-white *) {
@@ -9354,18 +8306,6 @@ html body :is(
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-
-/* Collapsed vertical sidebar — every icon tile + section trigger
-   should render as emerald-ombre with white icons (not flat green). */
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section],
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section] > div:first-child,
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-subitem] > span:first-child,
-body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight] > span:first-child {
-  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  color: #FFFFFF !important;
-}
 body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section] :is(svg, .lucide),
 body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-subitem] :is(svg, .lucide),
 body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight] :is(svg, .lucide) {
@@ -9481,40 +8421,12 @@ html body .jj-icon-emerald * {
   stroke: #047857 !important;
   fill: none !important;
 }
-
-/* PASS 31 — final emerald override for collapse control only.
-   Contact/Support are now governed by the sidebar hierarchy rule:
-   emerald only when their route is active. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control]:hover {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border-color: rgba(255,255,255,0.22) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] *,
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, .lucide),
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, .lucide) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-/* Contact / Support pinned buttons — active-aware. Inactive = champagne+ink;
-   active = canonical emerald-ombre + white. Both expanded and collapsed icon
-   variants are covered. */
-html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) {
-  background: transparent !important;
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(184,149,85,0.45) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  box-shadow: none !important;
 }
 html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]) *,
 html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) *,
@@ -9526,24 +8438,6 @@ html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   fill: none !important;
-}
-html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]):hover {
-  background: rgba(239,230,214,0.65) !important;
-  background-color: rgba(239,230,214,0.65) !important;
-  background-image: none !important;
-  border-color: rgba(184,149,85,0.65) !important;
-  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
-}
-html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"],
-html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"] *,
 html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] *,
@@ -9558,11 +8452,6 @@ html body section#ready-to-get-started .jj-emerald-metallic :is(svg, .lucide) *{
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-html body input.mortgage-range-input {
-  --mortgage-range-thumb: #FFFFFF !important;
-  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
 }
 
 /* Legacy `[role="tablist"] button[role="tab"][aria-selected="true"]` sweep
@@ -9776,14 +8665,6 @@ html body section#ready-to-get-started a :is(svg, .lucide) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
-}
-html body input.mortgage-range-input {
-  --mortgage-range-thumb: #FFFFFF !important;
-  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
-  accent-color: #064E3B !important;
-}
-html body input[type="range"][data-mortgage-slider]::-webkit-slider-runnable-track {
-  background-color: transparent !important;
 }
 html body :is(a, button).jj-pill-emerald,
 html body :is(a, button).jj-pill-emerald *,
@@ -10232,36 +9113,6 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
 @keyframes jj-sqtoggle-emerald-sweep {
   0%   { background-position: -80% 0, 0 0; }
   100% { background-position: 180% 0, 0 0; }
-}
-
-
-/* ── Sidebar Highlight Unification (Pass) ──
-   AI Home Finder / List Your Property / Careers / Resale Properties must
-   render with the SAME idle + hover style as every other sidebar row
-   (transparent background, ink label, subtle champagne wash on hover).
-   The emerald-filled treatment is reserved exclusively for the
-   [data-active="true"] state, which is handled by the active rule above. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):focus-visible {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(26,26,26,0.045) !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover [data-sidebar-highlight-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
 }
 /* Keep the emerald icon tile + white glyph inside the tile regardless of row state. */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child :is(svg, .lucide),
@@ -10726,27 +9577,6 @@ html body :is(
   stroke: currentColor !important;
   text-shadow: none !important;
 }
-
-/* PASS 44b — Mortgage sliders: approved deep emerald only, no inner oval lines, reliable drag hit-area. */
-html body input.mortgage-range-input {
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  height: 44px !important;
-  border-radius: 9999px !important;
-  cursor: ew-resize !important;
-  touch-action: pan-y !important;
-  accent-color: #064E3B !important;
-  --mortgage-range-thumb: radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%) !important;
-  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50) !important;
-}
-html body input.mortgage-range-input::-webkit-slider-runnable-track,
-html body input.mortgage-range-input::-moz-range-track{
-  height: 8px !important;
-  border-radius: 9999px !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-}
 /* ============================================================
  * PASS 11 — Sidebar emerald tiles & emerald-band headings
  * Final override: force white icons/text inside any emerald-fill
@@ -10760,12 +9590,6 @@ html body [data-sidebar-emerald] a[data-sidebar-subitem] svg[data-sidebar-subite
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-}
-html body .jj-side-tile.is-active svg,
-html body .jj-side-tile.is-active svg * {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: none !important;
 }
 
 /* Emerald band ("Open Positions" / Live Roles section) — white text */
@@ -10814,15 +9638,6 @@ html body .jj-hero-search-premium .jj-hero-search-bar :is(input, input:hover, in
   border-color: transparent !important;
   box-shadow: none !important;
 }
-html body .jj-hero-search-premium .jj-hero-search-bar input::placeholder {
-  color: rgba(255,255,255,0.82) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
-  opacity: 1 !important;
-}
-html body .jj-hero-search-premium .jj-hero-search-bar {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-}
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]),
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]):is(:hover,:focus,:focus-visible,:active) {
   background: var(--jj-emerald-ombre) !important;
@@ -10863,23 +9678,6 @@ html body .jj-dual-cta-secondary:is(:hover,:focus-visible) {
   background: #EFE6D6 !important;
   border-color: rgba(6,78,59,0.58) !important;
 }
-html body input.mortgage-range-input {
-  height: 44px !important;
-  border-radius: 9999px !important;
-  accent-color: #064E3B !important;
-  background-color: #EFE6D6 !important;
-  --mortgage-range-thumb: #FFFFFF !important;
-  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 0 18px rgba(6,78,59,0.68), 0 4px 14px rgba(4,44,28,0.42) !important;
-}
-html body input.mortgage-range-input::-webkit-slider-thumb,
-html body input.mortgage-range-input::-moz-range-thumb{
-  width: 24px !important;
-  height: 24px !important;
-  border: 0 !important;
-  border-radius: 9999px !important;
-  background: var(--mortgage-range-thumb) !important;
-  box-shadow: var(--mortgage-range-thumb-shadow) !important;
-}
 
 /* PASS 46e — final-tier override: extra-specific selector to beat every
    earlier pass that pins section labels to ink/gold. Active = WHITE. */
@@ -10895,52 +9693,6 @@ html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sideb
 }
 html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sidebar-section][data-active="true"] {
   background-image: var(--jj-emerald-ombre) !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   DESIGN SYSTEM v1 — CONTRAST CONTRACT (single source of truth)
-
-   Replaces PASS 47 + PASS 48 + their absurd repeated-attribute
-   duplicates. ONE rule per concern. No animation on resting active
-   states. No MutationObserver paint loops.
-
-   Rule: Emerald / dark surface → WHITE fg.
-         Champagne / gold / light surface → INK #1A1A1A fg.
-   ──────────────────────────────────────────────────────────────── */
-
-/* —— Sidebar active row —————————————————————————————————————— */
-[data-chrome="sidebar"] [data-active="true"] {
-  background-image: linear-gradient(135deg, #064E3B 0%, #0A6B4E 100%) !important;
-  background-color: #064E3B !important;
-  color: #FFFFFF !important;
-  animation: none !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 1px 0 rgba(0, 0, 0, 0.18),
-    0 6px 14px -10px rgba(6, 78, 59, 0.55);
-}
-[data-chrome="sidebar"] [data-active="true"]:hover {
-  background-image: linear-gradient(135deg, #075f48 0%, #0B7857 100%) !important;
-}
-[data-chrome="sidebar"] [data-active="true"]::before,
-[data-chrome="sidebar"] [data-active="true"]::after {
-  content: none !important;
-  animation: none !important;
-  background: none !important;
-}
-[data-chrome="sidebar"] [data-active="true"],
-[data-chrome="sidebar"] [data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-[data-chrome="sidebar"] .jj-tab-active-metallic,
-[data-chrome="sidebar"] .jj-emerald-metallic,
-[data-chrome="sidebar"] [data-emerald-shimmer],
-[data-chrome="sidebar"] .jbj-shimmer-champagne,
-[data-chrome="sidebar"] .animate-shimmer {
-  animation: none !important;
-  background-position: 0 0 !important;
 }
 
 /* —— Tabs / segmented controls active state ——————————————————
@@ -11107,26 +9859,6 @@ button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data
   color: var(--emerald-on) !important;
   -webkit-text-fill-color: var(--emerald-on) !important;
   stroke: var(--emerald-on) !important;
-}
-
-
-/* --- Secondary / Outline CTA: champagne fill + emerald ink + emerald hairline --- */
-.jj-cta-outline,
-[data-cta="outline"] {
-  background-color: #FDFBF7 !important;
-  color: var(--emerald-1) !important;
-  border: 1px solid rgba(6,78,59,0.45) !important;
-}
-.jj-cta-outline:hover,
-[data-cta="outline"]:hover {
-  background-color: var(--emerald-soft-bg) !important;
-  color: var(--emerald-1) !important;
-  border-color: var(--emerald-1) !important;
-}
-.jj-cta-outline svg,
-[data-cta="outline"] svg {
-  color: var(--emerald-1) !important;
-  stroke: var(--emerald-1) !important;
 }
 
 /* --- Default Badge (.jj-badge-dark): emerald gradient + white --- */
@@ -11451,16 +10183,6 @@ html body .jj-side-tile:not(.is-active) :is(svg, .lucide) * {
   stroke: #1A1A1A !important;
   fill: none !important;
   opacity: 1 !important;
-}
-
-/* PASS XX-D contrast hard-stop: beats legacy light-surface locks with exact primitive specificity. */
-html body button.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
-html body a.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
-html body .jj-cta-primary.jj-cta-champagne[data-surface="emerald"],
-html body .jj-cta-primary[data-cta="primary"],
-html body [data-surface="emerald"][data-cta="primary"] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 html body button.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"] :is(span, svg, .lucide),
 html body a.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"] :is(span, svg, .lucide),
@@ -11999,17 +10721,6 @@ html body :where(
   border: 0 !important;
 }
 
-/* 6. Idle/Hover SWAP for mortgage-advisor & sibling emerald CTAs:
-   per brand spec, the DEEPER emerald is idle and the LIGHTER tone is hover. */
-.jj-cta-emerald-metallic,
-.jj-cta-emerald {
-  background-image: var(--jj-emerald-ombre) !important;
-}
-.jj-cta-emerald-metallic:hover,
-.jj-cta-emerald:hover {
-  background-image: var(--jj-emerald-ombre-hover) !important;
-}
-
 /* ════════════════════════════════════════════════════════════════
    GATE 1 — OFFICIAL EMERALD ONLY
    The Call button emerald is the single platform emerald. No mint,
@@ -12302,225 +11013,6 @@ html body :is(
   color: #FFFFFF !important;
 }
 
-
-/* ════════════════════════════════════════════════════════════════
-   SIDEBAR VISUAL HIERARCHY — final cascade lock.
-   Rule: EMERALD background reserved for the currently-active row
-   (and the collapse button). All other rows render on champagne
-   with BLACK text/icons. Hover = subtle champagne, never emerald.
-   This block intentionally appears LAST so it beats earlier passes.
-   ════════════════════════════════════════════════════════════════ */
-
-/* ── 1. INACTIVE SECTION HEADER ROWS ──────────────────────────── */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-icon]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) svg:not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  fill: none !important;
-}
-/* Inactive section row hover: subtle champagne, NEVER emerald. */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(239, 230, 214, 0.65) !important;
-  transform: none !important;
-  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
-  border-color: rgba(184,149,85,0.18) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-label]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-icon]:not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover svg:not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-/* Inactive section row stays champagne, but the emerald icon tile keeps white glyphs. */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-
-/* ── 2. INACTIVE HIGHLIGHT ROWS (AI Home Finder, List Property,
-       Careers, Resale Properties, Broker/Investor/Developer Portal) ── */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  fill: none !important;
-}
-
-/* Inactive highlight hover: subtle champagne. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(239, 230, 214, 0.65) !important;
-  transform: none !important;
-  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
-  border-color: rgba(184,149,85,0.18) !important;
-}
-/* Inactive highlight rows stay champagne, but emerald icon tiles keep white glyphs. */
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-
-/* ── 3. INACTIVE SUBITEMS — already champagne, just enforce ink + no emerald hover ── */
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon] *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-label],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon],
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon] *{
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover {
-  background-color: rgba(239, 230, 214, 0.55) !important;
-  background-image: none !important;
-  transform: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-  transform: none !important;
-}
-
-/* ── 4. ACTIVE row treatment (canonical emerald-ombre, white FG) ── */
-html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-highlight][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"][data-active="true"],
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.15) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-highlight][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"][data-active="true"] *,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   SIDEBAR HIERARCHY EXTENSION — Mode Portal CTA + Contact/Support
-   Same rule as section/highlight rows: emerald ONLY when active.
-   ════════════════════════════════════════════════════════════════ */
-
-/* ── INACTIVE: Mode Portal (Broker / Investor / Developer) + Contact + Support ── */
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]) {
-  background-image: none !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(1,8,6,0.72) !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  fill: none !important;
-}
-/* Subtle champagne hover — never emerald. */
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover {
-  background-image: none !important;
-  background-color: rgba(239, 230, 214, 0.65) !important;
-   border-color: rgba(1,8,6,0.72) !important;
-  transform: none !important;
-   box-shadow: none !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-
-/* ── ACTIVE: canonical emerald-ombre + white FG ── */
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta][data-active="true"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.15) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
 /* ════════════════════════════════════════════════════════════════
    GLOBAL EMERALD ICON CONTRACT — final cascade.
    Rule: any icon rendered inside an emerald surface is pure white
@@ -12570,54 +11062,6 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > spa
   stroke: #FFFFFF !important;
   fill: none !important;
 }
-
-/* Highest-specificity duplicate to beat earlier :not([data-active]) light-green stops. */
-
-
-/* 🔒 ABSOLUTE LAST RULE — official dark emerald icon tiles only.
-   Older sidebar passes used lighter #047857/#10b981 stops and white rings,
-   which made the icons read as green-filled. This end-of-file lock removes
-   the light treatment and forces the canonical ombre everywhere. */
-
-
-
-/* 🔒 ABSOLUTE LAST RULE — no light-green sidebar/icon-tile fills.
-   Cause fixed: older rules and collapsed-sidebar inline styles used white
-   rings/shadows plus lighter #047857/#10b981 stops, so screenshots read as
-   green-filled instead of official dark emerald. */
-
-
-
-/* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
-   Must remain after all inactive-sidebar black repaint rules. */
-html body [data-chrome="sidebar"] [data-emerald-icon-surface],
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:hover,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus-visible,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:active,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface]:disabled {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] .lucide,
-html body [data-chrome="sidebar"] [data-emerald-icon-surface] .lucide *,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg,
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
-}
 /* Path-level lock so an inherited fill/stroke can't repaint icon strokes. */
 
 /* All interactive states — same lock, no recoloring on hover/focus/active. */
@@ -12665,30 +11109,6 @@ html body :is(
   fill: none !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   HERO GHOST CTA — outlined white-on-photo button for project hero.
-   Replaces filled .jj-pill-emerald CTAs that became unreadable on
-   bright hero photos. Locked to white text/border/icon at all states.
-   ════════════════════════════════════════════════════════════════ */
-html body .jj-hero-ghost-cta,
-html body .jj-hero-ghost-cta:hover,
-html body .jj-hero-ghost-cta:focus,
-html body .jj-hero-ghost-cta:focus-visible {
-  background: rgba(0, 0, 0, 0.28) !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 1px 16px rgba(0, 0, 0, 0.22) !important;
-  backdrop-filter: blur(8px) saturate(120%);
-  -webkit-backdrop-filter: blur(8px) saturate(120%);
-  transition: background 220ms ease, border-color 220ms ease, transform 220ms ease;
-}
-html body .jj-hero-ghost-cta:hover {
-  background: rgba(255, 255, 255, 0.14) !important;
-  border-color: #FFFFFF !important;
 }
 html body .jj-hero-ghost-cta * ,
 html body .jj-hero-ghost-cta :is(svg, .lucide),
@@ -12829,16 +11249,6 @@ html body main section.jj-project-hero :is(svg, .lucide) * {
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
-}
-html body main section.jj-project-hero .jj-hero-ghost-cta,
-html body main section.jj-project-hero .jj-hero-ghost-cta:hover,
-html body main section.jj-project-hero .jj-hero-ghost-cta:focus-visible {
-  background: rgba(0, 0, 0, 0.34) !important;
-  background-image: none !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.92) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24) !important;
 }
 
 html body main .jj-project-band {
@@ -13636,22 +12046,6 @@ html body #root :is(
 html body #root :is(.jj-emerald-action, [data-emerald-action="true"], [data-emerald-ok="icon"], [data-icon-tile][data-icon-tile-tone="emerald"], .jj-icon-tile-emerald, .jj-side-tile) :where(svg [fill]:not([fill="none"]), .fill-current) {
   fill: #FFFFFF !important;
 }
-
-/* Project-detail exceptions requested by owner: true metallic gold developer
-   logo frames stay gold, while pros rows on emerald panels keep readable ink. */
-html body #root [data-keep-gold].jj-cta-gold-metallic {
-  background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%) !important;
-  background-size: 220% 220% !important;
-  background-color: #d8b86a !important;
-  border-color: rgba(184, 149, 85, 0.80) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  animation: jj-metal-sheen 2.8s ease-in-out infinite !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 244, 210, 0.55),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.16),
-    0 12px 28px -10px rgba(184, 149, 85, 0.72) !important;
-}
 html body #root [data-keep-gold].jj-cta-gold-metallic :where(*, span, strong, p, div, svg, .lucide) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
@@ -13747,64 +12141,6 @@ html body #root section.jj-project-hero :where(.text-white, [class*="text-white/
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
   text-shadow: 0 2px 10px rgba(0,0,0,0.72) !important;
-}
-
-html body #root input.mortgage-range-input[data-mortgage-slider] {
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  height: 44px !important;
-  border-radius: 9999px !important;
-  cursor: ew-resize !important;
-  pointer-events: auto !important;
-  touch-action: none !important;
-  accent-color: #064E3B !important;
-  background:
-    var(--mortgage-range-fill, linear-gradient(90deg, #064E3B 0%, #042C1C 58%, #000000 100%)) 0 / var(--mortgage-range-progress, 0%) 100% no-repeat,
-    var(--mortgage-range-track, #EFE6D6) !important;
-  box-shadow: none !important;
-}
-
-html body #root input.mortgage-range-input[data-mortgage-slider]::-webkit-slider-runnable-track {
-  height: 8px !important;
-  border-radius: 9999px !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-html body #root input.mortgage-range-input[data-mortgage-slider]::-webkit-slider-thumb {
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  width: 24px !important;
-  height: 24px !important;
-  margin-top: -8px !important;
-  border: 0 !important;
-  border-radius: 9999px !important;
-  background: #FFFFFF !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.72),
-    0 0 18px rgba(6,78,59,0.65),
-    0 4px 14px rgba(4,44,28,0.45) !important;
-}
-
-html body #root input.mortgage-range-input[data-mortgage-slider]::-moz-range-track {
-  height: 8px !important;
-  border-radius: 9999px !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-html body #root input.mortgage-range-input[data-mortgage-slider]::-moz-range-thumb {
-  width: 24px !important;
-  height: 24px !important;
-  border: 0 !important;
-  border-radius: 9999px !important;
-  background: #FFFFFF !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.72),
-    0 0 18px rgba(6,78,59,0.65),
-    0 4px 14px rgba(4,44,28,0.45) !important;
 }
 
 /* =====================================================================
@@ -14084,14 +12420,6 @@ html body #root section#ready-to-get-started {
   padding-bottom: clamp(3rem, 5vw, 5rem) !important;
 }
 
-html body #root section#ready-to-get-started .jj-emerald-card {
-  width: 100% !important;
-  border-radius: 28px !important;
-  padding: clamp(1.5rem, 3vw, 3rem) !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-}
-
 html body #root section#ready-to-get-started .jj-emerald-card,
 html body #root section#ready-to-get-started .jj-emerald-card *,
 html body #root section#ready-to-get-started .jj-emerald-card :where(svg, .lucide, [data-lucide]),
@@ -14275,66 +12603,6 @@ html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-a
   0%   { background-position: 180% 0; }
   100% { background-position: -90% 0; }
 }
-
-/* Premium 3D animated metallic-gold developer logo box.
-   - Solid rich metallic gold base
-   - Animated bright shine sweep via ::before pseudo (transform — GPU)
-   - Animated specular highlight via ::after (slow drift)
-   - Strong inner bevel + outer drop shadow for 3D depth. */
-html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic {
-  position: relative;
-  background-color: #c89a48 !important;
-  background-image:
-    linear-gradient(155deg,
-      #8e6e36 0%,
-      #d8b86a 18%,
-      #fff1c2 34%,
-      #b89555 50%,
-      #fff1c2 66%,
-      #d8b86a 82%,
-      #8e6e36 100%) !important;
-  background-size: 100% 100% !important;
-  border: 1px solid rgba(142,110,54,0.85) !important;
-  box-shadow:
-    inset 0 2px 0 rgba(255,250,225,0.9),
-    inset 0 -2px 0 rgba(70,48,14,0.6),
-    inset 0 -14px 22px rgba(70,48,14,0.45),
-    inset 0 14px 22px rgba(255,244,210,0.32),
-    0 18px 36px -12px rgba(142,110,54,0.75),
-    0 2px 6px rgba(0,0,0,0.20) !important;
-  overflow: hidden;
-  isolation: isolate;
-  transform: translateZ(0);
-}
-/* Sweeping bright shine — diagonal band continuously moving L→R */
-html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::before {
-  content: "";
-  position: absolute;
-  inset: -20%;
-  background: linear-gradient(115deg,
-    rgba(255,255,255,0) 40%,
-    rgba(255,250,225,0.55) 47%,
-    rgba(255,255,255,0.95) 50%,
-    rgba(255,250,225,0.55) 53%,
-    rgba(255,255,255,0) 60%);
-  transform: translateX(-100%);
-  animation: jj-dev-logo-shine 2.6s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-  mix-blend-mode: screen;
-}
-/* Secondary slow specular drift for depth */
-html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 80% at 30% 0%,
-    rgba(255,250,225,0.55) 0%,
-    rgba(255,250,225,0) 55%);
-  animation: jj-dev-logo-drift 5.5s ease-in-out infinite alternate;
-  pointer-events: none;
-  z-index: 0;
-}
 html body #root .jj-developer-logo-metallic-inner {
   background: transparent !important;
   box-shadow: none !important;
@@ -14352,12 +12620,6 @@ html body #root .jj-developer-logo-metallic img {
 @keyframes jj-dev-logo-drift {
   0%   { transform: translate(-6%, -4%); opacity: 0.7; }
   100% { transform: translate(6%, 4%);   opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::before,
-  html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::after {
-    animation: none !important;
-  }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -14826,23 +13088,6 @@ html body #root button > span:not([data-jbj-allow-shrink]),
 html body #root a[role="button"] > span:not([data-jbj-allow-shrink]),
 html body #root [data-slot="button"] > span:not([data-jbj-allow-shrink]) {
   min-width: max-content;
-}
-
-
-
-html body #root :where(input, textarea, select, [data-jbj-field], .jbj-form-field) {
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-
-html body #root textarea,
-html body #root .jbj-form-field:is(textarea) {
-  overflow-y: auto;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 
 html body #root :is(
@@ -15577,11 +13822,6 @@ html body section.jj-project-hero a:hover,
 html body section.jj-project-hero button:hover {
   text-decoration: none !important;
 }
-html body section.jj-project-hero .jj-hero-ghost-cta,
-html body section.jj-project-hero .jj-hero-ghost-cta * {
-  text-decoration: none !important;
-  border-bottom: 0 !important;
-}
 
 /* 3. Payment Plan — approved emerald header band + white title/icon */
 html body [data-section="payment"] > .relative > .rounded-2xl,
@@ -15781,31 +14021,6 @@ html body :where(
 ) {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
-}
-
-/* PASS 47b — Slider thumb: remove the inner emerald oval ring.
-   Every previous override pinned `0 0 0 2px #064E3B inset` which
-   rendered as a small line inside the white knob. Drop the inset
-   so only the outer halo remains, on all mortgage range inputs. */
-html body input.mortgage-range-input {
-  --mortgage-range-thumb: #FFFFFF !important;
-  --mortgage-range-thumb-shadow:
-    0 0 0 1px rgba(255,255,255,0.85),
-    0 2px 6px rgba(4,44,28,0.35),
-    0 0 14px rgba(6,78,59,0.45) !important;
-}
-html body input.mortgage-range-input::-webkit-slider-thumb,
-html body input.mortgage-range-input::-moz-range-thumb{
-  background: #FFFFFF !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.85),
-    0 2px 6px rgba(4,44,28,0.35),
-    0 0 14px rgba(6,78,59,0.45) !important;
-  cursor: grab !important;
-}
-html body input.mortgage-range-input:active::-webkit-slider-thumb,
-html body input.mortgage-range-input:active::-moz-range-thumb {
-  cursor: grabbing !important;
 }
 
 /* PASS 47c — Radix slider thumb (shadcn Slider): same treatment.
@@ -16140,11 +14355,6 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
 }
 
-/* Prevent inline-flex rows of pills/chips from forcing horizontal overflow */
-.jj-card [class*="flex"]:not([class*="flex-col"]) {
-  flex-wrap: wrap;
-}
-
 /* Tables inside cards: allow internal horizontal scroll, never bleed out */
 .jj-card table,
 [data-jj-metric-card] table {
@@ -16213,10 +14423,6 @@ html body .jbj-form-popover:has([data-developer-name]),
 html body [data-developer-option] [data-radix-select-content] {
   width: max(var(--radix-select-trigger-width), 20rem) !important;
   max-width: calc(100vw - 2rem) !important;
-}
-html body .jbj-form-field:has([data-developer-name]) {
-  height: auto !important;
-  min-height: 2.5rem !important;
 }
 html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-radix-collection-item]) :is(span,p,div) {
   min-width: 0;
@@ -16557,24 +14763,6 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   opacity: 1 !important;
   mix-blend-mode: normal !important;
 }
-
-/* Sidebar tiles: ALWAYS emerald box with pure white icons (PASS 127 — restore emerald). */
-html body .jj-side-tile:not(.is-active) {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
-}
-html body .jj-side-tile:not(.is-active):hover {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  border-color: rgba(184,149,85,0.55) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important;
-}
 html body .jj-side-tile :is(svg, .lucide),
 html body .jj-side-tile :is(svg, .lucide) * {
   color: #FFFFFF !important;
@@ -16853,23 +15041,6 @@ html body [data-search-utility-controls] button[aria-pressed] {
 :where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([data-no-contrast-guard]):not(.jj-hero-search-input), textarea:not([data-no-contrast-guard]), select:not([data-no-contrast-guard]), [role="combobox"]:not([data-no-contrast-guard])):focus-visible {
   border-color: rgba(6, 78, 59, 0.45) !important;
   box-shadow: var(--jbj-focus-ring), inset 0 1px 0 rgba(255,255,255,0.65) !important;
-}
-/* Hard reset for the hero search input — no border/background/shadow ever. */
-html body .jj-hero-search-bar input.jj-hero-search-input,
-html body .jj-hero-search-bar input.jj-hero-search-input:focus,
-html body .jj-hero-search-bar input.jj-hero-search-input:focus-visible,
-html body .jj-hero-search-bar input.jj-hero-search-input:hover {
-  border: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  background-image: none !important;
-  min-height: 0 !important;
-  border-radius: 0 !important;
-}
-:where(input:not([data-no-contrast-guard]), textarea:not([data-no-contrast-guard]))::placeholder {
-  color: rgba(26, 26, 26, 0.58);
-  -webkit-text-fill-color: rgba(26, 26, 26, 0.58);
 }
 :where([data-search] input:not([data-no-contrast-guard]), .jj-search input:not([data-no-contrast-guard]), .search-input:not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
@@ -17258,15 +15429,6 @@ body :where([data-sidebar-highlight-tile], [data-emerald-icon-surface], .jj-side
   flex: 0 0 auto !important;
 }
 
-body :where(.jj-side-tile) {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
-  padding: 0 !important;
-  border-radius: 12px !important;
-}
-
 body :where([data-sidebar-highlight-tile], [data-sidebar-section] [data-emerald-icon-surface], [data-sidebar-subitem] [data-emerald-icon-surface]) {
   width: 32px !important;
   height: 32px !important;
@@ -17464,12 +15626,6 @@ html body #root [data-jj-utility-bar] .jj-avatar-metallic .jj-avatar-spinner {
   filter: drop-shadow(0 0 4px rgba(184,149,85,0.28)) !important;
 }
 
-html body #root [data-chrome="sidebar"] [data-sidebar-section-label] {
-  word-break: normal !important;
-  overflow-wrap: normal !important;
-  hyphens: manual !important;
-}
-
 html body #root [data-jj-utility-bar] .jj-avatar-metallic span {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -17477,23 +15633,6 @@ html body #root [data-jj-utility-bar] .jj-avatar-metallic span {
 
 html body #root [data-jj-utility-bar] .jj-avatar-metallic > span:not(.jj-avatar-spinner) span:last-child {
   text-shadow: 0 1px 2px rgba(0,0,0,0.72) !important;
-}
-
-/* FINAL SIDEBAR REPAIR — live vertical rail only.
-   Shared sizing + official emerald fill in collapsed and expanded states. */
-html body #root [data-chrome="sidebar"] :is(.jj-side-tile) {
-  width: 32px !important;
-  height: 32px !important;
-  min-width: 32px !important;
-  min-height: 32px !important;
-  border-radius: 10px !important;
-  padding: 0 !important;
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
-  border: 0 !important;
-  box-shadow: 0 8px 18px -13px rgba(6,78,59,0.9), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html body #root [data-chrome="sidebar"] :is(.jj-side-tile) :is(svg, .lucide, [data-lucide]) {
@@ -17532,28 +15671,6 @@ html body #root [data-chrome="sidebar"] [data-sidebar-emerald] :is([data-emerald
   stroke: currentColor !important;
   stroke-width: 2.1 !important;
   opacity: 1 !important;
-}
-
-
-
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] {
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-}
-
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] [data-sidebar-section-label],
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight] > span:nth-child(2),
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] [data-sidebar-subitem-label] {
-  min-width: 0 !important;
-  line-height: 1.12 !important;
-}
-
-/* Sidebar label crop lock — portal/sidebar labels must wrap, never ellipsize. */
-
-
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] > nav > div > div {
-  justify-content: space-between !important;
-  gap: 6px !important;
 }
 
 
@@ -17878,25 +15995,6 @@ html body [data-mode-switcher-root="true"] [data-mode-trigger="header"] .mode-sw
   display: block !important;
 }
 
-html body #root input[data-careers-position-search][data-careers-position-search] {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  caret-color: #FFFFFF !important;
-  padding-left: 4rem !important;
-  padding-right: 1.25rem !important;
-  border: 0 !important;
-  opacity: 1 !important;
-}
-
-html body #root input[data-careers-position-search][data-careers-position-search]::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
 html body #root [data-careers-position-search-wrap] > svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -17919,19 +16017,6 @@ html body #root#root [data-careers-job-card][data-careers-job-card] [data-career
   opacity: 1 !important;
   filter: none !important;
   mix-blend-mode: normal !important;
-}
-
-html body #root#root [data-careers-position-search-wrap][data-careers-position-search-wrap] input[data-careers-position-search][data-careers-position-search] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  caret-color: #FFFFFF !important;
-  padding-left: 4rem !important;
-}
-
-html body #root#root [data-careers-position-search-wrap][data-careers-position-search-wrap] input[data-careers-position-search][data-careers-position-search]::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
 }
 
 /* PASS 94 — ModeSwitcher active row lock: emerald card → white content */
@@ -18750,45 +16835,6 @@ html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]
   stroke: #1A1A1A !important;
   stroke-opacity: 1 !important;
 }
-
-/* Native <select>/<option>: many browsers paint the closed select using the
-   computed color of the SELECT element itself. Make sure data-no-contrast-guard
-   selects on light backgrounds always paint ink, regardless of any global
-   `.allow-white` force-white rule above. */
-html body select[data-no-contrast-guard]:not(#jj-ink-honour),
-html body select[data-no-contrast-guard]:not(#jj-ink-honour) option {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-
-/* ════════════════════════════════════════════════════════════════
-   PASS 127 FINAL LOCK — Sidebar tiles ALWAYS emerald metallic with
-   pure white glyphs (active = adds gold ring). Wins all prior rules.
-   ════════════════════════════════════════════════════════════════ */
-html body #root .jj-side-tile,
-html body .jj-side-tile {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body #root .jj-side-tile:hover,
-html body #root .jj-side-tile:focus-visible,
-html body .jj-side-tile:hover,
-html body .jj-side-tile:focus-visible {
-  border-color: rgba(184,149,85,0.55) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 10px 22px -12px rgba(4,120,87,0.78), inset 0 1px 0 rgba(255,255,255,0.24) !important;
-}
-html body #root .jj-side-tile.is-active,
-html body .jj-side-tile.is-active {
-  border-color: #B89555 !important;
-  box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.5) !important;
-}
 html body #root .jj-side-tile :is(svg, .lucide, path, circle, rect, line, polyline, polygon, ellipse, g),
 html body #root .jj-side-tile :is(svg, .lucide) *,
 html body .jj-side-tile :is(svg, .lucide, path, circle, rect, line, polyline, polygon, ellipse, g),
@@ -19161,15 +17207,6 @@ html body .bg-primary:not(#jj-avatar-lock) > * {
   background-color: rgba(6, 78, 59, 0.10) !important;
   color: var(--emerald-1, #064E3B) !important;
 }
-/* Native <input type="date"|"datetime-local"|"time"|"month"|"week"> accent. */
-:where(html) body input[type="date"],
-:where(html) body input[type="datetime-local"],
-:where(html) body input[type="month"],
-:where(html) body input[type="week"],
-:where(html) body input[type="time"] {
-  accent-color: var(--emerald-1, #064E3B) !important;
-  color-scheme: light;
-}
 
 
 /* ==============================================================
@@ -19192,17 +17229,6 @@ html body .bg-primary:not(#jj-avatar-lock) > * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-}
-:where(html) body input[type="date"]:focus,
-:where(html) body input[type="datetime-local"]:focus,
-:where(html) body input[type="month"]:focus,
-:where(html) body input[type="time"]:focus,
-:where(html) body select:focus,
-:where(html) body textarea:focus,
-:where(html) body input:focus {
-  border-color: var(--emerald-1, #064E3B) !important;
-  --tw-ring-color: rgba(6,78,59,.22) !important;
-  outline-color: var(--emerald-1, #064E3B) !important;
 }
 :where(html) body .rdp-button:hover:not([aria-selected="true"]),
 :where(html) body .rdp-nav_button:hover,
@@ -19361,37 +17387,6 @@ html body #root :is(#ready-to-get-started, #section-cta) :is(svg, .lucide) * {
 :where(html) body [role="dialog"] button:focus-visible:not([data-no-contrast-guard]) {
   --tw-ring-color: rgba(6,78,59,0.40) !important;
   outline-color: rgba(6,78,59,0.40) !important;
-}
-
-/* 7. Native date / time inputs — emerald accent + emerald focus. */
-:where(html) body input[type="date"],
-:where(html) body input[type="datetime-local"],
-:where(html) body input[type="month"],
-:where(html) body input[type="week"],
-:where(html) body input[type="time"] {
-  accent-color: #064E3B !important;
-  color-scheme: light !important;
-  caret-color: #064E3B !important;
-}
-:where(html) body input[type="date"]:focus,
-:where(html) body input[type="date"]:focus-visible,
-:where(html) body input[type="datetime-local"]:focus,
-:where(html) body input[type="datetime-local"]:focus-visible,
-:where(html) body input[type="month"]:focus,
-:where(html) body input[type="week"]:focus,
-:where(html) body input[type="time"]:focus {
-  border-color: #064E3B !important;
-  outline-color: #064E3B !important;
-  --tw-ring-color: rgba(6,78,59,0.25) !important;
-  box-shadow: 0 0 0 2px rgba(6,78,59,0.18) !important;
-}
-/* Webkit calendar picker indicator — subtle emerald tint. */
-:where(html) body input[type="date"]::-webkit-calendar-picker-indicator,
-:where(html) body input[type="datetime-local"]::-webkit-calendar-picker-indicator,
-:where(html) body input[type="month"]::-webkit-calendar-picker-indicator,
-:where(html) body input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(22%) sepia(54%) saturate(640%) hue-rotate(115deg) brightness(60%) !important;
-  cursor: pointer;
 }
 
 /* 8. Broker portal scope — re-assert against any layout-level blue. */
@@ -21033,11 +19028,6 @@ html body #root .aihf-root :is(input, textarea, select, [role="combobox"], [data
   -webkit-text-fill-color: #FFFFFF !important;
   caret-color: #FFFFFF !important;
 }
-html body #root .aihf-root :is(input, textarea)::placeholder {
-  color: rgba(255,255,255,0.58) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.58) !important;
-  opacity: 1 !important;
-}
 
 /* Listing assistant tools are also AI tools: emerald buttons must never carry
    black/ink text or black icons on emerald fills. */
@@ -21089,25 +19079,6 @@ html body[data-page-scope~="interior-ai"] footer[data-jj-minimal-footer] .jj-foo
 html body[data-page-scope~="aihf"] footer[data-jj-minimal-footer] p,
 html body[data-page-scope~="interior-ai"] footer[data-jj-minimal-footer] p {
   margin-top: 8px !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] {
-  min-height: 68px !important;
-  height: 68px !important;
-  aspect-ratio: auto !important;
-}
-
-html body [data-chrome="sidebar"] a[href="/auth"]:not([data-sidebar-auth-control]) {
-  min-height: 40px !important;
-  max-height: 40px !important;
-}
-
-html body [data-chrome="sidebar"] a[href="/auth"][data-sidebar-auth-control],
-html body [data-chrome="sidebar"] button[data-sidebar-auth-control],
-html body [data-chrome="sidebar"] [data-sidebar-auth-control] {
-  height: 42px !important;
-  min-height: 42px !important;
-  max-height: 42px !important;
-  border-radius: 8px !important;
 }
 
 html body.jj-vertical-nav-collapsed [data-sidebar-auth-control] {
@@ -21313,12 +19284,6 @@ html body #root [data-ai-property-analyzer] :is(input,textarea,[role="combobox"]
   border-color: rgba(255,255,255,0.26) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-}
-
-html body #root [data-compare-content-frame] :is(input,textarea)::placeholder,
-html body #root [data-ai-property-analyzer] :is(input,textarea)::placeholder {
-  color: rgba(255,255,255,0.62) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.62) !important;
 }
 
 html body #root [data-compare-page] [data-compare-project-table] :is(img,video,picture),
@@ -21566,14 +19531,6 @@ html body #root .jj-map-card-close {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   transition: transform 120ms ease, background-image 120ms ease, box-shadow 120ms ease !important;
-}
-
-html body #root .jj-map-card-close {
-  position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
-  z-index: 10 !important;
-  border-radius: 999px !important;
 }
 
 html body #root .jj-map-square-control:hover,
@@ -22156,12 +20113,6 @@ html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) input::placeholder {
-  color: rgba(255,255,255,0.78) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
-  opacity: 1 !important;
-}
-
 html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) :is([class*="via-gold"], [class*="bg-gold"]),
 html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) :is(.border-\[\#B89555\]\/30, .border-\[\#B89555\]\/40, .border-\[\#B89555\]\/55, .border-gold, .border-gold\/40) {
   background: rgba(255,255,255,0.12) !important;
@@ -22703,34 +20654,6 @@ html body #root [data-hero-dark] :is(h1, p).allow-white {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
-}
-/* END PASS 170 */
-
-/* PASS 171 — INSIGHTS/GUIDES FINAL EDGE + EMERALD ACCENT LOCK
-   Fixes the reported drift on Area Intelligence and guide pages without
-   changing page content: full-bleed heroes, no hero gold frame, stable TOC
-   active rows, emerald icon accents with pure-white glyphs, and no legacy
-   neon/purple overlays inside the insights wrapper. */
-
-
-
-
-
-
-
-
-
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] {
-  background-image: var(--jj-emerald-ombre) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 /* END PASS 171 */
 
@@ -23520,12 +21443,6 @@ html body :is(.aihf-root, [data-interior-design-ai], [data-business-card-scanner
   outline-color: transparent !important;
 }
 
-/* PASS 189 — sidebar border-left direct override (beats older .border-l pass). */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] [class*="border-l"] {
-  border-left-color: rgba(1, 8, 6, 0.72) !important;
-}
-
 
 /* PASS 190 — live-audit exact fixes: no gold hairlines, no bright-green sweep on reported tools. */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] :is([data-sidebar-bottom-cta], a[href="/contact"], a[href="/support"]) {
@@ -23743,13 +21660,6 @@ html body #root a.jj-services-emerald-cta.allow-white.inline-flex.rounded-xl.fon
   stroke: #FFFFFF !important;
 }
 
-html body #root .jj-service-card-animated {
-  position: relative !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(6,78,59,0.26) !important;
-  box-shadow: 0 18px 38px -28px rgba(4,44,28,0.42), inset 0 1px 0 rgba(255,255,255,0.72) !important;
-}
-
 html body #root [data-brand-emerald-page] #services-grid[data-no-section-frame] {
   width: 100% !important;
   max-width: none !important;
@@ -23801,61 +21711,10 @@ html body #root [data-brand-emerald-page] #services-grid .jj-services-grid > * {
   height: 100% !important;
 }
 
-html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
-  min-height: 390px !important;
-  height: 100% !important;
-  background: #FDFBF7 !important;
-  background-image: none !important;
-  border-radius: 16px !important;
-}
-
-html body #root [data-brand-emerald-page] #services-grid .jj-service-card-content {
-  display: flex !important;
-  height: 100% !important;
-  min-height: 0 !important;
-}
-
-@media (max-width: 759px) {
-  html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
-    min-height: 0 !important;
-  }
-}
-
-html body #root .jj-service-card-animated::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(120deg, rgba(6,78,59,0.14), rgba(110,231,183,0.78), rgba(6,78,59,0.16), rgba(184,149,85,0.26));
-  background-size: 260% 260%;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  animation: jj-services-emerald-border 5.5s linear infinite;
-}
-
-html body #root .jj-service-card-animated:hover {
-  transform: translateY(-3px) !important;
-  border-color: rgba(6,78,59,0.52) !important;
-  box-shadow: 0 22px 44px -28px rgba(4,44,28,0.62), inset 0 1px 0 rgba(255,255,255,0.82) !important;
-}
-
 html body #root .jj-service-check,
 html body #root .jj-service-check * {
   color: #064E3B !important;
   stroke: #064E3B !important;
-}
-
-html body #root .jj-disclaimer-card {
-  border: 1px solid rgba(6,78,59,0.34) !important;
-  box-shadow: 0 14px 30px -24px rgba(4,44,28,0.58), inset 0 1px 0 rgba(255,255,255,0.78) !important;
-}
-
-html body #root .jj-scope-card {
-  border: 1px solid rgba(6,78,59,0.34) !important;
-  box-shadow: 0 14px 34px -24px rgba(4,44,28,0.62), inset 0 1px 0 rgba(255,255,255,0.78) !important;
 }
 
 html body #root .jj-disclaimer-card,
@@ -23871,13 +21730,6 @@ html body #root section.jj-services-final-cta {
   background-image: none !important;
   padding-top: 24px !important;
   padding-bottom: 56px !important;
-}
-
-html body #root section.jj-services-final-cta .jj-emerald-card {
-  width: 100% !important;
-  max-width: 1100px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
 }
 
 html body #root section.jj-services-final-cta .jj-content-track {
@@ -24073,14 +21925,6 @@ html body #root .rdp-day_today:not([aria-selected="true"]) {
   background: transparent !important;
 }
 
-/* Any inline blue focus ring on inputs across popovers → emerald */
-html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus-visible,
-html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus {
-  outline: none !important;
-  box-shadow: 0 0 0 2px rgba(6,78,59,0.55) !important;
-  border-color: rgba(6,78,59,0.55) !important;
-}
-
 /* ============================================================
    PASS 204 — AI-TOOL DISCLAIMER BUTTONS (WhatsApp / phone)
    NUCLEAR: solid emerald bg, pure white text/icon, no gold.
@@ -24141,15 +21985,6 @@ html body #root [data-bank-picker-option] * {
 html body #root [data-bank-picker-option][data-selected] {
   background: linear-gradient(135deg,#0a6b53 0%,#064E3B 58%,#021b12 100%) !important;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28) !important;
-}
-/* END PASS 205 */
-
-/* Force pure-white placeholders on the AI Competitor Analysis form (overrides tool-darkbody guard) */
-html body #root [data-comp-analysis-form] input::placeholder,
-html body #root [data-comp-analysis-form] textarea::placeholder {
-  color: rgba(255,255,255,0.72) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.72) !important;
-  opacity: 1 !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -24316,24 +22151,6 @@ html body #root main[data-company-legal-page="true"] :is(.jj-hero-fullscreen, [d
   color: #FFFFFF !important;
 }
 
-html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) video,
-html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) img:not([alt*="Award"]):not([alt*="award"]) {
-  opacity: 0.08 !important;
-  filter: saturate(0.55) brightness(0.42) contrast(1.18) !important;
-}
-
-/* PASS 173 — LOCKED: hero must be solid emerald ombre. No stripe/pattern overlays. */
-html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen)::before {
-  content: none !important;
-  background: none !important;
-  animation: none !important;
-}
-
-html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) > :not(.absolute) {
-  position: relative;
-  z-index: 2;
-}
-
 html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) :is(h1, h2, p):not([data-surface="champagne"] *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -24376,17 +22193,6 @@ html body #root .jj-newsletter-emerald {
     0 0 0 1px rgba(255,255,255,0.16),
     0 16px 34px rgba(0,0,0,0.28),
     inset 0 1px 0 rgba(255,255,255,0.14) !important;
-}
-
-html body #root .jj-newsletter-emerald input,
-html body #root .jj-newsletter-emerald input:focus,
-html body #root .jj-newsletter-emerald input:active {
-  background: transparent !important;
-  background-color: transparent !important;
-  outline: 0 !important;
-  box-shadow: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html body #root .jj-newsletter-emerald button {
@@ -24477,17 +22283,6 @@ html body #root main[data-company-legal-page="true"] :is(.jj-layer-active, .jj-c
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-html body #root .jj-newsletter-emerald .jj-hero-search-bar {
-  min-height: 64px !important;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.25) !important;
-}
-
-html body #root .jj-newsletter-emerald .jj-hero-search-action {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  border: 0 !important;
 }
 
 html body #root main[data-company-legal-page="true"] :is(section:not([data-hero-dark]) > div > div, section:not([data-hero-dark]) > div > div > div, section:not([data-hero-dark]) article, section:not([data-hero-dark]) main > div, section:not([data-hero-dark]) main > div > div, section:not([data-hero-dark]) main section > div, section:not([data-hero-dark]) main section > .relative.overflow-hidden, section:not([data-hero-dark]) main section > div.relative.overflow-hidden):where([class*="rounded"]):not([data-surface="light"]):not([data-no-section-frame]):not([data-no-section-frame] *):not(.jj-loop-block):not(.jj-loop-block *):not([data-pm-faq-item]):not([data-pm-faq-item] *):not([data-radix-accordion-item]):not([data-radix-accordion-item] *):not([data-jbj-consultation-form]):not([data-jbj-consultation-form] *):not(form):not(form *) {
@@ -24659,12 +22454,6 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   -webkit-text-fill-color: #1A1A1A !important;
   border-color: rgba(184,149,85,0.50) !important;
   box-shadow: none !important;
-  opacity: 1 !important;
-}
-
-html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(input, textarea)::placeholder {
-  color: rgba(26,26,26,0.55) !important;
-  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
   opacity: 1 !important;
 }
 
@@ -25739,22 +23528,6 @@ html body :is(form, [data-form-shell], .jbj-form-shell, [role="dialog"] form) {
   min-width: 0 !important;
 }
 
-html body :is(form, [data-form-shell], .jbj-form-shell) :is(.jbj-form-field, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]) {
-  border-width: 1px !important;
-  border-color: rgba(184,149,85,0.36) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.58), 0 1px 0 rgba(184,149,85,0.08) !important;
-  transition: border-color 80ms ease, box-shadow 80ms ease, background-color 80ms ease, color 80ms ease !important;
-}
-
-html body :is(form, [data-form-shell], .jbj-form-shell) :is(.jbj-form-field, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]):is(:hover,:focus,:focus-visible) {
-  border-color: rgba(184,149,85,0.72) !important;
-  box-shadow: 0 0 0 2px rgba(184,149,85,0.12), inset 0 1px 0 rgba(255,255,255,0.7) !important;
-}
-
-html body :is(form, [data-form-shell], .jbj-form-shell) :is(.rounded-xl.border, .rounded-2xl.border):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
-  padding: max(1rem, var(--jj-form-inner-pad, 1rem)) !important;
-}
-
 html body :is([role="checkbox"], button[role="checkbox"], input[type="checkbox"]) {
   appearance: none !important;
   -webkit-appearance: none !important;
@@ -25794,13 +23567,6 @@ html body :is([role="checkbox"], button[role="checkbox"]) :is(svg, path, polylin
 html body :is(label, .form-checkbox-row, [data-checkbox-row], .items-start:has([role="checkbox"]), .items-start:has(input[type="checkbox"])) {
   -webkit-tap-highlight-color: transparent !important;
   user-select: none !important;
-}
-
-html body input[type="checkbox"]:checked + * {
-  background: transparent !important;
-  background-image: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 html body:not([data-ai-tools-scope="true"]) :is(
@@ -25856,12 +23622,6 @@ html body :is(.jbj-form-shell, [data-form-shell], [role="dialog"]:has(form)) for
   padding: 0 !important;
 }
 
-html body :is(.jbj-form-shell, [data-form-shell]) :is(.rounded-xl.border, .rounded-2xl.border, [data-field-group], .form-field-group):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
-  padding: clamp(1rem, 1.8vw, 1.35rem) !important;
-  border-width: 1px !important;
-  border-color: rgba(184,149,85,0.30) !important;
-}
-
 html body :is(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]):not(.jj-hero-search-input):not([data-no-contrast-guard]), textarea:not([data-no-contrast-guard]), select:not([data-no-contrast-guard]), [role="combobox"]:not([data-no-contrast-guard]), [data-radix-select-trigger]) {
   border-width: 1px !important;
   border-color: rgba(184,149,85,0.34) !important;
@@ -25906,18 +23666,6 @@ html body :is([data-emerald-ok="checkbox"], [data-radix-checkbox-root]) :is(svg,
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   stroke-width: 3.4px !important;
-}
-
-html body input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 2px;
-  width: 6px;
-  height: 10px;
-  border: solid #FFFFFF;
-  border-width: 0 3px 3px 0;
-  transform: rotate(45deg);
 }
 
 html body :is(label, .form-checkbox-row, [data-checkbox-row], .items-start:has([role="checkbox"]), .items-start:has(input[type="checkbox"])) {
@@ -26403,134 +24151,6 @@ html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-w
   background-color: #064E3B !important;
 }
 
-/* ============================================================
-   PASS 240 — Advanced Filter Panel: champagne + ink standard
-   Site-wide dropdown standard. AI tools excluded via scope.
-   ============================================================ */
-
-html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]),
-/* All descendant text defaults to ink black */
-html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(
-  h1, h2, h3, h4, p, span, div, label, button, a, li, small, strong, em
-){
-  color: #1A1A1A !important;
-}
-
-/* All icons default to ink */
-html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(svg) {
-  color: #1A1A1A !important;
-  stroke: currentColor;
-}
-
-/* EXCEPTION 1 — emerald metallic pills keep pure white text/icons */
-html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
-html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic *,
-html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic,
-html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic * {
-  color: #FFFFFF !important;
-}
-html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
-html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic svg {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* EXCEPTION 2 — inputs on champagne need white background + ink text */
-html body [role="dialog"][data-advanced-filter-panel="true"] input,
-html body [role="dialog"][data-advanced-filter-panel="true"] select,
-html body [role="dialog"][data-advanced-filter-panel="true"] textarea {
-  background-color: #FFFFFF !important;
-  color: #1A1A1A !important;
-  border-color: rgba(184,149,85,0.55) !important;
-}
-html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
-html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
-  color: rgba(26,26,26,0.55) !important;
-}
-
-/* Convert dark emerald surface panels to champagne cards */
-html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-\[\#021611\]"],
-html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/7"],
-html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/12"],
-html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/14"] {
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-}
-
-/* Borders: convert white-on-emerald borders to gold hairline */
-html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white\/"] {
-  border-color: rgba(184,149,85,0.50) !important;
-}
-
-/* Section-title bottom border */
-html body [role="dialog"][data-advanced-filter-panel="true"] .bg-black\/10 {
-  background-color: rgba(255,255,255,0.40) !important;
-}
-
-/* Hover rows inside developer/area popovers */
-html body [role="dialog"][data-advanced-filter-panel="true"] button:hover:not(.jj-pill-emerald-metallic) {
-  background-color: rgba(6,78,59,0.06) !important;
-}
-
-/* PASS 241 — refine champagne conversion for Advanced Filter Panel header/labels */
-html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-black/10"] {
-  background-color: rgba(184,149,85,0.10) !important;
-  background-image: none !important;
-}
-html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white/"] {
-  border-color: rgba(184,149,85,0.40) !important;
-}
-/* Force all text (including .text-white and .allow-white spans) to ink, EXCEPT
-   emerald-metallic pills, active/checked chips, and lucide icons inside dark triggers */
-html body [role="dialog"][data-advanced-filter-panel="true"] :where(h1,h2,h3,h4,p,span,label,button,div,li,dt,dd,small,strong,em,b):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *):not([role="combobox"]):not([role="combobox"] *):not([data-radix-select-trigger]):not([data-radix-select-trigger] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  opacity: 1 !important;
-}
-html body [role="dialog"][data-advanced-filter-panel="true"] :where(svg):not(.jj-pill-emerald-metallic svg):not([data-state="active"] svg):not([role="combobox"] svg):not([data-radix-select-trigger] svg) {
-  color: #1A1A1A !important;
-  stroke: currentColor !important;
-}
-
-/* PASS 242 — Final ink override for Advanced Filter Panel: any text-white / allow-white
-   inside the champagne panel must render as ink. Emerald pills keep their own white. */
-html body [role="dialog"][data-advanced-filter-panel="true"] *:not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
-html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
-  color: rgba(26,26,26,0.55) !important;
-  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
-}
-/* Header top strip: light champagne tint, not dark */
-html body [role="dialog"][data-advanced-filter-panel="true"] > div:first-child {
-  background-color: rgba(184,149,85,0.08) !important;
-  background-image: none !important;
-  border-bottom-color: rgba(184,149,85,0.35) !important;
-}
-
-/* PASS 243 — Header filter modal final row contract.
-   Champagne rows idle with ink; only the row being hovered/focused turns emerald
-   with pure white text/icons, matching the account dropdown. */
-html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:not(:hover):not(:focus):not(:focus-visible),
-html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:not(:hover):not(:focus):not(:focus-visible) :is(span, div, svg, path, line, polyline, polygon, rect, circle) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: currentColor !important;
-}
-html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) :is(span, div, svg, path, line, polyline, polygon, rect, circle) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
 /* PASS 244 — Header poppers align to header divider and stay out of sidebar. */
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:has(:is([data-currency-menu-content], [data-mode-switcher-panel="true"], [data-account-menu-content])) {
   z-index: 120000 !important;
@@ -26595,26 +24215,6 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] 
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-
-html body [role="dialog"][data-advanced-filter-panel="true"] > button {
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 9999px !important;
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border: 0 !important;
-}
-
-html body [role="dialog"][data-advanced-filter-panel="true"] > button :is(svg, path, line, polyline) {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-html body [role="dialog"][data-advanced-filter-panel="true"][data-header-anchored-panel="true"] {
-  max-height: calc(100dvh - var(--app-content-top, 88px) - 16px) !important;
 }
 
 /* PASS 245 — Search modal hover ink correction: emerald hover = pure white. */
@@ -26750,15 +24350,6 @@ html body [role="switch"][data-state="unchecked"] {
   transition-delay: 0ms !important;
 }
 
-/* Dialog content instant open/close */
-[data-state="open"][role="dialog"],
-[data-state="closed"][role="dialog"],
-[data-radix-dialog-overlay] {
-  animation-duration: 0ms !important;
-  animation-delay: 0ms !important;
-  transition-duration: 0ms !important;
-}
-
 /* ============================================================
    PASS 261 — Contrast repair after dropdown speed work.
    Restore the locked surface contract without reintroducing slow
@@ -26865,59 +24456,6 @@ html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [d
   -webkit-text-fill-color: #064E3B !important;
   stroke: #064E3B !important;
   fill: none !important;
-}
-
-html body #root [role="dialog"][data-advanced-filter-panel="true"],
-html body #root [role="dialog"][data-advanced-filter-panel="true"] h1,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] h2,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] h3,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] h4,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] label {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible),
-html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) span,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) div,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) svg {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic span,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] span,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] svg {
-  background: transparent !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"][data-state="checked"] {
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
-}
-
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"] > span,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"] > span[data-state] {
-  background: #FFFFFF !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html body #root [data-jj-utility-bar] .jj-header-premium-control,
@@ -27125,17 +24663,6 @@ html body .jj-home-area-corner {
   border-color: rgba(184,149,85,0.48) !important;
 }
 
-html body .jj-home-area-card {
-  background: #EFE6D6 !important;
-  border: 1px solid rgba(184,149,85,0.70) !important;
-  box-shadow: 0 10px 26px rgba(184,149,85,0.16), inset 0 1px 0 rgba(255,255,255,0.78) !important;
-}
-
-html body .jj-home-area-card:hover {
-  border-color: #B89555 !important;
-  box-shadow: 0 18px 40px rgba(184,149,85,0.24), inset 0 1px 0 rgba(255,255,255,0.86) !important;
-}
-
 html body .jj-home-area-caption {
   background: linear-gradient(180deg, rgba(253,251,247,0.94) 0%, rgba(239,230,214,0.98) 100%) !important;
   background-color: #EFE6D6 !important;
@@ -27194,16 +24721,6 @@ html body [data-filter-bar-gold] .bg-\[\#021611\]\/82 {
   background: rgba(253,251,247,0.65) !important;
   border-color: rgba(184,149,85,0.55) !important;
   box-shadow: none !important;
-}
-html body [data-filter-bar-gold] input[type="text"],
-html body [data-filter-bar-gold] input[type="search"] {
-  background: transparent !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border: none !important;
-}
-html body [data-filter-bar-gold] input::placeholder {
-  color: rgba(26,26,26,0.55) !important;
 }
 
 /* Developer detail hero — locked gold title with pure-white subtitle.
@@ -27480,41 +24997,6 @@ html body [data-filter-dropdown="true"][data-surface] [class*="text-white"]:not(
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-
-/* ============================================================
-   OWNER FIX — terminal locks for the reported sidebar, hero,
-   filter, and animation regressions. Keep this at the end.
-   ============================================================ */
-
-/* Expanded owner sidebar: start lower below the logo, then distribute the
-   visible categories down the rail so Help & Support no longer leaves a
-   dead empty block above the footer. */
-html body [data-chrome="sidebar"] nav > div.px-3 {
-  padding-top: 56px !important;
-}
-html body [data-chrome="sidebar"] nav > div.px-3 > div.flex.flex-col {
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  justify-content: flex-start !important;
-  gap: 9px !important;
-}
-html body [data-chrome="sidebar"] [id="nav-section-help-&-support"] {
-  margin-top: 0 !important;
-}
-
-/* Homepage hero search: remove the visible white top divider. */
-html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::before {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  opacity: 1 !important;
-  box-shadow: none !important;
-  filter: none !important;
-}
-html body #root .jj-hero-search-premium .jj-hero-search-bar {
-  border: 0 !important;
-  outline: 0 !important;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.36) !important;
-}
 html body #root .jj-hero-search-premium .jj-hero-search-bar:is(:hover,:focus-within,:focus,:active) {
   box-shadow: 0 18px 40px rgba(0,0,0,0.36) !important;
   border: 0 !important;
@@ -27563,13 +25045,6 @@ html body #root [data-filter-dropdown="true"] :is(h1,h2,h3,h4,h5,h6,p,span,label
 html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,div):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="checked"]):not([data-state="checked"] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
-}
-html body #root [data-filter-dropdown="true"] :is(input, select, textarea),
-html body [data-filter-dropdown="true"][data-surface] :is(input, select, textarea) {
-  background: #FFFFFF !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border-color: rgba(184,149,85,0.58) !important;
 }
 html body #root [data-filter-dropdown="true"] .jj-pill-emerald-metallic,
 html body #root [data-filter-dropdown="true"] .jj-pill-emerald-metallic *,
@@ -27647,12 +25122,6 @@ html body [data-filter-clean][data-filter-bar-gold] [role="button"] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-}
-html body [data-filter-clean][data-filter-bar-gold] input,
-html body [data-filter-clean][data-filter-bar-gold] input * {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
 }
 html body [data-filter-dropdown="true"],
 html body [data-filter-dropdown="true"].text-white,
@@ -27786,11 +25255,6 @@ html body [data-filter-dropdown="true"] [role="tab"].jj-pill-emerald-metallic * 
   stroke: #1A1A1A !important;
 }
 
-/* Final owner-requested nav/footer/filter closure. */
-html body [data-chrome="sidebar"] nav > div.px-3 {
-  padding-top: 32px !important;
-}
-
 
 
 @media (min-width: 640px) {
@@ -27909,11 +25373,6 @@ html body [data-filter-dropdown="true"] [data-filter-ink-label][data-filter-ink-
   opacity: 1 !important;
 }
 
-/* Request closure — lift Owner Portal slightly without changing sidebar rhythm. */
-html body [data-chrome="sidebar"] nav > div.px-3 {
-  padding-top: 24px !important;
-}
-
 /* Fast, deterministic filter dropdowns: no delayed entry animation/collision work
    and one final contrast contract. Champagne controls use ink; selected emerald
    chips and Apply buttons use pure white. */
@@ -28008,11 +25467,6 @@ html body #root .developer-name-gold * {
     padding-left: 20px !important;
     padding-right: 20px !important;
   }
-}
-
-html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::before {
-  content: none !important;
-  display: none !important;
 }
 
 html body [data-filter-dropdown="true"] {
@@ -28234,13 +25688,6 @@ html body [data-filter-dropdown="true"] :is(h1,h2,h3,h4,h5,h6,p,label,small,stro
   opacity: 1 !important;
   text-shadow: none !important;
 }
-html body [data-filter-dropdown="true"] :is(input,select,textarea) {
-  background: #FFFFFF !important;
-  background-image: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border-color: rgba(184,149,85,0.58) !important;
-}
 html body [data-filter-dropdown="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]),
 html body [data-filter-dropdown="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]) * {
   background: #FFFFFF !important;
@@ -28314,11 +25761,6 @@ html body #root .jj-hero-search-premium .jj-hero-search-bar {
   border-top: 0 !important;
   outline: 0 !important;
 }
-html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::before,
-html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::after {
-  content: none !important;
-  display: none !important;
-}
 
 html body [data-filter-menu="true"] {
   contain: layout paint !important;
@@ -28338,13 +25780,6 @@ html body [data-filter-menu="true"] :is(h1,h2,h3,h4,h5,h6,p,label,small,strong,e
   stroke: #1A1A1A !important;
   opacity: 1 !important;
   text-shadow: none !important;
-}
-html body [data-filter-menu="true"] :is(input,select,textarea) {
-  background: #FFFFFF !important;
-  background-image: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border-color: rgba(184,149,85,0.58) !important;
 }
 html body [data-filter-menu="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]),
 html body [data-filter-menu="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]) * {
@@ -28443,13 +25878,6 @@ html body #root .jj-hero-search-premium {
 
 html body #root .jj-home-hero {
   margin-top: -1px !important;
-  box-shadow: none !important;
-}
-html body #root .jj-hero-search-premium .jj-hero-search-bar,
-html body #root .jj-hero-search-premium .jj-hero-search-bar::before,
-html body #root .jj-hero-search-premium .jj-hero-search-bar::after {
-  border-top: 0 !important;
-  outline: 0 !important;
   box-shadow: none !important;
 }
 
@@ -28728,40 +26156,6 @@ html body .jj-sqtoggle[data-active="true"].jj-emerald-metallic::after {
   opacity: 1 !important;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   PASS 209 — Radix Checkbox duplicate-box fix.
-   Radix's <Checkbox> renders a visible button[role="checkbox"] AND a hidden
-   native <input type="checkbox" aria-hidden="true"> sibling for form
-   submission. Global checkbox skinning rules (borders / background / size /
-   transform: none) were forcing that hidden input to render as a second
-   empty box next to the real emerald one. Hide it hard, everywhere.
-   ───────────────────────────────────────────────────────────────────────── */
-html body input[type="checkbox"][aria-hidden="true"],
-html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald-ok="checkbox"]) + input[type="checkbox"][aria-hidden="true"],
-html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald-ok="checkbox"]) ~ input[type="checkbox"][aria-hidden="true"] {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  border: 0 !important;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  overflow: hidden !important;
-  clip: rect(0 0 0 0) !important;
-  clip-path: inset(50%) !important;
-  white-space: nowrap !important;
-  transform: translateX(-100%) !important;
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  flex: 0 0 1px !important;
-}
-
 /* Fix reported "dot leaking out of pill" — clamp status dots inside pill radius */
 html body .jj-pill-active > .dot,
 html body [data-active="true"].jj-pill > .dot,
@@ -28789,14 +26183,6 @@ html body [data-header-search] {
   flex-direction: row !important;
   align-items: center !important;
   writing-mode: horizontal-tb !important;
-}
-html body [data-owner-search] input,
-html body .owner-search-shell input,
-html body [data-header-search] input {
-  writing-mode: horizontal-tb !important;
-  white-space: nowrap !important;
-  min-width: 0 !important;
-  flex: 1 1 auto !important;
 }
 
 /* =============================================================
@@ -29211,16 +26597,6 @@ html body #root .leaflet-popup-content-wrapper,
 html body #root .leaflet-popup-tip {
   background: transparent !important;
   box-shadow: none !important;
-}
-
-html body #root .jj-map-popup-card {
-  overflow: hidden !important;
-  border: 1px solid rgba(184,149,85,0.46) !important;
-  border-radius: 14px !important;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
-  box-shadow: 0 18px 48px rgba(0,0,0,0.22) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 html body #root .jj-map-popup-card :is(a, button, p, div, span),
@@ -29699,10 +27075,6 @@ html body #root .jj-hero-search-premium input:hover {
   outline: 0 !important;
 }
 
-html body #root .jj-newsletter-emerald .jj-hero-search-bar {
-  background-image: var(--jj-emerald-ombre) !important;
-}
-
 html body #root .jj-newsletter-emerald input:-webkit-autofill,
 html body #root .jj-newsletter-emerald input:-webkit-autofill:hover,
 html body #root .jj-newsletter-emerald input:-webkit-autofill:focus,
@@ -29821,17 +27193,6 @@ html body #root :is([type="search"], [data-search], .jj-search, .search-input) i
   filter: none !important;
 }
 
-html body #root .jj-newsletter-emerald input:-webkit-autofill,
-html body #root .jj-newsletter-emerald input:-webkit-autofill:hover,
-html body #root .jj-newsletter-emerald input:-webkit-autofill:focus,
-html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill,
-html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill:hover,
-html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
-  box-shadow: 0 0 0 1000px transparent inset !important;
-  transition: background-color 999999s ease-out 0s !important;
-}
-
 html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-hero-search-input,
 html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-hero-search-input:hover,
 html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-hero-search-input:focus,
@@ -29928,19 +27289,6 @@ html body #root .jj-emerald-glow-wrap.jj-newsletter-emerald::before {
   z-index: 1 !important;
   opacity: 1 !important;
   filter: drop-shadow(0 0 18px rgba(52,211,153,0.58)) !important;
-}
-
-html body #root .jj-emerald-glow-wrap.jj-newsletter-emerald > .jj-hero-search-bar {
-  position: relative !important;
-  z-index: 2 !important;
-  border-radius: 28px !important;
-  background: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  box-shadow:
-    0 18px 40px rgba(0,0,0,0.34),
-    inset 0 1px 0 rgba(255,255,255,0.12) !important;
 }
 
 html body #root .jj-emerald-glow-wrap.jj-newsletter-emerald .jj-hero-search-action[data-variant="primary"],
@@ -30291,20 +27639,6 @@ html body [data-radix-accordion-root] > [data-radix-accordion-item] + [data-radi
   caret-color: #064E3B;
 }
 
-/* Remove Chrome autofill blue background/text */
-[data-jbj-signup] input:-webkit-autofill,
-[data-jbj-signup] input:-webkit-autofill:hover,
-[data-jbj-signup] input:-webkit-autofill:focus,
-[data-jbj-signup] input:-webkit-autofill:active,
-[data-jbj-signup] textarea:-webkit-autofill,
-[data-jbj-signup] select:-webkit-autofill {
-  -webkit-text-fill-color: #1A1A1A !important;
-  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-  box-shadow: 0 0 0 1000px #ffffff inset !important;
-  transition: background-color 5000s ease-in-out 0s;
-  caret-color: #064E3B !important;
-}
-
 /* Force emerald focus rings — never blue */
 [data-jbj-signup] input:focus,
 [data-jbj-signup] input:focus-visible,
@@ -30329,10 +27663,6 @@ html body [data-radix-accordion-root] > [data-radix-accordion-item] + [data-radi
 [data-jbj-signup] .PhoneInputCountrySelectArrow {
   border-color: #0d3a2b !important;
   opacity: 0.85 !important;
-}
-[data-jbj-signup] select option {
-  color: #1A1A1A;
-  background: #ffffff;
 }
 
 /* Force champagne background for INACTIVE pills inside sign-up form.
@@ -30612,74 +27942,6 @@ html body #root :is(
   opacity: 1 !important;
 }
 
-/* About page — allow inline background-image on opted-in media tiles.
-   Overrides the insights-hub bg-image:none guard on rounded/bordered divs.
-   Component sets --about-media-src to the resolved URL. */
-
-
-
-/* -------------------------------------------------------------------------
- * Shared CTA container/layout lock
- * -------------------------------------------------------------------------
- * Some routes nest MIPreFooterCard inside prose containers, sidebar shells,
- * or narrow columns that shrink the CTA below its intended width. This lock
- * uses the full-bleed technique so the CTA breaks out of any parent width
- * constraint on every route (service pages and non-service pages alike),
- * while the inner `maxWidthClass` still governs the actual card width.
- * ----------------------------------------------------------------------- */
-html body #root [data-cta-lock].jj-cta-lock {
-  /* Break out of nested max-width wrappers, but align to the app shell width
-     instead of raw 100vw so fixed desktop chrome cannot make the CTA wider
-     than the FAQ/content cards. */
-  width: var(--jj-shell-main-w, 100vw) !important;
-  max-width: var(--jj-shell-main-w, 100vw) !important;
-  margin-left: calc((100% - var(--jj-shell-main-w, 100vw)) / 2) !important;
-  margin-right: calc((100% - var(--jj-shell-main-w, 100vw)) / 2) !important;
-  /* Reset any inherited constraints from parents */
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  box-sizing: border-box;
-  position: relative;
-  /* Guard against parents that clip children */
-  float: none !important;
-  clear: both;
-}
-
-/* Keep the inner alignment column intact — parents can't shrink it either. */
-html body #root [data-cta-lock].jj-cta-lock > div {
-  width: 100%;
-  max-width: var(--jj-global-container-max, 1760px) !important;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--jj-global-container-px-mobile, 16px) !important;
-  padding-right: var(--jj-global-container-px-mobile, 16px) !important;
-}
-
-@media (min-width: 768px) {
-  html body #root [data-cta-lock].jj-cta-lock > div {
-    padding-left: var(--jj-global-container-px-tablet, 24px) !important;
-    padding-right: var(--jj-global-container-px-tablet, 24px) !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  html body #root [data-cta-lock].jj-cta-lock > div {
-    padding-left: var(--jj-global-container-px-desktop, 32px) !important;
-    padding-right: var(--jj-global-container-px-desktop, 32px) !important;
-  }
-}
-
-@media (min-width: 1440px) {
-  html body #root [data-cta-lock].jj-cta-lock > div {
-    padding-left: var(--jj-global-container-px-xl, 40px) !important;
-    padding-right: var(--jj-global-container-px-xl, 40px) !important;
-  }
-}
-
-html body #root [data-cta-lock].jj-cta-lock [data-cta-card] {
-  width: 100%;
-}
-
 /* Area detail repair lock — single sticky emerald filter, no gold on emerald,
    pure white hero/AI/map controls, and no clipped chips on tablet/mobile. */
 html body #root [data-area-detail-page] [data-area-sticky-filter-shell] {
@@ -30798,12 +28060,6 @@ html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] :is(butt
   border-color: rgba(255,255,255,0.16) !important;
 }
 
-html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] input::placeholder {
-  color: rgba(255,255,255,0.82) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
-  opacity: 1 !important;
-}
-
 html body #root [data-area-detail-page] [data-dld-market-widget] {
   background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
   color: #FFFFFF !important;
@@ -30848,17 +28104,6 @@ html body #root [data-area-detail-page] #similar-areas a {
 html body #root [data-area-detail-page] #similar-areas [data-explore-more-heading] {
   color: #0A0A0A !important;
   -webkit-text-fill-color: #0A0A0A !important;
-}
-
-/* Safety: if a scroll container clips the breakout, fall back to full width
- * without the viewport breakout so the CTA still renders at the container
- * edge instead of being squeezed. */
-@supports not (width: 100vw) {
-  html body #root [data-cta-lock].jj-cta-lock {
-    width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
 }
 
 /* ============================================================
@@ -31939,24 +29184,6 @@ html:root body #root [data-developer-gold][data-developer-name-shine].developer-
   background-clip: text !important;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   PASS 269 — NO CROPPED WORDS, NO ELLIPSIS ON LABELS (LOCKED)
-   No button/label/badge on the platform may clip a word or fall
-   back to a "…" ellipsis. Labels wrap and shrink to the available
-   width instead of being cut off.
-   ───────────────────────────────────────────────────────────── */
-html body #root [data-cta-label],
-html body #root button [data-cta-label],
-html body #root a [data-cta-label] {
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: clip !important;
-  overflow-wrap: anywhere;
-  word-break: normal !important;
-  max-width: 100%;
-}
-html body #root [data-cta-label].truncate { text-overflow: clip !important; }
-
 /* ============================================================
    PASS 269 — White active tab (Explore Our Services / JBJ Tools)
    The active segment is a pure white plate with ink-black text
@@ -32048,17 +29275,6 @@ html body :is(section, div):has(> .jj-content-track > .jj-card-grid) {
 }
 .jj-light-metallic > * { position: relative; z-index: 1; }
 
-/* PASS 272 — Canonical card grid column count wins over the legacy
-   auto-fill fallback in @layer components (4-up areas rail). */
-@media (min-width: 1024px) {
-  html body .jj-card-grid.jj-card-grid--4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-  html body .jj-card-grid.jj-card-grid--3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
    PASS 273 — DEVELOPER LOGO PLATE STANDARD (LOCKED)
    Every developer logo plate across the site (cards, similar developers,
@@ -32149,10 +29365,6 @@ html body #root .jj-filter-rail svg {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
-}
-html body #root .jj-filter-rail input::placeholder {
-  color: rgba(255, 255, 255, 0.78) !important;
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.78) !important;
 }
 html body #root .jj-filter-rail svg { fill: none !important; }
 
@@ -32487,44 +29699,6 @@ html body div[data-state="closed"].fixed.inset-0[class*="bg-[#1A1A1A]"] {
   backdrop-filter: blur(2px);
 }
 
-/* ============================================================
-   PASS 283 — BACKEND PORTAL SURFACE (LOCKED)
-   While the owner is inside the back office (body[data-jbj-backend]),
-   every portalled dialog / sheet / menu uses the backend surface
-   (white card + emerald ink), never the public champagne surface,
-   and never black text on an emerald fill.
-   ============================================================ */
-html body[data-jbj-backend="true"] [role="dialog"]:not([data-radix-dialog-overlay]),
-html body[data-jbj-backend="true"] [role="alertdialog"] {
-  background: #FFFFFF !important;
-  background-image: none !important;
-  border-color: rgba(6, 78, 59, 0.14) !important;
-  color: #0F172A !important;
-  -webkit-text-fill-color: #0F172A !important;
-}
-html body[data-jbj-backend="true"] [role="dialog"] :where(h1, h2, h3, label, p, span, div, td, th) {
-  color: #0F172A;
-  -webkit-text-fill-color: #0F172A;
-}
-html body[data-jbj-backend="true"] [role="dialog"] :where(input, textarea, select, [role="combobox"]) {
-  background: #FFFFFF !important;
-  border-color: rgba(6, 78, 59, 0.18) !important;
-  color: #0F172A !important;
-  -webkit-text-fill-color: #0F172A !important;
-}
-/* Emerald-filled controls inside backend portals keep white ink. */
-html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[class*="#064E3B"],
-html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[data-state="active"],
-html body[data-jbj-backend="true"] [role="dialog"] .jj-surface-emerald {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body[data-jbj-backend="true"] [role="dialog"] :where(button, [role="tab"])[class*="#064E3B"] svg,
-html body[data-jbj-backend="true"] [role="dialog"] .jj-surface-emerald svg {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
 /* ────────────────────────────────────────────────────────────────
    PASS 293 — NO WORD SPLIT (LOCKED)
 
@@ -32591,10 +29765,6 @@ html body #root:not(#\9) button:is(.mir-pill, .mir-solid, [data-status-pill]) {
     linear-gradient(160deg, #FFFFFF 0%, #FFFCF6 44%, #FBF6EC 100%);
 }
 html body #root .jj-surface-pearl { background: var(--jj-pearl-band); }
-html body #root .jj-card-pearl {
-  background: var(--jj-pearl-card);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 40px -28px rgba(4,44,28,0.28);
-}
 
 /* Developer name gold must stay READABLE — the light sheen stop is darkened
    so the wordmark never disappears against pearl/champagne surfaces. */
@@ -32663,13 +29833,6 @@ html body [aria-hidden="true"] .jj-type-caret {
   user-select: none;
   -webkit-user-select: none;
 }
-html body input[type="text"]::selection,
-html body input[type="search"]::selection,
-html body input:not([type])::selection {
-  background: rgba(120, 120, 120, 0.22) !important;
-  color: inherit !important;
-  -webkit-text-fill-color: currentColor !important;
-}
 
 /* PASS 301 — monogram ink follows the theme: the dark (black) monogram
    is knocked out to white whenever the page skin is emerald-night, so it
@@ -32688,34 +29851,4 @@ html body [data-chrome="sidebar"] [data-jbj-monogram="dark"] {
 @keyframes jj-card-edge-sweep {
   0%   { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
-}
-html body .jj-card-emerald-edge {
-  border-color: rgba(6, 78, 59, 0.34) !important;
-}
-html body .jj-card-emerald-edge::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(90deg, #064E3B, #0a6b52, #042c1c, #064E3B);
-  background-size: 200% auto;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 220ms ease;
-  pointer-events: none;
-  z-index: 3;
-}
-html body .jj-card-emerald-edge:hover::after,
-html body .jj-card-emerald-edge:focus-within::after {
-  opacity: 1;
-  animation: jj-card-edge-sweep 2.6s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  html body .jj-card-emerald-edge:hover::after { animation: none; }
-}
-html[data-jbj-theme="moon"] body .jj-card-emerald-edge {
-  border-color: rgba(255, 255, 255, 0.28) !important;
 }

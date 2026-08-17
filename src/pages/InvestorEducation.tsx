@@ -20,6 +20,12 @@ import {
   Briefcase,
   Eye,
 } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { ContentPageShell } from "@/components/content-page/ContentPageShell";
 
@@ -181,6 +187,76 @@ const InvestorEducation = () => {
     { id: "risk", title: "Risk Awareness", icon: AlertTriangle },
     { id: "jbj-role", title: "Role of JBJ", icon: Shield },
     { id: "long-term", title: "Long-Term Perspective", icon: Eye },
+    { id: "faq", title: "Investor FAQ", icon: HelpCircle },
+  ];
+
+  // Folded in from the standalone /investor-faq page (Guide Consolidation Stage 2).
+  const investorFaqCategories: Array<{
+    id: string;
+    title: string;
+    questions: Array<{ question: string; answer: string }>;
+  }> = [
+    {
+      id: "investor-basics",
+      title: "Investor Basics",
+      questions: [
+        { question: "Who is considered an investor in real estate?", answer: "An investor is anyone purchasing property with the objective of capital preservation, rental income, long-term appreciation, or portfolio diversification. This includes first-time investors, experienced portfolio holders, and international buyers." },
+        { question: "Is real estate in the UAE suitable for investment?", answer: "The UAE real estate market is supported by strong regulation, transparent ownership laws, and ongoing government-led development initiatives. Investment suitability depends on objectives, timeframe, risk tolerance, and market conditions at the time of purchase." },
+      ],
+    },
+    {
+      id: "returns-guarantees",
+      title: "Returns & Guarantees",
+      questions: [
+        { question: "Do you guarantee returns or rental income?", answer: "No. There are no guaranteed returns in real estate. Any claim of guaranteed ROI is misleading. We provide analysis based on historical data, market indicators, and official government information, but outcomes are never guaranteed." },
+      ],
+    },
+    {
+      id: "evaluation-process",
+      title: "Evaluation Process",
+      questions: [
+        { question: "How do you evaluate investment opportunities?", answer: "Investment analysis is based on:\n\n• Official government and regulatory data\n• Supply and demand dynamics\n• Location fundamentals\n• Developer credibility and delivery history\n• Entry price relative to comparable assets\n• Rental yield and exit liquidity indicators\n\nOur role is to help investors understand risk and opportunity clearly." },
+        { question: "Do you push projects that pay higher commissions?", answer: "No. Property recommendations are not driven by commissions or personal relationships. Our approach is to evaluate the full market and align options strictly with the investor's stated goals." },
+      ],
+    },
+    {
+      id: "fees-costs",
+      title: "Fees & Costs",
+      questions: [
+        { question: "Are there fees when buying off-plan as an investor?", answer: "For off-plan purchases, investors do not pay brokerage fees. Developers compensate licensed brokerages directly. All costs related to the property itself (purchase price, registration fees, etc.) are disclosed transparently." },
+        { question: "What fees apply when buying a ready property?", answer: "When purchasing a ready property, standard brokerage fees apply in accordance with UAE regulations. These are communicated clearly before proceeding with any transaction." },
+      ],
+    },
+    {
+      id: "international-investors",
+      title: "International Investors",
+      questions: [
+        { question: "Can non-residents invest in UAE real estate?", answer: "Yes. Non-residents can invest in designated freehold areas across the UAE. Residency is not required to purchase property, though certain investments may qualify buyers for residency programs subject to government criteria." },
+      ],
+    },
+    {
+      id: "investment-strategies",
+      title: "Investment Strategies",
+      questions: [
+        { question: "What types of investment strategies do you support?", answer: "We support multiple strategies, including:\n\n• Long-term capital appreciation\n• Rental income generation\n• Off-plan-to-handover strategies\n• Portfolio diversification across locations and asset types\n\nStrategy selection depends on individual objectives and market conditions." },
+      ],
+    },
+    {
+      id: "post-purchase-support",
+      title: "Post-Purchase Support",
+      questions: [
+        { question: "Do you manage properties after purchase?", answer: "We assist investors by coordinating leasing, resale, or introductions to licensed property management providers when required. All services are clearly defined and optional." },
+        { question: "How involved are you after the purchase?", answer: "Our support does not end at the transaction. We remain available to assist with leasing, resale strategies, and market updates relevant to your asset, subject to agreed services." },
+      ],
+    },
+    {
+      id: "decision-getting-started",
+      title: "Decision & Getting Started",
+      questions: [
+        { question: "Who makes the final investment decision?", answer: "The final decision always belongs to the investor. Our responsibility is to provide clarity, data, and guidance so decisions are made with full understanding of risks and opportunities." },
+        { question: "How do I start as an investor with JBJ Global Real Estate?", answer: "You can contact us through the website to outline your objectives. We then provide structured guidance and market insights aligned with your investment goals." },
+      ],
+    },
   ];
 
   return (
@@ -188,6 +264,7 @@ const InvestorEducation = () => {
       <SEOHead
         title="Investor Education | Understanding Real Estate Investment in the UAE | JBJ"
         description="Learn how real estate investment works in the UAE. Data-driven education on market cycles, investment types, risk awareness, and informed decision-making."
+        faqItems={investorFaqCategories.flatMap((c) => c.questions)}
       />
 
       <ContentPageShell
@@ -345,6 +422,34 @@ const InvestorEducation = () => {
           </p>
         </SectionCard>
 
+        {/* Investor FAQ — folded in from the standalone /investor-faq page (Guide Consolidation Stage 2) */}
+        <SectionCard id="faq" icon={HelpCircle} title="Investor FAQ">
+          <div className="space-y-8">
+            {investorFaqCategories.map((category) => (
+              <div key={category.id}>
+                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">{category.title}</h3>
+                <div className="space-y-3">
+                  {category.questions.map((faq, index) => (
+                    <Accordion key={index} type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value={`${category.id}-${index}`}
+                        className="jj-faq-item rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] px-5 data-[state=open]:bg-[image:var(--jj-emerald-ombre)] data-[state=open]:border-[#0d3a2b]/40 data-[state=open]:shadow-[0_10px_30px_-16px_rgba(6,78,59,0.55)] transition-colors"
+                      >
+                        <AccordionTrigger className="jj-faq-trigger text-left py-4 text-base font-medium text-[#1A1A1A] hover:no-underline data-[state=open]:text-white">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="jj-faq-content pb-5 leading-relaxed whitespace-pre-line text-[#1A1A1A]/80 data-[state=open]:text-white/90">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+
         {/* CTA */}
         <section className="mt-14 mb-10">
           <div
@@ -383,7 +488,7 @@ const InvestorEducation = () => {
                   Contact an Advisor
                 </Link>
                 <Link
-                  to="/investor-faq"
+                  to="#faq"
                   className="inline-flex items-center gap-2 h-12 px-7 rounded-full text-sm font-semibold text-white border border-white/25 hover:bg-white/5 transition-colors"
                 >
                   <HelpCircle className="w-4 h-4" />

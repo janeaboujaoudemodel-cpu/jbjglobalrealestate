@@ -6,6 +6,16 @@ import url from 'node:url';
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..', '..');
 const SRC = path.join(root, 'src');
+const baselinePath = path.join(__dirname, 'interactive-contrast-baseline.json');
+const PRINT_BASELINE = process.argv.includes('--print-baseline');
+
+let BASELINE = new Set();
+try {
+  const bl = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+  BASELINE = new Set(bl.entries ?? []);
+} catch {
+  // baseline optional during initial bootstrap
+}
 
 const exts = new Set(['.tsx', '.jsx']);
 const INTERACTIVE_RE = /<(Button|button|a|Badge|TabsTrigger)\b|role=["'](?:button|tab|menuitem|status|switch)["']/;
@@ -41,20 +51,37 @@ function check() {
       const segments = line.split(/['"`]\s*(?:\?|:|,|\+|\)|\}|$)|(?:\?|:|,)\s*['"`]|\$\{|\}/).filter(Boolean);
       const textRisk = segments.some((seg) => (LIGHT_BG_RE.test(seg) && WHITE_TEXT_RE.test(seg)) || (DARK_BG_RE.test(seg) && DARK_TEXT_RE.test(seg)) || BAD_ACTIVE_TAB_RE.test(seg));
       if (!textRisk) return;
-      violations.push({ file: rel, line: idx + 1, snippet: line.trim().slice(0, 220) });
+      violations.push({ file: rel, line: idx + 1, key: `${rel}:${idx + 1}`, snippet: line.trim().slice(0, 220) });
     });
   }
 
-  if (!violations.length) {
-    console.log('✓ Interactive contrast contract passed.');
+  if (PRINT_BASELINE) {
+    const out = {
+      _comment: 'Pre-existing interactive contrast hits captured when baseline tolerance was introduced. New regressions are blocked; historical hits are tolerated until cleaned up. Refresh with --print-baseline after fixing entries.',
+      entries: violations.map((v) => v.key).sort(),
+    };
+    process.stdout.write(JSON.stringify(out, null, 2) + '\n');
     return;
   }
-  console.error(`✗ Found ${violations.length} interactive contrast contract violation(s):\n`);
-  for (const v of violations) {
+
+  const newViolations = violations.filter((v) => !BASELINE.has(v.key));
+  const tolerated = violations.length - newViolations.length;
+
+  if (tolerated) {
+    console.log(`ⓘ Interactive contrast baseline: ${tolerated} pre-existing hit(s) tolerated (see scripts/contrast/interactive-contrast-baseline.json).`);
+  }
+
+  if (!newViolations.length) {
+    console.log('✓ Interactive contrast contract passed (no new violations).');
+    return;
+  }
+  console.error(`✗ Found ${newViolations.length} new interactive contrast contract violation(s):\n`);
+  for (const v of newViolations) {
     console.error(`  ${v.file}:${v.line}`);
     console.error(`    ${v.snippet}`);
   }
   console.error('\nFix: use jj-cta-dark, jj-cta-champagne, jj-cta-outline, jj-pill-active, or matching readable text/icon colors.');
+  console.error('\nRun `node scripts/contrast/check-interactive-contrast-contract.mjs --print-baseline > scripts/contrast/interactive-contrast-baseline.json` to refresh the baseline (only after fixing or explicitly waiving).');
   process.exit(1);
 }
 

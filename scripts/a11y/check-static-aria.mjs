@@ -16,6 +16,10 @@
  * regex-based scan, baseline allowlist for pre-existing hits, exit 1 on
  * any new violation. Refresh the baseline with --print-baseline.
  *
+ * lint-staged invokes this with the staged .tsx/.jsx file paths as CLI
+ * args — only those are scanned. Run with no file args (npm run
+ * check:a11y:static, CI, --print-baseline) to scan the whole src/ tree.
+ *
  * NOTE: This is a heuristic scan, not a full TS/JSX AST parse. It errs on
  * the side of false positives, which the allowlist mops up. Anything that
  * needs full type information should go in the rendered axe sweep instead.
@@ -46,14 +50,6 @@ const TARGETS = process.argv
   .map((a) => path.resolve(root, a))
   .filter((p) => exts.has(path.extname(p)) && fs.existsSync(p));
 const SCOPED = TARGETS.length > 0;
-
-if (SCOPED && PRINT_BASELINE) {
-  console.error(
-    '✗ --print-baseline regenerates the whole baseline and must not be combined with file arguments;\n' +
-      '  a partial scan would drop every entry outside the files listed.',
-  );
-  process.exit(2);
-}
 
 /**
  * Baseline of pre-existing hits, indexed two ways.
@@ -91,8 +87,11 @@ function walk(dir, out = []) {
   return out;
 }
 
+// PRINT_BASELINE always scans the full tree — it is a manual baseline
+// snapshot, not a pre-commit run, and needs every file to be meaningful.
 function filesToScan() {
-  return SCOPED ? TARGETS : walk(SRC);
+  if (PRINT_BASELINE || !SCOPED) return walk(SRC);
+  return TARGETS;
 }
 
 /* ----------------------------- detectors ---------------------------------- */
@@ -106,6 +105,34 @@ function matchOpenTags(source, tagName) {
   while ((m = re.exec(source)) !== null) {
     out.push({ index: m.index, attrs: m[1], selfClosing: m[2] === '/>' });
   }
+  return out;
+}
+
+// Replace comment CONTENT with spaces (newlines preserved) so tag-shaped
+// text inside `//` and `/* */` comments — e.g. a prose description of what
+// an <img> tag looks like — can't be mistaken for real JSX. Preserves
+// string length/line numbers exactly, so every downstream index/line
+// computation on the returned text still lines up with the original file.
+// A quote-parity guard on `//` skips anything that's plausibly inside a
+// string (e.g. a "https://" URL) rather than risk masking real code.
+function maskComments(source) {
+  let out = source.replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, ' '));
+  out = out
+    .split('\n')
+    .map((line) => {
+      let searchFrom = 0;
+      while (true) {
+        const idx = line.indexOf('//', searchFrom);
+        if (idx === -1) return line;
+        const before = line.slice(0, idx);
+        const quoteCount = (before.match(/["'`]/g) || []).length;
+        if (quoteCount % 2 === 0) {
+          return before + ' '.repeat(line.length - idx);
+        }
+        searchFrom = idx + 2;
+      }
+    })
+    .join('\n');
   return out;
 }
 
@@ -165,7 +192,7 @@ function record(file, line, rule, snippet) {
 for (const file of filesToScan()) {
   // Skip test files and the scanner's own dogfood targets.
   if (/\.(test|spec)\.(t|j)sx?$/.test(file)) continue;
-  const source = fs.readFileSync(file, 'utf8');
+  const source = maskComments(fs.readFileSync(file, 'utf8'));
 
   /* 1. Icon-only button / a */
   for (const tagName of ['button', 'Button', 'a', 'Link']) {

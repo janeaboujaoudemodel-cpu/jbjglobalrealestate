@@ -48,24 +48,23 @@ if (presentFinalContracts.length !== 1 || presentFinalContracts[0] !== 'GLOBAL S
   violations.push(`src/index.css must contain exactly one final contrast contract: GLOBAL SEMANTIC CONTRAST CONTRACT. Found: ${presentFinalContracts.join(', ') || 'none'}.`);
 }
 
-// The contract runs from its own boxed header to the start of the next boxed
-// section. Do NOT pin this to a named pass ("/* PASS 200"): the section that
-// happens to follow gets renamed and reformatted by every contrast pass, and a
-// sentinel that stops matching silently widens the slice to end-of-file — which
-// then flags every unrelated rule in the rest of the stylesheet.
-const CONTRACT_LABEL = 'GLOBAL SEMANTIC CONTRAST CONTRACT';
-const BOXED_SECTION = /\/\*[\s*]*={6,}/g;
+// Scope the scan to the contract's own block: from its closing banner line (a
+// line of "====" ending in "*/") to the next banner-open line ("/* ====").
+// Do NOT pin this to a named pass — the section that follows gets renamed and
+// reformatted by every contrast pass, and when the old "/* PASS 200" sentinel
+// stopped matching, indexOf returned -1 and the slice silently widened to
+// end-of-file, auditing the whole stylesheet as if it were the contract.
+const bannerCloseLineRe = /^[ \t]*=+[ \t]*\*\/[ \t]*$/m;
+const bannerOpenLineRe = /^\/\*[ \t]*=+[ \t]*$/m;
 
 function sliceFinalContract(source) {
-  const start = source.lastIndexOf(CONTRACT_LABEL);
+  const start = source.lastIndexOf('GLOBAL SEMANTIC CONTRAST CONTRACT');
   if (start < 0) return '';
-  // Step past the contract's own boxed header, or its closing `====== */`
-  // would immediately terminate the slice.
-  const headerEnd = source.indexOf('*/', start);
-  BOXED_SECTION.lastIndex = headerEnd >= 0 ? headerEnd + 2 : start + CONTRACT_LABEL.length;
-  const next = BOXED_SECTION.exec(source);
-  // No following boxed section means the contract really is the last block.
-  return source.slice(start, next ? next.index : undefined);
+  const closeMatch = bannerCloseLineRe.exec(source.slice(start));
+  if (!closeMatch) return source.slice(start);
+  const closeEnd = start + closeMatch.index + closeMatch[0].length;
+  const nextOpen = bannerOpenLineRe.exec(source.slice(closeEnd));
+  return source.slice(start, nextOpen ? closeEnd + nextOpen.index : undefined);
 }
 
 // Comment prose contains braces, colons and words like `div`, so a naive

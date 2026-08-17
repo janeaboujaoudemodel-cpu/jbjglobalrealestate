@@ -9,8 +9,14 @@
  * as base64 (so it can be emailed / uploaded / opened offline).
  *
  * Output:
- *   /mnt/documents/pass-142-report.html      (shareable, single file)
- *   /mnt/documents/pass-142-report.json      (raw results, machine-readable)
+ *   <OUT_DIR>/pass-142-report.html      (shareable, single file)
+ *   <OUT_DIR>/pass-142-report.json      (raw results, machine-readable)
+ *
+ * OUT_DIR is /mnt/documents when that mount is available and writable
+ * (the sandbox this script was originally authored in); everywhere else —
+ * including GitHub Actions runners, which have no such mount — it falls
+ * back to artifacts/pass-142 in the repo, which the CI workflow already
+ * creates and uploads.
  *
  * Usage:
  *   PREVIEW_URL=http://localhost:8080 node scripts/pass142/generate-report.mjs
@@ -18,6 +24,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const BASE_URL =
   process.env.PREVIEW_URL ||
@@ -29,14 +36,21 @@ const BASE_URL =
 // have no such mount and previously crashed here with EACCES before writing
 // anything — fall back to a repo-local dir (the one the CI workflow already
 // uploads as the `pass-142-report` artifact) when it isn't available.
+// Resolved from this file's own location rather than process.cwd(), so the
+// fallback lands in the same place regardless of the invoking directory.
 function resolveOutDir() {
+  const preferred = '/mnt/documents';
   try {
-    fs.mkdirSync('/mnt/documents', { recursive: true });
-    return '/mnt/documents';
+    fs.mkdirSync(preferred, { recursive: true });
+    return preferred;
   } catch {
-    return path.join(process.cwd(), 'artifacts', 'pass-142');
+    const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+    const fallback = path.join(repoRoot, 'artifacts', 'pass-142');
+    fs.mkdirSync(fallback, { recursive: true });
+    return fallback;
   }
 }
+
 const OUT_DIR = resolveOutDir();
 const HTML_OUT = path.join(OUT_DIR, 'pass-142-report.html');
 const JSON_OUT = path.join(OUT_DIR, 'pass-142-report.json');
@@ -284,8 +298,8 @@ function renderHtml(results, meta) {
 }
 
 (async () => {
-  fs.mkdirSync(OUT_DIR, { recursive: true });
   console.log(`[pass-142] base=${BASE_URL} routes=${ROUTES.length} viewports=${VIEWPORTS.length}`);
+  console.log(`[pass-142] writing report to ${OUT_DIR}`);
   // '/bin/chromium' only exists in the sandbox this script was originally
   // authored in. Everywhere else - including GitHub Actions runners - it
   // doesn't exist, so hardcoding it here overrides Playwright's own browser
