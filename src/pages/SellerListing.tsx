@@ -26,7 +26,6 @@ import {
 import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
-import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Dialog,
   DialogContent,
@@ -303,46 +302,89 @@ Requirements:
     }
   };
 
-  const validateStep = (step: number): boolean => {
+  /**
+   * Which required fields a step is still missing, by their on-screen labels.
+   *
+   * Returning the names rather than a bare boolean is what lets the step tabs
+   * and the Next button say *what* is missing. Previously the only feedback
+   * was a generic "Please complete all required fields" toast fired after
+   * clicking Next, which named neither the step nor the field.
+   */
+  const missingFieldsForStep = (step: number): string[] => {
     const values = form.getValues();
-    const sellerType = values.seller_type;
-    
+    const missing: string[] = [];
+
     switch (step) {
       case 1:
-        return !!(values.seller_full_name && values.seller_phone && values.seller_email);
+        if (!values.seller_full_name) missing.push("Full name");
+        if (!values.seller_phone) missing.push("Phone");
+        if (!values.seller_email) missing.push("Email");
+        break;
       case 2:
-        return !!(values.property_type && values.property_location);
+        if (!values.property_type) missing.push("Property type");
+        if (!values.property_location) missing.push("Location");
+        break;
       case 3:
-        return !!(values.target_selling_price && values.target_selling_price > 0);
+        if (!values.target_selling_price || values.target_selling_price <= 0) {
+          missing.push("Target selling price");
+        }
+        break;
       case 4:
-        return true; // Optional step
       case 5:
-        return true; // Optional but recommended
+        break; // optional
       case 6:
-        // Title Deed is required
-        if (!titleDeedFile) {
-          toast.error("Title Deed is required");
-          return false;
-        }
-        // POA is required if seller type is POA
-        if (sellerType === 'poa' && !poaFile) {
-          toast.error("Power of Attorney document is required for POA sellers");
-          return false;
-        }
-        return true;
+        if (!titleDeedFile) missing.push("Title Deed");
+        if (values.seller_type === "poa" && !poaFile) missing.push("Power of Attorney");
+        break;
       case 7:
-        return values.submission_confirmed === true;
-      default:
-        return true;
+        if (values.submission_confirmed !== true) missing.push("Confirmation checkbox");
+        break;
     }
+    return missing;
+  };
+
+  const validateStep = (step: number): boolean => missingFieldsForStep(step).length === 0;
+
+  const stepLabel = (step: number) =>
+    STEPS_LABELS[step as keyof typeof STEPS_LABELS] ?? STEPS.find((s) => s.number === step)?.title ?? `Step ${step}`;
+
+  const reportMissing = (step: number, missing: string[]) => {
+    toast.error(`${stepLabel(step)}: ${missing.join(", ")} ${missing.length === 1 ? "is" : "are"} required`);
+  };
+
+  /**
+   * Move to `target`, honouring the rule that you cannot skip past an
+   * incomplete step.
+   *
+   * Clicking a step tab used to be a silent no-op unless you were going
+   * backwards — the pane simply never changed and nothing said why. Now a
+   * forward jump advances as far as the form allows and lands on the first
+   * step that is actually blocking, naming what it needs.
+   */
+  const goToStep = (target: number) => {
+    const clamped = Math.min(Math.max(target, 1), 7);
+    if (clamped <= currentStep) {
+      setCurrentStep(clamped);
+      return;
+    }
+    for (let step = currentStep; step < clamped; step++) {
+      const missing = missingFieldsForStep(step);
+      if (missing.length > 0) {
+        setCurrentStep(step);
+        reportMissing(step, missing);
+        return;
+      }
+    }
+    setCurrentStep(clamped);
   };
 
   const goToNextStep = () => {
-    if (validateStep(currentStep)) {
+    const missing = missingFieldsForStep(currentStep);
+    if (missing.length === 0) {
       setCurrentStep(Math.min(currentStep + 1, 7));
-    } else if (currentStep !== 6) {
-      toast.error("Please complete all required fields before continuing");
+      return;
     }
+    reportMissing(currentStep, missing);
   };
 
   const goToPrevStep = () => {
@@ -684,11 +726,15 @@ Requirements:
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
 
               {STEPS.map((step, index) => (
-                <ClickableDiv 
+                <button
                   key={step.number}
+                  type="button"
                   data-no-contrast-guard
-                  className="flex flex-col items-center min-w-[80px] cursor-pointer transition-all"
-                  onClick={() => step.number < currentStep && setCurrentStep(step.number)}
+                  data-step-tab={step.number}
+                  aria-current={currentStep === step.number ? "step" : undefined}
+                  aria-label={`Step ${step.number}: ${STEPS_LABELS[step.number as keyof typeof STEPS_LABELS] ?? step.title}`}
+                  className="flex flex-col items-center min-w-[80px] cursor-pointer transition-all bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 rounded-lg"
+                  onClick={() => goToStep(step.number)}
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
  currentStep === step.number 
@@ -719,7 +765,7 @@ Requirements:
                       fontWeight: currentStep === step.number ? 600 : 400,
                     }}
                   >{STEPS_LABELS[step.number as keyof typeof STEPS_LABELS] ?? step.title}</span>
-                </ClickableDiv>
+                </button>
               ))}
             </div>
           </div>

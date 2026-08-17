@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Loader2, Upload, FileText } from "lucide-react";
+import { partitionValidMedia } from "@/lib/media/validateUpload";
 
 type Project = { id: string; name: string; slug: string };
 
@@ -43,16 +44,25 @@ export default function OwnerMediaIngest() {
   const handleFiles = async (files: FileList | null) => {
     if (!files || !projectId) { toast.error("Pick a project first"); return; }
     setBusy(true);
+
+    // Nothing reaches Storage until it has passed the size / MIME /
+    // extension / magic-byte checks. Rejections are reported per file rather
+    // than folded into a single failure count, so the uploader can see which
+    // file was refused and why.
+    const { accepted, rejected } = await partitionValidMedia(Array.from(files));
+    for (const message of rejected) toast.error(message);
+    if (accepted.length === 0) { setBusy(false); return; }
+
     let ok = 0, fail = 0;
-    for (const file of Array.from(files)) {
+    for (const { file, safeName } of accepted) {
       try {
-        const path = `${projectId}/${crypto.randomUUID()}-${file.name}`;
+        const path = `${projectId}/${crypto.randomUUID()}-${safeName}`;
         const { error: upErr } = await supabase.storage.from("rel-media").upload(path, file, { contentType: file.type });
         if (upErr) throw upErr;
         const { error: insErr } = await (supabase as any).from("rel_media_assets").insert({
           project_id: projectId,
           kind: detectKind(file.type),
-          title: file.name,
+          title: safeName,
           storage_path: path,
           mime_type: file.type,
           size_bytes: file.size,
