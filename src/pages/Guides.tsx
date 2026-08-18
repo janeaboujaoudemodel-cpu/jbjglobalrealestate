@@ -14,6 +14,7 @@ import { BookCard } from "@/components/books/BookCard";
 import type { BookData } from "@/types/books"; // used for selectedBook state typing
 import { GuideHero } from "@/components/guides/GuideHero";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 
 const fadeInUp = {
@@ -186,7 +187,7 @@ const Guides = () => {
 
       {/* TOC Modal */}
       {selectedBook && (
-        <div 
+        <ClickableDiv 
           className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-24 pb-8"
           style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
           onClick={() => setSelectedBook(null)}
@@ -251,7 +252,7 @@ const Guides = () => {
               </Button>
             </div>
           </motion.div>
-        </div>
+        </ClickableDiv>
       )}
     </div>
   );

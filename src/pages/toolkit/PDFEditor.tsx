@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import usePDFEditor from "./usePDFEditor";
 import { G } from "./pdfEditorTypes";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface PDFEditorProps { embedded?: boolean; }
 
@@ -101,7 +102,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                     {ed.pages.map((page, index) => {
                       const isPreviewing = ed.previewPage?.id === page.id;
                       return (
-                        <div key={page.id}
+                        <ClickableDiv key={page.id}
                           className="rounded-xl cursor-pointer transition-all overflow-hidden"
                           style={{
                             background: isPreviewing ? G.bgHover : page.selected ? G.bg : "rgba(255,255,255,0.03)",
@@ -149,7 +150,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                               <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: G.bg, color: G.gold }}>↻ {page.rotation}°</span>
                             </div>
                           )}
-                        </div>
+                        </ClickableDiv>
                       );
                     })}
                   </div>

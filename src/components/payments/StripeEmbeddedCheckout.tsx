@@ -6,6 +6,11 @@ interface Props {
   priceId: string;
   quantity?: number;
   customerEmail?: string;
+  /**
+   * @deprecated Ignored. The checkout session's `metadata.userId` is derived
+   * server-side from the verified Supabase session (backend audit 2.2) — a
+   * client-supplied value is never trusted and is no longer sent.
+   */
   userId?: string;
   returnUrl?: string;
 }
@@ -14,7 +19,6 @@ export function StripeEmbeddedCheckoutView({
   priceId,
   quantity,
   customerEmail,
-  userId,
   returnUrl,
 }: Props) {
   const fetchClientSecret = async (): Promise<string> => {
@@ -27,7 +31,6 @@ export function StripeEmbeddedCheckoutView({
         priceId,
         quantity,
         customerEmail,
-        userId,
         returnUrl: resolvedReturnUrl,
         environment: getStripeEnvironment(),
       },

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Building2, Eye, EyeOff, Search, CheckSquare, EyeIcon, EyeOffIcon, Clock } from "lucide-react";
 import { logAdminEdit, formatRelativeTime } from "@/hooks/useAdminEditLog";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 export function DeveloperVisibilityPanel() {
   const queryClient = useQueryClient();
@@ -177,7 +178,7 @@ export function DeveloperVisibilityPanel() {
         {/* Developer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {filtered.map((dev) => (
-            <div
+            <ClickableDiv
               key={dev.id}
               className={`flex items-center justify-between p-3 rounded-lg border bg-[#FDFBF7]/50 transition-colors cursor-pointer ${
  selectedIds.has(dev.id) ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20"
@@ -216,7 +217,7 @@ export function DeveloperVisibilityPanel() {
                   onClick={(e) => e.stopPropagation()}
                 />
               </div>
-            </div>
+            </ClickableDiv>
           ))}
         </div>
 

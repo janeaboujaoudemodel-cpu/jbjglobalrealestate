@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -366,7 +367,7 @@ export const DeveloperApprovalQueue = () => {
                 const existingMatch = findMatchingDeveloper(developer.slug);
 
                 return (
-                  <div
+                  <ClickableDiv
                     key={developer.id}
                     className="group relative bg-[#FDFBF7] rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer h-full"
                     onClick={() => handleCardClick(developer.slug)}
@@ -463,7 +464,7 @@ export const DeveloperApprovalQueue = () => {
                         </Button>
                       </div>
                     </div>
-                  </div>
+                  </ClickableDiv>
                 );
               })}
             </div>

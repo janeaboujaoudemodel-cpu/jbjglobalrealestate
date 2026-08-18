@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Upload, FileSpreadsheet, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 type ParsedFile = {
   headers: string[];          // ordered, verbatim (duplicates suffixed)
@@ -291,7 +292,7 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
         )}
 
         {stage === "pick" && (
-          <div
+          <ClickableDiv
             onClick={() => inputRef.current?.click()}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => {
@@ -311,7 +312,7 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
               className="hidden"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) handlePick(f); }}
             />
-          </div>
+          </ClickableDiv>
         )}
 
         {stage === "parsing" && (

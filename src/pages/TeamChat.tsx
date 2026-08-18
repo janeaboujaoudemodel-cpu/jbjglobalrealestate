@@ -26,6 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { allTeamMembers, TeamMember } from "@/config/team-members";
 import QuickCalendarWidget from "@/components/shared/QuickCalendarWidget";
 import QuickNoteWidget from "@/components/shared/QuickNoteWidget";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Message {
   id: string;
@@ -701,7 +702,7 @@ const TeamChat = () => {
                       {filteredDeptMembers.map(member => {
                         const status = memberStatuses[member.id] || 'offline';
                         return (
-                          <div
+                          <ClickableDiv
                             key={member.id}
                             className={cn(
                               "flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#B89555]/5 transition-colors cursor-pointer",
@@ -725,7 +726,7 @@ const TeamChat = () => {
                               </p>
                               <p className="text-[9px] text-[#1A1A1A]/40 truncate">{member.role}</p>
                             </div>
-                          </div>
+                          </ClickableDiv>
                         );
                       })}
                     </div>

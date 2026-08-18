@@ -12,6 +12,7 @@ import {
   Palette
 } from 'lucide-react';
 import { DesignHistoryItem } from '@/hooks/useInteriorDesignHistory';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface DesignHistoryListProps {
   history: DesignHistoryItem[];
@@ -106,7 +107,7 @@ const DesignHistoryList = ({
                   const modeInfo = modeLabels[item.mode] || modeLabels.concept;
                   
                   return (
-                    <div
+                    <ClickableDiv
                       key={item.id}
                       onClick={() => onSelect(item)}
                       className="p-4 border-b border-[#1A1A1A]/50 hover:bg-[#1A1A1A]/30 cursor-pointer transition-colors flex gap-4"
@@ -182,7 +183,7 @@ const DesignHistoryList = ({
                           )}
                         </Button>
                       </div>
-                    </div>
+                    </ClickableDiv>
                   );
                 })}
               </div>

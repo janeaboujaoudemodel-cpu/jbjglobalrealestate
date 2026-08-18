@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Upload, FileText, X, Folder } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Props {
   files: File[];
@@ -64,7 +65,7 @@ export default function UploadDropzone({ files, onFiles, disabled }: Props) {
 
   return (
     <div className="space-y-2">
-      <div
+      <ClickableDiv
         onClick={() => !disabled && fileInputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setHover(true); }}
         onDragLeave={() => setHover(false)}
@@ -114,7 +115,7 @@ export default function UploadDropzone({ files, onFiles, disabled }: Props) {
             <div className="text-xs">PDF · max 25 MB each · up to {MAX_FILES} files</div>
           </div>
         )}
-      </div>
+      </ClickableDiv>
 
       <div className="flex items-center justify-between gap-2">
         <Button

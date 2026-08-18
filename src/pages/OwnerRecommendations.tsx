@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Recommendation {
   id: string;
@@ -205,7 +206,7 @@ const OwnerRecommendations = () => {
               const isExpanded = expandedId === rec.id;
               return (
                 <div key={rec.id} className="bg-[#FDFBF7]/90 border border-[#B89555]/20 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="p-5 flex items-start gap-4 cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : rec.id)}>
+                  <ClickableDiv className="p-5 flex items-start gap-4 cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : rec.id)}>
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${srcConfig.color}`}>
                       <SrcIcon className="h-5 w-5" />
                     </div>
@@ -218,7 +219,7 @@ const OwnerRecommendations = () => {
                       <p className="text-xs text-[#1A1A1A]/70 line-clamp-2">{rec.description}</p>
                     </div>
                     <Eye className={`h-4 w-4 text-[#1A1A1A]/70 flex-shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
-                  </div>
+                  </ClickableDiv>
 
                   {isExpanded && (
                     <div className="border-t border-[#B89555]/10 bg-[#FDFBF7] p-5">

@@ -17,6 +17,7 @@ import {
   type VaultCategory, type VaultDocument, type VaultProperty, type VaultRanking,
 } from "@/lib/vault";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const CATEGORIES: { v: VaultCategory; label: string; help: string }[] = [
   { v: "identity",  label: "Identity",   help: "Passport, Emirates ID, visa, national ID, driving licence" },
@@ -359,7 +360,7 @@ function AddPropertyDialog({ onClose, onSaved }: { onClose: () => void; onSaved:
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4" onClick={onClose}>
+    <ClickableDiv className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4" onClick={onClose}>
       <Card className="w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
@@ -403,7 +404,7 @@ function AddPropertyDialog({ onClose, onSaved }: { onClose: () => void; onSaved:
           </div>
         </CardContent>
       </Card>
-    </div>
+    </ClickableDiv>
   );
 }
 

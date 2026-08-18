@@ -48,6 +48,7 @@ import { companyProfileBook } from "@/data/bookCollections";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 import { SEOHead } from "@/components/SEOHead";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 function SectionShell({
   children,
@@ -336,7 +337,7 @@ Today, JBJ Global Real Estate serves local and international clients seeking rel
 // Consistent 3D Book using the same cover asset from bookCollections
 const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGenerating: boolean }) => {
   return (
-    <div className="relative group cursor-pointer" onClick={onClick} style={{ perspective: '1200px' }}>
+    <ClickableDiv className="relative group cursor-pointer" onClick={onClick} style={{ perspective: '1200px' }}>
       <div className="absolute -bottom-4 left-4 right-4 h-8 bg-[#1A1A1A]/20 blur-xl rounded-full" />
       <div
         className="relative w-52 sm:w-60 md:w-64 mx-auto transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]"
@@ -373,7 +374,7 @@ const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGe
           )}
         </div>
       </div>
-    </div>
+    </ClickableDiv>
   );
 };
 

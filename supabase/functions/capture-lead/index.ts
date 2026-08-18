@@ -36,7 +36,6 @@ interface LeadCaptureRequest {
   intent?: LeadIntent;
   partnerServiceType?: PartnerServiceType;
   partnerConsentGiven?: boolean;
-  message?: string;
   context?: Record<string, unknown>;
   // Anti-spam honeypot: real users never populate this (see
   // src/components/forms/HoneypotField.tsx). Non-empty means bot.

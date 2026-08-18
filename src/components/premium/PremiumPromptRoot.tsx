@@ -7,6 +7,7 @@ import {
 } from "@/components/premium/premiumPromptBus";
 import { CONVERSION_SUB } from "@/config/premiumActions";
 import { logAnalytics } from "@/lib/analytics";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 /**
  * Global mount for the "Create your free account" prompt. Rendered once at
@@ -41,7 +42,7 @@ export default function PremiumPromptRoot() {
   };
 
   return (
-    <div
+    <ClickableDiv
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={close}
     >
@@ -90,6 +91,6 @@ export default function PremiumPromptRoot() {
           </div>
         </div>
       </div>
-    </div>
+    </ClickableDiv>
   );
 }

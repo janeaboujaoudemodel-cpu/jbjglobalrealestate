@@ -9,6 +9,7 @@ import { useModuleTests } from "@/hooks/useModuleTests";
 import { Loader2, BookOpen, CheckCircle, XCircle, ArrowRight, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TestResults } from "./TestResults";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface ModuleTestProps {
   moduleId: string;
@@ -168,7 +169,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
           >
             <div className="space-y-3">
               {currentQuestion.options.map((option, index) => (
-                <div
+                <ClickableDiv
                   key={index}
                   className={cn(
                     "flex items-center space-x-3 p-4 rounded-lg border transition-all cursor-pointer",
@@ -189,7 +190,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
                   >
                     {option}
                   </Label>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           </RadioGroup>

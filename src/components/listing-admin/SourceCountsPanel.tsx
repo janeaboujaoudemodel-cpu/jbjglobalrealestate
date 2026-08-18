@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Globe, RefreshCw, Database, CheckCircle, Clock, Layers, AlertTriangle } from "lucide-react";
 import { useSyncJobs } from "@/hooks/useSyncJobs";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import { useNavigate } from "react-router-dom";
 
 interface SourceCountsPanelProps {
@@ -60,7 +61,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                 <p className="text-[10px] text-muted-foreground font-medium">Enriched</p>
                 <p className="text-base font-bold text-foreground">—</p>
               </div>
-              <div
+              <ClickableDiv
                 className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
                 onClick={(e) => { e.stopPropagation(); handleViewProjects('pending', 'provident'); }}
               >
@@ -68,8 +69,8 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                   <Clock className="w-2.5 h-2.5" /> Pending
                 </p>
                 <p className="text-base font-bold text-amber-700">0</p>
-              </div>
-              <div
+              </ClickableDiv>
+              <ClickableDiv
                 className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
                 onClick={(e) => { e.stopPropagation(); handleViewProjects('approved', 'provident'); }}
               >
@@ -77,7 +78,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                   <CheckCircle className="w-2.5 h-2.5" /> Approved
                 </p>
                 <p className="text-base font-bold text-[color:var(--emerald-1)]">0</p>
-              </div>
+              </ClickableDiv>
             </div>
           </CardContent>
         </Card>
@@ -109,7 +110,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                   {reellyApiTotal?.toLocaleString() || liveCounts?.reelly_total_api?.toLocaleString() || "—"}
                 </p>
               </div>
-              <div
+              <ClickableDiv
                 className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
                 onClick={(e) => { e.stopPropagation(); handleViewProjects('pending', 'reelly'); }}
               >
@@ -119,8 +120,8 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                 <p className="text-base font-bold text-amber-700">
                   {liveCounts?.reelly_pending_queue?.toLocaleString() || "0"}
                 </p>
-              </div>
-              <div
+              </ClickableDiv>
+              <ClickableDiv
                 className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
                 onClick={(e) => { e.stopPropagation(); handleViewProjects('approved', 'reelly'); }}
               >
@@ -130,7 +131,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                 <p className="text-base font-bold text-[color:var(--emerald-1)]">
                   {liveCounts?.reelly_approved?.toLocaleString() || "0"}
                 </p>
-              </div>
+              </ClickableDiv>
             </div>
           </CardContent>
         </Card>

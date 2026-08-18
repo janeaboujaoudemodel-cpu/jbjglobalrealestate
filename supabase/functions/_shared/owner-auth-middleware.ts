@@ -70,66 +70,66 @@ export async function requireOwnerAuth(
   const userId = claimsData.claims.sub as string;
   const userEmail = (claimsData.claims.email as string) || "";
 
-  const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
-
-  // 4. Access is granted if ANY of these match:
-  //    a) userEmail == app_settings.owner_email (configured owner)
-  //    b) userEmail == PRIMARY_OWNER_EMAIL (bootstrap fallback)
-  //    c) user has 'owner' or 'admin' row in user_roles
+  // 4. Email allow-list is the ONLY gate — identical rule to the `verify-owner`
+  //    edge function that the Owner UI (`OwnerGuard`) trusts.
+  //
+  //    Backend audit 2.1: this middleware previously granted access on
+  //    `emailOk || roleOk`, where `roleOk` was an `owner`/`admin` row in
+  //    `user_roles`. That made the Owner UI and the Owner-only backend
+  //    functions disagree about what "being the owner" means: a stray
+  //    `owner` role row for a non-founder account would have opened every
+  //    `owner-*` function while `OwnerGuard` still refused the UI. Roles are
+  //    no longer consulted for authorization here — only for the audit label
+  //    recorded on a denial.
   const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
 
-  const [{ data: ownerSetting }, { data: roles }] = await Promise.all([
-    serviceClient.from("app_settings").select("value").eq("key", "owner_email").maybeSingle(),
-    serviceClient.from("user_roles").select("role").eq("user_id", userId),
+  // Keep in sync with supabase/functions/verify-owner/index.ts and
+  // src/config/ownerEmails.ts (OWNER_BACKEND_EMAILS).
+  const OWNER_BACKEND_EMAILS = new Set([
+    "janeaboujaoudemodel@gmail.com",
+    "janeaboujaoudenails@gmail.com",
+    "contact@janeaboujaoude.net",
+    "infoo.jane@gmail.com",
   ]);
 
-  const configuredOwnerEmail = String(ownerSetting?.value || "").toLowerCase().trim();
-  const normalizedEmail = userEmail.toLowerCase().trim();
-  const emailOk =
-    normalizedEmail === PRIMARY_OWNER_EMAIL ||
-    (!!configuredOwnerEmail && normalizedEmail === configuredOwnerEmail);
-  const roleOk = !!roles?.some(
-    (r: { role: string }) => r.role === "owner" || r.role === "admin",
-  );
-
-  if (!emailOk && !roleOk) {
-    await logDenied(req, "owner_email_mismatch", userId, userEmail);
-    return denied(403, "Owner-only access. This action has been logged.");
-  }
-
-  return { response: null, userId, email: userEmail };
-
-
-  /* Legacy role-only gate intentionally disabled.
-
-  const { data: roles } = await serviceClient
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", userId);
-
-  const hasOwnerRole = roles?.some(
-    (r: { role: string }) => r.role === "owner" || r.role === "admin"
-  );
-
-  if (hasOwnerRole) {
-    return { response: null, userId, email: userEmail };
-  }
-
-  // 5. Fallback: check app_settings.owner_email
   const { data: ownerSetting } = await serviceClient
     .from("app_settings")
     .select("value")
     .eq("key", "owner_email")
     .maybeSingle();
 
-  if (ownerSetting?.value && ownerSetting.value.toLowerCase() === userEmail.toLowerCase()) {
-    return { response: null, userId, email: userEmail };
+  // `app_settings.owner_email` can only ever NARROW or re-confirm the set —
+  // a configured value is honoured only when it is already an allow-listed
+  // founder inbox, so DB write access can never widen owner access.
+  const configuredOwnerEmail = String(ownerSetting?.value || "").toLowerCase().trim();
+  if (configuredOwnerEmail && OWNER_BACKEND_EMAILS.has(configuredOwnerEmail)) {
+    OWNER_BACKEND_EMAILS.add(configuredOwnerEmail);
   }
 
-  // 6. Denied — not owner
-  await logDenied(req, "privilege_escalation_attempt", userId, userEmail);
-  return denied(403, "Owner-only access. This action has been logged.");
-  */
+  const normalizedEmail = userEmail.toLowerCase().trim();
+
+  if (!OWNER_BACKEND_EMAILS.has(normalizedEmail)) {
+    // A caller holding an owner/admin role row but no allow-listed email is
+    // the exact privilege-escalation shape this gate exists to stop — log it
+    // at the higher severity so it is visible in api_security_events.
+    const { data: roles } = await serviceClient
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+    const hadOwnerRole = !!roles?.some(
+      (r: { role: string }) => r.role === "owner" || r.role === "admin",
+    );
+
+    await logDenied(
+      req,
+      hadOwnerRole ? "privilege_escalation_attempt" : "owner_email_mismatch",
+      userId,
+      userEmail,
+    );
+    return denied(403, "Owner-only access. This action has been logged.");
+  }
+
+  return { response: null, userId, email: userEmail };
 }
 
 async function logDenied(

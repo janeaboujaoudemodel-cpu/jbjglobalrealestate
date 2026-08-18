@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { toast } from 'sonner';
-import { Loader2, Check, X, Package } from 'lucide-react';
+import { Loader2, Check, Package } from 'lucide-react';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 type BrandAssetType = 'stamp' | 'logo' | 'business_card' | 'signature' | 'letterhead' | 'email_signature';
 
@@ -57,16 +60,15 @@ export function BrandAssetPicker({ filterType, onSelect, onClose }: BrandAssetPi
   const types = [...new Set(assets.map(a => a.asset_type))];
 
   return (
-    <div className="fixed inset-0 z-[10100] flex items-center justify-center bg-[#1A1A1A]/50 backdrop-blur-sm">
-      <div className="bg-[#FDFBF7] rounded-2xl shadow-2xl border border-[hsl(var(--border))] w-[90vw] max-w-[700px] max-h-[80vh] flex flex-col overflow-hidden">
+    <Dialog open onOpenChange={(next) => { if (!next) onClose(); }}>
+      <DialogContent className="w-[90vw] max-w-[700px] max-h-[80vh] p-0 bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white">
           <div className="flex items-center gap-2">
             <Package size={14} className="text-[hsl(var(--gold))]" />
-            <span className="font-semibold text-sm text-[hsl(var(--foreground))]">Brand Assets</span>
+            <DialogPrimitive.Title asChild>
+              <span className="font-semibold text-sm text-[hsl(var(--foreground))]">Brand Assets</span>
+            </DialogPrimitive.Title>
           </div>
-          <button onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[hsl(var(--muted))] flex items-center justify-center">
-            <X size={14} />
-          </button>
         </div>
 
         {!filterType && types.length > 1 && (
@@ -98,7 +100,7 @@ export function BrandAssetPicker({ filterType, onSelect, onClose }: BrandAssetPi
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {filtered.map(asset => (
-                <div key={asset.id}
+                <ClickableDiv key={asset.id}
                   className="group bg-card/80 rounded-xl border-2 border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold)/0.5)] transition-all cursor-pointer"
                   onClick={() => onSelect(asset)}>
                   <div className="p-2 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl min-h-[90px]">
@@ -119,13 +121,13 @@ export function BrandAssetPicker({ filterType, onSelect, onClose }: BrandAssetPi
                       <Check size={7} /> Select
                     </Button>
                   </div>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

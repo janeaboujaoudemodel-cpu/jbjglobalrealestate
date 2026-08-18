@@ -41,6 +41,7 @@ export type { ShortcutFilterState } from "./shortcutFilterState";
 export { defaultShortcutFilters } from "./shortcutFilterState";
 import type { ShortcutFilterState } from "./shortcutFilterState";
 import { defaultShortcutFilters } from "./shortcutFilterState";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 
 
@@ -991,7 +992,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
         ) : (
           <div className="space-y-1 max-h-60 overflow-y-auto">
             {savedFilters.map((sf, idx) => (
-              <div
+              <ClickableDiv
                 key={idx}
                 className="flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-white cursor-pointer transition-colors group"
                 onClick={() => applySavedFilter(sf)}
@@ -1024,7 +1025,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 )}
-              </div>
+              </ClickableDiv>
             ))}
           </div>
         )}

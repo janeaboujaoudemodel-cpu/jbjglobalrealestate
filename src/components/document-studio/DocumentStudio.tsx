@@ -83,6 +83,7 @@ import { deriveCandidateFolder, pickCandidateDisplayName } from "@/utils/candida
 import DocumentActionSheet from "./DocumentActionSheet";
 import DocumentPreviewDialog from "./DocumentPreviewDialog";
 import { RotateCcw } from "lucide-react";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface Props {
   catalog: DocumentScope;
@@ -561,14 +562,14 @@ export default function DocumentStudio({ catalog, trigger, presetTemplateId, ope
   return (
     <>
       {trigger !== null && (
-        <span onClick={() => setOpen(true)} className="contents">
+        <ClickableDiv onClick={() => setOpen(true)} className="contents">
           {trigger || (
           <Button variant="primary">
             <Wand2 className="w-4 h-4 mr-2" />
             Generate Document
           </Button>
           )}
-        </span>
+        </ClickableDiv>
       )}
       {open && (
         <StudioShell
@@ -2827,8 +2828,14 @@ function StudioShell({
         onPick={pickAsset}
       />
 
+      {/* NOT migrated to shared Dialog — see JBJ-005 batch 1 PR description.
+          DialogContent's inline z-index (120001, dialog.tsx) is hardcoded and
+          cannot be overridden, and this editor overlay renders at 2147483000
+          (createPortal(..., document.body) above), so a plain Dialog here would
+          render invisibly behind the shell. Keeping the original explicit
+          z-index (2147483100) until that's resolved. */}
       {saveDialogOpen && (
-        <div
+        <ClickableDiv
           className="fixed inset-0 bg-black/40 flex items-center justify-center"
           style={{ zIndex: 2147483100 }}
           onClick={() => setSaveDialogOpen(false)}
@@ -2865,11 +2872,11 @@ function StudioShell({
               </Button>
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
 
       {addPageAfterIndex !== null && (
-        <div
+        <ClickableDiv
           className="fixed inset-0 bg-black/40 flex items-center justify-center"
           style={{ zIndex: 2147483100 }}
           onClick={() => !aiPageBusy && setAddPageAfterIndex(null)}
@@ -2898,7 +2905,7 @@ function StudioShell({
               </Button>
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
 
 
@@ -3400,7 +3407,7 @@ function StudioShell({
                   </div>
 
                   {/* 1 — Company (locked) */}
-                  <div
+                  <ClickableDiv
                     className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5 cursor-pointer hover:ring-1 hover:ring-[#B89555]/40"
                     onClick={() => highlightSig("owner")}
                   >
@@ -3412,10 +3419,10 @@ function StudioShell({
                       <Input value={ownerTitle} onChange={(e) => setOwnerTitle(e.target.value)} placeholder="Title" className="bg-[#FDFBF7] h-7 text-[11px]" />
                     </div>
                     <Input type="date" value={ownerDate} onChange={(e) => setOwnerDate(e.target.value)} className="bg-[#FDFBF7] h-7 text-[11px]" />
-                  </div>
+                  </ClickableDiv>
 
                   {/* 2 — Recipient (locked) */}
-                  <div
+                  <ClickableDiv
                     className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5 cursor-pointer hover:ring-1 hover:ring-[#B89555]/40"
                     onClick={() => highlightSig("recipient")}
                   >
@@ -3450,11 +3457,11 @@ function StudioShell({
                       />
                     </div>
                     <Input type="date" value={applicantDate} onChange={(e) => setApplicantDate(e.target.value)} className="bg-[#FDFBF7] h-7 text-[11px]" />
-                  </div>
+                  </ClickableDiv>
 
                   {/* 3..N — Extras */}
                   {extraSignatories.map((s, idx) => (
-                    <div
+                    <ClickableDiv
                       key={s.id}
                       className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5 cursor-pointer hover:ring-1 hover:ring-[#B89555]/40"
                       onClick={() => highlightSig(`extra-${idx}`)}
@@ -3510,7 +3517,7 @@ function StudioShell({
                         className="h-7 text-[11px]"
                         onClick={(e) => e.stopPropagation()}
                       />
-                    </div>
+                    </ClickableDiv>
                   ))}
                 </div>
 

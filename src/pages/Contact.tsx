@@ -29,6 +29,7 @@ import contactHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json"
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const contactHeroVideo = contactHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
@@ -330,7 +331,7 @@ END:VCARD`;
           <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-5 md:p-6 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#B89555]/20">
               {contactCards.map((card) => (
-                <div
+                <ClickableDiv
                   key={card.title}
                   onClick={() => {
                     if (card.action === "phone-actions") setPhoneActionsOpen(true);
@@ -344,7 +345,7 @@ END:VCARD`;
                   </div>
                   <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 mb-1.5 font-medium">{card.title}</p>
                   <p className="text-sm font-medium text-[#1A1A1A] leading-snug">{card.value}</p>
-                </div>
+                </ClickableDiv>
               ))}
             </div>
           </div>

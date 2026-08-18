@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookCoverFace } from '@/components/books/BookCoverFace';
 import { BookCard } from '@/components/books/BookCard';
 import type { BookData } from '@/types/books';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 export type { BookData, BookTOCItem } from '@/types/books';
 
 interface BookShelfProps {
@@ -40,7 +41,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
 
       {/* TOC Modal — Gold Champagne Theme */}
       {selectedBook && (
-        <div 
+        <ClickableDiv 
           className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-20"
           style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
           onClick={() => setSelectedBook(null)}
@@ -118,7 +119,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
               </Button>
             </div>
           </motion.div>
-        </div>
+        </ClickableDiv>
       )}
     </>
   );

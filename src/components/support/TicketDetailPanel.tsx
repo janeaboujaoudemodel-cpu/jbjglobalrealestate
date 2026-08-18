@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import {
   useSupportTicketDetail,
   useUpdateTicketStatus,
@@ -39,6 +40,7 @@ import {
 import { useAITicketSuggestions, type AISuggestion } from "@/hooks/useAITicketSuggestions";
 import { useSignedAttachmentUrl, isImageUrl, getFilenameFromUrl } from "@/hooks/useTicketAttachments";
 import { cn } from "@/lib/utils";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface TicketDetailPanelProps {
   ticketId: string | null;
@@ -131,7 +133,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
   return (
     <div className="flex flex-col gap-2">
       {imagePreview && (
-        <div 
+        <ClickableDiv 
           onClick={handleView}
           className="cursor-pointer rounded-lg overflow-hidden border border-[#B89555]/20 hover:border-[#B89555] transition-colors"
         >
@@ -140,7 +142,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
             alt={filename}
             className="max-w-full max-h-32 object-cover"
            loading="lazy" decoding="async" />
-        </div>
+        </ClickableDiv>
       )}
       <div className="flex gap-1">
         <button
@@ -208,50 +210,45 @@ const SuggestionCard = ({
       </button>
 
       {/* Expanded Preview Modal */}
-      {expanded && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
-          <div
-            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="px-5 py-4 border-b border-[#B89555]/30 flex items-center justify-between">
-              <div>
-                <Badge className={cn("border text-xs mb-1", typeColors[suggestion.type])}>
-                  {typeLabels[suggestion.type] || suggestion.title}
-                </Badge>
-                <h3 className="text-[#1A1A1A] font-bold text-lg">{suggestion.title}</h3>
-              </div>
-              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20 border border-[#B89555]/40">
-                <X className="w-5 h-5" />
-              </Button>
-            </div>
-            <ScrollArea className="flex-1 p-5">
-              <div className="bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg p-4">
-                <p className="text-[#1A1A1A] text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
-              </div>
-            </ScrollArea>
-            <div className="px-5 py-4 border-t border-[#B89555]/30 flex gap-3">
-              <Button
-                onClick={() => {
-                  onSelect();
-                  setExpanded(false);
-                }}
-                className="flex-1 bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70"
-              >
-                <CheckCircle className="w-4 h-4 mr-2" />
-                Use This Reply
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setExpanded(false)}
-                className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20 font-semibold"
-              >
-                Cancel
-              </Button>
+      <Dialog open={expanded} onOpenChange={(next) => { if (!next) setExpanded(false); }}>
+        <DialogContent
+          className="flex flex-col p-0 gap-0 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)]"
+          style={{ width: "calc(100vw - 2rem)", maxWidth: "32rem", maxHeight: "80vh" }}
+        >
+          <div className="px-5 py-4 border-b border-[#B89555]/30 flex items-center justify-between">
+            <div>
+              <Badge className={cn("border text-xs mb-1", typeColors[suggestion.type])}>
+                {typeLabels[suggestion.type] || suggestion.title}
+              </Badge>
+              <DialogTitle className="text-[#1A1A1A] font-bold text-lg">{suggestion.title}</DialogTitle>
             </div>
           </div>
-        </div>
-      )}
+          <ScrollArea className="flex-1 p-5">
+            <div className="bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg p-4">
+              <p className="text-[#1A1A1A] text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
+            </div>
+          </ScrollArea>
+          <div className="px-5 py-4 border-t border-[#B89555]/30 flex gap-3">
+            <Button
+              onClick={() => {
+                onSelect();
+                setExpanded(false);
+              }}
+              className="flex-1 bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70"
+            >
+              <CheckCircle className="w-4 h-4 mr-2" />
+              Use This Reply
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setExpanded(false)}
+              className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20 font-semibold"
+            >
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
@@ -703,71 +700,66 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       </div>
 
       {/* Maximized Reply Editor Modal */}
-      {replyMaximized && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
-          <div
-            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="px-5 py-4 border-b border-[#B89555]/30 flex items-center justify-between">
-              <h3 className="text-[#1A1A1A] font-bold text-lg flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
-                Reply Editor
-              </h3>
-              <Button variant="ghost" size="icon" onClick={() => setReplyMaximized(false)} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20 border border-[#B89555]/40">
-                <Minimize2 className="w-5 h-5" />
-              </Button>
-            </div>
-            <div className="flex-1 p-5">
-              <textarea
-                value={replyMessage}
-                onChange={(e) => setReplyMessage(e.target.value)}
-                placeholder="Type your reply to the customer..."
-                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-[#FDFBF7]/80 border border-[#B89555]/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] transition-all leading-relaxed"
-                autoFocus
-              />
-            </div>
-            <div className="px-5 py-4 border-t border-[#B89555]/30 flex gap-3 items-center">
-              <VoiceInputButton
-                onTranscript={(text) => setReplyMessage(prev => prev ? `${prev} ${text}` : text)}
-                onTranscriptResult={(result) => {
-                  if (result.translated && !result.isEnglish) {
-                    const combined = `[${result.languageName || 'Original'}]: ${result.original}\n[English]: ${result.translated}`;
-                    setReplyMessage(prev => prev ? `${prev}\n\n${combined}` : combined);
-                  }
-                }}
-                size="default"
-                variant="outline"
-                className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
-              />
-              <div className="flex-1" />
-              <Button
-                variant="outline"
-                onClick={() => setReplyMaximized(false)}
-                className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20 font-semibold"
-              >
-                <Minimize2 className="w-4 h-4 mr-2" />
-                Minimize
-              </Button>
-              <Button
-                onClick={() => {
-                  handleSendReply();
-                  setReplyMaximized(false);
-                }}
-                disabled={!replyMessage.trim() || sendReply.isPending}
-                className="bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70"
-              >
-                {sendReply.isPending ? (
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                ) : (
-                  <Send className="w-4 h-4 mr-2" />
-                )}
-                Send Reply
-              </Button>
-            </div>
+      <Dialog open={replyMaximized} onOpenChange={(next) => { if (!next) setReplyMaximized(false); }}>
+        <DialogContent
+          className="flex flex-col p-0 gap-0 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)]"
+          style={{ width: "calc(100vw - 2rem)", maxWidth: "42rem", maxHeight: "80vh" }}
+        >
+          <div className="px-5 py-4 border-b border-[#B89555]/30 flex items-center justify-between">
+            <DialogTitle className="text-[#1A1A1A] font-bold text-lg flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
+              Reply Editor
+            </DialogTitle>
           </div>
-        </div>
-      )}
+          <div className="flex-1 p-5">
+            <textarea
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+              placeholder="Type your reply to the customer..."
+              className="w-full h-[45vh] px-4 py-3 rounded-lg bg-[#FDFBF7]/80 border border-[#B89555]/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] transition-all leading-relaxed"
+              autoFocus
+            />
+          </div>
+          <div className="px-5 py-4 border-t border-[#B89555]/30 flex gap-3 items-center">
+            <VoiceInputButton
+              onTranscript={(text) => setReplyMessage(prev => prev ? `${prev} ${text}` : text)}
+              onTranscriptResult={(result) => {
+                if (result.translated && !result.isEnglish) {
+                  const combined = `[${result.languageName || 'Original'}]: ${result.original}\n[English]: ${result.translated}`;
+                  setReplyMessage(prev => prev ? `${prev}\n\n${combined}` : combined);
+                }
+              }}
+              size="default"
+              variant="outline"
+              className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
+            />
+            <div className="flex-1" />
+            <Button
+              variant="outline"
+              onClick={() => setReplyMaximized(false)}
+              className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20 font-semibold"
+            >
+              <Minimize2 className="w-4 h-4 mr-2" />
+              Minimize
+            </Button>
+            <Button
+              onClick={() => {
+                handleSendReply();
+                setReplyMaximized(false);
+              }}
+              disabled={!replyMessage.trim() || sendReply.isPending}
+              className="bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70"
+            >
+              {sendReply.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : (
+                <Send className="w-4 h-4 mr-2" />
+              )}
+              Send Reply
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

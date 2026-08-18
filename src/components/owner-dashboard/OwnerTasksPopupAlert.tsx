@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { X, AlertTriangle, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 /**
  * Pending Tasks alert.
@@ -113,22 +114,18 @@ export function OwnerTasksPopupAlert() {
     navigate("/owner#tasks");
   };
 
-  if (suppressed || !loaded || hiddenThisSession || pendingCount === 0) return null;
+  const isOpen = !suppressed && loaded && !hiddenThisSession && pendingCount > 0;
+
+  if (!isOpen) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="pending-tasks-title"
-      data-no-contrast-guard
-      className="fixed inset-0 z-[9999] flex items-start md:items-center justify-center bg-[#1A1A1A]/50 p-4 pt-24 md:pt-[104px]"
-      data-no-backdrop-blur
-    >
-      <div
+    <Dialog open onOpenChange={(next) => { if (!next) handleClose(); }}>
+      <DialogContent
         data-no-contrast-guard
+        data-no-backdrop-blur
         data-surface="page"
         style={{ backgroundColor: "#FDFBF7", color: "#1A1A1A" }}
-        className="border-2 border-[#B89555]/60 rounded-2xl shadow-2xl p-5 md:p-8 max-w-md w-full max-w-[calc(100vw-2rem)] relative overflow-hidden"
+        className="gap-0 max-w-md w-full max-w-[calc(100vw-2rem)] border-2 border-[#B89555]/60 rounded-2xl shadow-2xl p-5 md:p-8 overflow-hidden [&>button[aria-label='Close']]:hidden"
       >
         <button
           type="button"
@@ -174,12 +171,12 @@ export function OwnerTasksPopupAlert() {
             <AlertTriangle className="allow-white w-6 h-6" strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }} />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 id="pending-tasks-title" style={{ color: "#1A1A1A" }} className="font-bold text-lg leading-tight">
+            <DialogTitle style={{ color: "#1A1A1A" }} className="font-bold text-lg leading-tight tracking-normal">
               Pending Tasks
-            </h3>
-            <p style={{ color: "rgba(26,26,26,0.75)" }} className="text-sm font-medium">
+            </DialogTitle>
+            <DialogDescription style={{ color: "rgba(26,26,26,0.75)" }} className="text-sm font-medium">
               Daily action items require attention
-            </p>
+            </DialogDescription>
           </div>
         </div>
 
@@ -224,7 +221,7 @@ export function OwnerTasksPopupAlert() {
             <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>Later</span>
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

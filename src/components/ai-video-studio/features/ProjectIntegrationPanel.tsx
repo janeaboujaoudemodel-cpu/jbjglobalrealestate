@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { VOICE_OPTIONS, SUPPORTED_LANGUAGES } from '../types';
 import { saveVideoAdToHistory } from './VideoAdHistoryPanel';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 
 
@@ -573,7 +574,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {filtered.map(proj => (
-                  <div
+                  <ClickableDiv
                     key={proj.id}
                     className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg overflow-hidden transition-all group hover:border-amber-400/40 cursor-pointer"
                     onClick={() => openWizard(proj)}
@@ -626,7 +627,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                         </div>
                       )}
                     </div>
-                  </div>
+                  </ClickableDiv>
                 ))}
               </div>
             )}

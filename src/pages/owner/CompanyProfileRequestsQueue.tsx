@@ -12,6 +12,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   FileText, Mail, Phone, User, Loader2, Send, Upload, CheckCircle2, Clock, Building2, RefreshCw,
 } from "lucide-react";
@@ -230,7 +231,7 @@ export default function CompanyProfileRequestsQueue() {
                 const dev = developers[r.developer_id];
                 const isSel = r.id === selectedId;
                 return (
-                  <div
+                  <ClickableDiv
                     key={r.id}
                     onClick={() => select(r.id)}
                     data-surface="light"
@@ -264,7 +265,7 @@ export default function CompanyProfileRequestsQueue() {
                         {r.status}
                       </span>
                     </div>
-                  </div>
+                  </ClickableDiv>
                 );
               })}
             </div>

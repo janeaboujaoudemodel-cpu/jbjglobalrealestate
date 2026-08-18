@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 import {
   Upload, FileText, Globe, Loader2, Check, AlertTriangle,
   X, Trash2, ChevronRight, Sparkles, MapPin, Building2,
@@ -736,7 +737,7 @@ const ListingGenerator = () => {
       {step === "input" && (
         <div className="space-y-6">
           {/* Drop Zone */}
-          <div
+          <ClickableDiv
             ref={dropRef}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
@@ -764,7 +765,7 @@ const ListingGenerator = () => {
             <p className="text-muted-foreground text-sm mt-1">
               PDFs, images, brochures, fact sheets — any project documents
             </p>
-          </div>
+          </ClickableDiv>
 
           {/* Queued Files */}
           {files.length > 0 && (

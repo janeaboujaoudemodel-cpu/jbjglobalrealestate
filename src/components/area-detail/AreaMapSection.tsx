@@ -12,6 +12,7 @@ import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyRemoveLayer } from "@/utils/leafletSafety";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 const formatMarkerPrice = (price: number | null | undefined) => {
   if (!price) return "Ask";
@@ -170,14 +171,14 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
         <div data-map-shell className="rounded-xl overflow-hidden border border-white/15 shadow-2xl relative" style={{ height: 500, touchAction: "none" }}>
           {/* Click to enable overlay */}
           {!mapInteractive && (
-            <div
+            <ClickableDiv
               className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#1A1A1A]/5"
               onClick={() => setMapInteractive(true)}
             >
               <div className="jj-map-enable-chip px-4 py-2 rounded-full text-sm font-medium" data-surface="emerald" data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 100%)', border: '1px solid rgba(255,255,255,0.45)' }}>
                 {t('map.clickToEnable')}
               </div>
-            </div>
+            </ClickableDiv>
           )}
           <MapContainer
             center={center}

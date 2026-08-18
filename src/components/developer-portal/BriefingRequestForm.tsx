@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { CalendarIcon, Loader2, Upload, FileText, X, Clock, Send, MapPin, Building2, AlertTriangle } from 'lucide-react';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface BriefingRequestFormProps {
   representativeId: string;
@@ -280,7 +281,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
         {/* File Upload */}
         <div className="space-y-3">
           <Label>Project Documents *</Label>
-          <div
+          <ClickableDiv
             className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-6 text-center hover:border-[#B89555]/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileInputRef.current?.click()}
           >
@@ -290,7 +291,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
             <input ref={fileInputRef} type="file" className="hidden" multiple
               accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.xlsx"
               onChange={handleFileUpload} />
-          </div>
+          </ClickableDiv>
           {uploadingFiles && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="w-4 h-4 animate-spin" /> Uploading files...

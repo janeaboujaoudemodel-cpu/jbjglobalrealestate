@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 export interface DocumentAttachment {
   id: string;
@@ -121,7 +122,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
   }
 
   return (
-    <div className="fixed inset-0 z-[10100] flex items-center justify-center bg-[#1A1A1A]/50 backdrop-blur-sm" onClick={onClose}>
+    <ClickableDiv className="fixed inset-0 z-[10100] flex items-center justify-center bg-[#1A1A1A]/50 backdrop-blur-sm" onClick={onClose}>
       <div
         className="bg-[#FDFBF7] rounded-2xl shadow-2xl border border-[#B89555]/30 w-[90vw] max-w-[420px] overflow-hidden"
         onClick={e => e.stopPropagation()}
@@ -140,7 +141,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
         {/* Options */}
         <div className="p-4 space-y-1.5">
           {/* Drop zone */}
-          <div
+          <ClickableDiv
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -159,7 +160,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
               <p className="text-sm font-medium text-[#1A1A1A]">{isDragOver ? 'Drop files here' : 'Upload Files'}</p>
               <p className="text-[11px] text-[#1A1A1A]/40">Drag & drop or click to browse</p>
             </div>
-          </div>
+          </ClickableDiv>
 
           <input
             ref={fileInputRef}
@@ -218,7 +219,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
           )}
         </div>
       </div>
-    </div>
+    </ClickableDiv>
   );
 }
 

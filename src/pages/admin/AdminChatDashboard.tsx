@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { useLiveChatNotifications } from '@/hooks/useLiveChatNotifications';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface ChatConversation {
   id: string;
@@ -440,7 +441,7 @@ const AdminChatDashboard = () => {
             { label: 'Avg Rating', value: stats.avgRating, icon: Award, onClick: () => { setTab('chats'); } },
             { label: 'CVs Received', value: stats.cvCount, icon: FileText, onClick: () => setTab('cvs') },
           ].map((stat) => (
-            <div
+            <ClickableDiv
               key={stat.label}
               onClick={stat.onClick}
               className={`${cardBg} border border-[#B89555]/20 rounded-xl p-4 hover:border-[#B89555]/50 hover:shadow-md transition-all cursor-pointer group`}
@@ -450,20 +451,20 @@ const AdminChatDashboard = () => {
                 <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/70 font-medium">{stat.label}</span>
               </div>
               <p className="text-2xl font-bold text-[#1A1A1A]">{stat.value}</p>
-            </div>
+            </ClickableDiv>
           ))}
         </div>
 
         {/* Alerts Banner */}
         {alerts.length > 0 && (
-          <div 
+          <ClickableDiv 
             onClick={() => setTab('alerts')}
             className="flex items-center gap-3 p-3 rounded-xl border border-red-200 bg-red-50/80 cursor-pointer hover:bg-red-50 transition-colors"
           >
             <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
             <span className="text-sm font-semibold text-red-800">{alerts.length} conversation{alerts.length > 1 ? 's' : ''} need your attention</span>
             <ChevronRight className="w-4 h-4 text-red-400 ml-auto" />
-          </div>
+          </ClickableDiv>
         )}
 
         {/* Tab Buttons - Champagne active */}
@@ -540,7 +541,7 @@ const AdminChatDashboard = () => {
                   const msgCount = c.messages?.length || 0;
                   const lastMsg = c.messages?.[c.messages.length - 1];
                   return (
-                    <div
+                    <ClickableDiv
                       key={c.id}
                       onClick={() => handleSelectConversation(c)}
                       className={`${cardBg} hover:shadow-md border border-[#B89555]/15 hover:border-[#B89555]/40 rounded-xl p-4 cursor-pointer transition-all group`}
@@ -596,7 +597,7 @@ const AdminChatDashboard = () => {
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </ClickableDiv>
                   );
                 })}
               </div>
@@ -616,7 +617,7 @@ const AdminChatDashboard = () => {
               const pc = getPriorityConfig(a.alertLevel);
               const PIcon = pc.icon;
               return (
-                <div
+                <ClickableDiv
                   key={a.id}
                   onClick={() => handleSelectConversation(a)}
                   className={`${pc.bg} border rounded-xl p-4 cursor-pointer hover:shadow-md transition-all`}
@@ -644,7 +645,7 @@ const AdminChatDashboard = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </ClickableDiv>
               );
             })}
           </div>
@@ -660,7 +661,7 @@ const AdminChatDashboard = () => {
               </div>
             ) : (
               cvSubmissions.map(cv => (
-                <div
+                <ClickableDiv
                   key={cv.id}
                   onClick={() => setSelectedCV(cv)}
                   className={`${cardBg} border border-[#B89555]/15 hover:border-[#B89555]/40 rounded-xl p-4 flex items-center gap-4 cursor-pointer transition-all group hover:shadow-md`}
@@ -689,7 +690,7 @@ const AdminChatDashboard = () => {
                     </Badge>
                     <span className="text-[10px] text-[#1A1A1A]/70">{format(new Date(cv.created_at), 'dd MMM yyyy')}</span>
                   </div>
-                </div>
+                </ClickableDiv>
               ))
             )}
           </div>
@@ -698,7 +699,7 @@ const AdminChatDashboard = () => {
 
       {/* ============ TRANSCRIPT MODAL ============ */}
       {selectedConversation && (
-        <div className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
+        <ClickableDiv className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
           <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
@@ -979,12 +980,12 @@ const AdminChatDashboard = () => {
               </div>
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
 
       {/* ============ CV VIEWER MODAL ============ */}
       {selectedCV && (
-        <div className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
+        <ClickableDiv className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
           <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
             {/* CV Header */}
             <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
@@ -1126,7 +1127,7 @@ const AdminChatDashboard = () => {
               </div>
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
     </div>
   );

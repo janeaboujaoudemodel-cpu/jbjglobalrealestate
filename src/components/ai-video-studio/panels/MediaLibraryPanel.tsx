@@ -21,6 +21,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { MediaAsset, StockAsset } from '../types';
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface MediaLibraryPanelProps {
   assets: MediaAsset[];
@@ -380,7 +381,7 @@ export function MediaLibraryPanel({
 
       {/* Preview Modal */}
       {previewAsset && (
-        <div className="fixed inset-0 bg-[#1A1A1A]/80 z-50 flex items-center justify-center p-4" onClick={() => setPreviewAsset(null)}>
+        <ClickableDiv className="fixed inset-0 bg-[#1A1A1A]/80 z-50 flex items-center justify-center p-4" onClick={() => setPreviewAsset(null)}>
           <div className="bg-[#1A1A1A] rounded-lg max-w-2xl w-full p-4" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">{previewAsset.name}</h3>
@@ -413,7 +414,7 @@ export function MediaLibraryPanel({
               </Button>
             </div>
           </div>
-        </div>
+        </ClickableDiv>
       )}
     </div>
   );
@@ -448,7 +449,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
   return (
     <div className="group relative bg-[#1A1A1A]/50 rounded-lg overflow-hidden border border-[#1A1A1A] hover:border-[#B89555]/50 transition-colors">
       {/* Thumbnail */}
-      <div 
+      <ClickableDiv 
         className={`aspect-video flex items-center justify-center cursor-pointer ${asset.thumbnailUrl ? 'bg-[#1A1A1A]' : bg}`}
         onClick={onPreview}
       >
@@ -467,7 +468,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
             {formatDuration(asset.duration)}
           </span>
         )}
-      </div>
+      </ClickableDiv>
 
       {/* Info */}
       <div className="p-1.5">

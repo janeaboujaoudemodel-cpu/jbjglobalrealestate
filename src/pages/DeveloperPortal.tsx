@@ -42,6 +42,7 @@ import { NationalitySelect } from "@/components/developer-portal/NationalitySele
 import { PhoneInputWithCountry } from "@/components/ui/phone-input-with-country";
 import { LanguageMultiSelect } from "@/components/ui/language-multi-select";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface UploadedFile {
   name: string;
@@ -858,7 +859,7 @@ const DeveloperPortal = () => {
     return (
     <div className="space-y-3">
       <Label>Photos, Videos & Documents</Label>
-      <div
+      <ClickableDiv
         className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer bg-card/50 ${isDragging ? 'border-primary bg-primary/5' : 'border-[#B89555]/40 hover:border-[#B89555]/70'}`}
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -878,7 +879,7 @@ const DeveloperPortal = () => {
         <input ref={inputRef} type="file" className="hidden" multiple
           accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic"
           onChange={onUpload} />
-      </div>
+      </ClickableDiv>
       {uploading && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="w-4 h-4 animate-spin" /> Uploading files...
@@ -1178,7 +1179,7 @@ const DeveloperPortal = () => {
                   {/* File Upload */}
                   <div className="space-y-3">
                     <Label>Marketing Materials *</Label>
-                    <div
+                    <ClickableDiv
                       className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer bg-card/50 ${mainDragOver ? 'border-primary bg-primary/5' : 'border-[#B89555]/40 hover:border-[#B89555]/70'}`}
                       onClick={() => fileInputRef.current?.click()}
                       onDragOver={(e) => { e.preventDefault(); setMainDragOver(true); }}
@@ -1202,7 +1203,7 @@ const DeveloperPortal = () => {
                       <input ref={fileInputRef} type="file" className="hidden" multiple
                         accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic"
                         onChange={handleFileUpload} />
-                    </div>
+                    </ClickableDiv>
                     {uploadingFiles && (
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Loader2 className="w-4 h-4 animate-spin" /> Uploading files...

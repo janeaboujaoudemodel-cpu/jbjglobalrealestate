@@ -26,6 +26,7 @@ import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
 import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from "@/components/tools/toolThemes";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { SEOHead } from "@/components/SEOHead";
+import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 interface PropertyDetails {
   buildingName: string;
@@ -1171,7 +1172,7 @@ const PropertyEvaluator = () => {
                         </div>
                         <FileCheck className="w-6 h-6 text-emerald-300" />
                       </div>
-                      <div
+                      <ClickableDiv
                         onClick={() => titleDeedInputRef.current?.click()}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => { e.preventDefault(); handleAssetUpload(e.dataTransfer.files, 'titleDeed'); }}
@@ -1180,7 +1181,7 @@ const PropertyEvaluator = () => {
                         <Upload className="w-7 h-7 mx-auto mb-2 text-emerald-300" />
                         <p className="text-white font-semibold text-sm">Drag & drop or click to upload</p>
                         <p className="text-xs text-white/70">Multiple files supported</p>
-                      </div>
+                      </ClickableDiv>
                       {property.titleDeedFiles.length > 0 && (
                         <div className="space-y-2">
                           {property.titleDeedFiles.map((file, i) => (
