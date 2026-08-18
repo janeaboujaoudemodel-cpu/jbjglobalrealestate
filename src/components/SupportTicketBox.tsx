@@ -441,7 +441,7 @@ const SupportTicketBox = () => {
                        <PremiumHeadsetIcon size={28} color="#ffffff" />
                     </div>
                     <div>
-                      <span className="text-xs uppercase tracking-[0.2em] text-foreground font-semibold">24/7 Support</span>
+                      <span data-allow-ink className="text-xs uppercase tracking-[0.2em] text-foreground font-semibold">24/7 Support</span>
                       <h2 className="label text-2xl md:text-3xl font-bold text-[#1A1A1A]">
                         Need Help?
                       </h2>
@@ -455,7 +455,14 @@ const SupportTicketBox = () => {
                   </p>
 
                   {/* Support Promise */}
-                  <div data-no-contrast-guard data-surface="light" className="bg-[#FDFBF7] border border-[#B89555]/35 rounded-xl p-4 mb-5 relative overflow-hidden" style={{ color: "#1A1A1A" }}>
+                  {/* data-allow-ink: on company/legal pages (/contact, /about, /terms …
+                    * see isCompanyLegalPage in MainLayout) an index.css rule repaints
+                    * "section cards" emerald with white text !important. It matches via
+                    * an outer container, so this card's own data-surface="light" never
+                    * gets consulted: the emerald background lands elsewhere while the
+                    * white text lands here, over this card's champagne #FDFBF7 — 1.03
+                    * contrast, i.e. invisible. data-allow-ink is that rule's own opt-out. */}
+                  <div data-allow-ink data-no-contrast-guard data-surface="light" className="bg-[#FDFBF7] border border-[#B89555]/35 rounded-xl p-4 mb-5 relative overflow-hidden" style={{ color: "#1A1A1A" }}>
                     <div className="relative z-10" style={{ color: "#1A1A1A" }}>
                       <div className="flex items-center gap-2 mb-3">
                         <AlertCircle className="w-5 h-5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
