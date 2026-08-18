@@ -13,8 +13,16 @@ happens separately.
 ## What's frozen, and what isn't
 
 `scripts/css-guard.mjs` counts every `!important` occurrence across
-`src/**/*.css` and compares it against a baseline constant (`BASELINE`,
-currently `7888`) defined in the script itself.
+`src/**/*.css`, **excluding `src/index.css`**, and compares it against a
+baseline constant (`BASELINE`, currently `6460`) defined in the script
+itself.
+
+`index.css` is excluded from the guard's count because it is a
+compiled/bundled output that already contains the rules from the
+individual source stylesheets — counting both would double-count the same
+`!important` declarations. `index.css` itself carries roughly 8,000
+additional `!important` occurrences on top of the 6,460 counted here; it
+is out of scope for this guard, not zero.
 
 - **This is a ceiling, not a target.** The guard does not require reducing
   the count — it only fails (`--ci`) when the count goes *above* baseline.
@@ -32,7 +40,8 @@ currently `7888`) defined in the script itself.
 
 `.stylelintrc.json` extends `stylelint-config-standard` but turns off
 `declaration-no-important`. A hard lint ban would fail on every one of the
-existing ~14k occurrences with no incremental path forward, which makes the
+existing occurrences (~6,460 in source files, plus ~8,000 more in the
+compiled `index.css`) with no incremental path forward, which makes the
 lint step useless (nobody can get it green, so it gets skipped or
 `--no-verify`'d). The count-based guard is the actual enforcement
 mechanism; the stylelint config is for catching new stylistic issues

@@ -2,11 +2,18 @@
 /**
  * JBJ-017: !important freeze guard.
  *
- * Counts `!important` declarations across src/**\/*.css and compares the
- * total against a frozen baseline. The baseline is not "the current count" —
- * it is the count agreed at freeze time (see docs/CSS_ARCHITECTURE.md). If
- * the live count is already above baseline, that gap is existing drift the
- * guard is meant to surface, not silently re-baseline away.
+ * Counts `!important` declarations across src/**\/*.css, EXCLUDING
+ * src/index.css, and compares the total against a frozen baseline — source
+ * files, excl. compiled index.css — pass-376 freeze, August 2026.
+ *
+ * index.css is excluded because it is a compiled/bundled output that
+ * already contains the rules from the individual source stylesheets;
+ * counting both double-counts the same !important declarations.
+ *
+ * The baseline is not "the current count" — it is the count agreed at
+ * freeze time (see docs/CSS_ARCHITECTURE.md). If the live count is already
+ * above baseline, that gap is existing drift the guard is meant to
+ * surface, not silently re-baseline away.
  *
  * Usage:
  *   node scripts/css-guard.mjs         # report only, always exits 0
@@ -19,8 +26,9 @@ import url from 'node:url';
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const srcDir = path.join(root, 'src');
+const excludedFile = path.join(srcDir, 'index.css');
 
-const BASELINE = 7888;
+const BASELINE = 6460; // source files, excl. compiled index.css — pass-376 freeze, August 2026
 
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -28,7 +36,7 @@ function walk(dir, out = []) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       walk(full, out);
-    } else if (entry.isFile() && entry.name.endsWith('.css')) {
+    } else if (entry.isFile() && entry.name.endsWith('.css') && full !== excludedFile) {
       out.push(full);
     }
   }
