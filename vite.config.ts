@@ -70,6 +70,14 @@ export default defineConfig(({ mode }) => {
             // Tiny styling utilities used by every component — own micro chunk.
             if (pkg('clsx') || pkg('tailwind-merge') || pkg('class-variance-authority')) return 'util-vendor';
 
+            // Keep the React-ecosystem shared utilities with React itself.
+            // These are tiny and are pulled in by both React-side packages
+            // (@sentry/react -> hoist-non-react-statics, @stripe/react-stripe-js
+            // -> prop-types) and by charting code, so leaving them unrouted
+            // invites a split that puts React's own dependencies in a lazy
+            // vendor chunk.
+            if (pkg('react-is') || pkg('prop-types') || pkg('hoist-non-react-statics')) return 'react-vendor';
+
             if (pkg('react-router-dom') || pkg('react-router') || pkg('react-dom') || pkg('scheduler') || id.includes('node_modules/react/')) return 'react-vendor';
             // lucide-react is intentionally NOT a manual chunk: forcing the
             // package into one chunk defeats tree-shaking and produced a
@@ -78,7 +86,28 @@ export default defineConfig(({ mode }) => {
             if (pkg('framer-motion') || pkg('motion-dom') || pkg('motion-utils')) return 'motion-vendor';
             if (id.includes('node_modules/@radix-ui/')) return 'ui-vendor';
             if (pkg('@tanstack/react-query') || pkg('@supabase/supabase-js') || id.includes('node_modules/@supabase/')) return 'data-vendor';
-            if (pkg('recharts') || pkg('d3-scale') || pkg('d3-shape') || pkg('victory-vendor')) return 'charts-vendor';
+            // JBJ-029 — recharts/d3 are deliberately NOT a manual chunk.
+            //
+            // Forcing them into `charts-vendor` produced a CIRCULAR chunk
+            // dependency and a blank white site in production. The cause is
+            // not any single package: Rollup generates a shared CommonJS
+            // interop helper (`getDefaultExportFromCjs`) and hoists it into
+            // the first chunk that needs it. That was `charts-vendor`, so
+            // `react-vendor` then had to import the helper back out of
+            // `charts-vendor`, while `charts-vendor` imports React out of
+            // `react-vendor`. `manualChunks` cannot route a Rollup-generated
+            // helper, so no package-level rule can break that cycle.
+            //
+            // Because `charts-vendor` was modulepreloaded first, it evaluated
+            // before React was initialised and threw
+            // `Cannot read properties of undefined (reading 'useState')` at
+            // module scope, leaving #root empty. Every route was blank.
+            //
+            // Left unrouted, Rollup does its own splitting, which is acyclic
+            // by construction, and recharts lands in the route chunks that
+            // actually use it — which also serves the first-paint goal the
+            // rest of this config is chasing. Enforced by
+            // `npm run check:chunks` (scripts/check-chunk-cycles.mjs).
             if (pkg('leaflet') || pkg('react-leaflet') || id.includes('node_modules/@react-leaflet/')) return 'maps-vendor';
             if (pkg('jspdf') || pkg('pdf-lib')) return 'pdf-vendor';
             if (pkg('exceljs') || pkg('xlsx')) return 'excel-vendor';

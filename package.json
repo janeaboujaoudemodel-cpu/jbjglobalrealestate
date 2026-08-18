@@ -33,7 +33,8 @@
     "check:quality": "npm run check:contrast && npm run check:a11y",
     "prepare": "husky || true",
     "postbuild": "node scripts/prerender/prerender.mjs || true",
-    "prerender": "node scripts/prerender/prerender.mjs"
+    "prerender": "node scripts/prerender/prerender.mjs",
+    "check:chunks": "node scripts/check-chunk-cycles.mjs"
   },
   "lint-staged": {
     "src/index.css": "node scripts/contrast/check-tokens.mjs",

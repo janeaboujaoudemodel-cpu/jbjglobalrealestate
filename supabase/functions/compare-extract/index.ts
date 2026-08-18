@@ -2,6 +2,7 @@
 // Accepts { url?, fileBase64?, mimeType?, text? } and returns canonical
 // comparison fields extracted via Lovable AI gateway (Gemini Flash).
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
@@ -48,6 +49,15 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
+
+  // Audit 4.3 — anonymous callers can burn third-party AI/voice credits
+  // through this endpoint. Shared DB-backed per-IP limiter.
+  const { response: rateLimited } = await enforceRateLimit(
+    req,
+    { functionName: 'compare-extract', maxRequests: 15, windowMinutes: 15, keyType: 'ip' },
+    corsHeaders,
+  );
+  if (rateLimited) return rateLimited;
 
   try {
     if (!LOVABLE_API_KEY) {
