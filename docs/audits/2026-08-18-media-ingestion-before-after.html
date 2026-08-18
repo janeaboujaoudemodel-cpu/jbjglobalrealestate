@@ -105,7 +105,7 @@
 
 <div class="eyebrow">JBJ Global Real Estate · Remediation Report</div>
 <h1>Media Ingestion Engine: Before &amp; After</h1>
-<p class="lede">Seven audit findings taken to a verified state, one of them narrowed after checking it against the schema history, one more defect class found by treating a finding as a pattern rather than a single site, and one regression test that was never actually run by CI. Two things the brief asked for could not be done, and both are named rather than smoothed over.</p>
+<p class="lede">The audit's launch blocker was filed as "not reproducible". It reproduces — in a production build, which is the one place nobody had looked. Root-causing it meant first repairing two CI gates that were reporting the wrong answer, one of which had never run at all.</p>
 
 <div class="meta">
   <span><b>Date</b> 18 Aug 2026</span>
@@ -116,10 +116,10 @@
 
 <h2>Headline</h2>
 <div class="big">
-  <div class="stat"><div class="k">Findings closed</div><div class="v a">5 of 7</div></div>
+  <div class="stat"><div class="k">Findings closed</div><div class="v a">6 of 7</div></div>
   <div class="stat"><div class="k">New findings</div><div class="v b">3</div></div>
   <div class="stat"><div class="k">Vitest</div><div class="v a">440/440</div></div>
-  <div class="stat"><div class="k">Overall score</div><div class="v"><span class="b">38</span> → <span class="a">86</span></div></div>
+  <div class="stat"><div class="k">Overall score</div><div class="v"><span class="b">31</span> → <span class="a">88</span></div></div>
 </div>
 
 <h2>The brief's first premise did not hold</h2>
@@ -152,7 +152,7 @@
 <table>
 <thead><tr><th>#</th><th>Area</th><th>State</th><th class="num">Before</th><th class="num">After</th></tr></thead>
 <tbody>
-<tr><td>3.1</td><td>Owner portal renders</td><td><span class="pill p-info">Not reproducible</span></td><td class="num score b">—</td><td class="num score a">70</td></tr>
+<tr><td>3.1</td><td>Owner portal renders (launch blocker)</td><td><span class="pill p-fix">Root-caused &amp; fixed</span></td><td class="num score b">0</td><td class="num score a">88</td></tr>
 <tr><td>3.2</td><td>Edge function caller verification</td><td><span class="pill p-fix">Fixed</span></td><td class="num score b">5</td><td class="num score a">90</td></tr>
 <tr><td>3.3</td><td>Listing-media upload validation</td><td><span class="pill p-fix">Fixed</span></td><td class="num score b">0</td><td class="num score a">92</td></tr>
 <tr><td>3.4</td><td><em>Unknown — audit document never reached the session</em></td><td><span class="pill p-open">Not addressed</span></td><td class="num score">?</td><td class="num score">?</td></tr>
@@ -195,10 +195,44 @@
 <p><b>Fix:</b> forward navigation now advances as far as the form allows and lands on the first genuinely incomplete step, naming the fields that are missing instead of firing a generic toast.</p>
 <p><b>A conflict worth recording:</b> on rebase this collided with <code>main</code>'s accessibility retrofit, which had wrapped the same element in <code>ClickableDiv</code>. Resolved in favour of the audit fix's native <code>&lt;button&gt;</code>: <code>ClickableDiv</code>'s own docstring describes it as a drop-in for divs that <em>cannot</em> be buttons, and a real button gets keyboard operability natively. The element already carried <code>type="button"</code> and button-reset classes. No lint rule mandates the wrapper; its now-unused import was removed.</p>
 
-<h3>3.1 — not reproducible, and recorded as such</h3>
-<p>The audit's launch blocker: every <code>/owner/*</code> route rendering blank in production, the container collapsing to zero height. Driven in a real browser across three routes and three owner-verification states (cached owner, cold with a slow <code>verify-owner</code>, cold with a failing one); all nine combinations rendered at full height with content present.</p>
-<p>One measurement detail probably explains the original diagnosis: <code>#root</code>'s first two children are legitimately zero-height portal anchors, so inspecting <code>#root &gt; *</code> reports <code>height: 0</code> on a perfectly healthy page. The real content is a later sibling.</p>
-<p>The likeliest explanation for a genuine sighting is publish lag — jbj.ae is published by a separate manual step in Lovable, so production can serve an older bundle than <code>main</code>. This is logged as <b>not reproducible</b>, not as fixed, and <code>tests/owner-shell-renders.spec.ts</code> now locks the invariant so a real regression is caught by CI. It still needs one check against the deployed bundle, which no session can perform from source.</p>
+<h3>3.1 — the launch blocker, root-caused</h3>
+<p>Recorded last round as <b>not reproducible</b>, after driving three routes across three
+owner-verification states and finding every combination rendered at full height. That conclusion was
+wrong, and how it was wrong is the useful part.</p>
+<p>It is a <b>bundling defect</b>, so it exists only in a built bundle. <code>vite dev</code> serves
+unbundled ESM and does no manual chunking at all, so the fault cannot occur there — no number of routes
+or auth states checked against a dev server could ever have surfaced it. The investigation was thorough
+and still could not have succeeded, because it was pointed at the one environment where the bug is
+absent.</p>
+<p>Once the regression spec was wired into CI against a real <code>npm run build</code> +
+<code>npm run preview</code>, it failed 5 of 5 immediately, and instrumenting it named the cause:</p>
+<div class="card"><pre style="margin:0;overflow-x:auto"><code>#root present=true children=0 scripts=5
+boot overlay shown: true
+Uncaught TypeError: Cannot read properties of undefined (reading 'useState')
+Source: /assets/charts-vendor-D1sAQr2I.js</code></pre></div>
+<ul>
+<li><code>vite.config.ts</code> hand-assigned recharts and its d3 dependencies into a
+<code>charts-vendor</code> chunk.</li>
+<li>In a production build that chunk is evaluated while the React namespace it closes over is still
+<code>undefined</code>, and throws.</li>
+<li><code>index.html</code> installs a <code>window.onerror</code> handler that paints a "Boot Error"
+overlay for anything raised before <code>__APP_MOUNTED__</code> — and that overlay appends to
+<code>&lt;body&gt;</code>, <b>not</b> <code>#root</code>.</li>
+<li>So <code>#root</code> stays empty, React never mounts, and the result is a blank page with the
+bundle loaded, no failed request and nothing in the app's own error handling. That is the audit's
+description of 3.1 line for line.</li>
+</ul>
+<p>The measurement note recorded last round — that <code>#root</code>'s first children are zero-height
+portal anchors, so <code>#root &gt; *</code> reads as <code>height: 0</code> on a healthy page — is
+still true, but it was not what was happening here. The distinguishing signal is
+<code>children=0</code>: a collapsed shell mounts and measures short; this never mounted at all.</p>
+<p><b>Fix:</b> stop hand-assigning a React-consuming library to its own chunk, so Rollup keeps React
+initialised before its consumers.</p>
+<p><b>Tradeoff, stated rather than hidden:</b> this config deliberately hand-routes vendors to keep the
+entry graph small, and Rollup may now pack these modules less tightly. A heavier first paint is a
+tunable optimisation; a production bundle that renders nothing is a launch blocker. If the entry graph
+regresses meaningfully, the follow-up is a different split that preserves evaluation order — not
+restoring this one.</p>
 
 <h3>New: 3.2 is a defect class, not one function</h3>
 <p>Finding 3.2 named a single function. Treating it as a pattern — a body-supplied user id reaching a service-role query — and grepping for that shape surfaced three candidates.</p>
@@ -210,9 +244,54 @@
 <p>Neither vulnerable function has a <code>functions.invoke(...)</code> caller anywhere in the repo — both are orphaned, exactly like the function in 3.2 — so neither fix can regress a live flow.</p>
 
 <h3>New: the 3.1 regression spec was never run by anything</h3>
-<p>The previous session added <code>tests/owner-shell-renders.spec.ts</code> for finding 3.1 and recorded that it "locks the invariant so a genuine regression is caught by CI rather than by hand". Checking that claim rather than repeating it: <b>no workflow ran the file.</b></p>
-<p>This repo has no <code>playwright.config.ts</code>, so there is no default test-directory sweep, and every workflow that uses Playwright names its target explicitly — PASS 142 runs only <code>tests/dark-surface-heading-contrast.spec.ts</code>, while PDF Export QA and the emerald audit drive their own scripts. The spec was dead code from the moment it landed, and the sentence describing it was false.</p>
-<p>That is the same failure this whole round of work exists to eliminate — a guard that reports nothing and is trusted anyway — so it is fixed rather than merely documented. <code>.github/workflows/owner-shell-renders.yml</code> now builds the app, serves the production bundle and drives the spec through the Playwright runner, on the same shape as PASS 142. Its path filter covers the spec itself plus what could plausibly collapse the owner shell: <code>OwnerGuard</code>, <code>BrokerGuard</code>, <code>UserModeContext</code>, <code>usePortalRole</code>, and the owner and admin page trees. It is running on this PR, which is how the claim became true.</p>
+<p>The spec was added last round with the claim that it "locks the invariant so a genuine regression is
+caught by CI rather than by hand". Checking that claim rather than repeating it: <b>no workflow ran the
+file.</b> There is no <code>playwright.config.ts</code>, so there is no default test-directory sweep,
+and every workflow here that uses Playwright names its target explicitly — PASS 142 runs one named
+spec, while PDF Export QA and the emerald audit drive their own scripts. The spec was dead code from
+the moment it landed, and the sentence describing it was false.</p>
+<p><code>.github/workflows/owner-shell-renders.yml</code> now builds the app, serves the production
+bundle and drives the spec. <b>Its first real result was the 5/5 failure that produced the root cause
+above</b> — the guard found the launch blocker within minutes of being given the ability to run.</p>
+<p>Its path filter needed widening too, for the same reason the bug survived: it originally covered only
+app source, so it would not have run on the commit that introduced the chunking defect, and did not run
+on the commit that fixed it. It now also covers <code>vite.config.ts</code>, <code>index.html</code>,
+<code>package.json</code> and <code>package-lock.json</code>, all of which change what the built bundle
+does without touching a line under <code>src/</code>.</p>
+
+<h3>New: the blocking contrast gate reported a failure that had not happened</h3>
+<p>The <b>Contrast PR Gate (blocks merges)</b> job came back red on this PR. Its contrast work had
+entirely passed: <code>PR Gate: passed (no new contrast regressions)</code>, 31 token pairs with 0
+fail, and <b>0 axe violations across all 56 route x viewport combinations</b>.</p>
+<p>The job failed afterwards, in the step that posts the summary comment:
+<code>HttpError: Resource not accessible by integration</code> — a 403 on
+<code>POST /issues/47/comments</code>. That is roadmap item JBJ-022: the repository's Actions setting
+is Read-only workflow permissions, which overrides the <code>issues: write</code> the workflow declares
+for itself.</p>
+<p>JBJ-022 was on record as cosmetic — "the check's actual work runs and passes, only the comment step
+fails". On a job named <em>blocks merges</em> it is not cosmetic. The error was unhandled, so it failed
+the job, and every pull request in this repository has been showing a red blocking contrast gate for a
+reason with nothing to do with contrast. <b>A gate reporting a failure that did not happen is the same
+class of defect as one reporting a pass that did not happen</b>, and it is the more corrosive of the
+two: it trains reviewers to merge past red.</p>
+<p>The comment call is now wrapped in try/catch — an unpostable comment warns and writes the report to
+the job summary instead. <b>This does not weaken the gate:</b> <code>check:contrast:pr-gate</code> still
+ends in <code>exit $status</code> and <code>check:contrast:rendered</code> still runs with no error
+suppression; only the comment step lost the ability to fail the job by itself. Confirmed as a
+controlled before/after — failure on <code>7f8e237</code>, success on <code>76f6e17</code>, with
+identical contrast results in both. The same change went into <code>pdf-export-qa.yml</code>, which
+posts its summary identically and hit the same 403. The underlying permission still needs a manual
+settings change no code session can make.</p>
+
+<div class="note">
+<h3>Tool Emerald: 7 of 30 routes breached, and none of it is this PR</h3>
+<p>The emerald visual regression check fails here. It also <b>fails on <code>main</code></b> — confirmed
+by dispatching the same workflow against <code>main</code>'s tip as a baseline rather than assuming.
+Three further pieces of evidence put it outside this PR: six of the seven breaching routes are pages
+this PR never touches; the seventh, <code>/list-property</code>, is edited only outside the
+<code>[data-tool-emerald]</code> element the check screenshots; and the audited route list is unchanged.
+A real finding worth its own ticket, but inherited, not introduced.</p>
+</div>
 
 <h2>What could not be done</h2>
 
@@ -260,11 +339,11 @@
 <thead><tr><th>Suite</th><th>Result</th><th>Evidence</th></tr></thead>
 <tbody>
 <tr><td>Vitest</td><td><span class="pill p-fix">Pass</span></td><td class="num">440 / 440 across 41 files, 27.0s</td></tr>
-<tr><td>Contrast PR Gate</td><td id="r-contrast"><span class="pill p-info">See PR</span></td><td>Blocking merge gate</td></tr>
-<tr><td>PASS 142 responsive sweep</td><td id="r-142"><span class="pill p-info">See PR</span></td><td>Dispatched manually — path filter excludes this PR's files</td></tr>
+<tr><td>Contrast PR Gate</td><td><span class="pill p-fix">Pass</span></td><td class="num">31 token pairs 0 fail · 0 axe violations / 56 combos</td></tr>
+<tr><td>PASS 142 responsive sweep</td><td><span class="pill p-info">Not re-run</span></td><td>Dispatched manually — path filter excludes this PR's files</td></tr>
 <tr><td>Report Pill Snapshot</td><td><span class="pill p-part">Runs, 5 breaches</span></td><td class="num">desktop 0 / tablet 0 / mobile 5, 22 targets each</td></tr>
-<tr><td>Tool emerald audit</td><td id="r-audit"><span class="pill p-info">See PR</span></td><td>Triggered by <code>src/pages/**</code> change</td></tr>
-<tr><td>Owner shell renders</td><td id="r-owner"><span class="pill p-info">See PR</span></td><td>New workflow — 3 routes x 3 owner-verification states</td></tr>
+<tr><td>Tool emerald audit</td><td><span class="pill p-open">Fail</span></td><td>7/30 routes — <b>also fails on <code>main</code></b> (baseline confirmed)</td></tr>
+<tr><td>Owner shell renders</td><td><span class="pill p-part">Found the bug</span></td><td>New workflow — 3 routes x 3 owner-verification states</td></tr>
 <tr><td>PDF Export QA</td><td><span class="pill p-open">Fail</span></td><td>Pre-existing low-DPI artwork — see above</td></tr>
 </tbody>
 </table>
@@ -275,12 +354,23 @@
 <p>Two limits on that evidence, stated plainly. Edge function changes are <b>not covered by any test</b> — this repo still has no <code>deno test</code> harness, so 3.2 and the two functions in JBJ-032 are verified by reading the shared middlewares' real signatures and return contracts, not by executing them. And the two migrations are <b>not applied</b> by anything in this repository; schema changes go through Supabase/Lovable, so their effect is verified by reading the policy history, not by observing the database.</p>
 
 <h2>Scoring</h2>
-<p>Weighted across the eight scoreable areas, excluding 3.4 as unknown:</p>
+<p>Weighted across the scoreable areas, excluding 3.4 as unknown:</p>
 <div class="big">
-  <div class="stat"><div class="k">Before</div><div class="v b">38</div></div>
-  <div class="stat"><div class="k">After</div><div class="v a">86</div></div>
+  <div class="stat"><div class="k">Before</div><div class="v b">31</div></div>
+  <div class="stat"><div class="k">After</div><div class="v a">88</div></div>
 </div>
-<p>The ceiling is 86 rather than higher for three specific reasons, each of them a real gap rather than a rounding choice: 3.4 is unknown and unaddressed; the edge-function fixes have no executable test behind them; and the two most security-relevant changes are migrations whose effect on the live database cannot be observed from this repository. A score above 90 would be claiming verification that was not performed.</p>
+<p>The "before" is lower than the previous round's write-up implied, because two of the numbers that
+round reported were measuring nothing: the 3.1 guard did not run, and the blocking contrast gate was
+red for a reason unrelated to contrast. A score computed from a gate that reports the wrong answer is
+not a score.</p>
+<p>The ceiling is 88 rather than higher for reasons that are gaps, not rounding. <b>3.4 is unknown and
+unaddressed</b> — the audit document never arrived. The edge-function fixes have <b>no executable test
+behind them</b>, because this repo still has no <code>deno test</code> harness. The two migrations are
+<b>not applied by anything in this repository</b>, so their effect is verified by reading policy history
+rather than by observing the database. And the 3.1 fix's own verification was still queued when this
+was written — the guard that failed 5/5 before the change is the thing that will confirm it, and
+CI stopped creating runs for this branch mid-session. Claiming above 90 would be claiming verification
+that has not happened.</p>
 
 <footer>
 Generated by Claude Code · branch <code>claude/lockfile-audit-remediation-cw055e</code> · PR #47 · 18 Aug 2026.
