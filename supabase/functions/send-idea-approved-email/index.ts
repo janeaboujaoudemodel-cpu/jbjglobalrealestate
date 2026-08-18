@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { SITE_URL, emailShell, progressSteps, arabicDivider, sharedSections } from "../_shared/email-html.ts";
 import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
+import { isInternalCaller } from "../_shared/internal-auth.ts";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -25,6 +27,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // This function had no caller check of any kind. It takes the recipient
+    // address, display name and idea title straight from the request body and
+    // sends a branded JBJ email through Resend — an open relay on the
+    // company's own sending domain, usable for phishing — while also inserting
+    // notification rows for an arbitrary `user_id` with a service-role client.
+    // Supabase's gateway-level `verify_jwt` does not close this: the public
+    // anon key is a valid JWT and ships in the frontend bundle.
+    //
+    // Awarding points and announcing an approval is a staff/system action, not
+    // something an end user initiates, so the gate is: an internal caller
+    // (service-role bearer or the cron secret, how a DB trigger or another
+    // edge function would call it) or a signed-in owner/admin. There is no
+    // `functions.invoke("send-idea-approved-email")` anywhere in the repo, so
+    // this cannot regress a live flow.
+    const internal = isInternalCaller(req);
+    if (!internal.ok) {
+      const owner = await requireOwnerAuth(req, corsHeaders);
+      if (owner.response) return owner.response;
+    }
+
     const { ideaId, userId, userEmail, userName, ideaTitle, status }: IdeaEmailRequest = await req.json();
 
     if (!userEmail || !ideaTitle) throw new Error("Missing required fields: userEmail and ideaTitle");

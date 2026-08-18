@@ -1,0 +1,85 @@
+name: Owner Shell Renders
+
+# Media Ingestion Audit (Aug 17 2026) — finding 3.1, the audit's launch blocker:
+# every `/owner/*` route reported as rendering blank in production, the content
+# container collapsing to zero height.
+#
+# The finding did not reproduce against source, and `tests/owner-shell-renders.spec.ts`
+# was written to stop the question being re-litigated by hand. That spec was
+# landing with nothing running it: this repo has no `playwright.config.ts`, so
+# there is no default test-directory sweep, and every other workflow that uses
+# Playwright names its spec file explicitly. The spec was dead code, and the
+# claim that it "locks the invariant in CI" was therefore untrue until this
+# workflow existed.
+#
+# Structure mirrors pass-142-heading-contrast.yml, which has the same shape:
+# build, serve the production bundle, drive it with the Playwright test runner.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tests/owner-shell-renders.spec.ts"
+      - "src/components/OwnerGuard.tsx"
+      - "src/components/BrokerGuard.tsx"
+      - "src/contexts/UserModeContext.tsx"
+      - "src/hooks/usePortalRole.ts"
+      - "src/pages/owner/**"
+      - "src/pages/admin/**"
+      - ".github/workflows/owner-shell-renders.yml"
+  pull_request:
+    paths:
+      - "tests/owner-shell-renders.spec.ts"
+      - "src/components/OwnerGuard.tsx"
+      - "src/components/BrokerGuard.tsx"
+      - "src/contexts/UserModeContext.tsx"
+      - "src/hooks/usePortalRole.ts"
+      - "src/pages/owner/**"
+      - "src/pages/admin/**"
+      - ".github/workflows/owner-shell-renders.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: owner-shell-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  owner-shell:
+    name: Owner shell renders
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        # The spec runs through the @playwright/test runner, so the plain
+        # chromium build is sufficient here — no headless-shell needed.
+        run: npx playwright install --with-deps chromium
+
+      - name: Build app
+        run: npm run build
+
+      - name: Start preview server
+        run: |
+          npm run preview -- --host 0.0.0.0 --port 8080 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:8080 > /dev/null && break || sleep 1
+          done
+
+      - name: Owner shell render sweep (3 routes x 3 verification states)
+        env:
+          PREVIEW_URL: http://localhost:8080
+        run: npx playwright test tests/owner-shell-renders.spec.ts --reporter=list

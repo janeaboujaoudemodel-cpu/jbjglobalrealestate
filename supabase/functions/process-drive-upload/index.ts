@@ -1,14 +1,25 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+/**
+ * `userId` is deliberately NOT part of this contract.
+ *
+ * It used to be read straight off the request body and written to
+ * `listing_uploads.user_id` with a service-role client, with no auth check at
+ * all — so any caller could attribute a draft listing to any user and burn AI
+ * Gateway credits doing it. Note that Supabase's gateway-level `verify_jwt`
+ * would not have stopped that: the public anon key is itself a valid JWT and
+ * ships in the frontend bundle. The caller is now identified from the token
+ * via `auth.getUser()`, which rejects an anon-key-only request.
+ */
 interface UploadRequest {
   url: string;
-  userId: string;
   type?: "drive" | "web" | "upload";
 }
 
@@ -88,7 +99,32 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { url, userId, type }: UploadRequest = await req.json();
+    // Identify the caller from their token. An anon-key-only request resolves
+    // to no user and is refused here.
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: userResp } = await userClient.auth.getUser();
+    const userId = userResp?.user?.id;
+    if (!userId) {
+      return new Response(JSON.stringify({ success: false, error: "unauthenticated" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Each call spends AI Gateway credits, so cap it per user even once
+    // authenticated.
+    const rl = await enforceRateLimit(
+      req,
+      { functionName: "process-drive-upload", maxRequests: 20, windowMinutes: 10, keyType: "user" },
+      corsHeaders,
+      userId,
+    );
+    if (rl.response) return rl.response;
+
+    const { url, type }: UploadRequest = await req.json();
 
     if (!url) {
       throw new Error("No URL provided");

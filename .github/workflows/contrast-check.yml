@@ -125,9 +125,28 @@ jobs:
             } else if (gateOutcome !== 'failure') {
               body += '_Rendered sweep did not produce a report (likely failed before completion). See workflow logs._\n';
             }
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body,
-            });
+            // Posting the summary is a convenience, not the gate. This repo's
+            // Actions setting is Read-only workflow permissions, which overrides
+            // the `issues: write` declared above, so createComment 403s with
+            // "Resource not accessible by integration" on every PR (ROADMAP
+            // JBJ-022). Unhandled, that 403 failed the whole job — so a run whose
+            // contrast checks had all passed still reported red, and on the job
+            // named "blocks merges" that is a gate reporting a failure that did
+            // not happen. The real check's own exit status decides the outcome;
+            // an unpostable comment only warns.
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            } catch (err) {
+              core.warning(
+                `Could not post the PR summary comment (${err.status ?? 'unknown'}: ${err.message}). ` +
+                'This does not affect the check result — see ROADMAP JBJ-022 ' +
+                '(Settings -> Actions -> General -> Workflow permissions).'
+              );
+              core.summary.addRaw(body);
+              await core.summary.write();
+            }
