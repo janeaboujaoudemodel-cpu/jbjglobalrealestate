@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JBJ Backend Remediation</title>
+<style>
+  /* ── Tokens: light is the base; dark redefines tokens only ───────────── */
+  :root{
+    --ink:#0B1411;
+    --ink-2:#22322c;
+    --muted:#5c6b63;
+    --page:#F7F2EA;
+    --surface:#FFFDF9;
+    --surface-2:#F1EADD;
+    --line:#DED3BF;
+    --line-soft:#EBE2D2;
+    --emerald:#064E3B;
+    --emerald-lift:#0A6B51;
+    --gold:#B89555;
+    --gold-deep:#8A6D3B;
+
+    --breach:#B3261E;
+    --breach-bg:#FBEAE8;
+    --sealed:#1F7A4A;
+    --sealed-bg:#E7F3EC;
+    --cleared:#3F5A78;
+    --cleared-bg:#E9EFF6;
+    --partial:#9A6A00;
+    --partial-bg:#FBF1DC;
+
+    --plate:#FFFDF9;
+    --plate-edge:#DCD1BC;
+    --scene-floor:rgba(6,78,59,.07);
+
+    --shadow-sm:0 1px 2px rgba(11,20,17,.06), 0 2px 8px rgba(11,20,17,.05);
+    --shadow-lg:0 18px 50px rgba(11,20,17,.13);
+
+    --display:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,serif;
+    --body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDF2EE;
+      --ink-2:#C3D2CA;
+      --muted:#8FA49A;
+      --page:#08110E;
+      --surface:#0E1B17;
+      --surface-2:#132621;
+      --line:#22392F;
+      --line-soft:#1A2E27;
+      --emerald:#4FBF95;
+      --emerald-lift:#6FD8AF;
+      --gold:#D3AF72;
+      --gold-deep:#B89555;
+
+      --breach:#F2837A;
+      --breach-bg:#2B1310;
+      --sealed:#5FCC93;
+      --sealed-bg:#0E2419;
+      --cleared:#8FB3D9;
+      --cleared-bg:#111E2B;
+      --partial:#E0B457;
+      --partial-bg:#2A2110;
+
+      --plate:#162922;
+      --plate-edge:#2E5044;
+      --scene-floor:rgba(79,191,149,.09);
+
+      --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 10px rgba(0,0,0,.4);
+      --shadow-lg:0 20px 56px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDF2EE;
+    --ink-2:#C3D2CA;
+    --muted:#8FA49A;
+    --page:#08110E;
+    --surface:#0E1B17;
+    --surface-2:#132621;
+    --line:#22392F;
+    --line-soft:#1A2E27;
+    --emerald:#4FBF95;
+    --emerald-lift:#6FD8AF;
+    --gold:#D3AF72;
+    --gold-deep:#B89555;
+
+    --breach:#F2837A;
+    --breach-bg:#2B1310;
+    --sealed:#5FCC93;
+    --sealed-bg:#0E2419;
+    --cleared:#8FB3D9;
+    --cleared-bg:#111E2B;
+    --partial:#E0B457;
+    --partial-bg:#2A2110;
+
+    --plate:#162922;
+    --plate-edge:#2E5044;
+    --scene-floor:rgba(79,191,149,.09);
+
+    --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 10px rgba(0,0,0,.4);
+    --shadow-lg:0 20px 56px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--page);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(16px,4vw,32px) 88px;}
+
+  /* ── Masthead ─────────────────────────────────────────────────────────── */
+  .masthead{
+    display:flex;flex-direction:column;gap:22px;
+    padding-bottom:26px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--gold-deep);font-weight:700;
+  }
+  h1{
+    font-family:var(--display);
+    font-size:clamp(30px,5.2vw,50px);
+    line-height:1.06;margin:0;font-weight:400;
+    letter-spacing:-.015em;text-wrap:balance;
+    color:var(--ink);
+  }
+  h1 em{font-style:italic;color:var(--emerald);}
+  .standfirst{
+    font-size:clamp(15px,1.6vw,17.5px);
+    color:var(--ink-2);max-width:64ch;margin:0;
+  }
+  .runline{
+    display:flex;flex-wrap:wrap;gap:8px 22px;
+    font-family:var(--mono);font-size:11.5px;
+    color:var(--muted);letter-spacing:.02em;
+  }
+  .runline b{color:var(--ink-2);font-weight:600;}
+
+  /* ── State switch ─────────────────────────────────────────────────────── */
+  .switchbar{
+    display:flex;flex-wrap:wrap;align-items:center;gap:16px;
+    margin:30px 0 0;
+  }
+  .switch{
+    display:inline-flex;padding:4px;gap:4px;
+    background:var(--surface-2);
+    border:1px solid var(--line);border-radius:999px;
+  }
+  .switch button{
+    appearance:none;border:0;cursor:pointer;
+    font-family:var(--mono);font-size:11.5px;font-weight:700;
+    letter-spacing:.13em;text-transform:uppercase;
+    padding:9px 20px;border-radius:999px;
+    background:transparent;color:var(--muted);
+    transition:background .25s ease,color .25s ease;
+  }
+  .switch button:hover{color:var(--ink);}
+  .switch button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .switch button[aria-pressed="true"]{
+    background:var(--emerald);color:var(--page);
+  }
+  :root[data-theme="dark"] .switch button[aria-pressed="true"],
+  html:not([data-theme="light"]) .switch button[aria-pressed="true"]{color:var(--page);}
+  .switch-note{font-size:13px;color:var(--muted);max-width:42ch;}
+
+  /* ── Tallies ──────────────────────────────────────────────────────────── */
+  .tallies{
+    display:grid;gap:12px;margin:26px 0 0;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  }
+  .tally{
+    background:var(--surface);border:1px solid var(--line-soft);
+    border-radius:12px;padding:15px 17px;box-shadow:var(--shadow-sm);
+  }
+  .tally .n{
+    font-family:var(--display);font-size:30px;line-height:1;
+    font-variant-numeric:tabular-nums;color:var(--emerald);
+  }
+  .tally .k{
+    margin-top:7px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  }
+  .tally[data-tone="breach"] .n{color:var(--breach);}
+  .tally[data-tone="sealed"] .n{color:var(--sealed);}
+  .tally[data-tone="cleared"] .n{color:var(--cleared);}
+  .tally[data-tone="partial"] .n{color:var(--partial);}
+
+  /* ── Section furniture ────────────────────────────────────────────────── */
+  section{margin-top:clamp(46px,7vw,76px);}
+  h2{
+    font-family:var(--display);font-weight:400;
+    font-size:clamp(21px,2.8vw,27px);
+    margin:0 0 6px;letter-spacing:-.01em;color:var(--ink);
+  }
+  .sectionlede{margin:0 0 22px;color:var(--muted);font-size:14.5px;max-width:66ch;}
+
+  /* ── The 3D stack ─────────────────────────────────────────────────────── */
+  .stage{
+    position:relative;
+    background:
+      radial-gradient(120% 90% at 50% 8%, var(--surface) 0%, var(--surface-2) 100%);
+    border:1px solid var(--line-soft);
+    border-radius:16px;
+    box-shadow:var(--shadow-lg);
+    overflow:hidden;
+    touch-action:none;
+    cursor:grab;
+  }
+  .stage.dragging{cursor:grabbing;}
+  .stage:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+  .viewport{
+    position:relative;
+    height:clamp(560px,50vw,620px);
+    perspective:2200px;
+    perspective-origin:50% 50%;
+  }
+  /* Absolutely centred rather than grid-centred: the model's bounding box is
+     wider than the stage on narrow screens, and an overflowing grid item is
+     start-aligned, not centred — which pushed the whole stack off to one side. */
+  .scaler{
+    position:absolute;left:50%;top:50%;
+    transform-style:preserve-3d;
+    transform:translate(-50%,-50%) scale(var(--fit,.72));
+  }
+  .stack{
+    position:relative;
+    width:520px;height:180px;
+    transform-style:preserve-3d;
+    transform:rotateX(56deg) rotateZ(-30deg);
+    transition:transform .5s cubic-bezier(.22,.75,.3,1);
+  }
+  .stack.free{transition:none;}
+
+  .plate{
+    position:absolute;inset:0;
+    transform-style:preserve-3d;
+    background:var(--plate);
+    border:1px solid var(--plate-edge);
+    border-radius:10px;
+    box-shadow:0 12px 26px rgba(11,20,17,.16);
+    padding:12px 15px;
+    transition:transform .6s cubic-bezier(.22,.75,.3,1), box-shadow .4s ease;
+  }
+  :root[data-theme="dark"] .plate,
+  html:not([data-theme="light"]) .plate{box-shadow:0 14px 30px rgba(0,0,0,.5);}
+
+  /* Layer altitude — set per-plate below, animated by the state class. */
+  .plate[data-layer="0"]{transform:translateZ(-300px);}
+  .plate[data-layer="1"]{transform:translateZ(-150px);}
+  .plate[data-layer="2"]{transform:translateZ(0px);}
+  .plate[data-layer="3"]{transform:translateZ(150px);}
+  .plate[data-layer="4"]{transform:translateZ(300px);}
+
+  .plate-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:12px;padding-bottom:8px;margin-bottom:10px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .plate-name{
+    font-family:var(--mono);font-size:10.5px;font-weight:700;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--emerald);
+  }
+  .plate-count{
+    font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+    color:var(--muted);font-variant-numeric:tabular-nums;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 9px;border-radius:6px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;
+    border:1px solid transparent;
+    transition:background .5s ease,color .5s ease,border-color .5s ease;
+    white-space:nowrap;
+  }
+  .chip .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:currentColor;flex:none;
+    transition:background .5s ease;
+  }
+
+  /* BEFORE colouring — severity as found by the audit */
+  .chip[data-sev="high"]   {background:var(--breach-bg); color:var(--breach); border-color:color-mix(in srgb,var(--breach) 34%,transparent);}
+  .chip[data-sev="medium"] {background:var(--partial-bg);color:var(--partial);border-color:color-mix(in srgb,var(--partial) 34%,transparent);}
+  .chip[data-sev="low"]    {background:var(--surface-2); color:var(--muted);  border-color:var(--line);}
+  .chip[data-sev="info"]   {background:var(--cleared-bg);color:var(--cleared);border-color:color-mix(in srgb,var(--cleared) 30%,transparent);}
+
+  /* AFTER colouring — outcome after this session's work */
+  .is-after .chip[data-out="sealed"]  {background:var(--sealed-bg); color:var(--sealed);  border-color:color-mix(in srgb,var(--sealed) 38%,transparent);}
+  .is-after .chip[data-out="partial"] {background:var(--partial-bg);color:var(--partial); border-color:color-mix(in srgb,var(--partial) 38%,transparent);}
+  .is-after .chip[data-out="cleared"] {background:var(--cleared-bg);color:var(--cleared); border-color:color-mix(in srgb,var(--cleared) 34%,transparent);}
+  .is-after .chip[data-out="open"]    {background:var(--breach-bg); color:var(--breach);  border-color:color-mix(in srgb,var(--breach) 38%,transparent);}
+
+  /* Geometry is deliberately identical in both states: the layer positions
+     carry no meaning, so holding them still makes the toggle a clean A/B on
+     colour alone. Sealed plates take a green edge instead. */
+  .is-after .plate{border-color:color-mix(in srgb,var(--sealed) 30%,var(--plate-edge));}
+
+  .stage-controls{
+    position:absolute;left:14px;bottom:12px;right:14px;
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;
+    pointer-events:none;
+  }
+  .hint{
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .reset{
+    pointer-events:auto;appearance:none;cursor:pointer;
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    padding:7px 13px;border-radius:999px;
+    background:var(--surface);color:var(--ink-2);
+    border:1px solid var(--line);
+  }
+  .reset:hover{border-color:var(--gold);color:var(--ink);}
+  .reset:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+  .legend{
+    display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);
+  }
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .legend i{width:9px;height:9px;border-radius:2px;display:inline-block;}
+
+  /* ── Ledger ───────────────────────────────────────────────────────────── */
+  .ledger-scroll{overflow-x:auto;border:1px solid var(--line-soft);border-radius:12px;background:var(--surface);}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px;}
+  thead th{
+    text-align:left;padding:12px 14px;
+    font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--gold-deep);font-weight:700;
+    border-bottom:1px solid var(--line);
+    background:var(--surface-2);
+    position:sticky;top:0;
+  }
+  tbody td{padding:13px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:0;}
+  tbody tr:hover{background:var(--surface-2);}
+  .fid{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap;}
+  .ftitle{font-weight:600;color:var(--ink);display:block;margin-bottom:3px;}
+  .fpath{font-family:var(--mono);font-size:11px;color:var(--gold-deep);word-break:break-all;}
+  .fnote{color:var(--muted);font-size:13px;margin-top:5px;display:block;}
+
+  .pill{
+    display:inline-block;padding:3px 9px;border-radius:5px;
+    font-family:var(--mono);font-size:9.5px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  }
+  .pill[data-p="sealed"] {background:var(--sealed-bg); color:var(--sealed);}
+  .pill[data-p="partial"]{background:var(--partial-bg);color:var(--partial);}
+  .pill[data-p="cleared"]{background:var(--cleared-bg);color:var(--cleared);}
+  .pill[data-p="open"]   {background:var(--breach-bg); color:var(--breach);}
+  .pill[data-p="high"]   {background:var(--breach-bg); color:var(--breach);}
+  .pill[data-p="medium"] {background:var(--partial-bg);color:var(--partial);}
+  .pill[data-p="low"]    {background:var(--surface-2); color:var(--muted);}
+  .pill[data-p="info"]   {background:var(--cleared-bg);color:var(--cleared);}
+
+  /* ── Callouts ─────────────────────────────────────────────────────────── */
+  .note{
+    background:var(--surface);border:1px solid var(--line-soft);
+    border-left:3px solid var(--gold);
+    border-radius:10px;padding:18px 20px;margin:14px 0;
+  }
+  .note.warn{border-left-color:var(--breach);}
+  .note.good{border-left-color:var(--sealed);}
+  .note h3{
+    font-family:var(--display);font-weight:400;font-size:17.5px;
+    margin:0 0 7px;color:var(--ink);
+  }
+  .note p{margin:0 0 9px;font-size:14.5px;color:var(--ink-2);}
+  .note p:last-child{margin-bottom:0;}
+  .note code, td code{
+    font-family:var(--mono);font-size:.88em;
+    background:var(--surface-2);padding:1.5px 5px;border-radius:4px;
+    color:var(--gold-deep);
+  }
+
+  .grid2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));}
+
+  ul.tight{margin:0;padding-left:20px;}
+  ul.tight li{margin-bottom:7px;font-size:14.5px;color:var(--ink-2);}
+
+  footer{
+    margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--muted);
+  }
+  footer code{font-family:var(--mono);font-size:.92em;color:var(--gold-deep);}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important;}
+  }
+  @media (max-width:640px){
+    .viewport{height:400px;}
+    .scaler{--fit:.40;}
+    .chip{font-size:10px;padding:4px 7px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="root">
+
+  <header class="masthead">
+    <div class="eyebrow">Backend Audit · Remediation Record</div>
+    <h1>The backend, <em>before and after</em></h1>
+    <p class="standfirst">
+      An external audit read 507 edge functions and 1,155 migrations and returned 18 findings.
+      Each one was re-checked against the code before anything was touched — which changed the
+      job. Three findings did not survive that check. Nine were fixed outright,
+      three closed partially, and two are still open.
+    </p>
+    <div class="runline">
+      <span><b>Repo</b> janeaboujaoudemodel-cpu/jbjglobalrealestate</span>
+      <span><b>Branch</b> claude/audit-report-3d-file-w335ta</span>
+      <span><b>Commit</b> 5eed81e</span>
+      <span><b>Date</b> 17 Aug 2026</span>
+    </div>
+  </header>
+
+  <div class="switchbar">
+    <div class="switch" role="group" aria-label="Show backend state">
+      <button type="button" id="btn-before" aria-pressed="true">Before</button>
+      <button type="button" id="btn-after" aria-pressed="false">After</button>
+    </div>
+    <p class="switch-note" id="switch-note">
+      As the audit found it. Severity colouring is the auditor's own.
+    </p>
+  </div>
+
+  <div class="tallies" id="tallies"></div>
+
+  <section>
+    <h2>The stack</h2>
+    <p class="sectionlede">
+      Five architectural layers, exploded. Every finding sits on the layer it belongs to.
+      Drag to orbit the model. The layers hold still between Before and After, so the only thing that changes is the state of each finding.
+    </p>
+
+    <div class="stage" id="stage" tabindex="0" role="img"
+         aria-label="Exploded three-dimensional model of the backend's five layers, with each audit finding placed on its layer. Full detail follows in the findings ledger below.">
+      <div class="viewport">
+        <div class="scaler"><div class="stack" id="stack"></div></div>
+      </div>
+      <div class="stage-controls">
+        <span class="hint">Drag to orbit · arrow keys to rotate</span>
+        <button type="button" class="reset" id="reset">Reset view</button>
+      </div>
+    </div>
+
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section>
+    <h2>Findings ledger</h2>
+    <p class="sectionlede">
+      Every finding, what it was, and where it landed. Sorted by layer, then by the auditor's
+      own numbering.
+    </p>
+    <div class="ledger-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Finding</th>
+            <th scope="col">Before</th>
+            <th scope="col">After</th>
+          </tr>
+        </thead>
+        <tbody id="ledger"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Three findings that didn't survive verification</h2>
+    <p class="sectionlede">
+      The audit was a static sweep, and said so. Checking each finding against the code first —
+      rather than fixing straight from the report — is what surfaced these.
+    </p>
+
+    <div class="note good">
+      <h3>3.3 — “<code>rel_listings</code> / <code>rel_projects</code> / <code>rel_deals</code> have RLS enabled but no policies”</h3>
+      <p>
+        <strong>False positive.</strong> Those tables do have policies. They are created in migration
+        <code>20260504141024</code> inside a <code>DO $$ … EXECUTE format(…) $$</code> loop over an array of
+        twelve table names — so a grep for <code>CREATE POLICY … ON public.rel_listings</code> finds nothing,
+        which is exactly what the audit's sweep did. Each table gets a <code>rel_auth_read_*</code> SELECT policy
+        and a <code>rel_owner_write_*</code> policy gated by <code>rel_is_owner()</code>. No change was needed;
+        the verification query is recorded in the new migration so the next reader doesn't repeat the finding.
+      </p>
+    </div>
+
+    <div class="note good">
+      <h3>3.2 — “<code>user_sessions</code> still has an unrestricted UPDATE policy”</h3>
+      <p>
+        <strong>Already fixed, months before the audit.</strong> Migration <code>20260706161023</code> replaced
+        <code>USING (true)</code> with <code>USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid())</code>
+        on 6 July. The audit read the original January migration and not the July correction. The policy is
+        re-asserted idempotently in the new migration anyway — a later migration touched the INSERT policy on
+        the same table without touching UPDATE, and that is the shape of a silent regression.
+      </p>
+    </div>
+
+    <div class="note good">
+      <h3>4.3 / 4.4 — rate limiting and validation on public endpoints</h3>
+      <p>
+        <strong>Partially stale.</strong> <code>newsletter-subscribe</code> was named as having “one validation
+        hit total”; it in fact runs the shared rate limiter, a honeypot, an email-format check, a per-email hourly
+        cap, and returns a deliberately uniform response to prevent subscriber enumeration.
+        <code>capture-lead</code> likewise already had DB-backed per-IP rate limiting. The genuine gaps —
+        <code>register-user</code> and <code>booking-public-create</code> — were real, and are fixed.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What is <em>not</em> fixed</h2>
+    <p class="sectionlede">
+      Stated plainly, because a remediation report that only lists wins is not useful.
+    </p>
+
+    <div class="grid2">
+      <div class="note warn">
+        <h3>Nothing here is verified live</h3>
+        <p>
+          This is a code-only change, pushed to a branch. No Lovable publish was performed, so none of it is
+          running on jbj.ae yet. Every “fixed” claim on this page means <em>fixed in code and passing tests</em> —
+          not confirmed against the deployed system. The <code>create-checkout</code> fix in particular deserves a
+          live check before it is called done.
+        </p>
+      </div>
+
+      <div class="note warn">
+        <h3>Deleting a function does not undeploy it</h3>
+        <p>
+          The four smoke-test endpoints and <code>bulk-import-devs-2027-6</code> were removed from the repo, but a
+          repo deletion does not remove an already-deployed function from the Supabase project. Until they are
+          explicitly undeployed they remain publicly callable — and
+          <code>bulk-import-devs-2027-6</code> is not just dead code, it performs unauthenticated service-role
+          writes into the <code>developers</code> table. Tracked as JBJ-027; this one needs action outside git.
+        </p>
+      </div>
+
+      <div class="note">
+        <h3>The wide sweeps are still wide</h3>
+        <p>
+          225 functions using service-role without a visible caller check, 357 with wildcard CORS, and ~210 with
+          no traceable caller are rollout-scale items, not single fixes. The public-facing subset that mattered
+          most was addressed; the long tail is tracked as JBJ-028 and needs a per-function pass, not a sweep.
+        </p>
+      </div>
+
+      <div class="note">
+        <h3>A bug the tests caught</h3>
+        <p>
+          The first version of the Sentry PII scrubber silently failed on <code>Full_Name</code>: the key
+          normaliser stripped underscores from the pattern but not from the key, so <code>full_name</code> never
+          matched <code>fullname</code>. Eight unit tests were written alongside it, and one of them caught this.
+          Worth noting because the fix would have looked correct in review.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Verification performed</h2>
+    <ul class="tight">
+      <li><strong>Full Vitest suite:</strong> 425 tests across 40 files, all passing — including 8 new tests for the Sentry PII scrubber.</li>
+      <li><strong><code>tsc --noEmit</code>:</strong> no errors in any file this change touches. The suite does report pre-existing errors from a zod v3→v4 API drift, all in files untouched here; confirmed by intersecting the changed-file list against the error list.</li>
+      <li><strong>Pre-commit gates:</strong> the repo's static a11y check and low-opacity-contrast checks both ran and passed on the staged diff.</li>
+      <li><strong>Not run:</strong> no Deno typecheck of the edge functions — Deno is not installed in this environment, so the 13 changed function files were verified by reading, not by compiler.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Remediation of the JBJ Global Real Estate backend audit dated 17 August 2026 · 18 findings assessed ·
+    26 files changed on <code>claude/audit-report-3d-file-w335ta</code> ·
+    Roadmap items <code>JBJ-024</code> through <code>JBJ-028</code> ·
+    Code changes only — hosting, deployment and database remain under Lovable's control.
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ── Findings data ─────────────────────────────────────────────────────
+  // sev  = severity as the audit graded it (drives BEFORE colouring)
+  // out  = outcome after this session (drives AFTER colouring)
+  const LAYERS = [
+    { name:"Reliability",     key:"reliability" },
+    { name:"Integrations",    key:"integrations" },
+    { name:"Edge Functions",  key:"functions" },
+    { name:"Database & RLS",  key:"db" },
+    { name:"Auth & Roles",    key:"auth" }
+  ];
+
+  const F = [
+    // Auth
+    { id:"2.1", layer:"auth", sev:"high", out:"sealed", chip:"2.1 owner-auth split",
+      title:"Owner auth had two logic paths that disagreed",
+      path:"supabase/functions/_shared/owner-auth-middleware.ts",
+      before:"Granted access on email OR an owner/admin row in user_roles, while the Owner UI's verify-owner gate was email-only. A stray role row would have opened every owner-* function while the UI still refused.",
+      after:"Email allow-list only, identical to verify-owner. A caller holding an owner role row but no allow-listed email is now logged as a privilege-escalation attempt." },
+
+    { id:"2.2", layer:"auth", sev:"high", out:"sealed", chip:"2.2 create-checkout",
+      title:"create-checkout had no authentication check at all",
+      path:"supabase/functions/create-checkout/index.ts",
+      before:"No JWT verification anywhere. Accepted a client-supplied userId and attached it to the Stripe session as metadata.userId — the field downstream entitlement logic reads.",
+      after:"Identity derived from the verified session only; the client-supplied field is gone from both the function and its caller. Guest checkout still works, but a purchase can no longer be attributed to another account. Rate limited and CORS-scoped while in there." },
+
+    { id:"2.3", layer:"auth", sev:"low", out:"cleared", chip:"2.3 client guards",
+      title:"Route guards are client-side UX only",
+      path:"src/components/OwnerGuard.tsx, BrokerGuard.tsx",
+      before:"Spoofable client-side redirects — normal for an SPA.",
+      after:"No change needed. Confirmed every owner-only edge function independently re-verifies server-side, so disabling JavaScript yields a broken UI, not access." },
+
+    // Database
+    { id:"3.1", layer:"db", sev:"info", out:"cleared", chip:"3.1 PII exposure",
+      title:"Two PII tables were publicly readable for months, then fixed",
+      path:"leads, email_verifications, phone_verifications",
+      before:"leads shipped with SELECT USING (true); OTP tables shipped with FOR ALL USING (true) and plaintext codes.",
+      after:"Already closed before the audit ran — codes hashed, anon access reduced to insert-only. Flagged here only because the exposure window is worth knowing about, not as an open item." },
+
+    { id:"3.2", layer:"db", sev:"medium", out:"cleared", chip:"3.2 user_sessions",
+      title:"user_sessions UPDATE policy said to be unrestricted",
+      path:"supabase/migrations/20260706161023_*.sql",
+      before:"Reported as USING (true) — any caller could modify another user's session row.",
+      after:"Already fixed on 6 July, before the audit; the report read the January migration and missed the correction. Re-asserted idempotently in the new migration so a later INSERT-only migration can't regress it." },
+
+    { id:"3.3", layer:"db", sev:"medium", out:"cleared", chip:"3.3 rel_* policies",
+      title:"rel_listings / rel_projects / rel_deals said to have zero policies",
+      path:"supabase/migrations/20260504141024_*.sql",
+      before:"Reported as RLS-enabled with no CREATE POLICY anywhere in 1,155 migrations.",
+      after:"False positive. Policies exist — created in a DO $$ … EXECUTE format(…) loop the audit's grep could not see. Verification query recorded in the new migration." },
+
+    { id:"3.4", layer:"db", sev:"medium", out:"sealed", chip:"3.4 FK cascade",
+      title:"Cascade-delete risk on developers → projects",
+      path:"supabase/migrations/20260817120000_*.sql",
+      before:"projects.developer_id was ON DELETE CASCADE, so deleting one developer row wiped every project beneath it and — via the projects → images/documents cascades — all of their media.",
+      after:"Changed to ON DELETE SET NULL, matching the safer pattern the newer rel_* module already used. The child cascades are deliberately kept; breaking the top link is the fix. A partial index keeps orphaned projects findable." },
+
+    // Edge functions
+    { id:"4.1", layer:"functions", sev:"high", out:"partial", chip:"4.1 service-role ×225",
+      title:"225 functions use service-role with no visible caller check",
+      path:"supabase/functions/**",
+      before:"377 of 507 functions use the service-role key; 152 check the caller first. The rest are mostly internal cron jobs, but a real subset were public-facing.",
+      after:"Partial. The public-facing endpoints that mattered are now gated or validated (4.2, 4.3, 4.4). The remaining long tail is a per-function pass, tracked as JBJ-028 — not something a sweep can close honestly." },
+
+    { id:"4.2", layer:"functions", sev:"medium", out:"sealed", chip:"4.2 ungated cron",
+      title:"Two internal-only functions had no auth or shared secret",
+      path:"crm-purge-trash, compute-user-scores",
+      before:"crm-purge-trash hard-deletes CRM records older than 30 days; compute-user-scores reads across analytics and CRM for an arbitrary user_id. Neither enforced anything — the public anon key was enough.",
+      after:"Both require an internal caller via a new _shared/internal-auth.ts (service-role bearer or x-cron-secret, constant-time compared, fails closed). compute-user-scores also accepts staff, since the admin page calls it, and now validates user_id as a UUID." },
+
+    { id:"4.3", layer:"functions", sev:"medium", out:"partial", chip:"4.3 rate limits",
+      title:"Rate limiting adopted by only 29 of 507 functions",
+      path:"_shared/rate-limit-middleware.ts",
+      before:"A working shared limiter existed but most public write endpoints didn't call it.",
+      after:"Partial, and the finding was partly stale — newsletter-subscribe and capture-lead already had it. Added to create-checkout, register-user and booking-public-create. The wider rollout across 507 functions remains open." },
+
+    { id:"4.4", layer:"functions", sev:"medium", out:"sealed", chip:"4.4 validation",
+      title:"Input validation inconsistent on public submission endpoints",
+      path:"supabase/functions/register-user/index.ts",
+      before:"register-user took raw string coercion on a body that creates auth users and writes six tables.",
+      after:"Full zod schema with bounded lengths; parse failures return field names only, never the zod issue tree. The other named endpoints were re-checked and already had validation." },
+
+    { id:"4.5", layer:"functions", sev:"low", out:"partial", chip:"4.5 wildcard CORS",
+      title:"357 of 507 functions wildcard CORS to any origin",
+      path:"supabase/functions/**",
+      before:"95% of functions setting a CORS header allow *. Normal for public reads, riskier on state-changing endpoints.",
+      after:"Partial. create-checkout moved to the shared origin-validating helper. A full pass over the remaining write endpoints is not done." },
+
+    { id:"4.6", layer:"functions", sev:"low", out:"open", chip:"4.6 dead functions",
+      title:"Leftover smoke-test and one-off functions in the production tree",
+      path:"bundle/esm/npm/std-smoke-test, bulk-import-devs-2027-6",
+      before:"Four trivial echo endpoints plus a dated one-off importer, all deployed and publicly reachable. The importer turned out to be worse than dead code — it does unauthenticated service-role writes into developers.",
+      after:"Deleted from the repo — but a repo deletion does not undeploy them. They stay publicly callable until explicitly undeployed in Supabase. Open, tracked as JBJ-027." },
+
+    { id:"4.7", layer:"functions", sev:"info", out:"open", chip:"4.7 ~210 orphans",
+      title:"Roughly 210 functions have no traceable caller",
+      path:"supabase/functions/**",
+      before:"Cross-referencing function names against frontend invokes and known cron wiring left ~210 unmatched.",
+      after:"Open, not started. The audit's own estimate is acknowledged as high — it can't see function-to-function calls, dynamic invoke strings, or webhook targets configured outside this repo. Tracked as JBJ-028." },
+
+    // Integrations
+    { id:"5.1", layer:"integrations", sev:"medium", out:"sealed", chip:"5.1 email relay",
+      title:"email-send-gateway let any authenticated user send arbitrary mail",
+      path:"supabase/functions/email-send-gateway/index.ts",
+      before:"Documented as “not publicly callable”, and it did require a JWT — but any authenticated account, including a fresh self-service signup, could set arbitrary from, to, subject and html at 10/hour from JBJ's own sending domain.",
+      after:"Sender-domain allow-list enforced for every caller, internal ones included. Non-staff callers may now only send to their own verified address or a JBJ address; staff and internal service calls keep arbitrary recipients, so Document Studio still works." },
+
+    // Reliability
+    { id:"6.1", layer:"reliability", sev:"low", out:"sealed", chip:"6.1 error leaks",
+      title:"Functions returned raw error messages to the client",
+      path:"submit-lead, distribute-leads, flag-lead-junk, sarah-search, ai-listing-extractor, +2",
+      before:"Raw error.message from caught exceptions returned in the API response, leaking column and constraint names.",
+      after:"Static generic strings across all seven, matching the pattern advisory-desk-request already used. Real errors still logged server-side, so nothing is lost for debugging." },
+
+    { id:"6.2", layer:"reliability", sev:"low", out:"sealed", chip:"6.2 Sentry PII",
+      title:"Sentry error capture had no PII-scrubbing hook",
+      path:"src/lib/sentry.ts",
+      before:"No beforeSend or redaction step — arbitrary extra data attached to captures, which can include user-entered form data from an error boundary, went to Sentry unfiltered.",
+      after:"Recursive scrubbing on ~35 PII-shaped key patterns plus free-text email and phone matching, applied at the captureToSentry source and again in beforeSend / beforeBreadcrumb so Sentry's own auto-collected data is covered. Depth- and cycle-bounded. 8 unit tests, one of which caught a real bug in the first implementation." },
+
+    { id:"6.3", layer:"reliability", sev:"low", out:"sealed", chip:"6.3 AI timeout",
+      title:"No timeout around the AI-gateway call",
+      path:"_shared/ai-utils.ts, _shared/ai-gateway.ts",
+      before:"The shared helper used by most ai-* functions had no timeout wrapper. A hung gateway call left the user watching a spinner until the platform's own function timeout killed it.",
+      after:"60-second AbortController on both AI paths, surfacing a clean error instead of a hang. A caller that supplies its own signal keeps control." }
+  ];
+
+  const OUT_LABEL = { sealed:"Fixed", partial:"Partial", cleared:"No action needed", open:"Open" };
+  const SEV_LABEL = { high:"High", medium:"Medium", low:"Low", info:"Info" };
+
+  const root = document.getElementById("root");
+  const stack = document.getElementById("stack");
+  const ledger = document.getElementById("ledger");
+  const tallies = document.getElementById("tallies");
+  const legend = document.getElementById("legend");
+  const note = document.getElementById("switch-note");
+  const btnBefore = document.getElementById("btn-before");
+  const btnAfter = document.getElementById("btn-after");
+
+  // ── Build the plates ──────────────────────────────────────────────────
+  LAYERS.forEach(function(layer, i){
+    const items = F.filter(function(f){ return f.layer === layer.key; });
+    const plate = document.createElement("div");
+    plate.className = "plate";
+    plate.setAttribute("data-layer", String(i));
+
+    const head = document.createElement("div");
+    head.className = "plate-head";
+    const nm = document.createElement("span");
+    nm.className = "plate-name";
+    nm.textContent = layer.name;
+    const ct = document.createElement("span");
+    ct.className = "plate-count";
+    ct.textContent = items.length + (items.length === 1 ? " finding" : " findings");
+    head.appendChild(nm); head.appendChild(ct);
+
+    const chips = document.createElement("div");
+    chips.className = "chips";
+    items.forEach(function(f){
+      const c = document.createElement("span");
+      c.className = "chip";
+      c.setAttribute("data-sev", f.sev);
+      c.setAttribute("data-out", f.out);
+      const d = document.createElement("i");
+      d.className = "dot";
+      c.appendChild(d);
+      c.appendChild(document.createTextNode(f.chip));
+      chips.appendChild(c);
+    });
+
+    plate.appendChild(head);
+    plate.appendChild(chips);
+    stack.appendChild(plate);
+  });
+
+  // ── Ledger ────────────────────────────────────────────────────────────
+  const ordered = LAYERS.slice().reverse().reduce(function(acc, l){
+    return acc.concat(F.filter(function(f){ return f.layer === l.key; }));
+  }, []);
+
+  ordered.forEach(function(f){
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.className = "fid";
+    tdId.textContent = f.id;
+
+    const tdWhat = document.createElement("td");
+    const t = document.createElement("strong");
+    t.className = "ftitle";
+    t.textContent = f.title;
+    const p = document.createElement("span");
+    p.className = "fpath";
+    p.textContent = f.path;
+    tdWhat.appendChild(t); tdWhat.appendChild(p);
+
+    const tdBefore = document.createElement("td");
+    const sevPill = document.createElement("span");
+    sevPill.className = "pill";
+    sevPill.setAttribute("data-p", f.sev);
+    sevPill.textContent = SEV_LABEL[f.sev];
+    const bTxt = document.createElement("span");
+    bTxt.className = "fnote";
+    bTxt.textContent = f.before;
+    tdBefore.appendChild(sevPill); tdBefore.appendChild(bTxt);
+
+    const tdAfter = document.createElement("td");
+    const outPill = document.createElement("span");
+    outPill.className = "pill";
+    outPill.setAttribute("data-p", f.out);
+    outPill.textContent = OUT_LABEL[f.out];
+    const aTxt = document.createElement("span");
+    aTxt.className = "fnote";
+    aTxt.textContent = f.after;
+    tdAfter.appendChild(outPill); tdAfter.appendChild(aTxt);
+
+    tr.appendChild(tdId); tr.appendChild(tdWhat);
+    tr.appendChild(tdBefore); tr.appendChild(tdAfter);
+    ledger.appendChild(tr);
+  });
+
+  // ── Tallies ───────────────────────────────────────────────────────────
+  function count(pred){ return F.filter(pred).length; }
+
+  const TALLY = {
+    before: [
+      { n: F.length,                                     k:"Findings assessed", tone:"" },
+      { n: count(function(f){return f.sev==="high";}),   k:"Graded high",       tone:"breach" },
+      { n: count(function(f){return f.sev==="medium";}), k:"Graded medium",     tone:"partial" },
+      { n: count(function(f){return f.sev==="low"||f.sev==="info";}), k:"Low / info", tone:"cleared" },
+      { n: 0,                                            k:"Fixed",             tone:"sealed" }
+    ],
+    after: [
+      { n: F.length,                                        k:"Findings assessed", tone:"" },
+      { n: count(function(f){return f.out==="sealed";}),    k:"Fixed",             tone:"sealed" },
+      { n: count(function(f){return f.out==="partial";}),   k:"Partially closed",  tone:"partial" },
+      { n: count(function(f){return f.out==="cleared";}),   k:"Cleared on review", tone:"cleared" },
+      { n: count(function(f){return f.out==="open";}),      k:"Still open",        tone:"breach" }
+    ]
+  };
+
+  function renderTallies(state){
+    tallies.textContent = "";
+    TALLY[state].forEach(function(t){
+      const el = document.createElement("div");
+      el.className = "tally";
+      if (t.tone) el.setAttribute("data-tone", t.tone);
+      const n = document.createElement("div");
+      n.className = "n";
+      n.textContent = String(t.n);
+      const k = document.createElement("div");
+      k.className = "k";
+      k.textContent = t.k;
+      el.appendChild(n); el.appendChild(k);
+      tallies.appendChild(el);
+    });
+  }
+
+  // ── Legend ────────────────────────────────────────────────────────────
+  const LEGEND = {
+    before: [
+      ["var(--breach)","High"], ["var(--partial)","Medium"],
+      ["var(--muted)","Low"],   ["var(--cleared)","Informational"]
+    ],
+    after: [
+      ["var(--sealed)","Fixed"], ["var(--partial)","Partial"],
+      ["var(--cleared)","Cleared on review"], ["var(--breach)","Still open"]
+    ]
+  };
+
+  function renderLegend(state){
+    legend.textContent = "";
+    LEGEND[state].forEach(function(pair){
+      const s = document.createElement("span");
+      const i = document.createElement("i");
+      i.style.background = pair[0];
+      s.appendChild(i);
+      s.appendChild(document.createTextNode(pair[1]));
+      legend.appendChild(s);
+    });
+  }
+
+  // ── State switch ──────────────────────────────────────────────────────
+  const NOTES = {
+    before: "As the audit found it. Severity colouring is the auditor's own.",
+    after:  "After verification and remediation. Two items are still open — deliberately shown in red."
+  };
+
+  function setState(state){
+    const isAfter = state === "after";
+    root.classList.toggle("is-after", isAfter);
+    btnBefore.setAttribute("aria-pressed", String(!isAfter));
+    btnAfter.setAttribute("aria-pressed", String(isAfter));
+    note.textContent = NOTES[state];
+    renderTallies(state);
+    renderLegend(state);
+  }
+
+  btnBefore.addEventListener("click", function(){ setState("before"); });
+  btnAfter.addEventListener("click", function(){ setState("after"); });
+
+  // ── Orbit ─────────────────────────────────────────────────────────────
+  const HOME = { x:56, z:-30 };
+  let rot = { x:HOME.x, z:HOME.z };
+  let drag = null;
+  const stage = document.getElementById("stage");
+
+  function apply(){
+    stack.style.transform = "rotateX(" + rot.x + "deg) rotateZ(" + rot.z + "deg)";
+  }
+  function clampX(v){ return Math.max(12, Math.min(84, v)); }
+
+  stage.addEventListener("pointerdown", function(e){
+    if (e.target.closest(".reset")) return;
+    drag = { x:e.clientX, y:e.clientY, rx:rot.x, rz:rot.z };
+    stack.classList.add("free");
+    stage.classList.add("dragging");
+    stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener("pointermove", function(e){
+    if (!drag) return;
+    rot.z = drag.rz + (e.clientX - drag.x) * 0.42;
+    rot.x = clampX(drag.rx - (e.clientY - drag.y) * 0.32);
+    apply();
+  });
+  function endDrag(e){
+    if (!drag) return;
+    drag = null;
+    stage.classList.remove("dragging");
+    if (e && e.pointerId != null && stage.hasPointerCapture(e.pointerId)) {
+      stage.releasePointerCapture(e.pointerId);
+    }
+  }
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+
+  stage.addEventListener("keydown", function(e){
+    const step = e.shiftKey ? 12 : 5;
+    let handled = true;
+    stack.classList.add("free");
+    switch(e.key){
+      case "ArrowLeft":  rot.z -= step; break;
+      case "ArrowRight": rot.z += step; break;
+      case "ArrowUp":    rot.x = clampX(rot.x + step); break;
+      case "ArrowDown":  rot.x = clampX(rot.x - step); break;
+      default: handled = false;
+    }
+    if (handled){ e.preventDefault(); apply(); }
+  });
+
+  document.getElementById("reset").addEventListener("click", function(){
+    stack.classList.remove("free");
+    rot = { x:HOME.x, z:HOME.z };
+    stack.style.transform = "";
+  });
+
+  setState("before");
+})();
+</script>
+
+</body>
+</html>

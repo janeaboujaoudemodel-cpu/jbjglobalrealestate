@@ -366,7 +366,23 @@ export interface AIRequestOptions {
   maxTokens?: number;
   temperature?: number;
   stream?: boolean;
+  /**
+   * Hard ceiling for the upstream AI-gateway call, in milliseconds.
+   * Defaults to AI_CALL_TIMEOUT_MS.
+   */
+  timeoutMs?: number;
 }
+
+/**
+ * Default timeout for the AI-gateway call (backend audit, §6 reliability).
+ *
+ * Previously there was no timeout at all: a hung gateway request left the
+ * caller's spinner running until the platform's own function timeout killed
+ * the invocation, with no clean error. 60s is comfortably above normal
+ * completion latency while still failing fast enough to surface a real error
+ * to the user.
+ */
+export const AI_CALL_TIMEOUT_MS = 60_000;
 
 export interface AIResponse {
   success: boolean;
@@ -400,9 +416,15 @@ export async function callLovableAI(
     options = systemPromptOrOptions;
   }
 
+  // Abort the upstream call rather than hanging until the platform timeout.
+  const timeoutMs = options.timeoutMs ?? AI_CALL_TIMEOUT_MS;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
+      signal: controller.signal,
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
@@ -441,8 +463,14 @@ export async function callLovableAI(
 
     return sanitizeContactInfo(content);
   } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      console.error(`AI call timed out after ${timeoutMs}ms`);
+      throw new Error("AI service timed out. Please try again.");
+    }
     console.error("AI call error:", err);
     throw err;
+  } finally {
+    clearTimeout(timer);
   }
 }
 

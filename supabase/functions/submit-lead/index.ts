@@ -71,8 +71,10 @@ Deno.serve(async (req) => {
       .select("id")
       .single();
     if (error) {
+      // Audit 6.1: the driver message can name columns/constraints — log it,
+      // don't return it.
       console.error("submit-lead insert error", error);
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: "An internal error occurred" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -82,7 +84,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("submit-lead unexpected", e);
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    return new Response(JSON.stringify({ error: "An internal error occurred" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
