@@ -21,6 +21,7 @@ jobs:
     permissions:
       contents: read
       issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -125,9 +126,36 @@ jobs:
             } else if (gateOutcome !== 'failure') {
               body += '_Rendered sweep did not produce a report (likely failed before completion). See workflow logs._\n';
             }
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body,
-            });
+            // Write the report to the job summary first. The summary needs no
+            // token permissions, so it is the copy that survives when
+            // commenting is not permitted.
+            try {
+              await core.summary.addRaw(body).write();
+            } catch (err) {
+              core.warning(`Could not write the job summary: ${err.message}`);
+            }
+
+            // Posting the PR comment is a convenience, not this job's verdict.
+            // This repo's GITHUB_TOKEN is capped read-only by a repository
+            // setting that a job-level `permissions:` block cannot raise, so
+            // createComment answers 403 "Resource not accessible by
+            // integration" on every run. Letting that failure surface marked a
+            // PASSING gate as failed - the precise class of bug this gate
+            // exists to catch. The real check steps above already fail the job
+            // on their own exit status, so swallowing this one cannot hide a
+            // genuine regression.
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            } catch (err) {
+              core.warning(
+                `Could not post the PR comment (${err.status || 'unknown status'}: ${err.message}). ` +
+                'The full report is in this job summary. To restore commenting, allow GitHub ' +
+                'Actions to write to pull requests under Settings -> Actions -> General -> ' +
+                'Workflow permissions.'
+              );
+            }
