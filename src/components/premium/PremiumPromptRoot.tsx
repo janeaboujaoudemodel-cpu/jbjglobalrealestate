@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Sparkles, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import {
   subscribePremiumPrompt,
   type PremiumPromptPayload,
 } from "@/components/premium/premiumPromptBus";
 import { CONVERSION_SUB } from "@/config/premiumActions";
 import { logAnalytics } from "@/lib/analytics";
-import { ClickableDiv } from "@/components/a11y/ClickableDiv";
 
 /**
  * Global mount for the "Create your free account" prompt. Rendered once at
@@ -22,9 +23,7 @@ export default function PremiumPromptRoot() {
       setPayload(p);
       logAnalytics("auth_prompt_shown", { action: p.actionKey });
     });
-    return () => {
-      unsub();
-    };
+    return () => { unsub(); };
   }, []);
 
   if (!payload) return null;
@@ -35,21 +34,23 @@ export default function PremiumPromptRoot() {
       mode === "signup" ? "auth_prompt_signup" : "auth_prompt_signin",
       { action: payload.actionKey },
     );
-    navigate(
-      `/auth?mode=${mode}&next=${encodeURIComponent(payload.next)}`,
-    );
+    navigate(`/auth?mode=${mode}&next=${encodeURIComponent(payload.next)}`);
     close();
   };
 
   return (
-    <ClickableDiv
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
-      onClick={close}
-    >
-      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
-        className="relative w-full max-w-md rounded-lg overflow-hidden shadow-2xl bg-[#FDFBF7] border border-[#B89555]/40"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Dialog open={!!payload} onOpenChange={(open) => !open && close()}>
+      {/*
+       * DialogContent's built-in close button is suppressed here because the
+       * emerald hero band already renders its own X button. Showing both would
+       * duplicate the control. Clicking outside (backdrop) also calls close()
+       * via onOpenChange.
+       */}
+      <DialogContent className="max-w-md p-0 overflow-hidden shadow-2xl bg-[#FDFBF7] border border-[#B89555]/40 rounded-lg [&>button]:hidden">
+        <VisuallyHidden.Root>
+          <DialogTitle>Create your free account</DialogTitle>
+        </VisuallyHidden.Root>
+
         {/* Emerald hero band */}
         <div className="relative px-7 pt-8 pb-6 bg-gradient-to-br from-[#064E3B] via-[#032A1E] to-[#000000] text-white">
           <button
@@ -57,7 +58,9 @@ export default function PremiumPromptRoot() {
             onClick={close}
             className="absolute top-3 right-3 rounded-full p-1.5 text-white/70 hover:text-white hover:bg-white/10"
           >
-            <X className="w-4 h-4" />
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
           <div className="inline-flex items-center gap-2 text-[10px] tracking-[0.32em] uppercase text-[#D4B87A]">
             <Sparkles className="w-3 h-3" />
@@ -67,9 +70,7 @@ export default function PremiumPromptRoot() {
             Create your free account to&nbsp;
             <span className="italic text-[#D4B87A]">{payload.actionLabel}</span>
           </h2>
-          <p className="mt-2 text-sm text-white/75 leading-relaxed">
-            {CONVERSION_SUB}
-          </p>
+          <p className="mt-2 text-sm text-white/75 leading-relaxed">{CONVERSION_SUB}</p>
         </div>
 
         <div className="px-7 py-5 space-y-3">
@@ -90,7 +91,7 @@ export default function PremiumPromptRoot() {
             Free forever · No credit card · Cancel anytime
           </div>
         </div>
-      </div>
-    </ClickableDiv>
+      </DialogContent>
+    </Dialog>
   );
 }

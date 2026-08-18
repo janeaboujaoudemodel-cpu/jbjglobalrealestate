@@ -1,12 +1,13 @@
-import { useState, useEffect, forwardRef } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { X, Bell, ArrowRight, CheckCircle, Headphones } from "lucide-react";
+import { Bell, ArrowRight, CheckCircle, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasksPopupAlert(_props, ref) {
+export const UserTasksPopupAlert = () => {
   const { user, isOwner, ownerLoading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -17,19 +18,12 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
 
   useEffect(() => {
     if (!user || ownerLoading) return;
-    if (isOwner) {
-      setLoaded(true);
-      return;
-    }
+    if (isOwner) { setLoaded(true); return; }
 
     const dismissedAt = localStorage.getItem('user_tasks_popup_dismissed_at');
     if (dismissedAt) {
       const elapsed = Date.now() - parseInt(dismissedAt, 10);
-      if (elapsed < 24 * 60 * 60 * 1000) {
-        setDismissed(true);
-        setLoaded(true);
-        return;
-      }
+      if (elapsed < 24 * 60 * 60 * 1000) { setDismissed(true); setLoaded(true); return; }
       localStorage.removeItem('user_tasks_popup_dismissed_at');
     }
 
@@ -39,7 +33,6 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
         .select("id", { count: "exact", head: true })
         .eq("user_id", user.id)
         .eq("status", "pending");
-
       setPendingCount(count || 0);
 
       const { data: notifications } = await supabase
@@ -50,60 +43,49 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
         .eq("is_read", false)
         .order("created_at", { ascending: false })
         .limit(5);
-
       setTicketAlerts(notifications || []);
       setLoaded(true);
     };
-
     checkAlerts();
   }, [user, isOwner, ownerLoading]);
 
   const handleDismiss = () => {
     localStorage.setItem('user_tasks_popup_dismissed_at', Date.now().toString());
     setDismissed(true);
-    // Invalidate alert counts so header badges update
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
     queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
   };
 
   const totalAlerts = pendingCount + ticketAlerts.length;
-  if (!loaded || dismissed || totalAlerts === 0) return null;
+  const open = loaded && !dismissed && totalAlerts > 0;
 
   return (
-    <div ref={ref} className="fixed inset-0 z-[9999] flex items-start md:items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm p-4 pt-24 md:pt-[104px]">
-      <div
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleDismiss()}>
+      <DialogContent
         data-no-contrast-guard
         data-surface="page"
         style={{ backgroundColor: "#FDFBF7", color: "#1A1A1A" }}
-        className="border-2 border-[#B89555]/60 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative"
+        className="border-2 border-[#B89555]/60 max-w-md"
       >
-        <button
-          type="button"
-          onClick={handleDismiss}
-          aria-label="Close pending tasks alert"
-          style={{ color: "#1A1A1A" }}
-          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
-        >
-          <X className="w-5 h-5" style={{ color: "#1A1A1A" }} />
-        </button>
-
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] border border-[#B89555]/60 flex items-center justify-center shadow-sm">
-            <Bell className="w-6 h-6" style={{ color: "#B89555" }} />
+        <DialogHeader>
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] border border-[#B89555]/60 flex items-center justify-center shadow-sm">
+              <Bell className="w-6 h-6" style={{ color: "#B89555" }} />
+            </div>
+            <div>
+              <DialogTitle className="text-[#1A1A1A] font-bold text-lg">
+                {ticketAlerts.length > 0 && pendingCount > 0
+                  ? "Updates & Tasks"
+                  : ticketAlerts.length > 0
+                    ? "Ticket Updates"
+                    : "Pending Tasks"}
+              </DialogTitle>
+              <DialogDescription className="text-[#1A1A1A]/70 text-sm font-medium">
+                {totalAlerts} notification{totalAlerts !== 1 ? "s" : ""} for you
+              </DialogDescription>
+            </div>
           </div>
-          <div>
-            <h3 className="text-[#1A1A1A] font-bold text-lg">
-              {ticketAlerts.length > 0 && pendingCount > 0
-                ? "Updates & Tasks"
-                : ticketAlerts.length > 0
-                  ? "Ticket Updates"
-                  : "Pending Tasks"}
-            </h3>
-            <p className="text-[#1A1A1A]/70 text-sm font-medium">
-              {totalAlerts} notification{totalAlerts !== 1 ? "s" : ""} for you
-            </p>
-          </div>
-        </div>
+        </DialogHeader>
 
         {ticketAlerts.length > 0 && (
           <div className="space-y-2 mb-4">
@@ -129,33 +111,18 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
 
         <div className="flex gap-3">
           {ticketAlerts.length > 0 && (
-            <Button
-              onClick={() => { handleDismiss(); navigate("/my-tickets"); }}
-              variant="primary"
-              className="flex-1 rounded-xl"
-            >
-              <Headphones className="w-4 h-4 mr-2" />
-              My Tickets
+            <Button onClick={() => { handleDismiss(); navigate("/my-tickets"); }} variant="primary" className="flex-1 rounded-xl">
+              <Headphones className="w-4 h-4 mr-2" />My Tickets
             </Button>
           )}
           {pendingCount > 0 && (
-            <Button
-              onClick={() => { handleDismiss(); navigate("/my-account#tasks"); }}
-              variant="primary"
-              className="flex-1 rounded-xl"
-            >
+            <Button onClick={() => { handleDismiss(); navigate("/my-account#tasks"); }} variant="primary" className="flex-1 rounded-xl">
               View Tasks <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           )}
-          <Button
-            variant="secondary"
-            onClick={handleDismiss}
-            className="rounded-xl"
-          >
-            Later
-          </Button>
+          <Button variant="secondary" onClick={handleDismiss} className="rounded-xl">Later</Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
-});
+};

@@ -90,12 +90,52 @@ jobs:
       - name: Build app
         run: npm run build
 
+      # JBJ-031. A circular import between emitted chunks means one chunk
+      # runs before its dependency is initialised — a blank-page boot
+      # failure in production. This exact bug shipped and took every route
+      # down while unit tests, the build, and the rendered sweep below all
+      # reported green, because none of them read the built bundle. Runs
+      # here because this job already has a build.
+      - name: Check for circular chunk dependencies
+        run: npm run check:chunks
+
       - name: Start preview server
         run: |
           npm run preview -- --host 0.0.0.0 --port 8080 &
           for i in $(seq 1 60); do
             curl -sf http://localhost:8080 > /dev/null && break || sleep 1
           done
+
+      # JBJ-031. The contrast sweep below reported "0 violations" on all 56
+      # routes while the site was rendering nothing at all — axe found no
+      # bad colour pairs because there were no elements. Assert the app
+      # actually mounts before trusting any rendered check.
+      - name: Assert the app boots
+        run: |
+          node -e '
+            const { chromium } = require("playwright");
+            (async () => {
+              const b = await chromium.launch();
+              const p = await b.newPage();
+              const errors = [];
+              p.on("pageerror", (e) => errors.push(e.message));
+              await p.goto("http://localhost:8080/", { waitUntil: "networkidle" });
+              await p.waitForTimeout(2000);
+              const len = await p.evaluate(
+                () => document.getElementById("root")?.innerHTML.length ?? -1
+              );
+              await b.close();
+              if (errors.length) {
+                console.error("Page errors on boot:\n  " + errors.join("\n  "));
+              }
+              if (len <= 0) {
+                console.error(`#root is empty (innerHTML length ${len}) — the app did not mount.`);
+                process.exit(1);
+              }
+              if (errors.length) process.exit(1);
+              console.log(`✓ App mounted (#root innerHTML ${len} chars), no page errors.`);
+            })().catch((e) => { console.error(e); process.exit(1); });
+          '
 
       - name: Run rendered contrast sweep (axe color-contrast)
         env:
@@ -156,22 +196,21 @@ jobs:
             } else if (gateOutcome !== 'failure') {
               body += '_Rendered sweep did not produce a report (likely failed before completion). See workflow logs._\n';
             }
-            // Posting the summary is reporting, not gating. A transient GitHub
-            // API failure here (500 "No server is currently available", or the
-            // 403 this repo hits when workflow permissions are tight) used to
-            // fail the whole job, marking a gate that PASSED as red — which is
-            // how a green Contrast gate and a passing PDF QA both showed up as
-            // failures on PR #44. Warn and carry on; the gate's own result is
-            // decided by the steps above.
-            // Always write the report to the run's own job summary. This needs
-            // no token permissions at all, so it survives the repo-level
-            // Actions setting that makes the createComment call below 403 with
-            // "Resource not accessible by integration" — a setting that needs
-            // repo admin to change and has been outstanding as JBJ-022. Without
-            // this, a 403 meant the report simply vanished; now the PR comment
-            // is a convenience and the job summary is the guaranteed copy.
+            // Always write the report to the job summary. This needs no
+            // token permissions, so the report survives even when the
+            // comment below is refused.
             await core.summary.addRaw(body).write();
 
+            // Posting the PR comment is best-effort. The repository's
+            // Actions setting caps GITHUB_TOKEN to read-only, and a
+            // workflow-level `permissions:` block can only narrow that cap,
+            // never widen it — so this call 403s until someone changes
+            // Settings -> Actions -> General -> Workflow permissions
+            // (JBJ-022). Letting it throw made this job report `failure`
+            // on runs where the actual check had PASSED, which is worse
+            // than not having the comment: it trains everyone to ignore a
+            // red gate. The real pass/fail is carried by the check step's
+            // own exit code, not by whether a comment posted.
             try {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
@@ -180,5 +219,13 @@ jobs:
                 body,
               });
             } catch (err) {
-              core.warning(`Could not post the PR summary comment: ${err.message}. The full report is in this job's summary, and the gate result above is unaffected.`);
+              if (err.status === 403) {
+                core.warning(
+                  'Could not post the PR comment: GITHUB_TOKEN is read-only ' +
+                  '(JBJ-022). The full report is in this job\'s summary. Fix via ' +
+                  'Settings -> Actions -> General -> Workflow permissions.'
+                );
+              } else {
+                core.warning(`Could not post the PR comment: ${err.message}`);
+              }
             }

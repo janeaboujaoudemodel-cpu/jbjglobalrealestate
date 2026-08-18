@@ -205,22 +205,21 @@ jobs:
               body += 'No new heading-contrast regressions detected. See the `pass-142-report` artifact for the shareable HTML report.\n';
             }
 
-            // Posting the summary is reporting, not gating. A transient GitHub
-            // API failure here (500 "No server is currently available", or the
-            // 403 this repo hits when workflow permissions are tight) used to
-            // fail the whole job, marking a gate that PASSED as red — which is
-            // how a green Contrast gate and a passing PDF QA both showed up as
-            // failures on PR #44. Warn and carry on; the gate's own result is
-            // decided by the steps above.
-            // Always write the report to the run's own job summary. This needs
-            // no token permissions at all, so it survives the repo-level
-            // Actions setting that makes the createComment call below 403 with
-            // "Resource not accessible by integration" — a setting that needs
-            // repo admin to change and has been outstanding as JBJ-022. Without
-            // this, a 403 meant the report simply vanished; now the PR comment
-            // is a convenience and the job summary is the guaranteed copy.
+            // Always write the report to the job summary. This needs no
+            // token permissions, so the report survives even when the
+            // comment below is refused.
             await core.summary.addRaw(body).write();
 
+            // Posting the PR comment is best-effort. The repository's
+            // Actions setting caps GITHUB_TOKEN to read-only, and a
+            // workflow-level `permissions:` block can only narrow that cap,
+            // never widen it — so this call 403s until someone changes
+            // Settings -> Actions -> General -> Workflow permissions
+            // (JBJ-022). Letting it throw made this job report `failure`
+            // on runs where the actual check had PASSED, which is worse
+            // than not having the comment: it trains everyone to ignore a
+            // red gate. The real pass/fail is carried by the check step's
+            // own exit code, not by whether a comment posted.
             try {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
@@ -229,5 +228,13 @@ jobs:
                 body,
               });
             } catch (err) {
-              core.warning(`Could not post the PR summary comment: ${err.message}. The full report is in this job's summary, and the gate result above is unaffected.`);
+              if (err.status === 403) {
+                core.warning(
+                  'Could not post the PR comment: GITHUB_TOKEN is read-only ' +
+                  '(JBJ-022). The full report is in this job\'s summary. Fix via ' +
+                  'Settings -> Actions -> General -> Workflow permissions.'
+                );
+              } else {
+                core.warning(`Could not post the PR comment: ${err.message}`);
+              }
             }
