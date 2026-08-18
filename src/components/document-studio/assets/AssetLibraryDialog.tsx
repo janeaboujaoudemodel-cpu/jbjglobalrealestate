@@ -19,9 +19,11 @@ interface Props {
   /** Optional: when set, picking an asset closes the dialog and invokes callback */
   onPick?: (asset: OwnerAsset) => void;
   initialTab?: AssetKind;
+  /** Optional: override DialogContent's inline style (e.g. to raise z-index above a host editor's own stacking context) */
+  contentStyle?: React.CSSProperties;
 }
 
-export default function AssetLibraryDialog({ open, onOpenChange, onPick, initialTab = "signature" }: Props) {
+export default function AssetLibraryDialog({ open, onOpenChange, onPick, initialTab = "signature", contentStyle }: Props) {
   const { signatures, stamps, upload, setDefault, remove } = useOwnerAssets();
   const [adding, setAdding] = useState<AssetKind | null>(null);
 
@@ -33,7 +35,7 @@ export default function AssetLibraryDialog({ open, onOpenChange, onPick, initial
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30" data-no-contrast-guard>
+      <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30" data-no-contrast-guard style={contentStyle}>
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A]">Signatures &amp; Stamps</DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/65">

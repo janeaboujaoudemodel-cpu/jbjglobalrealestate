@@ -2826,6 +2826,7 @@ function StudioShell({
         onOpenChange={(v) => !v && setAssetDialog(null)}
         initialTab={assetDialog || "signature"}
         onPick={pickAsset}
+        contentStyle={{ zIndex: 2147483647 }}
       />
 
       {/* NOT migrated to shared Dialog — see JBJ-005 batch 1 PR description.

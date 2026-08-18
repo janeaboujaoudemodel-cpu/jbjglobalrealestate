@@ -68,7 +68,7 @@ const DialogOverlay = React.forwardRef<
       className,
     )}
     {...props}
-    style={{ ...(props.style || {}), zIndex: 120000 }}
+    style={{ zIndex: 120000, ...(props.style || {}) }}
   />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
@@ -116,6 +116,7 @@ const DialogContent = React.forwardRef<
         onInteractOutside={handleInteractOutside}
         {...props}
         style={{
+          zIndex: 120001,
           /* PASS 374 — centre inside the VISIBLE content viewport (window minus
              the docked rail), never the raw window, so the panel reads centred
              in every rail state: expanded, collapsed and closed. */
@@ -124,7 +125,6 @@ const DialogContent = React.forwardRef<
           top: "calc(var(--jj-modal-inset-top, 0px) + (100dvh - var(--jj-modal-inset-top, 0px) - var(--jj-modal-inset-bottom, 0px)) / 2)",
           maxHeight: "calc(100dvh - var(--jj-modal-inset-top, 0px) - var(--jj-modal-inset-bottom, 0px) - 2rem)",
           ...((props as { style?: React.CSSProperties }).style || {}),
-          zIndex: 120001,
         }}
       >
         {children}
