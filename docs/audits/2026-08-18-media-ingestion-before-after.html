@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Media Ingestion Remediation</title>
+<style>
+  :root{
+    --ink:#0B1411; --ink-2:#22322c; --muted:#5c6b63;
+    --page:#F7F2EA; --surface:#FFFDF9; --surface-2:#F1EADD;
+    --line:#DED3BF; --line-soft:#EBE2D2;
+    --emerald:#064E3B; --emerald-lift:#0A6B51;
+    --gold:#B89555; --gold-deep:#8A6D3B;
+    --breach:#B3261E; --breach-bg:#FBEAE8;
+    --sealed:#1F7A4A; --sealed-bg:#E7F3EC;
+    --cleared:#3F5A78; --cleared-bg:#E9EFF6;
+    --partial:#9A6A00; --partial-bg:#FBF1DC;
+    --shadow-sm:0 1px 2px rgba(11,20,17,.06), 0 2px 8px rgba(11,20,17,.05);
+    --shadow-lg:0 18px 50px rgba(11,20,17,.13);
+    --display:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,serif;
+    --body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDF2EE; --ink-2:#C3D2CA; --muted:#8FA49A;
+      --page:#08110E; --surface:#0E1B17; --surface-2:#132621;
+      --line:#22392F; --line-soft:#1A2E27;
+      --emerald:#4FBF95; --emerald-lift:#6FD8AF;
+      --gold:#D3AF72; --gold-deep:#B89555;
+      --breach:#F2837A; --breach-bg:#2B1310;
+      --sealed:#5FCC93; --sealed-bg:#0C2419;
+      --cleared:#9DB9D8; --cleared-bg:#111D2A;
+      --partial:#E0B357; --partial-bg:#2A2110;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 18px 50px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+      --ink:#EDF2EE; --ink-2:#C3D2CA; --muted:#8FA49A;
+      --page:#08110E; --surface:#0E1B17; --surface-2:#132621;
+      --line:#22392F; --line-soft:#1A2E27;
+      --emerald:#4FBF95; --emerald-lift:#6FD8AF;
+      --gold:#D3AF72; --gold-deep:#B89555;
+      --breach:#F2837A; --breach-bg:#2B1310;
+      --sealed:#5FCC93; --sealed-bg:#0C2419;
+      --cleared:#9DB9D8; --cleared-bg:#111D2A;
+      --partial:#E0B357; --partial-bg:#2A2110;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 18px 50px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--ink);font-family:var(--body);
+       font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:56px 24px 96px}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+  h1{font-size:clamp(2rem,4.4vw,2.9rem);letter-spacing:-.015em}
+  h2{font-size:1.6rem;margin:56px 0 6px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+  h3{font-size:1.18rem;margin:30px 0 6px}
+  p{margin:12px 0}
+  code{font-family:var(--mono);font-size:.87em;background:var(--surface-2);
+       padding:.13em .38em;border-radius:4px;border:1px solid var(--line-soft)}
+  a{color:var(--emerald-lift)}
+  .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+           color:var(--gold-deep);font-weight:700;margin-bottom:12px}
+  .lede{font-size:1.12rem;color:var(--ink-2);margin-top:14px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;padding-top:20px;
+        border-top:1px solid var(--line);font-size:.83rem;color:var(--muted)}
+  .meta b{color:var(--ink-2);font-weight:600}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+        padding:20px 22px;margin:18px 0;box-shadow:var(--shadow-sm)}
+  .scroll{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:600px}
+  th{background:var(--surface-2);text-align:left;padding:11px 14px;font-size:.72rem;
+     letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);
+     border-bottom:1px solid var(--line);font-weight:700;white-space:nowrap}
+  td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+  .pill{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;
+        padding:.2em .6em;border-radius:999px;white-space:nowrap;text-transform:uppercase}
+  .p-fix{background:var(--sealed-bg);color:var(--sealed);border:1px solid var(--sealed)}
+  .p-open{background:var(--breach-bg);color:var(--breach);border:1px solid var(--breach)}
+  .p-info{background:var(--cleared-bg);color:var(--cleared);border:1px solid var(--cleared)}
+  .p-part{background:var(--partial-bg);color:var(--partial);border:1px solid var(--partial)}
+  .score{font-family:var(--display);font-variant-numeric:tabular-nums;font-weight:700}
+  .b{color:var(--breach)} .a{color:var(--sealed)}
+  .flag{border-left:4px solid var(--partial);background:var(--partial-bg);
+        border-radius:0 8px 8px 0;padding:16px 20px;margin:18px 0}
+  .flag h3{margin-top:0;color:var(--partial)}
+  .note{border-left:4px solid var(--cleared);background:var(--cleared-bg);
+        border-radius:0 8px 8px 0;padding:16px 20px;margin:18px 0}
+  .note h3{margin-top:0;color:var(--cleared)}
+  ul{padding-left:22px;margin:12px 0} li{margin:7px 0}
+  .big{display:flex;flex-wrap:wrap;gap:14px;margin:24px 0}
+  .stat{flex:1 1 150px;background:var(--surface);border:1px solid var(--line);
+        border-radius:10px;padding:16px 18px;box-shadow:var(--shadow-sm)}
+  .stat .k{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .stat .v{font-family:var(--display);font-size:1.9rem;font-weight:700;margin-top:6px;
+           font-variant-numeric:tabular-nums}
+  footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
+         font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="eyebrow">JBJ Global Real Estate · Remediation Report</div>
+<h1>Media Ingestion Engine: Before &amp; After</h1>
+<p class="lede">Seven audit findings taken to a verified state, one of them narrowed after checking it against the schema history, one more defect class found by treating a finding as a pattern rather than a single site, and one regression test that was never actually run by CI. Two things the brief asked for could not be done, and both are named rather than smoothed over.</p>
+
+<div class="meta">
+  <span><b>Date</b> 18 Aug 2026</span>
+  <span><b>Branch</b> <code>claude/lockfile-audit-remediation-cw055e</code></span>
+  <span><b>PR</b> #47</span>
+  <span><b>Base</b> <code>main</code></span>
+</div>
+
+<h2>Headline</h2>
+<div class="big">
+  <div class="stat"><div class="k">Findings closed</div><div class="v a">5 of 7</div></div>
+  <div class="stat"><div class="k">New findings</div><div class="v b">3</div></div>
+  <div class="stat"><div class="k">Vitest</div><div class="v a">440/440</div></div>
+  <div class="stat"><div class="k">Overall score</div><div class="v"><span class="b">38</span> → <span class="a">86</span></div></div>
+</div>
+
+<h2>The brief's first premise did not hold</h2>
+
+<p>The task opened with an instruction to fix a blocking CI failure before anything else: <code>package.json</code> declares 17 <code>overrides</code>, <code>package-lock.json</code> records none, so <code>npm ci</code> dies in <code>assertRootOverrides</code> and every workflow on <code>main</code> is red. That was true when it was written. It is not true now, and two parts of the diagnosis were never true.</p>
+
+<h3>It was already fixed</h3>
+<p>PR #39 plus follow-up commit <code>b343cdf</code> resolved it, tracked in the roadmap as JBJ-021. On <code>main</code>'s four most recent commits, <b>Unit Tests and Contrast Regression Check both pass</b>, and both run <code>npm ci</code>. A lockfile that failed the override assertion could not produce a green run.</p>
+
+<h3>The assertion cannot fire on this repo</h3>
+<p>Reading <code>assertRootOverrides</code> in Arborist's <code>node.js</code>, it throws only when an override changes the resolved spec of a <em>direct</em> dependency, and it explicitly exempts any override whose value starts with <code>$</code>. This repo's three overrides that target direct dependencies — <code>zod</code>, <code>react-hook-form</code>, <code>recharts</code> — are all written as <code>$</code>-references, which is precisely the escape hatch for that case. The other 14 target transitive-only packages, which the assertion never inspects.</p>
+
+<h3>"The lockfile records no overrides" is not a defect</h3>
+<p>npm never serializes root <code>overrides</code> into a lockfile at all. Confirmed empirically rather than from memory: a throwaway project with <code>rimraf@5.0.5</code> and an override pinning <code>glob</code> to <code>10.3.10</code> produced a lockfile whose tree honoured the override exactly, and whose root package entry contained no <code>overrides</code> key. Its absence here says nothing about whether overrides are applied.</p>
+
+<div class="note">
+<h3>What the lockfile actually contains</h3>
+<p>15 of the 17 overrides are honoured exactly in the resolved tree. The two that are not are both harmless, and neither is what the brief described:</p>
+<ul>
+<li><code>lodash@4.18.1</code> — nothing in the tree depends on <code>lodash</code> at all, so the override is a dead no-op. Worth deleting on a future dependency pass.</li>
+<li><code>glob@10.5.0</code> — applied, but <code>rimraf</code> carries a nested <code>glob@13.0.0</code> beside it. <code>npm ci</code> installs the lockfile as written and does not care; a future <code>npm install</code> would rewrite it.</li>
+</ul>
+</div>
+
+<h2>Findings ledger</h2>
+
+<p>Scores are 0–100 for the health of each area: 0 is "exploitable or broken with nothing catching it", 100 is "correct, and something would catch a regression".</p>
+
+<div class="scroll">
+<table>
+<thead><tr><th>#</th><th>Area</th><th>State</th><th class="num">Before</th><th class="num">After</th></tr></thead>
+<tbody>
+<tr><td>3.1</td><td>Owner portal renders</td><td><span class="pill p-info">Not reproducible</span></td><td class="num score b">—</td><td class="num score a">70</td></tr>
+<tr><td>3.2</td><td>Edge function caller verification</td><td><span class="pill p-fix">Fixed</span></td><td class="num score b">5</td><td class="num score a">90</td></tr>
+<tr><td>3.3</td><td>Listing-media upload validation</td><td><span class="pill p-fix">Fixed</span></td><td class="num score b">0</td><td class="num score a">92</td></tr>
+<tr><td>3.4</td><td><em>Unknown — audit document never reached the session</em></td><td><span class="pill p-open">Not addressed</span></td><td class="num score">?</td><td class="num score">?</td></tr>
+<tr><td>3.5</td><td><code>rel_*</code> CRM read scoping</td><td><span class="pill p-fix">Fixed, scope corrected</span></td><td class="num score b">55</td><td class="num score a">95</td></tr>
+<tr><td>3.6</td><td>Seller form step navigation</td><td><span class="pill p-fix">Fixed</span></td><td class="num score b">30</td><td class="num score a">88</td></tr>
+<tr><td>3.7</td><td>Google Drive "integration"</td><td><span class="pill p-part">Product decision</span></td><td class="num score b">40</td><td class="num score a">55</td></tr>
+<tr><td>+</td><td>3.2 defect class (2 more functions)</td><td><span class="pill p-fix">Found &amp; fixed</span></td><td class="num score b">5</td><td class="num score a">88</td></tr>
+<tr><td>+</td><td>3.1 regression spec actually runs</td><td><span class="pill p-fix">Found &amp; fixed</span></td><td class="num score b">0</td><td class="num score a">90</td></tr>
+<tr><td>+</td><td>Lockfile / CI health</td><td><span class="pill p-fix">Already fixed, verified</span></td><td class="num score b">100</td><td class="num score a">100</td></tr>
+<tr><td>+</td><td>Roadmap tracking integrity</td><td><span class="pill p-fix">Reconciled</span></td><td class="num score b">45</td><td class="num score a">95</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 id="f32">3.2 — <code>process-drive-upload</code> trusted a body-supplied <code>userId</code></h3>
+<p><b>Broken:</b> the function read <code>userId</code> straight from the request body and wrote it to <code>listing_uploads</code> using a service-role client, after spending AI Gateway credits, with no authentication check at all.</p>
+<p><b>Root cause:</b> the caller's identity was treated as an input rather than something to be derived. Supabase's gateway-level <code>verify_jwt</code> gives a false sense of cover here — the public anon key is itself a valid JWT and ships in the frontend bundle, so it satisfies the gateway while proving nothing about who is calling.</p>
+<p><b>Fix:</b> the caller is resolved with <code>auth.getUser()</code> against an anon-key client carrying the caller's own <code>Authorization</code> header, which resolves to no user for an anon-key-only request and returns 401. <code>userId</code> has left the request contract entirely. <code>enforceRateLimit</code> added at 20 requests per 10 minutes, keyed per user, because each call costs money.</p>
+<p><b>Verification:</b> confirmed the call matches the shared middleware's real signature <code>enforceRateLimit(req, config, corsHeaders, userId?)</code> and that <code>keyType: 'user'</code> is a valid config field — these functions are not type-checked in CI, so a signature drift would only surface at runtime.</p>
+
+<h3>3.3 — no validation on direct-to-storage uploads</h3>
+<p><b>Broken:</b> <code>OwnerMediaIngest.handleFiles</code> sent whatever it was handed straight to Storage — no size cap, no type check — and concatenated the raw <code>file.name</code> into the storage key, so the filename decided where the object landed.</p>
+<p><b>Root cause:</b> the upload goes browser-to-Storage with no edge function in the middle, so the only possible server-side enforcement point is the bucket definition, and both buckets had neither <code>file_size_limit</code> nor <code>allowed_mime_types</code> set.</p>
+<p><b>Fix:</b> two halves, because neither is sufficient alone. <code>src/lib/media/validateUpload.ts</code> adds per-kind size caps, a MIME allowlist, an extension-vs-MIME cross-check, magic-byte sniffing and filename sanitisation — this is what catches an executable renamed to <code>.jpg</code>, which a bucket-level MIME check cannot see. A migration then sets <code>allowed_mime_types</code> and <code>file_size_limit</code> on <code>rel-media</code> and <code>rel-logos</code>, which Storage enforces regardless of what any client does. SVG is excluded deliberately: it is XML that can carry script, into a public bucket.</p>
+<p><b>Verification:</b> 15 tests including the renamed-executable and path-traversal-filename cases. Checked independently that the bucket's MIME array and the client's <code>ALLOWED_MIME_TYPES</code> are the same 12 entries — if those drift, the client accepts what the bucket rejects.</p>
+
+<h3>3.5 — the finding was real, but a fifth its reported size</h3>
+<p><b>Reported:</b> all twelve <code>rel_*</code> tables were <code>FOR SELECT TO authenticated USING (true)</code> — every contact, deal, payment and email record readable by any account that could log in.</p>
+<p><b>What the schema history actually shows:</b> that was their <em>creation</em> state in <code>20260504141024</code>, but not the live state. Migration <code>20260524022402</code> already re-scoped ten of the twelve to <code>rel_is_owner()</code> back in May. Its table list omitted exactly two:</p>
+<ul>
+<li><code>rel_media_assets</code> — storage paths, titles and kind for every media object</li>
+<li><code>rel_listing_media</code> — which media asset belongs to which listing</li>
+</ul>
+<p>Those two, and only those two, were the live exposure. Verified that no later migration re-scoped them.</p>
+<p><b>A defect in the inherited fix:</b> as originally written, the migration dropped <code>rel_auth_read_&lt;t&gt;</code> (a no-op — May already dropped it) and created <code>rel_staff_read_&lt;t&gt;</code> <em>alongside</em> the surviving <code>rel_owner_read_&lt;t&gt;</code>. Because permissive RLS policies are OR'd and both predicates were <code>rel_is_owner()</code>, the grant stayed correct — but ten tables were left carrying two identical SELECT policies, so the effective permission could no longer be read off the schema. Both legacy names are now dropped so each table ends with exactly one canonical policy, and identifier interpolation moved from <code>%s</code> to <code>%I</code>.</p>
+<p><b>Verification that this removes nothing live:</b> checked independently — the only frontend reads of <code>rel_*</code> tables are three files under <code>src/pages/owner/</code>, and the single edge function touching them (<code>rel-send-bulk-email</code>) uses a service-role client, which bypasses RLS entirely.</p>
+
+<h3>3.6 — step tabs dropped forward clicks silently</h3>
+<p><b>Broken:</b> clicking a step tab only did anything when moving backwards; forward clicks were discarded with no feedback, which is exactly the reported "clicking the tab doesn't switch the panel".</p>
+<p><b>Fix:</b> forward navigation now advances as far as the form allows and lands on the first genuinely incomplete step, naming the fields that are missing instead of firing a generic toast.</p>
+<p><b>A conflict worth recording:</b> on rebase this collided with <code>main</code>'s accessibility retrofit, which had wrapped the same element in <code>ClickableDiv</code>. Resolved in favour of the audit fix's native <code>&lt;button&gt;</code>: <code>ClickableDiv</code>'s own docstring describes it as a drop-in for divs that <em>cannot</em> be buttons, and a real button gets keyboard operability natively. The element already carried <code>type="button"</code> and button-reset classes. No lint rule mandates the wrapper; its now-unused import was removed.</p>
+
+<h3>3.1 — not reproducible, and recorded as such</h3>
+<p>The audit's launch blocker: every <code>/owner/*</code> route rendering blank in production, the container collapsing to zero height. Driven in a real browser across three routes and three owner-verification states (cached owner, cold with a slow <code>verify-owner</code>, cold with a failing one); all nine combinations rendered at full height with content present.</p>
+<p>One measurement detail probably explains the original diagnosis: <code>#root</code>'s first two children are legitimately zero-height portal anchors, so inspecting <code>#root &gt; *</code> reports <code>height: 0</code> on a perfectly healthy page. The real content is a later sibling.</p>
+<p>The likeliest explanation for a genuine sighting is publish lag — jbj.ae is published by a separate manual step in Lovable, so production can serve an older bundle than <code>main</code>. This is logged as <b>not reproducible</b>, not as fixed, and <code>tests/owner-shell-renders.spec.ts</code> now locks the invariant so a real regression is caught by CI. It still needs one check against the deployed bundle, which no session can perform from source.</p>
+
+<h3>New: 3.2 is a defect class, not one function</h3>
+<p>Finding 3.2 named a single function. Treating it as a pattern — a body-supplied user id reaching a service-role query — and grepping for that shape surfaced three candidates.</p>
+<ul>
+<li><code>owner-user-detail</code> — <b>not vulnerable.</b> It verifies the bearer token and then requires the owner email allow-list or an <code>owner</code>/<code>admin</code> role before reading another user's record. Taking <code>user_id</code> from the body is the intended contract. Left alone.</li>
+<li><code>ai-executive-assistant</code> — <b>vulnerable.</b> The entire auth check was that an <code>Authorization</code> header was <em>present</em>; the token was never validated. It then read <code>assistant_learned_responses</code> — a user's private canned reply templates — and <code>assistant_ignore_rules</code> for a body-supplied <code>userId</code> on a service-role client, wrote back to the matched row, and passed caller-supplied text to the AI Gateway on the company key. Fixed the same way as 3.2, plus a rate limit.</li>
+<li><code>send-idea-approved-email</code> — <b>vulnerable, and the most serious of the three.</b> No caller check whatsoever. Recipient address, display name and idea title all came from the request body into a branded JBJ email sent through Resend — an open relay on the company's own sending domain, usable to send plausible "Idea Approved! +50 Points" mail to any address — while also inserting notification rows for an arbitrary <code>user_id</code>. Now gated on an internal caller (service-role bearer or the cron secret) or a signed-in owner/admin, reusing the repo's existing <code>isInternalCaller</code> and <code>requireOwnerAuth</code>.</li>
+</ul>
+<p>Neither vulnerable function has a <code>functions.invoke(...)</code> caller anywhere in the repo — both are orphaned, exactly like the function in 3.2 — so neither fix can regress a live flow.</p>
+
+<h3>New: the 3.1 regression spec was never run by anything</h3>
+<p>The previous session added <code>tests/owner-shell-renders.spec.ts</code> for finding 3.1 and recorded that it "locks the invariant so a genuine regression is caught by CI rather than by hand". Checking that claim rather than repeating it: <b>no workflow ran the file.</b></p>
+<p>This repo has no <code>playwright.config.ts</code>, so there is no default test-directory sweep, and every workflow that uses Playwright names its target explicitly — PASS 142 runs only <code>tests/dark-surface-heading-contrast.spec.ts</code>, while PDF Export QA and the emerald audit drive their own scripts. The spec was dead code from the moment it landed, and the sentence describing it was false.</p>
+<p>That is the same failure this whole round of work exists to eliminate — a guard that reports nothing and is trusted anyway — so it is fixed rather than merely documented. <code>.github/workflows/owner-shell-renders.yml</code> now builds the app, serves the production bundle and drives the spec through the Playwright runner, on the same shape as PASS 142. Its path filter covers the spec itself plus what could plausibly collapse the owner shell: <code>OwnerGuard</code>, <code>BrokerGuard</code>, <code>UserModeContext</code>, <code>usePortalRole</code>, and the owner and admin page trees. It is running on this PR, which is how the claim became true.</p>
+
+<h2>What could not be done</h2>
+
+<div class="flag">
+<h3>The audit document never reached this session</h3>
+<p><code>JBJ_Media_Ingestion_Audit.html</code> was referenced as attached but is not in the uploads directory, not in the repository, and not anywhere on the filesystem. Only the instruction file arrived.</p>
+<p>The finding set was reconstructed from the previous session's commit messages and roadmap entries on the unmerged branch, which name 3.1, 3.2, 3.3, 3.5, 3.6 and 3.7. <b>3.4 is conspicuously absent from that enumeration and its content is unknown.</b> It is not addressed here, and nothing in this report should be read as covering it. Re-attaching the audit file is the one thing needed to close that gap.</p>
+</div>
+
+<div class="flag">
+<h3>PDF Export QA is red, and deliberately left red</h3>
+<p>The check fails on the Company Profile brochure: <b>10 of 42 embedded images below 150 DPI</b>, lowest 114, on pages 4, 6, 11, 12, 14, 17 and 18. This is pre-existing on <code>main</code> — it fails identically on commits that predate this branch — and is not caused by anything in this PR.</p>
+<p>It is a real content finding, not a broken gate. The threshold file documents 150 as the print bar and says a screen-only deliverable "can justify less, but lower it deliberately and record why". Both available responses are outside what a code session can decide:</p>
+<ul>
+<li><b>Re-export the artwork at higher resolution</b> — the PDF is a committed binary with no generator script and no source assets in the repository. The originals sit with whoever produced it.</li>
+<li><b>Lower <code>minImageDpi</code> for this export</b> — legitimate only if the brochure is genuinely screen-only, which is a product call about how the company profile is used.</li>
+</ul>
+<p>Silently lowering the threshold to turn the check green would be exactly the kind of gate-patching the brief rules out, so it was not done. <b>CI is therefore not fully green, and this is the reason.</b></p>
+</div>
+
+<div class="flag">
+<h3>No dependency install was possible in this session</h3>
+<p><code>npm ci</code> cannot run here. The pinned <code>xlsx@0.20.2</code> resolves to <code>cdn.sheetjs.com</code>, and that host is denied by this sandbox's egress policy — a 403 on CONNECT, recorded by the proxy as a policy denial. The proxy's own documentation says to report such denials rather than route around them.</p>
+<p>The alternative — repointing <code>xlsx</code> at a registry version so an install succeeds — would be precisely the lockfile fabrication the brief forbids. So every result in the verification table below comes from CI on the real lockfile, not from a local run. This is the same restriction the previous session hit, and it is unchanged.</p>
+</div>
+
+<div class="flag">
+<h3>Two things remain product decisions, not bugs</h3>
+<ul>
+<li><b>3.7 — Google Drive support is link-parsing.</b> No <code>googleapis</code>, OAuth or Picker code exists anywhere in the repo. "Drive integration" means: paste a <code>drive.google.com</code> URL, regex-confirm it looks like one, ask an AI model to guess the contents. That is a defensible lightweight design, but if the expectation is "connect your Drive and pick files", it does not exist and would need building from scratch. Logged as JBJ-031 so the ambiguity is settled deliberately.</li>
+<li><b><code>rel-media</code> and <code>rel-logos</code> stay public-read.</b> They are public buckets, so any object URL already shared — in an email, an export, a brochure link — breaks the moment they are made private. Flagged rather than changed unilaterally.</li>
+</ul>
+</div>
+
+<div class="note">
+<h3>Roadmap ID collisions, twice</h3>
+<p>The inherited commits claimed JBJ-021/022/023 and RM-025. Every one of those had been independently assigned on <code>main</code> to unrelated work. They were renumbered to JBJ-024/025/026 — and then a second session merged PR #45 mid-flight, taking JBJ-024 through JBJ-028 as well. Final landing: <b>JBJ-029, JBJ-030, JBJ-031</b> for the audit findings, <b>JBJ-032</b> for the new defect class, changelog rows <b>RM-030</b> and <b>RM-031</b>. Item IDs are never reused, and the renumbering provenance is recorded in the changelog rather than left as a silent overwrite.</p>
+</div>
+
+<h2>Verification</h2>
+<p>All results are from CI on the real lockfile, on branch <code>claude/lockfile-audit-remediation-cw055e</code>.</p>
+
+<div class="scroll">
+<table>
+<thead><tr><th>Suite</th><th>Result</th><th>Evidence</th></tr></thead>
+<tbody>
+<tr><td>Vitest</td><td><span class="pill p-fix">Pass</span></td><td class="num">440 / 440 across 41 files, 27.0s</td></tr>
+<tr><td>Contrast PR Gate</td><td id="r-contrast"><span class="pill p-info">See PR</span></td><td>Blocking merge gate</td></tr>
+<tr><td>PASS 142 responsive sweep</td><td id="r-142"><span class="pill p-info">See PR</span></td><td>Dispatched manually — path filter excludes this PR's files</td></tr>
+<tr><td>Report Pill Snapshot</td><td id="r-pill"><span class="pill p-info">See PR</span></td><td>Dispatched manually — same reason</td></tr>
+<tr><td>Tool emerald audit</td><td id="r-audit"><span class="pill p-info">See PR</span></td><td>Triggered by <code>src/pages/**</code> change</td></tr>
+<tr><td>Owner shell renders</td><td id="r-owner"><span class="pill p-info">See PR</span></td><td>New workflow — 3 routes x 3 owner-verification states</td></tr>
+<tr><td>PDF Export QA</td><td><span class="pill p-open">Fail</span></td><td>Pre-existing low-DPI artwork — see above</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Two limits on that evidence, stated plainly. Edge function changes are <b>not covered by any test</b> — this repo still has no <code>deno test</code> harness, so 3.2 and the two functions in JBJ-032 are verified by reading the shared middlewares' real signatures and return contracts, not by executing them. And the two migrations are <b>not applied</b> by anything in this repository; schema changes go through Supabase/Lovable, so their effect is verified by reading the policy history, not by observing the database.</p>
+
+<h2>Scoring</h2>
+<p>Weighted across the eight scoreable areas, excluding 3.4 as unknown:</p>
+<div class="big">
+  <div class="stat"><div class="k">Before</div><div class="v b">38</div></div>
+  <div class="stat"><div class="k">After</div><div class="v a">86</div></div>
+</div>
+<p>The ceiling is 86 rather than higher for three specific reasons, each of them a real gap rather than a rounding choice: 3.4 is unknown and unaddressed; the edge-function fixes have no executable test behind them; and the two most security-relevant changes are migrations whose effect on the live database cannot be observed from this repository. A score above 90 would be claiming verification that was not performed.</p>
+
+<footer>
+Generated by Claude Code · branch <code>claude/lockfile-audit-remediation-cw055e</code> · PR #47 · 18 Aug 2026.
+Companion to <code>docs/audits/2026-08-17-backend-audit-before-after.html</code>.
+</footer>
+
+</div>
+</body>
+</html>
