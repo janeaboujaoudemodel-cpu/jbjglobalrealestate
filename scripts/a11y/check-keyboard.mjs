@@ -35,6 +35,8 @@ const reportDir = path.join(root, 'artifacts', 'a11y');
 
 const PREVIEW_URL = process.env.PREVIEW_URL || 'http://localhost:8080';
 const PRINT_BASELINE = process.argv.includes('--print-baseline');
+const INSTALLED_CHROMIUM = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+  || '/opt/ms-playwright/chromium-1194/chrome-linux/chrome';
 
 const ROUTES = [
   '/',
@@ -165,7 +167,9 @@ async function run() {
   const baseline = new Set(allowlist.keyboardBaseline?.entries || []);
   const routeWaivers = allowlist.keyboardRouteWaivers || {};
 
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({
+    executablePath: fs.existsSync(INSTALLED_CHROMIUM) ? INSTALLED_CHROMIUM : undefined,
+  });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const results = [];
   const newFindings = [];

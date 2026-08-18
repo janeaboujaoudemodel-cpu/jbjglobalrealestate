@@ -111,12 +111,48 @@ jobs:
           PREVIEW_URL: http://localhost:8080
         run: npm run check:contrast:rendered
 
+      # ---------- Layer 3: accessibility (JBJ-011) ----------
+      # Reuses the build + preview server already up for the contrast sweep
+      # above rather than standing up a second workflow. static is a fast
+      # regex scan (no browser); aria/keyboard are Playwright+axe sweeps.
+      # static + aria gate on NEW findings only — pre-existing violations are
+      # tracked in scripts/a11y/allowlist.json's baselines (see issue #5 for
+      # the outstanding remediation backlog; this gate stops it from growing).
+      - name: a11y — static scan
+        run: npm run check:a11y:static
+
+      - name: a11y — rendered ARIA sweep
+        env:
+          PREVIEW_URL: http://localhost:8080
+        run: npm run check:a11y:aria
+
+      # Non-blocking: two consecutive same-code local runs of this check
+      # produced different tab-stop counts on content-heavy routes (e.g.
+      # homepage 212 vs 233 expected stops), most likely from live listing
+      # data shifting between page loads. A flaky required check erodes
+      # trust faster than no check at all — report-only until that's
+      # root-caused, tracked as a JBJ-011 follow-up.
+      - name: a11y — keyboard navigation (report only, known flaky)
+        continue-on-error: true
+        env:
+          PREVIEW_URL: http://localhost:8080
+        run: npm run check:a11y:keyboard
+
       - name: Upload contrast report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: contrast-report
           path: artifacts/contrast/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload a11y report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: artifacts/a11y/
           if-no-files-found: warn
           retention-days: 30
 
