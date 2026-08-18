@@ -140,6 +140,15 @@ jobs:
             // how a green Contrast gate and a passing PDF QA both showed up as
             // failures on PR #44. Warn and carry on; the gate's own result is
             // decided by the steps above.
+            // Always write the report to the run's own job summary. This needs
+            // no token permissions at all, so it survives the repo-level
+            // Actions setting that makes the createComment call below 403 with
+            // "Resource not accessible by integration" — a setting that needs
+            // repo admin to change and has been outstanding as JBJ-022. Without
+            // this, a 403 meant the report simply vanished; now the PR comment
+            // is a convenience and the job summary is the guaranteed copy.
+            await core.summary.addRaw(body).write();
+
             try {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
@@ -148,5 +157,5 @@ jobs:
                 body,
               });
             } catch (err) {
-              core.warning(`Could not post the PR summary comment: ${err.message}. The gate result above is unaffected.`);
+              core.warning(`Could not post the PR summary comment: ${err.message}. The full report is in this job's summary, and the gate result above is unaffected.`);
             }
