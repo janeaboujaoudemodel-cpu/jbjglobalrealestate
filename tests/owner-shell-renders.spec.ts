@@ -21,6 +21,19 @@ import { test, expect } from '@playwright/test';
  * The session is stubbed rather than real: OWNER_BACKEND_EMAILS is a hard-coded
  * allow-list, so a token carrying one of those emails plus a stubbed
  * `verify-owner` reproduces the owner path without a live credential.
+ *
+ * RUN THIS AGAINST A PRODUCTION BUILD (`npm run build && npm run preview`),
+ * NOT `vite dev`.
+ *
+ * This is not a style preference — it is the whole reason this spec initially
+ * gave the wrong answer. Finding 3.1 turned out to be a circular chunk
+ * dependency between `charts-vendor` and `react-vendor` (JBJ-031): a vendor
+ * chunk was modulepreloaded ahead of React, evaluated before React had
+ * initialised, and threw at module scope, leaving #root empty. `vite dev`
+ * serves unbundled ES modules — no manualChunks, no vendor chunks, no cycle —
+ * so the defect cannot exist in dev and this spec passed against a server that
+ * was structurally incapable of reproducing it. A pass here means nothing
+ * unless the target is bundled output. See ROADMAP JBJ-033.
  */
 
 const BASE_URL = process.env.PREVIEW_URL || process.env.BASE_URL || 'http://127.0.0.1:8080';

@@ -11,13 +11,6 @@ jobs:
     name: Validate PDF exports
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # This job posts its report as a PR comment. Declared for correctness;
-    # note the repository currently caps GITHUB_TOKEN below this, so the
-    # comment step is written to degrade to the job summary rather than fail.
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
 
     steps:
       - name: Checkout
@@ -89,24 +82,21 @@ jobs:
               return;
             }
             const body = fs.readFileSync(path, 'utf8');
-            // Write the report to the job summary first. The summary needs no
-            // token permissions, so it is the copy that survives when
-            // commenting is not permitted.
-            try {
-              await core.summary.addRaw(body).write();
-            } catch (err) {
-              core.warning(`Could not write the job summary: ${err.message}`);
-            }
+            // Always write the report to the job summary. This needs no
+            // token permissions, so the report survives even when the
+            // comment below is refused.
+            await core.summary.addRaw(body).write();
 
-            // Posting the PR comment is a convenience, not this job's verdict.
-            // This repo's GITHUB_TOKEN is capped read-only by a repository
-            // setting that a job-level `permissions:` block cannot raise, so
-            // createComment answers 403 "Resource not accessible by
-            // integration" on every run. Letting that failure surface marked a
-            // PASSING gate as failed - the precise class of bug this gate
-            // exists to catch. The real check steps above already fail the job
-            // on their own exit status, so swallowing this one cannot hide a
-            // genuine regression.
+            // Posting the PR comment is best-effort. The repository's
+            // Actions setting caps GITHUB_TOKEN to read-only, and a
+            // workflow-level `permissions:` block can only narrow that cap,
+            // never widen it — so this call 403s until someone changes
+            // Settings -> Actions -> General -> Workflow permissions
+            // (JBJ-022). Letting it throw made this job report `failure`
+            // on runs where the actual check had PASSED, which is worse
+            // than not having the comment: it trains everyone to ignore a
+            // red gate. The real pass/fail is carried by the check step's
+            // own exit code, not by whether a comment posted.
             try {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
@@ -115,10 +105,13 @@ jobs:
                 body,
               });
             } catch (err) {
-              core.warning(
-                `Could not post the PR comment (${err.status || 'unknown status'}: ${err.message}). ` +
-                'The full report is in this job summary. To restore commenting, allow GitHub ' +
-                'Actions to write to pull requests under Settings -> Actions -> General -> ' +
-                'Workflow permissions.'
-              );
+              if (err.status === 403) {
+                core.warning(
+                  'Could not post the PR comment: GITHUB_TOKEN is read-only ' +
+                  '(JBJ-022). The full report is in this job\'s summary. Fix via ' +
+                  'Settings -> Actions -> General -> Workflow permissions.'
+                );
+              } else {
+                core.warning(`Could not post the PR comment: ${err.message}`);
+              }
             }

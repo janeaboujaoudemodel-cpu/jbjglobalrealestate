@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { callLovableAI, sanitizeContactInfo, sanitizeForPrompt } from "../_shared/ai-utils.ts";
 import { enforceWAF } from "../_shared/waf-middleware.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -23,6 +24,15 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Audit 4.3 — anonymous callers can burn third-party AI/voice credits
+  // through this endpoint. Shared DB-backed per-IP limiter.
+  const { response: rateLimited } = await enforceRateLimit(
+    req,
+    { functionName: 'ai-property-analyzer', maxRequests: 15, windowMinutes: 15, keyType: 'ip' },
+    corsHeaders,
+  );
+  if (rateLimited) return rateLimited;
 
   // WAF Layer
   const waf = await enforceWAF(req, corsHeaders, "ai", "ai-property-analyzer");

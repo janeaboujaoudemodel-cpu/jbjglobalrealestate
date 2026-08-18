@@ -1,3 +1,4 @@
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 // Generates 4 alternative chrome (header + footer) variants for the JBJ
 // PAA template using the Lovable AI Gateway. No API key required from user.
 const corsHeaders = {
@@ -25,6 +26,15 @@ Each variant must be visually distinct. accent must be #B89555 or a tasteful cha
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // Audit 4.3 — anonymous callers can burn third-party AI/voice credits
+  // through this endpoint. Shared DB-backed per-IP limiter.
+  const { response: rateLimited } = await enforceRateLimit(
+    req,
+    { functionName: 'template-chrome-ai', maxRequests: 15, windowMinutes: 15, keyType: 'ip' },
+    corsHeaders,
+  );
+  if (rateLimited) return rateLimited;
   try {
     const body = (await req.json().catch(() => ({}))) as ChromeRequest;
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
