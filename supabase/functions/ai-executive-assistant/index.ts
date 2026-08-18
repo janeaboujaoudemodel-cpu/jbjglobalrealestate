@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -38,19 +39,41 @@ serve(async (req) => {
   }
 
   try {
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    // Presence of an Authorization header used to be the whole check here.
+    // That is not a check: the public anon key is a valid Bearer token and
+    // ships in the frontend bundle, so any caller could satisfy it and then
+    // name any `userId` they liked in the body — while every query below runs
+    // on a service-role client that bypasses RLS. Same defect as the audit's
+    // finding 3.2 in `process-drive-upload`. The caller is now resolved from
+    // the token itself and `userId` has left the request contract.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: userResp } = await userClient.auth.getUser();
+    const userId = userResp?.user?.id;
+    if (!userId) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    // Each `analyze` path spends AI Gateway credits on caller-supplied text,
+    // so cap it per user even once authenticated.
+    const rl = await enforceRateLimit(
+      req,
+      { functionName: "ai-executive-assistant", maxRequests: 30, windowMinutes: 10, keyType: "user" },
+      corsHeaders,
+      userId,
+    );
+    if (rl.response) return rl.response;
 
-    const { action, communication, userId } = await req.json();
+    const { action, communication } = await req.json();
 
     if (action === "process_communication") {
       // Get user's learned responses and ignore rules
