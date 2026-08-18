@@ -124,19 +124,37 @@ const captureReportRootToPdf = async (
   // reducing work to a single render pass.
   const totalHeight = REPORT_PAGE_PX.height * pages.length;
 
-  const canvas = await html2canvas(reportRoot, {
-    scale: EXPORT_SCALE,
-    useCORS: true,
-    allowTaint: false,
-    backgroundColor: "#FDFBF7",
-    logging: false,
-    imageTimeout: 1800,
-    removeContainer: true,
-    width: REPORT_PAGE_PX.width,
-    height: totalHeight,
-    windowWidth: REPORT_PAGE_PX.width,
-    windowHeight: totalHeight,
-  } as any);
+  // html2canvas can hang indefinitely when it clones a subtree containing
+  // position:fixed elements (the clone is laid out outside the fixed
+  // containing block it expects, and layout never settles). The offscreen
+  // export host itself uses position:fixed, so every export was at risk of
+  // this — it only reproduced reliably in CI, hanging the run instead of
+  // failing it. onclone rewrites fixed to absolute in the detached clone
+  // before html2canvas measures it, and the outer race guarantees the
+  // export fails loudly instead of hanging forever if anything else stalls.
+  const canvas = await Promise.race([
+    html2canvas(reportRoot, {
+      scale: EXPORT_SCALE,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: "#FDFBF7",
+      logging: false,
+      imageTimeout: 1800,
+      removeContainer: true,
+      width: REPORT_PAGE_PX.width,
+      height: totalHeight,
+      windowWidth: REPORT_PAGE_PX.width,
+      windowHeight: totalHeight,
+      onclone: (clonedDoc: Document) => {
+        clonedDoc.querySelectorAll<HTMLElement>('[style*="position:fixed"], [style*="position: fixed"]').forEach((el) => {
+          el.style.position = "absolute";
+        });
+      },
+    } as any),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("html2canvas timed out after 75s")), 75000)
+    ),
+  ]);
 
   for (let i = 0; i < pages.length; i++) {
     addCanvasPageToPdf(pdf, canvas, i * REPORT_PAGE_PX.height * EXPORT_SCALE, i);
