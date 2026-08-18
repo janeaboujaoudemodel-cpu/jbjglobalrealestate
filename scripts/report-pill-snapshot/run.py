@@ -38,7 +38,6 @@ PDF_DPI = 150
 VIEWPORTS = [
     ("desktop", 1440, 1800),
     ("tablet",   820, 1800),
-    ("mobile",   414, 1800),
 ]
 
 # Snapshot pass thresholds.
