@@ -26,6 +26,15 @@ on:
       - "src/hooks/usePortalRole.ts"
       - "src/pages/owner/**"
       - "src/pages/admin/**"
+      # Build configuration, because the bug this guard exists for was a
+      # bundling defect: a hand-assigned manual chunk that evaluated with
+      # React undefined and blanked the app in production only. A filter
+      # covering just app source would not have run on the commit that
+      # introduced it, or on the one that fixed it.
+      - "vite.config.ts"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
       - ".github/workflows/owner-shell-renders.yml"
   pull_request:
     paths:
@@ -36,6 +45,15 @@ on:
       - "src/hooks/usePortalRole.ts"
       - "src/pages/owner/**"
       - "src/pages/admin/**"
+      # Build configuration, because the bug this guard exists for was a
+      # bundling defect: a hand-assigned manual chunk that evaluated with
+      # React undefined and blanked the app in production only. A filter
+      # covering just app source would not have run on the commit that
+      # introduced it, or on the one that fixed it.
+      - "vite.config.ts"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
       - ".github/workflows/owner-shell-renders.yml"
   workflow_dispatch:
 
