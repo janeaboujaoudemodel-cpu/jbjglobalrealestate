@@ -1,0 +1,70 @@
+/* ============================================================
+ * PASS 377 — dark-host heading contract (gap-fill)
+ *
+ * Enforces white (#FFFFFF) foreground on headings inside the
+ * 8 dark-surface classes scanned by collectDarkHostOffenders
+ * that were absent from the bright-background guard's :not()
+ * exclusion chain in index.css.
+ *
+ * Import order: load AFTER the bright-background guard in
+ * index.css so these !important rules win.
+ *
+ * Static lock: src/test/pass-142-dark-context-exclusions.regression.test.ts
+ * Runtime proof: tests/dark-surface-heading-contrast.spec.ts
+ * ============================================================ */
+
+/* 1. .jj-hero-fullscreen */
+.jj-hero-fullscreen :is(h1, h2, h3, h4, h5, h6),
+.jj-hero-fullscreen :is(h1, h2, h3, h4, h5, h6) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 2. .jj-hero-neon */
+.jj-hero-neon :is(h1, h2, h3, h4, h5, h6),
+.jj-hero-neon :is(h1, h2, h3, h4, h5, h6) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 3. .jj-cta-primary */
+.jj-cta-primary :is(h1, h2, h3, h4, h5, h6),
+.jj-cta-primary :is(h1, h2, h3, h4, h5, h6) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 4. .jj-pill-emerald (non-metallic; metallic already guarded in index.css) */
+.jj-pill-emerald :is(h1, h2, h3, h4, h5, h6),
+.jj-pill-emerald :is(h1, h2, h3, h4, h5, h6) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 5. .jj-side-tile.is-active */
+.jj-side-tile.is-active :is(h1, h2, h3, h4, h5, h6),
+.jj-side-tile.is-active :is(h1, h2, h3, h4, h5, h6) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 6–8. .surface-dark / .surface-ink / .surface-navy
+ * Class equivalents of data-surface="dark|ink|navy" — those
+ * attributes are already guarded in index.css; these are not. */
+.surface-dark :is(h1, h2, h3, h4, h5, h6),
+.surface-dark :is(h1, h2, h3, h4, h5, h6) *,
+.surface-ink  :is(h1, h2, h3, h4, h5, h6),
+.surface-ink  :is(h1, h2, h3, h4, h5, h6) *,
+.surface-navy :is(h1, h2, h3, h4, h5, h6),
+.surface-navy :is(h1, h2, h3, h4, h5, h6) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Gold text inside these hosts — readable on dark, unaffected by
+ * the probe (which only checks headings). */
+.jj-hero-fullscreen .text-gold,
+.jj-hero-neon       .text-gold,
+.jj-cta-primary     .text-gold {
+  color: var(--brand-gold, #B89555) !important;
+}
