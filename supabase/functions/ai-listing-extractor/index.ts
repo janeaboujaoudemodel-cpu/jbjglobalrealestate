@@ -162,9 +162,10 @@ IMPORTANT:
     });
 
   } catch (error: unknown) {
+    // Audit 6.1: log the real error, return a static string.
     console.error("Listing extractor error:", error);
     return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : "Extraction failed" 
+      error: "Extraction is temporarily unavailable. Please try again." 
     }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -2,7 +2,15 @@
 // Public endpoint that creates the auth user, assigns client role,
 // writes CRM profile, logs activity, and inserts a leads record.
 // deno-lint-ignore-file no-explicit-any
+//
+// SECURITY (backend audit 4.3 / 4.4): this endpoint is anonymous, uses a
+// service-role client, and writes to six tables including auth.users. It now
+// carries the same three controls the well-built public endpoints in this
+// codebase already use — shared DB-backed rate limiting, zod schema
+// validation, and static error strings (no raw driver messages echoed back).
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { z } from "npm:zod@3.23.8";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -19,6 +27,26 @@ const CATEGORIES = [
   "landlord","tenant","partner","service_provider","media","other",
 ] as const;
 
+const BodySchema = z.object({
+  category: z.enum(CATEGORIES),
+  category_data: z.record(z.any()).default({}),
+  common: z.object({
+    email: z.string().trim().toLowerCase().email().max(320),
+    password: z.string().min(8).max(200),
+    full_name: z.string().trim().min(1).max(200),
+    phone: z.string().trim().min(1).max(60),
+    whatsapp: z.string().trim().max(60).optional(),
+    country: z.string().trim().max(120).optional(),
+    nationality: z.string().trim().max(120).optional(),
+    preferred_language: z.string().trim().max(60).optional(),
+    preferred_contact_method: z.string().trim().max(60).optional(),
+    preferred_contact_time: z.string().trim().max(60).optional(),
+    services: z.array(z.string().max(120)).max(50).optional(),
+    notes: z.string().max(4000).optional(),
+  }).passthrough(),
+  source_page: z.string().max(300).default(""),
+}).passthrough();
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") {
@@ -27,21 +55,30 @@ Deno.serve(async (req) => {
     });
   }
 
+  // Account creation from anonymous traffic — 5 attempts per IP per hour.
+  const { response: rateLimited } = await enforceRateLimit(
+    req,
+    { functionName: "register-user", maxRequests: 5, windowMinutes: 60, keyType: "ip" },
+    corsHeaders,
+  );
+  if (rateLimited) return rateLimited;
+
   try {
-    const body = await req.json();
-    const { category, category_data = {}, common = {}, source_page = "" } = body ?? {};
-
-    if (!CATEGORIES.includes(category)) {
-      return json({ error: "Invalid category" }, 400);
+    const raw = await req.json().catch(() => null);
+    const parsed = BodySchema.safeParse(raw);
+    if (!parsed.success) {
+      // Field names only — never the raw zod issue tree.
+      const fields = Array.from(new Set(parsed.error.issues.map((i) => i.path.join("."))))
+        .filter(Boolean)
+        .slice(0, 10);
+      return json({ error: "Invalid registration details", fields }, 400);
     }
-    const email = String(common.email ?? "").trim().toLowerCase();
-    const password = String(common.password ?? "");
-    const full_name = String(common.full_name ?? "").trim();
-    const phone = String(common.phone ?? "").trim();
+    const { category, category_data, common, source_page } = parsed.data as any;
 
-    if (!email || !password || password.length < 8 || !full_name || !phone) {
-      return json({ error: "Missing required fields" }, 400);
-    }
+    const email = common.email;
+    const password = common.password;
+    const full_name = common.full_name;
+    const phone = common.phone;
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
@@ -69,7 +106,11 @@ Deno.serve(async (req) => {
       user_metadata: { full_name, category, phone },
     });
     if (createErr || !created.user) {
-      return json({ error: createErr?.message ?? "Failed to create user" }, 400);
+      // Audit 6.1: log internally, return a static message. Note the response
+      // is deliberately the same shape whether the address is already
+      // registered or the insert failed for another reason.
+      console.error("[register-user] createUser failed:", createErr?.message);
+      return json({ error: "Unable to complete registration." }, 400);
     }
     const userId = created.user.id;
 
@@ -141,7 +182,8 @@ Deno.serve(async (req) => {
       .select("id")
       .single();
     if (profileErr) {
-      return json({ error: profileErr.message }, 400);
+      console.error("[register-user] CRM profile insert failed:", profileErr.message);
+      return json({ error: "Unable to complete registration." }, 400);
     }
 
     // 5. Log activity
@@ -210,7 +252,8 @@ Deno.serve(async (req) => {
 
     return json({ ok: true, user_id: userId, profile_id: profile!.id }, 200);
   } catch (err) {
-    return json({ error: (err as Error).message }, 500);
+    console.error("[register-user] Error:", err);
+    return json({ error: "An internal error occurred" }, 500);
   }
 });
 

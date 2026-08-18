@@ -74,11 +74,12 @@ serve(async (req) => {
     });
 
   } catch (error: unknown) {
+    // Audit 6.1: log the real error, return a static string. The upstream
+    // AI-gateway message can carry model/provider/config detail.
     console.error("Sarah search error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Search failed";
     return new Response(JSON.stringify({ 
       success: false,
-      error: errorMessage 
+      error: "Search is temporarily unavailable. Please try again." 
     }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
