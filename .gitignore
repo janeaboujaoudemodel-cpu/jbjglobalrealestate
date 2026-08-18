@@ -11,6 +11,19 @@ node_modules
 dist
 dist-ssr
 *.local
+
+# Environment variables — .env and .env.development were previously
+# tracked (contained Supabase anon key, Sentry DSN, Stripe test publishable
+# key; confirmed no service-role/secret keys, see git history). Ignore all
+# real env files going forward; .env.example stays tracked as the template.
+.env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+.env.test
+.env.test.local
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
