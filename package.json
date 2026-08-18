@@ -33,11 +33,16 @@
     "check:quality": "npm run check:contrast && npm run check:a11y",
     "prepare": "husky || true",
     "postbuild": "node scripts/prerender/prerender.mjs || true",
-    "prerender": "node scripts/prerender/prerender.mjs"
+    "prerender": "node scripts/prerender/prerender.mjs",
+    "lint:css": "stylelint 'src/**/*.css'",
+    "check:css:guard": "node scripts/css-guard.mjs --ci"
   },
   "lint-staged": {
     "src/index.css": "node scripts/contrast/check-tokens.mjs",
     "tailwind.config.ts": "node scripts/contrast/check-tokens.mjs",
+    "src/**/*.css": [
+      "stylelint --allow-empty-input"
+    ],
     "src/**/*.{tsx,jsx}": [
       "node scripts/a11y/check-static-aria.mjs",
       "eslint --no-warn-ignored --max-warnings 0 --rule 'jbj-contrast/no-low-opacity-text: error'",
@@ -166,6 +171,8 @@
     "postcss": "^8.5.6",
     "rollup-plugin-visualizer": "^7.0.1",
     "sharp": "^0.35.3",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "^40.0.0",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.22.3",
     "typescript": "^5.8.3",
