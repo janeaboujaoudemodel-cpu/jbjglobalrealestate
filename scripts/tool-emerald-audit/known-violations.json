@@ -2,27 +2,42 @@
   "_comment": "Pre-existing color-budget violations. Routes listed here print a ⚠ warning in CI output but do NOT cause a non-zero exit — they are tracked, not silently ignored. Remove a route only once its violation is confirmed fixed. Each route must have a corresponding JBJ-### item in ROADMAP.md.",
   "trackedBy": "JBJ-029",
   "firstFoundInPR": 43,
-  "_provenance": "Contents corrected in PR #48. The original list was drawn from a PR #43 CI log that reported 7 breaching routes, but that count was not reproducible: the audit skipped measuring any route whose shell lost a 6-second race and recorded it as a pass, so the same unchanged tree scored 3, 4 and 7 breaches on consecutive runs. After the race was fixed (JBJ-036), two back-to-back runs of identical code agree exactly, and the four routes below are the real, stable set. /mortgage-calculator was removed: it has no [data-tool-emerald] shell at all, so it cannot breach and was never being audited — it is one of the 26 routes the summary now reports as not audited.",
+  "_provenance": "All 7 routes confirmed against the CI runner (run 32120369539), which is the environment the gate actually runs in. The original PR #43 count of 7 was correct. An earlier revision of this file cut the list to 4 based on local runs where 3 of these routes timed out before their shell mounted and were therefore never measured — that was a property of the slower local sandbox, not of the routes. Values below are the CI measurements. Whether a lazy-loaded shell mounts inside SHELL_TIMEOUT_MS is machine-dependent, so the not-audited list can differ between environments; the run now prints that list explicitly (JBJ-036) instead of counting unmeasured routes as passes.",
   "routes": [
     {
       "route": "/property-measurement",
       "breach": "champagne,darkInk",
-      "note": "Pre-existing on main. champagne ~422,540 and darkInk ~1,096,318 against a 400 cap. Confirmed identical across two consecutive runs."
+      "note": "champagne 318,672 / darkInk 1,097,194 against a 400 cap (CI)."
     },
     {
       "route": "/list-property",
       "breach": "champagne,darkInk",
-      "note": "Pre-existing on main. champagne ~171,000 and darkInk ~1,378,300 against a 400 cap. Confirmed identical across two consecutive runs."
+      "note": "champagne 171,082 / darkInk 1,384,000 against a 400 cap (CI)."
     },
     {
       "route": "/property-evaluator",
       "breach": "champagne,darkInk",
-      "note": "Pre-existing on main. champagne ~602,640 and darkInk ~877,907 against a 400 cap. Confirmed identical across two consecutive runs."
+      "note": "champagne 604,774 / darkInk 878,047 against a 400 cap (CI)."
     },
     {
       "route": "/rental-index",
       "breach": "champagne",
-      "note": "Pre-existing on main. champagne ~179,014 against a 400 cap; darkInk is 0. Confirmed identical across two consecutive runs."
+      "note": "champagne 179,401 against a 400 cap (CI); darkInk is 0."
+    },
+    {
+      "route": "/interior-design-ai",
+      "breach": "champagne,darkInk",
+      "note": "champagne 412,384 / darkInk 1,152,953 against a 400 cap (CI)."
+    },
+    {
+      "route": "/mortgage-calculator",
+      "breach": "champagne,darkInk",
+      "note": "champagne 252,005 / darkInk 1,767,477 against a 400 cap (CI). Present in the original PR #43 list; briefly and wrongly removed when local runs failed to mount its shell in time."
+    },
+    {
+      "route": "/ai-personal-shopper",
+      "breach": "champagne",
+      "note": "champagne 906,305 against a 400 cap (CI); darkInk is 0."
     }
   ]
 }
