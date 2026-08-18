@@ -78,7 +78,27 @@ export default defineConfig(({ mode }) => {
             if (pkg('framer-motion') || pkg('motion-dom') || pkg('motion-utils')) return 'motion-vendor';
             if (id.includes('node_modules/@radix-ui/')) return 'ui-vendor';
             if (pkg('@tanstack/react-query') || pkg('@supabase/supabase-js') || id.includes('node_modules/@supabase/')) return 'data-vendor';
-            if (pkg('recharts') || pkg('d3-scale') || pkg('d3-shape') || pkg('victory-vendor')) return 'charts-vendor';
+            // recharts and its d3 dependencies are deliberately NOT hand-chunked.
+            //
+            // They used to be forced into a 'charts-vendor' chunk. In a production
+            // build that chunk was evaluated with the React namespace still
+            // undefined and threw on first paint:
+            //
+            //   Uncaught TypeError: Cannot read properties of undefined (reading 'useState')
+            //   at /assets/charts-vendor-*.js
+            //
+            // which trips index.html's pre-mount boot overlay, so React never
+            // mounts and #root stays empty — the blank owner portal reported as
+            // audit finding 3.1. It only ever showed in a bundled build, never
+            // under `vite dev` (which serves unbundled ESM and does no manual
+            // chunking), which is why the finding kept coming back as "not
+            // reproducible from source" while production was blank.
+            //
+            // Hand-assigning a React-consuming library to its own chunk is what
+            // creates the cycle; letting Rollup place these modules keeps the
+            // React-before-consumer evaluation order intact. Covered by
+            // tests/owner-shell-renders.spec.ts, which runs against a real
+            // production build in .github/workflows/owner-shell-renders.yml.
             if (pkg('leaflet') || pkg('react-leaflet') || id.includes('node_modules/@react-leaflet/')) return 'maps-vendor';
             if (pkg('jspdf') || pkg('pdf-lib')) return 'pdf-vendor';
             if (pkg('exceljs') || pkg('xlsx')) return 'excel-vendor';
