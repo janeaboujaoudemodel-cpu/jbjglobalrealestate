@@ -293,6 +293,27 @@ this PR never touches; the seventh, <code>/list-property</code>, is edited only 
 A real finding worth its own ticket, but inherited, not introduced.</p>
 </div>
 
+<h3>Confirmation: the fix works, and it unmasked two things</h3>
+<p>GitHub stopped creating workflow runs for this branch partway through the session, so the fix was
+verified by dispatching a Contrast Regression Check directly against the fixed branch head. What came
+back is better evidence than a green tick would have been.</p>
+<p>Four <code>/owner/*</code> routes are now flagged <code>unexpectedRedirect</code> — they redirect to
+auth for a logged-out sweep. On every previous run they reported a clean <code>0</code>. <b>The router
+only runs at all now that the bundle boots</b>; before the fix those routes crashed before React
+mounted, so nothing ever redirected. That behavioural change is direct confirmation the chunking fix
+does what it claims.</p>
+<p>The same run surfaced <b>1 real axe <code>color-contrast</code> violation on mobile
+<code>/services</code></b>, previously reported as 0. A manual-chunk change cannot alter CSS colours —
+only whether content renders — so this violation was always present, on a page that was not painting.
+It is logged as JBJ-033 rather than folded in here, because identifying the element needs the
+<code>contrast-report</code> artifact and it is a separate defect from the one this PR fixes.</p>
+<p>This is the sharpest illustration of the theme running through this whole report: <b>the contrast
+gate could report a clean sweep across all 56 route/viewport combinations while the owner portal was
+blank in production.</b> A check that inspects a page which never rendered will find nothing wrong with
+it, and report that as a pass. Three separate guards here were reporting green or red for reasons
+unconnected to what they were supposed to be measuring, and the blank portal survived three
+investigations behind them.</p>
+
 <h2>What could not be done</h2>
 
 <div class="flag">
