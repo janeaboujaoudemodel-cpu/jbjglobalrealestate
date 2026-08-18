@@ -114,3 +114,28 @@ describe('sanitizeDocumentHtml', () => {
     expect(sanitizeDocumentHtml(null)).toBe('');
   });
 });
+
+describe('sanitizeSvgMarkup — URI scheme validation (regression, PR #44 review)', () => {
+  // This file originally passed DOMPurify `ADD_URI_SAFE_ATTR: ['href',
+  // 'xlink:href']` to let uploaded logos through as data: URIs. That flag
+  // marks the attributes as URI-safe, which makes DOMPurify skip its scheme
+  // check on them entirely — so `javascript:` survived on every allowed tag,
+  // not just `<image>`. The data: allowance was already covered, correctly
+  // tag-scoped, by ADD_DATA_URI_TAGS: ['image']. Verified against the
+  // pre-fix code: both javascript: cases below failed, the data: case passed.
+  it('strips javascript: from xlink:href', () => {
+    const out = sanitizeSvgMarkup('<svg><a xlink:href="javascript:alert(1)"><text>x</text></a></svg>');
+    expect(out.toLowerCase()).not.toContain('javascript:');
+  });
+
+  it('strips javascript: from href', () => {
+    const out = sanitizeSvgMarkup('<svg><a href="javascript:alert(1)"><text>x</text></a></svg>');
+    expect(out.toLowerCase()).not.toContain('javascript:');
+  });
+
+  it('still allows a data: image on <image>, which is why the flag was there', () => {
+    const png = 'data:image/png;base64,iVBORw0KGgo=';
+    const out = sanitizeSvgMarkup(`<svg><image href="${png}" /></svg>`);
+    expect(out).toContain('data:image/png');
+  });
+});
