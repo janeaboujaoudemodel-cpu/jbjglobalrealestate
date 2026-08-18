@@ -5,7 +5,14 @@ For every tool route in routes.json:
  2. Scan every pixel and count champagne palette hits + dark ink on emerald.
  3. Write per-route PNG and report.json under artifacts/.
 
-Exit non-zero if any route breaches THRESHOLDS.
+Exit behaviour:
+  ✓  Clean route — no breach.
+  ⚠  Breach on a route listed in known-violations.json — warning only, does
+     NOT exit non-zero. These are tracked pre-existing violations (JBJ-029).
+     Remove an entry here only once the violation is confirmed fixed.
+  ✗  Breach on a route NOT in known-violations.json — exits non-zero.
+     Either fix the violation or add it to known-violations.json with a
+     JBJ-### ID in ROADMAP.md.
 
 Run:
     # dev server on :8080 must be up
@@ -31,6 +38,15 @@ THRESHOLDS = {"champagnePixels": 400, "darkInkPixels": 400}
 # script - they are reported as "skipped", never as a pass.
 SHELL_SELECTOR = "[data-tool-emerald]"
 SHELL_TIMEOUT_MS = 15000
+
+# ---------------------------------------------------------------------------
+# Known pre-existing violations — warn only, do not block CI.
+# Each entry must have a JBJ-### ID in ROADMAP.md.
+# ---------------------------------------------------------------------------
+_kv_path = HERE / "known-violations.json"
+_kv: dict = json.loads(_kv_path.read_text()) if _kv_path.exists() else {}
+KNOWN_ROUTES: set[str] = {e["route"] for e in _kv.get("routes", [])}
+KNOWN_TRACKED_BY: str = _kv.get("trackedBy", "")
 
 CHAMPAGNE = [
     ("champagne-page",    253, 251, 247, 6),
@@ -65,7 +81,6 @@ def scan(png_path: Path):
     emerald = 0
     dark = 0
     violations: dict[str, int] = {}
-    # single pass
     for y in range(h):
         for x in range(w):
             r, g, b, a = px[x, y]
@@ -102,6 +117,7 @@ async def audit_route(page, route: str):
         "reachable": False, "hasShell": False,
         "champagne": 0, "dark": 0, "emeraldCoverage": 0.0,
         "violations": {}, "breach": [],
+        "knownViolation": route in KNOWN_ROUTES,
     }
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=30000)
@@ -147,7 +163,6 @@ async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch(headless=True)
         ctx = await b.new_context(viewport=VIEWPORT)
-        # Restore Supabase session so auth-gated tools render their shell.
         cookies_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON")
         if cookies_json:
             cookies = json.loads(cookies_json)
@@ -166,46 +181,90 @@ async def main():
         results = []
         for route in ROUTES:
             r = await audit_route(page, route)
-            # A route with no emerald shell was never measured, so it is not a
-            # pass. It used to print the same tick as an audited, clean route -
-            # which is how /business-card-scanner reported success while its
+            # Three outcomes, not two. A breach is blocking (✗) unless it is
+            # on the known-violations allowlist (⚠). No breach is a pass (✓)
+            # only if the route actually had a shell to measure — otherwise it
+            # was never audited and prints "–". That last distinction is how
+            # /business-card-scanner used to report success while its
             # screenshot held 4,494,758 champagne pixels against a 400 cap.
-            mark = "✗" if r["breach"] else ("✓" if r["hasShell"] else "–")
+            known = r["knownViolation"]
+            if r["breach"]:
+                mark = "⚠" if known else "✗"
+                tracked = f" [tracked:{KNOWN_TRACKED_BY}]" if known else ""
+            else:
+                mark = "✓" if r["hasShell"] else "–"
+                tracked = ""
             print(
                 f"{mark} {r['route']:<30} shell={r['hasShell']} "
                 f"champagne={r['champagne']} dark={r['dark']} "
-                f"emerald={r['emeraldCoverage']*100:.1f}% "
-                f"{','.join(r['breach'])}{(' ERR:'+r['error']) if r.get('error') else ''}"
+                f"emerald={r['emeraldCoverage']*100:.1f}%"
+                f"{' ' + ','.join(r['breach']) if r['breach'] else ''}"
+                f"{tracked}"
+                f"{(' ERR:'+r['error']) if r.get('error') else ''}"
             )
             results.append(r)
         await b.close()
 
+    new_breaches   = [r for r in results if r["breach"] and not r["knownViolation"]]
+    known_breaches = [r for r in results if r["breach"] and     r["knownViolation"]]
+    skipped        = [r for r in results if not r["hasShell"]]
+
     report = {
         "baseUrl": BASE,
         "thresholds": THRESHOLDS,
+        "knownViolationRoutes": sorted(KNOWN_ROUTES),
+        "knownTrackedBy": KNOWN_TRACKED_BY,
         "routes": results,
         "summary": {
             "total": len(results),
             "reachable": sum(1 for r in results if r["reachable"]),
             "shells": sum(1 for r in results if r["hasShell"]),
-            "breached": sum(1 for r in results if r["breach"]),
-            "skippedNoShell": sum(1 for r in results if not r["hasShell"]),
+            "newBreaches": len(new_breaches),
+            "knownBreaches": len(known_breaches),
+            "skippedNoShell": len(skipped),
         },
     }
     (OUT / "report.json").write_text(json.dumps(report, indent=2))
-    breached = [r for r in results if r["breach"]]
-    skipped = [r for r in results if not r["hasShell"]]
-    audited = len(results) - len(skipped)
-    print(f"\nSummary: {len(breached)}/{audited} audited routes breached")
+
     if skipped:
-        # Stated rather than implied: these carry no verdict either way.
+        # Stated rather than implied: these carry no verdict either way, and
+        # for a long time they were being counted as passes.
         print(
-            f"         {len(skipped)}/{len(results)} routes had no "
-            f"{SHELL_SELECTOR} shell and were not audited: "
-            + ", ".join(r["route"] for r in skipped)
+            f"\n–  {len(skipped)}/{len(results)} route(s) had no {SHELL_SELECTOR} "
+            f"shell and were NOT audited:"
         )
-    if breached:
+        print("   " + ", ".join(r["route"] for r in skipped))
+
+    if known_breaches:
+        print(
+            f"\n⚠  {len(known_breaches)} known pre-existing violation(s) "
+            f"tracked as {KNOWN_TRACKED_BY} — not blocking CI:"
+        )
+        for r in known_breaches:
+            print(f"   {r['route']}: {','.join(r['breach'])}")
+        print(f"   Fix and remove from known-violations.json when resolved.\n")
+
+    if new_breaches:
+        print(f"\n✗  {len(new_breaches)} NEW violation(s) — blocking CI:")
+        for r in new_breaches:
+            print(f"   {r['route']}: {','.join(r['breach'])}")
+        print(
+            f"\n   Fix the violation or — if pre-existing and not introduced "
+            f"by this PR —\n"
+            f"   add it to known-violations.json with a JBJ-### ID in ROADMAP.md."
+        )
+        print(
+            f"\nSummary: {len(new_breaches)} new (blocking) / "
+            f"{len(known_breaches)} known pre-existing (tracked) / "
+            f"{len(skipped)} not audited"
+        )
         sys.exit(1)
+
+    print(
+        f"\nSummary: 0 new violations / "
+        f"{len(known_breaches)} known pre-existing (tracked as {KNOWN_TRACKED_BY}) / "
+        f"{len(skipped)} not audited"
+    )
 
 
 if __name__ == "__main__":

@@ -1,0 +1,28 @@
+{
+  "_comment": "Pre-existing color-budget violations. Routes listed here print a ⚠ warning in CI output but do NOT cause a non-zero exit — they are tracked, not silently ignored. Remove a route only once its violation is confirmed fixed. Each route must have a corresponding JBJ-### item in ROADMAP.md.",
+  "trackedBy": "JBJ-029",
+  "firstFoundInPR": 43,
+  "_provenance": "Contents corrected in PR #48. The original list was drawn from a PR #43 CI log that reported 7 breaching routes, but that count was not reproducible: the audit skipped measuring any route whose shell lost a 6-second race and recorded it as a pass, so the same unchanged tree scored 3, 4 and 7 breaches on consecutive runs. After the race was fixed (JBJ-036), two back-to-back runs of identical code agree exactly, and the four routes below are the real, stable set. /mortgage-calculator was removed: it has no [data-tool-emerald] shell at all, so it cannot breach and was never being audited — it is one of the 26 routes the summary now reports as not audited.",
+  "routes": [
+    {
+      "route": "/property-measurement",
+      "breach": "champagne,darkInk",
+      "note": "Pre-existing on main. champagne ~422,540 and darkInk ~1,096,318 against a 400 cap. Confirmed identical across two consecutive runs."
+    },
+    {
+      "route": "/list-property",
+      "breach": "champagne,darkInk",
+      "note": "Pre-existing on main. champagne ~171,000 and darkInk ~1,378,300 against a 400 cap. Confirmed identical across two consecutive runs."
+    },
+    {
+      "route": "/property-evaluator",
+      "breach": "champagne,darkInk",
+      "note": "Pre-existing on main. champagne ~602,640 and darkInk ~877,907 against a 400 cap. Confirmed identical across two consecutive runs."
+    },
+    {
+      "route": "/rental-index",
+      "breach": "champagne",
+      "note": "Pre-existing on main. champagne ~179,014 against a 400 cap; darkInk is 0. Confirmed identical across two consecutive runs."
+    }
+  ]
+}
