@@ -1,19 +1,22 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { safeFetch } from "../_shared/ssrf-guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// url is DB-sourced (developers.feature_image_url / logo_url), so every
+// fetch goes through safeFetch — it resolves redirects itself and
+// re-validates each hop, unlike plain fetch's redirect: "follow".
 async function isUrlBroken(url: string): Promise<boolean> {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       method: "HEAD",
       signal: controller.signal,
-      redirect: "follow",
     });
     clearTimeout(timeout);
     if (!res.ok) return true;
@@ -21,7 +24,7 @@ async function isUrlBroken(url: string): Promise<boolean> {
     // If HEAD returned non-image content-type, it's likely broken
     if (ct && !ct.startsWith("image/") && !ct.includes("octet-stream") && !ct.includes("binary")) {
       // Some servers don't support HEAD, try GET
-      const res2 = await fetch(url, { method: "GET", signal: AbortSignal.timeout(8000), redirect: "follow" });
+      const res2 = await safeFetch(url, { method: "GET", signal: AbortSignal.timeout(8000) });
       const ct2 = res2.headers.get("content-type") || "";
       if (!ct2.startsWith("image/") && !ct2.includes("octet-stream")) return true;
     }

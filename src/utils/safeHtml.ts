@@ -147,9 +147,12 @@ export function sanitizeSvgMarkup(dirty: string | null | undefined): string {
       'data-stamp-element',
     ],
     // Uploaded logos arrive as data: URIs; `<image href="data:image/png;…">`
-    // is the only place a data: URI is accepted.
+    // is the only place a data: URI is accepted. ADD_DATA_URI_TAGS scopes
+    // that allowance to the `image` tag only — do NOT add ADD_URI_SAFE_ATTR
+    // for href/xlink:href, it disables scheme validation (including
+    // javascript:) for those attributes on every allowed tag, not just
+    // `image`.
     ADD_DATA_URI_TAGS: ['image'],
-    ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],
     FORBID_TAGS: [...FORBIDDEN_TAGS, 'foreignObject'],
     FORBID_ATTR: [...FORBIDDEN_ATTR],
     FORCE_BODY: false,

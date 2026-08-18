@@ -315,7 +315,7 @@ serve(async (req) => {
       // Fallback: simple fetch
       if (!scrapedMarkdown && !extractedText) {
         try {
-          const res = await fetch(url, { redirect: 'follow' });
+          const res = await safeFetch(url);
           if (res.ok) {
             const ct = res.headers.get('content-type') || '';
             if (ct.includes('text') || ct.includes('html')) {
