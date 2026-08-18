@@ -22,6 +22,7 @@ Based on the CTO technical review of jbjglobalrealestate (jbj.ae), the Aug 12 fu
 
 | ID | Date (UTC) | Author | Change | Item(s) | Commit / PR |
 |---|---|---|---|---|---|
+| RM-026 | 2026-08-17 | Claude Code session | Consolidated the two hardcoded owner-email definitions onto one server-side table with a CI drift guard that names the offending address (3.4); made the five `npm ci` workflows fall back to `npm install` with a warning so CI runs again despite the lockfile mismatch, and logged what still has to happen to fix it properly. | JBJ-024, JBJ-025 | pending |
 | RM-025 | 2026-08-17 | Claude Code session | Media Ingestion Engine Audit: fixed 3.2 (unauthenticated `process-drive-upload` impersonation + AI spend), 3.3 (no upload validation — added shared validator with magic-byte sniffing plus bucket `allowed_mime_types`/`file_size_limit`), 3.5 (all twelve `rel_*` tables readable by any authenticated user), 3.6 (seller step tabs silently ignored forward clicks). Investigated 3.1 (blank owner portal) across 3 routes x 3 auth states — not reproducible on current `main`; added a Playwright regression spec and recorded the likely publish-lag explanation rather than claiming a fix. Logged 3.7 as a product decision. | JBJ-021, JBJ-022, JBJ-023 | `ff671a7` |
 | RM-024 | 2026-08-16 | Claude Code session | Guide Consolidation Stage 2, part 1: folded five standalone FAQ pages into their matching guide pages (accordion section, old routes redirect to `#faq` anchors), removed the now-empty FAQ hub audience picker, fixed a hash-scroll gap in `ScrollToTopOnMount` that anchor redirects depend on. Stage 2 part 2 (Rental Guide → Tenant/Landlord split) deferred — found Tenant/Landlord Guide already independently cover the same ground as `RentGuide.tsx`'s content-mapping table; flagged rather than resolved unilaterally. Added JBJ-020 for the landlord rental-content gap this surfaced. | JBJ-018, JBJ-020 | `dd27252`, PR #37 |
 | RM-023 | 2026-08-16 | Claude Code session | Documented the JBJ-019 self-verification decision in CLAUDE.md as a new "PR review process" section (near where PR #17's roadmap-tracking section lands); updated JBJ-019 status to fully resolved | JBJ-019 | `pending`, new PR |
@@ -340,6 +341,22 @@ The panel's undercount (PostgREST's 1,000-row cap truncating the query) was alre
   No `googleapis` / OAuth / Picker code exists anywhere in the repo. Drive support means: paste a `drive.google.com` URL, regex-confirm it looks like one, ask an AI model to guess the contents. No folder browsing, no scoped access, no check that the link is even reachable.
 
   That is a legitimate lightweight design — but if the expectation is "connect your Drive and pick files", it does not exist and would need building from scratch (OAuth consent screen, Picker API, token storage). Recorded so the ambiguity is settled deliberately rather than assumed either way.
+
+- [x] **JBJ-025 — Two independent "who is owner" definitions (audit 3.4). RESOLVED (Aug 17), with the drift guard that was the real gap.**
+
+  `src/config/ownerEmails.ts` and the `rel_is_owner()` Postgres function each hardcoded the same four addresses with nothing connecting them. Two hardcoded copies of a security boundary drift eventually, and the failure is silent both ways — the owner loses CRM access, or someone keeps database rights after being removed from the frontend list.
+
+  **Not** resolved by deleting the allow-list. That is the documented design (CLAUDE.md, "Roles & access control") — owner is an allow-list rather than a role precisely so it cannot be granted by writing a row. Removing it server-side while `OwnerGuard` still trusts it would either lock the owner out or make owner a DB-writable privilege.
+
+  Instead: the server-side list moved into one table (`public.owner_email_allowlist`), `rel_is_owner()` reads that table rather than a literal, `user_roles` is seeded with the owner role for any matching account so the proper mechanism is populated for later, and both paths remain accepted so nothing can lock out. The piece that was actually missing is `src/config/ownerEmails.drift.test.ts`, which fails CI the moment the two lists disagree and names the offending address — verified by planting a drift and watching it fail.
+
+- [ ] **JBJ-024 — `npm ci` cannot run: package.json declares 17 `overrides`, the lockfile records none.**
+
+  Every workflow starts with `npm ci`, so every job on `main` died in under a second before running a single test. The security-update commits edited `package.json` without regenerating the lockfile, which also means those updates are **not in effect**: the lockfile still resolves `uuid` 8.3.2 against an override of 11.1.1, `nanoid` 3.3.15 against 5.1.16, and `xlsx` **0.18.5** from npm while `package.json` pins 0.20.2 from the SheetJS CDN.
+
+  Fixed so far: three overrides named packages that are also direct dependencies, which npm rejects with `EOVERRIDE` before doing any resolution — rewritten to npm's `"$name"` form so a resolve can proceed at all. Workflows now fall back to `npm install` with a loud warning when `npm ci` refuses, so CI is useful again rather than dead.
+
+  **Still required:** run `npm install` and commit the regenerated `package-lock.json`, then drop the fallback. Not doable from a Claude Code sandbox — the environment's network policy denies `cdn.sheetjs.com` (`403 to CONNECT`), which the `xlsx` tarball resolves from. Any machine with normal network access can do it in one command.
 
 - [ ] **CI infrastructure gap, ticketed separately.** 3 of the known-failing CI checks (see JBJ-011) trace to the runner itself missing Playwright browsers and `bunx` — infrastructure, not code. A GitHub issue was opened for this specifically, alongside the existing issue #5 tracking the 485-violation a11y baseline drift. Worth linking both issues here once numbers are confirmed, so this doc and GitHub's own issue tracker don't drift apart.
 

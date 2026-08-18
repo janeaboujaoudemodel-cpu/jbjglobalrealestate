@@ -38,7 +38,24 @@ jobs:
         run: python -m playwright install --with-deps chromium
 
       - name: Install node deps
-        run: npm ci
+        # `npm ci` refuses to run whenever package.json and package-lock.json
+        # disagree — currently they do: package.json declares 17 `overrides`
+        # that the lockfile records none of, so every job here died in under a
+        # second before running anything at all. Falling back to `npm install`
+        # keeps CI useful, and the warning keeps the drift visible instead of
+        # letting a green run imply the lockfile is fine. Remove the fallback
+        # once `npm install` has been run and the regenerated lockfile
+        # committed (see ROADMAP JBJ-024).
+        # An `if` condition is exempt from `set -e`, which the default
+        # `bash -e {0}` shell applies — a plain `npm ci || npm install` would
+        # abort the step on the first failure instead of falling through.
+        run: |
+          if npm ci; then
+            echo "npm ci succeeded"
+          else
+            echo "::warning title=Lockfile out of sync::npm ci failed; fell back to npm install. Regenerate package-lock.json (see ROADMAP JBJ-024)."
+            npm install --no-audit --no-fund
+          fi
 
       # The harness this snapshot targets, /__report-contrast, is registered
       # behind `import.meta.env.DEV` in src/routes/PublicRoutes.tsx so the debug
