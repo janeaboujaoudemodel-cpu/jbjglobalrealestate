@@ -152,14 +152,70 @@ async function handleBrokerTierSubscription(subscription: any) {
   });
 }
 
-async function handleInvoicePaid(invoice: any) {
-  // Renewal grants: on each successful recurring invoice, refill subscription credits.
-  if (!invoice.subscription || invoice.billing_reason === "subscription_create") return;
-  const userId = invoice.subscription_details?.metadata?.userId
-    ?? invoice.metadata?.userId;
-  const line = invoice.lines?.data?.find((l: any) => l.price?.recurring);
-  const priceId = resolvePriceId(line);
-  if (!userId || !priceId) return;
+/**
+ * The location of an invoice's subscription reference moved in Stripe API
+ * version 2025-04-30.basil: the top-level `invoice.subscription` field was
+ * replaced by `invoice.parent.subscription_details`. This client pins
+ * `2026-03-25.dahlia`, so reading only the legacy field made every renewal
+ * invoice fall through the `!invoice.subscription` guard and silently skip
+ * the credit refill. Read every known shape so the handler keeps working
+ * regardless of which API version the webhook endpoint is configured for.
+ */
+function resolveInvoiceSubscriptionId(invoice: any): string | undefined {
+  const candidates = [
+    invoice?.subscription,
+    invoice?.parent?.subscription_details?.subscription,
+    invoice?.parent?.subscription_details?.subscription_id,
+  ];
+  for (const candidate of candidates) {
+    if (typeof candidate === "string" && candidate) return candidate;
+    if (candidate?.id) return candidate.id as string;
+  }
+  return undefined;
+}
+
+function resolveInvoiceUserId(invoice: any, subscription: any): string | undefined {
+  return subscription?.metadata?.userId
+    ?? invoice?.parent?.subscription_details?.metadata?.userId
+    ?? invoice?.subscription_details?.metadata?.userId
+    ?? invoice?.metadata?.userId;
+}
+
+async function handleInvoicePaid(invoice: any, env: StripeEnv) {
+  // Renewal grants: on each successful recurring invoice, refill subscription
+  // credits. The initial invoice is skipped — `customer.subscription.created`
+  // already grants the first cycle.
+  if (invoice.billing_reason === "subscription_create") return;
+
+  const subscriptionId = resolveInvoiceSubscriptionId(invoice);
+  if (!subscriptionId) return; // one-off invoice, nothing to refill
+
+  // Resolve the price from the subscription itself rather than the invoice
+  // line items. Line-item shape also changed in 2025-04-30.basil (`line.price`
+  // → `line.pricing.price_details`), and the subscription carries the stable
+  // `lookup_key` the tier table is keyed on.
+  const stripe = createStripeClient(env);
+  let subscription: any;
+  try {
+    subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+      expand: ["items.data.price"],
+    });
+  } catch (e) {
+    console.error("handleInvoicePaid: failed to retrieve subscription", subscriptionId, e);
+    return;
+  }
+
+  const userId = resolveInvoiceUserId(invoice, subscription);
+  const priceId = resolvePriceId(subscription.items?.data?.[0]);
+  if (!userId || !priceId) {
+    console.error("handleInvoicePaid: missing userId or priceId", {
+      invoiceId: invoice.id,
+      subscriptionId,
+      hasUserId: Boolean(userId),
+      hasPriceId: Boolean(priceId),
+    });
+    return;
+  }
 
   const sb = getSupabase();
   const { data: tier } = await sb
@@ -179,13 +235,13 @@ async function handleInvoicePaid(invoice: any) {
   });
 }
 
-async function handleCreditPackPurchase(session: any) {
+async function handleCreditPackPurchase(session: any, env: StripeEnv) {
   if (session.mode !== "payment" || session.payment_status !== "paid") return;
   const userId = session.metadata?.userId;
   if (!userId) return;
 
   // Line items aren't on the session by default — fetch them.
-  const stripe = createStripeClient((session.livemode ? "live" : "sandbox") as StripeEnv);
+  const stripe = createStripeClient(env);
   const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
     expand: ["data.price"],
     limit: 20,
@@ -231,10 +287,10 @@ async function handleWebhook(req: Request, env: StripeEnv) {
       break;
     case "invoice.paid":
     case "invoice.payment_succeeded":
-      await handleInvoicePaid(event.data.object);
+      await handleInvoicePaid(event.data.object, env);
       break;
     case "checkout.session.completed":
-      await handleCreditPackPurchase(event.data.object);
+      await handleCreditPackPurchase(event.data.object, env);
       break;
     default:
       console.log("Unhandled event:", event.type);

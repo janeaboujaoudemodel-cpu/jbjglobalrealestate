@@ -40,6 +40,20 @@ export function createStripeClient(env: StripeEnv): Stripe {
   });
 }
 
+/**
+ * Constant-time string comparison. `Array.prototype.includes` short-circuits on
+ * the first differing byte, which leaks how much of a forged signature prefix
+ * was correct. Compares every byte regardless of where the first mismatch is.
+ */
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i++) {
+    mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return mismatch === 0;
+}
+
 export async function verifyWebhook(
   req: Request,
   env: StripeEnv,
@@ -79,7 +93,9 @@ export async function verifyWebhook(
   );
   const expected = new TextDecoder().decode(encode(new Uint8Array(signed)));
 
-  if (!v1Signatures.includes(expected)) throw new Error("Invalid webhook signature");
+  if (!v1Signatures.some((candidate) => timingSafeEqual(candidate, expected))) {
+    throw new Error("Invalid webhook signature");
+  }
 
   return JSON.parse(body);
 }
