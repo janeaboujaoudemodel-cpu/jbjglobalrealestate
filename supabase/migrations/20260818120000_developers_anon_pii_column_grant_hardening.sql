@@ -1,4 +1,4 @@
--- JBJ-032: developers table — anonymous public API exposure of internal/admin-only
+-- JBJ-033: developers table — anonymous public API exposure of internal/admin-only
 -- columns (admin_email, office_phone, whatsapp, notes, enrichment_source,
 -- last_enriched_at).
 --
