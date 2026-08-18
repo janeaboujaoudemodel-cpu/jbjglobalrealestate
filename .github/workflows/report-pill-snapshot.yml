@@ -39,7 +39,30 @@ jobs:
         run: python -m pip install --upgrade pip playwright pillow
 
       - name: Install Playwright Chromium
-        run: python -m playwright install --with-deps chromium
+        run: |
+          # cdn.playwright.dev intermittently answers GitHub runners with
+          # 403 "this service is not available in your location" — a geo/CDN
+          # refusal, not rate limiting. It took down the Report Pill snapshot
+          # on bda388d thirty minutes after the same job passed, before a
+          # single test body ran. Retry a few times, then fall back to the
+          # Chrome that ubuntu-latest already ships, so a CDN having a bad
+          # minute cannot fail a code gate.
+          for attempt in 1 2 3; do
+            python -m playwright install --with-deps chromium && exit 0
+            echo "playwright install failed (attempt $attempt/3); retrying in $((attempt * 5))s"
+            sleep $((attempt * 5))
+          done
+          echo "::warning::playwright install failed 3x; falling back to the runner's preinstalled Chrome"
+          for candidate in "$CHROME_PATH" /usr/bin/google-chrome /usr/bin/chromium-browser /usr/bin/chromium; do
+            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+              echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE=$candidate" >> "$GITHUB_ENV"
+              echo "CHROMIUM_PATH=$candidate" >> "$GITHUB_ENV"
+              echo "Using $candidate"
+              exit 0
+            fi
+          done
+          echo "::error::No Chromium available: the download failed and no system Chrome was found."
+          exit 1
 
       - name: Install node deps
         run: npm ci

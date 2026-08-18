@@ -70,6 +70,22 @@ def color_delta(a, b) -> float:
     return sum(abs(x - y) for x, y in zip(a, b)) / 3
 
 
+
+def chromium_launch_kwargs() -> dict:
+    """Launch options honouring a CI-supplied Chromium path.
+
+    The workflow falls back to the runner's preinstalled Chrome when
+    cdn.playwright.dev refuses the download (it answers GitHub runners with a
+    403 "not available in your location" often enough to redden a gate). When
+    that happens it exports the path here; otherwise Playwright resolves its
+    own binary, exactly as before.
+    """
+    exe = os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE") or os.environ.get("CHROMIUM_PATH")
+    kwargs = {"headless": True}
+    if exe and os.path.exists(exe):
+        kwargs["executable_path"] = exe
+    return kwargs
+
 async def snapshot_viewport(page, label: str, w: int, h: int):
     """Return list of pair results for this viewport."""
     art = OUT / label
@@ -251,7 +267,7 @@ async def main():
     OUT.mkdir(parents=True, exist_ok=True)
 
     async with async_playwright() as p:
-        b = await p.chromium.launch(headless=True)
+        b = await p.chromium.launch(**chromium_launch_kwargs())
         ctx = await b.new_context()
         page = await ctx.new_page()
 

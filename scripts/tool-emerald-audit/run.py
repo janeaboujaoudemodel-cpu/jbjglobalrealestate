@@ -91,6 +91,22 @@ def scan(png_path: Path):
     }
 
 
+
+def chromium_launch_kwargs() -> dict:
+    """Launch options honouring a CI-supplied Chromium path.
+
+    The workflow falls back to the runner's preinstalled Chrome when
+    cdn.playwright.dev refuses the download (it answers GitHub runners with a
+    403 "not available in your location" often enough to redden a gate). When
+    that happens it exports the path here; otherwise Playwright resolves its
+    own binary, exactly as before.
+    """
+    exe = os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE") or os.environ.get("CHROMIUM_PATH")
+    kwargs = {"headless": True}
+    if exe and os.path.exists(exe):
+        kwargs["executable_path"] = exe
+    return kwargs
+
 async def audit_route(page, route: str):
     url = f"{BASE}{route}"
     slug = "".join(c if c.isalnum() else "_" for c in route).strip("_")
@@ -163,7 +179,7 @@ async def main():
     OUT.mkdir(parents=True, exist_ok=True)
 
     async with async_playwright() as p:
-        b = await p.chromium.launch(headless=True)
+        b = await p.chromium.launch(**chromium_launch_kwargs())
         ctx = await b.new_context(viewport=VIEWPORT)
         # Restore Supabase session so auth-gated tools render their shell.
         cookies_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON")
