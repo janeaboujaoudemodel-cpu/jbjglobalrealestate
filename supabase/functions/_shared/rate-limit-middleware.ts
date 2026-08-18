@@ -12,6 +12,18 @@ export interface RateLimitMiddlewareConfig {
   windowMinutes: number;
   keyType?: 'ip' | 'user' | 'email';
   customKey?: string;
+  /**
+   * When true, the rate-limit counter is skipped for this call.
+   * The IP blocklist check still runs regardless — an authenticated caller
+   * on a blocked IP is still rejected.
+   *
+   * Use this for gated (JWT-verified) paths so signed-in users don't burn
+   * the same per-IP quota as anonymous guests. The caller is responsible
+   * for verifying the JWT before setting this to true.
+   *
+   * Default: false (rate limiting applies to all callers).
+   */
+  skipRateLimit?: boolean;
 }
 
 export interface MiddlewareResult {
@@ -125,6 +137,10 @@ export async function cleanupWebhookReplayLog(
 /**
  * enforceRateLimit — Single call that checks IP blocklist + rate limit + logs events
  * Returns null if allowed, or a Response if blocked.
+ *
+ * Pass `skipRateLimit: true` for JWT-verified (gated) callers — the IP blocklist
+ * check still runs, but the per-IP counter is not incremented and the 429 path
+ * is never reached for those callers. See JBJ-008 for the full design note.
  */
 export async function enforceRateLimit(
   req: Request,
@@ -137,7 +153,7 @@ export async function enforceRateLimit(
   const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
   const clientIp = getClientIp(req);
 
-  // 1. Check IP blocklist
+  // 1. IP blocklist — runs for ALL callers regardless of skipRateLimit.
   const blockResult = await checkIPBlocklist(serviceClient, clientIp);
   if (blockResult.blocked) {
     await logSecurityEvent(serviceClient, {
@@ -158,43 +174,48 @@ export async function enforceRateLimit(
     };
   }
 
-  // 2. Rate limit check
-  const rateKey = config.customKey || (config.keyType === 'user' && userId ? userId : clientIp);
-  const rateLimitConfig: RateLimitConfig = {
-    functionName: config.functionName,
-    windowMinutes: config.windowMinutes,
-    maxRequests: config.maxRequests,
-  };
-
-  const rateResult = await checkRateLimit(serviceClient, rateKey, clientIp, rateLimitConfig);
-
-  if (!rateResult.allowed) {
-    await logSecurityEvent(serviceClient, {
-      event_type: 'rate_limit_hit',
-      function_name: config.functionName,
-      client_ip: clientIp,
-      user_id: userId,
-      severity: 'medium',
-      details: {
-        rate_key: rateKey.substring(0, 8) + '***',
-        request_count: rateResult.requestCount,
-        max_requests: config.maxRequests,
-        window_minutes: config.windowMinutes,
-      },
-    });
-
-    return {
-      response: new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
-        status: 429,
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'application/json',
-          'Retry-After': String(rateResult.retryAfterSeconds || 60),
-        },
-      }),
-      clientIp,
-      serviceClient,
+  // 2. Rate limit counter — skipped when skipRateLimit is true.
+  // Authenticated (JWT-verified) callers set this flag so they don't consume
+  // the per-IP guest quota. The caller is responsible for verifying the JWT
+  // before passing skipRateLimit: true.
+  if (!config.skipRateLimit) {
+    const rateKey = config.customKey || (config.keyType === 'user' && userId ? userId : clientIp);
+    const rateLimitConfig: RateLimitConfig = {
+      functionName: config.functionName,
+      windowMinutes: config.windowMinutes,
+      maxRequests: config.maxRequests,
     };
+
+    const rateResult = await checkRateLimit(serviceClient, rateKey, clientIp, rateLimitConfig);
+
+    if (!rateResult.allowed) {
+      await logSecurityEvent(serviceClient, {
+        event_type: 'rate_limit_hit',
+        function_name: config.functionName,
+        client_ip: clientIp,
+        user_id: userId,
+        severity: 'medium',
+        details: {
+          rate_key: rateKey.substring(0, 8) + '***',
+          request_count: rateResult.requestCount,
+          max_requests: config.maxRequests,
+          window_minutes: config.windowMinutes,
+        },
+      });
+
+      return {
+        response: new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
+          status: 429,
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+            'Retry-After': String(rateResult.retryAfterSeconds || 60),
+          },
+        }),
+        clientIp,
+        serviceClient,
+      };
+    }
   }
 
   return { response: null, clientIp, serviceClient };
