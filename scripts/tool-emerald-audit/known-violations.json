@@ -1,0 +1,18 @@
+{
+  "_comment": "Pre-existing color-budget violations found by the first-ever tool-emerald-audit CI run (PR #43, 2026-08-17). Routes listed here generate a ⚠ warning in CI output but do NOT cause a non-zero exit — they are tracked, not silently ignored. Remove a route only once its violation is confirmed fixed on the live dev server. Each route must have a corresponding JBJ-### item in ROADMAP.md.",
+  "trackedBy": "JBJ-029",
+  "firstFoundInPR": 43,
+  "_pendingNote": "PR #43 CI log shows 7 total breaching routes. The 2 entries below are confirmed. The remaining 5 must be identified from the PR #43 CI artifact (actions/runs/32038786479) and added here with their breach type before this allowlist is complete.",
+  "routes": [
+    {
+      "route": "/property-measurement",
+      "breach": "unknown",
+      "note": "Pre-existing. Breach type to be confirmed from PR #43 CI artifact report.json."
+    },
+    {
+      "route": "/mortgage-calculator",
+      "breach": "unknown",
+      "note": "Pre-existing. Breach type to be confirmed from PR #43 CI artifact report.json."
+    }
+  ]
+}

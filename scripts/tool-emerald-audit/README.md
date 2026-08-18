@@ -9,7 +9,30 @@ Screenshots every AI tool route and scans **every pixel** for two brand violatio
 
 The audit screenshots the `[data-tool-emerald]` shell element (falls back to `<main>` / full page). Per-route PNGs + `report.json` are written to `artifacts/`.
 
-Any route with `hasShell=true` that breaches either threshold makes the run exit non-zero.
+## CI exit behaviour
+
+| Route state | Console mark | CI exit |
+|---|---|---|
+| Clean — no breach | `✓` | 0 (pass) |
+| Breach + listed in `known-violations.json` | `⚠ [tracked:JBJ-###]` | 0 (warn only) |
+| Breach + NOT in `known-violations.json` | `✗` | 1 (fail — blocks merge) |
+
+This two-bucket model means pre-existing violations don't pollute the signal for code changed in the current PR.
+
+## Known pre-existing violations (`known-violations.json`)
+
+Routes that were already violating when the check first ran (PR #43, 2026-08-17) are listed in `known-violations.json` and tracked as **JBJ-029** in ROADMAP.md.
+
+**To add a pre-existing route** (violation existed before your PR, not introduced by it):
+1. Verify it was already breaching on `main` before your change.
+2. Add an entry to `known-violations.json` with `route`, `breach` type (`champagne` | `darkInk` | `unknown`), and a `note`.
+3. Create or reference a JBJ-### item in ROADMAP.md.
+4. Include both files in the same PR.
+
+**To close a known violation** (you've fixed the underlying component):
+1. Run the audit locally and confirm the route is now `✓`.
+2. Remove its entry from `known-violations.json`.
+3. Update the JBJ-### item in ROADMAP.md to Resolved with the commit hash.
 
 ## Run locally
 ```bash
@@ -25,7 +48,7 @@ Auth: if `LOVABLE_BROWSER_SUPABASE_STORAGE_KEY / _SESSION_JSON / _COOKIES_JSON` 
 ## CI
 `.github/workflows/tool-emerald-audit.yml` runs on every PR that touches tool code and uploads `artifacts/` (PNGs + report) for inspection.
 
-## Add a new tool
+## Add a new tool route
 Append its route to `routes.json`. Nothing else to change.
 
 ## Tune thresholds
