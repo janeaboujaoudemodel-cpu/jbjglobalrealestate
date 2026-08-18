@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -110,6 +111,15 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Audit 4.3 — anonymous callers can burn third-party AI/voice credits
+  // through this endpoint. Shared DB-backed per-IP limiter.
+  const { response: rateLimited } = await enforceRateLimit(
+    req,
+    { functionName: 'repair-project-extraction', maxRequests: 15, windowMinutes: 15, keyType: 'ip' },
+    corsHeaders,
+  );
+  if (rateLimited) return rateLimited;
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;

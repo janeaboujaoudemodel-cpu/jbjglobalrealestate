@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { resolveElevenLabsKey } from "../_shared/elevenlabsKey.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -50,6 +51,15 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Audit 4.3 — anonymous callers can burn third-party AI/voice credits
+  // through this endpoint. Shared DB-backed per-IP limiter.
+  const { response: rateLimited } = await enforceRateLimit(
+    req,
+    { functionName: 'elevenlabs-conversation-token', maxRequests: 15, windowMinutes: 15, keyType: 'ip' },
+    corsHeaders,
+  );
+  if (rateLimited) return rateLimited;
 
   try {
     // Gate: require a valid voice_agent_leads.id (intake submission within 30 days)

@@ -5,586 +5,378 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JBJ Backend Remediation</title>
 <style>
-  /* ── Tokens: light is the base; dark redefines tokens only ───────────── */
   :root{
-    --ink:#0B1411;
-    --ink-2:#22322c;
-    --muted:#5c6b63;
-    --page:#F7F2EA;
-    --surface:#FFFDF9;
-    --surface-2:#F1EADD;
-    --line:#DED3BF;
-    --line-soft:#EBE2D2;
-    --emerald:#064E3B;
-    --emerald-lift:#0A6B51;
-    --gold:#B89555;
-    --gold-deep:#8A6D3B;
+    --ink:#0B1411; --ink-2:#31423a; --muted:#63736a;
+    --page:#F7F3EC; --card:#FFFFFF; --card-2:#F2EBDF;
+    --line:#E2D8C6; --line-soft:#EDE5D6;
+    --emerald:#064E3B; --gold:#B08A4A; --gold-deep:#8A6D3B;
 
-    --breach:#B3261E;
-    --breach-bg:#FBEAE8;
-    --sealed:#1F7A4A;
-    --sealed-bg:#E7F3EC;
-    --cleared:#3F5A78;
-    --cleared-bg:#E9EFF6;
-    --partial:#9A6A00;
-    --partial-bg:#FBF1DC;
+    --fix:#12734A;   --fix-bg:#E4F2E9;   --fix-line:#9CCDB3;
+    --open:#B3261E;  --open-bg:#FBEAE7;  --open-line:#E8A9A3;
+    --part:#8A6100;  --part-bg:#FBF1DA;  --part-line:#DCBE7A;
+    --clear:#3A5A7D; --clear-bg:#E8EFF6; --clear-line:#A6BFD8;
 
-    --plate:#FFFDF9;
-    --plate-edge:#DCD1BC;
-    --scene-floor:rgba(6,78,59,.07);
+    --plate:#FFFFFF; --plate-edge:#DACFBB;
+    --shadow:0 1px 2px rgba(11,20,17,.05),0 8px 24px rgba(11,20,17,.07);
+    --shadow-lg:0 20px 56px rgba(11,20,17,.14);
 
-    --shadow-sm:0 1px 2px rgba(11,20,17,.06), 0 2px 8px rgba(11,20,17,.05);
-    --shadow-lg:0 18px 50px rgba(11,20,17,.13);
-
-    --display:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,serif;
+    --display:Georgia,"Iowan Old Style",Palatino,serif;
     --body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --ink:#EDF2EE;
-      --ink-2:#C3D2CA;
-      --muted:#8FA49A;
-      --page:#08110E;
-      --surface:#0E1B17;
-      --surface-2:#132621;
-      --line:#22392F;
-      --line-soft:#1A2E27;
-      --emerald:#4FBF95;
-      --emerald-lift:#6FD8AF;
-      --gold:#D3AF72;
-      --gold-deep:#B89555;
+      --ink:#EEF3EF; --ink-2:#C6D4CC; --muted:#93A79D;
+      --page:#070F0D; --card:#101C18; --card-2:#16261F;
+      --line:#263E34; --line-soft:#1D3229;
+      --emerald:#57C79C; --gold:#D8B478; --gold-deep:#C6A067;
 
-      --breach:#F2837A;
-      --breach-bg:#2B1310;
-      --sealed:#5FCC93;
-      --sealed-bg:#0E2419;
-      --cleared:#8FB3D9;
-      --cleared-bg:#111E2B;
-      --partial:#E0B457;
-      --partial-bg:#2A2110;
+      --fix:#63D49B;   --fix-bg:#0D2519;   --fix-line:#2C6B4A;
+      --open:#F58F85;  --open-bg:#2C1411;  --open-line:#7A342D;
+      --part:#E5BA5F;  --part-bg:#2B2211;  --part-line:#6E5623;
+      --clear:#93B9E0; --clear-bg:#121F2C; --clear-line:#33526F;
 
-      --plate:#162922;
-      --plate-edge:#2E5044;
-      --scene-floor:rgba(79,191,149,.09);
-
-      --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 10px rgba(0,0,0,.4);
-      --shadow-lg:0 20px 56px rgba(0,0,0,.6);
+      --plate:#17282110; --plate-edge:#305547;
+      --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 26px rgba(0,0,0,.45);
+      --shadow-lg:0 22px 60px rgba(0,0,0,.6);
     }
   }
   :root[data-theme="dark"]{
-    --ink:#EDF2EE;
-    --ink-2:#C3D2CA;
-    --muted:#8FA49A;
-    --page:#08110E;
-    --surface:#0E1B17;
-    --surface-2:#132621;
-    --line:#22392F;
-    --line-soft:#1A2E27;
-    --emerald:#4FBF95;
-    --emerald-lift:#6FD8AF;
-    --gold:#D3AF72;
-    --gold-deep:#B89555;
+    --ink:#EEF3EF; --ink-2:#C6D4CC; --muted:#93A79D;
+    --page:#070F0D; --card:#101C18; --card-2:#16261F;
+    --line:#263E34; --line-soft:#1D3229;
+    --emerald:#57C79C; --gold:#D8B478; --gold-deep:#C6A067;
 
-    --breach:#F2837A;
-    --breach-bg:#2B1310;
-    --sealed:#5FCC93;
-    --sealed-bg:#0E2419;
-    --cleared:#8FB3D9;
-    --cleared-bg:#111E2B;
-    --partial:#E0B457;
-    --partial-bg:#2A2110;
+    --fix:#63D49B;   --fix-bg:#0D2519;   --fix-line:#2C6B4A;
+    --open:#F58F85;  --open-bg:#2C1411;  --open-line:#7A342D;
+    --part:#E5BA5F;  --part-bg:#2B2211;  --part-line:#6E5623;
+    --clear:#93B9E0; --clear-bg:#121F2C; --clear-line:#33526F;
 
-    --plate:#162922;
-    --plate-edge:#2E5044;
-    --scene-floor:rgba(79,191,149,.09);
-
-    --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 10px rgba(0,0,0,.4);
-    --shadow-lg:0 20px 56px rgba(0,0,0,.6);
+    --plate:#172821; --plate-edge:#305547;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 26px rgba(0,0,0,.45);
+    --shadow-lg:0 22px 60px rgba(0,0,0,.6);
   }
 
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--page);
-    color:var(--ink);
-    font-family:var(--body);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1080px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(16px,4vw,32px) 88px;}
+  body{margin:0;background:var(--page);color:var(--ink);font-family:var(--body);line-height:1.62;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto;padding:clamp(28px,5vw,60px) clamp(16px,4vw,32px) 96px;}
 
-  /* ── Masthead ─────────────────────────────────────────────────────────── */
-  .masthead{
-    display:flex;flex-direction:column;gap:22px;
-    padding-bottom:26px;
-    border-bottom:1px solid var(--line);
-  }
-  .eyebrow{
-    font-family:var(--mono);
-    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--gold-deep);font-weight:700;
-  }
-  h1{
-    font-family:var(--display);
-    font-size:clamp(30px,5.2vw,50px);
-    line-height:1.06;margin:0;font-weight:400;
-    letter-spacing:-.015em;text-wrap:balance;
-    color:var(--ink);
-  }
+  /* ── Masthead ───────────────────────────────────────────── */
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:14px;}
+  h1{font-family:var(--display);font-size:clamp(30px,5vw,48px);line-height:1.05;margin:0 0 18px;font-weight:400;letter-spacing:-.015em;text-wrap:balance;}
   h1 em{font-style:italic;color:var(--emerald);}
-  .standfirst{
-    font-size:clamp(15px,1.6vw,17.5px);
-    color:var(--ink-2);max-width:64ch;margin:0;
-  }
-  .runline{
-    display:flex;flex-wrap:wrap;gap:8px 22px;
-    font-family:var(--mono);font-size:11.5px;
-    color:var(--muted);letter-spacing:.02em;
-  }
+  .lede{font-size:clamp(15.5px,1.6vw,18px);color:var(--ink-2);max-width:62ch;margin:0 0 20px;}
+  .runline{display:flex;flex-wrap:wrap;gap:6px 20px;font-family:var(--mono);font-size:11.5px;color:var(--muted);padding-bottom:28px;border-bottom:1px solid var(--line);}
   .runline b{color:var(--ink-2);font-weight:600;}
 
-  /* ── State switch ─────────────────────────────────────────────────────── */
-  .switchbar{
-    display:flex;flex-wrap:wrap;align-items:center;gap:16px;
-    margin:30px 0 0;
+  /* ── Headline verdict ───────────────────────────────────── */
+  .verdict{
+    margin:30px 0 0;padding:22px 24px;border-radius:14px;
+    background:var(--open-bg);border:1px solid var(--open-line);
+    border-left:5px solid var(--open);
   }
-  .switch{
-    display:inline-flex;padding:4px;gap:4px;
-    background:var(--surface-2);
-    border:1px solid var(--line);border-radius:999px;
-  }
-  .switch button{
-    appearance:none;border:0;cursor:pointer;
-    font-family:var(--mono);font-size:11.5px;font-weight:700;
-    letter-spacing:.13em;text-transform:uppercase;
-    padding:9px 20px;border-radius:999px;
-    background:transparent;color:var(--muted);
-    transition:background .25s ease,color .25s ease;
-  }
-  .switch button:hover{color:var(--ink);}
-  .switch button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
-  .switch button[aria-pressed="true"]{
-    background:var(--emerald);color:var(--page);
-  }
-  :root[data-theme="dark"] .switch button[aria-pressed="true"],
-  html:not([data-theme="light"]) .switch button[aria-pressed="true"]{color:var(--page);}
-  .switch-note{font-size:13px;color:var(--muted);max-width:42ch;}
+  .verdict.good{background:var(--fix-bg);border-color:var(--fix-line);border-left-color:var(--fix);}
+  .verdict h2{font-family:var(--display);font-weight:400;font-size:clamp(19px,2.4vw,24px);margin:0 0 8px;color:var(--ink);border:0;padding:0;}
+  .verdict p{margin:0 0 10px;font-size:15px;color:var(--ink-2);}
+  .verdict p:last-child{margin-bottom:0;}
 
-  /* ── Tallies ──────────────────────────────────────────────────────────── */
-  .tallies{
-    display:grid;gap:12px;margin:26px 0 0;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  }
-  .tally{
-    background:var(--surface);border:1px solid var(--line-soft);
-    border-radius:12px;padding:15px 17px;box-shadow:var(--shadow-sm);
-  }
-  .tally .n{
-    font-family:var(--display);font-size:30px;line-height:1;
-    font-variant-numeric:tabular-nums;color:var(--emerald);
-  }
-  .tally .k{
-    margin-top:7px;font-family:var(--mono);font-size:10.5px;
-    letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
-  }
-  .tally[data-tone="breach"] .n{color:var(--breach);}
-  .tally[data-tone="sealed"] .n{color:var(--sealed);}
-  .tally[data-tone="cleared"] .n{color:var(--cleared);}
-  .tally[data-tone="partial"] .n{color:var(--partial);}
+  /* ── Scoreboard ─────────────────────────────────────────── */
+  .score{display:grid;gap:10px;margin:22px 0 0;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));}
+  .s{background:var(--card);border:1px solid var(--line-soft);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
+  .s .n{font-family:var(--display);font-size:32px;line-height:1;font-variant-numeric:tabular-nums;}
+  .s .k{margin-top:6px;font-size:12px;color:var(--muted);letter-spacing:.01em;}
+  .s[data-t="fix"] .n{color:var(--fix);}
+  .s[data-t="part"] .n{color:var(--part);}
+  .s[data-t="clear"] .n{color:var(--clear);}
+  .s[data-t="open"] .n{color:var(--open);}
 
-  /* ── Section furniture ────────────────────────────────────────────────── */
-  section{margin-top:clamp(46px,7vw,76px);}
-  h2{
-    font-family:var(--display);font-weight:400;
-    font-size:clamp(21px,2.8vw,27px);
-    margin:0 0 6px;letter-spacing:-.01em;color:var(--ink);
-  }
-  .sectionlede{margin:0 0 22px;color:var(--muted);font-size:14.5px;max-width:66ch;}
+  section{margin-top:clamp(44px,6vw,70px);}
+  h2{font-family:var(--display);font-weight:400;font-size:clamp(21px,2.7vw,28px);margin:0 0 6px;letter-spacing:-.01em;}
+  .sub{margin:0 0 22px;color:var(--muted);font-size:14.5px;max-width:64ch;}
 
-  /* ── The 3D stack ─────────────────────────────────────────────────────── */
-  .stage{
-    position:relative;
-    background:
-      radial-gradient(120% 90% at 50% 8%, var(--surface) 0%, var(--surface-2) 100%);
-    border:1px solid var(--line-soft);
-    border-radius:16px;
-    box-shadow:var(--shadow-lg);
-    overflow:hidden;
-    touch-action:none;
-    cursor:grab;
-  }
+  /* ── 3D stack ───────────────────────────────────────────── */
+  .stage{position:relative;background:linear-gradient(170deg,var(--card) 0%,var(--card-2) 100%);border:1px solid var(--line-soft);border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;touch-action:none;cursor:grab;}
   .stage.dragging{cursor:grabbing;}
   .stage:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
-  .viewport{
-    position:relative;
-    height:clamp(560px,50vw,620px);
-    perspective:2200px;
-    perspective-origin:50% 50%;
-  }
-  /* Absolutely centred rather than grid-centred: the model's bounding box is
-     wider than the stage on narrow screens, and an overflowing grid item is
-     start-aligned, not centred — which pushed the whole stack off to one side. */
-  .scaler{
-    position:absolute;left:50%;top:50%;
-    transform-style:preserve-3d;
-    transform:translate(-50%,-50%) scale(var(--fit,.72));
-  }
-  .stack{
-    position:relative;
-    width:520px;height:180px;
-    transform-style:preserve-3d;
-    transform:rotateX(56deg) rotateZ(-30deg);
-    transition:transform .5s cubic-bezier(.22,.75,.3,1);
-  }
+  .viewport{position:relative;height:clamp(500px,45vw,545px);perspective:2200px;}
+  .scaler{position:absolute;left:50%;top:50%;transform-style:preserve-3d;transform:translate(-50%,-50%) scale(var(--fit,.66));}
+  .stack{position:relative;width:540px;height:170px;transform-style:preserve-3d;transform:rotateX(55deg) rotateZ(-28deg);transition:transform .5s cubic-bezier(.22,.75,.3,1);}
   .stack.free{transition:none;}
-
-  .plate{
-    position:absolute;inset:0;
-    transform-style:preserve-3d;
-    background:var(--plate);
-    border:1px solid var(--plate-edge);
-    border-radius:10px;
-    box-shadow:0 12px 26px rgba(11,20,17,.16);
-    padding:12px 15px;
-    transition:transform .6s cubic-bezier(.22,.75,.3,1), box-shadow .4s ease;
-  }
-  :root[data-theme="dark"] .plate,
-  html:not([data-theme="light"]) .plate{box-shadow:0 14px 30px rgba(0,0,0,.5);}
-
-  /* Layer altitude — set per-plate below, animated by the state class. */
-  .plate[data-layer="0"]{transform:translateZ(-300px);}
-  .plate[data-layer="1"]{transform:translateZ(-150px);}
-  .plate[data-layer="2"]{transform:translateZ(0px);}
-  .plate[data-layer="3"]{transform:translateZ(150px);}
-  .plate[data-layer="4"]{transform:translateZ(300px);}
-
-  .plate-head{
-    display:flex;align-items:baseline;justify-content:space-between;
-    gap:12px;padding-bottom:8px;margin-bottom:10px;
-    border-bottom:1px solid var(--line-soft);
-  }
-  .plate-name{
-    font-family:var(--mono);font-size:10.5px;font-weight:700;
-    letter-spacing:.15em;text-transform:uppercase;color:var(--emerald);
-  }
-  .plate-count{
-    font-family:var(--mono);font-size:10px;letter-spacing:.06em;
-    color:var(--muted);font-variant-numeric:tabular-nums;
-  }
-  .chips{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
-  .chip{
-    display:inline-flex;align-items:center;gap:6px;
-    padding:5px 9px;border-radius:6px;
-    font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;
-    border:1px solid transparent;
-    transition:background .5s ease,color .5s ease,border-color .5s ease;
-    white-space:nowrap;
-  }
-  .chip .dot{
-    width:6px;height:6px;border-radius:50%;
-    background:currentColor;flex:none;
-    transition:background .5s ease;
-  }
-
-  /* BEFORE colouring — severity as found by the audit */
-  .chip[data-sev="high"]   {background:var(--breach-bg); color:var(--breach); border-color:color-mix(in srgb,var(--breach) 34%,transparent);}
-  .chip[data-sev="medium"] {background:var(--partial-bg);color:var(--partial);border-color:color-mix(in srgb,var(--partial) 34%,transparent);}
-  .chip[data-sev="low"]    {background:var(--surface-2); color:var(--muted);  border-color:var(--line);}
-  .chip[data-sev="info"]   {background:var(--cleared-bg);color:var(--cleared);border-color:color-mix(in srgb,var(--cleared) 30%,transparent);}
-
-  /* AFTER colouring — outcome after this session's work */
-  .is-after .chip[data-out="sealed"]  {background:var(--sealed-bg); color:var(--sealed);  border-color:color-mix(in srgb,var(--sealed) 38%,transparent);}
-  .is-after .chip[data-out="partial"] {background:var(--partial-bg);color:var(--partial); border-color:color-mix(in srgb,var(--partial) 38%,transparent);}
-  .is-after .chip[data-out="cleared"] {background:var(--cleared-bg);color:var(--cleared); border-color:color-mix(in srgb,var(--cleared) 34%,transparent);}
-  .is-after .chip[data-out="open"]    {background:var(--breach-bg); color:var(--breach);  border-color:color-mix(in srgb,var(--breach) 38%,transparent);}
-
-  /* Geometry is deliberately identical in both states: the layer positions
-     carry no meaning, so holding them still makes the toggle a clean A/B on
-     colour alone. Sealed plates take a green edge instead. */
-  .is-after .plate{border-color:color-mix(in srgb,var(--sealed) 30%,var(--plate-edge));}
-
-  .stage-controls{
-    position:absolute;left:14px;bottom:12px;right:14px;
-    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;
-    pointer-events:none;
-  }
-  .hint{
-    font-family:var(--mono);font-size:10px;letter-spacing:.1em;
-    text-transform:uppercase;color:var(--muted);
-  }
-  .reset{
-    pointer-events:auto;appearance:none;cursor:pointer;
-    font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-    padding:7px 13px;border-radius:999px;
-    background:var(--surface);color:var(--ink-2);
-    border:1px solid var(--line);
-  }
+  .plate{position:absolute;inset:0;transform-style:preserve-3d;background:var(--plate);border:1px solid var(--plate-edge);border-radius:10px;box-shadow:0 14px 30px rgba(11,20,17,.17);padding:11px 14px;}
+  :root[data-theme="dark"] .plate,html:not([data-theme="light"]) .plate{box-shadow:0 16px 34px rgba(0,0,0,.55);}
+  .plate[data-l="0"]{transform:translateZ(-300px);}
+  .plate[data-l="1"]{transform:translateZ(-150px);}
+  .plate[data-l="2"]{transform:translateZ(0);}
+  .plate[data-l="3"]{transform:translateZ(150px);}
+  .plate[data-l="4"]{transform:translateZ(300px);}
+  .p-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:7px;margin-bottom:9px;border-bottom:1px solid var(--line-soft);}
+  .p-name{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--emerald);}
+  .p-n{font-family:var(--mono);font-size:10px;color:var(--muted);}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:6px;font-family:var(--mono);font-size:10.5px;border:1px solid transparent;transition:background .45s,color .45s,border-color .45s;white-space:nowrap;}
+  .chip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none;}
+  .chip[data-sev="high"]{background:var(--open-bg);color:var(--open);border-color:var(--open-line);}
+  .chip[data-sev="medium"]{background:var(--part-bg);color:var(--part);border-color:var(--part-line);}
+  .chip[data-sev="low"]{background:var(--card-2);color:var(--muted);border-color:var(--line);}
+  .chip[data-sev="info"]{background:var(--clear-bg);color:var(--clear);border-color:var(--clear-line);}
+  .is-after .chip[data-out="fix"]{background:var(--fix-bg);color:var(--fix);border-color:var(--fix-line);}
+  .is-after .chip[data-out="part"]{background:var(--part-bg);color:var(--part);border-color:var(--part-line);}
+  .is-after .chip[data-out="clear"]{background:var(--clear-bg);color:var(--clear);border-color:var(--clear-line);}
+  .is-after .chip[data-out="open"]{background:var(--open-bg);color:var(--open);border-color:var(--open-line);}
+  .is-after .plate{border-color:color-mix(in srgb,var(--fix) 26%,var(--plate-edge));}
+  .ctl{position:absolute;left:14px;right:14px;bottom:12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;pointer-events:none;}
+  .hint{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+  .reset{pointer-events:auto;appearance:none;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;padding:7px 13px;border-radius:999px;background:var(--card);color:var(--ink-2);border:1px solid var(--line);}
   .reset:hover{border-color:var(--gold);color:var(--ink);}
   .reset:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
 
-  .legend{
-    display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;
-    font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);
-  }
-  .legend span{display:inline-flex;align-items:center;gap:7px;}
-  .legend i{width:9px;height:9px;border-radius:2px;display:inline-block;}
+  .switchbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:0 0 18px;}
+  .switch{display:inline-flex;padding:4px;gap:4px;background:var(--card-2);border:1px solid var(--line);border-radius:999px;}
+  .switch button{appearance:none;border:0;cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:9px 20px;border-radius:999px;background:transparent;color:var(--muted);transition:background .25s,color .25s;}
+  .switch button:hover{color:var(--ink);}
+  .switch button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .switch button[aria-pressed="true"]{background:var(--emerald);color:var(--page);}
+  .legend{display:flex;flex-wrap:wrap;gap:7px 16px;margin-top:13px;font-size:12px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .legend i{width:9px;height:9px;border-radius:2px;}
 
-  /* ── Ledger ───────────────────────────────────────────────────────────── */
-  .ledger-scroll{overflow-x:auto;border:1px solid var(--line-soft);border-radius:12px;background:var(--surface);}
-  table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px;}
-  thead th{
-    text-align:left;padding:12px 14px;
-    font-family:var(--mono);font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--gold-deep);font-weight:700;
-    border-bottom:1px solid var(--line);
-    background:var(--surface-2);
-    position:sticky;top:0;
+  /* ── Finding cards (replaces the dense table) ───────────── */
+  .cards{display:grid;gap:12px;}
+  .fc{
+    background:var(--card);border:1px solid var(--line-soft);border-radius:12px;
+    box-shadow:var(--shadow);overflow:hidden;
+    border-left:4px solid var(--line);
   }
-  tbody td{padding:13px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
-  tbody tr:last-child td{border-bottom:0;}
-  tbody tr:hover{background:var(--surface-2);}
-  .fid{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap;}
-  .ftitle{font-weight:600;color:var(--ink);display:block;margin-bottom:3px;}
-  .fpath{font-family:var(--mono);font-size:11px;color:var(--gold-deep);word-break:break-all;}
-  .fnote{color:var(--muted);font-size:13px;margin-top:5px;display:block;}
+  .fc[data-out="fix"]{border-left-color:var(--fix);}
+  .fc[data-out="part"]{border-left-color:var(--part);}
+  .fc[data-out="clear"]{border-left-color:var(--clear);}
+  .fc[data-out="open"]{border-left-color:var(--open);}
+  .fc-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:13px 18px;background:var(--card-2);border-bottom:1px solid var(--line-soft);}
+  .fc-id{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:700;}
+  .fc-title{font-weight:650;font-size:15.5px;flex:1 1 260px;min-width:0;}
+  .tag{display:inline-block;padding:3px 9px;border-radius:999px;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;}
+  .tag[data-t="fix"]{background:var(--fix-bg);color:var(--fix);}
+  .tag[data-t="part"]{background:var(--part-bg);color:var(--part);}
+  .tag[data-t="clear"]{background:var(--clear-bg);color:var(--clear);}
+  .tag[data-t="open"]{background:var(--open-bg);color:var(--open);}
+  .fc-body{display:grid;grid-template-columns:1fr 1fr;}
+  .col{padding:15px 18px;}
+  .col+.col{border-left:1px solid var(--line-soft);}
+  .col h4{margin:0 0 7px;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;}
+  .col.before h4{color:var(--open);}
+  .col.after h4{color:var(--fix);}
+  .col p{margin:0;font-size:14px;color:var(--ink-2);}
+  .fc-path{padding:9px 18px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:11px;color:var(--gold-deep);word-break:break-all;background:var(--card);}
+  @media (max-width:680px){
+    .fc-body{grid-template-columns:1fr;}
+    .col+.col{border-left:0;border-top:1px solid var(--line-soft);}
+  }
 
-  .pill{
-    display:inline-block;padding:3px 9px;border-radius:5px;
-    font-family:var(--mono);font-size:9.5px;font-weight:700;
-    letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
-  }
-  .pill[data-p="sealed"] {background:var(--sealed-bg); color:var(--sealed);}
-  .pill[data-p="partial"]{background:var(--partial-bg);color:var(--partial);}
-  .pill[data-p="cleared"]{background:var(--cleared-bg);color:var(--cleared);}
-  .pill[data-p="open"]   {background:var(--breach-bg); color:var(--breach);}
-  .pill[data-p="high"]   {background:var(--breach-bg); color:var(--breach);}
-  .pill[data-p="medium"] {background:var(--partial-bg);color:var(--partial);}
-  .pill[data-p="low"]    {background:var(--surface-2); color:var(--muted);}
-  .pill[data-p="info"]   {background:var(--cleared-bg);color:var(--cleared);}
-
-  /* ── Callouts ─────────────────────────────────────────────────────────── */
-  .note{
-    background:var(--surface);border:1px solid var(--line-soft);
-    border-left:3px solid var(--gold);
-    border-radius:10px;padding:18px 20px;margin:14px 0;
-  }
-  .note.warn{border-left-color:var(--breach);}
-  .note.good{border-left-color:var(--sealed);}
-  .note h3{
-    font-family:var(--display);font-weight:400;font-size:17.5px;
-    margin:0 0 7px;color:var(--ink);
-  }
-  .note p{margin:0 0 9px;font-size:14.5px;color:var(--ink-2);}
+  /* ── Callouts ───────────────────────────────────────────── */
+  .note{background:var(--card);border:1px solid var(--line-soft);border-left:4px solid var(--gold);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow);}
+  .note.bad{border-left-color:var(--open);}
+  .note.ok{border-left-color:var(--fix);}
+  .note h3{font-family:var(--display);font-weight:400;font-size:18px;margin:0 0 8px;}
+  .note p{margin:0 0 10px;font-size:14.5px;color:var(--ink-2);}
   .note p:last-child{margin-bottom:0;}
-  .note code, td code{
-    font-family:var(--mono);font-size:.88em;
-    background:var(--surface-2);padding:1.5px 5px;border-radius:4px;
-    color:var(--gold-deep);
-  }
+  .grid2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));}
+  code{font-family:var(--mono);font-size:.88em;background:var(--card-2);padding:1.5px 5px;border-radius:4px;color:var(--gold-deep);}
 
-  .grid2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));}
+  /* ── Before/after metric ────────────────────────────────── */
+  .ba{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:14px 0 0;font-family:var(--mono);font-size:13px;}
+  .ba .v{padding:8px 14px;border-radius:8px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .ba .v.b{background:var(--open-bg);color:var(--open);}
+  .ba .v.a{background:var(--fix-bg);color:var(--fix);}
+  .ba .arw{color:var(--muted);}
+  .ba .lbl{color:var(--muted);font-family:var(--body);font-size:13px;}
 
-  ul.tight{margin:0;padding-left:20px;}
-  ul.tight li{margin-bottom:7px;font-size:14.5px;color:var(--ink-2);}
+  ul.t{margin:0;padding-left:20px;}
+  ul.t li{margin-bottom:7px;font-size:14.5px;color:var(--ink-2);}
 
-  footer{
-    margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
-    font-size:12.5px;color:var(--muted);
-  }
-  footer code{font-family:var(--mono);font-size:.92em;color:var(--gold-deep);}
-
-  @media (prefers-reduced-motion:reduce){
-    *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important;}
-  }
-  @media (max-width:640px){
-    .viewport{height:400px;}
-    .scaler{--fit:.40;}
-    .chip{font-size:10px;padding:4px 7px;}
-  }
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms !important;}}
+  @media (max-width:640px){.viewport{height:360px;} .scaler{--fit:.42;}}
 </style>
 </head>
 <body>
 
 <div class="wrap" id="root">
 
-  <header class="masthead">
+  <header>
     <div class="eyebrow">Backend Audit · Remediation Record</div>
     <h1>The backend, <em>before and after</em></h1>
-    <p class="standfirst">
-      An external audit read 507 edge functions and 1,155 migrations and returned 18 findings.
-      Each one was re-checked against the code before anything was touched — which changed the
-      job. Three findings did not survive that check. Nine were fixed outright,
-      three closed partially, and two are still open.
+    <p class="lede">
+      An external audit returned 18 findings. Verifying each one against the code before
+      touching it changed the job — three findings weren't real. Acting on them then
+      surfaced something the audit never looked for: the site was serving a blank page.
     </p>
     <div class="runline">
       <span><b>Repo</b> janeaboujaoudemodel-cpu/jbjglobalrealestate</span>
-      <span><b>Branch</b> claude/audit-report-3d-file-w335ta</span>
-      <span><b>Commit</b> 5eed81e</span>
-      <span><b>Date</b> 17 Aug 2026</span>
+      <span><b>Commit</b> 5e265d8</span>
+      <span><b>Date</b> 18 Aug 2026</span>
     </div>
   </header>
 
-  <div class="switchbar">
-    <div class="switch" role="group" aria-label="Show backend state">
-      <button type="button" id="btn-before" aria-pressed="true">Before</button>
-      <button type="button" id="btn-after" aria-pressed="false">After</button>
-    </div>
-    <p class="switch-note" id="switch-note">
-      As the audit found it. Severity colouring is the auditor's own.
+  <div class="verdict good">
+    <h2>Headline: the site was blank in production. It renders now.</h2>
+    <p>
+      A circular dependency between two JavaScript bundles meant the charts bundle ran before
+      React existed. It crashed on load, so <strong>every route rendered an empty page</strong>.
+      This predates the audit work and the audit did not catch it — nor did the test suite,
+      the build, or the accessibility sweep.
     </p>
+    <div class="ba">
+      <span class="lbl">Page content on load:</span>
+      <span class="v b">0 characters</span>
+      <span class="arw">→</span>
+      <span class="v a">400,783 characters</span>
+      <span class="lbl">measured in a real browser against the production build</span>
+    </div>
   </div>
 
-  <div class="tallies" id="tallies"></div>
+  <div class="score" id="score"></div>
 
   <section>
-    <h2>The stack</h2>
-    <p class="sectionlede">
-      Five architectural layers, exploded. Every finding sits on the layer it belongs to.
-      Drag to orbit the model. The layers hold still between Before and After, so the only thing that changes is the state of each finding.
+    <h2>Every finding, by layer</h2>
+    <p class="sub">
+      The backend's five layers, exploded. Each finding sits on the layer it belongs to.
+      Flip the switch to recolour by outcome; drag the model to look around it.
     </p>
 
-    <div class="stage" id="stage" tabindex="0" role="img"
-         aria-label="Exploded three-dimensional model of the backend's five layers, with each audit finding placed on its layer. Full detail follows in the findings ledger below.">
-      <div class="viewport">
-        <div class="scaler"><div class="stack" id="stack"></div></div>
+    <div class="switchbar">
+      <div class="switch" role="group" aria-label="Show state">
+        <button type="button" id="b-before" aria-pressed="true">Before</button>
+        <button type="button" id="b-after" aria-pressed="false">After</button>
       </div>
-      <div class="stage-controls">
+      <p class="sub" style="margin:0;" id="s-note">Coloured by the severity the auditor assigned.</p>
+    </div>
+
+    <div class="stage" id="stage" tabindex="0" role="img"
+         aria-label="Exploded 3D model of the backend's five layers with each finding placed on its layer. Every finding is also listed in full below.">
+      <div class="viewport"><div class="scaler"><div class="stack" id="stack"></div></div></div>
+      <div class="ctl">
         <span class="hint">Drag to orbit · arrow keys to rotate</span>
         <button type="button" class="reset" id="reset">Reset view</button>
       </div>
     </div>
-
     <div class="legend" id="legend"></div>
   </section>
 
   <section>
-    <h2>Findings ledger</h2>
-    <p class="sectionlede">
-      Every finding, what it was, and where it landed. Sorted by layer, then by the auditor's
-      own numbering.
-    </p>
-    <div class="ledger-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Finding</th>
-            <th scope="col">Before</th>
-            <th scope="col">After</th>
-          </tr>
-        </thead>
-        <tbody id="ledger"></tbody>
-      </table>
-    </div>
+    <h2>What each finding was, and where it landed</h2>
+    <p class="sub">Before on the left, after on the right. Nothing here is summarised away.</p>
+    <div class="cards" id="cards"></div>
   </section>
 
   <section>
-    <h2>Three findings that didn't survive verification</h2>
-    <p class="sectionlede">
-      The audit was a static sweep, and said so. Checking each finding against the code first —
-      rather than fixing straight from the report — is what surfaced these.
+    <h2>Three findings that weren't real</h2>
+    <p class="sub">
+      The audit was a text search over the code, and said so. Checking each finding first is
+      what caught these — fixing them straight from the report would have been wasted work,
+      including one pointless database migration.
     </p>
-
-    <div class="note good">
-      <h3>3.3 — “<code>rel_listings</code> / <code>rel_projects</code> / <code>rel_deals</code> have RLS enabled but no policies”</h3>
-      <p>
-        <strong>False positive.</strong> Those tables do have policies. They are created in migration
-        <code>20260504141024</code> inside a <code>DO $$ … EXECUTE format(…) $$</code> loop over an array of
-        twelve table names — so a grep for <code>CREATE POLICY … ON public.rel_listings</code> finds nothing,
-        which is exactly what the audit's sweep did. Each table gets a <code>rel_auth_read_*</code> SELECT policy
-        and a <code>rel_owner_write_*</code> policy gated by <code>rel_is_owner()</code>. No change was needed;
-        the verification query is recorded in the new migration so the next reader doesn't repeat the finding.
-      </p>
-    </div>
-
-    <div class="note good">
-      <h3>3.2 — “<code>user_sessions</code> still has an unrestricted UPDATE policy”</h3>
-      <p>
-        <strong>Already fixed, months before the audit.</strong> Migration <code>20260706161023</code> replaced
-        <code>USING (true)</code> with <code>USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid())</code>
-        on 6 July. The audit read the original January migration and not the July correction. The policy is
-        re-asserted idempotently in the new migration anyway — a later migration touched the INSERT policy on
-        the same table without touching UPDATE, and that is the shape of a silent regression.
-      </p>
-    </div>
-
-    <div class="note good">
-      <h3>4.3 / 4.4 — rate limiting and validation on public endpoints</h3>
-      <p>
-        <strong>Partially stale.</strong> <code>newsletter-subscribe</code> was named as having “one validation
-        hit total”; it in fact runs the shared rate limiter, a honeypot, an email-format check, a per-email hourly
-        cap, and returns a deliberately uniform response to prevent subscriber enumeration.
-        <code>capture-lead</code> likewise already had DB-backed per-IP rate limiting. The genuine gaps —
-        <code>register-user</code> and <code>booking-public-create</code> — were real, and are fixed.
-      </p>
-    </div>
-  </section>
-
-  <section>
-    <h2>What is <em>not</em> fixed</h2>
-    <p class="sectionlede">
-      Stated plainly, because a remediation report that only lists wins is not useful.
-    </p>
-
     <div class="grid2">
-      <div class="note warn">
-        <h3>Nothing here is verified live</h3>
+      <div class="note ok">
+        <h3>“Three tables have security enabled but no rules”</h3>
         <p>
-          This is a code-only change, pushed to a branch. No Lovable publish was performed, so none of it is
-          running on jbj.ae yet. Every “fixed” claim on this page means <em>fixed in code and passing tests</em> —
-          not confirmed against the deployed system. The <code>create-checkout</code> fix in particular deserves a
-          live check before it is called done.
+          <strong>Not true — the rules exist.</strong> They're created inside a loop that
+          generates them for twelve tables at once, so searching for the usual
+          <code>CREATE POLICY … ON rel_listings</code> finds nothing. That's exactly what the
+          audit's search did. No change was needed; the check query is now recorded in the
+          migration so nobody repeats the finding.
         </p>
       </div>
-
-      <div class="note warn">
-        <h3>Deleting a function does not undeploy it</h3>
+      <div class="note ok">
+        <h3>“Session records can be edited by anyone”</h3>
         <p>
-          The four smoke-test endpoints and <code>bulk-import-devs-2027-6</code> were removed from the repo, but a
-          repo deletion does not remove an already-deployed function from the Supabase project. Until they are
-          explicitly undeployed they remain publicly callable — and
-          <code>bulk-import-devs-2027-6</code> is not just dead code, it performs unauthenticated service-role
-          writes into the <code>developers</code> table. Tracked as JBJ-027; this one needs action outside git.
+          <strong>Already fixed six weeks earlier</strong>, on 6 July. The audit read the
+          January version of the file and missed the correction. Re-asserted anyway, because a
+          later change touched the same table without touching this rule — which is how a fix
+          silently comes undone.
         </p>
       </div>
-
-      <div class="note">
-        <h3>The wide sweeps are still wide</h3>
+      <div class="note ok">
+        <h3>“Newsletter signup has almost no validation”</h3>
         <p>
-          225 functions using service-role without a visible caller check, 357 with wildcard CORS, and ~210 with
-          no traceable caller are rollout-scale items, not single fixes. The public-facing subset that mattered
-          most was addressed; the long tail is tracked as JBJ-028 and needs a per-function pass, not a sweep.
-        </p>
-      </div>
-
-      <div class="note">
-        <h3>A bug the tests caught</h3>
-        <p>
-          The first version of the Sentry PII scrubber silently failed on <code>Full_Name</code>: the key
-          normaliser stripped underscores from the pattern but not from the key, so <code>full_name</code> never
-          matched <code>fullname</code>. Eight unit tests were written alongside it, and one of them caught this.
-          Worth noting because the fix would have looked correct in review.
+          <strong>It had five layers of it</strong> — rate limiting, a bot trap, email format
+          checking, a per-address hourly cap, and deliberately identical responses so nobody can
+          test whether an address is subscribed. Two genuinely unprotected endpoints did exist,
+          and those were fixed.
         </p>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>Verification performed</h2>
-    <ul class="tight">
-      <li><strong>Full Vitest suite:</strong> 425 tests across 40 files, all passing — including 8 new tests for the Sentry PII scrubber.</li>
-      <li><strong><code>tsc --noEmit</code>:</strong> no errors in any file this change touches. The suite does report pre-existing errors from a zod v3→v4 API drift, all in files untouched here; confirmed by intersecting the changed-file list against the error list.</li>
-      <li><strong>Pre-commit gates:</strong> the repo's static a11y check and low-opacity-contrast checks both ran and passed on the staged diff.</li>
-      <li><strong>Not run:</strong> no Deno typecheck of the edge functions — Deno is not installed in this environment, so the 13 changed function files were verified by reading, not by compiler.</li>
+    <h2>Why nothing caught the blank page</h2>
+    <p class="sub">This is the part worth changing, more than any single fix.</p>
+    <div class="note bad">
+      <p>
+        Every check was green while the site showed nothing. The 425 unit tests passed, because
+        they test functions, not the assembled app. The build succeeded, because the code is
+        valid — the bundles were just ordered wrong. And the accessibility sweep reported
+        <strong>“0 violations” across all 56 pages</strong> — not because the pages were fine,
+        but <em>because they were empty</em>. A checker looking for unreadable text finds none
+        when there is no text.
+      </p>
+      <p>
+        A green checkmark that turns green precisely when the site breaks is worse than no check
+        at all. Two guards now close that:
+      </p>
+      <ul class="t">
+        <li><strong>A bundle-order check</strong> that reads the built output and fails on a circular dependency. Confirmed it catches this exact bug by running it against the broken build first.</li>
+        <li><strong>A boot assertion</strong> that loads the built site in a real browser and fails if the page is empty — before any other rendered check is believed.</li>
+      </ul>
+      <p>Both run on every pull request, on the build that job already produces.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Still open</h2>
+    <p class="sub">Two items need action outside this repository. Neither can be closed from code.</p>
+    <div class="grid2">
+      <div class="note bad">
+        <h3>Retired endpoints need undeploying</h3>
+        <p>
+          Deleting a function from the repository does <strong>not</strong> remove it from the
+          server — it keeps running its last deployed version. Five dead endpoints were deleted,
+          which quietly left one of them live: an importer that let anyone write records into the
+          developers table with no login at all.
+        </p>
+        <p>
+          They've been restored as harmless stubs that do nothing, so redeploying overwrites the
+          dangerous version. <strong>Someone still needs to delete them in the Supabase
+          dashboard</strong> to finish the job.
+        </p>
+      </div>
+      <div class="note bad">
+        <h3>The live site hasn't been checked by me</h3>
+        <p>
+          This session's network blocks <code>jbj.ae</code> and <code>lovable.app</code>, so every
+          "verified" claim here means verified against the code and a local production build — not
+          by loading the real site.
+        </p>
+        <p>
+          <strong>Please open jbj.ae and confirm it renders.</strong> The fix is proven locally;
+          it still needs publishing and a real look.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How this was checked</h2>
+    <ul class="t">
+      <li><strong>425 of 425 tests pass</strong>, across 40 files — including 8 new ones for the privacy scrubber. One of those caught a real bug in the scrubber's first version.</li>
+      <li><strong>The production build was actually run and loaded in a browser.</strong> That is how the blank page was found and how the fix was confirmed — not by reading configuration.</li>
+      <li><strong>All 25 modified backend endpoints were syntax-checked.</strong> A proper type-check wasn't possible (Deno isn't installed here), so they were also read individually.</li>
+      <li><strong>The orphaned-function count was recalculated</strong>: 105 of 506, not the ~210 estimated. The list is published as a review queue, not a delete list — it can't see endpoints wired up in outside dashboards.</li>
     </ul>
   </section>
 
   <footer>
-    Remediation of the JBJ Global Real Estate backend audit dated 17 August 2026 · 18 findings assessed ·
-    26 files changed on <code>claude/audit-report-3d-file-w335ta</code> ·
-    Roadmap items <code>JBJ-024</code> through <code>JBJ-028</code> ·
-    Code changes only — hosting, deployment and database remain under Lovable's control.
+    JBJ Global Real Estate backend audit, 17 Aug 2026 · 18 findings assessed, plus 1 found during remediation ·
+    Code changes only — publishing and database administration remain manual steps in Lovable and Supabase.
   </footer>
 </div>
 
@@ -592,359 +384,251 @@
 (function(){
   "use strict";
 
-  // ── Findings data ─────────────────────────────────────────────────────
-  // sev  = severity as the audit graded it (drives BEFORE colouring)
-  // out  = outcome after this session (drives AFTER colouring)
-  const LAYERS = [
-    { name:"Reliability",     key:"reliability" },
-    { name:"Integrations",    key:"integrations" },
-    { name:"Edge Functions",  key:"functions" },
-    { name:"Database & RLS",  key:"db" },
-    { name:"Auth & Roles",    key:"auth" }
+  var LAYERS = [
+    {n:"Reliability",   k:"rel"},
+    {n:"Integrations",  k:"int"},
+    {n:"Edge Functions",k:"fns"},
+    {n:"Database",      k:"db"},
+    {n:"Auth & Access", k:"auth"}
   ];
 
-  const F = [
-    // Auth
-    { id:"2.1", layer:"auth", sev:"high", out:"sealed", chip:"2.1 owner-auth split",
-      title:"Owner auth had two logic paths that disagreed",
-      path:"supabase/functions/_shared/owner-auth-middleware.ts",
-      before:"Granted access on email OR an owner/admin row in user_roles, while the Owner UI's verify-owner gate was email-only. A stray role row would have opened every owner-* function while the UI still refused.",
-      after:"Email allow-list only, identical to verify-owner. A caller holding an owner role row but no allow-listed email is now logged as a privilege-escalation attempt." },
+  // out: fix | part | clear | open
+  var F = [
+    {id:"2.2", l:"auth", sev:"high", out:"fix", chip:"2.2 checkout auth",
+     t:"Anyone could charge a purchase to someone else's account",
+     path:"supabase/functions/create-checkout/index.ts",
+     b:"The checkout endpoint had no login check at all. It accepted whichever account ID the caller typed in and attached it to the Stripe payment — the same field the system later reads to decide who gets what they paid for.",
+     a:"The account is now taken from the verified login session only, and the caller-supplied field is gone entirely. Guests can still check out; they just can't check out as somebody else."},
 
-    { id:"2.2", layer:"auth", sev:"high", out:"sealed", chip:"2.2 create-checkout",
-      title:"create-checkout had no authentication check at all",
-      path:"supabase/functions/create-checkout/index.ts",
-      before:"No JWT verification anywhere. Accepted a client-supplied userId and attached it to the Stripe session as metadata.userId — the field downstream entitlement logic reads.",
-      after:"Identity derived from the verified session only; the client-supplied field is gone from both the function and its caller. Guest checkout still works, but a purchase can no longer be attributed to another account. Rate limited and CORS-scoped while in there." },
+    {id:"2.1", l:"auth", sev:"high", out:"fix", chip:"2.1 owner access",
+     t:"The owner check disagreed with itself",
+     path:"supabase/functions/_shared/owner-auth-middleware.ts",
+     b:"The screen and the server used different rules for who counts as the owner. The server also accepted a database flag; the screen only accepted the approved email list. A stray flag would have opened the back end while the UI kept refusing.",
+     a:"Both now use the same email list. A caller with the flag but not the email is recorded as an attempted break-in."},
 
-    { id:"2.3", layer:"auth", sev:"low", out:"cleared", chip:"2.3 client guards",
-      title:"Route guards are client-side UX only",
-      path:"src/components/OwnerGuard.tsx, BrokerGuard.tsx",
-      before:"Spoofable client-side redirects — normal for an SPA.",
-      after:"No change needed. Confirmed every owner-only edge function independently re-verifies server-side, so disabling JavaScript yields a broken UI, not access." },
+    {id:"2.3", l:"auth", sev:"low", out:"clear",  chip:"2.3 page guards",
+     t:"Page guards are cosmetic only",
+     path:"src/components/OwnerGuard.tsx",
+     b:"Front-end guards can be bypassed by anyone who knows how — normal for this kind of app.",
+     a:"No change needed. Confirmed every owner-only endpoint re-checks on the server, so bypassing the screen gets you a broken page, not access."},
 
-    // Database
-    { id:"3.1", layer:"db", sev:"info", out:"cleared", chip:"3.1 PII exposure",
-      title:"Two PII tables were publicly readable for months, then fixed",
-      path:"leads, email_verifications, phone_verifications",
-      before:"leads shipped with SELECT USING (true); OTP tables shipped with FOR ALL USING (true) and plaintext codes.",
-      after:"Already closed before the audit ran — codes hashed, anon access reduced to insert-only. Flagged here only because the exposure window is worth knowing about, not as an open item." },
+    {id:"3.1", l:"db", sev:"info", out:"clear", chip:"3.1 old PII leak",
+     t:"Customer contact details were once publicly readable",
+     path:"leads, email_verifications",
+     b:"Names, emails and phone numbers were readable by anyone for several months, and one-time login codes were stored as plain text.",
+     a:"Already closed before this audit. Noted here only because the exposure window is worth knowing about, not as an open item."},
 
-    { id:"3.2", layer:"db", sev:"medium", out:"cleared", chip:"3.2 user_sessions",
-      title:"user_sessions UPDATE policy said to be unrestricted",
-      path:"supabase/migrations/20260706161023_*.sql",
-      before:"Reported as USING (true) — any caller could modify another user's session row.",
-      after:"Already fixed on 6 July, before the audit; the report read the January migration and missed the correction. Re-asserted idempotently in the new migration so a later INSERT-only migration can't regress it." },
+    {id:"3.2", l:"db", sev:"medium", out:"clear", chip:"3.2 session edits",
+     t:"“Anyone can edit anyone's session record”",
+     path:"supabase/migrations/20260706161023_*.sql",
+     b:"Reported as wide open to editing by any caller.",
+     a:"Already fixed on 6 July, before the audit ran. Re-asserted so a later change can't quietly undo it again."},
 
-    { id:"3.3", layer:"db", sev:"medium", out:"cleared", chip:"3.3 rel_* policies",
-      title:"rel_listings / rel_projects / rel_deals said to have zero policies",
-      path:"supabase/migrations/20260504141024_*.sql",
-      before:"Reported as RLS-enabled with no CREATE POLICY anywhere in 1,155 migrations.",
-      after:"False positive. Policies exist — created in a DO $$ … EXECUTE format(…) loop the audit's grep could not see. Verification query recorded in the new migration." },
+    {id:"3.3", l:"db", sev:"medium", out:"clear", chip:"3.3 missing rules",
+     t:"“Three tables have security on but no rules”",
+     path:"supabase/migrations/20260504141024_*.sql",
+     b:"Reported as locked-down-by-accident, with no access rules written anywhere.",
+     a:"Not real. The rules are generated in a loop for twelve tables at once, which the audit's text search couldn't see."},
 
-    { id:"3.4", layer:"db", sev:"medium", out:"sealed", chip:"3.4 FK cascade",
-      title:"Cascade-delete risk on developers → projects",
-      path:"supabase/migrations/20260817120000_*.sql",
-      before:"projects.developer_id was ON DELETE CASCADE, so deleting one developer row wiped every project beneath it and — via the projects → images/documents cascades — all of their media.",
-      after:"Changed to ON DELETE SET NULL, matching the safer pattern the newer rel_* module already used. The child cascades are deliberately kept; breaking the top link is the fix. A partial index keeps orphaned projects findable." },
+    {id:"3.4", l:"db", sev:"medium", out:"fix", chip:"3.4 delete cascade",
+     t:"Deleting one developer erased their entire portfolio",
+     path:"supabase/migrations/20260817120000_*.sql",
+     b:"Removing a single developer record silently deleted every project under it, and every image and document under those. One mis-click, no recovery.",
+     a:"Projects now survive and simply lose the link, which staff can re-point. Deleting a project still removes its own images, which is intended."},
 
-    // Edge functions
-    { id:"4.1", layer:"functions", sev:"high", out:"partial", chip:"4.1 service-role ×225",
-      title:"225 functions use service-role with no visible caller check",
-      path:"supabase/functions/**",
-      before:"377 of 507 functions use the service-role key; 152 check the caller first. The rest are mostly internal cron jobs, but a real subset were public-facing.",
-      after:"Partial. The public-facing endpoints that mattered are now gated or validated (4.2, 4.3, 4.4). The remaining long tail is a per-function pass, tracked as JBJ-028 — not something a sweep can close honestly." },
+    {id:"4.2", l:"fns", sev:"medium", out:"fix", chip:"4.2 open cron jobs",
+     t:"Two maintenance jobs could be triggered by anyone",
+     path:"crm-purge-trash, compute-user-scores",
+     b:"One permanently deletes records older than 30 days; the other reads across sales and analytics data for any account you name. Neither checked who was calling.",
+     a:"Both now require an internal key. The scoring job also accepts staff, since the admin page uses it, and validates the account ID."},
 
-    { id:"4.2", layer:"functions", sev:"medium", out:"sealed", chip:"4.2 ungated cron",
-      title:"Two internal-only functions had no auth or shared secret",
-      path:"crm-purge-trash, compute-user-scores",
-      before:"crm-purge-trash hard-deletes CRM records older than 30 days; compute-user-scores reads across analytics and CRM for an arbitrary user_id. Neither enforced anything — the public anon key was enough.",
-      after:"Both require an internal caller via a new _shared/internal-auth.ts (service-role bearer or x-cron-secret, constant-time compared, fails closed). compute-user-scores also accepts staff, since the admin page calls it, and now validates user_id as a UUID." },
+    {id:"4.4", l:"fns", sev:"medium", out:"fix", chip:"4.4 signup checks",
+     t:"Account signup accepted almost anything",
+     path:"supabase/functions/register-user/index.ts",
+     b:"The endpoint that creates accounts and writes to six tables took its input largely on trust.",
+     a:"Full validation with length limits. Rejections name the bad field and nothing more."},
 
-    { id:"4.3", layer:"functions", sev:"medium", out:"partial", chip:"4.3 rate limits",
-      title:"Rate limiting adopted by only 29 of 507 functions",
-      path:"_shared/rate-limit-middleware.ts",
-      before:"A working shared limiter existed but most public write endpoints didn't call it.",
-      after:"Partial, and the finding was partly stale — newsletter-subscribe and capture-lead already had it. Added to create-checkout, register-user and booking-public-create. The wider rollout across 507 functions remains open." },
+    {id:"4.3", l:"fns", sev:"medium", out:"fix", chip:"4.3 rate limits",
+     t:"Anonymous visitors could run up your AI bill",
+     path:"25 AI and voice endpoints",
+     b:"Only 29 of 507 endpoints limited how often they could be called. Twenty-five AI and voice endpoints reachable from the website had neither a login check nor a limit — each call spends real credits.",
+     a:"All 25 now limited to 15 calls per 15 minutes per visitor, using the limiter that already existed. Every one syntax-checked."},
 
-    { id:"4.4", layer:"functions", sev:"medium", out:"sealed", chip:"4.4 validation",
-      title:"Input validation inconsistent on public submission endpoints",
-      path:"supabase/functions/register-user/index.ts",
-      before:"register-user took raw string coercion on a body that creates auth users and writes six tables.",
-      after:"Full zod schema with bounded lengths; parse failures return field names only, never the zod issue tree. The other named endpoints were re-checked and already had validation." },
+    {id:"4.6", l:"fns", sev:"low", out:"open", chip:"4.6 retired endpoints",
+     t:"Deleted endpoints were still running",
+     path:"bulk-import-devs-2027-6 + 4 test endpoints",
+     b:"Four leftover test endpoints and a one-off importer were still deployed. The importer let anyone add or overwrite developer records with no login.",
+     a:"Deleting them from the code was the wrong fix — it doesn't take them offline. They're now harmless stubs so redeploying overwrites the dangerous version. Still needs deleting in Supabase."},
 
-    { id:"4.5", layer:"functions", sev:"low", out:"partial", chip:"4.5 wildcard CORS",
-      title:"357 of 507 functions wildcard CORS to any origin",
-      path:"supabase/functions/**",
-      before:"95% of functions setting a CORS header allow *. Normal for public reads, riskier on state-changing endpoints.",
-      after:"Partial. create-checkout moved to the shared origin-validating helper. A full pass over the remaining write endpoints is not done." },
+    {id:"4.1", l:"fns", sev:"high", out:"part", chip:"4.1 admin-level access",
+     t:"225 endpoints run with full database powers, unchecked",
+     path:"supabase/functions/**",
+     b:"377 of 507 endpoints bypass normal database permissions. 152 verify who's calling first; the rest don't. Most are internal jobs, but some were public.",
+     a:"Partly closed. The public ones that mattered are now protected. The rest needs an endpoint-by-endpoint review — a sweep can't safely close it, so it isn't claimed as closed."},
 
-    { id:"4.6", layer:"functions", sev:"low", out:"open", chip:"4.6 dead functions",
-      title:"Leftover smoke-test and one-off functions in the production tree",
-      path:"bundle/esm/npm/std-smoke-test, bulk-import-devs-2027-6",
-      before:"Four trivial echo endpoints plus a dated one-off importer, all deployed and publicly reachable. The importer turned out to be worse than dead code — it does unauthenticated service-role writes into developers.",
-      after:"Deleted from the repo — but a repo deletion does not undeploy them. They stay publicly callable until explicitly undeployed in Supabase. Open, tracked as JBJ-027." },
+    {id:"4.5", l:"fns", sev:"low", out:"part", chip:"4.5 open to any site",
+     t:"357 endpoints accept requests from any website",
+     path:"supabase/functions/**",
+     b:"Fine for public read-only data, riskier for endpoints that change things.",
+     a:"Partly closed. Checkout is now restricted to your own domains. A full pass over the rest isn't done."},
 
-    { id:"4.7", layer:"functions", sev:"info", out:"open", chip:"4.7 ~210 orphans",
-      title:"Roughly 210 functions have no traceable caller",
-      path:"supabase/functions/**",
-      before:"Cross-referencing function names against frontend invokes and known cron wiring left ~210 unmatched.",
-      after:"Open, not started. The audit's own estimate is acknowledged as high — it can't see function-to-function calls, dynamic invoke strings, or webhook targets configured outside this repo. Tracked as JBJ-028." },
+    {id:"4.7", l:"fns", sev:"info", out:"part", chip:"4.7 unused endpoints",
+     t:"Roughly 210 endpoints looked unused",
+     path:"docs/audits/orphan-functions.md",
+     b:"The audit couldn't find anything calling about 210 endpoints, and flagged its own number as probably too high.",
+     a:"Recounted properly, including endpoints calling each other: 105, about half. Published as a review queue with the method and the caveats — it can't see endpoints wired up in Stripe or Vapi dashboards."},
 
-    // Integrations
-    { id:"5.1", layer:"integrations", sev:"medium", out:"sealed", chip:"5.1 email relay",
-      title:"email-send-gateway let any authenticated user send arbitrary mail",
-      path:"supabase/functions/email-send-gateway/index.ts",
-      before:"Documented as “not publicly callable”, and it did require a JWT — but any authenticated account, including a fresh self-service signup, could set arbitrary from, to, subject and html at 10/hour from JBJ's own sending domain.",
-      after:"Sender-domain allow-list enforced for every caller, internal ones included. Non-staff callers may now only send to their own verified address or a JBJ address; staff and internal service calls keep arbitrary recipients, so Document Studio still works." },
+    {id:"5.1", l:"int", sev:"medium", out:"fix", chip:"5.1 email relay",
+     t:"Any signed-up user could send email as JBJ",
+     path:"supabase/functions/email-send-gateway/index.ts",
+     b:"Anyone with an account — including a brand-new free signup — could send email from your domain, to any address, with any content, ten times an hour. That's a ready-made phishing tool wearing your name.",
+     a:"Only your own domains can be used as the sender. Ordinary users can now only email themselves or a JBJ address. Staff tools are unaffected."},
 
-    // Reliability
-    { id:"6.1", layer:"reliability", sev:"low", out:"sealed", chip:"6.1 error leaks",
-      title:"Functions returned raw error messages to the client",
-      path:"submit-lead, distribute-leads, flag-lead-junk, sarah-search, ai-listing-extractor, +2",
-      before:"Raw error.message from caught exceptions returned in the API response, leaking column and constraint names.",
-      after:"Static generic strings across all seven, matching the pattern advisory-desk-request already used. Real errors still logged server-side, so nothing is lost for debugging." },
+    {id:"6.1", l:"rel", sev:"low", out:"fix", chip:"6.1 error leaks",
+     t:"Error messages exposed database internals",
+     path:"7 endpoints",
+     b:"Seven endpoints returned raw database errors to whoever triggered them, revealing internal table and column names.",
+     a:"All seven return a plain message now. The real error is still written to the logs, so nothing is lost for debugging."},
 
-    { id:"6.2", layer:"reliability", sev:"low", out:"sealed", chip:"6.2 Sentry PII",
-      title:"Sentry error capture had no PII-scrubbing hook",
-      path:"src/lib/sentry.ts",
-      before:"No beforeSend or redaction step — arbitrary extra data attached to captures, which can include user-entered form data from an error boundary, went to Sentry unfiltered.",
-      after:"Recursive scrubbing on ~35 PII-shaped key patterns plus free-text email and phone matching, applied at the captureToSentry source and again in beforeSend / beforeBreadcrumb so Sentry's own auto-collected data is covered. Depth- and cycle-bounded. 8 unit tests, one of which caught a real bug in the first implementation." },
+    {id:"6.2", l:"rel", sev:"low", out:"fix", chip:"6.2 privacy in logs",
+     t:"Crash reports could carry customer data",
+     path:"src/lib/sentry.ts",
+     b:"When something broke, the crash report could include whatever the customer had typed into the form — names, emails, phone numbers — sent to an outside service unfiltered.",
+     a:"Around 35 kinds of personal data are now stripped out, plus any email or phone number spotted in free text. Covered by 8 tests, one of which caught a real bug in the first attempt."},
 
-    { id:"6.3", layer:"reliability", sev:"low", out:"sealed", chip:"6.3 AI timeout",
-      title:"No timeout around the AI-gateway call",
-      path:"_shared/ai-utils.ts, _shared/ai-gateway.ts",
-      before:"The shared helper used by most ai-* functions had no timeout wrapper. A hung gateway call left the user watching a spinner until the platform's own function timeout killed it.",
-      after:"60-second AbortController on both AI paths, surfacing a clean error instead of a hang. A caller that supplies its own signal keeps control." }
+    {id:"6.3", l:"rel", sev:"low", out:"fix", chip:"6.3 hung AI calls",
+     t:"A stuck AI request span forever",
+     path:"_shared/ai-utils.ts",
+     b:"If the AI service stopped responding, the customer watched a spinner until the platform eventually killed it.",
+     a:"Cuts off after 60 seconds with a clear error."},
+
+    {id:"NEW", l:"rel", sev:"high", out:"fix", chip:"★ blank page",
+     t:"The entire site rendered a blank page",
+     path:"vite.config.ts",
+     b:"Not in the audit — found while verifying the work. Two code bundles depended on each other in a loop, so the charts bundle ran before React was ready and crashed instantly. Every page was empty.",
+     a:"Fixed by letting the bundler decide the grouping instead of forcing it. Confirmed in a real browser: page content went from 0 to 400,783 characters. Two new automated guards stop it recurring."}
   ];
 
-  const OUT_LABEL = { sealed:"Fixed", partial:"Partial", cleared:"No action needed", open:"Open" };
-  const SEV_LABEL = { high:"High", medium:"Medium", low:"Low", info:"Info" };
+  var OUT = {fix:"Fixed", part:"Partly closed", clear:"Not an issue", open:"Still open"};
 
-  const root = document.getElementById("root");
-  const stack = document.getElementById("stack");
-  const ledger = document.getElementById("ledger");
-  const tallies = document.getElementById("tallies");
-  const legend = document.getElementById("legend");
-  const note = document.getElementById("switch-note");
-  const btnBefore = document.getElementById("btn-before");
-  const btnAfter = document.getElementById("btn-after");
+  var root=document.getElementById("root"), stack=document.getElementById("stack"),
+      cards=document.getElementById("cards"), score=document.getElementById("score"),
+      legend=document.getElementById("legend"), note=document.getElementById("s-note"),
+      bB=document.getElementById("b-before"), bA=document.getElementById("b-after");
 
-  // ── Build the plates ──────────────────────────────────────────────────
-  LAYERS.forEach(function(layer, i){
-    const items = F.filter(function(f){ return f.layer === layer.key; });
-    const plate = document.createElement("div");
-    plate.className = "plate";
-    plate.setAttribute("data-layer", String(i));
-
-    const head = document.createElement("div");
-    head.className = "plate-head";
-    const nm = document.createElement("span");
-    nm.className = "plate-name";
-    nm.textContent = layer.name;
-    const ct = document.createElement("span");
-    ct.className = "plate-count";
-    ct.textContent = items.length + (items.length === 1 ? " finding" : " findings");
-    head.appendChild(nm); head.appendChild(ct);
-
-    const chips = document.createElement("div");
-    chips.className = "chips";
+  LAYERS.forEach(function(L,i){
+    var items=F.filter(function(f){return f.l===L.k;});
+    var p=document.createElement("div");
+    p.className="plate"; p.setAttribute("data-l",String(i));
+    var h=document.createElement("div"); h.className="p-head";
+    var nm=document.createElement("span"); nm.className="p-name"; nm.textContent=L.n;
+    var ct=document.createElement("span"); ct.className="p-n";
+    ct.textContent=items.length+(items.length===1?" finding":" findings");
+    h.appendChild(nm); h.appendChild(ct);
+    var cw=document.createElement("div"); cw.className="chips";
     items.forEach(function(f){
-      const c = document.createElement("span");
-      c.className = "chip";
-      c.setAttribute("data-sev", f.sev);
-      c.setAttribute("data-out", f.out);
-      const d = document.createElement("i");
-      d.className = "dot";
-      c.appendChild(d);
+      var c=document.createElement("span");
+      c.className="chip"; c.setAttribute("data-sev",f.sev); c.setAttribute("data-out",f.out);
+      var d=document.createElement("i"); c.appendChild(d);
       c.appendChild(document.createTextNode(f.chip));
-      chips.appendChild(c);
+      cw.appendChild(c);
     });
-
-    plate.appendChild(head);
-    plate.appendChild(chips);
-    stack.appendChild(plate);
+    p.appendChild(h); p.appendChild(cw); stack.appendChild(p);
   });
 
-  // ── Ledger ────────────────────────────────────────────────────────────
-  const ordered = LAYERS.slice().reverse().reduce(function(acc, l){
-    return acc.concat(F.filter(function(f){ return f.layer === l.key; }));
-  }, []);
+  LAYERS.slice().reverse().reduce(function(acc,L){
+    return acc.concat(F.filter(function(f){return f.l===L.k;}));
+  },[]).forEach(function(f){
+    var el=document.createElement("article");
+    el.className="fc"; el.setAttribute("data-out",f.out);
 
-  ordered.forEach(function(f){
-    const tr = document.createElement("tr");
+    var top=document.createElement("div"); top.className="fc-top";
+    var id=document.createElement("span"); id.className="fc-id"; id.textContent=f.id;
+    var ti=document.createElement("span"); ti.className="fc-title"; ti.textContent=f.t;
+    var tg=document.createElement("span"); tg.className="tag"; tg.setAttribute("data-t",f.out);
+    tg.textContent=OUT[f.out];
+    top.appendChild(id); top.appendChild(ti); top.appendChild(tg);
 
-    const tdId = document.createElement("td");
-    tdId.className = "fid";
-    tdId.textContent = f.id;
+    var body=document.createElement("div"); body.className="fc-body";
+    [["before","Before",f.b],["after","After",f.a]].forEach(function(pair){
+      var c=document.createElement("div"); c.className="col "+pair[0];
+      var hh=document.createElement("h4"); hh.textContent=pair[1];
+      var pp=document.createElement("p"); pp.textContent=pair[2];
+      c.appendChild(hh); c.appendChild(pp); body.appendChild(c);
+    });
 
-    const tdWhat = document.createElement("td");
-    const t = document.createElement("strong");
-    t.className = "ftitle";
-    t.textContent = f.title;
-    const p = document.createElement("span");
-    p.className = "fpath";
-    p.textContent = f.path;
-    tdWhat.appendChild(t); tdWhat.appendChild(p);
-
-    const tdBefore = document.createElement("td");
-    const sevPill = document.createElement("span");
-    sevPill.className = "pill";
-    sevPill.setAttribute("data-p", f.sev);
-    sevPill.textContent = SEV_LABEL[f.sev];
-    const bTxt = document.createElement("span");
-    bTxt.className = "fnote";
-    bTxt.textContent = f.before;
-    tdBefore.appendChild(sevPill); tdBefore.appendChild(bTxt);
-
-    const tdAfter = document.createElement("td");
-    const outPill = document.createElement("span");
-    outPill.className = "pill";
-    outPill.setAttribute("data-p", f.out);
-    outPill.textContent = OUT_LABEL[f.out];
-    const aTxt = document.createElement("span");
-    aTxt.className = "fnote";
-    aTxt.textContent = f.after;
-    tdAfter.appendChild(outPill); tdAfter.appendChild(aTxt);
-
-    tr.appendChild(tdId); tr.appendChild(tdWhat);
-    tr.appendChild(tdBefore); tr.appendChild(tdAfter);
-    ledger.appendChild(tr);
+    var pa=document.createElement("div"); pa.className="fc-path"; pa.textContent=f.path;
+    el.appendChild(top); el.appendChild(body); el.appendChild(pa);
+    cards.appendChild(el);
   });
 
-  // ── Tallies ───────────────────────────────────────────────────────────
-  function count(pred){ return F.filter(pred).length; }
+  function n(o){return F.filter(function(f){return f.out===o;}).length;}
+  [["s-total",F.length,"Findings assessed",""],
+   ["s-fix",n("fix"),"Fixed","fix"],
+   ["s-part",n("part"),"Partly closed","part"],
+   ["s-clear",n("clear"),"Weren't real issues","clear"],
+   ["s-open",n("open"),"Still open","open"]].forEach(function(r){
+    var d=document.createElement("div"); d.className="s";
+    if(r[3]) d.setAttribute("data-t",r[3]);
+    var a=document.createElement("div"); a.className="n"; a.textContent=String(r[1]);
+    var b=document.createElement("div"); b.className="k"; b.textContent=r[2];
+    d.appendChild(a); d.appendChild(b); score.appendChild(d);
+  });
 
-  const TALLY = {
-    before: [
-      { n: F.length,                                     k:"Findings assessed", tone:"" },
-      { n: count(function(f){return f.sev==="high";}),   k:"Graded high",       tone:"breach" },
-      { n: count(function(f){return f.sev==="medium";}), k:"Graded medium",     tone:"partial" },
-      { n: count(function(f){return f.sev==="low"||f.sev==="info";}), k:"Low / info", tone:"cleared" },
-      { n: 0,                                            k:"Fixed",             tone:"sealed" }
-    ],
-    after: [
-      { n: F.length,                                        k:"Findings assessed", tone:"" },
-      { n: count(function(f){return f.out==="sealed";}),    k:"Fixed",             tone:"sealed" },
-      { n: count(function(f){return f.out==="partial";}),   k:"Partially closed",  tone:"partial" },
-      { n: count(function(f){return f.out==="cleared";}),   k:"Cleared on review", tone:"cleared" },
-      { n: count(function(f){return f.out==="open";}),      k:"Still open",        tone:"breach" }
-    ]
+  var LG={
+    before:[["var(--open)","High severity"],["var(--part)","Medium"],["var(--muted)","Low"],["var(--clear)","Informational"]],
+    after:[["var(--fix)","Fixed"],["var(--part)","Partly closed"],["var(--clear)","Not an issue"],["var(--open)","Still open"]]
   };
-
-  function renderTallies(state){
-    tallies.textContent = "";
-    TALLY[state].forEach(function(t){
-      const el = document.createElement("div");
-      el.className = "tally";
-      if (t.tone) el.setAttribute("data-tone", t.tone);
-      const n = document.createElement("div");
-      n.className = "n";
-      n.textContent = String(t.n);
-      const k = document.createElement("div");
-      k.className = "k";
-      k.textContent = t.k;
-      el.appendChild(n); el.appendChild(k);
-      tallies.appendChild(el);
+  function legendFor(s){
+    legend.textContent="";
+    LG[s].forEach(function(p){
+      var x=document.createElement("span"); var i=document.createElement("i");
+      i.style.background=p[0]; x.appendChild(i);
+      x.appendChild(document.createTextNode(p[1])); legend.appendChild(x);
     });
   }
-
-  // ── Legend ────────────────────────────────────────────────────────────
-  const LEGEND = {
-    before: [
-      ["var(--breach)","High"], ["var(--partial)","Medium"],
-      ["var(--muted)","Low"],   ["var(--cleared)","Informational"]
-    ],
-    after: [
-      ["var(--sealed)","Fixed"], ["var(--partial)","Partial"],
-      ["var(--cleared)","Cleared on review"], ["var(--breach)","Still open"]
-    ]
-  };
-
-  function renderLegend(state){
-    legend.textContent = "";
-    LEGEND[state].forEach(function(pair){
-      const s = document.createElement("span");
-      const i = document.createElement("i");
-      i.style.background = pair[0];
-      s.appendChild(i);
-      s.appendChild(document.createTextNode(pair[1]));
-      legend.appendChild(s);
-    });
+  var NOTES={before:"Coloured by the severity the auditor assigned.",
+             after:"Coloured by outcome. The one red chip is the item still needing action in Supabase."};
+  function setState(s){
+    var after=s==="after";
+    root.classList.toggle("is-after",after);
+    bB.setAttribute("aria-pressed",String(!after));
+    bA.setAttribute("aria-pressed",String(after));
+    note.textContent=NOTES[s]; legendFor(s);
   }
+  bB.addEventListener("click",function(){setState("before");});
+  bA.addEventListener("click",function(){setState("after");});
 
-  // ── State switch ──────────────────────────────────────────────────────
-  const NOTES = {
-    before: "As the audit found it. Severity colouring is the auditor's own.",
-    after:  "After verification and remediation. Two items are still open — deliberately shown in red."
-  };
-
-  function setState(state){
-    const isAfter = state === "after";
-    root.classList.toggle("is-after", isAfter);
-    btnBefore.setAttribute("aria-pressed", String(!isAfter));
-    btnAfter.setAttribute("aria-pressed", String(isAfter));
-    note.textContent = NOTES[state];
-    renderTallies(state);
-    renderLegend(state);
-  }
-
-  btnBefore.addEventListener("click", function(){ setState("before"); });
-  btnAfter.addEventListener("click", function(){ setState("after"); });
-
-  // ── Orbit ─────────────────────────────────────────────────────────────
-  const HOME = { x:56, z:-30 };
-  let rot = { x:HOME.x, z:HOME.z };
-  let drag = null;
-  const stage = document.getElementById("stage");
-
-  function apply(){
-    stack.style.transform = "rotateX(" + rot.x + "deg) rotateZ(" + rot.z + "deg)";
-  }
-  function clampX(v){ return Math.max(12, Math.min(84, v)); }
-
-  stage.addEventListener("pointerdown", function(e){
-    if (e.target.closest(".reset")) return;
-    drag = { x:e.clientX, y:e.clientY, rx:rot.x, rz:rot.z };
-    stack.classList.add("free");
-    stage.classList.add("dragging");
+  var HOME={x:55,z:-28}, rot={x:HOME.x,z:HOME.z}, drag=null;
+  var stage=document.getElementById("stage");
+  function apply(){stack.style.transform="rotateX("+rot.x+"deg) rotateZ("+rot.z+"deg)";}
+  function cl(v){return Math.max(14,Math.min(84,v));}
+  stage.addEventListener("pointerdown",function(e){
+    if(e.target.closest(".reset"))return;
+    drag={x:e.clientX,y:e.clientY,rx:rot.x,rz:rot.z};
+    stack.classList.add("free"); stage.classList.add("dragging");
     stage.setPointerCapture(e.pointerId);
   });
-  stage.addEventListener("pointermove", function(e){
-    if (!drag) return;
-    rot.z = drag.rz + (e.clientX - drag.x) * 0.42;
-    rot.x = clampX(drag.rx - (e.clientY - drag.y) * 0.32);
+  stage.addEventListener("pointermove",function(e){
+    if(!drag)return;
+    rot.z=drag.rz+(e.clientX-drag.x)*0.4;
+    rot.x=cl(drag.rx-(e.clientY-drag.y)*0.3);
     apply();
   });
-  function endDrag(e){
-    if (!drag) return;
-    drag = null;
-    stage.classList.remove("dragging");
-    if (e && e.pointerId != null && stage.hasPointerCapture(e.pointerId)) {
-      stage.releasePointerCapture(e.pointerId);
-    }
+  function end(e){
+    if(!drag)return; drag=null; stage.classList.remove("dragging");
+    if(e&&e.pointerId!=null&&stage.hasPointerCapture(e.pointerId))stage.releasePointerCapture(e.pointerId);
   }
-  stage.addEventListener("pointerup", endDrag);
-  stage.addEventListener("pointercancel", endDrag);
-
-  stage.addEventListener("keydown", function(e){
-    const step = e.shiftKey ? 12 : 5;
-    let handled = true;
-    stack.classList.add("free");
-    switch(e.key){
-      case "ArrowLeft":  rot.z -= step; break;
-      case "ArrowRight": rot.z += step; break;
-      case "ArrowUp":    rot.x = clampX(rot.x + step); break;
-      case "ArrowDown":  rot.x = clampX(rot.x - step); break;
-      default: handled = false;
-    }
-    if (handled){ e.preventDefault(); apply(); }
+  stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
+  stage.addEventListener("keydown",function(e){
+    var s=e.shiftKey?12:5, ok=true; stack.classList.add("free");
+    if(e.key==="ArrowLeft")rot.z-=s; else if(e.key==="ArrowRight")rot.z+=s;
+    else if(e.key==="ArrowUp")rot.x=cl(rot.x+s); else if(e.key==="ArrowDown")rot.x=cl(rot.x-s);
+    else ok=false;
+    if(ok){e.preventDefault();apply();}
   });
-
-  document.getElementById("reset").addEventListener("click", function(){
-    stack.classList.remove("free");
-    rot = { x:HOME.x, z:HOME.z };
-    stack.style.transform = "";
+  document.getElementById("reset").addEventListener("click",function(){
+    stack.classList.remove("free"); rot={x:HOME.x,z:HOME.z}; stack.style.transform="";
   });
 
   setState("before");
