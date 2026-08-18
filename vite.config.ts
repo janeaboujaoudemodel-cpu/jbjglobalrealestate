@@ -86,7 +86,7 @@ export default defineConfig(({ mode }) => {
             if (pkg('framer-motion') || pkg('motion-dom') || pkg('motion-utils')) return 'motion-vendor';
             if (id.includes('node_modules/@radix-ui/')) return 'ui-vendor';
             if (pkg('@tanstack/react-query') || pkg('@supabase/supabase-js') || id.includes('node_modules/@supabase/')) return 'data-vendor';
-            // JBJ-029 — recharts/d3 are deliberately NOT a manual chunk.
+            // JBJ-031 — recharts/d3 are deliberately NOT a manual chunk.
             //
             // Forcing them into `charts-vendor` produced a CIRCULAR chunk
             // dependency and a blank white site in production. The cause is

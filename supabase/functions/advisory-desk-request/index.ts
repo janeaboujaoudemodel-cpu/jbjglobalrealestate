@@ -15,6 +15,16 @@
  *     contact details the widget collected are accepted and the ticket is
  *     flagged visitor_kind = 'guest' so the owner sees it is unverified.
  *
+ * RATE LIMITING (JBJ-008 — gated/public split):
+ *
+ *  Only the public (unauthenticated) path is rate-limited: 5 req / 10 min per IP.
+ *  Authenticated callers (valid Bearer JWT) bypass the counter — they have already
+ *  gone through Supabase auth and IP-based limiting is not the right control for
+ *  them. The IP blocklist check still runs for all callers regardless.
+ *
+ *  Order matters: JWT resolution happens FIRST so the rate-limit call can receive
+ *  the skipRateLimit flag before any body parsing occurs.
+ *
  * Creates the ticket in public.advisory_desk_requests, emails the owner the
  * full visitor card with reply-by-email and reply-on-WhatsApp shortcuts, and
  * raises the in-app bell that deep-links into the owner backend queue.
@@ -95,14 +105,6 @@ const waDigits = (phone?: string | null) => (phone || "").replace(/\D/g, "");
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  // SECURITY: public intake — IP blocklist + rate limit (5 req / 10 min per IP).
-  const rl = await enforceRateLimit(
-    req,
-    { functionName: "advisory-desk-request", maxRequests: 5, windowMinutes: 10 },
-    corsHeaders,
-  );
-  if (rl.response) return rl.response;
-
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
       status,
@@ -110,21 +112,12 @@ Deno.serve(async (req) => {
     });
 
   try {
+    // ── Step 1: Resolve the caller's JWT FIRST.
+    //
+    // This must happen before the rate-limit call so we can pass skipRateLimit
+    // for authenticated callers. A missing or invalid token leaves user = null
+    // (guests still get the full per-IP rate limit). No body parsing yet.
     const authHeader = req.headers.get("Authorization") ?? "";
-
-    const parsed = BodySchema.safeParse(await req.json());
-    if (!parsed.success) return json({ error: parsed.error.flatten().fieldErrors }, 400);
-    const b = parsed.data;
-
-    const svc = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-      { auth: { persistSession: false } },
-    );
-
-    // Identity comes from the session when there is one. A ticket is never
-    // created for an unidentified visitor: without a session we require the
-    // contact details the chat widget already collected.
     let user: { id: string; email?: string; user_metadata?: Record<string, unknown> } | null = null;
     if (authHeader.startsWith("Bearer ")) {
       const userClient = createClient(
@@ -136,9 +129,40 @@ Deno.serve(async (req) => {
       user = data.user as typeof user;
     }
 
-    // Where did this come from? A gated page means the visitor MUST be signed
-    // in — that is the whole point of the gate. We refuse to mint a ticket for
-    // an "anonymous" visitor on a page no anonymous visitor can reach.
+    // ── Step 2: Rate limiting — public (guest) callers only.
+    //
+    // Authenticated callers bypass the 5-req/10-min per-IP counter via
+    // skipRateLimit: true. The IP blocklist check still runs for everyone.
+    // See JBJ-008 and the skipRateLimit JSDoc in rate-limit-middleware.ts.
+    const rl = await enforceRateLimit(
+      req,
+      {
+        functionName: "advisory-desk-request",
+        maxRequests: 5,
+        windowMinutes: 10,
+        skipRateLimit: !!user,
+      },
+      corsHeaders,
+      user?.id,
+    );
+    if (rl.response) return rl.response;
+
+    // ── Step 3: Parse and validate body.
+    const parsed = BodySchema.safeParse(await req.json());
+    if (!parsed.success) return json({ error: parsed.error.flatten().fieldErrors }, 400);
+    const b = parsed.data;
+
+    const svc = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      { auth: { persistSession: false } },
+    );
+
+    // ── Step 4: Gated surface check.
+    //
+    // A gated page can only be reached by signed-in users — an escalation from
+    // there without a session is a spoof attempt. user is already resolved in
+    // Step 1 so there is no second JWT call here.
     const gated = isGatedPath(b.pageSource);
     if (gated && !user) {
       console.warn("[advisory-desk-request] gated page without a session", {
@@ -247,7 +271,7 @@ Deno.serve(async (req) => {
       </p>
       <div style="background:linear-gradient(180deg,#064E3B 0%,#042c1c 55%,#000 100%);color:#ffffff;
                   padding:14px 16px;border-radius:10px;font-size:14px;line-height:1.5;">
-        “${esc(b.query)}”
+        "${esc(b.query)}"
       </div>
       <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin-top:16px;font-size:13px;color:#1A1A1A;">
         ${rows

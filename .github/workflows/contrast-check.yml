@@ -59,7 +59,7 @@ jobs:
       - name: Build app
         run: npm run build
 
-      # JBJ-029. A circular import between emitted chunks means one chunk
+      # JBJ-031. A circular import between emitted chunks means one chunk
       # runs before its dependency is initialised — a blank-page boot
       # failure in production. This exact bug shipped and took every route
       # down while unit tests, the build, and the rendered sweep below all
@@ -75,7 +75,7 @@ jobs:
             curl -sf http://localhost:8080 > /dev/null && break || sleep 1
           done
 
-      # JBJ-029. The contrast sweep below reported "0 violations" on all 56
+      # JBJ-031. The contrast sweep below reported "0 violations" on all 56
       # routes while the site was rendering nothing at all — axe found no
       # bad colour pairs because there were no elements. Assert the app
       # actually mounts before trusting any rendered check.

@@ -3,14 +3,20 @@
  * Fails if the production build contains a circular dependency between
  * emitted chunks.
  *
- * Why this exists (JBJ-029): `react-is` was left unrouted by
- * `manualChunks`, so Rollup put it in `charts-vendor` — and `react-vendor`
- * then had to import back out of `charts-vendor`. A circular chunk edge is
- * not a performance nit. `charts-vendor` is modulepreloaded first, so it
- * evaluated before React was initialised and threw
- * `Cannot read properties of undefined (reading 'useState')` at module
- * scope. #root stayed empty: the entire site rendered blank, in production,
- * for anyone who loaded it.
+ * Why this exists (JBJ-031): `manualChunks` forced recharts/d3 into a
+ * `charts-vendor` chunk, and Rollup hoisted its generated CommonJS interop
+ * helper into that same chunk. `react-vendor` then had to import the helper
+ * back out of `charts-vendor`, while `charts-vendor` imports React out of
+ * `react-vendor` — a cycle. A circular chunk edge is not a performance nit.
+ * `charts-vendor` is modulepreloaded first, so it evaluated before React was
+ * initialised and threw `Cannot read properties of undefined (reading
+ * 'useState')` at module scope. #root stayed empty: the entire site rendered
+ * blank, in production, for anyone who loaded it.
+ *
+ * Note the back-edge was a Rollup-*generated* helper, not a package, which
+ * is why an earlier attempt to fix it by routing `react-is` explicitly did
+ * nothing. No package-level rule can break that cycle — which is the reason
+ * this check reads the emitted output instead of reasoning about config.
  *
  * Nothing caught that. Every unit test passed, the build exited 0, and the
  * contrast sweep reported 0 violations on all 56 routes — because those
