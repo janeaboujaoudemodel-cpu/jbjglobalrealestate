@@ -3,6 +3,15 @@ import { createOpenAICompatible } from "npm:@ai-sdk/openai-compatible";
 
 const LOVABLE_AIG_RUN_ID_HEADER = "X-Lovable-AIG-Run-ID";
 
+/**
+ * Hard ceiling on any single AI-gateway request (backend audit, §6
+ * reliability). Without it, a hung upstream call blocks until the platform's
+ * own function timeout fires and the user just watches a stuck spinner.
+ * A caller that already passes its own `init.signal` keeps control — this
+ * only supplies a timeout when none was given.
+ */
+const AI_GATEWAY_TIMEOUT_MS = 60_000;
+
 export function createLovableAiGatewayRunIdFetch(initialRunId?: string) {
   let runId = initialRunId?.trim() || undefined;
   let resolveRunId: (value: string | undefined) => void = () => {};
@@ -27,12 +36,25 @@ export function createLovableAiGatewayRunIdFetch(initialRunId?: string) {
       if (runId && !headers.has(LOVABLE_AIG_RUN_ID_HEADER)) {
         headers.set(LOVABLE_AIG_RUN_ID_HEADER, runId);
       }
+      // Only impose our timeout when the caller didn't bring its own signal.
+      const timeoutSignal = init?.signal
+        ? undefined
+        : AbortSignal.timeout(AI_GATEWAY_TIMEOUT_MS);
       try {
-        const response = await fetch(input, { ...init, headers });
+        const response = await fetch(input, {
+          ...init,
+          headers,
+          ...(timeoutSignal && { signal: timeoutSignal }),
+        });
         publishRunId(response.headers.get(LOVABLE_AIG_RUN_ID_HEADER) ?? undefined);
         return response;
       } catch (error) {
         publishRunId(undefined);
+        if (error instanceof DOMException && error.name === "TimeoutError") {
+          throw new Error(
+            `AI gateway request timed out after ${AI_GATEWAY_TIMEOUT_MS}ms`,
+          );
+        }
         throw error;
       }
     },

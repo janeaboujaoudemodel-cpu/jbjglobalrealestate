@@ -6,6 +6,7 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { z } from 'npm:zod@3.23.8';
+import { enforceRateLimit } from '../_shared/rate-limit-middleware.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -177,10 +178,25 @@ async function notifyOwnersAboutBooking(sb: any, p: {
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+
+  // Audit 4.3: anonymous endpoint that creates appointments and sends email —
+  // 10 requests per IP per 15 minutes via the shared DB-backed limiter. The
+  // per-email code guards above stay as the second layer.
+  const { response: rateLimited } = await enforceRateLimit(
+    req,
+    { functionName: 'booking-public-create', maxRequests: 10, windowMinutes: 15, keyType: 'ip' },
+    corsHeaders,
+  );
+  if (rateLimited) return rateLimited;
+
   try {
-    const parsed = BodySchema.safeParse(await req.json());
+    const parsed = BodySchema.safeParse(await req.json().catch(() => null));
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.flatten() }), {
+      // Audit 6.1: field names only, not the full zod issue tree.
+      const fields = Array.from(new Set(parsed.error.issues.map((i) => i.path.join('.'))))
+        .filter(Boolean)
+        .slice(0, 10);
+      return new Response(JSON.stringify({ error: 'Invalid booking details', fields }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }

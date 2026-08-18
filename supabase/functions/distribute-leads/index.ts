@@ -113,12 +113,16 @@ ${candidates.slice(0, count * 2).map((l: any) => JSON.stringify({ id: l.id, sour
       .from('crm_lead_assignments')
       .insert(rows)
       .select('id, lead_id, ai_score');
-    if (insErr) return json({ error: insErr.message }, 500);
+    if (insErr) {
+      // Audit 6.1: log the driver message, return a static one.
+      console.error('[distribute-leads] assignment insert failed:', insErr.message);
+      return json({ error: 'An internal error occurred' }, 500);
+    }
 
     return json({ ok: true, batchId, count: inserted?.length ?? 0, ai_used: scored.length > 0 });
   } catch (e) {
     console.error(e);
-    return json({ error: (e as Error).message }, 500);
+    return json({ error: 'An internal error occurred' }, 500);
   }
 });
 
