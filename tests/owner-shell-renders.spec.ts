@@ -74,6 +74,22 @@ async function openAsOwner(
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
 
+  // Boot diagnostics. `contentHeight` returning 0 means #root exists but has no
+  // children — React never mounted — which is a different failure from the
+  // collapsed-shell one this spec is about, and index.html's boot overlay
+  // appends to <body> rather than #root, so it does not show up in the height.
+  // Without capturing these, a harness problem and a genuine product collapse
+  // are indistinguishable in CI.
+  const bootErrors: string[] = [];
+  page.on('pageerror', (err) => bootErrors.push(`pageerror: ${err.message}`));
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') bootErrors.push(`console.error: ${msg.text()}`);
+  });
+  page.on('requestfailed', (req) => {
+    bootErrors.push(`requestfailed: ${req.url()} (${req.failure()?.errorText ?? 'unknown'})`);
+  });
+  (page as unknown as { __bootErrors: string[] }).__bootErrors = bootErrors;
+
   await ctx.addInitScript(
     ([ref, session]) => {
       localStorage.setItem(`sb-${ref}-auth-token`, JSON.stringify(session));
@@ -107,6 +123,29 @@ async function openAsOwner(
   return { ctx, page };
 }
 
+/** Everything useful about why a page came up empty, for the failure message. */
+async function diagnose(page: import('@playwright/test').Page) {
+  const dom = await page.evaluate(() => {
+    const root = document.getElementById('root');
+    return {
+      rootPresent: !!root,
+      rootChildren: root ? root.children.length : -1,
+      rootHtmlHead: root ? root.innerHTML.slice(0, 200) : '(no #root)',
+      bodyText: (document.body.innerText || '').trim().slice(0, 400),
+      bootOverlay: document.body.innerText.includes('Boot Error'),
+      scriptCount: document.querySelectorAll('script').length,
+    };
+  });
+  const errs = (page as unknown as { __bootErrors: string[] }).__bootErrors ?? [];
+  return [
+    `#root present=${dom.rootPresent} children=${dom.rootChildren} scripts=${dom.scriptCount}`,
+    `boot overlay shown: ${dom.bootOverlay}`,
+    `#root innerHTML[0:200]: ${dom.rootHtmlHead}`,
+    `body text[0:400]: ${dom.bodyText}`,
+    errs.length ? `page errors:\n  - ${errs.slice(0, 12).join('\n  - ')}` : 'page errors: none captured',
+  ].join('\n');
+}
+
 test.describe('Owner portal renders (audit finding 3.1)', () => {
   for (const route of OWNER_ROUTES) {
     test(`content occupies real height @ ${route}`, async ({ browser }) => {
@@ -115,7 +154,11 @@ test.describe('Owner portal renders (audit finding 3.1)', () => {
       const height = await contentHeight(page);
       const text = ((await page.locator('body').innerText()) || '').trim();
 
-      expect(height, `${route} rendered a collapsed container (tallest #root child was ${height}px)`).toBeGreaterThan(200);
+      const why = await diagnose(page);
+      expect(
+        height,
+        `${route} rendered a collapsed container (tallest #root child was ${height}px)\n${why}`,
+      ).toBeGreaterThan(200);
       expect(text.length, `${route} rendered no visible text`).toBeGreaterThan(20);
 
       await ctx.close();
@@ -128,9 +171,10 @@ test.describe('Owner portal renders (audit finding 3.1)', () => {
     test(`content still renders when verify-owner is ${verify}`, async ({ browser }) => {
       const { ctx, page } = await openAsOwner(browser, '/owner/media-ingest', verify);
       const height = await contentHeight(page);
+      const why = await diagnose(page);
       expect(
         height,
-        `owner shell collapsed to ${height}px while verify-owner was ${verify}`,
+        `owner shell collapsed to ${height}px while verify-owner was ${verify}\n${why}`,
       ).toBeGreaterThan(200);
       await ctx.close();
     });
