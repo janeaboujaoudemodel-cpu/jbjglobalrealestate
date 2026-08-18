@@ -17,6 +17,7 @@ import asyncio, json, os, sys
 from pathlib import Path
 from PIL import Image
 from playwright.async_api import async_playwright
+from playwright.async_api import TimeoutError as PWTimeout
 
 HERE = Path(__file__).parent
 OUT = HERE / "artifacts"
@@ -25,6 +26,11 @@ BASE = os.environ.get("TOOL_AUDIT_BASE_URL", "http://localhost:8080")
 VIEWPORT = {"width": 1280, "height": 1800}
 
 THRESHOLDS = {"champagnePixels": 400, "darkInkPixels": 400}
+
+# The emerald tool shell. Routes without one are not audited by this
+# script - they are reported as "skipped", never as a pass.
+SHELL_SELECTOR = "[data-tool-emerald]"
+SHELL_TIMEOUT_MS = 15000
 
 CHAMPAGNE = [
     ("champagne-page",    253, 251, 247, 6),
@@ -99,14 +105,23 @@ async def audit_route(page, route: str):
     }
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        # Give the app time to hydrate and mount the tool shell.
-        for _ in range(6):
-            await page.wait_for_timeout(1000)
-            if await page.query_selector("[data-tool-emerald]"):
-                break
         result["reachable"] = True
 
-        shell = await page.query_selector("[data-tool-emerald]")
+        # Wait for the shell deterministically rather than polling a fixed
+        # six one-second ticks. Routes here are lazy-loaded chunks, and on a
+        # loaded machine a slow chunk used to lose that race - which decided
+        # whether the route got measured at all (see the hasShell branch
+        # below), so the same tree scored 3, 4 or 7 breaches run to run.
+        # One explicit wait, not six blind ticks. Deliberately no
+        # `networkidle` wait here: several of these pages keep a connection
+        # open and never reach idle, so it burned its full timeout on every
+        # such route for no added certainty.
+        try:
+            await page.wait_for_selector(SHELL_SELECTOR, timeout=SHELL_TIMEOUT_MS)
+        except PWTimeout:
+            pass  # Genuinely shell-less route; recorded as skipped below.
+
+        shell = await page.query_selector(SHELL_SELECTOR)
         result["hasShell"] = bool(shell)
         target = shell or await page.query_selector("main") or page
         await target.screenshot(path=str(shot))
@@ -151,7 +166,11 @@ async def main():
         results = []
         for route in ROUTES:
             r = await audit_route(page, route)
-            mark = "✗" if r["breach"] else "✓"
+            # A route with no emerald shell was never measured, so it is not a
+            # pass. It used to print the same tick as an audited, clean route -
+            # which is how /business-card-scanner reported success while its
+            # screenshot held 4,494,758 champagne pixels against a 400 cap.
+            mark = "✗" if r["breach"] else ("✓" if r["hasShell"] else "–")
             print(
                 f"{mark} {r['route']:<30} shell={r['hasShell']} "
                 f"champagne={r['champagne']} dark={r['dark']} "
@@ -170,11 +189,21 @@ async def main():
             "reachable": sum(1 for r in results if r["reachable"]),
             "shells": sum(1 for r in results if r["hasShell"]),
             "breached": sum(1 for r in results if r["breach"]),
+            "skippedNoShell": sum(1 for r in results if not r["hasShell"]),
         },
     }
     (OUT / "report.json").write_text(json.dumps(report, indent=2))
     breached = [r for r in results if r["breach"]]
-    print(f"\nSummary: {len(breached)}/{len(results)} routes breached")
+    skipped = [r for r in results if not r["hasShell"]]
+    audited = len(results) - len(skipped)
+    print(f"\nSummary: {len(breached)}/{audited} audited routes breached")
+    if skipped:
+        # Stated rather than implied: these carry no verdict either way.
+        print(
+            f"         {len(skipped)}/{len(results)} routes had no "
+            f"{SHELL_SELECTOR} shell and were not audited: "
+            + ", ".join(r["route"] for r in skipped)
+        )
     if breached:
         sys.exit(1)
 
