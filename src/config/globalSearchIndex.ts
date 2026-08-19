@@ -50,7 +50,7 @@ const publicPages: SearchItem[] = [
 const guides: SearchItem[] = [
   { id: 'buyer-guide', label: 'Buyer Guide', route: '/buyer-guide', keywords: ['buyer', 'buying', 'purchase', 'guide'], description: 'Guide for property buyers', icon: BookOpen, access: 'public', category: 'guide' },
   { id: 'seller-guide', label: 'Seller Guide', route: '/seller-guide', keywords: ['seller', 'selling', 'sell property', 'guide'], description: 'Guide for property sellers', icon: BookOpen, access: 'public', category: 'guide' },
-  { id: 'rent-guide', label: 'Rental Guide', route: '/rent-guide', keywords: ['rent', 'renting', 'tenant', 'lease', 'rental', 'guide'], description: 'Rental guide for Dubai properties', icon: Key, access: 'public', category: 'guide' },
+  { id: 'rent-guide', label: 'Renting in Dubai', route: '/rent-guide', keywords: ['rent', 'renting', 'tenant', 'landlord', 'lease', 'rental', 'guide'], description: 'Choose your Tenant or Landlord guide', icon: Key, access: 'public', category: 'guide' },
   { id: 'tenant-guide', label: 'Tenant Guide', route: '/tenant-guide', keywords: ['tenant', 'rental', 'lease', 'guide'], description: 'Rights and responsibilities', icon: BookOpen, access: 'public', category: 'guide' },
   { id: 'landlord-guide', label: 'Landlord Guide', route: '/landlord-guide', keywords: ['landlord', 'owner', 'rental income', 'guide'], description: 'For property owners', icon: BookOpen, access: 'public', category: 'guide' },
   { id: 'golden-visa', label: 'Golden Visa Guide', route: '/guides/golden-visa-uae', keywords: ['golden visa', 'visa', 'residency', 'uae visa', 'investor visa'], description: 'UAE Golden Visa information', icon: Award, access: 'public', category: 'guide' },
