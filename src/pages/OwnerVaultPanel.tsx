@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getVaultSignedUrl, formatAed, VIP_LABEL } from "@/lib/vault";
 import OwnerGuard from "@/components/OwnerGuard";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 type Row = {
   user_id: string;
@@ -168,7 +169,7 @@ function ClientFolder({ row, onBack }: { row: Row; onBack: () => void }) {
   async function view(id: string) {
     try {
       const { url } = await getVaultSignedUrl(id);
-      window.open(url, "_blank", "noopener,noreferrer");
+      safeOpen(url);
     } catch (e) { toast.error((e as Error).message); }
   }
 

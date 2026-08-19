@@ -11802,7 +11802,16 @@ html body #root :is(
   [data-jj-utility-bar] button[aria-label="Currency"],
   [data-mode-trigger="header"],
   [data-mode-trigger="compact"],
-  button[data-phone-code-trigger],
+  /* Gated on [data-emerald-action="true"], not the bare trigger. This block
+   * and its siblings below force an emerald fill and white text on
+   * descendants with !important. A page that legitimately repaints this
+   * control -- the services consultation form repaints it champagne and
+   * strips data-emerald-action -- could override the background with an
+   * inline style but could not beat !important white on the inner spans,
+   * leaving the dial code at 1.11 contrast (white on #F7F2EA) and effectively
+   * invisible. Keying on the marker attribute lets the lock follow the
+   * control's actual state rather than its tag name. */
+  button[data-phone-code-trigger][data-emerald-action="true"],
   [role="tab"][data-state="active"],
   [data-jj-segmented-trigger][data-state="active"],
   [class~="bg-[#0E8A66]"],
@@ -11872,7 +11881,7 @@ html body #root :is(
   [data-jj-utility-bar] button[aria-label="Currency"],
   [data-mode-trigger="header"],
   [data-mode-trigger="compact"],
-  button[data-phone-code-trigger],
+  button[data-phone-code-trigger][data-emerald-action="true"],
   [role="tab"][data-state="active"],
   [data-jj-segmented-trigger][data-state="active"],
   [class~="bg-[#0E8A66]"],
@@ -11929,7 +11938,7 @@ html body #root :is(
   [data-jj-utility-bar] button[aria-label="Currency"],
   [data-mode-trigger="header"],
   [data-mode-trigger="compact"],
-  button[data-phone-code-trigger],
+  button[data-phone-code-trigger][data-emerald-action="true"],
   [role="tab"][data-state="active"],
   [data-jj-segmented-trigger][data-state="active"],
   [class~="bg-[#0E8A66]"],
@@ -11983,7 +11992,7 @@ html body #root :is(
   [data-jj-utility-bar] button[aria-label="Currency"],
   [data-mode-trigger="header"],
   [data-mode-trigger="compact"],
-  button[data-phone-code-trigger],
+  button[data-phone-code-trigger][data-emerald-action="true"],
   [role="tab"][data-state="active"],
   [data-jj-segmented-trigger][data-state="active"],
   [class~="bg-[#0E8A66]"],
@@ -12032,7 +12041,7 @@ html body #root :is(
   [data-jj-utility-bar] button[aria-label="Currency"],
   [data-mode-trigger="header"],
   [data-mode-trigger="compact"],
-  button[data-phone-code-trigger],
+  button[data-phone-code-trigger][data-emerald-action="true"],
   [role="tab"][data-state="active"],
   [data-jj-segmented-trigger][data-state="active"]
 ) :where(svg, .lucide) * {

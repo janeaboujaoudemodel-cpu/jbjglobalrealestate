@@ -104,7 +104,7 @@ export function VisitRequestForm({ developerId, developerName, onSuccess, onCanc
               onValueChange={(val) => setValue("purpose", val as "briefing" | "general_visit")}
               className="grid grid-cols-2 gap-3"
             >
-              <div
+              <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                 className={`flex items-center space-x-3 p-4 rounded-lg border cursor-pointer transition-colors ${
                   purpose === "briefing"
                     ? "border-primary bg-primary/5"
@@ -122,7 +122,7 @@ export function VisitRequestForm({ developerId, developerName, onSuccess, onCanc
                   </p>
                 </div>
               </div>
-              <div
+              <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                 className={`flex items-center space-x-3 p-4 rounded-lg border cursor-pointer transition-colors ${
                   purpose === "general_visit"
                     ? "border-primary bg-primary/5"

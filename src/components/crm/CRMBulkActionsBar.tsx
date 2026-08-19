@@ -69,7 +69,7 @@ export function CRMBulkActionsBar({ table, ids, view, onClear, onChanged, onExpo
         </Button>
       )}
 
-      <Button size="sm" variant="ghost" className="text-white hover:text-white/90" onClick={onClear}>
+      <Button aria-label="Close" size="sm" variant="ghost" className="text-white hover:text-white/90" onClick={onClear}>
         <X className="w-3.5 h-3.5" />
       </Button>
     </div>

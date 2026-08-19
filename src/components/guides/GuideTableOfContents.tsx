@@ -209,8 +209,8 @@ export const GuideTableOfContents = ({
             
             {/* CTA Action Button - Premium 3D Glow Style */}
             {ctaAction && (
-              <Link to={ctaAction.href} className="block mt-4">
-                <Button 
+              <Link aria-label="Open" to={ctaAction.href} className="block mt-4">
+                <Button aria-label="Open" 
                   variant="primary"
                   data-surface="emerald"
                   className="w-full relative py-3 mi-cta-emerald"

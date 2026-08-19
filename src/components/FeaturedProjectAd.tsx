@@ -95,7 +95,7 @@ export const FeaturedProjectAd = ({
 
               
               {/* CTA Button */}
-              <Button
+              <Button aria-label="Next"
                 variant="primary"
                 className="group/btn h-12 px-8 font-semibold"
               >

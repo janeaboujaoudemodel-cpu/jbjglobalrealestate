@@ -253,7 +253,7 @@ What would you like to create today?`,
               disabled={isProcessing}
             />
             
-            <Button
+            <Button aria-label="Send"
               onClick={handleSend}
               disabled={isProcessing || (!input.trim() && photos.length === 0)}
               variant="ai-orange"

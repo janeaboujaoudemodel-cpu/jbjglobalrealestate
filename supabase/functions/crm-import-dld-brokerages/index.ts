@@ -2,6 +2,7 @@
 // Body: { rows: [{ office_number, name_en, name_ar, website, phone, email }] }
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
+import { safeFetch } from "../_shared/ssrf-guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -45,7 +46,7 @@ async function loadDldRows(req: Request) {
   let lastError = "DLD register unavailable";
   for (const url of candidates) {
     try {
-      const res = await fetch(url, { headers: { "Accept": "application/json" } });
+      const res = await safeFetch(url, { headers: { "Accept": "application/json" } });
       if (!res.ok) {
         lastError = `${url} returned ${res.status}`;
         continue;

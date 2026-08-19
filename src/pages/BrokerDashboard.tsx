@@ -294,7 +294,7 @@ export default function BrokerDashboard() {
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {filteredActions.map((action, index) => (
-              <Link key={index} to={action.href}>
+              <Link key={index} to={action.href} aria-label={action.title}>
                 <Card className={tileCardCls}>
                   <CardContent className="p-4 text-center">
                     <div className={`w-12 h-12 mx-auto mb-3 ${tileIconWrapCls}`}>
@@ -408,7 +408,7 @@ export default function BrokerDashboard() {
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {brokerHubLinks.map((link, index) => (
-              <Link key={index} to={link.href}>
+              <Link aria-label="Next" key={index} to={link.href}>
                 <Card className={tileCardCls}>
                   <CardContent className="p-5">
                     <div className="flex items-start gap-3">

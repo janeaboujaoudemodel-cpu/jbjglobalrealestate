@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow, subDays, subHours, startOfDay, startOfHour } from "date-fns";
 import { toast } from "sonner";
+import { openPrintWindow } from "@/utils/printWindow";
 import {
   AreaChart,
   Area,
@@ -443,17 +444,8 @@ export const SecurityDashboardSummary = () => {
 </html>`;
     
     // Open in new window for printing
-    const printWindow = window.open('', '_blank');
+    const printWindow = openPrintWindow(htmlContent);
     if (printWindow) {
-      printWindow.document.write(htmlContent);
-      printWindow.document.close();
-      printWindow.focus();
-      
-      // Slight delay to ensure styles are loaded
-      setTimeout(() => {
-        printWindow.print();
-      }, 250);
-      
       toast.success("PDF report opened - use Print dialog to save");
 
       logExportEvent({

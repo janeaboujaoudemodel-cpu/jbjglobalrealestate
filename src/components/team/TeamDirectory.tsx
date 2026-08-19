@@ -140,7 +140,7 @@ function DirectChatPane({ peer }: { peer: DirectoryEntry | null }) {
           placeholder={`Message ${peer.full_name.split(" ")[0]}…`}
           className="bg-white border-[#B89555]/30 text-[#1A1A1A]"
         />
-        <Button type="submit" disabled={!draft.trim() || send.isPending} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white" data-allow-dark-cta>
+        <Button aria-label="Send" type="submit" disabled={!draft.trim() || send.isPending} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white" data-allow-dark-cta>
           <Send className="h-4 w-4" />
         </Button>
       </form>

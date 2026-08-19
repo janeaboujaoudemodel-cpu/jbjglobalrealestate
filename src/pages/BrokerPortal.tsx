@@ -28,6 +28,7 @@ import {
 import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import BrandedEmailDashboard, { type CanonicalStatus } from "@/components/crm/branded-emails/BrandedEmailDashboard";
 import { format } from "date-fns";
+import { safeFileExtension } from "@/utils/storagePath";
 
 const TAB_STYLE = "text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[hsl(36,40%,70%)]/40 rounded-lg";
 
@@ -199,7 +200,7 @@ function DocumentVerificationSection() {
 
   const handleDocUpload = async (docType: "rera" | "id", file: File) => {
     if (!user || !profile) return;
-    const ext = file.name.split(".").pop();
+    const ext = safeFileExtension(file.name);
     const path = `broker-docs/${user.id}/${docType}-${Date.now()}.${ext}`;
     const { error: uploadError } = await supabase.storage.from("broker-documents").upload(path, file, { cacheControl: "3600", upsert: true });
     if (uploadError) { toast.error("Upload service unavailable. Please try again later."); return; }
@@ -311,7 +312,7 @@ export default function BrokerPortal() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {PORTAL_TOOLS.map((tool) => (
                     <motion.div key={tool.href} variants={fadeInUp}>
-                      <Link to={tool.href}>
+                      <Link aria-label="Next" to={tool.href}>
                         <Card className={`h-full hover:border-[hsl(36,40%,70%)] transition-all duration-300 group cursor-pointer ${tool.accent ? "border-[hsl(36,40%,70%)] bg-gradient-to-br from-[hsl(36,40%,70%)]/10 to-transparent" : "border-[hsl(36,40%,70%)]/20"}`}>
                           <CardContent className="p-4 flex flex-col items-start gap-2">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${tool.accent ? "bg-[hsl(36,40%,70%)]/20" : "bg-[hsl(36,40%,70%)]/10"}`}>

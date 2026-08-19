@@ -66,7 +66,7 @@ const AIBackgroundGenerator = ({
           <Image className="w-5 h-5 text-[#1A1A1A]" />
           Virtual Backgrounds
         </CardTitle>
-        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-white/70 hover:text-white">
+        <Button aria-label="Close" variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-white/70 hover:text-white">
           <X className="h-4 w-4" />
         </Button>
       </CardHeader>

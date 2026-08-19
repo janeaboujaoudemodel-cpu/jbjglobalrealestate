@@ -16,6 +16,7 @@ import CVSearchFilters from './CVSearchFilters';
 import CVRankingCard, { type CVCandidate } from './CVRankingCard';
 import InterviewScheduler from './InterviewScheduler';
 import CVViewer from '@/components/hr/CVViewer';
+import { safeOpen } from '@/utils/safeUrl';
 
 interface EmployeeCenterProps {
   userId: string;
@@ -538,7 +539,7 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
                   onDownload={(id) => {
                     const c = candidates.find(cand => cand.id === id);
                     if (c?.fileUrl && c.fileUrl !== '#') {
-                      window.open(c.fileUrl, '_blank');
+                      safeOpen(c.fileUrl);
                     } else {
                       toast.error('No CV file available');
                     }

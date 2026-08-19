@@ -14,6 +14,7 @@ import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
 import { PhoneInputWithCountry } from '@/components/ui/phone-input-with-country';
 import { NationalitySelect } from '@/components/developer-portal/NationalitySelect';
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 // LOCKED: Full company name — never abbreviate
 const COMPANY_FULL_NAME = 'JBJ GLOBAL REAL ESTATE';
@@ -95,7 +96,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
     if (!file || !user) return;
     setUploadingDoc(docType);
     try {
-      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const safeName = safeStorageFileName(file.name);
       const path = `rep-verification/${user.id}/${docType}/${Date.now()}-${safeName}`;
       const { error } = await supabase.storage.from('documents').upload(path, file);
       if (error) throw error;

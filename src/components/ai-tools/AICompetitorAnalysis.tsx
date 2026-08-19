@@ -122,7 +122,7 @@ const AICompetitorAnalysis = ({ onResponse }: AICompetitorAnalysisProps) => {
           <div className="mt-6 space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold">Competition Analysis</h4>
-              <Button variant="outline" size="sm" onClick={copyToClipboard}>
+              <Button aria-label="Confirm" variant="outline" size="sm" onClick={copyToClipboard}>
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
             </div>

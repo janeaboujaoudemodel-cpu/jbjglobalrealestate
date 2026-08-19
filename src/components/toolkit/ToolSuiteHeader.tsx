@@ -39,9 +39,9 @@ export function ToolSuiteHeader({
     <div className="border-b border-[#B89555]/20 bg-gradient-to-r from-black via-zinc-900/50 to-black">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex items-center gap-4 mb-4">
-          <Link to={backHref}>
+          <Link aria-label="Back" to={backHref}>
             {/* Using inline styles to bypass any class sanitization */}
-            <Button 
+            <Button aria-label="Back" 
               variant="ghost" 
               size="sm" 
               className="hover:bg-[#1A1A1A] border border-[#1A1A1A] hover:border-[#1A1A1A]"

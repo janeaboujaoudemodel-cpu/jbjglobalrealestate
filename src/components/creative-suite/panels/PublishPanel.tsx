@@ -150,7 +150,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                   readOnly
                   className="bg-[#1A1A1A] border-[#B89555]/30 text-[#1A1A1A]/70 text-sm"
                 />
-                <Button onClick={handleCopyShareLink} variant="outline" className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                <Button aria-label="Confirm" onClick={handleCopyShareLink} variant="outline" className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>

@@ -755,7 +755,7 @@ export default function ESignatureDashboard() {
                           </Link>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-7 w-7">
+                              <Button aria-label="More options" variant="ghost" size="icon" className="h-7 w-7">
                                 <MoreVertical className="w-3.5 h-3.5" />
                               </Button>
                             </DropdownMenuTrigger>

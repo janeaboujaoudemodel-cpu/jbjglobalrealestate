@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 const HOST_NAME = "Jane Bou Jaoude";
 const HOST_PHONE = "+971 54 15 15 015";
@@ -205,7 +206,7 @@ export default function BreakfastBooking() {
     const dtEnd = new Date(dt.getTime() + 60 * 60 * 1000);
     const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
     const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Private Breakfast for ${brokerageLabel}`)}&dates=${fmt(dt)}/${fmt(dtEnd)}&details=${encodeURIComponent(`Host on arrival: ${HOST_NAME} — ${HOST_PHONE}\nLocation: ${OFFICE_LOCATION}`)}&location=${encodeURIComponent(OFFICE_LOCATION)}`;
-    window.open(url, "_blank");
+    safeOpen(url);
   };
 
   const downloadPng = async () => {

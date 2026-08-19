@@ -424,7 +424,7 @@ const VisitorInsightsDashboard = () => {
                             </div>
                           </td>
                           <td className="p-4">
-                            <Button size="sm" variant="ghost" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
+                            <Button aria-label="Next" size="sm" variant="ghost" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </td>

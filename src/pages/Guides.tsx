@@ -15,6 +15,7 @@ import type { BookData } from "@/types/books"; // used for selectedBook state ty
 import { GuideHero } from "@/components/guides/GuideHero";
 import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeNavigate } from "@/utils/safeUrl";
 
 
 const fadeInUp = {
@@ -56,7 +57,7 @@ const Guides = () => {
     const target = directHref || `${book.href}#chapter-${index + 1}`;
     setSelectedBook(null);
     if (target.startsWith('/') && !target.includes('#')) {
-      window.location.href = target;
+      safeNavigate(target);
     } else {
       navigate(target);
     }
@@ -245,7 +246,7 @@ const Guides = () => {
                 style={{ boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)' }}
                 onClick={() => {
                   setSelectedBook(null);
-                  window.location.href = selectedBook.href;
+                  safeNavigate(selectedBook.href);
                 }}
               >
                 Open Full Guide <ArrowRight className="w-4 h-4 ml-2" />

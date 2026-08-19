@@ -466,7 +466,7 @@ function ManageFieldsPopover({
                 <option value="list">List</option>
                 <option value="date">Date</option>
               </select>
-              <Button
+              <Button aria-label="Add"
                 size="sm"
                 onClick={addField}
                 disabled={busy || !newLabel.trim()}

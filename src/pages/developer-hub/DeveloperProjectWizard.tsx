@@ -17,6 +17,7 @@ import { SafeImage } from "@/components/SafeImage";
 import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
 import { ProjectDuplicateCheck } from "@/components/projects/ProjectDuplicateCheck";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "floor_plan" | "payment_plan" | "document" }
 
@@ -933,7 +934,7 @@ const DeveloperProjectWizard = () => {
                     type="button"
                     data-surface="emerald"
                     className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
-                    onClick={() => publicPath && window.open(publicPath, "_blank", "noopener,noreferrer")}
+                    onClick={() => publicPath && safeOpen(publicPath)}
                   >
                     <ExternalLink className="w-4 h-4 mr-2" /> {isPublished ? "Open" : "Preview"}
                   </Button>
@@ -945,7 +946,7 @@ const DeveloperProjectWizard = () => {
 
         {publicPath && (
             <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] transition-colors">
-              <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
+              <button type="button" onClick={() => safeOpen(publicPath)} className="block w-full text-left">
                 <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
                   {cover?.url ? <SafeImage src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
                 </div>

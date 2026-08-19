@@ -149,24 +149,24 @@ export function SalespersonContact({ developerId, developerName }: SalespersonCo
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-foreground">{contact.name}</h4>
                   <div className="flex flex-wrap gap-3 mt-2">
-                    <Button
+                    <Button aria-label="Call"
                       variant="outline"
                       size="sm"
                       asChild
                       className="text-xs"
                     >
-                      <a href={`tel:${contact.phone}`}>
+                      <a aria-label="Call" href={`tel:${contact.phone}`}>
                         <Phone className="h-3 w-3 mr-1" />
                         {contact.phone}
                       </a>
                     </Button>
-                    <Button
+                    <Button aria-label="Email"
                       variant="outline"
                       size="sm"
                       asChild
                       className="text-xs"
                     >
-                      <a href={`mailto:${contact.email}`}>
+                      <a aria-label="Email" href={`mailto:${contact.email}`}>
                         <Mail className="h-3 w-3 mr-1" />
                         {contact.email}
                       </a>

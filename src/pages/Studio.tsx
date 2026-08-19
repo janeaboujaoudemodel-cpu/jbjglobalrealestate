@@ -324,7 +324,7 @@ export default function Studio() {
               {filteredQuickTools.map((tool) => {
                 const Icon = tool.icon;
                 return (
-                  <Link key={tool.href} to={tool.href}
+                  <Link aria-label="Next" key={tool.href} to={tool.href}
                     className="group flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all bg-[#FDFBF7]/40 border border-[#B89555]/15 hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/10"
                   >
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-[#EFE6D6]/15 border border-[#B89555]/30">
@@ -410,7 +410,7 @@ export default function Studio() {
                 const Icon = typeIcons[project.project_type] || Film;
                 return (
                   <div key={project.id} className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-[#FDFBF7]/50 border border-[#B89555]/15 hover:border-[#B89555]/40 hover:shadow-[0_12px_40px_rgba(201,168,76,0.15)]">
-                    <Link to={`/studio/editor/${project.id}`}>
+                    <Link aria-label="Share" to={`/studio/editor/${project.id}`}>
                       <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2]">
                         {project.thumbnail_url ? (
                           <img src={project.thumbnail_url} alt={project.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />

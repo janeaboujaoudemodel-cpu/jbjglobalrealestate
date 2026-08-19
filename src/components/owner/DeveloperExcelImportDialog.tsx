@@ -425,7 +425,7 @@ export default function DeveloperExcelImportDialog({
 
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {rows.length === 0 ? (
-            <div
+            <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
               onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
               onDragLeave={() => setDragOver(false)}
               onDrop={async (e) => {

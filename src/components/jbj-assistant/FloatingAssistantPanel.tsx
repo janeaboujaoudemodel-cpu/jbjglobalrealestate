@@ -347,7 +347,7 @@ JBJ Contact Information:
               className="flex-1 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
               disabled={isLoading}
             />
-            <Button
+            <Button aria-label="Send"
               onClick={handleSendMessage}
               disabled={!input.trim() || isLoading}
               className="bg-gradient-to-r from-gold to-amber-500 hover:from-amber-500 hover:to-gold text-[#1A1A1A]"

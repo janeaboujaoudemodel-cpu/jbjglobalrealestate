@@ -153,7 +153,7 @@ const PreJoinForm = ({
                   </div>
                 )}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  <Button
+                  <Button aria-label="Video"
                     variant={videoEnabled ? "secondary" : "destructive"}
                     size="icon"
                     onClick={onToggleVideo}
@@ -162,7 +162,7 @@ const PreJoinForm = ({
                   >
                     {videoEnabled ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
                   </Button>
-                  <Button
+                  <Button aria-label="Record"
                     variant={audioEnabled ? "secondary" : "destructive"}
                     size="icon"
                     onClick={onToggleAudio}
@@ -171,7 +171,7 @@ const PreJoinForm = ({
                   >
                     {audioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
                   </Button>
-                  <Button
+                  <Button aria-label="Settings"
                     variant="secondary"
                     size="icon"
                     onClick={onOpenSettings}

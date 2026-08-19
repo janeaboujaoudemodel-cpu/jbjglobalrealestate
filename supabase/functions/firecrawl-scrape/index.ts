@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
 import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
+import { isPublicHttpUrl } from "../_shared/ssrf-guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -34,6 +35,12 @@ serve(async (req) => {
     if (!url) {
       return new Response(
         JSON.stringify({ success: false, error: "URL is required" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    if (!isPublicHttpUrl(url)) {
+      return new Response(
+        JSON.stringify({ success: false, error: "URL must be a public http(s) address" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }

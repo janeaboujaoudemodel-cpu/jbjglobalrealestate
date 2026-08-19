@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { T } from '@/components/ui/T';
 import { validateEmail, validateE164Phone } from './types';
 import { useAuth } from '@/contexts/AuthContext';
+import { safeFileExtension } from '@/utils/storagePath';
 
 interface ChatCVSubmissionProps {
   userInfo: {
@@ -86,7 +87,7 @@ const ChatCVSubmission = ({
     setIsUploading(true);
 
     try {
-      const fileExt = cvFile.name.split('.').pop();
+      const fileExt = safeFileExtension(cvFile.name);
       const fileName = `cv_${Date.now()}_${userInfo.firstName}_${userInfo.lastName}.${fileExt}`;
       const filePath = `cv-submissions/${fileName}`;
 

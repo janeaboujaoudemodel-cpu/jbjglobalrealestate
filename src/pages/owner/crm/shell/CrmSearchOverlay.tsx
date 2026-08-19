@@ -146,6 +146,7 @@ export default function CrmSearchOverlay({ open, onClose }: Props) {
                       <li key={m.slug}>
                         <Link
                           to={`/owner/crm/jbj/${m.slug}`}
+                          aria-label={m.label}
                           className="jc-search-overlay__chip"
                           onClick={onClose}
                         >

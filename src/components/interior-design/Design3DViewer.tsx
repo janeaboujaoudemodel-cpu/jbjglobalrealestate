@@ -64,7 +64,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           {is3D ? '3D On' : '3D View'}
         </Button>
         {is3D && (
-          <Button
+          <Button aria-label="Undo"
             size="sm"
             variant="outline"
             onClick={resetRotation}
@@ -73,7 +73,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
             <RotateCcw className="w-4 h-4" />
           </Button>
         )}
-        <Button
+        <Button aria-label="Download"
           size="sm"
           variant="outline"
           onClick={handleDownload}

@@ -11,6 +11,8 @@
  * 4. Secure by Default - Security built into every feature
  */
 
+import { safeFileExtension } from '@/utils/storagePath';
+
 // ============================================================================
 // SECTION 1: INPUT VALIDATION PATTERNS
 // ============================================================================
@@ -435,8 +437,13 @@ export const isValidPhone = (phone: string): boolean => {
  * Check if file extension is allowed
  */
 export const isAllowedFileExtension = (filename: string): boolean => {
-  const ext = '.' + filename.split('.').pop()?.toLowerCase();
-  return !BLOCKED_EXTENSIONS.includes(ext as any);
+  // `split('.').pop()` is not a safe extension parser: "payload.exe/../x" yields
+  // "/../x", which matches nothing in BLOCKED_EXTENSIONS and so was reported as
+  // allowed. safeFileExtension takes the basename and requires [a-z0-9]{1,10},
+  // returning '' for anything it cannot parse — which is then rejected here.
+  const ext = safeFileExtension(filename, '');
+  if (!ext) return false;
+  return !BLOCKED_EXTENSIONS.includes(`.${ext}` as any);
 };
 
 /**

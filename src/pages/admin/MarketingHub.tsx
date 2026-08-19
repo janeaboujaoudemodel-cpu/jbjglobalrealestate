@@ -436,7 +436,7 @@ const MarketingHub: React.FC = () => {
                           <TableCell className="text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="hover:bg-[#EFE6D6]/10">
+                                <Button aria-label="More options" variant="ghost" size="icon" className="hover:bg-[#EFE6D6]/10">
                                   <MoreHorizontal className="h-4 w-4 text-[#1A1A1A]" />
                                 </Button>
                               </DropdownMenuTrigger>

@@ -342,7 +342,7 @@ const ExclusiveDocuments = () => {
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-[#1A1A1A] text-lg">Generated Document</h3>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={handleCopy} className="border-[#B89555]/40">
+                      <Button aria-label="Confirm" variant="outline" size="sm" onClick={handleCopy} className="border-[#B89555]/40">
                         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </Button>
                     </div>

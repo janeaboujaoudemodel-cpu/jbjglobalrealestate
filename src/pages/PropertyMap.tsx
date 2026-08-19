@@ -706,7 +706,7 @@ const PropertyMap = () => {
 
         {/* ── LIST / GRID PANEL — attached to map stage, never over the filter bar ── */}
         {showPanel && (
-        <div
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
           data-map-list-panel
           className="absolute top-3 right-3 bottom-3 w-[min(420px,calc(100%-24px))] sm:w-[420px] z-[1200] overflow-hidden flex flex-col pointer-events-auto"
           onPointerEnter={() => setHoveredProject(null)}

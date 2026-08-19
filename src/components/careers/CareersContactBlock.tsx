@@ -60,6 +60,7 @@ export default function CareersContactBlock() {
               <a
                 key={label}
                 href={href}
+                aria-label={label}
                 target={href.startsWith("/") ? undefined : undefined}
                 className="group relative overflow-hidden rounded-2xl border border-[#B89555]/45
                            bg-[#FDFBF7]/85 backdrop-blur-md p-4 sm:p-5

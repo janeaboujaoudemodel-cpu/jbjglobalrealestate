@@ -648,7 +648,7 @@ const SellerGuide = () => {
                     <Phone className="w-4 h-4 text-blue-500" />
                     Call: {CONTACT_INFO.phone}
                   </a>
-                  <a 
+                  <a aria-label="Email" 
                     href={getEmailUrl()}
                     className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                   >

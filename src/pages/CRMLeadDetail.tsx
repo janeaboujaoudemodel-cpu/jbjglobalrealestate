@@ -392,7 +392,7 @@ const CRMLeadDetail = () => {
                   <Phone className="h-4 w-4 text-green-500 shrink-0" />
                   <a href={`tel:${lead.phone_e164}`} className="text-sm font-medium truncate flex-1">{lead.phone_e164}</a>
                   <div className="flex gap-1 shrink-0">
-                    <Button size="sm" variant="ghost" className="h-7 px-2 text-green-500 hover:jj-surface-emerald-soft" onClick={handleWhatsAppClick}>
+                    <Button aria-label="Message" size="sm" variant="ghost" className="h-7 px-2 text-green-500 hover:jj-surface-emerald-soft" onClick={handleWhatsAppClick}>
                       <MessageSquare className="h-3.5 w-3.5" />
                     </Button>
                     <Button size="sm" variant="ghost" className="h-7 px-2 text-blue-500 hover:bg-blue-500/10" onClick={() => window.open(`tel:${lead.phone_e164}`, "_self")}>
@@ -405,7 +405,7 @@ const CRMLeadDetail = () => {
                 <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg">
                   <Mail className="h-4 w-4 text-purple-500 shrink-0" />
                   <a href={`mailto:${lead.email_lower}`} onClick={handleEmailClick} className="text-sm font-medium hover:text-purple-400 truncate flex-1">{lead.email_lower}</a>
-                  <Button size="sm" variant="ghost" className="h-7 px-2 text-purple-500 hover:bg-purple-500/10 shrink-0" onClick={handleEmailClick}>
+                  <Button aria-label="Email" size="sm" variant="ghost" className="h-7 px-2 text-purple-500 hover:bg-purple-500/10 shrink-0" onClick={handleEmailClick}>
                     <Mail className="h-3.5 w-3.5" />
                   </Button>
                 </div>
@@ -545,7 +545,7 @@ const CRMLeadDetail = () => {
                   <Textarea placeholder="Add a note..." value={newNote} onChange={(e) => setNewNote(e.target.value)} rows={2} className="flex-1" />
                   <div className="flex flex-col gap-2">
                     <VoiceNoteRecorder onTranscript={(text) => setNewNote(prev => prev ? `${prev} ${text}` : text)} />
-                    <Button onClick={addNote} disabled={!newNote.trim()}><Plus className="h-4 w-4" /></Button>
+                    <Button aria-label="Add" onClick={addNote} disabled={!newNote.trim()}><Plus className="h-4 w-4" /></Button>
                   </div>
                 </div>
                 {notes.length === 0 ? (
@@ -570,7 +570,7 @@ const CRMLeadDetail = () => {
                 <div className="flex gap-2 flex-wrap">
                   <Input placeholder="New task title..." value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} className="flex-1 min-w-[200px]" />
                   <Input type="datetime-local" value={newTask.due_at} onChange={(e) => setNewTask({ ...newTask, due_at: e.target.value })} className="w-48" />
-                  <Button onClick={addTask} disabled={!newTask.title.trim()}><Plus className="h-4 w-4" /></Button>
+                  <Button aria-label="Add" onClick={addTask} disabled={!newTask.title.trim()}><Plus className="h-4 w-4" /></Button>
                 </div>
                 {tasks.length === 0 ? (
                   <p className="text-center text-muted-foreground py-8">No tasks yet</p>

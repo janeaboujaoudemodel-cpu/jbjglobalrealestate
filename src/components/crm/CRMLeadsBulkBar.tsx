@@ -6,6 +6,7 @@ import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles, Gi
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
 import MergeContactsDialog from "./MergeContactsDialog";
 import { BulkActionBar, BulkActionItem } from "@/components/ui/bulk-action-bar";
+import { safeNavigate } from "@/utils/safeUrl";
 
 interface BrokerOption {
   user_id: string;
@@ -304,7 +305,7 @@ export default function CRMLeadsBulkBar({
           const mailto = `mailto:?bcc=${recipients.join(",")}&subject=${encodeURIComponent(
             broadcastSubject,
           )}&body=${encodeURIComponent(broadcastMessage)}`;
-          window.location.href = mailto;
+          safeNavigate(mailto);
           sent = recipients.length;
         }
       }

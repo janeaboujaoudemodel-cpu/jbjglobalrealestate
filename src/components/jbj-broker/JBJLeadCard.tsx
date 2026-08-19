@@ -103,7 +103,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
             )}
 
             <div className="flex items-center gap-2">
-              <Button
+              <Button aria-label="Message"
                 size="sm"
                 variant="outline"
                 onClick={handleWhatsApp}
@@ -112,7 +112,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
               >
                 <MessageSquare className="h-4 w-4" />
               </Button>
-              <Button
+              <Button aria-label="Email"
                 size="sm"
                 variant="outline"
                 onClick={handleEmail}
@@ -121,7 +121,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
               >
                 <Mail className="h-4 w-4" />
               </Button>
-              <Button
+              <Button aria-label="Call"
                 size="sm"
                 variant="outline"
                 onClick={handleCall}
@@ -157,7 +157,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button aria-label="More options" variant="ghost" size="icon" className="h-8 w-8">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -217,7 +217,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
             <Mail className="h-4 w-4 mr-1" />
             Email
           </Button>
-          <Button
+          <Button aria-label="Call"
             size="sm"
             variant="outline"
             onClick={handleCall}

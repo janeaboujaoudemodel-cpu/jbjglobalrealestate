@@ -31,6 +31,7 @@ import CareersContactBlock from "@/components/careers/CareersContactBlock";
 import FieldError from "@/components/forms/FieldError";
 import { z } from "zod";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
+import { safeFileExtension } from "@/utils/storagePath";
 
 interface OpenPosition {
   id: string;
@@ -254,7 +255,7 @@ export default function JoinApplication() {
 
   const uploadCV = async (file: File): Promise<string | null> => {
     if (!user) return null;
-    const fileExt = file.name.split(".").pop();
+    const fileExt = safeFileExtension(file.name);
     const fileName = `${user.id}/cv-${Date.now()}.${fileExt}`;
     const { data, error } = await supabase.storage
       .from("hr-documents")
@@ -492,7 +493,7 @@ export default function JoinApplication() {
       "image/heic",
       "image/heif",
     ];
-    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    const ext = safeFileExtension(file.name);
     const validExts = ["pdf", "doc", "docx", "jpg", "jpeg", "png", "webp", "heic", "heif"];
     if (!validTypes.includes(file.type) && !validExts.includes(ext)) {
       toast.error("Please upload a PDF, Word document, or photo (JPG/PNG/HEIC)");
@@ -731,11 +732,11 @@ export default function JoinApplication() {
             </Card>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-[#1A1A1A]/70">
-              <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+              <a aria-label="Call" href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
                 <Phone className="w-4 h-4 text-[#1A1A1A]" />
                 {CONTACT_INFO.phone}
               </a>
-              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+              <a aria-label="Email" href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
                 <Mail className="w-4 h-4 text-[#1A1A1A]" />
                 {CONTACT_INFO.email}
               </a>

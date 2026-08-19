@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { safeFetch } from "../_shared/ssrf-guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -115,8 +116,11 @@ Deno.serve(async (req) => {
       try {
         if (!dev.logo_url) continue;
 
-        // Download the logo using the API key (vault URLs are accessible server-side)
-        const logoRes = await fetch(dev.logo_url, {
+        // Download the logo using the API key (vault URLs are accessible server-side).
+        // logo_url is DB-sourced (from the Reelly sync), so it goes through
+        // safeFetch — the `.like("logo_url", ...)` filter above is a substring
+        // match, not a host check, so it doesn't guarantee a safe target.
+        const logoRes = await safeFetch(dev.logo_url, {
           headers: {
             "X-API-Key": apiKey,
             "Authorization": `Bearer ${apiKey}`,

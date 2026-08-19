@@ -62,6 +62,8 @@ import { SafeImage } from "@/components/SafeImage";
 import type { UnifiedProject } from "@/types/unifiedProject";
 import { logAdminEdit, detectChangedFields, useLatestEditLogs, formatRelativeTime } from "@/hooks/useAdminEditLog";
 import { Clock } from "lucide-react";
+import { safeOpen } from "@/utils/safeUrl";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface ProjectDocument {
   id: string;
@@ -364,7 +366,7 @@ const ListingAdmin = () => {
     try {
       for (const file of Array.from(files)) {
         try {
-          const fileName = `${selectedProject.id}/${Date.now()}-${file.name}`;
+          const fileName = `${selectedProject.id}/${Date.now()}-${safeStorageFileName(file.name)}`;
 
           const { error: uploadError } = await supabase.storage
             .from("project-files")
@@ -430,7 +432,7 @@ const ListingAdmin = () => {
     let successCount = 0;
     for (const file of Array.from(files)) {
       try {
-        const fileName = `${selectedProject.id}/${Date.now()}-${file.name}`;
+        const fileName = `${selectedProject.id}/${Date.now()}-${safeStorageFileName(file.name)}`;
 
         const { error: uploadError } = await supabase.storage
           .from("project-files")
@@ -1481,7 +1483,7 @@ const ListingAdmin = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => window.open(doc.file_url, "_blank")}
+                              onClick={() => safeOpen(doc.file_url)}
                             >
                               <Download className="w-4 h-4" />
                             </Button>

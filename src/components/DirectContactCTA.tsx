@@ -206,7 +206,7 @@ const DirectContactCTA = ({
         {/* Social Links Display */}
         <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-[#B89555]/20">
           <span className="text-white/90 text-xs uppercase tracking-wider">{t('cta.followUs', 'Follow Us:')}</span>
-          <a 
+          <a aria-label="LinkedIn" 
             href={SOCIAL_LINKS.linkedin} 
             target="_blank" 
             rel="noopener noreferrer"
@@ -214,7 +214,7 @@ const DirectContactCTA = ({
           >
             <FaLinkedinIn className="w-4 h-4 text-[#1A1A1A]" />
           </a>
-          <a 
+          <a aria-label="Instagram" 
             href={SOCIAL_LINKS.instagram} 
             target="_blank" 
             rel="noopener noreferrer"
@@ -222,7 +222,7 @@ const DirectContactCTA = ({
           >
             <FaInstagram className="w-4 h-4 text-[#1A1A1A]" />
           </a>
-          <a 
+          <a aria-label="TikTok" 
             href={SOCIAL_LINKS.tiktok} 
             target="_blank" 
             rel="noopener noreferrer"
@@ -230,7 +230,7 @@ const DirectContactCTA = ({
           >
             <FaTiktok className="w-4 h-4 text-[#1A1A1A]" />
           </a>
-          <a 
+          <a aria-label="Website" 
             href={SOCIAL_LINKS.website} 
             target="_blank" 
             rel="noopener noreferrer"

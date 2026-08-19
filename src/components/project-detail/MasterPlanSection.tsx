@@ -1,5 +1,6 @@
 import { Map, Building2, Trees, Waves, Car, ShoppingBag, Maximize } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface MasterPlanSectionProps {
   masterPlanImageUrl?: string | null;
@@ -41,7 +42,7 @@ export default function MasterPlanSection({
 
   const handleMaximize = () => {
     if (masterPlanImageUrl) {
-      window.open(masterPlanImageUrl, "_blank", "noopener,noreferrer");
+      safeOpen(masterPlanImageUrl);
     }
   };
 

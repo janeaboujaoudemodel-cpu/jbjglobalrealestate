@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { generateWatermarkId, logDocumentDownload } from "@/utils/pdfWatermark";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Document {
   id: string;
@@ -69,7 +70,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
       duration: 5000,
     });
 
-    window.open(doc.file_url, "_blank");
+    safeOpen(doc.file_url);
   };
 
   const handleDownloadAll = async () => {
@@ -88,7 +89,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
         user?.id,
         user?.email || undefined
       );
-      window.open(doc.file_url, "_blank");
+      safeOpen(doc.file_url);
     }
   };
 

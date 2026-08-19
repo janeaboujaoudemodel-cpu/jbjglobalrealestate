@@ -183,7 +183,14 @@ def main() -> None:
     apply = "--apply" in sys.argv
     src = open(CSS).read()
     nodes = parse(src)
-    assert serialize(nodes) == src, "parser round-trip failed — refusing to write"
+    # Not an `assert`: `python -O` strips assert statements, which would silently
+    # delete this guard and let a lossy parse overwrite the 32k-line index.css.
+    if serialize(nodes) != src:
+        raise SystemExit(
+            f"parser round-trip failed on {CSS} — refusing to write. "
+            "The parser did not reproduce the source byte-for-byte, so any "
+            "rewrite would lose or corrupt CSS."
+        )
     rules = list(iter_style_rules(nodes))
     touched = 0
     branches = 0

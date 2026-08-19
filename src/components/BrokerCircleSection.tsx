@@ -170,7 +170,7 @@ const BrokerCircleSection = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-3">
             {AI_TOOLS.map((tool, index) => (
               <motion.div key={index} variants={fadeInUp}>
-                <Link to="/ai-hub">
+                <Link aria-label={tool.name} to="/ai-hub">
                   <Card className="bg-white/[0.04] backdrop-blur-sm border border-[#B89555]/30 hover:border-[#B89555]/60 hover:bg-white/[0.07] transition-all duration-300 h-full group rounded-xl">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">

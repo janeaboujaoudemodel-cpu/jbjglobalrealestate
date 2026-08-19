@@ -162,7 +162,7 @@ function DetailDrawer({ ad, isPlaying, onPlay, onClose, onRestore, onLoadAndExpo
       style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}
     >
-      <div
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
         className="w-full max-w-lg rounded-t-2xl shadow-2xl overflow-hidden"
         style={{ maxHeight: '85vh', background: '#111118', border: '1px solid rgba(255,255,255,0.08)' }}
         onClick={e => e.stopPropagation()}
@@ -173,7 +173,7 @@ function DetailDrawer({ ad, isPlaying, onPlay, onClose, onRestore, onLoadAndExpo
             <StatusBadge status={ad.project_data.status} />
             <p className="text-sm font-bold truncate max-w-[200px]" style={{ color: '#F1F0EE' }}>{ad.project_name}</p>
           </div>
-          <button onClick={onClose} style={{ color: '#8A8A9A' }} className="hover:opacity-70 transition-opacity">
+          <button aria-label="Close" onClick={onClose} style={{ color: '#8A8A9A' }} className="hover:opacity-70 transition-opacity">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -194,7 +194,7 @@ function DetailDrawer({ ad, isPlaying, onPlay, onClose, onRestore, onLoadAndExpo
             <span className="bg-[#1A1A1A]/70 text-[10px] px-2 py-0.5 rounded-full" style={{ color: '#F1F0EE' }}>{getLangName(s.language ?? 'en')}</span>
             <span className="bg-[#1A1A1A]/70 text-[10px] px-2 py-0.5 rounded-full" style={{ color: '#F1F0EE' }}>{getVoiceName(s.voiceId ?? '')}</span>
           </div>
-          <button
+          <button aria-label="Pause"
             onClick={onPlay}
             className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all"
             style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#F1F0EE' }}
@@ -348,7 +348,7 @@ function GridCard({
   const dur = ad.project_data.voiceover?.duration ?? ad.project_data.settings?.scriptDuration ?? 60;
 
   return (
-    <div
+    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
       className="relative rounded-lg overflow-hidden transition-all duration-200 group cursor-pointer"
       style={{
         border: hovered ? '1px solid rgba(200,168,122,0.4)' : '1px solid rgba(255,255,255,0.06)',

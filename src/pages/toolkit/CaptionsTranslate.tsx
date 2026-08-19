@@ -302,7 +302,7 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
 
         {/* Upload Area */}
         {!file && (
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
             className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300"

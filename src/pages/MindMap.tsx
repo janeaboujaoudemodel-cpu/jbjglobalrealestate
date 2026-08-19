@@ -326,7 +326,7 @@ const MindMap = () => {
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.min(2, z + 0.1))}>
             <ZoomIn className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={resetView}>
+          <Button aria-label="Undo" variant="outline" size="icon" onClick={resetView}>
             <RotateCcw className="w-4 h-4" />
           </Button>
           <Button onClick={exportMap} className="bg-violet-600 hover:bg-violet-700">

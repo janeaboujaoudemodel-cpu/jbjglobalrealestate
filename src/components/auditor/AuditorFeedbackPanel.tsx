@@ -167,7 +167,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
             <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
             Send Feedback to Jane
           </h2>
-          <button onClick={onClose} className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
+          <button aria-label="Close" onClick={onClose} className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
             <X className="w-5 h-5" />
           </button>
         </div>

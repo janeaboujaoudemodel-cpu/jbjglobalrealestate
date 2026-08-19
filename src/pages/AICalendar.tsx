@@ -475,13 +475,13 @@ const AICalendar = () => {
             <Card className="bg-cyan-900/20 border-cyan-500/30">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <Button size="sm" onClick={prevMonth} className="bg-cyan-600 hover:bg-cyan-700 text-white border-0 h-8 w-8 p-0">
+                  <Button aria-label="Previous" size="sm" onClick={prevMonth} className="bg-cyan-600 hover:bg-cyan-700 text-white border-0 h-8 w-8 p-0">
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
                   <CardTitle className="text-white">
                     {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   </CardTitle>
-                  <Button size="sm" onClick={nextMonth} className="bg-cyan-600 hover:bg-cyan-700 text-white border-0 h-8 w-8 p-0">
+                  <Button aria-label="Next" size="sm" onClick={nextMonth} className="bg-cyan-600 hover:bg-cyan-700 text-white border-0 h-8 w-8 p-0">
                     <ChevronRight className="w-4 h-4" />
                   </Button>
                 </div>

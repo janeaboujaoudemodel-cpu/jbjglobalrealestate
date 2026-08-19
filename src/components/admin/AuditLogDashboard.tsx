@@ -199,7 +199,7 @@ export default function AuditLogDashboard() {
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 className="flex-1 bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
               />
-              <Button onClick={handleSearch} variant="secondary" className="bg-[#EFE6D6]/20 hover:bg-[#EFE6D6]/30 text-[#1A1A1A]">
+              <Button aria-label="Search" onClick={handleSearch} variant="secondary" className="bg-[#EFE6D6]/20 hover:bg-[#EFE6D6]/30 text-[#1A1A1A]">
                 <Search className="h-4 w-4" />
               </Button>
             </div>

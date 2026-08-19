@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useCanEdit } from "@/hooks/useEffectiveOwner";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface ImageRow {
   id: string;
@@ -61,7 +62,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
     let i = 0;
     for (const file of Array.from(files)) {
       try {
-        const path = `project-uploads/${projectId}/${crypto.randomUUID()}-${file.name}`;
+        const path = `project-uploads/${projectId}/${crypto.randomUUID()}-${safeStorageFileName(file.name)}`;
         const { error: upErr } = await supabase.storage
           .from(BUCKET)
           .upload(path, file, { contentType: file.type || "image/jpeg" });

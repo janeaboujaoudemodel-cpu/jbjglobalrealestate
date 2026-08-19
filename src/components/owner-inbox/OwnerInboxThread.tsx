@@ -225,7 +225,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               </Button>
             )}
 
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
+            <Button aria-label="Close" variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -476,7 +476,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 }}
               />
               <div className="flex flex-col gap-2">
-                <Button
+                <Button aria-label="AI assist"
                   variant="outline"
                   size="icon"
                   className="h-9 w-9 border-[#B89555]/30"
@@ -489,7 +489,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                     <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
                   )}
                 </Button>
-                <Button
+                <Button aria-label="Send"
                   variant="primary"
                   size="icon"
                   className="h-9 w-9"

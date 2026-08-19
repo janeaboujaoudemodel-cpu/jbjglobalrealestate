@@ -664,7 +664,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
               <Command className="w-4 h-4" />
             </button>
           </div>
-          <Button onClick={handleSendMessage} disabled={(!input.trim() && pendingFiles.length === 0) || isLoading}
+          <Button aria-label="Show commands" onClick={handleSendMessage} disabled={(!input.trim() && pendingFiles.length === 0) || isLoading}
             className="bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#B89555] text-white w-11 h-11 p-0">
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </Button>

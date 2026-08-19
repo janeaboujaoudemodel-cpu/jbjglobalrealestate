@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { FileSpreadsheet, Loader2, Download, Wand2, Stamp, PenTool, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import DOMPurify from "dompurify";
+import { escapeHtml, openPrintWindow } from "@/utils/printWindow";
 
 const TONES = ["professional", "formal", "friendly", "executive"];
 
@@ -71,16 +72,12 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
   };
 
   const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
-    if (printWindow && generatedHtml) {
-      printWindow.document.write(`<!DOCTYPE html><html><head><title>Job Offer - ${applicantName}</title><style>body{font-family:Georgia,serif;padding:40px;max-width:700px;margin:0 auto;color:#1a1a1a;}@media print{body{padding:20px;}}</style></head><body>
-        <div style="height:6px;background:linear-gradient(90deg,${headerColor1},${headerColor2});border-radius:3px;margin-bottom:30px;"></div>
-        ${generatedHtml}
-        <div style="height:6px;background:linear-gradient(90deg,${headerColor1},${headerColor2});border-radius:3px;margin-top:30px;"></div>
-      </body></html>`);
-      printWindow.document.close();
-      printWindow.print();
-    }
+    if (!generatedHtml) return;
+    openPrintWindow(`<!DOCTYPE html><html><head><title>Job Offer - ${escapeHtml(applicantName)}</title><style>body{font-family:Georgia,serif;padding:40px;max-width:700px;margin:0 auto;color:#1a1a1a;}@media print{body{padding:20px;}}</style></head><body>
+      <div style="height:6px;background:linear-gradient(90deg,${headerColor1},${headerColor2});border-radius:3px;margin-bottom:30px;"></div>
+      ${generatedHtml}
+      <div style="height:6px;background:linear-gradient(90deg,${headerColor1},${headerColor2});border-radius:3px;margin-top:30px;"></div>
+    </body></html>`);
   };
 
   return (

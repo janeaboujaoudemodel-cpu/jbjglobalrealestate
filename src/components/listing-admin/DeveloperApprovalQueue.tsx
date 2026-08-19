@@ -27,6 +27,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeOpen } from "@/utils/safeUrl";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -421,7 +422,7 @@ export const DeveloperApprovalQueue = () => {
                       </p>
 
                       {/* Action buttons */}
-                      <div
+                      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                         className="flex items-center gap-2 pt-3 border-t border-[#B89555]/30 mt-auto"
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -455,7 +456,7 @@ export const DeveloperApprovalQueue = () => {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => window.open(developer.provident_link || "#", "_blank")}
+                          onClick={() => safeOpen(developer.provident_link || "#")}
                           disabled={!developer.provident_link}
                           className="w-8 h-8 p-0 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                           title="View Source"

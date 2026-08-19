@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import pako from "npm:pako@2.1.0";
 import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
+import { safeFetch } from "../_shared/ssrf-guard.ts";
 
 
 const corsHeaders = {
@@ -220,13 +221,13 @@ async function extractCvText(
     const isFullUrl = /^https?:\/\//i.test(cvUrl);
 
     if (publicMatch) {
-      const resp = await fetch(cvUrl);
+      const resp = await safeFetch(cvUrl);
       if (resp.ok) {
         fileBytes = new Uint8Array(await resp.arrayBuffer());
         fileName = publicMatch[2];
       }
     } else if (isFullUrl) {
-      const resp = await fetch(cvUrl);
+      const resp = await safeFetch(cvUrl);
       if (resp.ok) {
         fileBytes = new Uint8Array(await resp.arrayBuffer());
       }

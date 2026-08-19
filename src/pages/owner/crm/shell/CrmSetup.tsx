@@ -180,7 +180,7 @@ export default function CrmSetup() {
                 {g.items.map((i) => {
                   const Icon = i.icon;
                   return (
-                    <button type="button" className="jc-setup__card" key={i.label}>
+                    <button type="button" aria-label={i.label} className="jc-setup__card" key={i.label}>
                       <span className="jc-setup__card-icon"><Icon size={20} strokeWidth={1.9} /></span>
                       <span className="jc-setup__card-body">
                         <span className="jc-setup__card-title">{i.label}</span>

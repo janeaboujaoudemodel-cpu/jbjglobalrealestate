@@ -101,7 +101,7 @@ export function AIVideoStudioTopBar({
                 if (e.key === 'Escape') setIsEditing(false);
               }}
             />
-            <button
+            <button aria-label="Confirm"
               onClick={handleSave}
               className="p-1.5 rounded"
               style={{ color: '#FFFFFF' }}
@@ -123,7 +123,7 @@ export function AIVideoStudioTopBar({
       {/* Center — Undo/Redo & Status */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1">
-          <button
+          <button aria-label="Undo"
             onClick={onUndo}
             disabled={!canUndo}
             className="min-w-11 h-11 p-1.5 rounded transition-opacity disabled:opacity-20 inline-flex items-center justify-center"
@@ -131,7 +131,7 @@ export function AIVideoStudioTopBar({
           >
             <Undo2 className="w-4 h-4" />
           </button>
-          <button
+          <button aria-label="Redo"
             onClick={onRedo}
             disabled={!canRedo}
             className="min-w-11 h-11 p-1.5 rounded transition-opacity disabled:opacity-20 inline-flex items-center justify-center"
@@ -181,7 +181,7 @@ export function AIVideoStudioTopBar({
           <Download className="w-3.5 h-3.5" />
           Export
         </button>
-        <button
+        <button aria-label="Settings"
           className="min-w-11 h-11 p-1.5 rounded-md transition-opacity hover:opacity-80 inline-flex items-center justify-center"
           style={{
             background: '#1E1E28',

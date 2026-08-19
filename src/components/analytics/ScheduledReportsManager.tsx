@@ -350,7 +350,7 @@ function ReportCard({ report, onToggleStatus, onSendNow, onDelete, onViewHistory
               Send Now
             </Button>
           </div>
-          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={onDelete}>
+          <Button aria-label="Delete" variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={onDelete}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>

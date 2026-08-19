@@ -17,6 +17,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { CrossChannelToggle } from "@/components/shared/CrossChannelToggle";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Lead {
   id: string;
@@ -102,7 +103,7 @@ const SmartEmailComposer = ({ lead, onSend }: SmartEmailComposerProps) => {
     }
 
     const mailtoUrl = `mailto:${lead.email_lower}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(mailtoUrl, "_blank");
+    safeOpen(mailtoUrl);
     onSend?.({ subject, body });
   };
 

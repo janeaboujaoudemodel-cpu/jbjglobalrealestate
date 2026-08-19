@@ -97,7 +97,7 @@ export const BreakfastBookingsSection = () => {
               {k[0].toUpperCase() + k.slice(1)}
             </button>
           ))}
-          <Button variant="outline" size="sm" onClick={load} className="h-7">
+          <Button aria-label="Refresh" variant="outline" size="sm" onClick={load} className="h-7">
             <RefreshCw className="w-3 h-3" />
           </Button>
         </div>
@@ -138,11 +138,11 @@ export const BreakfastBookingsSection = () => {
                   <td className="px-3 py-2 align-top font-semibold text-[#1A1A1A]">{r.brokerage_name || "—"}</td>
                   <td className="px-3 py-2 align-top text-[#1A1A1A]">{r.requester_name}</td>
                   <td className="px-3 py-2 align-top">
-                    <a href={`mailto:${r.requester_email}`} className="flex items-center gap-1 text-xs text-[#1A1A1A] hover:underline">
+                    <a aria-label="Email" href={`mailto:${r.requester_email}`} className="flex items-center gap-1 text-xs text-[#1A1A1A] hover:underline">
                       <Mail className="w-3 h-3" /> {r.requester_email}
                     </a>
                     {r.requester_phone && (
-                      <a href={`tel:${r.requester_phone}`} className="flex items-center gap-1 text-xs text-[#1A1A1A] hover:underline mt-0.5">
+                      <a aria-label="Call" href={`tel:${r.requester_phone}`} className="flex items-center gap-1 text-xs text-[#1A1A1A] hover:underline mt-0.5">
                         <Phone className="w-3 h-3" /> {r.requester_phone}
                       </a>
                     )}

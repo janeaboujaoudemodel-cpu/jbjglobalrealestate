@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { UnifiedProject } from "@/types/unifiedProject";
 import { useLatestEditLog, formatRelativeTime } from "@/hooks/useAdminEditLog";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface ProjectDetailAdminProps {
   project: UnifiedProject;
@@ -327,7 +328,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
                       <p className="text-xs text-muted-foreground">{doc.document_type}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => window.open(doc.file_url, "_blank")}>
+                  <Button variant="ghost" size="sm" onClick={() => safeOpen(doc.file_url)}>
                     <ExternalLink className="w-4 h-4" />
                   </Button>
                 </div>

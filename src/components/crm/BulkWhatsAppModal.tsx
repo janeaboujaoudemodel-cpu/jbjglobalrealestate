@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { MessageCircle, Users, Briefcase, Building, TrendingUp, ExternalLink, Copy, Check } from "lucide-react";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface BulkWhatsAppModalProps {
   open: boolean;
@@ -99,7 +100,7 @@ JBJ Global Real Estate Team`
   };
 
   const openWhatsApp = (recipient: Recipient) => {
-    window.open(getWhatsAppUrl(recipient.phone_e164), '_blank');
+    safeOpen(getWhatsAppUrl(recipient.phone_e164));
     
     // Log activity
     supabase.from("crm_activities").insert({

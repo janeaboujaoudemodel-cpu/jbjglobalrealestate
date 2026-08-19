@@ -286,10 +286,10 @@ const AICallSummarizerPremium = () => {
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="dark-outline" size="sm" onClick={copyToClipboard}>
+                  <Button aria-label="Confirm" variant="dark-outline" size="sm" onClick={copyToClipboard}>
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
-                  <Button variant="dark-outline" size="sm" onClick={downloadReport}>
+                  <Button aria-label="Download" variant="dark-outline" size="sm" onClick={downloadReport}>
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>

@@ -48,7 +48,7 @@ export function SettingsDropdown({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
+        <Button aria-label="Settings"
           variant="outline"
           size="icon"
           className={cn(

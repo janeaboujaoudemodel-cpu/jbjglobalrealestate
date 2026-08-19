@@ -370,7 +370,7 @@ const MyTickets = () => {
                 />
               </div>
             </div>
-            <Button
+            <Button aria-label="Send"
               onClick={handleSendReply}
               disabled={!replyMessage.trim() || sendReplyMutation.isPending}
               className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] self-end"

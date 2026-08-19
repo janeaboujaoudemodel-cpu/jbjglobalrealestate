@@ -19,6 +19,8 @@ const allowlistPath = path.join(__dirname, 'allowlist.json');
 const reportDir = path.join(root, 'artifacts', 'contrast');
 
 const PREVIEW_URL = process.env.PREVIEW_URL || 'http://localhost:8080';
+// Time to let a route finish hydrating before (and between) axe scans.
+const SETTLE_MS = Number(process.env.CONTRAST_SETTLE_MS || 2000);
 const INSTALLED_CHROMIUM = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
   || '/opt/ms-playwright/chromium-1194/chrome-linux/chrome';
 
@@ -112,24 +114,51 @@ async function run() {
     const targetUrl = new URL(route, PREVIEW_URL).toString();
     try {
       await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 30000 });
+      // Let the page settle before scanning. `networkidle` only means the
+      // network went quiet; React is often still hydrating, and the runtime
+      // contrast guards that repaint surfaces run after mount. Scanning at
+      // that instant is why this sweep was non-deterministic: two runs of the
+      // same commit (930ec6b) reported 1 violation and then 8, and routes
+      // flipped between clean and failing with no code change between them.
+      await page.waitForTimeout(SETTLE_MS);
       await page.addScriptTag({ content: axeSource });
-      const result = await page.evaluate(async () => {
-        // eslint-disable-next-line no-undef
-        return await axe.run(document, {
-          runOnly: { type: 'rule', values: ['color-contrast'] },
-          resultTypes: ['violations'],
+
+      const scan = async () => {
+        const result = await page.evaluate(async () => {
+          // eslint-disable-next-line no-undef
+          return await axe.run(document, {
+            runOnly: { type: 'rule', values: ['color-contrast'] },
+            resultTypes: ['violations'],
+          });
         });
-      });
-      const filtered = (result.violations || []).flatMap((v) =>
-        v.nodes
-          .filter((n) => !n.target.some((sel) => allowedSelectors.has(sel)))
-          .map((n) => ({
-            route,
-            target: n.target.join(' '),
-            html: n.html.slice(0, 240),
-            summary: n.failureSummary,
-          })),
-      );
+        return (result.violations || []).flatMap((v) =>
+          v.nodes
+            .filter((n) => !n.target.some((sel) => allowedSelectors.has(sel)))
+            .map((n) => ({
+              route,
+              target: n.target.join(' '),
+              html: n.html.slice(0, 240),
+              summary: n.failureSummary,
+            })),
+        );
+      };
+
+      let filtered = await scan();
+      if (filtered.length > 0) {
+        // Confirm before failing a merge-blocking gate: re-scan and keep only
+        // violations that appear in BOTH passes. A real contrast regression is
+        // a property of the stylesheet and reproduces; a half-rendered frame
+        // does not. Dropped candidates are logged rather than swallowed, so a
+        // genuinely intermittent problem is still visible in the run output.
+        await page.waitForTimeout(SETTLE_MS);
+        const second = await scan();
+        const confirmedTargets = new Set(second.map((f) => f.target));
+        const dropped = filtered.filter((f) => !confirmedTargets.has(f.target));
+        filtered = filtered.filter((f) => confirmedTargets.has(f.target));
+        for (const d of dropped) {
+          console.log(`    ~ [${viewport.name}] ${route} — did not reproduce on re-scan, not counted: ${d.target}`);
+        }
+      }
       const finalPath = new URL(page.url()).pathname;
       const unexpectedRedirect = route.startsWith('/owner') && !finalPath.startsWith('/owner');
       await page.screenshot({ path: path.join(reportDir, `${viewport.name}-${route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'home'}.png`) });

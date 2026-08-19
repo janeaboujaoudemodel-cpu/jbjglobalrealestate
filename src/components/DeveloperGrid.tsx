@@ -101,6 +101,7 @@ const DeveloperGrid = () => {
               <Link
                 to={`/developer/${developer.slug}`}
                 className="inline-block group mb-6"
+                aria-label={developer.name}
               >
                 <DeveloperLogo
                   src={developer.logo_url}

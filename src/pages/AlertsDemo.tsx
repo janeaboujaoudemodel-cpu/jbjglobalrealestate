@@ -68,7 +68,7 @@ export default function AlertsDemo() {
       <DemoSection title="2. Owner Tasks Popup" description="Shown to owner on login when pending tasks exist. Once per day.">
         <div className="rounded-xl overflow-hidden border border-[#B89555]/30 relative flex items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm" style={{ height: 360 }}>
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
-            <button className="absolute top-3 right-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"><X className="w-5 h-5" /></button>
+            <button aria-label="Close" className="absolute top-3 right-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
                 <AlertTriangle className="w-6 h-6 text-[hsl(var(--gold))]" />
@@ -93,7 +93,7 @@ export default function AlertsDemo() {
       <DemoSection title="3. User Notifications Popup" description="Shown to regular users when they have ticket replies or pending tasks. Once per 24h.">
         <div className="rounded-xl overflow-hidden border border-[#B89555]/30 relative flex items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm" style={{ height: 460 }}>
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
-            <button className="absolute top-3 right-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"><X className="w-5 h-5" /></button>
+            <button aria-label="Close" className="absolute top-3 right-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
                 <Bell className="w-6 h-6 text-[hsl(var(--gold))]" />

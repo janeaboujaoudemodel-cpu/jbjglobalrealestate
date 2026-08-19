@@ -199,7 +199,25 @@
           if (overlay) return;
           overlay = document.createElement('div');
           overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#000;color:#fff;padding:2rem;font-family:monospace;overflow:auto;';
-          overlay.innerHTML = '<h1 style="color:#f00;margin:0 0 1rem;">Boot Error</h1><pre style="white-space:pre-wrap;word-break:break-word;">' + msg + '</pre><p style="margin-top:1rem;color:#888;">Check DevTools Console for details.</p>';
+
+          // Built with DOM nodes, not innerHTML: `msg` carries the error text,
+          // the failing script URL and a stack trace, any of which can contain
+          // attacker-influenced markup. textContent renders it inert.
+          var heading = document.createElement('h1');
+          heading.style.cssText = 'color:#f00;margin:0 0 1rem;';
+          heading.textContent = 'Boot Error';
+
+          var detail = document.createElement('pre');
+          detail.style.cssText = 'white-space:pre-wrap;word-break:break-word;';
+          detail.textContent = msg;
+
+          var hint = document.createElement('p');
+          hint.style.cssText = 'margin-top:1rem;color:#888;';
+          hint.textContent = 'Check DevTools Console for details.';
+
+          overlay.appendChild(heading);
+          overlay.appendChild(detail);
+          overlay.appendChild(hint);
           document.body.appendChild(overlay);
         }
         window.onerror = function(msg, src, line, col, err) {

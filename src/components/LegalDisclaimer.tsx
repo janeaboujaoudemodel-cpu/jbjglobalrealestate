@@ -129,7 +129,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
               <MessageCircle className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               WhatsApp Us
             </a>
-            <a 
+            <a aria-label="Call" 
               href={`tel:${CONTACT_INFO.phone}`}
               className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors border-0"
               style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}

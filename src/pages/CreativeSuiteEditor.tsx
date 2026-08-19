@@ -131,7 +131,7 @@ export default function CreativeSuiteEditor() {
       {/* Top Bar */}
       <header className="h-14 bg-[#1A1A1A]/90 backdrop-blur-xl border-b border-[#B89555]/20 flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <Link to="/studio" className="p-2 rounded-lg hover:bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white transition-colors">
+          <Link aria-label="Back" to="/studio" className="p-2 rounded-lg hover:bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           
@@ -217,7 +217,7 @@ export default function CreativeSuiteEditor() {
           {/* More Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-[#1A1A1A]/70">
+              <Button aria-label="More options" variant="ghost" size="icon" className="text-[#1A1A1A]/70">
                 <MoreVertical className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>

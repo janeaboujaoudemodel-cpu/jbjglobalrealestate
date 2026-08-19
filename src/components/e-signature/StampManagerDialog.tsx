@@ -300,7 +300,7 @@ export default function StampManagerDialog({ open, onOpenChange, onUse }: StampM
                           if (e.key === "Escape") setRenamingId(null);
                         }}
                       />
-                      <Button size="icon" className="h-7 w-7" onClick={commitRename}>
+                      <Button aria-label="Confirm" size="icon" className="h-7 w-7" onClick={commitRename}>
                         <Check className="w-3.5 h-3.5" />
                       </Button>
                       <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setRenamingId(null)}>

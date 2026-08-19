@@ -170,7 +170,7 @@ export default function OwnerNewsHub() {
             ))}
             <Input value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === "Enter" && load()}
               placeholder="Search title…" className="ml-2 max-w-xs bg-[#FDFBF7]" />
-            <Button onClick={load} variant="ghost" size="sm"><RefreshCw className="h-4 w-4" /></Button>
+            <Button aria-label="Refresh" onClick={load} variant="ghost" size="sm"><RefreshCw className="h-4 w-4" /></Button>
           </div>
 
           <div className="overflow-x-auto">
@@ -203,7 +203,7 @@ export default function OwnerNewsHub() {
                         <Button size="sm" variant="ghost" title="Delete" onClick={() => { if (confirm("Delete article?")) mutate(a.id, "delete"); }}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
-                        {a.source_url && <a href={a.source_url} target="_blank" rel="noreferrer"
+                        {a.source_url && <a aria-label="Delete" href={a.source_url} target="_blank" rel="noreferrer"
                           className="inline-flex items-center px-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"><ExternalLink className="h-3.5 w-3.5" /></a>}
                       </div>
                     </td>

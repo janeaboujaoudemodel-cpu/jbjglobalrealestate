@@ -58,7 +58,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
       : {};
 
     return (
-      <img
+      <img alt=""
         ref={ref}
         {...props}
         src={resolvedSrc}

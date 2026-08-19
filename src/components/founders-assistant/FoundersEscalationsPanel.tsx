@@ -249,7 +249,7 @@ export function FoundersEscalationsPanel() {
               </SelectContent>
             </Select>
 
-            <Button
+            <Button aria-label="Refresh"
               variant="outline"
               size="icon"
               onClick={refreshEscalationQueue}

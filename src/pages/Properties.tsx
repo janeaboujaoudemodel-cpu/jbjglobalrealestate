@@ -89,6 +89,7 @@ const toDisplayNames = (values: string[]): string[] =>
 const PropertiesMapView = lazy(() => import("@/components/maps/PropertiesMapView"));
 import { CURRENCY_RATES, CURRENCY_SYMBOLS } from "@/hooks/useCurrency";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { safeOpen } from "@/utils/safeUrl";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 
 type ExtendedCurrency = string;
@@ -650,7 +651,7 @@ const Properties = ({ preset }: { preset?: ProjectStatus } = {}) => {
   };
 
   const handleInquirySubmit = () => {
-    window.open(buildSureFormsUrl(), '_blank', 'noopener,noreferrer');
+    safeOpen(buildSureFormsUrl());
     setIsRequestFormOpen(false);
   };
 

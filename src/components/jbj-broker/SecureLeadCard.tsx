@@ -20,6 +20,7 @@ import {
   Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { safeNavigate } from "@/utils/safeUrl";
 
 interface SecureLeadData {
   id: string;
@@ -66,7 +67,7 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
       const message = `Hi, I'm reaching out regarding a property inquiry from ${lead.first_name}. Lead ID: ${lead.id}`;
       const whatsappUrl = getWhatsAppUrl(message);
 
-      window.location.href = whatsappUrl;
+      safeNavigate(whatsappUrl);
 
       onContact?.();
       toast.success("Opening company WhatsApp...");

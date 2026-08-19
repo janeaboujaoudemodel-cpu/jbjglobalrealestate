@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
 import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
+import { safeFetch } from "../_shared/ssrf-guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -138,7 +139,7 @@ async function extractTextFromDocumentUrl(docUrl: string, firecrawlApiKey?: stri
 
   // 2) Fallback: direct text read for text-based files
   try {
-    const res = await fetch(docUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+    const res = await safeFetch(docUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
     if (!res.ok) return "";
     const contentType = (res.headers.get("content-type") || "").toLowerCase();
     if (
@@ -322,7 +323,7 @@ async function saveDocumentsToStorage(
 
   for (const doc of documents) {
     try {
-      const res = await fetch(doc.url, { headers: { "User-Agent": "Mozilla/5.0" } });
+      const res = await safeFetch(doc.url, { headers: { "User-Agent": "Mozilla/5.0" } });
       if (!res.ok) {
         saved.push({ ...doc, storage_url: doc.url });
         continue;

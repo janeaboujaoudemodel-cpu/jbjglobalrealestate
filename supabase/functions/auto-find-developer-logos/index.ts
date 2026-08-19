@@ -13,6 +13,7 @@
  * logo_status='unavailable' so the queue can move on.
  */
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { safeFetch } from "../_shared/ssrf-guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -98,7 +99,7 @@ async function fetchWithTimeout(url: string, init: RequestInit, ms: number): Pro
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), ms);
   try {
-    return await fetch(url, { ...init, signal: ctl.signal });
+    return await safeFetch(url, { ...init, signal: ctl.signal });
   } finally {
     clearTimeout(t);
   }
@@ -142,7 +143,8 @@ async function firecrawlBranding(apiKey: string, url: string): Promise<{ logo?: 
 
 async function headValidate(url: string): Promise<{ ok: boolean; contentType?: string; size?: number }> {
   try {
-    const r = await fetch(url, { method: "HEAD", redirect: "follow" });
+    // safeFetch resolves redirects itself so every hop is re-validated.
+    const r = await safeFetch(url, { method: "HEAD" });
     if (!r.ok) return { ok: false };
     const ct = (r.headers.get("content-type") || "").toLowerCase().split(";")[0].trim();
     const len = Number(r.headers.get("content-length") || 0);
@@ -157,7 +159,7 @@ async function headValidate(url: string): Promise<{ ok: boolean; contentType?: s
 
 async function downloadBytes(url: string): Promise<{ bytes: Uint8Array; contentType: string } | null> {
   try {
-    const r = await fetch(url, { redirect: "follow" });
+    const r = await safeFetch(url);
     if (!r.ok) return null;
     const ct = (r.headers.get("content-type") || "image/png").toLowerCase().split(";")[0].trim();
     const buf = new Uint8Array(await r.arrayBuffer());

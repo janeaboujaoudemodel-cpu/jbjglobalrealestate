@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { CalendarIcon, Loader2, Upload, FileText, X, Clock, Send, MapPin, Building2, AlertTriangle } from 'lucide-react';
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface BriefingRequestFormProps {
   representativeId: string;
@@ -52,7 +53,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
     const uploaded: UploadedFile[] = [];
     for (const file of Array.from(fileList)) {
       try {
-        const path = `briefing-docs/${representativeId}/${Date.now()}-${file.name}`;
+        const path = `briefing-docs/${representativeId}/${Date.now()}-${safeStorageFileName(file.name)}`;
         const { error } = await supabase.storage.from('documents').upload(path, file);
         if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
         const { data: urlData } = supabase.storage.from('documents').getPublicUrl(path);

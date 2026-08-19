@@ -83,6 +83,7 @@ export default function JBJContactBlock({
               <a
                 key={label}
                 href={href}
+                aria-label={label}
                 className="group relative overflow-hidden rounded-2xl border border-[#B89555]/45
                            bg-[#FDFBF7]/85 backdrop-blur-md p-4 sm:p-5
                            shadow-[0_10px_28px_-22px_rgba(184,149,85,0.45)]

@@ -485,7 +485,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
           
           {/* Upload Area */}
           {!mediaFile && (
-            <div
+            <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileDrop}
               className="border-2 border-dashed border-[#1A1A1A] rounded-lg p-4 text-center hover:border-amber-500/50 transition-colors cursor-pointer"

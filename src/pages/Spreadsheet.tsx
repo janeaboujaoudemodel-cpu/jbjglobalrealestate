@@ -421,7 +421,7 @@ const Spreadsheet = () => {
 
           {/* Toolbar */}
           <div className="bg-card border border-border rounded-lg p-2 mb-4 flex flex-wrap items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={undo} disabled={historyIndex <= 0}>
+            <Button aria-label="Undo" variant="ghost" size="sm" onClick={undo} disabled={historyIndex <= 0}>
               <Undo className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="sm" onClick={redo} disabled={historyIndex >= history.length - 1}>
@@ -430,14 +430,14 @@ const Spreadsheet = () => {
             
             <div className="w-px h-6 bg-border mx-1" />
             
-            <Button 
+            <Button aria-label="Toggle bold" 
               variant={selectedCellData?.bold ? "secondary" : "ghost"} 
               size="sm" 
               onClick={toggleBold}
             >
               <Bold className="h-4 w-4" />
             </Button>
-            <Button 
+            <Button aria-label="Toggle italic" 
               variant={selectedCellData?.italic ? "secondary" : "ghost"} 
               size="sm" 
               onClick={toggleItalic}
@@ -471,10 +471,10 @@ const Spreadsheet = () => {
             
             <div className="w-px h-6 bg-border mx-1" />
             
-            <Button variant="ghost" size="sm" onClick={copyCell}>
+            <Button aria-label="Copy" variant="ghost" size="sm" onClick={copyCell}>
               <Copy className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm" onClick={pasteCell}>
+            <Button aria-label="Copy" variant="ghost" size="sm" onClick={pasteCell}>
               <Clipboard className="h-4 w-4" />
             </Button>
             

@@ -363,7 +363,7 @@ const AdminRoleManagement = () => {
                     <TableCell className="text-right">
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                          <Button aria-label="Delete" variant="ghost" size="sm" className="text-destructive hover:text-destructive">
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </AlertDialogTrigger>
@@ -443,7 +443,7 @@ const AdminRoleManagement = () => {
                     <TableCell className="text-right">
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                          <Button aria-label="Delete" variant="ghost" size="sm" className="text-destructive hover:text-destructive">
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </AlertDialogTrigger>

@@ -19,6 +19,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Sparkles, X, Send as SendIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { safeOpen } from "@/utils/safeUrl";
 
 type Bucket =
   | "templates" | "documents" | "esign" | "drafts" | "generated"
@@ -139,7 +140,7 @@ export function AICommandPanel(props: AICommandPanelProps) {
       // the user sees the export even if the bucket button isn't visible yet.
       rows.forEach((e, i) =>
         setTimeout(
-          () => window.open(brandedHref(e.signed_document_url || undefined, e.document_filename || `${e.name || "document"}.pdf`), "_blank", "noopener,noreferrer"),
+          () => safeOpen(brandedHref(e.signed_document_url || undefined, e.document_filename || `${e.name || "document"}.pdf`)),
           i * 120,
         ),
       );
@@ -199,7 +200,7 @@ export function AICommandPanel(props: AICommandPanelProps) {
           disabled={busy}
           className="h-9 text-sm bg-white"
         />
-        <Button type="submit" size="sm" variant="gold" disabled={busy || !input.trim()}>
+        <Button type="submit" size="sm" variant="gold" aria-label="Send command" disabled={busy || !input.trim()}>
           {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <SendIcon className="w-4 h-4" />}
         </Button>
       </form>

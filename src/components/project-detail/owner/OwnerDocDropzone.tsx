@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface DocRow {
   id: string;
@@ -71,7 +72,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
         const mediaKind = isImageFile(file) ? "image" : isVideoFile(file) ? "video" : "document";
         const bucket = mediaKind === "document" ? BUCKET : PUBLIC_MEDIA_BUCKET;
         const folder = mediaKind === "document" ? projectId : `project-uploads/${projectId}`;
-        const path = `${folder}/${crypto.randomUUID()}-${file.name}`;
+        const path = `${folder}/${crypto.randomUUID()}-${safeStorageFileName(file.name)}`;
         const { error: upErr } = await supabase.storage
           .from(bucket)
           .upload(path, file, { contentType: file.type || "application/octet-stream" });

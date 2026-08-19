@@ -345,7 +345,7 @@ const InquiryManagementHub: React.FC = () => {
                               </div>
                             </TableCell>
                             <TableCell className="text-right">
-                              <div className="flex items-center justify-end gap-1" onClick={e => e.stopPropagation()}>
+                              <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="flex items-center justify-end gap-1" onClick={e => e.stopPropagation()}>
                                 {inq.phone && (
                                   <Button
                                     size="sm"

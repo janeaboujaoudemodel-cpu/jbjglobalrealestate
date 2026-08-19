@@ -29,6 +29,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import DOMPurify from 'dompurify';
+import { safeStorageFileName } from '@/utils/storagePath';
 
 type CampaignType = 'email' | 'whatsapp' | 'social' | 'sms';
 type TargetAudience = 'all' | 'newsletter' | 'leads' | 'investors' | 'brokers' | 'custom';
@@ -259,7 +260,7 @@ const CampaignEditor: React.FC<CampaignEditorProps> = ({ campaign, onClose, onSa
 
     for (const file of Array.from(files)) {
       try {
-        const fileName = `${Date.now()}_${file.name}`;
+        const fileName = `${Date.now()}_${safeStorageFileName(file.name)}`;
         const { data, error } = await supabase.storage
           .from('public-assets')
           .upload(`marketing/${fileName}`, file, { cacheControl: '3600', upsert: false });
@@ -533,7 +534,7 @@ The content should be:
       <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+            <Button aria-label="Back" variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>

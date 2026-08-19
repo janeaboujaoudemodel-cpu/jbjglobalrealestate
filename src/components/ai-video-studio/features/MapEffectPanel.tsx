@@ -220,7 +220,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                 className="flex-1 bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg px-2.5 py-1.5 text-xs text-white placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-amber-400 transition-colors"
                 placeholder="Type address or place..."
               />
-              <button
+              <button aria-label="Search"
                 onClick={handleGeocode}
                 disabled={isGeocoding}
                 className="bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] rounded-lg px-2.5 flex items-center justify-center transition-colors font-bold disabled:opacity-50"

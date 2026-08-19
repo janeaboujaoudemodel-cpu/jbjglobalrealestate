@@ -139,7 +139,7 @@ export function StampLicenseUploader({ onExtracted }: Props) {
       {!extracted ? (
         <>
           {/* Drop zone */}
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             onDragOver={e => { e.preventDefault(); setDragging(true); }}
             onDragLeave={() => setDragging(false)}
             onDrop={handleDrop}

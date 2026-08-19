@@ -575,6 +575,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             <PopoverTrigger asChild>
               <button
                 type="button"
+                aria-label="Select country dialling code"
                 aria-expanded={codeOpen}
                 aria-haspopup="dialog"
                 disabled={disabled}
@@ -587,11 +588,18 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 data-no-contrast-guard
                 data-allow-dark-cta
               >
-                <span className="flex items-center gap-2 truncate" style={{ color: "#FFFFFF" }}>
+                {/* Inherit the trigger's own colour instead of hard-coding white.
+                  * buttonStyles resolves to a dark fill on one variant and a
+                  * light/gold one on another, and the Sun-skin guard can repaint
+                  * the fill champagne at runtime -- but these spans used to stay
+                  * #FFFFFF regardless, which rendered the dial code white on
+                  * #F7F2EA (contrast 1.11) and made it invisible on /services at
+                  * mobile width. Inheriting tracks whichever fill actually wins. */}
+                <span className="flex items-center gap-2 truncate" style={{ color: "inherit" }}>
                   <span className="text-xl">{currentCountry.flag}</span>
-                  <span className="font-medium" style={{ color: "#FFFFFF" }}>{currentCode}</span>
+                  <span className="font-medium" style={{ color: "inherit" }}>{currentCode}</span>
                 </span>
-                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={{ color: "inherit", stroke: "currentColor" }} />
               </button>
             </PopoverTrigger>
             <PopoverContent 

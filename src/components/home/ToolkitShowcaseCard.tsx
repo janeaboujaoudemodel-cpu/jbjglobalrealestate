@@ -203,7 +203,7 @@ export function ToolkitShowcaseCard() {
                 {active.description}
               </p>
               <div className="mt-4">
-                <Link
+                <Link aria-label="Next"
                   to={active.href}
                   data-ink-emerald
                   data-on-dark

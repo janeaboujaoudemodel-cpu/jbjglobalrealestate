@@ -297,10 +297,10 @@ const Whiteboard = () => {
           />
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" onClick={undo} disabled={historyIndex === 0}>
+          <Button aria-label="Undo" variant="outline" size="icon" onClick={undo} disabled={historyIndex === 0}>
             <Undo className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={redo} disabled={historyIndex === history.length - 1}>
+          <Button aria-label="Redo" variant="outline" size="icon" onClick={redo} disabled={historyIndex === history.length - 1}>
             <Redo className="w-4 h-4" />
           </Button>
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}>
@@ -310,7 +310,7 @@ const Whiteboard = () => {
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.min(2, z + 0.1))}>
             <ZoomIn className="w-4 h-4" />
           </Button>
-          <Button variant="destructive" size="icon" onClick={clearCanvas}>
+          <Button aria-label="Delete" variant="destructive" size="icon" onClick={clearCanvas}>
             <Trash2 className="w-4 h-4" />
           </Button>
           <Button onClick={exportCanvas} className="bg-cyan-600 hover:bg-cyan-700">

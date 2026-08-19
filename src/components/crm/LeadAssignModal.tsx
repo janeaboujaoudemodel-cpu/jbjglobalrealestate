@@ -206,7 +206,7 @@ export default function LeadAssignModal({
         <DialogHeader>
           <DialogTitle className="text-foreground flex items-center gap-2">
             {step !== "choose" && (
-              <Button
+              <Button aria-label="Back"
                 variant="ghost"
                 size="icon"
                 className="h-8 w-8 mr-1"

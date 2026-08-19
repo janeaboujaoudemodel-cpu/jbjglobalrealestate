@@ -132,7 +132,7 @@ export function VoiceoverRecorder({ onRecordingComplete, onAIVoiceGenerated }: V
           <div className="p-3 bg-[#1A1A1A]/50 rounded-lg border border-[#1A1A1A]">
             <div className="flex items-center justify-center gap-4 mb-3">
               {!isRecording && !recordedBlob && (
-                <Button
+                <Button aria-label="Record"
                   onClick={startRecording}
                   className="bg-red-500 hover:bg-red-600 text-white rounded-full w-16 h-16"
                 >
@@ -141,7 +141,7 @@ export function VoiceoverRecorder({ onRecordingComplete, onAIVoiceGenerated }: V
               )}
               {isRecording && (
                 <div className="flex flex-col items-center gap-2">
-                  <Button
+                  <Button aria-label="Stop"
                     onClick={stopRecording}
                     className="bg-red-500 hover:bg-red-600 text-white rounded-full w-16 h-16 animate-pulse"
                   >
@@ -154,11 +154,11 @@ export function VoiceoverRecorder({ onRecordingComplete, onAIVoiceGenerated }: V
               )}
               {recordedBlob && !isRecording && (
                 <div className="flex items-center gap-2">
-                  <Button size="sm" variant="ghost" onClick={togglePlayback} className="text-[#1A1A1A]/70 hover:text-white">
+                  <Button aria-label="Pause" size="sm" variant="ghost" onClick={togglePlayback} className="text-[#1A1A1A]/70 hover:text-white">
                     {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </Button>
                   <span className="text-[#1A1A1A]/70 font-mono text-sm">{formatTime(recordingDuration)}</span>
-                  <Button size="sm" variant="ghost" onClick={deleteRecording} className="text-red-400 hover:text-red-300">
+                  <Button aria-label="Delete" size="sm" variant="ghost" onClick={deleteRecording} className="text-red-400 hover:text-red-300">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                   <Button size="sm" onClick={addToTimeline} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">

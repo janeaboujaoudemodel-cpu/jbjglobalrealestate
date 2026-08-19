@@ -502,14 +502,14 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 <p className="text-xs text-white/80">~{narration.duration}s · {narration.wordCount} words</p>
               </div>
               <div className="flex items-center gap-1.5 flex-shrink-0">
-                <button onClick={handlePlayPause}
+                <button aria-label="Pause" onClick={handlePlayPause}
                   disabled={voiceEngine === "premium" && !premiumAudioUrl}
                   className="w-9 h-9 rounded-full bg-[#FDFBF7]/20 hover:bg-[#FDFBF7]/30 flex items-center justify-center transition-all disabled:opacity-40">
                   {isPlaying
                     ? <Pause className="w-4 h-4 text-white" />
                     : <Play className="w-4 h-4 text-white ml-0.5" />}
                 </button>
-                <button onClick={handleDownload}
+                <button aria-label="Download" onClick={handleDownload}
                   className="w-8 h-8 rounded-full bg-[#FDFBF7]/10 hover:bg-[#FDFBF7]/20 flex items-center justify-center transition-all">
                   <Download className="w-3.5 h-3.5 text-white" />
                 </button>

@@ -756,19 +756,19 @@ export function VideoPreviewCanvas({
 
           {/* Center - Playback Controls */}
           <div className="flex items-center gap-1">
-            <button
+            <button aria-label="Skip backward"
               onClick={skipBackward}
               className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
               <SkipBack className="w-4 h-4" />
             </button>
-            <button
+            <button aria-label="Stop"
               onClick={handleStop}
               className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
               <Square className="w-4 h-4" />
             </button>
-            <button
+            <button aria-label="Pause"
               onClick={onTogglePlayback}
               className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-bold flex items-center justify-center transition-all shadow-lg"
             >
@@ -778,7 +778,7 @@ export function VideoPreviewCanvas({
                 <Play className="w-5 h-5 ml-0.5" />
               )}
             </button>
-            <button
+            <button aria-label="Skip"
               onClick={skipForward}
               className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
@@ -788,7 +788,7 @@ export function VideoPreviewCanvas({
 
           {/* Right - Volume & Fullscreen */}
           <div className="flex items-center gap-2 w-32 justify-end">
-            <button
+            <button aria-label="Mute"
               onClick={toggleMute}
               className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
@@ -803,7 +803,7 @@ export function VideoPreviewCanvas({
                 onValueChange={handleVolumeChange}
               />
             </div>
-            <button
+            <button aria-label="Maximise"
               onClick={toggleFullscreen}
               className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >

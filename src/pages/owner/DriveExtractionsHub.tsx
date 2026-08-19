@@ -220,7 +220,7 @@ function DevelopersView({ jobs }: { jobs: Job[] }) {
           {jobs.map(j => (
             <tr key={j.id} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7]">
               <td className="px-4 py-3">
-                <Link to={`/owner/developers/${j.developers?.slug ?? ""}`} className="inline-flex items-center gap-2 font-medium hover:underline">
+                <Link to={`/owner/developers/${j.developers?.slug ?? ""}`} className="inline-flex items-center gap-2 font-medium hover:underline" aria-label={j.developers?.name ?? "Open developer"}>
                   <DeveloperLogo src={getDeveloperLogoUrl(j.developers)} name={j.developers?.name} alt={j.developers?.name ?? "Developer"} variant="bare" size="micro" loading="lazy" />
                   {j.developers?.name ?? j.developer_id}
                 </Link>

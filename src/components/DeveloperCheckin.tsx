@@ -273,14 +273,14 @@ const DeveloperCheckin = ({ developer, salesReps, activeCheckin, onCheckinComple
               <p className="text-xs text-muted-foreground">{primaryRep.title || 'Sales Representative'}</p>
             </div>
             <div className="flex gap-2">
-              <Button size="icon" variant="outline" asChild>
-                <a href={`tel:${primaryRep.phone_e164}`}>
+              <Button aria-label="Call" size="icon" variant="outline" asChild>
+                <a aria-label="Call" href={`tel:${primaryRep.phone_e164}`}>
                   <Phone className="h-4 w-4" />
                 </a>
               </Button>
               {primaryRep.whatsapp_number && (
-                <Button size="icon" variant="outline" className="text-[color:var(--emerald-1)]" asChild>
-                  <a href={`https://wa.me/${primaryRep.whatsapp_number.replace(/\D/g, '')}`} target="_blank">
+                <Button aria-label="Message on WhatsApp" size="icon" variant="outline" className="text-[color:var(--emerald-1)]" asChild>
+                  <a aria-label="Message on WhatsApp" href={`https://wa.me/${primaryRep.whatsapp_number.replace(/\D/g, '')}`} target="_blank">
                     <MessageCircle className="h-4 w-4" />
                   </a>
                 </Button>

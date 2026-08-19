@@ -667,7 +667,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
           {/* ═══ STEP 1 — UPLOAD ═══ */}
           {activeStep === 1 && (
             <div className="space-y-3">
-              <div
+              <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                 onDrop={handleDrop}
                 onDragOver={e => e.preventDefault()}
                 onClick={() => fileInputRef.current?.click()}
@@ -1095,7 +1095,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       </div>
                       <div className="flex items-center justify-center gap-2">
                     <button onClick={() => seekPreview(-5)} className="jj-cta-dark p-1.5 rounded-lg transition-colors" title="-5s"><SkipBack className="w-3.5 h-3.5" /></button>
-                        <button onClick={togglePreviewPlay} className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] transition-colors">{previewPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}</button>
+                        <button aria-label="-5s" onClick={togglePreviewPlay} className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] transition-colors">{previewPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}</button>
                     <button onClick={() => seekPreview(5)} className="jj-cta-dark p-1.5 rounded-lg transition-colors" title="+5s"><SkipForward className="w-3.5 h-3.5" /></button>
                       </div>
                     </div>

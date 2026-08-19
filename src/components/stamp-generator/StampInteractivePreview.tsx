@@ -375,7 +375,7 @@ export function StampInteractivePreview({
 
       {/* Hit zone overlays */}
       {hitZones.map((zone) => (
-        <div
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
           key={zone.id}
           data-hit-zone={zone.id}
           onClick={(e) => { e.stopPropagation(); handleZoneClick(zone, e); }}
@@ -399,7 +399,7 @@ export function StampInteractivePreview({
 
       {/* Floating Toolbar */}
       {selected && selectedZone && selectedMeta && (
-        <div
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
           data-toolbar
           className="absolute z-50 bg-[#FDFBF7] rounded-lg shadow-xl border border-[hsl(var(--gold)/0.3)] p-2 min-w-[200px] max-w-[280px]"
           style={{
@@ -448,7 +448,7 @@ export function StampInteractivePreview({
                 autoFocus
                 className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-[#FDFBF7] text-[#1A1A1A] font-mono"
               />
-              <button onClick={commitTextEdit} className="p-1 rounded hover:jj-emerald-soft text-[color:var(--emerald-1)]"><Check size={11} /></button>
+              <button aria-label="Confirm" onClick={commitTextEdit} className="p-1 rounded hover:jj-emerald-soft text-[color:var(--emerald-1)]"><Check size={11} /></button>
               <button onClick={() => setEditingText(null)} className="p-1 rounded hover:bg-[hsl(var(--muted))]"><X size={11} /></button>
             </div>
           ) : null}

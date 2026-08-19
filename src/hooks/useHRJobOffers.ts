@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { safeFileExtension } from '@/utils/storagePath';
 
 export const TEMPLATE_TYPES = [
   { value: 'job_offer', label: 'Job Offer' },
@@ -174,7 +175,7 @@ export const useHRJobOffers = () => {
     if (!user) return null;
 
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = safeFileExtension(file.name);
       const fileName = `${department.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${fileExt}`;
       const filePath = `job-offers/${fileName}`;
 

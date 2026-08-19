@@ -13,6 +13,7 @@ import {
   buildQrData, getDefaultFieldConfigs, saveDraftToStorage, loadDraftFromStorage, clearDraftFromStorage,
 } from "./businessCardTypes";
 import { exportCardAsPDF, exportDigitalCardAsHtml } from "./businessCardExport";
+import { openPrintWindow } from "@/utils/printWindow";
 
 // ─── Card Info Profile Types ──────────────────────────────────────────────────
 interface CardInfoProfile {
@@ -549,8 +550,6 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
   };
 
   const handleBatchPrint = () => {
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups."); return; }
     const cardHtml = cardPreviewRef.current?.innerHTML || "";
 
     const cards = Array.from({ length: batchPrintCount }, () => `
@@ -559,7 +558,9 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       </div>
     `).join("");
 
-    printWindow.document.write(`<!DOCTYPE html>
+    // The old markup drove printing from an inline <script>; openPrintWindow
+    // strips scripts, so autoPrint does that job instead.
+    const printWindow = openPrintWindow(`<!DOCTYPE html>
 <html><head><title>Print Business Cards</title>
 <style>
   @page { size: A4; margin: 0.5in; }
@@ -571,9 +572,8 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
 </style></head>
 <body>
   <div class="grid">${cards}</div>
-  <script>window.onload = () => { window.print(); }</script>
 </body></html>`);
-    printWindow.document.close();
+    if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups."); return; }
     toast.success(`Print layout ready — ${batchPrintCount} cards on A4`);
   };
 

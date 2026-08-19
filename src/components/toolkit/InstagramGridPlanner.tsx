@@ -101,7 +101,7 @@ function CaptionPanel({
           <Pencil className="h-3 w-3" style={{ color: I.text }} />
           Edit Caption
         </p>
-        <button onClick={onClose} className="p-1 rounded" style={{ color: I.dim }}>
+        <button aria-label="Close" onClick={onClose} className="p-1 rounded" style={{ color: I.dim }}>
           <X className="h-3.5 w-3.5" />
         </button>
       </div>
@@ -511,7 +511,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                     const photo = photos[i];
                     const isSelected = editingId === photo?.id;
                     return (
-                      <div
+                      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                         key={i}
                         draggable={!!photo}
                         onDragStart={() => photo && handleDragStart(i)}

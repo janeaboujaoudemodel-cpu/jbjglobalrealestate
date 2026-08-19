@@ -22,3 +22,9 @@ dist-ssr
 *.sln
 *.sw?
 artifacts/
+
+# Local environment files. Real values live in Lovable's env config /
+# `supabase secrets set`, never in the repo — see .env.example for the keys.
+.env
+.env.*
+!.env.example

@@ -609,7 +609,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                               {idea.email && <span>{idea.email}</span>}
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
+                          <Button aria-label="View" variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>

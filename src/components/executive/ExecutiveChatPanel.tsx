@@ -247,7 +247,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                 <Volume2 className="w-4 h-4 text-[#1A1A1A]" />
               )}
             </button>
-            <button
+            <button aria-label="Close"
               onClick={onClose}
               className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 flex items-center justify-center transition-colors"
             >
@@ -332,7 +332,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               className="flex-1 bg-[#1A1A1A] border-[#B89555]/20 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
               disabled={isLoading}
             />
-            <Button
+            <Button aria-label="Send"
               onClick={handleSendMessage}
               disabled={!input.trim() || isLoading}
               variant="primary"

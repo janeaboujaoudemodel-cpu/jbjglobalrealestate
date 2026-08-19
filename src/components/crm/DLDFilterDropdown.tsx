@@ -105,7 +105,7 @@ export function DLDFilterDropdown({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
+        <Button aria-label="Expand"
           type="button"
           variant="outline"
           className={cn(

@@ -286,7 +286,7 @@ const CompanyCommunicationHub = () => {
                 <p className="text-xs text-white/70">Real Estate</p>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button aria-label="Settings" variant="ghost" size="icon" className="h-8 w-8">
               <Settings className="w-4 h-4" />
             </Button>
           </div>
@@ -390,7 +390,7 @@ const CompanyCommunicationHub = () => {
           <div className="px-3 py-2">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-white/70 uppercase tracking-wider">Direct Messages</span>
-              <Button variant="ghost" size="icon" className="h-5 w-5">
+              <Button aria-label="Add" variant="ghost" size="icon" className="h-5 w-5">
                 <Plus className="w-3 h-3" />
               </Button>
             </div>
@@ -477,10 +477,10 @@ const CompanyCommunicationHub = () => {
               <Video className="w-4 h-4 mr-1" />
               Video
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#1A1A1A]">
+            <Button aria-label="People" variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#1A1A1A]">
               <Users className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#1A1A1A]">
+            <Button aria-label="Notifications" variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#1A1A1A]">
               <Bell className="w-4 h-4" />
             </Button>
           </div>
@@ -556,7 +556,7 @@ const CompanyCommunicationHub = () => {
                               {emoji}
                             </button>
                           ))}
-                          <button className="hover:bg-[#1A1A1A] rounded px-1.5 py-0.5">
+                          <button aria-label="More options" className="hover:bg-[#1A1A1A] rounded px-1.5 py-0.5">
                             <MoreVertical className="w-4 h-4" />
                           </button>
                         </div>
@@ -609,7 +609,7 @@ const CompanyCommunicationHub = () => {
         {/* Message Input */}
         <div className="p-4 border-t border-[#1A1A1A] flex-shrink-0">
           <div className="flex items-center gap-2 bg-[#1A1A1A] rounded-lg px-3 py-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+            <Button aria-label="Add" variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <Plus className="w-4 h-4" />
             </Button>
             <Input
@@ -626,19 +626,19 @@ const CompanyCommunicationHub = () => {
                 }
               }}
             />
-            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+            <Button aria-label="Record" variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <Mic className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+            <Button aria-label="Image" variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <ImageIcon className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+            <Button aria-label="Insert emoji" variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <Smile className="w-4 h-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <AtSign className="w-4 h-4" onClick={() => setShowMentions(true)} />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+            <Button aria-label="Attach a file" variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <Paperclip className="w-4 h-4" />
             </Button>
             <Button 

@@ -115,7 +115,7 @@ export default function VerifyCertificate() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-block">
+          <Link to="/" aria-label="JBJ Global Real Estate home" className="inline-block">
             <JJLogoImage className="h-12 mx-auto mb-4" />
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Certificate Verification</h1>

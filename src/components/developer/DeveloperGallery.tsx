@@ -115,7 +115,7 @@ const DeveloperGallery = ({ developerId, developerName }: { developerId: string;
       </div>
 
       {active && (
-        <div
+        <div tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
           className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/90 p-4"
           role="dialog"
           aria-modal="true"

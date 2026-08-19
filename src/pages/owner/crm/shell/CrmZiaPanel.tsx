@@ -86,7 +86,7 @@ export default function CrmZiaPanel({ open, onClose }: Props) {
 
   return (
     <>
-      <div className="jc-zia__scrim" onClick={onClose} aria-hidden />
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="jc-zia__scrim" onClick={onClose} aria-hidden />
       <aside
         className="jc-zia"
         ref={ref}
@@ -181,7 +181,7 @@ export default function CrmZiaPanel({ open, onClose }: Props) {
                       <div className="jc-zia__sug-body">
                         <span className="jc-zia__sug-title">{s.title}</span>
                         <span className="jc-zia__sug-text">{s.body}</span>
-                        <button type="button" className="jc-zia__sug-cta">{s.cta} <ChevronRight size={13} /></button>
+                        <button aria-label="Next" type="button" className="jc-zia__sug-cta">{s.cta} <ChevronRight size={13} /></button>
                       </div>
                     </li>
                   );

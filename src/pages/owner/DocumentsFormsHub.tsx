@@ -30,6 +30,7 @@ import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { AICommandPanel } from "@/components/owner/documents/AICommandPanel";
 import { getCatalogByAudience, type DocumentTemplate } from "@/config/documentCatalog";
 import { CandidateFoldersPanel } from "@/components/owner/documents/CandidateFoldersPanel";
+import { safeOpen } from "@/utils/safeUrl";
 
 let documentStudioPromise: Promise<typeof import("@/components/document-studio/DocumentStudio")> | null = null;
 const loadDocumentStudio = () => {
@@ -491,7 +492,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     rows.forEach((e: any, i: number) => {
       const href = brandedDownloadHref(e.signed_document_url, e.document_filename || `${e.name || "document"}.pdf`);
       // Stagger window.open calls so popup blockers don't suppress later ones.
-      setTimeout(() => window.open(href, "_blank", "noopener,noreferrer"), i * 120);
+      setTimeout(() => safeOpen(href), i * 120);
     });
     toast.success(`Opening ${rows.length} signed PDF${rows.length === 1 ? "" : "s"}…`);
   };
@@ -1144,7 +1145,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button size="sm" variant="ghost"><MoreVertical className="w-4 h-4" /></Button>
+                      <Button aria-label="More options" size="sm" variant="ghost"><MoreVertical className="w-4 h-4" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="bg-white">
                       <DropdownMenuItem onClick={() => setAssetDefault(manageKind!, s.id)}><Star className="w-3.5 h-3.5 mr-2" /> Set as default</DropdownMenuItem>

@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Loader2, Upload, FileText } from "lucide-react";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 type Project = { id: string; name: string; slug: string };
 
@@ -46,7 +47,7 @@ export default function OwnerMediaIngest() {
     let ok = 0, fail = 0;
     for (const file of Array.from(files)) {
       try {
-        const path = `${projectId}/${crypto.randomUUID()}-${file.name}`;
+        const path = `${projectId}/${crypto.randomUUID()}-${safeStorageFileName(file.name)}`;
         const { error: upErr } = await supabase.storage.from("rel-media").upload(path, file, { contentType: file.type });
         if (upErr) throw upErr;
         const { error: insErr } = await (supabase as any).from("rel_media_assets").insert({

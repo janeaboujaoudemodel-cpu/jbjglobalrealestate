@@ -266,7 +266,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
                 <button onClick={() => setCurrentIndex(prev => (prev - 1 + slides.length) % slides.length)} className="text-white/80 hover:text-white">
                   <SkipBack className="w-5 h-5" />
                 </button>
-                <button onClick={togglePlay} className="w-10 h-10 rounded-full bg-[#FDFBF7]/20 backdrop-blur flex items-center justify-center text-white hover:bg-[#FDFBF7]/30 transition-colors">
+                <button aria-label="Pause" onClick={togglePlay} className="w-10 h-10 rounded-full bg-[#FDFBF7]/20 backdrop-blur flex items-center justify-center text-white hover:bg-[#FDFBF7]/30 transition-colors">
                   {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
                 </button>
                 <button onClick={() => setCurrentIndex(prev => (prev + 1) % slides.length)} className="text-white/80 hover:text-white">

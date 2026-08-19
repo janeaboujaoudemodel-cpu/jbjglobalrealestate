@@ -200,7 +200,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                     </span>
                   )}
                 </div>
-                <button
+                <button aria-label="Close"
                   onClick={onClose}
                   className="p-1.5 rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors"
                 >

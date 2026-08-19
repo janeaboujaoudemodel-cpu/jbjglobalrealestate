@@ -6,6 +6,7 @@
 import DOMPurify from "dompurify";
 import { JBJ_BRAND, JBJ_CHAMPAGNE, JBJ_GOLD, JBJ_INK, wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
 import type { DocumentTemplate } from "@/config/documentCatalog";
+import { openPrintWindow } from "@/utils/printWindow";
 
 const PDF_PAGE_SCALE = 1.8;
 const PDF_JPEG_QUALITY = 0.94;
@@ -1271,10 +1272,5 @@ export async function exportDocx(
 /* ───────────────────────── Print ───────────────────────── */
 
 export function printDocument(bodyHtml: string, marks: DocumentMarks): void {
-  const w = window.open("", "_blank");
-  if (!w) return;
-  w.document.write(buildPrintableHtml(bodyHtml, marks));
-  w.document.close();
-  w.focus();
-  setTimeout(() => { try { w.print(); } catch { /* ignore */ } }, 250);
+  openPrintWindow(buildPrintableHtml(bodyHtml, marks));
 }

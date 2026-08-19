@@ -137,7 +137,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
               >
                 {/* Close button */}
-                <button
+                <button aria-label="Close"
                   onClick={handleSkip}
                   className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-[#EFE6D6]/20 transition-colors"
                 >

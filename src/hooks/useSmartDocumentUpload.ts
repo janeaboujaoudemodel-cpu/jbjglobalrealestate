@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface Project {
   id: string;
@@ -252,7 +253,7 @@ export function useSmartDocumentUpload(projects: Project[] | undefined) {
         }
 
         // Upload to storage
-        const fileName = `${projectId}/${Date.now()}-${file.name}`;
+        const fileName = `${projectId}/${Date.now()}-${safeStorageFileName(file.name)}`;
         const { error: uploadError } = await supabase.storage
           .from("project-files")
           .upload(fileName, file);

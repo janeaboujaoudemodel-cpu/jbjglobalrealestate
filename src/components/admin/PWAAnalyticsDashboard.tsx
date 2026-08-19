@@ -144,7 +144,7 @@ const PWAAnalyticsDashboard = () => {
               <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">All Time</TabsTrigger>
             </TabsList>
           </Tabs>
-          <Button
+          <Button aria-label="Refresh"
             variant="outline"
             size="icon"
             onClick={fetchAnalytics}

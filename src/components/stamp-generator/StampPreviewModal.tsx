@@ -127,7 +127,7 @@ export function StampPreviewModal({
           <div className="w-px h-5 bg-[hsl(var(--border))]"/>
           <span className="font-semibold text-[hsl(var(--foreground))] text-sm">{concept.label}</span>
         </div>
-        <button onClick={onBack} className="p-1.5 hover:bg-[hsl(var(--muted))] rounded-lg transition-colors">
+        <button aria-label="Close" onClick={onBack} className="p-1.5 hover:bg-[hsl(var(--muted))] rounded-lg transition-colors">
           <X size={18} className="text-[hsl(var(--muted-foreground))]"/>
         </button>
       </div>
@@ -643,7 +643,7 @@ export function StampPreviewModal({
           >
             <X size={22}/>
           </button>
-          <div className="bg-[#FDFBF7] rounded-3xl p-10 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="bg-[#FDFBF7] rounded-3xl p-10 shadow-2xl" onClick={e => e.stopPropagation()}>
             <StampSVGRenderer
               svgSource={displaySvg}
               tintColor={tintColor}
@@ -658,7 +658,7 @@ export function StampPreviewModal({
             />
           </div>
           {/* Floating editing toolbar in fullscreen */}
-          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-[#FDFBF7]/95 backdrop-blur rounded-2xl shadow-2xl border border-[hsl(var(--border))] px-5 py-3 flex items-center gap-4" onClick={e => e.stopPropagation()}>
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-[#FDFBF7]/95 backdrop-blur rounded-2xl shadow-2xl border border-[hsl(var(--border))] px-5 py-3 flex items-center gap-4" onClick={e => e.stopPropagation()}>
             <div className="flex items-center gap-2">
               <span className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">Colors</span>
               <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm cursor-pointer" style={{ backgroundColor: tintColor }} title="Primary color"/>

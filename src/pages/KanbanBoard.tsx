@@ -332,7 +332,7 @@ const KanbanBoard = () => {
                             <h4 className="font-medium text-[#1A1A1A] text-sm flex-1 min-w-0 break-words">{task.title}</h4>
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#B89555]/10 shrink-0">
+                                <Button aria-label="More options" variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#B89555]/10 shrink-0">
                                   <MoreVertical className="w-4 h-4 text-[#1A1A1A]/50" />
                                 </Button>
                               </DialogTrigger>

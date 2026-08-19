@@ -1627,7 +1627,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedImport.documents.map((doc, idx) => (
-                      <a
+                      <a aria-label="Open document"
                         key={idx}
                         href={doc.url}
                         target="_blank"

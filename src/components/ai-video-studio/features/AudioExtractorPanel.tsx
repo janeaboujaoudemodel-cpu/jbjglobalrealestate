@@ -362,7 +362,7 @@ export function AudioExtractorPanel({ onAddToTimeline }: AudioExtractorPanelProp
 
             {/* Format selector + download */}
             <div className="flex-1 flex gap-0 relative">
-              <button
+              <button aria-label="Download"
                 onClick={handleDownload}
                 className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-l-md text-xs font-medium transition-all"
                 style={{ background: C.bgButton, border: `1px solid ${C.borderSubtle}`, borderRight: 'none', color: C.textPrimary }}

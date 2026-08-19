@@ -85,7 +85,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
               transition={{ delay: i * 0.03 }}
             >
               {dev.slug ? (
-                <Link
+                <Link aria-label={dev.name}
                   to={`/developer/${dev.slug}`}
                   className="flex items-center gap-3 px-4 py-3 bg-white/70 border border-[#064E3B]/15 rounded-xl hover:shadow-lg hover:border-[#064E3B]/40 transition-all"
                 >
