@@ -235,7 +235,7 @@ const About = () => {
               >
                 <motion.div variants={fadeInUp} className="flex justify-center">
                   <div className="relative">
-                    <Link to="/founder" className="group block">
+                    <Link to="/founder" className="group block" aria-label="Read about the founder">
                       {/* Portrait sits fully INSIDE the emerald ring — no more overflow. */}
                       <div
                         className="relative mx-auto h-56 w-56 overflow-hidden rounded-full border-2 border-[#B89555] shadow-[0_20px_50px_rgba(0,0,0,0.25)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.35),0_20px_50px_rgba(0,0,0,0.35)] md:h-64 md:w-64"

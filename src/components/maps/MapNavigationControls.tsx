@@ -1,6 +1,7 @@
 import { useMap } from "react-leaflet";
 import { ZoomIn, ZoomOut, Navigation, Box } from "lucide-react";
 import type { MouseEvent } from "react";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface MapNavigationControlsProps {
   latitude: number;
@@ -26,7 +27,7 @@ export function MapNavigationControls({ latitude, longitude }: MapNavigationCont
     const zoom = map.getZoom();
     const altitude = Math.max(500, 50000 / Math.pow(2, zoom - 10));
     const url = `https://earth.google.com/web/@${latitude},${longitude},${altitude}a,0d,35y,0h,45t,0r`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    safeOpen(url);
   };
 
   const btnClass = "jj-map-square-control";
@@ -78,7 +79,7 @@ export function MapNavigationControlsStandalone({
     const zoom = mapInstance.getZoom();
     const altitude = Math.max(500, 50000 / Math.pow(2, zoom - 10));
     const url = `https://earth.google.com/web/@${latitude},${longitude},${altitude}a,0d,35y,0h,45t,0r`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    safeOpen(url);
   };
 
   const btnClass = "jj-map-square-control";

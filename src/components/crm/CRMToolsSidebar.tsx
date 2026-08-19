@@ -113,7 +113,7 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
           <Wrench className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-semibold text-[#1A1A1A]">CRM Navigation</h3>
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
+        <Button aria-label="Close" variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
           <X className="w-5 h-5" />
         </Button>
       </div>

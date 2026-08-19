@@ -2,6 +2,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
+import os from 'node:os';
+import { resolveWithinRoot } from '../lib/safePath.mjs';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..', '..');
@@ -11,7 +13,12 @@ const contrastGuard = path.join(root, 'src', 'utils', 'contrastGuard.ts');
 // `--css=<path>` points the stylesheet checks at a fixture so the guard's own
 // regression tests can prove it still fails on a genuinely leaking rule.
 const cssOverride = process.argv.find((a) => a.startsWith('--css='))?.slice('--css='.length);
-const css = cssOverride ? path.resolve(cssOverride) : path.join(root, 'src', 'index.css');
+// Confined to the repo or the system temp dir: the override exists so the
+// guard's own tests can point it at a generated fixture, not so a caller can
+// read arbitrary files.
+const css = cssOverride
+  ? resolveWithinRoot(root, cssOverride, { mustExist: true, alsoAllow: [os.tmpdir()] })
+  : path.join(root, 'src', 'index.css');
 
 const violations = [];
 

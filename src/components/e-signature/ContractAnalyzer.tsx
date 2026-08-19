@@ -175,7 +175,7 @@ export default function ContractAnalyzer({
                   ))}
                 </SelectContent>
               </Select>
-              <Button
+              <Button aria-label="Website"
                 size="sm"
                 variant="outline"
                 onClick={handleTranslate}

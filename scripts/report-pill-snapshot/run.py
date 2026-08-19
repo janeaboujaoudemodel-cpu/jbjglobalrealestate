@@ -69,6 +69,22 @@ def color_delta(a, b) -> float:
     return sum(abs(x - y) for x, y in zip(a, b)) / 3
 
 
+
+def chromium_launch_kwargs() -> dict:
+    """Launch options honouring a CI-supplied Chromium path.
+
+    The workflow falls back to the runner's preinstalled Chrome when
+    cdn.playwright.dev refuses the download (it answers GitHub runners with a
+    403 "not available in your location" often enough to redden a gate). When
+    that happens it exports the path here; otherwise Playwright resolves its
+    own binary, exactly as before.
+    """
+    exe = os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE") or os.environ.get("CHROMIUM_PATH")
+    kwargs = {"headless": True}
+    if exe and os.path.exists(exe):
+        kwargs["executable_path"] = exe
+    return kwargs
+
 async def snapshot_viewport(page, label: str, w: int, h: int):
     """Return list of pair results for this viewport."""
     art = OUT / label
@@ -120,7 +136,22 @@ async def snapshot_viewport(page, label: str, w: int, h: int):
         }"""
     )
 
-    # Element screenshots for preview side.
+    # Preview crops, taken as clipped page screenshots rather than element
+    # screenshots.
+    #
+    # ElementHandle.screenshot() scrolls its target into view first. The report
+    # page is a fixed 794px wide, so at the 414px mobile viewport it overflows
+    # horizontally and every capture triggers a scroll. That made the mobile
+    # run report five false breaches: the crops came back as one identical flat
+    # champagne image (mean 229,218,195, stddev 29.9) for pills whose real
+    # colours are emerald and near-white — the page ground, not the pill. The
+    # same instability also surfaced as intermittent
+    # "Element is not attached to the DOM" failures mid-run.
+    #
+    # Clipping a page screenshot to the element's own bounding box needs no
+    # scrolling and no per-element handle, so what is captured is exactly the
+    # rectangle that was measured. Full-page capture keeps elements below the
+    # fold in frame.
     handles_pill = await page.query_selector_all("[data-report-page] [data-report-pill]")
     handles_btn  = await page.query_selector_all("[data-aihf-include-btn]")
 
@@ -128,10 +159,28 @@ async def snapshot_viewport(page, label: str, w: int, h: int):
     for t in targets:
         slug = f"{t['kind']}_p{t['pageIndex']}_i{t['indexInPage']}"
         path = art / f"preview_{slug}.png"
+        handle = handles_pill[pill_i] if t["kind"] == "pill" else handles_btn[btn_i]
         if t["kind"] == "pill":
-            await handles_pill[pill_i].screenshot(path=str(path)); pill_i += 1
+            pill_i += 1
         else:
-            await handles_btn[btn_i].screenshot(path=str(path)); btn_i += 1
+            btn_i += 1
+
+        box = await handle.bounding_box()
+        if box and box["width"] >= 1 and box["height"] >= 1:
+            await page.screenshot(
+                path=str(path),
+                full_page=True,
+                clip={
+                    "x": box["x"] + await page.evaluate("() => window.scrollX"),
+                    "y": box["y"] + await page.evaluate("() => window.scrollY"),
+                    "width": box["width"],
+                    "height": box["height"],
+                },
+            )
+        else:
+            # Zero-sized box (display:none / detached) — fall back so the run
+            # still produces a comparable artefact instead of aborting.
+            await handle.screenshot(path=str(path))
         t["previewPath"] = str(path)
 
     # 2. Export PDF via harness button.
@@ -217,7 +266,7 @@ async def main():
     OUT.mkdir(parents=True, exist_ok=True)
 
     async with async_playwright() as p:
-        b = await p.chromium.launch(headless=True)
+        b = await p.chromium.launch(**chromium_launch_kwargs())
         ctx = await b.new_context()
         page = await ctx.new_page()
 

@@ -172,7 +172,7 @@ const ListingAdminManager = () => {
                       className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                       onKeyDown={(e) => e.key === "Enter" && handleSearchUser()}
                     />
-                    <Button
+                    <Button aria-label="Search"
                       onClick={handleSearchUser}
                       disabled={isSearching}
                       className="bg-[#EFE6D6] hover:bg-[#1A1A1A]"

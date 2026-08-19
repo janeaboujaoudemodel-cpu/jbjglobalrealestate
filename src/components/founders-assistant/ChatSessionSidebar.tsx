@@ -83,7 +83,7 @@ export function ChatSessionSidebar({
         <div className="flex items-center gap-1">
           {selectMode ? (
             <>
-              <Button
+              <Button aria-label="Delete"
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6 text-red-500 hover:bg-red-50"

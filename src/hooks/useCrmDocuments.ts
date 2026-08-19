@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { JBJ_PAA_TEMPLATE_ID, buildPAAHtml, type PAAFieldKey } from "@/templates/jbjPropertyAdvertisingAgreement";
+import { safeOpen } from "@/utils/safeUrl";
 
 export interface CrmDocument {
   id: string;
@@ -193,7 +194,7 @@ export function useSendDocument() {
     onSuccess: (res) => {
       qc.invalidateQueries({ queryKey: ["crm_documents"] });
       if (res?.fallback_link) {
-        window.open(res.fallback_link, "_blank");
+        safeOpen(res.fallback_link);
         toast.message("Opened WhatsApp web with prefilled message");
       } else {
         toast.success("Sent");

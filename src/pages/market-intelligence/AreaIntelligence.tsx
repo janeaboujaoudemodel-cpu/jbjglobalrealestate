@@ -179,7 +179,7 @@ const AreaIntelligence = () => {
                         { title: "RERA Rental Index", desc: "Area-specific rent benchmarks", url: "https://dubailand.gov.ae/en/eservices/rental-index/" },
                         { title: "RERA Service Charge Index", desc: "Project-specific costs", url: "https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" }
                       ].map((source, idx) => (
-                        <a 
+                        <a aria-label="Open in a new tab" 
                           key={idx}
                           data-surface="emerald"
                           href={source.url}

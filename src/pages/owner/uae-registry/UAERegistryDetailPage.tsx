@@ -16,6 +16,7 @@ import {
 } from "@/hooks/useUAERegistry";
 import { toast } from "sonner";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
+import { safeOpen } from "@/utils/safeUrl";
 
 const SERVICE_CATEGORIES = ["Sales","Leasing","Off-Plan","Secondary Market","Property Management","Commercial","Luxury","Investment Advisory","Unknown"];
 const COMPANY_TYPES = ["Private Developer","Government Developer","Semi-Government Developer","Master Developer","Holding Company","Development Arm","Unknown"];
@@ -358,7 +359,7 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
                     <div className="flex gap-1">
                       <Button size="sm" variant="outline" onClick={async () => {
                         const url = await getAttachmentUrl(a.storage_path);
-                        if (url) window.open(url, "_blank");
+                        if (url) safeOpen(url);
                       }}><Download className="h-3 w-3" /></Button>
                       <Button size="sm" variant="outline" onClick={() => delAtt.mutate({ id: a.id, storage_path: a.storage_path, recordId: r.id })}><Trash2 className="h-3 w-3" /></Button>
                     </div>

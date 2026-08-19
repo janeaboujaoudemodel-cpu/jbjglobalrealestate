@@ -362,7 +362,7 @@ export default function VoiceStudioPro() {
       {/* ── Header ── */}
       <div className="border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Link to="/toolkit" className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors">
+          <Link aria-label="Previous" to="/toolkit" className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="p-2 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/40">
@@ -839,7 +839,7 @@ export default function VoiceStudioPro() {
                           {isPlaying && !isPausedState ? <><Pause className="h-4 w-4 mr-2" />Pause</> : <><Play className="h-4 w-4 mr-2" />{isPausedState ? "Resume" : "Preview"}</>}
                         </Button>
                         {isPlaying && (
-                          <Button
+                          <Button aria-label="Stop"
                             onClick={stopPlayback}
                             variant="outline"
                             size="sm"

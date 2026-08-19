@@ -33,6 +33,7 @@ import {
 } from "@/hooks/useCandidateAttachments";
 import { useSoftDeleteDocument, useRestoreDocument } from "@/hooks/useCrmDocuments";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface DocRow {
   id: string;
@@ -187,7 +188,7 @@ export function CandidateFoldersPanel({ onOpenDoc }: { onOpenDoc: (id: string) =
     const { data, error } = await (supabase as any).storage
       .from("candidate-documents")
       .createSignedUrl(row.file_path, 60);
-    if (!error && data?.signedUrl) window.open(data.signedUrl, "_blank", "noopener");
+    if (!error && data?.signedUrl) safeOpen(data.signedUrl);
   }
 
   function askDuplicate(file: File, folder: string, displayName: string, existing: CandidateAttachment): Promise<DuplicateAction> {

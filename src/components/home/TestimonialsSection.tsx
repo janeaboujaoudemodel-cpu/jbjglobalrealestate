@@ -125,13 +125,13 @@ const TestimonialsSection = () => {
 
             {/* Navigation */}
             <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none">
-              <button
+              <button aria-label="Previous"
                 onClick={goToPrev}
                 className="w-10 h-10 rounded-full bg-[#FDFBF7] hover:bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center shadow-md transition-colors pointer-events-auto"
               >
                 <ChevronLeft className="w-5 h-5 text-[#1A1A1A]" />
               </button>
-              <button
+              <button aria-label="Next"
                 onClick={goToNext}
                 className="w-10 h-10 rounded-full bg-[#FDFBF7] hover:bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center shadow-md transition-colors pointer-events-auto"
               >

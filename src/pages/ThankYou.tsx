@@ -194,16 +194,16 @@ const ThankYou = () => {
                 variants={fadeInUp}
                 className="flex flex-col sm:flex-row gap-4 justify-center"
               >
-                <Button asChild size="lg" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold">
-                  <Link to={content.primaryCta.href}>
+                <Button aria-label="Copy link" asChild size="lg" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold">
+                  <Link aria-label="Home" to={content.primaryCta.href}>
                     <Home className="mr-2 h-5 w-5" />
                     {content.primaryCta.label}
                   </Link>
                 </Button>
                 
                 {content.secondaryCta && (
-                  <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-[#FDFBF7]/10">
-                    <Link to={content.secondaryCta.href}>
+                  <Button aria-label="Copy link" asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-[#FDFBF7]/10">
+                    <Link aria-label="Next" to={content.secondaryCta.href}>
                       {content.secondaryCta.label}
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>

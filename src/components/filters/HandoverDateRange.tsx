@@ -58,7 +58,7 @@ export function HandoverDateRange({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
+        <Button aria-label="Calendar"
           variant="outline"
           className={cn(
             "justify-between min-w-[160px] h-11",

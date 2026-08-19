@@ -67,7 +67,7 @@ export function StampLetterEditor({ selection, overrides, inkColor, onUpdate, on
             {arcLabel}
           </Badge>
         </div>
-        <button onClick={onClose} className="w-5 h-5 rounded flex items-center justify-center hover:bg-[hsl(var(--muted))]">
+        <button aria-label="Close" onClick={onClose} className="w-5 h-5 rounded flex items-center justify-center hover:bg-[hsl(var(--muted))]">
           <X size={11} />
         </button>
       </div>

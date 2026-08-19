@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 export type UAEEmirate = "Abu Dhabi" | "Dubai" | "Sharjah" | "Ajman" | "Ras Al Khaimah" | "Fujairah" | "Umm Al Quwain";
 export type OutreachStatus =
@@ -339,7 +340,7 @@ export function useUploadAttachment(type: RegistryRecordType) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: { recordId: string; file: File; sentTo?: string; sentDate?: string }) => {
-      const path = `${type}/${payload.recordId}/${Date.now()}-${payload.file.name}`;
+      const path = `${type}/${payload.recordId}/${Date.now()}-${safeStorageFileName(payload.file.name)}`;
       const { error: upErr } = await (supabase as any).storage.from(BUCKET).upload(path, payload.file, { upsert: false });
       if (upErr) throw upErr;
       const col = type === "developer" ? "developer_id" : "brokerage_id";

@@ -195,7 +195,7 @@ const BrokerPartnerDashboard = () => {
             {QUICK_TOOLS.map((tool) => {
               const Icon = tool.icon;
               return (
-                <Link key={tool.name} to={tool.href}>
+                <Link aria-label={tool.name} key={tool.name} to={tool.href}>
                   <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-purple-500/50 transition-all cursor-pointer group">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
@@ -302,7 +302,7 @@ const BrokerPartnerDashboard = () => {
                               <p className="text-xs text-white/90">{report.type} • {report.date}</p>
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300">
+                          <Button aria-label="Download" variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300">
                             <Download className="w-4 h-4" />
                           </Button>
                         </div>

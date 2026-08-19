@@ -19,6 +19,7 @@ import {
   AGENCY_PACKAGES,
 } from "@/content/pricing";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 const ALL_TIERS = [...INVESTOR_TIERS, ...ACADEMY_BUNDLES, ...AGENCY_PACKAGES];
 
@@ -68,7 +69,7 @@ export default function AccountBilling() {
         },
       });
       if (error || !data?.url) throw new Error(error?.message || "Failed to open portal");
-      window.open(data.url as string, "_blank", "noopener,noreferrer");
+      safeOpen(data.url as string);
     } catch (e: unknown) {
       toast.error((e as Error).message ?? "Failed to open billing portal");
     } finally {

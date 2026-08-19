@@ -76,7 +76,7 @@ export default function ExistingProjectsReview({ developerName }: Props) {
                     )}
                   </div>
                 </div>
-                <Link to={`/project/${p.slug}`} className="text-[#1A1A1A] hover:text-[#1A1A1A] shrink-0">
+                <Link aria-label="Open in a new tab" to={`/project/${p.slug}`} className="text-[#1A1A1A] hover:text-[#1A1A1A] shrink-0">
                   <ExternalLink className="w-4 h-4" />
                 </Link>
               </div>

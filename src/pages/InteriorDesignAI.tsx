@@ -712,7 +712,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       className="id-input min-h-[44px] max-h-[90px] resize-none flex-1 text-xs rounded-xl"
                       disabled={isProcessing}
                     />
-                    <Button onClick={handleChatSend} disabled={isProcessing || !chatInput.trim()} size="icon" className="id-primary h-auto min-h-[44px] w-11 shrink-0 rounded-xl self-stretch">
+                    <Button aria-label="Send" onClick={handleChatSend} disabled={isProcessing || !chatInput.trim()} size="icon" className="id-primary h-auto min-h-[44px] w-11 shrink-0 rounded-xl self-stretch">
                       {isProcessing ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
                     </Button>
                   </div>

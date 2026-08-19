@@ -296,7 +296,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]">
+                            <Button aria-label="More options" variant="ghost" size="icon" className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]">
                               <MoreVertical className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>

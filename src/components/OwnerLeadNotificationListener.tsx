@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { normalizeNotificationRoute } from "@/lib/notificationRouting";
+import { safeNavigate } from "@/utils/safeUrl";
 
 
 function playLeadSound() {
@@ -69,9 +70,11 @@ export default function OwnerLeadNotificationListener() {
           onClick: () => {
             void markOneRead(row.id);
             // Legacy /crm links are remapped to the JBJ Hub CRM.
-            window.location.href = normalizeNotificationRoute(
-              row.action_url || "/owner/crm/jbj/leads",
-              "/owner/crm/jbj/leads",
+            safeNavigate(
+              normalizeNotificationRoute(
+                row.action_url || "/owner/crm/jbj/leads",
+                "/owner/crm/jbj/leads",
+              ),
             );
           },
         },

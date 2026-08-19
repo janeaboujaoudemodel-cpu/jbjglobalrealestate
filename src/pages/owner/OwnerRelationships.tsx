@@ -148,14 +148,14 @@ function DirectoryTable({ kind }: { kind: "developers" | "brokerages" }) {
                 <td className="p-2 font-semibold text-[#1A1A1A]">{r.name}</td>
                 <td className="p-2">{r.hq_emirate}</td>
                 <td className="p-2">
-                  {r.website && <a href={r.website} target="_blank" rel="noreferrer"
+                  {r.website && <a aria-label="Open in a new tab" href={r.website} target="_blank" rel="noreferrer"
                     className="inline-flex items-center gap-1 text-[#1A1A1A] underline decoration-[#B89555]/60 hover:decoration-[#B89555]">
                     {cleanDomain(r.website)} <ExternalLink className="w-3 h-3" />
                   </a>}
                 </td>
                 <td className="p-2 text-[#1A1A1A]/80">
                   {r.google_maps_url
-                    ? <a href={r.google_maps_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 underline decoration-[#B89555]/40">
+                    ? <a aria-label="Open in Maps" href={r.google_maps_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 underline decoration-[#B89555]/40">
                         <MapPin className="w-3 h-3" /> {r.hq_address}
                       </a>
                     : r.hq_address}

@@ -10,6 +10,7 @@ import { Loader2, Upload, FileSpreadsheet, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeFileExtension } from "@/utils/storagePath";
 
 type ParsedFile = {
   headers: string[];          // ordered, verbatim (duplicates suffixed)
@@ -42,7 +43,7 @@ function dedupeHeaders(headers: string[]): string[] {
 }
 
 async function parseFile(file: File): Promise<ParsedFile> {
-  const ext = (file.name.split(".").pop() || "").toLowerCase();
+  const ext = safeFileExtension(file.name);
   if (ext === "csv") {
     return new Promise((resolve, reject) => {
       Papa.parse(file, {
@@ -127,7 +128,7 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
     // 1. Upload original file to private bucket (path scoped by user folder so RLS passes)
     const safeName = file.name.replace(/[^\w.\-]+/g, "_");
     const storagePath = `${uid}/${Date.now()}_${safeName}`;
-    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    const ext = safeFileExtension(file.name);
     const mime = MIME_BY_EXT[ext] || file.type || "application/octet-stream";
     const upload = await supabase.storage
       .from("crm-source-databases")

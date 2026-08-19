@@ -323,7 +323,14 @@ def p5_merge_equivalent(items, stats):
 def run(path: str, apply: bool):
     src = open(path).read()
     items = parse(src)
-    assert render(items) == src, "parser round-trip failed -- aborting"
+    # Not an `assert`: `python -O` strips assert statements, which would silently
+    # delete this guard and let a lossy parse overwrite the source CSS.
+    if render(items) != src:
+        raise SystemExit(
+            f"parser round-trip failed on {path} -- aborting. The parser did not "
+            "reproduce the source byte-for-byte, so any rewrite would lose or "
+            "corrupt CSS."
+        )
 
     stats = {
         "p1_rules": 0,

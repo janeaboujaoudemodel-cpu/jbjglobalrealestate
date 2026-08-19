@@ -102,10 +102,10 @@ export default function VoiceStudio() {
                         {vs.uploadedAudio?.name || `Recording (${vs.formatTime(vs.recordedAudio?.duration || 0)})`}
                       </p>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={vs.playPreview} className="text-[#1A1A1A]/70 hover:text-white">
+                    <Button aria-label="Pause" variant="ghost" size="sm" onClick={vs.playPreview} className="text-[#1A1A1A]/70 hover:text-white">
                       {vs.isPreviewPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={vs.clearAudio} className="text-[#1A1A1A]/70 hover:text-red-400">
+                    <Button aria-label="Delete" variant="ghost" size="sm" onClick={vs.clearAudio} className="text-[#1A1A1A]/70 hover:text-red-400">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

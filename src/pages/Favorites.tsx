@@ -33,6 +33,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeNavigate } from "@/utils/safeUrl";
 
 const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 
@@ -204,7 +205,7 @@ const Favorites = () => {
     const mailtoLink = to
       ? `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
       : `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
+    safeNavigate(mailtoLink);
   };
 
   const handleEmailShare = () => {
@@ -224,7 +225,7 @@ const Favorites = () => {
   const handleShareWhatsApp = () => {
     if (!shortlistedProjects?.length) return;
     const { whatsapp } = buildShortlistShareText();
-    window.location.href = getWhatsAppUrl(whatsapp);
+    safeNavigate(getWhatsAppUrl(whatsapp));
   };
 
   const handleCopyShortlist = async () => {
@@ -656,7 +657,7 @@ const Favorites = () => {
               <Label htmlFor="email" className="text-[#1A1A1A]/60">Email a copy to yourself</Label>
               <div className="flex gap-2 mt-1">
                 <Input id="email" type="email" placeholder="your.email@example.com" value={shareEmail} onChange={(e) => setShareEmail(e.target.value)} className="bg-[#F7F2EA] border-[#B89555]/20 text-[#1A1A1A]" />
-                <Button onClick={handleEmailShare} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 shrink-0">
+                <Button aria-label="Email" onClick={handleEmailShare} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 shrink-0">
                   <Mail className="w-4 h-4" />
                 </Button>
               </div>

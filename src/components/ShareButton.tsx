@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface ShareButtonProps {
   projectName: string;
@@ -50,7 +51,7 @@ const ShareButton = ({ projectName, projectSlug }: ShareButtonProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#1A1A1A]">
         <DropdownMenuItem
-          onClick={() => window.open(whatsappUrl, "_blank")}
+          onClick={() => safeOpen(whatsappUrl)}
           className="text-white/85 hover:text-white hover:bg-[#1A1A1A] cursor-pointer"
         >
           <MessageCircle className="w-4 h-4 mr-2 text-green-500" />

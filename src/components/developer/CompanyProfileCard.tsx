@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Download, Send, Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Props {
   developerId: string;
@@ -49,7 +50,7 @@ export default function CompanyProfileCard({ developerId, developerName }: Props
     try {
       const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(doc.storage_path, 60 * 10);
       if (error || !data?.signedUrl) throw error || new Error("Could not create link");
-      window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+      safeOpen(data.signedUrl);
     } catch (e: any) {
       toast.error(e.message || "Download failed");
     } finally {

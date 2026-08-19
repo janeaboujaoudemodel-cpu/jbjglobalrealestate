@@ -263,7 +263,7 @@ export function EmbeddedEmployeeHub() {
                     </Badge>
                     
                     <div className="flex items-center gap-1">
-                      <Button
+                      <Button aria-label="Email"
                         size="sm"
                         variant="ghost"
                         className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20 h-6 w-6 p-0"

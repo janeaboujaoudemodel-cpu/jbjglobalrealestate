@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCanEdit } from "@/hooks/useEffectiveOwner";
+import { safeStorageFileName } from "@/utils/storagePath";
 import {
   Dialog,
   DialogContent,
@@ -99,7 +100,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
     let i = 0;
     for (const file of Array.from(files)) {
       try {
-        const path = `project-uploads/${projectId}/${crypto.randomUUID()}-${file.name}`;
+        const path = `project-uploads/${projectId}/${crypto.randomUUID()}-${safeStorageFileName(file.name)}`;
         const { error: upErr } = await supabase.storage
           .from(BUCKET)
           .upload(path, file, { contentType: file.type || "image/jpeg" });

@@ -104,7 +104,7 @@ export default function MIPageShell({
             <div className="mt-12 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row sm:flex-nowrap">
               {heroCTAs.map((cta) =>
                 cta.external ? (
-                  <a
+                  <a aria-label="Open"
                     key={cta.href + cta.label}
                     href={cta.href}
                     data-no-contrast-guard
@@ -115,7 +115,7 @@ export default function MIPageShell({
                     <ArrowUpRight className="w-5 h-5" />
                   </a>
                 ) : (
-                  <Link
+                  <Link aria-label="Open"
                     key={cta.href + cta.label}
                     to={cta.href}
                     data-no-contrast-guard

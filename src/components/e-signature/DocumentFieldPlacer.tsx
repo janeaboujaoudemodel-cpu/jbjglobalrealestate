@@ -743,7 +743,7 @@ export default function DocumentFieldPlacer({
                       const isSelected = selectedFieldId === field.id;
 
                       return (
-                        <div
+                        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                           key={field.id}
                           data-field="true"
                           onPointerDown={(e) => handleFieldPointerDown(e, field.id)}

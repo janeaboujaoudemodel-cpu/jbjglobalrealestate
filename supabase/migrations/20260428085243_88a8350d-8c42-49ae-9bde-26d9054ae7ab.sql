@@ -1,3 +1,8 @@
+-- NOTE: the publishable (anon) key that used to be written inline here was
+-- replaced by public.edge_function_anon_key(). This migration is already
+-- applied and is kept only as history; migration
+-- 20260817160000_edge_function_key_indirection.sql recreates every object
+-- below with the accessor, so a fresh bootstrap ends in the correct state.
 -- Schedule crm-email-sync every 15 minutes
 SELECT cron.unschedule('crm-email-sync-15min') WHERE EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'crm-email-sync-15min');
 
@@ -7,7 +12,7 @@ SELECT cron.schedule(
   $$
   SELECT net.http_post(
     url:='https://mdafrewypkkrildjgtey.supabase.co/functions/v1/crm-email-sync',
-    headers:='{"Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0"}'::jsonb,
+    headers:='{"Content-Type":"application/json","Authorization":"Bearer REPLACED_BY_edge_function_anon_key"}'::jsonb,
     body:='{}'::jsonb
   );
   $$

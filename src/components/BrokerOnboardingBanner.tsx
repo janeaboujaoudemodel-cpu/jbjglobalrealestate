@@ -147,7 +147,7 @@ const BrokerOnboardingBanner = () => {
                 <p className="text-white/70 text-sm">Complete your onboarding to unlock all features</p>
               </div>
             </div>
-            <button
+            <button aria-label="Close"
               onClick={handleDismiss}
               className="p-2 rounded-lg hover:bg-[#1A1A1A] transition-colors"
             >

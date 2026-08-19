@@ -216,7 +216,7 @@ export default function LogoColorPicker({ colors, onChange, colorPreset, onPrese
             placeholder="https://example.com"
             className="flex-1 text-xs h-8"
           />
-          <Button onClick={extractFromWebsite} disabled={extracting || !websiteUrl.trim()} size="sm" variant="outline" className="h-8 text-[10px] px-2">
+          <Button aria-label="Extract from website" onClick={extractFromWebsite} disabled={extracting || !websiteUrl.trim()} size="sm" variant="outline" className="h-8 text-[10px] px-2">
             {extracting ? <Palette size={12} className="animate-spin" /> : <Palette size={12} />}
           </Button>
         </div>

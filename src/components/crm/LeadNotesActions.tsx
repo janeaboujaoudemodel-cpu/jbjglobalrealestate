@@ -124,7 +124,7 @@ const LeadNotesActions = ({
               onChange={(e) => setNextFollowUp(e.target.value)}
               className="bg-[#FDFBF7] border-[#1A1A1A] text-white flex-1"
             />
-            <Button 
+            <Button aria-label="Notifications" 
               onClick={setFollowUpReminder} 
               size="sm"
               className="bg-[#EFE6D6]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"

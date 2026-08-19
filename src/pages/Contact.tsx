@@ -30,6 +30,7 @@ import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const contactHeroVideo = contactHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeNavigate, safeOpen } from "@/utils/safeUrl";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
@@ -219,7 +220,7 @@ const Contact = () => {
         window.location.href = `tel:${phoneNumber}`;
         break;
       case 'whatsapp':
-        window.open(getWhatsAppUrl(), '_blank', 'noopener,noreferrer');
+        safeOpen(getWhatsAppUrl());
         break;
       case 'save':
         // Create vCard
@@ -336,7 +337,7 @@ END:VCARD`;
                   onClick={() => {
                     if (card.action === "phone-actions") setPhoneActionsOpen(true);
                     else if (card.action === "meeting") window.location.assign("/book");
-                    else if (card.action && card.clickable) window.location.href = card.action;
+                    else if (card.action && card.clickable) safeNavigate(card.action);
                   }}
                   className={`group flex flex-col items-center text-center px-4 py-3 transition-all duration-300 ${card.clickable ? "cursor-pointer hover:-translate-y-0.5" : ""}`}
                 >

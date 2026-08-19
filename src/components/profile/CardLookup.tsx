@@ -152,7 +152,7 @@ export function CardLookup() {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             className="flex-1"
           />
-          <Button onClick={handleSearch} disabled={isSearching}>
+          <Button aria-label="Search" onClick={handleSearch} disabled={isSearching}>
             {isSearching ? (
               <span className="animate-pulse">...</span>
             ) : (

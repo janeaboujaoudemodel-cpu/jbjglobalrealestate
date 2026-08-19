@@ -89,7 +89,7 @@ export function SharePanel({ projectName = 'Untitled Project' }: SharePanelProps
           {channels.map(ch => {
             const Icon = ch.icon;
             return (
-              <button
+              <button aria-label={ch.label}
                 key={ch.id}
                 onClick={ch.onClick}
                 className="flex flex-col items-center gap-1.5 py-3 rounded-lg text-[10px] font-medium transition-all hover:opacity-90"

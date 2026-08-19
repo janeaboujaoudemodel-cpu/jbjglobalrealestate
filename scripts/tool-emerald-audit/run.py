@@ -14,6 +14,10 @@ Exit behaviour:
      Either fix the violation or add it to known-violations.json with a
      JBJ-### ID in ROADMAP.md.
 
+The emerald-purity thresholds apply only where the emerald contract is
+actually in force. On the Sun skin, AI tool routes are governed by PASS 369
+(champagne band + black ink) instead — see the note in audit_route().
+
 Run:
     # dev server on :8080 must be up
     python3 scripts/tool-emerald-audit/run.py
@@ -102,6 +106,22 @@ def scan(png_path: Path):
     }
 
 
+
+def chromium_launch_kwargs() -> dict:
+    """Launch options honouring a CI-supplied Chromium path.
+
+    The workflow falls back to the runner's preinstalled Chrome when
+    cdn.playwright.dev refuses the download (it answers GitHub runners with a
+    403 "not available in your location" often enough to redden a gate). When
+    that happens it exports the path here; otherwise Playwright resolves its
+    own binary, exactly as before.
+    """
+    exe = os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE") or os.environ.get("CHROMIUM_PATH")
+    kwargs = {"headless": True}
+    if exe and os.path.exists(exe):
+        kwargs["executable_path"] = exe
+    return kwargs
+
 async def audit_route(page, route: str):
     url = f"{BASE}{route}"
     slug = "".join(c if c.isalnum() else "_" for c in route).strip("_")
@@ -128,7 +148,36 @@ async def audit_route(page, route: str):
 
         result.update(scan(shot))
 
-        if result["hasShell"]:
+        # Is the PASS 369 champagne contract in force for this render?
+        #
+        # PASS 369 (src/styles/pass-369-ai-tools-sun-champagne.css) deliberately
+        # replaces the emerald ombre with a champagne band + black ink on AI
+        # tool routes in the Sun skin, because the global Sun ink lock writes
+        # BLACK on those emerald fills — black-on-emerald, unreadable. This
+        # audit predates that decision and asserts the older "emerald
+        # everywhere" contract, so on Sun it reports the intended design as a
+        # regression. Enforcing it there would mean repainting these pages back
+        # to the exact unreadable combination PASS 369 was written to remove.
+        #
+        # Readability on the Sun path is not left unchecked: it is gated by the
+        # rendered axe sweep (npm run check:contrast:rendered), which asserts
+        # WCAG AA on every one of these routes.
+        skin = await page.evaluate(
+            """() => ({
+                 theme: document.documentElement.getAttribute('data-jbj-theme'),
+                 aiScope: document.body.getAttribute('data-ai-tools-scope'),
+                 lock: document.documentElement.getAttribute('data-jbj-backend-lock'),
+               })"""
+        )
+        champagne_contract = (
+            skin.get("theme") == "sun"
+            and skin.get("aiScope") == "true"
+            and skin.get("lock") != "1"
+        )
+        result["skin"] = skin.get("theme")
+        result["champagneContract"] = champagne_contract
+
+        if result["hasShell"] and not champagne_contract:
             if result["champagne"] > THRESHOLDS["champagnePixels"]:
                 result["breach"].append(f"champagne:{result['champagne']}>{THRESHOLDS['champagnePixels']}")
             if result["dark"] > THRESHOLDS["darkInkPixels"]:
@@ -145,7 +194,7 @@ async def main():
     OUT.mkdir(parents=True, exist_ok=True)
 
     async with async_playwright() as p:
-        b = await p.chromium.launch(headless=True)
+        b = await p.chromium.launch(**chromium_launch_kwargs())
         ctx = await b.new_context(viewport=VIEWPORT)
         cookies_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON")
         if cookies_json:

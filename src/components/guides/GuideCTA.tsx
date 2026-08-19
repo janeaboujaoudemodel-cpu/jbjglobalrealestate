@@ -62,7 +62,7 @@ export const GuideCTA = ({
 
             <div className="flex flex-wrap justify-center gap-3">
               {primaryAction && (
-                <a
+                <a aria-label="Open"
                   href={primaryAction.href}
                   data-cta="guide-primary"
                   className="jj-cta-champagne inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm font-semibold"
@@ -85,7 +85,7 @@ export const GuideCTA = ({
                     <MessageSquare className="w-4 h-4" />
                     <span>WhatsApp</span>
                   </a>
-                  <a
+                  <a aria-label="Call"
                     href={getCallUrl()}
                     data-cta="guide-call"
                     className="jj-cta-dark allow-white inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl text-sm font-semibold"

@@ -342,7 +342,7 @@ export default function StudioEditor() {
               <Home className="w-4 h-4" />
               <span className="text-sm font-medium">Projects</span>
             </Link>
-            <button className="p-2 text-muted-foreground hover:text-foreground">
+            <button aria-label="Help" className="p-2 text-muted-foreground hover:text-foreground">
               <HelpCircle className="w-5 h-5" />
             </button>
           </nav>
@@ -420,7 +420,7 @@ export default function StudioEditor() {
                   <p className="text-muted-foreground">Preview will appear here</p>
                 </div>
               </div>
-              <button className="absolute top-4 right-4 p-2 rounded-lg bg-background/50 text-foreground hover:bg-background/70 transition-colors">
+              <button aria-label="Maximise" className="absolute top-4 right-4 p-2 rounded-lg bg-background/50 text-foreground hover:bg-background/70 transition-colors">
                 <Maximize className="w-4 h-4" />
               </button>
             </div>
@@ -429,16 +429,17 @@ export default function StudioEditor() {
             <div className="mt-4 p-4 rounded-2xl bg-card border border-[#B89555]/20">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <button className="p-2 text-muted-foreground hover:text-foreground">
+                  <button aria-label="Skip back" className="p-2 text-muted-foreground hover:text-foreground">
                     <SkipBack className="w-4 h-4" />
                   </button>
                   <button
+                    aria-label={isPlaying ? "Pause" : "Play"}
                     onClick={() => setIsPlaying(!isPlaying)}
                     className="w-10 h-10 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6]/90 transition-colors"
                   >
                     {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                   </button>
-                  <button className="p-2 text-muted-foreground hover:text-foreground">
+                  <button aria-label="Skip" className="p-2 text-muted-foreground hover:text-foreground">
                     <SkipForward className="w-4 h-4" />
                   </button>
                 </div>
@@ -580,7 +581,7 @@ export default function StudioEditor() {
                     {["Luxury Vibes", "Modern Elegance", "Urban Dreams"].map((track) => (
                       <div key={track} className="p-3 rounded-xl bg-background/50 border border-[#B89555]/10 flex items-center justify-between">
                         <span>{track}</span>
-                        <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                        <Button aria-label="Add" variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                           <Plus className="w-4 h-4" />
                         </Button>
                       </div>

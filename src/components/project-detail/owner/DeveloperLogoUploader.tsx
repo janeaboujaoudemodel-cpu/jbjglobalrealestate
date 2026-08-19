@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCanEdit } from "@/hooks/useEffectiveOwner";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 
 interface Props {
@@ -24,7 +25,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
   const upload = async (file: File) => {
     setBusy(true);
     try {
-      const path = `developer-logos/${developerId}/${crypto.randomUUID()}-${file.name}`;
+      const path = `developer-logos/${developerId}/${crypto.randomUUID()}-${safeStorageFileName(file.name)}`;
       const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type || "image/png" });
       if (upErr) throw upErr;
       const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);

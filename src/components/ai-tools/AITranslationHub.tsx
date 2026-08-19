@@ -103,7 +103,7 @@ const AITranslationHub = ({ defaultText = "", onResponse }: AITranslationHubProp
             </Select>
           </div>
 
-          <Button variant="ghost" size="icon" className="mt-6" onClick={swapLanguages}>
+          <Button aria-label="Next" variant="ghost" size="icon" className="mt-6" onClick={swapLanguages}>
             <ArrowRight className="h-4 w-4" />
           </Button>
 
@@ -171,7 +171,7 @@ const AITranslationHub = ({ defaultText = "", onResponse }: AITranslationHubProp
               <h4 className="font-semibold">
                 Translation ({LANGUAGES.find((l) => l.code === targetLanguage)?.name})
               </h4>
-              <Button variant="outline" size="sm" onClick={copyToClipboard}>
+              <Button aria-label="Confirm" variant="outline" size="sm" onClick={copyToClipboard}>
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
             </div>

@@ -305,7 +305,7 @@ const JBJPodcastSection = () => {
                 {/* Controls Row */}
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
-                    <button
+                    <button aria-label="Skip back"
                       onClick={handleSkipBack}
                       className="w-10 h-10 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center transition-colors"
                     >
@@ -324,7 +324,7 @@ const JBJPodcastSection = () => {
                         <Play className="w-6 h-6 text-[#1A1A1A] ml-0.5" />
                       )}
                     </button>
-                    <button
+                    <button aria-label="Skip"
                       onClick={handleSkipForward}
                       className="w-10 h-10 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center transition-colors"
                     >

@@ -82,7 +82,7 @@ export default function DeveloperDashboard() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {developerTiles.map((t, i) => (
-                  <Link key={i} to={t.href}>
+                  <Link aria-label="Next" key={i} to={t.href}>
                     <Card className="h-full bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:bg-[#F7F2EA] hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all group">
                       <CardContent className="p-5 flex items-start gap-3">
                         <div className="w-10 h-10 flex-shrink-0 bg-[#F7F2EA] border-2 border-[#B89555]/60 rounded-xl flex items-center justify-center">

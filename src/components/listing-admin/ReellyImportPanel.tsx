@@ -686,7 +686,7 @@ export function ReellyImportPanel() {
             <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
               <Clock className="w-3 h-3" />
               {new Date(liveCounts.last_updated).toLocaleTimeString()}
-              <Button variant="ghost" size="sm" onClick={refreshCounts} className="h-6 px-2"><RefreshCw className="w-3 h-3" /></Button>
+              <Button aria-label="Refresh" variant="ghost" size="sm" onClick={refreshCounts} className="h-6 px-2"><RefreshCw className="w-3 h-3" /></Button>
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -1395,7 +1395,7 @@ export function ReellyImportPanel() {
                 <div key={i} className="flex items-center justify-between gap-3 border rounded-lg p-2 hover:bg-[#F7F2EA]">
                   <div className="min-w-0">
                     {p.slug ? (
-                      <a href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="font-medium text-[#1A1A1A] truncate text-sm hover:text-blue-600 hover:underline flex items-center gap-1">
+                      <a aria-label="Open in a new tab" href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="font-medium text-[#1A1A1A] truncate text-sm hover:text-blue-600 hover:underline flex items-center gap-1">
                         {p.name} <ExternalLink className="h-3 w-3 flex-shrink-0 opacity-50" />
                       </a>
                     ) : <div className="font-medium text-[#1A1A1A] truncate text-sm">{p.name}</div>}

@@ -38,7 +38,7 @@ export function CurrencyTooltip() {
           background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
         }}
       >
-        <button
+        <button aria-label="Close"
           onClick={dismiss}
           className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-[#EFE6D6]/20 transition-colors"
         >

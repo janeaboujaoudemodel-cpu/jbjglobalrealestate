@@ -658,7 +658,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       <div className="h-full flex flex-col bg-[#1A1A1A] text-white overflow-hidden">
         {/* Header */}
         <div className="px-3 py-2.5 border-b border-[#1A1A1A] flex items-center gap-2">
-          <button onClick={backToGrid} className="text-[#1A1A1A]/70 hover:text-white transition-colors">
+          <button aria-label="Back" onClick={backToGrid} className="text-[#1A1A1A]/70 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </button>
           <Sparkles className="w-4 h-4 text-[#1A1A1A] shrink-0" />

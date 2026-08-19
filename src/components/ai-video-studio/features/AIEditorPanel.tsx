@@ -503,7 +503,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                     placeholder="Template name…"
                     className="flex-1 bg-[#1A1A1A] border border-[#B89555]/30 rounded px-2 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
                   />
-                  <Button
+                  <Button aria-label="Save"
                     size="sm"
                     onClick={handleSaveTemplate}
                     disabled={isSavingTemplate}
@@ -529,7 +529,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                 <p className="text-xs text-[#1A1A1A]/70 font-semibold uppercase tracking-wide">
                   My Templates
                 </p>
-                <button
+                <button aria-label="Refresh"
                   onClick={loadCustomTemplates}
                   className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70"
                 >

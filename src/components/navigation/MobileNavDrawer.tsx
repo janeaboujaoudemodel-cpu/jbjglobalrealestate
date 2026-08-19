@@ -210,6 +210,7 @@ export default function MobileNavDrawer({
       <Link
         to={item.href}
         onClick={onClose}
+        aria-label={item.label}
         aria-current={active ? "page" : undefined}
         data-jj-drawer-row={nested ? "sub" : "top"}
         data-active={active ? "true" : undefined}

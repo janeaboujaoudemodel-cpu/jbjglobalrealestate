@@ -700,7 +700,7 @@ const AdminChatDashboard = () => {
       {/* ============ TRANSCRIPT MODAL ============ */}
       {selectedConversation && (
         <ClickableDiv className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
-          <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
@@ -712,10 +712,10 @@ const AdminChatDashboard = () => {
                     <h3 className="font-semibold text-[#1A1A1A]">{selectedConversation.user_name || 'Anonymous'}</h3>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                       {selectedConversation.user_email && (
-                        <a href={`mailto:${selectedConversation.user_email}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedConversation.user_email}</a>
+                        <a aria-label="Email" href={`mailto:${selectedConversation.user_email}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedConversation.user_email}</a>
                       )}
                       {selectedConversation.user_phone && (
-                        <a href={`tel:${selectedConversation.user_phone}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedConversation.user_phone}</a>
+                        <a aria-label="Call" href={`tel:${selectedConversation.user_phone}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedConversation.user_phone}</a>
                       )}
                     </div>
                   </div>
@@ -986,7 +986,7 @@ const AdminChatDashboard = () => {
       {/* ============ CV VIEWER MODAL ============ */}
       {selectedCV && (
         <ClickableDiv className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
-          <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
             {/* CV Header */}
             <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
@@ -997,8 +997,8 @@ const AdminChatDashboard = () => {
                   <div>
                     <h3 className="text-lg font-bold text-[#1A1A1A]">{selectedCV.full_name}</h3>
                     <div className="flex items-center gap-3 mt-1 flex-wrap">
-                      <a href={`mailto:${selectedCV.email}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedCV.email}</a>
-                      {selectedCV.phone && <a href={`tel:${selectedCV.phone}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedCV.phone}</a>}
+                      <a aria-label="Email" href={`mailto:${selectedCV.email}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedCV.email}</a>
+                      {selectedCV.phone && <a aria-label="Call" href={`tel:${selectedCV.phone}`} className="text-xs text-[#1A1A1A]/70 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedCV.phone}</a>}
                       <span className="text-xs text-[#1A1A1A]/70 flex items-center gap-1"><Calendar className="w-3 h-3" /> {format(new Date(selectedCV.created_at), 'dd MMM yyyy')}</span>
                       <Badge className="bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30 text-[10px]">Source: Chat Widget</Badge>
                     </div>

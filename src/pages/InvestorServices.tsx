@@ -5,6 +5,7 @@ import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { type ReactNode } from "react";
+import { safeNavigate } from "@/utils/safeUrl";
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 16 },
@@ -101,11 +102,11 @@ const InvestorServices = () => {
   ];
 
   const handleWhatsAppClick = () => {
-    window.location.href = getWhatsAppUrl("Hello JBJ Global Real Estate, I would like to discuss investment opportunities in Dubai.");
+    safeNavigate(getWhatsAppUrl("Hello JBJ Global Real Estate, I would like to discuss investment opportunities in Dubai."));
   };
 
   const handleCallClick = () => {
-    window.location.href = getCallUrl();
+    safeNavigate(getCallUrl());
   };
 
   return (

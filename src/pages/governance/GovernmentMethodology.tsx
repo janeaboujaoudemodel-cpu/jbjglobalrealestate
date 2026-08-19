@@ -158,8 +158,8 @@ const GovernmentMethodology: React.FC = () => {
                           <p className="text-sm text-muted-foreground">{source.dataType}</p>
                           <p className="text-sm">{source.usage}</p>
                         </div>
-                        <Button variant="ghost" size="sm" asChild>
-                          <a href={source.website} target="_blank" rel="noopener noreferrer">
+                        <Button aria-label="Open in a new tab" variant="ghost" size="sm" asChild>
+                          <a aria-label="Open in a new tab" href={source.website} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="h-4 w-4" />
                           </a>
                         </Button>

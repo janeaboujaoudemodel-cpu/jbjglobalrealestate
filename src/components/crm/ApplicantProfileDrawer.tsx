@@ -19,6 +19,7 @@ import {
 import { format, formatDistanceToNow } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 export interface ApplicantDrawerEntry {
   id: string;
@@ -222,7 +223,7 @@ export default function ApplicantProfileDrawer({
       toast.success("Job offer envelope created — open it to send");
       setCandidateRow((r) => (r ? { ...r, status: "offer_sent", current_envelope_id: (data as any).envelope_id } : r));
       const next = (data as any)?.next;
-      if (next) window.open(next, "_blank", "noopener,noreferrer");
+      if (next) safeOpen(next);
     } catch (e: any) {
       toast.error(e?.message || "Send for signature failed");
     } finally {

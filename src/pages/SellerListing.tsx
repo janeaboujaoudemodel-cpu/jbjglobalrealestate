@@ -27,6 +27,7 @@ import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeFileExtension } from "@/utils/storagePath";
 import {
   Dialog,
   DialogContent,
@@ -191,7 +192,7 @@ const SellerListing = () => {
   const uploadFile = async (file: File, folder: string): Promise<string | null> => {
     if (!user) return null;
     
-    const fileExt = file.name.split('.').pop();
+    const fileExt = safeFileExtension(file.name);
     const fileName = `${user.id}/${folder}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
     
     const { error } = await supabase.storage

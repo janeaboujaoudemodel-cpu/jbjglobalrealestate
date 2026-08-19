@@ -63,7 +63,7 @@ const LockedField = ({ label, value, placeholder, locked, onUnlock, onCommit }: 
         {locked ? <Lock className="w-3 h-3 text-[#1A1A1A]/50" /> : null}
       </Label>
       {locked ? (
-        <button
+        <button aria-label="Edit"
           type="button"
           onClick={onUnlock}
           className="w-full text-left flex items-center justify-between gap-2 px-3 py-2 rounded-md bg-white border border-[#1A1A1A]/15 hover:border-[#B89555] transition-colors"

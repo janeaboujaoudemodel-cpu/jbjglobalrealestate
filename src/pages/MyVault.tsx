@@ -18,6 +18,7 @@ import {
 } from "@/lib/vault";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeOpen } from "@/utils/safeUrl";
 
 const CATEGORIES: { v: VaultCategory; label: string; help: string }[] = [
   { v: "identity",  label: "Identity",   help: "Passport, Emirates ID, visa, national ID, driving licence" },
@@ -78,7 +79,7 @@ export default function MyVault() {
   async function openDoc(doc: VaultDocument) {
     try {
       const { url } = await getVaultSignedUrl(doc.id);
-      window.open(url, "_blank", "noopener,noreferrer");
+      safeOpen(url);
     } catch (e) {
       toast.error((e as Error).message);
     }
@@ -289,7 +290,7 @@ function DocCard({ d, onOpen, onDelete }: { d: VaultDocument; onOpen: () => void
             <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onOpen}>
               <Eye className="w-3 h-3 mr-1" /> View
             </Button>
-            <Button size="sm" variant="outline" className="h-7 px-2 text-xs text-[#b91c1c]" onClick={onDelete}>
+            <Button aria-label="Delete" size="sm" variant="outline" className="h-7 px-2 text-xs text-[#b91c1c]" onClick={onDelete}>
               <Trash2 className="w-3 h-3" />
             </Button>
           </div>
@@ -315,7 +316,7 @@ function PropRow({ p, onDelete }: { p: VaultProperty; onDelete: () => void }) {
         <div className="text-sm font-semibold text-[#064E3B]">{formatAed(Number(p.purchase_price_aed))}</div>
         <div className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55">{p.status}</div>
       </div>
-      <Button size="sm" variant="ghost" onClick={onDelete} className="text-[#b91c1c]"><Trash2 className="w-4 h-4" /></Button>
+      <Button aria-label="Delete" size="sm" variant="ghost" onClick={onDelete} className="text-[#b91c1c]"><Trash2 className="w-4 h-4" /></Button>
     </div>
   );
 }
@@ -366,7 +367,7 @@ function AddPropertyDialog({ onClose, onSaved }: { onClose: () => void; onSaved:
           <CardTitle className="text-base flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-[#064E3B]" /> Add a property
           </CardTitle>
-          <Button size="sm" variant="ghost" onClick={onClose}><X className="w-4 h-4" /></Button>
+          <Button aria-label="Close" size="sm" variant="ghost" onClick={onClose}><X className="w-4 h-4" /></Button>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-3">
           <Field className="col-span-2" label="Project / building *"><Input value={f.project_name} onChange={(e) => setF({ ...f, project_name: e.target.value })} /></Field>

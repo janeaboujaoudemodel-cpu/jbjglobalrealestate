@@ -234,7 +234,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
                       }
                     }}
                   />
-                  <Button
+                  <Button aria-label="Send"
                     onClick={handleSendMessage}
                     disabled={isSending || !message.trim()}
                     className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] self-end"

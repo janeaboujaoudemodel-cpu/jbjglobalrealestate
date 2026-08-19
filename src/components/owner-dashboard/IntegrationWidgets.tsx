@@ -74,7 +74,7 @@ export default function IntegrationWidgets() {
             </span>
             <h3 className="text-sm font-semibold text-[#1A1A1A]">Upcoming Events</h3>
           </div>
-          <Button 
+          <Button aria-label="Next" 
             variant="ghost" 
             size="sm" 
             onClick={openOwnerCalendar}

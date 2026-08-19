@@ -4,6 +4,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { safeFetch } from "../_shared/ssrf-guard.ts";
 
 const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 const BAD_PREFIXES = ["noreply", "no-reply", "donotreply", "example", "wixpress", "sentry"];
@@ -35,9 +36,8 @@ async function fetchText(url: string, timeoutMs = 6000): Promise<string | null> 
   try {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), timeoutMs);
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       signal: ctrl.signal,
-      redirect: "follow",
       headers: {
         "user-agent": "Mozilla/5.0 (compatible; JBJ-Enrich/1.0; +https://jbj.ae)",
         accept: "text/html,application/xhtml+xml",

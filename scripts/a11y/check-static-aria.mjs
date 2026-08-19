@@ -27,6 +27,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
+import { tryResolveWithinRoot } from '../lib/safePath.mjs';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..', '..');
@@ -47,8 +48,10 @@ const exts = new Set(['.tsx', '.jsx']);
 const TARGETS = process.argv
   .slice(2)
   .filter((a) => !a.startsWith('-'))
-  .map((a) => path.resolve(root, a))
-  .filter((p) => exts.has(path.extname(p)) && fs.existsSync(p));
+  // Confined to the repo — a forwarded filename must not be able to point the
+  // scanner at a file outside the working tree.
+  .map((a) => tryResolveWithinRoot(root, a))
+  .filter((p) => p && exts.has(path.extname(p)) && fs.existsSync(p));
 const SCOPED = TARGETS.length > 0;
 
 /**
@@ -98,12 +101,51 @@ function filesToScan() {
 
 // Match a complete opening tag (single-line or multi-line) for a target name.
 // We capture the attributes blob between the tag name and the `>` (or `/>`).
+// Collect open tags and their FULL attribute text.
+//
+// This can't be a single regex. `[^>]*?` stops at the first `>` in the tag,
+// and in JSX that `>` is very often the arrow of an inline handler:
+//
+//   <div onClick={...} onKeyDown={(e) => { … }} role="button" tabIndex={0}>
+//                                      ^ attrs used to be truncated here
+//
+// so every attribute after the first arrow function became invisible. That
+// made the scan report `click-events-have-key-events` against elements that
+// already had role + tabIndex + onKeyDown — noise that teaches people to
+// ignore the check. Walk the tag instead, tracking brace depth and string
+// state, and stop only at a `>` that is genuinely at attribute level.
 function matchOpenTags(source, tagName) {
-  const re = new RegExp(`<${tagName}\\b([^>]*?)(/?>)`, 'gs');
+  const re = new RegExp(`<${tagName}\\b`, 'g');
   const out = [];
   let m;
   while ((m = re.exec(source)) !== null) {
-    out.push({ index: m.index, attrs: m[1], selfClosing: m[2] === '/>' });
+    let i = re.lastIndex;
+    let depth = 0;
+    let quote = null;
+    let end = -1;
+    while (i < source.length) {
+      const c = source[i];
+      if (quote) {
+        if (c === quote && source[i - 1] !== '\\') quote = null;
+      } else if (c === '"' || c === "'" || c === '`') {
+        quote = c;
+      } else if (c === '{') {
+        depth++;
+      } else if (c === '}') {
+        depth--;
+      } else if (c === '>' && depth === 0) {
+        end = i;
+        break;
+      }
+      i++;
+    }
+    if (end === -1) continue;
+    const attrs = source.slice(re.lastIndex, end);
+    out.push({
+      index: m.index,
+      attrs,
+      selfClosing: attrs.trimEnd().endsWith('/'),
+    });
   }
   return out;
 }
@@ -153,13 +195,39 @@ function attrsHave(attrs, names) {
   return names.some((n) => new RegExp(`\\b${n}\\s*=`).test(attrs));
 }
 
+// Identifiers that render user-visible text when interpolated. A control
+// whose body is `{children}` or `{label}` does have an accessible name — the
+// consumer supplies it — so treating the stripped-out expression as "no text"
+// reported real, correctly-labelled components as violations.
+const TEXT_EXPRESSIONS =
+  /\{\s*(children|label|title|text|name|ctaLabel|buttonText)\s*\}/;
+
+// A quoted or template string, holding at least two consecutive letters.
+// Used to spot text an expression renders, e.g. `{value || "Select developer"}`
+// or `{badge ? `Change badge` : `Add badge`}`.
+const STRING_WITH_WORD = /(["'`])[^"'`]*[A-Za-z]{2}[^"'`]*\1/;
+
 function bodyHasVisibleText(body) {
   if (!body) return false;
+  if (TEXT_EXPRESSIONS.test(body)) return true;
   // Strip JSX comments
   const stripped = body.replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, '');
+  // Drop nested elements first, so their *attribute* string literals (className,
+  // key, …) can't be mistaken for rendered copy below.
+  const noElements = stripped.replace(/<[^>]*>/g, '');
+  // A `{…}` expression that contains a string literal renders that string —
+  // `{formData.location || "Select location…"}` is a real accessible name, but
+  // stripping the whole expression made it look like an unlabelled icon button.
+  for (const expr of noElements.match(/\{[^{}]*\}/g) || []) {
+    if (STRING_WITH_WORD.test(expr)) return true;
+  }
+  // JSX text nodes always sit between a `>` and a `<`, so a run of letters there
+  // is rendered copy even when it is nested inside a conditional expression —
+  // `{loading ? <span>Submitting…</span> : <span>Submit application</span>}`
+  // reads as an unnamed control once the whole expression is stripped.
+  if (/>[^<>{}]*[A-Za-z]{2}[^<>{}]*</.test(stripped)) return true;
   // Look for any text outside of JSX tags / expressions that is non-whitespace.
-  // Heuristic: remove all <...> (icons, child components) and {...} (expressions).
-  const noTags = stripped.replace(/<[^>]*>/g, '').replace(/\{[^{}]*\}/g, '');
+  const noTags = noElements.replace(/\{[^{}]*\}/g, '');
   return /\S/.test(noTags);
 }
 
@@ -232,6 +300,12 @@ for (const file of filesToScan()) {
   for (const tagName of ['div', 'span']) {
     for (const tag of matchOpenTags(source, tagName)) {
       if (!/\bonClick\s*=/.test(tag.attrs)) continue;
+      // A contentEditable host is focusable and keyboard-operable by definition,
+      // and the clicks it receives are delegated from real <button> descendants
+      // inside the edited HTML — Enter/Space on those buttons already fires this
+      // handler. Demanding role/tabIndex/onKeyDown here would mean bolting a
+      // second, redundant keyboard path onto a text editor.
+      if (/\bcontentEditable\b/.test(tag.attrs)) continue;
       const hasKbd = /\bonKeyDown\s*=|\bonKeyUp\s*=|\bonKeyPress\s*=/.test(tag.attrs);
       const hasRole = /\brole\s*=/.test(tag.attrs);
       const hasTabIdx = /\btabIndex\s*=/.test(tag.attrs);

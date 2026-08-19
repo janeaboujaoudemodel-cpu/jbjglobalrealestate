@@ -282,7 +282,7 @@ export const PremiumToolShell = ({
                   <div aria-hidden className="h-px w-16" style={{ background: TOOL_GOLD }} />
                 </div>
                 {readMore && (
-                  <a
+                  <a aria-label="Details"
                     href={readMore.href}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors"
                     style={{

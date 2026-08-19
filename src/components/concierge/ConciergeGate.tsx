@@ -242,7 +242,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
           <div className="grid grid-cols-[138px_minmax(0,1fr)] gap-2 overflow-visible">
             <Popover open={countryOpen} onOpenChange={setCountryOpen}>
               <PopoverTrigger asChild>
-                <button
+                <button aria-label="Expand"
                   type="button"
                   data-no-contrast-guard
                   className="flex h-12 w-full items-center justify-between rounded-lg border border-[#B89555]/45 bg-[#FDFBF7] px-3 text-[13.5px] text-[#1A1A1A] outline-none transition hover:border-[#B89555] hover:bg-[#F7F2EA] focus:border-[#B89555] focus:bg-[#FDFBF7]"

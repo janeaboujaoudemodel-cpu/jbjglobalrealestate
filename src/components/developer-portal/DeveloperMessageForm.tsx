@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { MessageSquare, Loader2, Upload, FileText, X, Send } from 'lucide-react';
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface DeveloperMessageFormProps {
   representativeId: string;
@@ -42,7 +43,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
     const uploaded: UploadedFile[] = [];
     for (const file of Array.from(fileList)) {
       try {
-        const path = `developer-messages/${representativeId}/${Date.now()}-${file.name}`;
+        const path = `developer-messages/${representativeId}/${Date.now()}-${safeStorageFileName(file.name)}`;
         const { error } = await supabase.storage.from('documents').upload(path, file);
         if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
         const { data: urlData } = supabase.storage.from('documents').getPublicUrl(path);

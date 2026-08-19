@@ -1088,7 +1088,7 @@ const FilterPill = ({
 }) => (
   <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-full text-[#1A1A1A] text-sm">
     {label}
-    <button
+    <button aria-label="Close"
       onClick={onRemove}
       className="ml-1 hover:bg-[#1A1A1A] rounded-full p-0.5"
     >

@@ -218,7 +218,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
           )}
 
           {/* Play/Pause Overlay */}
-          <button
+          <button aria-label="Play"
             onClick={handlePlayPause}
             className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/0 hover:bg-[#1A1A1A]/20 transition-colors z-5"
           >
@@ -248,26 +248,26 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
         {/* Controls */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={handleReset}>
+            <Button aria-label="Undo" variant="ghost" size="icon" onClick={handleReset}>
               <RotateCcw className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={handleSkipBack}>
+            <Button aria-label="Skip back" variant="ghost" size="icon" onClick={handleSkipBack}>
               <SkipBack className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={handlePlayPause}>
+            <Button aria-label="Pause" variant="ghost" size="icon" onClick={handlePlayPause}>
               {isPlaying ? (
                 <Pause className="h-5 w-5" />
               ) : (
                 <Play className="h-5 w-5" />
               )}
             </Button>
-            <Button variant="ghost" size="icon" onClick={handleSkipForward}>
+            <Button aria-label="Skip" variant="ghost" size="icon" onClick={handleSkipForward}>
               <SkipForward className="h-4 w-4" />
             </Button>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={toggleMute}>
+            <Button aria-label="Mute" variant="ghost" size="icon" onClick={toggleMute}>
               {isMuted ? (
                 <VolumeX className="h-4 w-4" />
               ) : (
@@ -281,7 +281,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
               step={1}
               className="w-20"
             />
-            <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
+            <Button aria-label="Minimise" variant="ghost" size="icon" onClick={toggleFullscreen}>
               {isFullscreen ? (
                 <Minimize className="h-4 w-4" />
               ) : (

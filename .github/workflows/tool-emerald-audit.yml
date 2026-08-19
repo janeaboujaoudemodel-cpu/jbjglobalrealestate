@@ -14,13 +14,40 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          # Do not leave the job-scoped GITHUB_TOKEN in .git/config where any
+          # later step (or a compromised dependency) could read and reuse it.
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with: { bun-version: latest }
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with: { python-version: "3.11" }
       - run: bun install
-      - run: pip install playwright pillow && python -m playwright install --with-deps chromium
+      - run: |
+          # cdn.playwright.dev intermittently answers GitHub runners with
+          # 403 "this service is not available in your location" — a geo/CDN
+          # refusal, not rate limiting. It took down the Report Pill snapshot
+          # on bda388d thirty minutes after the same job passed, before a
+          # single test body ran. Retry a few times, then fall back to the
+          # Chrome that ubuntu-latest already ships, so a CDN having a bad
+          # minute cannot fail a code gate.
+          for attempt in 1 2 3; do
+            pip install playwright pillow && python -m playwright install --with-deps chromium && exit 0
+            echo "playwright install failed (attempt $attempt/3); retrying in $((attempt * 5))s"
+            sleep $((attempt * 5))
+          done
+          echo "::warning::playwright install failed 3x; falling back to the runner's preinstalled Chrome"
+          for candidate in "$CHROME_PATH" /usr/bin/google-chrome /usr/bin/chromium-browser /usr/bin/chromium; do
+            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+              echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE=$candidate" >> "$GITHUB_ENV"
+              echo "CHROMIUM_PATH=$candidate" >> "$GITHUB_ENV"
+              echo "Using $candidate"
+              exit 0
+            fi
+          done
+          echo "::error::No Chromium available: the download failed and no system Chrome was found."
+          exit 1
       - name: Start dev server
         run: |
           bun run dev &
@@ -31,7 +58,7 @@ jobs:
         run: python scripts/tool-emerald-audit/run.py
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: tool-emerald-audit
           path: scripts/tool-emerald-audit/artifacts

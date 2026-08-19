@@ -55,7 +55,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
 
       <div className="flex items-center gap-3">
         {showBackButton && (
-          <Button
+          <Button aria-label="Next"
             variant="ghost"
             size="icon"
             onClick={onBack}

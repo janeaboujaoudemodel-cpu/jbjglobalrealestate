@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Lead {
   id: string;
@@ -98,7 +99,7 @@ const SmartWhatsAppComposer = ({ lead, onSend }: SmartWhatsAppComposerProps) => 
 
     const phone = lead.phone_e164.replace("+", "");
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    safeOpen(whatsappUrl);
     onSend?.(message);
   };
 

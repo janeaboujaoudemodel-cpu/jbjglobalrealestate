@@ -1,5 +1,20 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
+import { isPublicHttpUrl, safeFetch } from "../_shared/ssrf-guard.ts";
+
+/** Every export URL below is built from an ID parsed out of the caller's
+ *  link, so the reachable host set is fixed and can be pinned. */
+const GOOGLE_ONLY = {
+  // Google export endpoints 302 to a content host, so the download hosts have
+  // to be on the list too or safeFetch blocks the redirect.
+  allowedHosts: [
+    "docs.google.com",
+    "drive.google.com",
+    "drive.usercontent.google.com",
+    "googleusercontent.com",
+    "googleapis.com",
+  ],
+} as const;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -51,7 +66,7 @@ async function fetchGoogleDriveContent(parsed: { type: string; id: string }): Pr
     // Export Google Doc as plain text
     const exportUrl = `https://docs.google.com/document/d/${parsed.id}/export?format=txt`;
     try {
-      const res = await fetch(exportUrl);
+      const res = await safeFetch(exportUrl, {}, GOOGLE_ONLY);
       if (res.ok) {
         result.text = await res.text();
       }
@@ -60,7 +75,7 @@ async function fetchGoogleDriveContent(parsed: { type: string; id: string }): Pr
     // Also try HTML for richer extraction
     const htmlUrl = `https://docs.google.com/document/d/${parsed.id}/export?format=html`;
     try {
-      const res = await fetch(htmlUrl);
+      const res = await safeFetch(htmlUrl, {}, GOOGLE_ONLY);
       if (res.ok) {
         const html = await res.text();
         // Extract image URLs from HTML
@@ -74,7 +89,7 @@ async function fetchGoogleDriveContent(parsed: { type: string; id: string }): Pr
     // Export Google Sheet as CSV
     const exportUrl = `https://docs.google.com/spreadsheets/d/${parsed.id}/export?format=csv`;
     try {
-      const res = await fetch(exportUrl);
+      const res = await safeFetch(exportUrl, {}, GOOGLE_ONLY);
       if (res.ok) {
         result.text = await res.text();
       }
@@ -83,7 +98,7 @@ async function fetchGoogleDriveContent(parsed: { type: string; id: string }): Pr
     // Export as text
     const exportUrl = `https://docs.google.com/presentation/d/${parsed.id}/export?format=txt`;
     try {
-      const res = await fetch(exportUrl);
+      const res = await safeFetch(exportUrl, {}, GOOGLE_ONLY);
       if (res.ok) {
         result.text = await res.text();
       }
@@ -96,7 +111,7 @@ async function fetchGoogleDriveContent(parsed: { type: string; id: string }): Pr
     // Try to get file metadata via embed page
     try {
       const metaUrl = `https://drive.google.com/file/d/${parsed.id}/view`;
-      const res = await fetch(metaUrl, { redirect: 'follow' });
+      const res = await safeFetch(metaUrl, {}, GOOGLE_ONLY);
       if (res.ok) {
         const html = await res.text();
         // Extract title
@@ -110,7 +125,7 @@ async function fetchGoogleDriveContent(parsed: { type: string; id: string }): Pr
     // For folders, we can try to list public contents via embed
     try {
       const embedUrl = `https://drive.google.com/embeddedfolderview?id=${parsed.id}#list`;
-      const res = await fetch(embedUrl, { redirect: 'follow' });
+      const res = await safeFetch(embedUrl, {}, GOOGLE_ONLY);
       if (res.ok) {
         const html = await res.text();
         // Extract file names and IDs
@@ -181,7 +196,7 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("AI service not configured");
 
     const { url, extract_mode } = await req.json();
-    if (!url || typeof url !== 'string') {
+    if (!url || typeof url !== 'string' || !isPublicHttpUrl(url)) {
       return new Response(JSON.stringify({ success: false, error: "URL is required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -218,7 +233,7 @@ serve(async (req) => {
       if (parsed.type === 'file' || (driveFiles.length > 0 && driveFiles.length <= 5)) {
         for (const df of driveFiles.slice(0, 5)) {
           try {
-            const fileRes = await fetch(df.exportUrl, { redirect: 'follow' });
+            const fileRes = await safeFetch(df.exportUrl, {}, GOOGLE_ONLY);
             if (fileRes.ok) {
               const contentType = fileRes.headers.get('content-type') || '';
               if (contentType.includes('text') || contentType.includes('csv') || contentType.includes('json')) {
@@ -300,7 +315,7 @@ serve(async (req) => {
       // Fallback: simple fetch
       if (!scrapedMarkdown && !extractedText) {
         try {
-          const res = await fetch(url, { redirect: 'follow' });
+          const res = await safeFetch(url);
           if (res.ok) {
             const ct = res.headers.get('content-type') || '';
             if (ct.includes('text') || ct.includes('html')) {

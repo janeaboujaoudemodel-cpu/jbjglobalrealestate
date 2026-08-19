@@ -416,7 +416,7 @@ export default function VoiceAgentControlPanel() {
               disabled={!draft || testing}
               className="bg-white border-[#B89555]/30 text-[#1A1A1A]"
             />
-            <Button
+            <Button aria-label="Send"
               onClick={runTest}
               disabled={!draft || !testInput.trim() || testing}
               className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90"

@@ -100,7 +100,7 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
       {/* More Actions Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button 
+          <Button aria-label="More options" 
             variant="outline" 
             size="sm" 
             className="bg-[#EFE6D6]/10 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/20"

@@ -269,7 +269,7 @@ export const MarketIntelligenceTableOfContents = ({
                   className="border-t border-white/15 p-2.5 flex-shrink-0"
                   style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
                 >
-                  <Link
+                  <Link aria-label="Open"
                     to={ctaAction.href}
                     data-surface="emerald"
                     data-emerald-ok="button"

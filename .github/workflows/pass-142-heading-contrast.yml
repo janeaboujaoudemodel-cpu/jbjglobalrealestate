@@ -40,7 +40,13 @@ jobs:
   heading-contrast:
     name: PASS 142 Heading Contrast Gate
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # 30, not 20: this job builds the app and runs a Playwright sweep over
+    # 13 routes x 3 viewports. On 2026-08-17 it took 20m35s and GitHub
+    # cancelled it at the 20-minute mark *after* both gates had already
+    # reported success -- a passing gate showing up as a red 'cancelled'
+    # check. The work is genuinely ~20 minutes, so the ceiling has to sit
+    # above it rather than on top of it.
+    timeout-minutes: 30
     # Default GITHUB_TOKEN in this repo is read-only, so the "Post PR
     # summary" step's issues.createComment call 403s on every run
     # ("Resource not accessible by integration") without this.
@@ -50,10 +56,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          # Do not leave the job-scoped GITHUB_TOKEN in .git/config where any
+          # later step (or a compromised dependency) could read and reuse it.
+          persist-credentials: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -86,7 +96,30 @@ jobs:
         # enough. tests/dark-surface-heading-contrast.spec.ts runs via the
         # @playwright/test runner and doesn't need it, but installing it here
         # too is harmless and keeps both Playwright users in this job covered.
-        run: npx playwright install --with-deps chromium chromium-headless-shell
+        run: |
+          # cdn.playwright.dev intermittently answers GitHub runners with
+          # 403 "this service is not available in your location" — a geo/CDN
+          # refusal, not rate limiting. It took down the Report Pill snapshot
+          # on bda388d thirty minutes after the same job passed, before a
+          # single test body ran. Retry a few times, then fall back to the
+          # Chrome that ubuntu-latest already ships, so a CDN having a bad
+          # minute cannot fail a code gate.
+          for attempt in 1 2 3; do
+            npx playwright install --with-deps chromium chromium-headless-shell && exit 0
+            echo "playwright install failed (attempt $attempt/3); retrying in $((attempt * 5))s"
+            sleep $((attempt * 5))
+          done
+          echo "::warning::playwright install failed 3x; falling back to the runner's preinstalled Chrome"
+          for candidate in "$CHROME_PATH" /usr/bin/google-chrome /usr/bin/chromium-browser /usr/bin/chromium; do
+            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+              echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE=$candidate" >> "$GITHUB_ENV"
+              echo "CHROMIUM_PATH=$candidate" >> "$GITHUB_ENV"
+              echo "Using $candidate"
+              exit 0
+            fi
+          done
+          echo "::error::No Chromium available: the download failed and no system Chrome was found."
+          exit 1
 
       - name: Build app
         run: npm run build
@@ -127,7 +160,7 @@ jobs:
 
       - name: Upload PASS 142 artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: pass-142-report
           path: |
@@ -138,7 +171,7 @@ jobs:
 
       - name: Post PR summary
         if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             const fs = require('fs');

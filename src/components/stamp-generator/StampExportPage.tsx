@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
+import { escapeHtml, openPrintWindow } from '@/utils/printWindow';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import JSZip from 'jszip';
@@ -1138,24 +1139,21 @@ export default function StampExportPage() {
                 </Button>
                 <Button variant="outline" className="gap-1.5 text-xs border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]" onClick={() => {
                   if (!tintedSvg) return;
-                  const printWindow = window.open('', '_blank', 'width=800,height=800');
-                  if (printWindow) {
-                    const cleanSvg = sanitizeSvgForExport(tintedSvg, 200);
-                    const htmlSvg = cleanSvg.replace(/<\?xml[^?]*\?>\s*/, '');
-                    printWindow.document.write(`<!DOCTYPE html><html><head>
-                      <title>Print Stamp — ${project?.company_name || 'Stamp'}</title>
-                      <style>
-                        @page { size: 100mm 100mm; margin: 10mm; }
-                        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
-                        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-                        svg { width: 80mm; height: 80mm; max-width: 100%; }
-                      </style>
-                    </head><body>${htmlSvg}</body></html>`);
-                    printWindow.document.close();
-                    printWindow.focus();
-                    printWindow.onafterprint = () => printWindow.close();
-                    setTimeout(() => printWindow.print(), 600);
-                  }
+                  const cleanSvg = sanitizeSvgForExport(tintedSvg, 200);
+                  const htmlSvg = cleanSvg.replace(/<\?xml[^?]*\?>\s*/, '');
+                  openPrintWindow(`<!DOCTYPE html><html><head>
+                    <title>Print Stamp — ${escapeHtml(project?.company_name || 'Stamp')}</title>
+                    <style>
+                      @page { size: 100mm 100mm; margin: 10mm; }
+                      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
+                      body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+                      svg { width: 80mm; height: 80mm; max-width: 100%; }
+                    </style>
+                  </head><body>${htmlSvg}</body></html>`, {
+                    features: 'width=800,height=800',
+                    printDelayMs: 600,
+                    closeAfterPrint: true,
+                  });
                 }}>
                   <Printer size={12}/> Print
                 </Button>

@@ -128,7 +128,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button
+            <button aria-label="Refresh"
               onClick={onRefresh}
               className={cn(
                 'p-2 rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 transition-colors',
@@ -138,7 +138,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
               <RefreshCw className="w-4 h-4" />
             </button>
             {onToggleCollapse && (
-              <button
+              <button aria-label="Close"
                 onClick={onToggleCollapse}
                 className="p-2 rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 transition-colors"
               >

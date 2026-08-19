@@ -101,7 +101,7 @@ export default function PropertiesVerticalNav() {
     return (
       <>
         {/* Backdrop */}
-        <div
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
           className="fixed inset-0 z-[9999] bg-[#1A1A1A]/30 backdrop-blur-sm"
           style={{ left: '200px' }}
           onClick={closeMegaMenu}
@@ -111,7 +111,7 @@ export default function PropertiesVerticalNav() {
           className="fixed z-[10000] flex items-start justify-center pointer-events-none"
           style={{ left: '200px', top: '88px', bottom: 0, right: 0 }}
         >
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             className="pointer-events-auto max-w-[360px] w-full max-h-[calc(100vh-100px)] overflow-y-auto jj-scrollbar-gold mt-2 rounded-2xl shadow-2xl border-2 border-[#B89555]/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA]"
             onClick={(e) => e.stopPropagation()}
             onMouseLeave={closeMegaMenu}
@@ -120,7 +120,7 @@ export default function PropertiesVerticalNav() {
               {links.map((link) => {
                 const Icon = link.icon;
                 return (
-                  <Link
+                  <Link aria-label={link.label}
                     key={link.href + link.label}
                     to={link.href}
                     onClick={closeMegaMenu}

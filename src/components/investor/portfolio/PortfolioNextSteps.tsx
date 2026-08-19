@@ -61,8 +61,8 @@ export default function PortfolioNextSteps() {
                   <p className="text-sm text-muted-foreground">{step.description}</p>
                 </div>
               </div>
-              <Link to={step.actionLink}>
-                <Button variant="secondary" className="w-full gap-2">
+              <Link aria-label="Next" to={step.actionLink}>
+                <Button aria-label="Next" variant="secondary" className="w-full gap-2">
                   {step.actionLabel}
                   <ArrowRight className="w-4 h-4" />
                 </Button>

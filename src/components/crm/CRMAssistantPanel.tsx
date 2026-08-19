@@ -593,7 +593,7 @@ ${COMPANY_CONTACTS.email}`;
                 className="flex-1 bg-muted border-border text-white"
                 disabled={processing}
               />
-              <Button 
+              <Button aria-label="Refresh" 
                 variant="primary"
                 onClick={processCommand} 
                 disabled={processing || !command.trim()}
@@ -644,7 +644,7 @@ ${COMPANY_CONTACTS.email}`;
                   onKeyDown={(e) => e.key === "Enter" && addTask()}
                   className="flex-1 bg-muted border-border text-white"
                 />
-                <Button 
+                <Button aria-label="Add" 
                   variant="primary"
                   onClick={addTask} 
                   disabled={!newTaskTitle.trim()}

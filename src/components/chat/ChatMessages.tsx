@@ -285,7 +285,7 @@ const ChatMessages = React.memo(({
             disabled={isLoading}
             className="flex-1 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.88)_100%)] border border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 focus:border-[#B89555] focus:ring-2 focus:ring-[#B89555]/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200 shadow-[0_1px_0_rgba(255,255,255,0.65)_inset,0_2px_8px_rgba(184,149,85,0.10)]"
           />
-          <Button
+          <Button aria-label="Send"
             onClick={onSend}
             disabled={!input.trim() || isLoading}
             className="bg-[#1A1A1A] hover:bg-[#2A2A2A] text-[#FDFBF7] h-12 w-12 rounded-xl hover:shadow-[0_0_18px_rgba(184,149,85,0.40)] transition-all duration-200"

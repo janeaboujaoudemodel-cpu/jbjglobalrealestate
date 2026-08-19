@@ -562,7 +562,7 @@ const TicketHub = () => {
                         <Label>Attachments (max 5 files — photos, videos, screenshots)</Label>
 
                         {/* Drop zone */}
-                        <div
+                        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                           ref={dropZoneRef}
                           onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
                           onDragLeave={() => setIsDragOver(false)}

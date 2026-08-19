@@ -14,6 +14,7 @@
  *    bottom-left over a line, stamp bottom-right).
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { sanitizeRichHtml } from "@/utils/safeHtml";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -346,6 +347,7 @@ export default function BlankLetterStudio() {
   const SectionToggle = ({ open, onToggle, label, icon: Icon }: any) => (
     <button
       onClick={onToggle}
+      aria-label={label}
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${
         open ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]" : "bg-white border-[#EFE6D6] text-[#1A1A1A]/80 hover:border-[#B89555]/60"
       }`}
@@ -606,7 +608,7 @@ export default function BlankLetterStudio() {
                 <div
                   className="bg-white shadow-2xl mx-auto relative"
                   style={{ width: 794, minHeight: 1123 }}
-                  dangerouslySetInnerHTML={{ __html: previewHtml }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(previewHtml) }}
                 />
                 {placementMode && activeSignature && placedSig && (
                   <div onMouseDown={(e) => startDrag("sig", e)}

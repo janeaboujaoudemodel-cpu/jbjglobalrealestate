@@ -82,7 +82,7 @@ const ContentSection = ({
           {links && links.length > 0 && (
             <div className="mt-6 pt-6 border-t border-[#B89555]/20 space-y-2">
               {links.map((link, idx) => (
-                <a 
+                <a aria-label="Open in a new tab" 
                   key={idx}
                   href={link.url}
                   target="_blank"

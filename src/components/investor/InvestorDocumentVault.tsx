@@ -26,6 +26,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { format } from "date-fns";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface InvestorDocument {
   id: string;
@@ -327,7 +328,7 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
                             <Button
                               variant="secondary"
                               size="sm"
-                              onClick={() => window.open(existingDoc.file_url, "_blank")}
+                              onClick={() => safeOpen(existingDoc.file_url)}
                               className="text-xs h-7"
                             >
                               <Eye className="w-3 h-3 mr-1" />

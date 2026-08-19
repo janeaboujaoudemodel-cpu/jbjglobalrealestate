@@ -31,6 +31,7 @@ import SignaturePad from "@/components/referral/SignaturePad";
 import ReferralContract from "@/components/referral/ReferralContract";
 import MainLayout from "@/components/MainLayout";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { safeFileExtension } from "@/utils/storagePath";
 
 type OnboardingStep = 1 | 2 | 3 | 4;
 
@@ -153,7 +154,7 @@ export default function ReferralOnboarding() {
   };
 
   const uploadFile = async (file: File, folder: string): Promise<string | null> => {
-    const fileExt = file.name.split('.').pop();
+    const fileExt = safeFileExtension(file.name);
     const fileName = `${user?.id || 'guest'}_${Date.now()}.${fileExt}`;
     const filePath = `${folder}/${fileName}`;
 

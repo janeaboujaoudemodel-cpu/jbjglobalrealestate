@@ -257,14 +257,14 @@ function SubmissionDetail({ submission }: { submission: Submission }) {
       </SheetHeader>
 
       <div className="grid gap-3 md:grid-cols-2 mb-6">
-        <a
+        <a aria-label="Email"
           href={`mailto:${submission.email}`}
           className="flex items-center gap-2 p-3 rounded-xl bg-[#031E18] border border-[#B89555]/40 hover:border-[#B89555]"
         >
           <Mail className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm">{submission.email}</span>
         </a>
-        <a
+        <a aria-label="Message on WhatsApp"
           href={`https://wa.me/${submission.phone.replace(/[^0-9]/g, "")}`}
           target="_blank"
           rel="noopener noreferrer"

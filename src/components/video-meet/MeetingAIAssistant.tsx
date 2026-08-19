@@ -285,7 +285,7 @@ export function MeetingAIAssistant({
               <Input value={input} onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                 placeholder="Ask AI privately..." className="bg-[#1A1A1A] border-[#1A1A1A] text-white text-sm" />
-              <Button size="icon" onClick={sendMessage} disabled={isLoading || !input.trim()} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
+              <Button aria-label="Send" size="icon" onClick={sendMessage} disabled={isLoading || !input.trim()} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                 <Send className="w-4 h-4" />
               </Button>
             </div>

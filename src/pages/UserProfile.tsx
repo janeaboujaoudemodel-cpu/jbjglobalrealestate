@@ -54,6 +54,7 @@ import {
 import { PhoneInput } from "@/components/ui/phone-input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useUserMode } from "@/hooks/useUserMode";
+import { safeFileExtension } from "@/utils/storagePath";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -165,7 +166,7 @@ const UserProfile = () => {
 
     setUploadingPhoto(true);
     try {
-      const fileExt = file.name.split('.').pop() || 'jpg';
+      const fileExt = safeFileExtension(file.name, 'jpg');
       const fileName = `${user.id}/${Date.now()}-avatar.${fileExt}`;
       const bucket = 'profile-pictures';
 

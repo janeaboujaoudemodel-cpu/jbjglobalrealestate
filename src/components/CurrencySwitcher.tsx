@@ -125,7 +125,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             <span className="text-[9px] font-medium text-center">Currency</span>
           </button>
         ) : isIconOnly ? (
-          <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#EFE6D6]/10 group">
+          <button aria-label="Price" className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#EFE6D6]/10 group">
             <DollarSign className="w-4 h-4 text-[#1A1A1A] group-hover:text-white group-hover:scale-110 transition-all" />
           </button>
         ) : isFlag ? (
@@ -135,7 +135,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           </HeaderControl>
         ) : (
-          <button className="h-11 px-4 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#064E3B]/20 hover:border-[#064E3B]/50 hover:bg-[#064E3B]/10 flex items-center gap-2">
+          <button aria-label="Price" className="h-11 px-4 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#064E3B]/20 hover:border-[#064E3B]/50 hover:bg-[#064E3B]/10 flex items-center gap-2">
             <DollarSign className="w-4 h-4" />
             <span className="text-xs font-medium">{currentCurrency.code}</span>
           </button>

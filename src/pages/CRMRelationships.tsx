@@ -475,12 +475,12 @@ const BrokerageContactLinks = ({ r }: { r: any }) => {
   return (
     <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1.5" data-no-contrast-guard>
       {email && (
-        <a href={`mailto:${email}`} className={link} onClick={stop}>
+        <a aria-label="Email" href={`mailto:${email}`} className={link} onClick={stop}>
           <Mail className="w-3 h-3" />{email}
         </a>
       )}
       {phoneHref && (
-        <a href={phoneHref} className={link} onClick={stop}>
+        <a aria-label="Call" href={phoneHref} className={link} onClick={stop}>
           <Phone className="w-3 h-3" />{phoneRaw}
         </a>
       )}
@@ -495,7 +495,7 @@ const BrokerageContactLinks = ({ r }: { r: any }) => {
         </a>
       )}
       {web && (
-        <a href={web.href} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={`${link} max-w-[240px]`} onClick={stop}>
+        <a aria-label="Website" href={web.href} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={`${link} max-w-[240px]`} onClick={stop}>
           <Globe2 className="w-3 h-3 shrink-0" />
           <span className="truncate">{web.display}</span>
         </a>

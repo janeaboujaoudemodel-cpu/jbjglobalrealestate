@@ -731,7 +731,7 @@ export default function ScanSignPage() {
                   </div>
                 </div>
               ) : (
-                <div
+                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                   className={`w-full rounded-xl p-5 text-center transition-all border-2 border-dashed ${
  pages.length > 0
  ? 'border-[color:var(--emerald-1)]/30 jj-emerald-soft/20 cursor-pointer hover:border-[color:var(--emerald-1)]/30'

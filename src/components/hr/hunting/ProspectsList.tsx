@@ -327,22 +327,22 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
                     {/* Quick Actions */}
                     <div className="flex items-center gap-1">
                       {prospect.email && (
-                        <Button variant="secondary" size="icon" asChild>
-                          <a href={`mailto:${prospect.email}`}>
+                        <Button aria-label="Email" variant="secondary" size="icon" asChild>
+                          <a aria-label="Email" href={`mailto:${prospect.email}`}>
                             <Mail className="h-4 w-4" />
                           </a>
                         </Button>
                       )}
                       {prospect.phone && (
-                        <Button variant="secondary" size="icon" asChild>
-                          <a href={`tel:${prospect.phone}`}>
+                        <Button aria-label="Call" variant="secondary" size="icon" asChild>
+                          <a aria-label="Call" href={`tel:${prospect.phone}`}>
                             <Phone className="h-4 w-4" />
                           </a>
                         </Button>
                       )}
                       {prospect.linkedin_url && (
-                        <Button variant="secondary" size="icon" asChild>
-                          <a href={prospect.linkedin_url} target="_blank" rel="noopener noreferrer">
+                        <Button aria-label="LinkedIn" variant="secondary" size="icon" asChild>
+                          <a aria-label="LinkedIn" href={prospect.linkedin_url} target="_blank" rel="noopener noreferrer">
                             <Linkedin className="h-4 w-4" />
                           </a>
                         </Button>
@@ -350,7 +350,7 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="secondary" size="icon">
+                          <Button aria-label="More options" variant="secondary" size="icon">
                             <MoreVertical className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>

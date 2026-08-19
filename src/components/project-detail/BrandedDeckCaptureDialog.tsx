@@ -15,6 +15,7 @@ import { Loader2, Upload, ImageIcon, User, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { safeFileExtension } from "@/utils/storagePath";
 
 const BUCKET = "broker-brand";
 const SIGNED_URL_TTL = 60 * 60 * 24 * 365;
@@ -97,7 +98,7 @@ export default function BrandedDeckCaptureDialog({ open, onOpenChange, onSubmit 
     if (file.size > 5 * 1024 * 1024) { toast.error("Max 5 MB"); return; }
     setUploading(kind);
     try {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+      const ext = safeFileExtension(file.name, 'png');
       const path = `${user.id}/${kind}-${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type });
       if (upErr) throw upErr;

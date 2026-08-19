@@ -327,7 +327,7 @@ const AIFollowupSchedulerPremium = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-white">Full Schedule & Recommendations</h4>
-                    <Button variant="dark-outline" size="sm" onClick={copyToClipboard}>
+                    <Button aria-label="Confirm" variant="dark-outline" size="sm" onClick={copyToClipboard}>
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>

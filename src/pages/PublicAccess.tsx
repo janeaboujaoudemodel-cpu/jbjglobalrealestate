@@ -1779,7 +1779,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin, onResolved }: { onCrea
       aria-labelledby="jbj-welcome-portal-title"
       className="fixed inset-0 z-[110] flex items-center justify-center px-4"
     >
-      <div
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
         className={`
           absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300
           ${mounted ? "opacity-100" : "opacity-0"}

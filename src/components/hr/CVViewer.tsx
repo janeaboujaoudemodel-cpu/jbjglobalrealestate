@@ -26,6 +26,7 @@ import {
   Video
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { safeOpen } from '@/utils/safeUrl';
 
 interface CVViewerProps {
   open: boolean;
@@ -161,7 +162,7 @@ const CVViewer = ({
 
   const handleOpenExternal = () => {
     if (signedUrl) {
-      window.open(signedUrl, '_blank');
+      safeOpen(signedUrl);
     }
   };
 

@@ -85,7 +85,7 @@ export function BrokerToolkitTools() {
                 transition={{ delay: i * 0.04, duration: 0.4 }}
                 viewport={{ once: true }}
               >
-                <Link
+                <Link aria-label="Open"
                   to={tool.href}
                   className="group h-full flex flex-col bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-[0_8px_24px_-12px_rgba(184,149,85,0.35)] rounded-2xl p-5 transition-all"
                 >

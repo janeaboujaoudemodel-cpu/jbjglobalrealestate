@@ -111,7 +111,7 @@ export function BrokerToolkitSupport() {
                   transition={{ delay: i * 0.05 }}
                   viewport={{ once: true }}
                 >
-                  <Link to={member.link}>
+                  <Link aria-label="Next" to={member.link}>
                     <Card className="bg-[#0A0A0A] border-2 border-[#B89555]/40 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(184,149,85,0.3)] h-full group cursor-pointer transition-all duration-300">
                       <CardContent className="p-5">
                         <div className="flex items-start gap-4">
@@ -167,7 +167,7 @@ export function BrokerToolkitSupport() {
                   transition={{ delay: i * 0.05 }}
                   viewport={{ once: true }}
                 >
-                  <Link to={member.link}>
+                  <Link aria-label="Next" to={member.link}>
                     <Card className="bg-[#0A0A0A] border-2 border-[#B89555]/40 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(184,149,85,0.3)] h-full group cursor-pointer transition-all duration-300">
                       <CardContent className="p-5">
                         <div className="flex items-start gap-4">

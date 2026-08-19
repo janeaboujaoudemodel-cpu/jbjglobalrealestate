@@ -360,7 +360,7 @@ const VideoVoiceStudio = ({ project, onUpdate, onNext }: VideoVoiceStudioProps) 
           <div className="bg-muted/50 rounded-lg p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Button
+                <Button aria-label="Pause"
                   size="icon"
                   variant="outline"
                   onClick={handlePlayPause}

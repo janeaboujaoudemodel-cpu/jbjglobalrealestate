@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Bell, CalendarPlus, Check, CheckCheck, ExternalLink, MailOpen, Mail, StickyNote, X } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Notification {
   id: string;
@@ -169,7 +170,7 @@ export function NotificationsPanel({ maxHeight = "350px", compact = false }: Not
     const destination = normalizeNotificationRoute(actionUrl);
 
     if (/^https?:\/\//i.test(destination)) {
-      window.open(destination, "_blank", "noopener,noreferrer");
+      safeOpen(destination);
       return;
     }
 

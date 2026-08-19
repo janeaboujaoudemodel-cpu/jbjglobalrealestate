@@ -28,6 +28,7 @@ import DeveloperCustomFieldsSection from "@/components/owner/DeveloperCustomFiel
 import DeveloperFocusProjectCard from "@/components/owner/DeveloperFocusProjectCard";
 import DeveloperProjectsFootprint from "@/components/owner/DeveloperProjectsFootprint";
 import { fieldToText, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
+import { safeFileExtension } from "@/utils/storagePath";
 
 interface Developer {
   id: string;
@@ -468,7 +469,7 @@ export default function DeveloperProfilePage() {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const uploadLogo = async (file: File) => {
     if (!developer) return;
-    const ext = file.name.split(".").pop() || "png";
+    const ext = safeFileExtension(file.name, 'png');
     const path = `${developer.id}/logo-${Date.now()}.${ext}`;
     const { error: upErr } = await supabase.storage
       .from("developer-assets")
@@ -488,7 +489,7 @@ export default function DeveloperProfilePage() {
   /* ---------- Media upload ---------- */
   const uploadMedia = async (file: File, kind: string) => {
     if (!developer) return;
-    const ext = file.name.split(".").pop() || "bin";
+    const ext = safeFileExtension(file.name, 'bin');
     const path = `${developer.id}/${kind}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const { error: upErr } = await supabase.storage
       .from("developer-assets")
@@ -1131,8 +1132,8 @@ export default function DeveloperProfilePage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      {r.phone_e164 && <a className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone_e164}`}><Phone className="w-3.5 h-3.5" /></a>}
-                      {r.email && <a className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
+                      {r.phone_e164 && <a aria-label="Call" className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone_e164}`}><Phone className="w-3.5 h-3.5" /></a>}
+                      {r.email && <a aria-label="Email" className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
                     </div>
                   </div>
                 ))}
@@ -1154,8 +1155,8 @@ export default function DeveloperProfilePage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      {r.phone && <a className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
-                      {r.email && <a className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
+                      {r.phone && <a aria-label="Call" className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
+                      {r.email && <a aria-label="Email" className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
                     </div>
                   </div>
                 ))}

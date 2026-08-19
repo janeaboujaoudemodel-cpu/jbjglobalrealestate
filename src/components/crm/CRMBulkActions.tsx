@@ -304,7 +304,7 @@ const CRMBulkActions = ({
           Delete
         </Button>
 
-        <Button variant="ghost" size="sm" onClick={onClear} className="text-muted-foreground">
+        <Button aria-label="Close" variant="ghost" size="sm" onClick={onClear} className="text-muted-foreground">
           <X className="h-4 w-4" />
         </Button>
       </div>

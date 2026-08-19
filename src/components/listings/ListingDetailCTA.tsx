@@ -8,6 +8,7 @@ import { Phone, MessageCircle, Calendar, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from '@/constants/stats';
 import { trackingEvents } from '@/types/blueprint';
+import { safeNavigate } from '@/utils/safeUrl';
 
 interface ListingDetailCTAProps {
   listingId: string;
@@ -30,12 +31,12 @@ export const ListingDetailCTA = ({
 
   const handleWhatsAppClick = () => {
     console.log(`[Tracking] ${trackingEvents.listing_whatsapp_click}`, { listingId, listingName });
-    window.location.href = getWhatsAppUrl(whatsappMessage);
+    safeNavigate(getWhatsAppUrl(whatsappMessage));
   };
 
   const handleCallClick = () => {
     console.log(`[Tracking] ${trackingEvents.listing_call_click}`, { listingId, listingName });
-    window.location.href = getCallUrl();
+    safeNavigate(getCallUrl());
   };
 
   return (

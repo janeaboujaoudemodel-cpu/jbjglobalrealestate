@@ -335,7 +335,7 @@ function MatchDiff({ match, jbjHref }: { match: MatchRow; jbjHref?: string | nul
           {title}
         </span>
         {href ? (
-          <a href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap text-xs">
+          <a aria-label="Open in a new tab" href={href} target="_blank" rel="noreferrer noopener" className="mir-link inline-flex items-center gap-1 !whitespace-nowrap text-xs">
             {hrefLabel} <ExternalLink className="h-3 w-3" aria-hidden />
           </a>
         ) : (

@@ -7,6 +7,7 @@
  */
 
 import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
+import { sanitizeSvgMarkup } from '@/utils/safeHtml';
 import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType, type LanguageMode, type StampShape, type LetterOverride } from '@/lib/stampOfficialTemplate';
 import type { LetterSelection } from '@/components/stamp-generator/StampLetterEditor';
 
@@ -524,7 +525,7 @@ export function LiveStampPreview({
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
-      dangerouslySetInnerHTML={{ __html: svg }}
+      dangerouslySetInnerHTML={{ __html: sanitizeSvgMarkup(svg) }}
     />
   );
 }

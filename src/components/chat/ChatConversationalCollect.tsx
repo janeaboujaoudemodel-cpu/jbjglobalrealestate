@@ -197,7 +197,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 autoComplete="off"
                 className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
-              <Button
+              <Button aria-label="Send"
                 size="icon"
                 onClick={handleNameSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light rounded-lg"
@@ -226,7 +226,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 autoFocus
                 className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
-              <Button
+              <Button aria-label="Send"
                 size="icon"
                 onClick={handleNameSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light rounded-lg"
@@ -255,7 +255,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 autoFocus
                 className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
-              <Button
+              <Button aria-label="Send"
                 size="icon"
                 onClick={handleEmailSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light rounded-lg"
@@ -284,7 +284,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 autoFocus
                 className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
-              <Button
+              <Button aria-label="Send"
                 size="icon"
                 onClick={handlePhoneSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light rounded-lg"

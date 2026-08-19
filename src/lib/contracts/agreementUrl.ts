@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { safeOpen } from "@/utils/safeUrl";
 
 /**
  * Resolve an "open" URL for a stored developer-agreement file at click time.
@@ -16,13 +17,13 @@ export async function openAgreement(row: { file_path?: string | null; file_url?:
       .from("developer-agreements")
       .createSignedUrl(path, 60 * 10); // 10 minutes
     if (!error && data?.signedUrl) {
-      window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+      safeOpen(data.signedUrl);
       return;
     }
   }
   const legacy = row?.file_url?.trim();
   if (legacy) {
-    window.open(legacy, "_blank", "noopener,noreferrer");
+    safeOpen(legacy);
     return;
   }
   throw new Error("This agreement has no file attached.");

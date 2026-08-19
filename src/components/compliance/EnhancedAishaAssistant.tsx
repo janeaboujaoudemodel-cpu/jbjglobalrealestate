@@ -559,7 +559,7 @@ Would you like me to run a specific audit or show detailed information? Type **"
               disabled={isProcessing}
               className="flex-1"
             />
-            <Button 
+            <Button aria-label="Send" 
               onClick={handleSend}
               disabled={!inputValue.trim() || isProcessing}
               className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"

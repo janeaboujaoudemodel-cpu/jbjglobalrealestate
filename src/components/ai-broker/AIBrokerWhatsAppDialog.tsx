@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Send, AlertTriangle, MessageSquare } from "lucide-react";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Lead {
   id: string;
@@ -214,7 +215,7 @@ export function AIBrokerWhatsAppDialog({
       }
 
       // Open WhatsApp
-      window.open(whatsappUrl, "_blank");
+      safeOpen(whatsappUrl);
 
       toast.success(`Opening WhatsApp to ${lead.full_name}`);
       onOpenChange(false);

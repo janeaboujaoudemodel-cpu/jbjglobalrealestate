@@ -28,6 +28,7 @@ import { useUserCVs, type SavedCVRow } from "@/hooks/useUserCVs";
 import { SavedCVsMenu } from "@/components/cv-builder/SavedCVsMenu";
 import { CVAIAssistant } from "@/components/cv-builder/CVAIAssistant";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeFileExtension } from "@/utils/storagePath";
 
 /* ────────────── Types ────────────── */
 
@@ -155,7 +156,7 @@ export default function CVBuilder() {
       // If signed in, also upload to bucket for sharing/download stability.
       if (user?.id) {
         try {
-          const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+          const ext = safeFileExtension(file.name, 'png');
           const path = `${user.id}/${Date.now()}.${ext}`;
           const { error } = await supabase.storage.from("cv-photos").upload(path, file, { upsert: true });
           if (!error) {
@@ -756,7 +757,7 @@ function SectionCard({
           <h3 className="text-[13px] font-semibold text-[#1A1A1A]">{title}</h3>
         </div>
         {onAdd && (
-          <button onClick={onAdd} className="text-[11px] font-medium text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1 rounded-md border border-[#B89555]/40 px-2 py-1 bg-[#FDFBF7]">
+          <button aria-label="Add" onClick={onAdd} className="text-[11px] font-medium text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1 rounded-md border border-[#B89555]/40 px-2 py-1 bg-[#FDFBF7]">
             <Plus className="w-3.5 h-3.5" /> {addLabel}
           </button>
         )}

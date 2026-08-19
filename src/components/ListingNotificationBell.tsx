@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { resolveNotificationRoute } from '@/lib/notificationRouting';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserAlerts } from '@/hooks/useUserAlerts';
+import { safeOpen } from '@/utils/safeUrl';
 
 interface Notification {
   id: string;
@@ -155,7 +156,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
       message: notif.message,
     });
     if (/^https?:\/\//i.test(destination)) {
-      window.open(destination, '_blank', 'noopener,noreferrer');
+      safeOpen(destination);
     } else {
       navigate(destination);
     }

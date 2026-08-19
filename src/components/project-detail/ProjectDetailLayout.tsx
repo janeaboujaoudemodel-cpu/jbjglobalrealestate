@@ -128,6 +128,7 @@ const amraPoolCabanas = amraAsset("pool-cabanas-marina"), amraAerialResort = amr
 import amraSmegKitchen from "@/assets/amra-smeg-kitchen.jpg";
 const amraCitiApp = amraAsset("brochure-citi-app"), amraYachtPartnerships = amraAsset("brochure-yacht-partnerships"), amraSnowShower = amraAsset("snow-shower"), amraSmartRecoveryHub = amraAsset("smart-recovery-hub"), amraIsabellaCucina = amraAsset("isabella-cucina-italiana"), amraHunterBarrel = amraAsset("hunter-and-barrel"), amraAllDayDining = amraAsset("all-day-dining"), amraArtGallery = amraAsset("art-gallery"), amraPharmacy = amraAsset("pharmacy"), amraBowlingLanes = amraAsset("bowling-lanes"), amraVrGameZone = amraAsset("vr-game-zone"), amraGolfSimulator = amraAsset("golf-simulator"), amraArcadePoolDarts = amraAsset("arcade-pool-darts"), amraBookLoungeLibrary = amraAsset("book-lounge-library"), amraRooftopSportsDeck = amraAsset("rooftop-sports-deck"), amraBusinessZone = amraAsset("business-zone"), amraParentChildStudio = amraAsset("parent-child-studio"), amraJuiceBar = amraAsset("juice-bar-refreshments"), amraEntranceLobbyFeaturedSculpture = amraAsset("entrance-lobby-featured-sculpture"), amraHelipadAirTaxi = amraAsset("helipad-air-taxi"), amraSpinneysSupermarket = amraAsset("spinneys-supermarket");
 import { useQuery } from "@tanstack/react-query";
+import { safeOpen, toSafeUrl } from "@/utils/safeUrl";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -2141,10 +2142,13 @@ function ProjectDetailLayoutInner({
                     const url = hasProjectCoords
                       ? `https://www.google.com/maps/search/?api=1&query=${project.latitude},${project.longitude}`
                       : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
-                    const win = window.open(url, "_blank", "noopener,noreferrer");
+                    const win = safeOpen(url);
                     if (!win) {
                       // Popup blocked — navigate the top window instead of the iframe.
-                      try { window.top!.location.href = url; } catch { window.location.href = url; }
+                      const safe = toSafeUrl(url);
+                      if (safe) {
+                        try { window.top!.location.href = safe; } catch { window.location.href = safe; }
+                      }
                     }
                   }}
                   className="jj-emerald-action inline-flex items-center gap-2 h-9 rounded-full px-4 text-sm font-semibold transition-colors shadow-sm"

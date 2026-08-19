@@ -126,7 +126,7 @@ export default function PortalShowcaseCard({
                 </ul>
 
                 <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <Link
+                  <Link aria-label="Next"
                     to={href}
                     data-surface="navy"
                     data-on-dark

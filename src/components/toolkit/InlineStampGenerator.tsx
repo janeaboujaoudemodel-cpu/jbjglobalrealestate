@@ -3,6 +3,7 @@
  * Now includes a "Select from Library" tab to reuse saved brand assets.
  */
 import React, { useState, useCallback, useEffect } from 'react';
+import { sanitizeSvgMarkup } from '@/utils/safeHtml';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -292,7 +293,7 @@ export function InlineStampGenerator({ open, onClose, onStampReady, accentColor 
               <div className="flex items-center justify-center p-6 bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))]">
                 <div
                   className="w-48 h-48"
-                  dangerouslySetInnerHTML={{ __html: previewSvg }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeSvgMarkup(previewSvg) }}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 />
               </div>

@@ -338,7 +338,7 @@ export default function StampProjectsDashboard() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {projects.map(project => (
-                  <div key={project.id}
+                  <div tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} key={project.id}
                     onClick={(e) => {
                       // Allow clicks on buttons/checkboxes to work normally
                       const target = e.target as HTMLElement;

@@ -49,6 +49,7 @@ import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 import { SEOHead } from "@/components/SEOHead";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeNavigate } from "@/utils/safeUrl";
 
 function SectionShell({
   children,
@@ -398,7 +399,7 @@ const CompanyProfile = () => {
   };
 
   const handleWhatsApp = () => {
-    window.location.href = getWhatsAppUrl("Hello, I would like to request a private consultation.");
+    safeNavigate(getWhatsAppUrl("Hello, I would like to request a private consultation."));
   };
 
   const handleCall = () => {
@@ -519,7 +520,7 @@ const CompanyProfile = () => {
                 { title: 'Company Snapshot', anchor: 'snapshot' },
                 { title: 'Download Company Profile', anchor: 'download' },
               ].map((item, index) => (
-                <a
+                <a aria-label="Next"
                   key={index}
                   href={`#${item.anchor}`}
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors group"

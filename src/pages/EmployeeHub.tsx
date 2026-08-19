@@ -192,14 +192,14 @@ const EmployeeCard = ({
               <div className="flex items-center gap-1">
                 {hasContactDetails ? (
                   <>
-                    <Button
+                    <Button aria-label="Call"
                       size="sm"
                       variant="ghost"
                       className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20 h-7 px-1.5"
                     >
                       <Phone className="h-3.5 w-3.5" />
                     </Button>
-                    <Button
+                    <Button aria-label="Email"
                       size="sm"
                       variant="ghost"
                       className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20 h-7 px-1.5"

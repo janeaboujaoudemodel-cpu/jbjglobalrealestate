@@ -131,7 +131,7 @@ const ActiveLeadBanner = ({
         >
           View Lead
         </Button>
-        <Button
+        <Button aria-label="Close"
           size="icon"
           variant="ghost"
           onClick={clearActiveLead}

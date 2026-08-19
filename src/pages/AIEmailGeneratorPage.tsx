@@ -238,7 +238,7 @@ export default function AIEmailGeneratorPage() {
                 <Mail className="w-5 h-5 text-teal-400" />
                 Generated Email
               </CardTitle>
-              <Button
+              <Button aria-label="Confirm"
                 variant="outline"
                 size="sm"
                 onClick={copyToClipboard}

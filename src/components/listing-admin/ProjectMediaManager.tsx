@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logAdminEdit } from "@/hooks/useAdminEditLog";
 import { useQueryClient } from "@tanstack/react-query";
+import { safeStorageFileName } from "@/utils/storagePath";
 
 interface ProjectImage {
   id: string;
@@ -155,7 +156,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
     try {
       for (const file of Array.from(files)) {
         if (!isImageFile(file) && !isVideoFile(file)) continue;
-        const fileName = `project-uploads/${project.id}/${crypto.randomUUID()}-${file.name}`;
+        const fileName = `project-uploads/${project.id}/${crypto.randomUUID()}-${safeStorageFileName(file.name)}`;
         const { error: uploadError } = await supabase.storage.from(MEDIA_BUCKET).upload(fileName, file);
         if (uploadError) continue;
 

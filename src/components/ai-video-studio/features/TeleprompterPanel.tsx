@@ -133,7 +133,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               <AlignLeft className="w-4 h-4" />
               Teleprompter
             </h4>
-            <Button
+            <Button aria-label="Maximise"
               size="sm"
               variant="ghost"
               onClick={toggleFullscreen}
@@ -187,7 +187,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
             </div>
 
             <div className="flex items-center gap-1">
-              <Button
+              <Button aria-label="Undo"
                 size="sm"
                 variant="ghost"
                 onClick={resetScroll}
@@ -195,14 +195,14 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               >
                 <RotateCcw className="w-4 h-4" />
               </Button>
-              <Button
+              <Button aria-label="Pause"
                 size="sm"
                 onClick={handlePlayPause}
                 className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
               >
                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               </Button>
-              <Button
+              <Button aria-label="Maximise"
                 size="sm"
                 variant="ghost"
                 onClick={toggleFullscreen}
@@ -244,7 +244,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
         {/* Fullscreen Controls */}
         {isFullscreen && (
           <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-[#1A1A1A]/80 rounded-full px-4 py-2">
-            <Button
+            <Button aria-label="Undo"
               size="sm"
               variant="ghost"
               onClick={resetScroll}
@@ -252,14 +252,14 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
             >
               <RotateCcw className="w-4 h-4" />
             </Button>
-            <Button
+            <Button aria-label="Pause"
               size="sm"
               onClick={handlePlayPause}
               className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>
-            <Button
+            <Button aria-label="Minimise"
               size="sm"
               variant="ghost"
               onClick={toggleFullscreen}

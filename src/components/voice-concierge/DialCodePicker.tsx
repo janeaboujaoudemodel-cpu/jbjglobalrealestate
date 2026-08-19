@@ -29,6 +29,7 @@ export default function DialCodePicker({ value, display, options, onChange }: Pr
       <PopoverTrigger asChild>
         <button
           type="button"
+          aria-label="Select country dialling code"
           className="w-full h-10 inline-flex items-center justify-between gap-1 rounded-md border border-input bg-white px-2.5 text-sm text-[#1A1A1A] hover:bg-[#FDFBF7] focus:outline-none focus:ring-1 focus:ring-[#B89555]"
           aria-haspopup="listbox"
           aria-expanded={open}

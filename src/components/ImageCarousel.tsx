@@ -5,6 +5,7 @@ import { getHighResImageUrl, isValidImageUrl } from "@/lib/imageUtils";
 import { SafeImage } from "@/components/SafeImage";
 import { Button } from "@/components/ui/button";
 import { SUPABASE_URL } from "@/config/backend";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface ImageCarouselProps {
   images: {
@@ -325,7 +326,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch {
-      window.open(imageUrl, "_blank");
+      safeOpen(imageUrl);
     }
   };
   const handleDownloadAll = async () => {

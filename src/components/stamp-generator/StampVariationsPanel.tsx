@@ -47,7 +47,7 @@ export function StampVariationsPanel({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white">
         <div className="flex items-center gap-2">
-          <button onClick={onClose} className="w-6 h-6 rounded-md border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)]">
+          <button aria-label="Previous" onClick={onClose} className="w-6 h-6 rounded-md border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)]">
             <ChevronLeft size={12} />
           </button>
           <Wand2 size={14} className="text-[hsl(var(--gold))]" />
@@ -62,7 +62,7 @@ export function StampVariationsPanel({
             <Wand2 size={10} className={loading ? 'animate-spin' : ''} />
             {loading ? 'Generating…' : 'More Variations'}
           </Button>
-          <button onClick={onClose} className="w-6 h-6 rounded-full hover:bg-[hsl(var(--muted))] flex items-center justify-center">
+          <button aria-label="Close" onClick={onClose} className="w-6 h-6 rounded-full hover:bg-[hsl(var(--muted))] flex items-center justify-center">
             <X size={12} />
           </button>
         </div>

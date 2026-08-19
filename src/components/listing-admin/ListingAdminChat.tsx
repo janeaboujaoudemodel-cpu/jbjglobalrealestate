@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeOpen } from "@/utils/safeUrl";
 
 interface Message {
   id: string;
@@ -695,7 +696,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       <ClickableDiv
         className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
         onClick={() => {
-          if (listing.viewUrl.startsWith("http")) window.open(listing.viewUrl, "_blank");
+          if (listing.viewUrl.startsWith("http")) safeOpen(listing.viewUrl);
           else navigate(listing.viewUrl);
         }}
       >
@@ -849,7 +850,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               className="flex-1 h-8 text-xs bg-gradient-to-r from-[#D4A853] to-[#C19A3E] text-white hover:opacity-90 rounded-lg font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-                if (listing.viewUrl.startsWith("http")) window.open(listing.viewUrl, "_blank");
+                if (listing.viewUrl.startsWith("http")) safeOpen(listing.viewUrl);
                 else navigate(listing.viewUrl);
               }}
             >

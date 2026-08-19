@@ -913,7 +913,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
         {/* Upload Zone */}
         {!image && (
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
             onClick={() => fileInputRef.current?.click()}

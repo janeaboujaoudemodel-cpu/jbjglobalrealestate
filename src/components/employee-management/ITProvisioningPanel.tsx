@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { sanitizeRichHtml } from '@/utils/safeHtml';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -263,7 +264,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               HR-approved joiners ready for email, credentials, and CRM access
             </CardDescription>
           </div>
-          <Button variant="ghost" size="sm" onClick={fetchPendingApplications}>
+          <Button aria-label="Refresh" variant="ghost" size="sm" onClick={fetchPendingApplications}>
             <RefreshCw className="w-4 h-4" />
           </Button>
         </CardHeader>
@@ -393,7 +394,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
             <div className="space-y-2">
               <Label className="text-[#1A1A1A]">Email Signature</Label>
               <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg p-4">
-                <div dangerouslySetInnerHTML={{ __html: emailSignature }} />
+                <div dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(emailSignature) }} />
               </div>
             </div>
 

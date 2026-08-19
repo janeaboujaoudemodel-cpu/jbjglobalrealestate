@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { safeJsonLd } from "@/utils/safeHtml";
 import { ArrowLeft, Calendar, Landmark, ExternalLink, Newspaper, Sparkles, TrendingUp, CheckCircle, BarChart3, Lightbulb, Building2, Banknote, Gift, MapPin, Globe, PhoneCall } from "lucide-react";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Button } from "@/components/ui/button";
@@ -211,7 +212,7 @@ const NewsDetail = () => {
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }}
       />
 
       <article className="min-h-screen bg-[#FDFBF7]">

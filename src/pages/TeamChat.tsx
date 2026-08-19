@@ -340,7 +340,7 @@ const TeamChat = () => {
           <div className="px-3 py-2">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider">Channels</span>
-              <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-[#B89555]/10" onClick={addChannel}>
+              <Button aria-label="Add" variant="ghost" size="icon" className="h-5 w-5 hover:bg-[#B89555]/10" onClick={addChannel}>
                 <Plus className="w-3.5 h-3.5 text-[#1A1A1A]/40" />
               </Button>
             </div>
@@ -494,10 +494,10 @@ const TeamChat = () => {
             </div>
           </div>
           <div className="flex items-center gap-1 shrink-0">
-            <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInCall ? "jj-surface-emerald-soft" : "hover:bg-[#B89555]/10")} onClick={handleCall}>
+            <Button aria-label="Call" variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInCall ? "jj-surface-emerald-soft" : "hover:bg-[#B89555]/10")} onClick={handleCall}>
               <Phone className={cn("w-4 h-4", isInCall ? "text-[color:var(--emerald-1)] animate-pulse" : "text-[#1A1A1A]/50")} />
             </Button>
-            <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInVideo ? "bg-blue-500/20" : "hover:bg-[#B89555]/10")} onClick={handleVideo}>
+            <Button aria-label="Video" variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInVideo ? "bg-blue-500/20" : "hover:bg-[#B89555]/10")} onClick={handleVideo}>
               <Video className={cn("w-4 h-4", isInVideo ? "text-blue-600 animate-pulse" : "text-[#1A1A1A]/50")} />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10" onClick={() => setShowMembers(!showMembers)}>
@@ -626,13 +626,13 @@ const TeamChat = () => {
               className="flex-1 bg-transparent border-none focus-visible:ring-0 text-[#1A1A1A] placeholder:text-[#1A1A1A]/35 text-sm h-9"
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
-            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#B89555]/10 hidden sm:flex">
+            <Button aria-label="Insert emoji" variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#B89555]/10 hidden sm:flex">
               <Smile className="w-4 h-4 text-[#1A1A1A]/40" />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#B89555]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
               <Paperclip className="w-4 h-4 text-[#1A1A1A]/40" />
             </Button>
-            <Button
+            <Button aria-label="Send"
               size="icon"
               className="h-8 w-8 shrink-0 bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#957539] text-white shadow-sm"
               onClick={sendMessage}

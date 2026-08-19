@@ -74,6 +74,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
     <div className="pt-0 pb-0" data-sidebar-mode-portal-shell>
       <Link
         to={cfg.href}
+        aria-label={cfg.label}
         data-no-contrast-guard
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}

@@ -309,7 +309,7 @@ ${response.script}
                         <Button variant="dark-outline" size="sm" onClick={() => copyToClipboard()}>
                           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                         </Button>
-                        <Button variant="dark-outline" size="sm" onClick={downloadScript}>
+                        <Button aria-label="Download" variant="dark-outline" size="sm" onClick={downloadScript}>
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>

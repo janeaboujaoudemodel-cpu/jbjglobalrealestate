@@ -158,8 +158,8 @@ const NotificationsPreview = () => {
               Mark all read
             </Button>
           )}
-          <Button variant="ghost" size="icon" asChild className="h-8 w-8">
-            <Link to="/profile?tab=settings">
+          <Button aria-label="Copy link" variant="ghost" size="icon" asChild className="h-8 w-8">
+            <Link aria-label="Settings" to="/profile?tab=settings">
               <Settings className="w-4 h-4 text-muted-foreground" />
             </Link>
           </Button>

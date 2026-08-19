@@ -117,7 +117,7 @@ function DeveloperActivityMenu({ slug, name }: { slug: string; name: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 rounded-md border-[#B89555]/50 text-[#1A1A1A]">
+        <Button aria-label="More options" size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 rounded-md border-[#B89555]/50 text-[#1A1A1A]">
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>

@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
+import { safeFileExtension } from "@/utils/storagePath";
 
 /**
  * useFounderPhoto — reads the optional founder photo override URL stored in
@@ -39,7 +40,7 @@ export function useFounderPhoto() {
 
   const uploadAndSet = useCallback(
     async (file: File) => {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const ext = safeFileExtension(file.name, 'jpg');
       const path = `founder/founder-${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage.from("site-branding").upload(path, file, {
         cacheControl: "3600",

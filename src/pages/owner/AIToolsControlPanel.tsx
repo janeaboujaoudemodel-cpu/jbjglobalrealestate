@@ -18,6 +18,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import { isApprovedPublicToolId } from "@/config/publicToolAccess";
+import { safeOpen } from "@/utils/safeUrl";
 
 // ─── Tool Registry (mirrors AIHub.tsx) ───────────────────────────────────────
 type ToolCategory = "property" | "productivity" | "marketing" | "design" | "corporate";
@@ -314,7 +315,7 @@ export default function AIToolsControlPanel() {
   const testTool = async (toolId: string, toolUrl: string) => {
     const latestVersion = versions.find(v => v.tool_id === toolId && (v.status === "applied" || v.status === "tested"));
     // Open tool in new tab
-    window.open(toolUrl, "_blank");
+    safeOpen(toolUrl);
     // Create test log
     const { error } = await (supabase.from("ai_tool_test_logs") as any).insert({
       tool_id: toolId,
@@ -489,7 +490,7 @@ export default function AIToolsControlPanel() {
                     <CardHeader className="cursor-pointer py-4">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <div onClick={e => e.stopPropagation()}>
+                          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} onClick={e => e.stopPropagation()}>
                             <Checkbox
                               checked={isSelected}
                               onCheckedChange={() => toggleSelect(tool.id)}
@@ -504,7 +505,7 @@ export default function AIToolsControlPanel() {
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           {/* Three-state visibility segmented control */}
-                          <div onClick={e => e.stopPropagation()} className="inline-flex rounded-md border border-[#1A1A1A]/40 overflow-hidden">
+                          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} onClick={e => e.stopPropagation()} className="inline-flex rounded-md border border-[#1A1A1A]/40 overflow-hidden">
                             {(["public", "owner_only", "hidden"] as const).map((v) => {
                               const active = vis === v;
                               const meta = v === "public"
@@ -536,7 +537,7 @@ export default function AIToolsControlPanel() {
                       </div>
 
                       {/* Direct URL row */}
-                      <div className="flex items-center gap-2 mt-2 ml-7" onClick={e => e.stopPropagation()}>
+                      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} className="flex items-center gap-2 mt-2 ml-7" onClick={e => e.stopPropagation()}>
                         <code className="text-xs text-white/70 bg-[#F7F2EA]/80 px-2 py-1 rounded font-mono truncate max-w-[400px]">{fullUrl}</code>
                         <Button size="sm" variant="ghost" onClick={() => copyUrl(fullUrl)} className="h-6 w-6 p-0 text-white/90 hover:text-[#1A1A1A]">
                           <Copy className="w-3 h-3" />

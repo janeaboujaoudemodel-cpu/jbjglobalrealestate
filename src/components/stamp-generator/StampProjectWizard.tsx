@@ -11,6 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
+import { escapeHtml, openPrintWindow } from '@/utils/printWindow';
 import {
   Stamp, Building2, Palette, Image, Check, Type, Upload, X, Globe, FileText,
   RotateCcw, MapPin, Undo2, Redo2, RotateCw, Save, Circle, Star, Minus, Hash,
@@ -557,22 +558,19 @@ export default function StampProjectWizard() {
   const handlePrintPreview = useCallback(() => {
     const svgData = getPreviewSvg();
     if (!svgData) return;
-    const printWindow = window.open('', '_blank', 'width=800,height=800');
-    if (printWindow) {
-      printWindow.document.write(`<!DOCTYPE html><html><head>
-        <title>Print Stamp — ${form.company_name || 'Stamp'}</title>
-        <style>
-          @page { size: 100mm 100mm; margin: 10mm; }
-          html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
-          body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-          svg { width: 80mm; height: 80mm; max-width: 100%; }
-        </style>
-      </head><body>${svgData}</body></html>`);
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.onafterprint = () => printWindow.close();
-      setTimeout(() => printWindow.print(), 600);
-    }
+    openPrintWindow(`<!DOCTYPE html><html><head>
+      <title>Print Stamp — ${escapeHtml(form.company_name || 'Stamp')}</title>
+      <style>
+        @page { size: 100mm 100mm; margin: 10mm; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        svg { width: 80mm; height: 80mm; max-width: 100%; }
+      </style>
+    </head><body>${svgData}</body></html>`, {
+      features: 'width=800,height=800',
+      printDelayMs: 600,
+      closeAfterPrint: true,
+    });
   }, [form.company_name, getPreviewSvg]);
 
   const [bulkExporting, setBulkExporting] = useState(false);

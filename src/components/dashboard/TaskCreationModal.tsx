@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ClickableDiv } from "@/components/a11y/ClickableDiv";
+import { safeStorageFileName } from "@/utils/storagePath";
 import {
   Loader2, Mic, MicOff, Link2, Upload, Phone, Calendar as CalendarIcon,
   Flag, FolderOpen, X, Plus, FileText, CheckCircle2, Users, UserPlus, Search,
@@ -248,7 +249,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
         continue;
       }
 
-      const filePath = `task-attachments/${user.id}/${Date.now()}-${file.name}`;
+      const filePath = `task-attachments/${user.id}/${Date.now()}-${safeStorageFileName(file.name)}`;
       const { error } = await supabase.storage.from("documents").upload(filePath, file);
 
       if (error) {
@@ -448,6 +449,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   <PopoverTrigger asChild>
                     <Button
                       type="button"
+                      aria-label="Pick a due date"
                       variant="outline"
                       className="h-10 w-10 p-0 border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                     >

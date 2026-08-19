@@ -638,7 +638,7 @@ export default function InvestorDashboard() {
                     { label: "Request ROI Snapshot", href: "/contact?type=roi", icon: TrendingUp },
                     { label: "Speak to Advisor", href: "/contact?type=advisor", icon: MessageCircle },
                   ].map((a) => (
-                    <Link key={a.label} to={a.href}>
+                    <Link aria-label={a.label} key={a.label} to={a.href}>
                       <Card className="border-[hsl(36,40%,70%)]/20 hover:border-[hsl(36,40%,70%)]/50 transition-all cursor-pointer group h-full">
                         <CardContent className="p-4 flex flex-col items-center gap-2 text-center">
                           <div data-backend-icon-tile="emerald" className="allow-white w-10 h-10 rounded-xl flex items-center justify-center transition-colors">

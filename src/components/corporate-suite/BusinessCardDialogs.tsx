@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { buildQrUrl } from "./businessCardTypes";
+import { safeOpen } from "@/utils/safeUrl";
 
 /* ── Share Modal ──────────────────────────────────────────────────── */
 export function ShareModal({
@@ -68,7 +69,7 @@ export function ShareModal({
             >
               💬 WhatsApp
             </Button>
-            <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs" onClick={() => window.open(shareUrl, "_blank")}>
+            <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs" onClick={() => safeOpen(shareUrl)}>
               <ExternalLink size={12} /> Preview
             </Button>
           </div>
