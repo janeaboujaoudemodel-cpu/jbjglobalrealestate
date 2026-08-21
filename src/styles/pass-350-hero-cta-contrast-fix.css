@@ -1,0 +1,49 @@
+/* ---------------------------------------------------------------------
+   PASS 350 - HERO CTA CONTRAST FIX (emerald primary button)
+
+   route-surfaces.css carries broad `:is(button, a)[class*="px-6"]` /
+   `[class*="px-8"]` selectors written for the SECONDARY "champagne" hero
+   CTA (light background, dark ink). Because the PRIMARY emerald CTA
+   (`.jj-mi-hero-cta-emerald`, rendered by MIPageShell's heroCtaClass) also
+   carries the generic Tailwind `px-6` / `md:px-8` padding utilities, it
+   unintentionally matches those same selectors too — and several of those
+   rule blocks in route-surfaces.css are not (or not fully) excluded from
+   matching it. The dark champagne-CTA ink (`#1A1A1A`) then wins the
+   cascade over the emerald CTA's own white-ink rules, producing
+   unreadable dark-on-dark button text (e.g. the "Explore Company" /
+   "Speak With Our Team" buttons on /founder, and any other MIPageShell
+   hero with both CTA styles).
+
+   Rather than chase every current and future occurrence of that
+   px-6/px-8 pattern inside route-surfaces.css, this sheet targets the
+   emerald CTA directly and uses the same "#root" specificity-repeat
+   technique already used elsewhere in this codebase (see PASS 348/349)
+   so it deterministically outranks any attribute-selector rule there,
+   regardless of source order. It is imported immediately after
+   route-surfaces.css (see ensureRouteSurfaceStyles in
+   src/components/util/RouteSurfaceStyles.tsx), so it also wins any
+   equal-specificity, same-!important tie by source order.
+   --------------------------------------------------------------------- */
+
+html body #root#root#root#root#root#root#root [data-insights-page] a.jj-mi-hero-cta-emerald,
+html body #root#root#root#root#root#root#root [data-insights-page] button.jj-mi-hero-cta-emerald {
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root#root#root#root#root#root#root [data-insights-page] a.jj-mi-hero-cta-emerald :is(span, svg, path, circle, rect, line, polyline, polygon),
+html body #root#root#root#root#root#root#root [data-insights-page] button.jj-mi-hero-cta-emerald :is(span, svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+html body #root#root#root#root#root#root#root [data-insights-page] a.jj-mi-hero-cta-emerald:hover,
+html body #root#root#root#root#root#root#root [data-insights-page] button.jj-mi-hero-cta-emerald:hover {
+  background: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
