@@ -12,9 +12,20 @@ interface AreaAboutSectionProps {
     property_count?: number | null;
     developer_count?: number | null;
   };
+  /**
+   * Live counts from the same database query that feeds the hero stat badge
+   * (AreaDetail's `liveStats`) -- the single source of truth. When provided,
+   * these take priority over area.property_count/developer_count, which are
+   * a separate, frequently stale snapshot field and previously caused this
+   * section to show a different "Active Projects" number than the hero.
+   */
+  liveProjectCount?: number;
+  liveDeveloperCount?: number;
 }
 
-export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
+export const AreaAboutSection = ({ area, liveProjectCount, liveDeveloperCount }: AreaAboutSectionProps) => {
+  const displayedProjectCount = liveProjectCount ?? area.property_count ?? 0;
+  const displayedDeveloperCount = liveDeveloperCount ?? area.developer_count ?? 0;
   const [isExpanded, setIsExpanded] = useState(false);
   const handleScrollToProjects = () => {
     document.getElementById("projects-section")?.scrollIntoView({ behavior: "smooth" });
@@ -81,20 +92,20 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
 
           {/* Quick highlights */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-5">
-            {(area.property_count ?? 0) > 0 && (
+            {displayedProjectCount > 0 && (
               <div data-area-about-stat-card className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/55 shadow-sm" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
                 <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
                 <div>
-                  <div className="text-sm font-bold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{area.property_count}</div>
+                  <div className="text-sm font-bold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{displayedProjectCount}</div>
                   <div className="text-[10px]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Active Projects</div>
                 </div>
               </div>
             )}
-            {(area.developer_count ?? 0) > 0 && (
+            {displayedDeveloperCount > 0 && (
               <div data-area-about-stat-card className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/55 shadow-sm" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
                 <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
                 <div>
-                  <div className="text-sm font-bold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{area.developer_count}</div>
+                  <div className="text-sm font-bold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{displayedDeveloperCount}</div>
                   <div className="text-[10px]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Developers</div>
                 </div>
               </div>

@@ -124,7 +124,7 @@ export const SERVICE_SEO_CATALOG: ServiceSeoSource[] = [
     title: "Legal Services Dubai | Real Estate Law | JBJ GLOBAL REAL ESTATE",
     description:
       "Expert legal services for Dubai real estate. Property transactions, contract law, dispute resolution, and regulatory compliance. Licensed legal professionals.",
-    canonicalPath: "/services/legal",
+    canonicalPath: "/services/law-firm",
   },
   {
     slug: "property-management",

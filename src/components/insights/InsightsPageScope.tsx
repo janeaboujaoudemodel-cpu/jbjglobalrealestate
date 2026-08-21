@@ -56,6 +56,7 @@ type CategoryShellConfig = {
   items: Array<MIShellTocItem & { href: string }>;
   preFooterTitle: string;
   preFooterSubtitle: string;
+  showPreFooter?: boolean;
 };
 
 const insightsItems = [
@@ -147,6 +148,7 @@ const PAGES_WITH_OWN_HERO = new Set<string>([
   "/services",
   "/contact",
   "/about",
+  "/founder",
   "/terms",
   "/privacy",
   "/cookies",
@@ -204,6 +206,10 @@ const getCategoryShellConfig = (pathname: string): CategoryShellConfig | null =>
   }
 
   if (pathname === "/services" || pathname.startsWith("/services/") || pathname.startsWith("/partners") || pathname === "/referral-partner" || pathname.startsWith("/investors") || pathname.startsWith("/brokers/join") || pathname.startsWith("/developers/join")) {
+    // /partners renders its own MIPreFooterCard with dedicated partnership
+    // copy further down the page -- suppress this shell's generic one so the
+    // "GET IN TOUCH" card doesn't render twice.
+    const isPartnersRoute = pathname.startsWith("/partners");
     return {
       title: "Services",
       description: "A curated service ecosystem for buying, selling, renting, ownership, partners, and premium coordination.",
@@ -211,6 +217,7 @@ const getCategoryShellConfig = (pathname: string): CategoryShellConfig | null =>
       items: serviceItems,
       preFooterTitle: "Ready to Structure Your Service Request?",
       preFooterSubtitle: "Tell us what you need and our team will route the request to the correct specialist path.",
+      showPreFooter: !isPartnersRoute,
     };
   }
 
@@ -275,6 +282,7 @@ export function InsightsPageScope({ children }: { children: ReactNode }) {
           tocTitle={shellConfig.tocTitle}
           preFooterTitle={shellConfig.preFooterTitle}
           preFooterSubtitle={shellConfig.preFooterSubtitle}
+          showPreFooter={shellConfig.showPreFooter ?? true}
           bodyClassName="jj-category-shell-body"
         >
           <div id="category-content" data-category-shell-body className="scroll-mt-24">

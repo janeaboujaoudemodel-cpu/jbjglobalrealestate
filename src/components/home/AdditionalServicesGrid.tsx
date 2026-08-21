@@ -36,7 +36,7 @@ const additionalServices: ServiceCard[] = [
     title: "Legal & Law Firm Services",
     description: "Connect with trusted legal partners",
     icon: Scale,
-    href: "/services/legal",
+    href: "/services/legal-services",
     available: false,
     color: "from-purple-500 to-purple-600"
   },
