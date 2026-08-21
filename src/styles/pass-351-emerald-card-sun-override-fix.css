@@ -21,25 +21,28 @@
    element, this sheet targets the .jj-emerald-card component itself (and
    any data-surface="emerald" element nested inside it) directly and uses
    the same "#root" specificity-repeat technique already used elsewhere in
-   this codebase (see PASS 348/349/350) with one more repeat than the
-   sun-band rule so it deterministically outranks it regardless of source
-   order.
+   this codebase (see PASS 348/349/350). The codebase's existing rules use
+   up to 12 repeats of #root for this trick, so this sheet uses 14 repeats
+   (rather than "one more than the sun-band rule's 7") to deterministically
+   outrank every existing rule of this kind regardless of source order,
+   including the ones that separately target svg/.lucide icon color inside
+   [data-surface="emerald"] elements.
    --------------------------------------------------------------------- */
 
-html body #root#root#root#root#root#root#root#root .jj-emerald-card,
-html body #root#root#root#root#root#root#root#root .jj-emerald-card [data-surface="emerald"] {
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root .jj-emerald-card,
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root .jj-emerald-card [data-surface="emerald"] {
   background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
   background-color: #064E3B !important;
   border-color: rgba(255, 255, 255, 0.18) !important;
 }
 
-html body #root#root#root#root#root#root#root#root .jj-emerald-card :is(svg, .lucide),
-html body #root#root#root#root#root#root#root#root .jj-emerald-card :is(svg, .lucide) * {
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root .jj-emerald-card :is(svg, .lucide),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root .jj-emerald-card :is(svg, .lucide) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
 
-html body #root#root#root#root#root#root#root#root .jj-emerald-card :where(h1, h2, h3, h4, h5, h6, p, span):not([data-surface="champagne"]):not([data-surface="champagne"] *) {
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root .jj-emerald-card :where(h1, h2, h3, h4, h5, h6, p, span):not([data-surface="champagne"]):not([data-surface="champagne"] *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
