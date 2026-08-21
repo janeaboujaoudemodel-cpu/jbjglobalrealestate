@@ -54,6 +54,14 @@ export function ensureRouteSurfaceStyles(): void {
   import("@/styles/route-surfaces.css").catch(() => {
     loaded = false;
   });
+  // PASS 350 fix — loaded right after route-surfaces.css so its higher-
+  // specificity, later-in-source rules win the cascade. route-surfaces.css
+  // has overly-broad `[class*="px-6"]`/`[class*="px-8"]` hero-CTA selectors
+  // that unintentionally also match the primary emerald CTA buttons
+  // (.jj-mi-hero-cta-emerald), producing unreadable dark-on-dark button text
+  // (e.g. the "Explore Company" / "Speak With Our Team" buttons on
+  // /founder). This sheet restores the correct emerald fill + white text.
+  import("@/styles/pass-350-hero-cta-contrast-fix.css").catch(() => {});
 }
 
 export default function RouteSurfaceStyles() {
