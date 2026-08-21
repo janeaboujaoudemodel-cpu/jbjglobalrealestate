@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import { MarketIntelligenceTableOfContents } from "@/components/market-intelligence/MarketIntelligenceTableOfContents";
 import { PhoneCall } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface MIShellHeroCTA {
   label: string;
@@ -140,7 +141,14 @@ export default function MIPageShell({
         />
       ) : null}
 
-      <div className={bodyClassName}>{children}</div>
+      <div
+        className={cn(
+          tocItems && tocItems.length > 0 ? "lg:pr-64 xl:pr-72" : undefined,
+          bodyClassName,
+        )}
+      >
+        {children}
+      </div>
 
       {showPreFooter ? (
         <div id="cta" className="scroll-mt-24 bg-[#F7F2EA] py-12 md:py-16">
