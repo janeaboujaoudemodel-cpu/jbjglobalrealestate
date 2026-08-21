@@ -36,6 +36,14 @@ import { useLocation } from "react-router-dom";
 // is scoped by selector (not by when it loads), so loading it unconditionally
 // is safe and guarantees it always wins the cascade.
 import "@/styles/pass-350-hero-cta-contrast-fix.css";
+// PASS 351 fix — statically imported for the same reason as PASS 350 above.
+// The sun-theme band rule repaints any [data-surface="emerald"] element with
+// a light cream background + dark ink text, even when it is marked
+// data-no-contrast-guard (e.g. .jj-emerald-card, used by /founder's photo/
+// bio card and its Role Focus icon tiles, and by the "services final CTA" /
+// "ready to get started" sections). This sheet restores the intended dark
+// emerald background and white text/icon color for that component.
+import "@/styles/pass-351-emerald-card-sun-override-fix.css";
 
 const ROUTE_PREFIXES = [
   "/insights",
