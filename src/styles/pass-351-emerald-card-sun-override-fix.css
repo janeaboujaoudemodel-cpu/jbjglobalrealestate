@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------
-   PASS 351 - EMERALD CARD SUN-THEME OVERRIDE FIX
+   PASS 351 - EMERALD CARD SUN-THEME OVERRIDE FIX (rev 2)
 
    html[data-jbj-theme="sun"] ... body #root(x7) :is([data-surface="emerald"], ...)
    is a broad "sun theme" band rule that repaints anything carrying
@@ -27,11 +27,20 @@
    outrank every existing rule of this kind regardless of source order,
    including the ones that separately target svg/.lucide icon color inside
    [data-surface="emerald"] elements.
+
+   REV 2: rev 1 filled the card with an invented gradient
+   (#0A6B53 -> #064E3B -> #010806) that is NOT the site's locked brand
+   emerald. index.css already defines the one approved emerald fill as
+   --jj-emerald-ombre (see the "LOCKED BRAND GUARD" rule a few hundred
+   lines above this file's import point): #064E3B -> #042c1c -> #000000.
+   This revision uses that exact locked value via var(--jj-emerald-ombre,
+   ...) instead of a new color, so the card matches the same official
+   emerald used everywhere else on the site.
    --------------------------------------------------------------------- */
 
 html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root .jj-emerald-card,
 html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root .jj-emerald-card [data-surface="emerald"] {
-  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
   background-color: #064E3B !important;
   border-color: rgba(255, 255, 255, 0.18) !important;
 }

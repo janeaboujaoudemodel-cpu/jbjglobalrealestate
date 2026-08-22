@@ -133,7 +133,7 @@ const Founder = () => {
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8">
           <motion.div 
-            className="max-w-4xl"
+            className="max-w-6xl"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
@@ -190,7 +190,7 @@ const Founder = () => {
       {/* SECTION 1: FOUNDER - 3-Layer System */}
       <section id="leadership" className="py-10 md:py-14 bg-[#FDFBF7] relative overflow-hidden">
         <div className="jj-content-track">
-          <div className="jj-emerald-card rounded-2xl p-4 sm:p-6 md:p-8 max-w-[1100px] mx-auto overflow-hidden" data-surface="emerald" data-no-contrast-guard>
+          <div className="jj-emerald-card rounded-2xl p-4 sm:p-6 md:p-8 max-w-[1400px] mx-auto overflow-hidden" data-surface="emerald" data-no-contrast-guard>
             <motion.div 
               className="grid lg:grid-cols-[minmax(260px,380px)_minmax(0,1fr)] gap-8 lg:gap-10 items-center min-w-0"
               initial="hidden"
