@@ -45,7 +45,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
   const [frequency, setFrequency] = useState("daily");
   const [saving, setSaving] = useState(false);
 
-  const ink = dark ? "#FFFFFF" : "#1A1A1A";
+  const ink = dark ? "#FFFFFF" : "#14263D";
   const set = (patch: Partial<PropertySearch>) => onChange({ ...f, ...patch });
 
   const locationName = f.region
@@ -147,7 +147,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
             <PopoverContent
               align="end"
               className="w-56 p-1 z-[70]"
-              style={{ background: "#FFF", border: "1px solid rgba(184,149,85,0.35)", color: "#1A1A1A" }}
+              style={{ background: "#FFF", border: "1px solid rgba(184,149,85,0.35)", color: "#14263D" }}
             >
               {SORT_OPTIONS.filter((s) => f.purpose !== "rent" || !["distress", "handover"].includes(s.slug)).map((s) => (
                 <button
@@ -226,7 +226,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
       <Dialog open={alertOpen} onOpenChange={setAlertOpen}>
         <DialogContent
           className="max-w-md z-[80]"
-          style={{ background: "#FBF6EC", color: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }}
+          style={{ background: "#FDFBF7", color: "#14263D", border: "1px solid rgba(184,149,85,0.35)" }}
         >
           <DialogHeader>
             <DialogTitle>Create alert</DialogTitle>
@@ -239,7 +239,7 @@ export default function ResultsToolbar({ value: f, onChange, total, dark = false
             value={alertName}
             onChange={(e) => setAlertName(e.target.value)}
             placeholder={`Properties for ${purposeWord} in ${locationName}`}
-            className="h-10 rounded-lg px-3 text-sm bg-transparent border border-[#B89555]/35 outline-none"
+            className="h-10 rounded-lg px-3 text-sm bg-transparent border border-[#A9822E]/35 outline-none"
           />
           <label className="text-xs font-semibold uppercase tracking-wider opacity-70">Receive updates</label>
           <div className="flex gap-1.5">
