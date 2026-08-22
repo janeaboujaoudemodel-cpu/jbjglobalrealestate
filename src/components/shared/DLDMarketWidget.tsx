@@ -114,7 +114,7 @@ const DownloadReportDialog = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-[#FDFBF7] border border-[#B89555]/40">
+      <DialogContent className="bg-[#FDFBF7] border border-[#A9822E]/40">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A]">Download Market Intelligence Report</DialogTitle>
         </DialogHeader>
@@ -124,10 +124,10 @@ const DownloadReportDialog = ({
               Quick range
             </p>
             <div className="flex flex-wrap gap-2">
-              <button type="button" onClick={() => preset(sevenAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 7 days</button>
-              <button type="button" onClick={() => preset(thirtyAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 30 days</button>
-              <button type="button" onClick={() => preset(startOfMonth, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">This month</button>
-              <button type="button" onClick={() => preset(startOfYear, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">YTD</button>
+              <button type="button" onClick={() => preset(sevenAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#A9822E]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 7 days</button>
+              <button type="button" onClick={() => preset(thirtyAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#A9822E]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 30 days</button>
+              <button type="button" onClick={() => preset(startOfMonth, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#A9822E]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">This month</button>
+              <button type="button" onClick={() => preset(startOfYear, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#A9822E]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">YTD</button>
             </div>
           </div>
 
@@ -135,12 +135,12 @@ const DownloadReportDialog = ({
             <label className="text-xs text-[#1A1A1A]/80">
               From
               <input type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)}
-                className="mt-1 w-full bg-[#F7F2EA] border border-[#B89555]/40 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
+                className="mt-1 w-full bg-[#F7F2EA] border border-[#A9822E]/40 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
             </label>
             <label className="text-xs text-[#1A1A1A]/80">
               To
               <input type="date" value={to} min={from} max={isoDate(now)} onChange={(e) => setTo(e.target.value)}
-                className="mt-1 w-full bg-[#F7F2EA] border border-[#B89555]/40 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
+                className="mt-1 w-full bg-[#F7F2EA] border border-[#A9822E]/40 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
             </label>
           </div>
 
@@ -180,7 +180,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   // ─── Compact variant (sidebar) ────────────────────────────────────
   if (compact) {
     return (
-      <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/40 p-5 space-y-4">
+      <div className="bg-[#FDFBF7] rounded-2xl border border-[#A9822E]/40 p-5 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-[#064E3B]" />
@@ -202,7 +202,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           ))}
         </div>
         {matchedArea && (
-          <div className="bg-[#F7F2EA] border border-[#B89555]/40 rounded-lg p-3">
+          <div className="bg-[#F7F2EA] border border-[#A9822E]/40 rounded-lg p-3">
             <p className="text-[10px] text-[#1A1A1A]/65 uppercase tracking-wider mb-1">This Area</p>
             <div className="flex items-center justify-between">
               <span className="text-[#1A1A1A] text-sm font-medium">{matchedArea.transactions.toLocaleString()} transactions</span>
@@ -236,7 +236,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
   const INK = "#1A1A1A";
   const EMERALD_GRADIENT = "linear-gradient(155deg,#064E3B 0%,#042C1C 58%,#000000 100%)";
-  const PANEL_GRADIENT = "linear-gradient(135deg,#FFFDF9 0%,#FBF6EC 52%,#F3EADA 100%)";
+  const PANEL_GRADIENT = "linear-gradient(135deg,#FFFDF9 0%,#FDFBF7 52%,#F3EADA 100%)";
   const CARD_SURFACE = "linear-gradient(135deg,#FFFFFF 0%,#FBF7F0 100%)";
   const GOLD = "rgba(184,149,85,0.42)";
 
@@ -452,7 +452,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       </button>
 
                       {isExpanded && nats.length > 0 && (
-                        <div className="relative px-3 py-3" style={{ background: "#FBF6EC", borderTop: `1px solid ${GOLD}` }}>
+                        <div className="relative px-3 py-3" style={{ background: "#FDFBF7", borderTop: `1px solid ${GOLD}` }}>
                           <p className="text-[10px] uppercase tracking-[0.15em] font-bold mb-2" style={{ color: "rgba(26,26,26,0.55)" }}>
                             Top 5 Buyer Nationalities
                           </p>

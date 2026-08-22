@@ -629,23 +629,23 @@ export function SendViaEmailDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="!max-w-[1200px] w-[min(96vw,1200px)] sm:!max-w-[1200px] max-h-[92vh] overflow-y-auto p-0 bg-[#FDFBF7] border-[#B89555]/40"
+        className="!max-w-[1200px] w-[min(96vw,1200px)] sm:!max-w-[1200px] max-h-[92vh] overflow-y-auto p-0 bg-[#FDFBF7] border-[#A9822E]/40"
       >
-        <DialogHeader className="px-5 pt-5 pb-3 border-b border-[#B89555]/30">
-          <DialogTitle className="flex items-center gap-2 text-[#1A1A1A] text-base">
+        <DialogHeader className="px-5 pt-5 pb-3 border-b border-[#A9822E]/30">
+          <DialogTitle className="flex items-center gap-2 text-[#14263D] text-base">
             <Mail className="w-5 h-5" />
             Preview &amp; send by email
           </DialogTitle>
-          <DialogDescription className="text-xs text-[#1A1A1A]/60 mt-1">
+          <DialogDescription className="text-xs text-[#14263D]/60 mt-1">
             What you see in the preview is byte-for-byte the branded email the recipient receives — including the OPEN IN DOCUSIGN button and App Store / Google Play fallback.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-0">
           {/* Compose pane */}
-          <div className="p-5 space-y-4 border-b md:border-b-0 md:border-r border-[#B89555]/30">
+          <div className="p-5 space-y-4 border-b md:border-b-0 md:border-r border-[#A9822E]/30">
             {/* Headers strip */}
-            <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-2.5 text-[11px] text-[#1A1A1A] space-y-1">
+            <div className="rounded-md border border-[#A9822E]/30 bg-[#F7F2EA] p-2.5 text-[11px] text-[#14263D] space-y-1">
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">From:</span><strong className="break-all">{DISPLAY_FROM}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Reply-To:</span><strong className="break-all">{DISPLAY_REPLY_TO}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Provider:</span>Resend</div>
@@ -659,7 +659,7 @@ export function SendViaEmailDialog({
                       href={safeOpenHref(liveAttachmentUrl, liveAttachmentName)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
+                      className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#14263D]/70"
                       title="Preview attached PDF"
                     >
                       <Eye className="w-3.5 h-3.5" />
@@ -668,7 +668,7 @@ export function SendViaEmailDialog({
                   <button
                     type="button"
                     onClick={() => setAutoAttachmentRemoved(true)}
-                    className="shrink-0 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-2"
+                    className="shrink-0 text-[10px] uppercase tracking-wider text-[#14263D]/60 hover:text-[#14263D] underline decoration-[#A9822E]/60 underline-offset-2"
                     title="Remove the auto-attached signed PDF from this send"
                   >
                     Remove
@@ -682,7 +682,7 @@ export function SendViaEmailDialog({
                   <button
                     type="button"
                     onClick={() => setAutoAttachmentRemoved(false)}
-                    className="ml-auto text-[10px] uppercase tracking-wider text-[#B89555] hover:text-[#1A1A1A]"
+                    className="ml-auto text-[10px] uppercase tracking-wider text-[#A9822E] hover:text-[#14263D]"
                   >
                     Restore
                   </button>
@@ -693,8 +693,8 @@ export function SendViaEmailDialog({
             {/* To */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between gap-2">
-                <Label className="text-[#1A1A1A] text-xs">To · {tos.length || "no"} recipient{tos.length === 1 ? "" : "s"}</Label>
-                <Button type="button" size="sm" variant="outline" onClick={() => saveTemplateField("recipients")} disabled={!!savingField} className="h-7 px-2 text-[11px] border-[#B89555]/50 hover:bg-[#EFE6D6]">
+                <Label className="text-[#14263D] text-xs">To · {tos.length || "no"} recipient{tos.length === 1 ? "" : "s"}</Label>
+                <Button type="button" size="sm" variant="outline" onClick={() => saveTemplateField("recipients")} disabled={!!savingField} className="h-7 px-2 text-[11px] border-[#A9822E]/50 hover:bg-[#EFE6D6]">
                   {savingField === "recipients" ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save
                 </Button>
               </div>
@@ -705,27 +705,27 @@ export function SendViaEmailDialog({
                 ariaLabel="Recipient emails"
               />
               {recipientName && (
-                <p className="text-[10px] text-[#1A1A1A]/60">Primary contact on record: {recipientName}</p>
+                <p className="text-[10px] text-[#14263D]/60">Primary contact on record: {recipientName}</p>
               )}
             </div>
 
             {/* CC */}
             <div className="space-y-1.5">
-              <Label className="text-[#1A1A1A] text-xs">CC · {cleanCcs.length}</Label>
+              <Label className="text-[#14263D] text-xs">CC · {cleanCcs.length}</Label>
               <EmailRecipientChips
                 value={ccs}
                 onChange={setCcs}
                 placeholder="add CC…"
                 ariaLabel="CC emails"
               />
-              <p className="text-[10px] text-[#1A1A1A]/60">Default CC is your test inbox — remove the chip if you don't want it.</p>
+              <p className="text-[10px] text-[#14263D]/60">Default CC is your test inbox — remove the chip if you don't want it.</p>
             </div>
 
             {/* Subject */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between gap-2">
-                <Label className="text-[#1A1A1A] text-xs">Subject</Label>
-                <Button type="button" size="sm" variant="outline" onClick={() => saveTemplateField("subject")} disabled={!!savingField || !subject.trim()} className="h-7 px-2 text-[11px] border-[#B89555]/50 hover:bg-[#EFE6D6]">
+                <Label className="text-[#14263D] text-xs">Subject</Label>
+                <Button type="button" size="sm" variant="outline" onClick={() => saveTemplateField("subject")} disabled={!!savingField || !subject.trim()} className="h-7 px-2 text-[11px] border-[#A9822E]/50 hover:bg-[#EFE6D6]">
                   {savingField === "subject" ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save
                 </Button>
               </div>
@@ -734,7 +734,7 @@ export function SendViaEmailDialog({
 
             {/* Signature picker — Radix Select with champagne/gold styling, no native blue */}
             <div className="space-y-1.5">
-              <Label className="text-[#1A1A1A] text-xs flex items-center gap-1.5">
+              <Label className="text-[#14263D] text-xs flex items-center gap-1.5">
                 <PenLine className="w-3.5 h-3.5" /> Signature · {signatures.length} available
               </Label>
               <div className="flex gap-2">
@@ -744,16 +744,16 @@ export function SendViaEmailDialog({
                 >
                   <SelectTrigger
                     aria-label="Select email signature"
-                      className="flex-1 bg-white border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 focus:ring-[#B89555]/30 focus:ring-offset-0 data-[state=open]:bg-[#F7F2EA] data-[state=open]:border-[#B89555]"
+                      className="flex-1 bg-white border-[#A9822E]/40 text-[#14263D] hover:bg-[#F7F2EA] hover:border-[#A9822E]/70 focus:ring-[#A9822E]/30 focus:ring-offset-0 data-[state=open]:bg-[#F7F2EA] data-[state=open]:border-[#A9822E]"
                   >
                     <SelectValue placeholder={signatures.length ? "Pick a signature…" : "Loading signatures…"} />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">
+                  <SelectContent className="bg-[#FDFBF7] border-[#A9822E]/40">
                     {signatures.map((s) => (
                       <SelectItem
                         key={s.id}
                         value={s.id}
-                        className="text-[#1A1A1A] hover:!bg-[#EFE6D6] focus:!bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:!bg-[#EFE6D6] data-[highlighted]:!bg-[#EFE6D6] data-[highlighted]:text-[#1A1A1A]"
+                        className="text-[#14263D] hover:!bg-[#EFE6D6] focus:!bg-[#EFE6D6] focus:text-[#14263D] data-[state=checked]:!bg-[#EFE6D6] data-[highlighted]:!bg-[#EFE6D6] data-[highlighted]:text-[#14263D]"
                       >
                         {s.name}{s.is_default ? " · default" : ""}{s.is_system ? " · system" : ""}
                       </SelectItem>
@@ -767,26 +767,26 @@ export function SendViaEmailDialog({
                   onClick={() => saveTemplateField("signature")}
                   disabled={!selectedSigHtml}
                   title="Save this signature as the standard for future PAA emails"
-                  className="border-[#B89555]/50 hover:bg-[#EFE6D6] hover:border-[#B89555]"
+                  className="border-[#A9822E]/50 hover:bg-[#EFE6D6] hover:border-[#A9822E]"
                 >
                   {savingField === "signature" ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save
                 </Button>
               </div>
-              <p className="text-[10px] text-[#1A1A1A]/60">
+              <p className="text-[10px] text-[#14263D]/60">
                 Pick which signature appears at the bottom of the body — the preview updates instantly.
               </p>
               {effectiveSig && (
-                <div className="rounded-md border border-[#B89555]/30 bg-white">
+                <div className="rounded-md border border-[#A9822E]/30 bg-white">
                   <button
                     type="button"
                     onClick={() => setSigEditorOpen((v) => !v)}
-                    className="w-full flex items-center justify-between gap-2 px-2.5 py-1.5 text-[11px] text-[#1A1A1A] hover:bg-[#FBF6EC]"
+                    className="w-full flex items-center justify-between gap-2 px-2.5 py-1.5 text-[11px] text-[#14263D] hover:bg-[#FDFBF7]"
                   >
                     <span className="inline-flex items-center gap-1.5">
-                      <PenLine className="w-3 h-3 text-[#B89555]" />
+                      <PenLine className="w-3 h-3 text-[#A9822E]" />
                       {sigEditorOpen ? "Hide signature editor" : "Edit signature for this email"}
                     </span>
-                    <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/50">
+                    <span className="text-[10px] uppercase tracking-wider text-[#14263D]/50">
                       {Object.keys(sigEdits).length ? "Edited" : "Unchanged"}
                     </span>
                   </button>
@@ -802,7 +802,7 @@ export function SendViaEmailDialog({
                         ["website", "Website"],
                       ] as const).map(([key, label]) => (
                         <div key={key} className="space-y-1">
-                          <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">{label}</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-[#14263D]/60">{label}</Label>
                           <Input
                             value={(effectiveSig as any)[key] ?? ""}
                             onChange={(e) => setSigEdits((prev) => ({ ...prev, [key]: e.target.value }))}
@@ -811,14 +811,14 @@ export function SendViaEmailDialog({
                         </div>
                       ))}
                       <div className="sm:col-span-2 flex items-center justify-between pt-1">
-                        <p className="text-[10px] text-[#1A1A1A]/60">
+                        <p className="text-[10px] text-[#14263D]/60">
                           Edits apply only to this email. Click <strong>Save</strong> above to make them the default for future PAA emails.
                         </p>
                         {Object.keys(sigEdits).length > 0 && (
                           <button
                             type="button"
                             onClick={() => setSigEdits({})}
-                            className="text-[10px] uppercase tracking-wider text-[#B89555] hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-2"
+                            className="text-[10px] uppercase tracking-wider text-[#A9822E] hover:text-[#14263D] underline decoration-[#A9822E]/60 underline-offset-2"
                           >
                             Reset to preset
                           </button>
@@ -833,7 +833,7 @@ export function SendViaEmailDialog({
 
             {/* DocuSign URL (optional) */}
             <div className="space-y-1.5">
-              <Label className="text-[#1A1A1A] text-xs">
+              <Label className="text-[#14263D] text-xs">
                 DocuSign envelope URL <span className="opacity-60 font-normal">(optional)</span>
               </Label>
               <Input
@@ -843,7 +843,7 @@ export function SendViaEmailDialog({
                 className="bg-white font-mono text-[12px]"
                 type="url"
               />
-              <p className="text-[10px] text-[#1A1A1A]/60">
+              <p className="text-[10px] text-[#14263D]/60">
                 Empty is fine — the <strong>OPEN IN DOCUSIGN</strong> button always appears and opens the universal DocuSign entry. Paste a specific envelope URL to deep-link directly.
               </p>
             </div>
@@ -858,14 +858,14 @@ export function SendViaEmailDialog({
             {/* Body (rich) */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between gap-2">
-                <Label className="text-[#1A1A1A] text-xs">Message</Label>
+                <Label className="text-[#14263D] text-xs">Message</Label>
                 {draftSavedAt && (
-                  <span className="text-[10px] text-[#1A1A1A]/50 flex items-center gap-1.5">
+                  <span className="text-[10px] text-[#14263D]/50 flex items-center gap-1.5">
                     Draft saved · {new Date(draftSavedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     <button
                       type="button"
                       onClick={clearDraft}
-                      className="underline decoration-[#B89555]/60 underline-offset-2 hover:text-[#1A1A1A]"
+                      className="underline decoration-[#A9822E]/60 underline-offset-2 hover:text-[#14263D]"
                     >
                       Discard
                     </button>
@@ -883,12 +883,12 @@ export function SendViaEmailDialog({
           {/* Live preview pane */}
           <div className="bg-[#F7F2EA]/40 p-3 md:p-5 flex flex-col min-h-[520px] min-w-0">
             <div className="flex items-center justify-between gap-2 mb-2">
-              <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70">
+              <div className="flex items-center gap-1.5 text-[11px] text-[#14263D]/70">
                 <Eye className="w-3.5 h-3.5" /> Live preview — exact recipient view
               </div>
-              <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/50">includes DocuSign CTA</span>
+              <span className="text-[10px] uppercase tracking-wider text-[#14263D]/50">includes DocuSign CTA</span>
             </div>
-            <div className="flex-1 min-h-[520px] md:min-h-[640px] rounded-md border border-[#B89555]/40 overflow-hidden bg-white">
+            <div className="flex-1 min-h-[520px] md:min-h-[640px] rounded-md border border-[#A9822E]/40 overflow-hidden bg-white">
               <EmailPreviewIframe
                 subject={subject}
                 bodyHtml={bodyHtml}
@@ -903,9 +903,9 @@ export function SendViaEmailDialog({
 
             {/* Attachments the recipient will receive — clickable so the owner
                 can open and verify the EXACT file before pressing send. */}
-            <div className="mt-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] p-3">
+            <div className="mt-3 rounded-md border border-[#A9822E]/30 bg-[#FDFBF7] p-3">
               <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A] flex items-center gap-2">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#14263D] flex items-center gap-2">
                   Attachments the client will receive · {(!autoAttachmentRemoved && liveAttachmentName ? 1 : 0) + extraAttachments.length}
                   {!autoAttachmentRemoved && (
                     <span
@@ -914,10 +914,10 @@ export function SendViaEmailDialog({
                         (attachmentSyncStatus === "latest"
                           ? "border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] jj-emerald-soft"
                           : attachmentSyncStatus === "syncing"
-                          ? "border-[#B89555]/50 text-[#B89555] bg-[#FDF8EE]"
+                          ? "border-[#A9822E]/50 text-[#A9822E] bg-[#FDF8EE]"
                           : attachmentSyncStatus === "failed"
                           ? "border-red-500/40 text-red-700 bg-red-50"
-                          : "border-[#B89555]/40 text-[#1A1A1A]/60 bg-white")
+                          : "border-[#A9822E]/40 text-[#14263D]/60 bg-white")
                       }
                       title={attachmentSyncedAt ? `Last synced ${new Date(attachmentSyncedAt).toLocaleTimeString()}` : undefined}
                     >
@@ -930,7 +930,7 @@ export function SendViaEmailDialog({
                   type="button"
                   onClick={() => { resolveFreshAttachment().catch(() => {}); }}
                   disabled={attachmentSyncStatus === "syncing"}
-                  className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-2 disabled:opacity-50"
+                  className="text-[10px] uppercase tracking-wider text-[#14263D]/70 hover:text-[#14263D] underline decoration-[#A9822E]/60 underline-offset-2 disabled:opacity-50"
                   title="Regenerate the latest PDF from current saved document state"
                 >
                   {attachmentSyncStatus === "syncing" ? "Syncing…" : "Regenerate latest"}
@@ -938,11 +938,11 @@ export function SendViaEmailDialog({
               </div>
               <ul className="space-y-1.5">
                 {!autoAttachmentRemoved && liveAttachmentName && (
-                  <li className="flex items-center gap-2 text-xs text-[#1A1A1A] bg-white border border-[#B89555]/30 rounded px-2 py-1.5">
-                    <FileText className="w-3.5 h-3.5 shrink-0 text-[#B89555]" />
+                  <li className="flex items-center gap-2 text-xs text-[#14263D] bg-white border border-[#A9822E]/30 rounded px-2 py-1.5">
+                    <FileText className="w-3.5 h-3.5 shrink-0 text-[#A9822E]" />
                     <span className="truncate flex-1">
                       <strong>{liveAttachmentName}</strong>
-                      <span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">
+                      <span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#14263D]/60">
                         Standard PAA{attachmentSyncedAt ? ` · synced ${new Date(attachmentSyncedAt).toLocaleTimeString()}` : ""}
                       </span>
                     </span>
@@ -951,7 +951,7 @@ export function SendViaEmailDialog({
                         href={safeOpenHref(liveAttachmentUrl, liveAttachmentName)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
+                        className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#14263D]/70 inline-flex items-center gap-1"
                         title="Preview the standard PAA PDF"
                       >
                         <Eye className="w-3.5 h-3.5" /> Open
@@ -960,7 +960,7 @@ export function SendViaEmailDialog({
                     <button
                       type="button"
                       onClick={() => setAutoAttachmentRemoved(true)}
-                      className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/60 text-[10px] uppercase tracking-wider"
+                      className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#14263D]/60 text-[10px] uppercase tracking-wider"
                       title="Remove the auto-attached PDF from this send"
                     >
                       Remove
@@ -968,15 +968,15 @@ export function SendViaEmailDialog({
                   </li>
                 )}
                 {extraAttachments.map((a, i) => (
-                  <li key={`${a.name}-${i}`} className="flex items-center gap-2 text-xs text-[#1A1A1A] bg-white border border-[#B89555]/30 rounded px-2 py-1.5">
-                    <FileText className="w-3.5 h-3.5 shrink-0 text-[#1A1A1A]/60" />
-                    <span className="truncate flex-1">{a.name}<span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Uploaded</span></span>
+                  <li key={`${a.name}-${i}`} className="flex items-center gap-2 text-xs text-[#14263D] bg-white border border-[#A9822E]/30 rounded px-2 py-1.5">
+                    <FileText className="w-3.5 h-3.5 shrink-0 text-[#14263D]/60" />
+                    <span className="truncate flex-1">{a.name}<span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#14263D]/60">Uploaded</span></span>
                     {a.url && (
                       <a
                         href={safeOpenHref(a.url, a.name)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
+                        className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#14263D]/70 inline-flex items-center gap-1"
                         title={`Preview ${a.name}`}
                       >
                         <Eye className="w-3.5 h-3.5" /> Open
@@ -985,12 +985,12 @@ export function SendViaEmailDialog({
                   </li>
                 ))}
                 {autoAttachmentRemoved && extraAttachments.length === 0 && (
-                  <li className="text-[11px] text-[#1A1A1A]/60 italic">
+                  <li className="text-[11px] text-[#14263D]/60 italic">
                     No attachments — recipient will get the email body only. Restore the standard PDF above or upload a file.
                   </li>
                 )}
               </ul>
-              <p className="text-[10px] text-[#1A1A1A]/55 mt-2">
+              <p className="text-[10px] text-[#14263D]/55 mt-2">
                 {attachmentSyncStatus === "failed"
                   ? "Latest PDF sync failed — click Regenerate before sending. Send is disabled until sync succeeds."
                   : "The standard PAA file is regenerated from the latest document state right before each send so the client always receives the up-to-date copy."}
@@ -1000,7 +1000,7 @@ export function SendViaEmailDialog({
         </div>
 
         {/* Footer — wraps; never overflows */}
-        <div className="border-t border-[#B89555]/30 px-5 py-3 bg-[#FDFBF7] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 flex-wrap">
+        <div className="border-t border-[#A9822E]/30 px-5 py-3 bg-[#FDFBF7] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 flex-wrap">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
@@ -1023,7 +1023,7 @@ export function SendViaEmailDialog({
             variant="outline"
             onClick={saveAsTemplate}
             disabled={!!busy || !subject.trim()}
-            className="w-full sm:w-auto border-[#B89555]/50 hover:bg-[#EFE6D6]"
+            className="w-full sm:w-auto border-[#A9822E]/50 hover:bg-[#EFE6D6]"
             title="Save the current subject + body as the standard template — affects future sends only, not this one"
           >
             <Save className="w-4 h-4 mr-2" /> Save as standard template

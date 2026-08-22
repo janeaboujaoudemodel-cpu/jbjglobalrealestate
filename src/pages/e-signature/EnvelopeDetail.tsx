@@ -36,18 +36,18 @@ type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'comple
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#B89555]/40", icon: <FileSignature className="w-4 h-4" /> },
+  draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#A9822E]/40", icon: <FileSignature className="w-4 h-4" /> },
   sent: { label: "Pending Signature", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
   viewed: { label: "Pending Signature · Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
   partially_signed: { label: "Pending Signature · Partial", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
-  expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
-  voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <XCircle className="w-4 h-4" /> },
+  expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#A9822E]/30", icon: <Clock className="w-4 h-4" /> },
+  voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#A9822E]/30", icon: <XCircle className="w-4 h-4" /> },
 };
 
 const recipientStatusConfig: Record<RecipientStatus, { label: string; color: string }> = {
-  pending: { label: "Pending", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#B89555]/30" },
+  pending: { label: "Pending", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#A9822E]/30" },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   delivered: { label: "Delivered", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200" },
@@ -769,7 +769,7 @@ export default function EnvelopeDetail() {
     return (
       <div className="min-h-screen bg-[#FDFBF7] p-6">
         <div className="max-w-5xl mx-auto text-center py-12">
-          <FileSignature className="w-16 h-16 text-[#B89555]/40 mx-auto mb-4" />
+          <FileSignature className="w-16 h-16 text-[#A9822E]/40 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">Envelope Not Found</h2>
           <Link to="/e-signature"><Button variant="gold">Back</Button></Link>
         </div>
@@ -796,10 +796,10 @@ export default function EnvelopeDetail() {
         body > div[style*="min-height:1123px"] > div > div[style*="margin-top:auto"]{margin-top:18px !important;}
         body > div:last-child{margin-bottom:0 !important;padding-bottom:0 !important;}
         [data-field-key]{position:relative;cursor:text;transition:background .15s,outline .15s;border-radius:4px;}
-        [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
+        [data-field-key]:hover{background:#FDFBF7;outline:1px dashed #A9822E;outline-offset:2px;}
         [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
-        [data-chip-key]:hover{background:#FBF6EC;}
-        .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #B89555;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
+        [data-chip-key]:hover{background:#FDFBF7;}
+        .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #A9822E;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
         [data-field-key]:hover > .jbj-x{display:block;}
       </style></head><body>${previewHtml}<script>(function(){
         var EDITABLE=${editing ? "true" : "false"};
@@ -889,7 +889,7 @@ export default function EnvelopeDetail() {
             </div>
           </div>
         )}
-        <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+        <Card className="bg-[#F7F2EA] border-[#A9822E]/30">
           <CardContent className="p-3 flex items-center gap-2 flex-wrap">
             {isDraft && (
               <Button variant="gold" onClick={() => setSendOpen(true)} disabled={sending}>
@@ -970,7 +970,7 @@ export default function EnvelopeDetail() {
         {/* TOP CONTROL BAND — minimized by default. Click a header to expand. */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
           {/* Recipients + CCs */}
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <Card className="bg-[#F7F2EA] border-[#A9822E]/30">
             <button onClick={() => setOpenRecipients(v => !v)} className="w-full flex items-center justify-between px-4 py-2.5 text-left">
               <span className="text-sm font-semibold flex items-center gap-2 text-[#1A1A1A]">
                 <User className="w-4 h-4" /> Recipients & CCs
@@ -986,7 +986,7 @@ export default function EnvelopeDetail() {
                     && ["sent", "viewed", "partially_signed"].includes(envelope.status);
                   const isReminding = remindingId === recipient.id;
                   return (
-                    <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3">
+                    <div key={recipient.id} className="rounded-lg bg-white border border-[#A9822E]/20 p-3">
                       <div className="flex items-center justify-between gap-2">
                         <div className="min-w-0">
                           <div className="font-medium text-[#1A1A1A] text-sm truncate">{recipient.name}</div>
@@ -1035,11 +1035,11 @@ export default function EnvelopeDetail() {
                 })}
 
                 {/* CC manager */}
-                <div className="border-t border-[#B89555]/30 pt-3">
+                <div className="border-t border-[#A9822E]/30 pt-3">
                   <Label className="text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70">CC on send</Label>
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {ccs.map((e) => (
-                      <span key={e} className="inline-flex items-center gap-1 text-[11px] bg-white border border-[#B89555]/30 rounded px-2 py-0.5 text-[#1A1A1A]">
+                      <span key={e} className="inline-flex items-center gap-1 text-[11px] bg-white border border-[#A9822E]/30 rounded px-2 py-0.5 text-[#1A1A1A]">
                         {e}
                         <button type="button" onClick={() => setCcs((prev) => prev.filter((x) => x !== e))} aria-label={`Remove ${e}`}>
                           <X className="w-3 h-3" />
@@ -1068,7 +1068,7 @@ export default function EnvelopeDetail() {
           </Card>
 
           {/* Document Info */}
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <Card className="bg-[#F7F2EA] border-[#A9822E]/30">
             <button onClick={() => setOpenDetails(v => !v)} className="w-full flex items-center justify-between px-4 py-2.5 text-left">
               <span className="text-sm font-semibold text-[#1A1A1A]">Details</span>
               {openDetails ? <ChevronUp className="w-4 h-4 text-[#1A1A1A]/60" /> : <ChevronDown className="w-4 h-4 text-[#1A1A1A]/60" />}
@@ -1081,7 +1081,7 @@ export default function EnvelopeDetail() {
                 {envelope.expires_at && <div className="flex justify-between"><span>Expires</span><span>{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span></div>}
                 {envelope.completed_at && <div className="flex justify-between"><span>Completed</span><span>{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span></div>}
                 <div className="flex justify-between"><span>Reminders</span><span>{envelope.reminders_sent || 0}</span></div>
-                <div className="pt-2 border-t border-[#B89555]/30 mt-2">
+                <div className="pt-2 border-t border-[#A9822E]/30 mt-2">
                   <Button variant="outline" size="sm" className="w-full h-8 text-[11px]" onClick={() => setShowStudio((s) => !s)}>
                     {showStudio ? "Hide" : "Customize"} header &amp; footer
                   </Button>
@@ -1124,7 +1124,7 @@ export default function EnvelopeDetail() {
               )}
             </Card>
           ) : (
-            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+            <Card className="bg-[#F7F2EA] border-[#A9822E]/30">
               <button onClick={() => setOpenActivity(v => !v)} className="w-full flex items-center justify-between px-4 py-2.5 text-left">
                 <span className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
                   <Shield className="w-4 h-4" /> Activity Log
@@ -1137,7 +1137,7 @@ export default function EnvelopeDetail() {
                   <div className="space-y-3">
                     {auditLogs.slice(0, 5).map((log: any) => (
                       <div key={log.id} className="flex items-start gap-2">
-                        <div className="w-6 h-6 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
+                        <div className="w-6 h-6 rounded-full bg-white border border-[#A9822E]/30 flex items-center justify-center shrink-0">
                           <Clock className="w-3 h-3 text-[#1A1A1A]/70" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -1155,7 +1155,7 @@ export default function EnvelopeDetail() {
 
           {/* Listing draft (auto-generated from PAA) — minimized */}
           {PAA_TEMPLATE_KEYS.has(envelope.template_key || "") && (
-            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+            <Card className="bg-[#F7F2EA] border-[#A9822E]/30">
               <button onClick={() => setOpenListing(v => !v)} className="w-full flex items-center justify-between px-4 py-2.5 text-left">
                 <span className="text-sm font-semibold text-[#1A1A1A]">Listing Draft</span>
                 {openListing ? <ChevronUp className="w-4 h-4 text-[#1A1A1A]/60" /> : <ChevronDown className="w-4 h-4 text-[#1A1A1A]/60" />}
@@ -1178,7 +1178,7 @@ export default function EnvelopeDetail() {
         {/* Edit Fields panel — appears ABOVE the document so the user can immediately
             see and edit every PAA field. Live preview below updates as they type. */}
         {editing && envelope.template_key && (
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <Card className="bg-[#F7F2EA] border-[#A9822E]/30">
             <CardHeader className="py-3">
               <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
                 <Edit3 className="w-4 h-4" /> Edit fields — changes preview live below
@@ -1190,7 +1190,7 @@ export default function EnvelopeDetail() {
                 onExtracted={(fields) => setEditValues((prev) => ({ ...prev, ...fields }))}
               />
               {hiddenFields.length > 0 && (
-                <div className="flex items-center gap-2 p-2 rounded border border-[#B89555]/40 bg-[#FDFBF7]">
+                <div className="flex items-center gap-2 p-2 rounded border border-[#A9822E]/40 bg-[#FDFBF7]">
                   <span className="text-xs text-[#1A1A1A]/80">
                     {hiddenFields.length} removed field{hiddenFields.length === 1 ? "" : "s"}
                   </span>
@@ -1266,7 +1266,7 @@ export default function EnvelopeDetail() {
                           return (
                             <div key={f.key}>
                               <Label className="text-xs">{f.label}{conditionalHint && <span className="text-[10px] text-[#1A1A1A]/50 ml-1">{conditionalHint}</span>}</Label>
-                              <select data-edit-key={f.key} value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
+                              <select data-edit-key={f.key} value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#A9822E]/40 bg-white text-sm text-[#1A1A1A]">
                                 <option value="">—</option>
                                 {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
                               </select>
@@ -1318,8 +1318,8 @@ export default function EnvelopeDetail() {
         )}
 
         {/* Document preview — FULL WIDTH, edge to edge */}
-        <Card className="bg-white border-[#B89555]/30 overflow-hidden">
-          <CardHeader className="bg-[#F7F2EA] border-b border-[#B89555]/30 py-3">
+        <Card className="bg-white border-[#A9822E]/30 overflow-hidden">
+          <CardHeader className="bg-[#F7F2EA] border-b border-[#A9822E]/30 py-3">
             <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
               <FileText className="w-4 h-4" /> {editing ? "Live preview (unsaved edits)" : "Document"}
             </CardTitle>
@@ -1373,7 +1373,7 @@ export default function EnvelopeDetail() {
         <Button
           size="icon"
           variant="outline"
-          className="h-10 w-10 rounded-full bg-[#FDFBF7] border-[#B89555]/40 shadow-md hover:bg-[#F7F2EA]"
+          className="h-10 w-10 rounded-full bg-[#FDFBF7] border-[#A9822E]/40 shadow-md hover:bg-[#F7F2EA]"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Go to top"
           title="Go to top"
@@ -1383,7 +1383,7 @@ export default function EnvelopeDetail() {
         <Button
           size="icon"
           variant="outline"
-          className="h-10 w-10 rounded-full bg-[#FDFBF7] border-[#B89555]/40 shadow-md hover:bg-[#F7F2EA]"
+          className="h-10 w-10 rounded-full bg-[#FDFBF7] border-[#A9822E]/40 shadow-md hover:bg-[#F7F2EA]"
           onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" })}
           aria-label="Go to bottom"
           title="Go to bottom"

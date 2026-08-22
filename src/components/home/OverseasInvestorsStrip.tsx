@@ -195,7 +195,7 @@ const OverseasInvestorsStrip = () => {
         /* Sun skin — brighter champagne surface matching the vertical rail,
            black ink and icons per the brand contrast contract. */
         html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band .oi-surface {
-          background: linear-gradient(135deg, #FBF6EC 0%, #F4EDDF 52%, #EFE6D6 100%) !important;
+          background: linear-gradient(135deg, #FDFBF7 0%, #FAF6EF 52%, #EFE6D6 100%) !important;
         }
         html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band,
         html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body #root .oi-band * {
@@ -252,7 +252,7 @@ const OverseasInvestorsStrip = () => {
         className={`jj-bleed-allow ${isSun ? "" : "allow-white"} oi-metallic oi-surface group relative block w-full overflow-hidden px-5 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16`}
         style={{
           background: isSun
-            ? "linear-gradient(135deg, #FBF6EC 0%, #F4EDDF 52%, #EFE6D6 100%)"
+            ? "linear-gradient(135deg, #FDFBF7 0%, #FAF6EF 52%, #EFE6D6 100%)"
             : "var(--jj-emerald-ombre)",
           color: isSun ? "#1A1A1A" : "#FFFFFF",
           marginLeft: 0,
