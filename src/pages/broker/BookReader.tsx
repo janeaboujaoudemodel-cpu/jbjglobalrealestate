@@ -201,7 +201,7 @@ export default function BookReader() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#A9822E] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -250,7 +250,7 @@ export default function BookReader() {
       />
 
       {/* Top bar */}
-      <div className="sticky top-[88px] z-30 bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/20" data-gold-hairline>
+      <div className="sticky top-[88px] z-30 bg-[#FDFBF7]/95 backdrop-blur border-b border-[#A9822E]/20" data-gold-hairline>
         <div className="container mx-auto px-4 max-w-6xl py-3 flex items-center gap-3">
           <Button
             variant="ghost"
@@ -275,8 +275,8 @@ export default function BookReader() {
                 currentIsDone
                   ? "jj-surface-emerald hover:jj-surface-emerald text-white border border-[color:var(--emerald-1)]/30"
                   : isLastBodyOfModule
-                    ? "jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110 border border-[#B89555]/50"
-                    : "bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50"
+                    ? "jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110 border border-[#A9822E]/50"
+                    : "bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#A9822E]/50"
               }
             >
               {currentIsDone ? (
@@ -303,7 +303,7 @@ export default function BookReader() {
                     size="sm"
                     variant="secondary"
                     disabled={!audio.available}
-                    className="bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/40 disabled:opacity-60"
+                    className="bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#A9822E]/40 disabled:opacity-60"
                   >
                     <Headphones className="w-4 h-4 mr-1.5" /> Listen
                   </Button>
@@ -322,7 +322,7 @@ export default function BookReader() {
         <div className="relative mx-auto">
           {/* Flat page paper area */}
           <div
-            className="relative bg-[#FBF6EC] rounded-2xl overflow-hidden mx-auto border border-[#B89555]/25 shadow-[0_18px_60px_-30px_rgba(0,0,0,0.35)]"
+            className="relative bg-[#FDFBF7] rounded-2xl overflow-hidden mx-auto border border-[#A9822E]/25 shadow-[0_18px_60px_-30px_rgba(0,0,0,0.35)]"
             style={{
               width: "min(720px, 96vw)",
               aspectRatio: "5 / 7",
@@ -388,7 +388,7 @@ export default function BookReader() {
             onClick={prev}
             disabled={safeIndex === 0}
             aria-label="Previous page"
-            className="hidden md:flex absolute left-[-56px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 items-center justify-center text-[#1A1A1A] hover:bg-[#E5D8BD] disabled:opacity-40 transition-colors"
+            className="hidden md:flex absolute left-[-56px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#A9822E]/40 items-center justify-center text-[#1A1A1A] hover:bg-[#E5D8BD] disabled:opacity-40 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -396,7 +396,7 @@ export default function BookReader() {
             onClick={next}
             disabled={safeIndex >= totalPages - 1}
             aria-label="Next page"
-            className="hidden md:flex absolute right-[-56px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 items-center justify-center text-[#1A1A1A] hover:bg-[#E5D8BD] disabled:opacity-40 transition-colors"
+            className="hidden md:flex absolute right-[-56px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#A9822E]/40 items-center justify-center text-[#1A1A1A] hover:bg-[#E5D8BD] disabled:opacity-40 transition-colors"
           >
             <ArrowRight className="w-5 h-5" />
           </button>
@@ -432,9 +432,9 @@ export default function BookReader() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed right-0 top-0 bottom-0 z-50 w-[min(380px,90vw)] bg-[#FDFBF7] border-l border-[#B89555]/30 shadow-2xl flex flex-col"
+              className="fixed right-0 top-0 bottom-0 z-50 w-[min(380px,90vw)] bg-[#FDFBF7] border-l border-[#A9822E]/30 shadow-2xl flex flex-col"
             >
-              <div className="flex items-center justify-between p-4 border-b border-[#B89555]/20" data-gold-hairline>
+              <div className="flex items-center justify-between p-4 border-b border-[#A9822E]/20" data-gold-hairline>
                 <div className="text-sm font-semibold text-[#1A1A1A]">Table of Contents</div>
                 <Button variant="ghost" size="icon" onClick={() => setTocOpen(false)}>
                   <X className="w-4 h-4" />
@@ -530,7 +530,7 @@ function CoverFace({
         <div>
           <button
             onClick={onOpen}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/50 hover:bg-[#E5D8BD] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#A9822E]/50 hover:bg-[#E5D8BD] transition-colors"
           >
             Open Book <ArrowRight className="w-4 h-4" />
           </button>
@@ -549,7 +549,7 @@ function BackCoverFace({ book, onRestart }: { book: EducationBook; onRestart: ()
         <p className="allow-white text-white/80 text-sm leading-relaxed mb-5">{book.learning_objective}</p>
       )}
       <div className="flex-1" />
-      <div className="rounded-md border border-[#B89555]/40 bg-black/30 p-4 mb-5">
+      <div className="rounded-md border border-[#A9822E]/40 bg-black/30 p-4 mb-5">
         <p className="allow-white text-white/85 text-xs leading-relaxed">
           Proprietary academy content — internal recognition only, not for external certification.
         </p>
@@ -557,7 +557,7 @@ function BackCoverFace({ book, onRestart }: { book: EducationBook; onRestart: ()
       <div className="flex flex-wrap gap-2">
         <button
           onClick={onRestart}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/50 hover:bg-[#E5D8BD] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#A9822E]/50 hover:bg-[#E5D8BD] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Cover
         </button>
@@ -613,11 +613,11 @@ function ChapterOpenPage({
 }) {
   return (
     <div className="absolute inset-0 px-10 py-12 flex flex-col">
-      <div className="inline-flex items-center gap-2 text-[10px] tracking-[0.4em] text-[#B89555] uppercase mb-3">
+      <div className="inline-flex items-center gap-2 text-[10px] tracking-[0.4em] text-[#A9822E] uppercase mb-3">
         <Lock className="w-3 h-3" /> Chapter
       </div>
       <div
-        className="h-px w-16 bg-[#B89555]/60 mb-5"
+        className="h-px w-16 bg-[#A9822E]/60 mb-5"
         data-gold-hairline
       />
       <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold leading-tight mb-4">
@@ -656,7 +656,7 @@ function ChapterBodyPage({
         )}
       </div>
       <div
-        className="prose prose-neutral max-w-none prose-headings:text-[#1A1A1A] prose-headings:font-bold prose-p:text-[#1A1A1A]/85 prose-strong:text-[#1A1A1A] prose-a:text-[#1A1A1A] prose-a:underline prose-li:text-[#1A1A1A]/85 prose-blockquote:border-l-[#B89555] prose-blockquote:bg-[#F2EADB] prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic prose-table:text-sm prose-th:bg-[#F2EADB] prose-th:text-[#1A1A1A] text-[15px] leading-relaxed"
+        className="prose prose-neutral max-w-none prose-headings:text-[#1A1A1A] prose-headings:font-bold prose-p:text-[#1A1A1A]/85 prose-strong:text-[#1A1A1A] prose-a:text-[#1A1A1A] prose-a:underline prose-li:text-[#1A1A1A]/85 prose-blockquote:border-l-[#A9822E] prose-blockquote:bg-[#F2EADB] prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic prose-table:text-sm prose-th:bg-[#F2EADB] prose-th:text-[#1A1A1A] text-[15px] leading-relaxed"
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(html, {
             USE_PROFILES: { html: true },
