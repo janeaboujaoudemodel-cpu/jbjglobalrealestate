@@ -25,14 +25,14 @@
   /* ── 1. SUN — footer champagne band in EVERY state ──────────────────── */
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
     [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"] {
-    background-color: #C8AD7A !important;
+    background-color: #A9822E !important;
     background-image: linear-gradient(
       90deg,
-      #F1E8D6 0%,
-      #E2D2B4 22%,
-      #C8AD7A 50%,
-      #E2D2B4 78%,
-      #F1E8D6 100%
+      #FDFBF7 0%,
+      #FAF6EF 22%,
+      #A9822E 50%,
+      #FAF6EF 78%,
+      #FDFBF7 100%
     ) !important;
     background-size: 100% 100% !important;
     animation: none !important;
@@ -50,8 +50,8 @@
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body div#root
     [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="true"]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline, .jj-header-tagline *) {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+    color: #14263D !important;
+    -webkit-text-fill-color: #14263D !important;
     text-shadow: none !important;
   }
 }
@@ -66,8 +66,8 @@
     div[data-property-search-bar] :is(button, a)[aria-pressed="true"],
   html[data-jbj-theme="sun"]:not(#jj-p329-a):not(#jj-p329-b):not(#jj-p329-c):not(#jj-p329-d):not(#jj-p329-e) body[data-home-hero-state] div#root
     div[data-property-search-bar] :is(button, a)[aria-pressed="true"] :is(span, svg, path, strong, em) {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+    color: #14263D !important;
+    -webkit-text-fill-color: #14263D !important;
     fill: currentColor !important;
     text-shadow: none !important;
   }
@@ -91,8 +91,8 @@
     div[data-property-search-bar] button[data-surface="emerald"][data-search-segment],
   html[data-jbj-theme="sun"]:not(#p1):not(#p2):not(#p3):not(#p4):not(#p5):not(#p6) body[data-home-hero-state] div#root
     div[data-property-search-bar] button[data-surface="emerald"][data-search-segment] * {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+    color: #14263D !important;
+    -webkit-text-fill-color: #14263D !important;
     text-shadow: none !important;
   }
 }
