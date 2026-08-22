@@ -288,7 +288,7 @@ export const ConsultationRequestForm = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`bg-[#FBF6EC] border border-[#B89555] rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
+        className={`bg-[#FDFBF7] border border-[#A9822E] rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
       >
         <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-[#1A1A1A]" />
@@ -312,7 +312,7 @@ export const ConsultationRequestForm = ({
         data-jbj-consultation-form
         data-surface="champagne-raised"
         data-allow-ink
-        className={`jbj-form-shell bg-[#FBF6EC] border border-[#B89555]/35 rounded-2xl p-7 sm:p-10 md:p-12 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
+        className={`jbj-form-shell bg-[#FDFBF7] border border-[#A9822E]/35 rounded-2xl p-7 sm:p-10 md:p-12 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
     >
       {/* PASS 374 — pill lock. Inactive: #1A1A1A ink on flat #F1E7D4 (13.9:1, AAA)
           with a solid gold hairline. Active: locked emerald pair + pure white ink. */}
@@ -325,7 +325,7 @@ export const ConsultationRequestForm = ({
           background-image: none !important;
           color: #1A1A1A !important;
           -webkit-text-fill-color: #1A1A1A !important;
-          border: 1px solid #B89555 !important;
+          border: 1px solid #A9822E !important;
           box-shadow: none !important;
         }
         [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:hover {
@@ -794,17 +794,17 @@ export const ConsultationRequestForm = ({
             )}
           />
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-[#B89555]/20">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-[#A9822E]/20">
             <FormField
               control={form.control}
               name="agreeTerms"
               render={({ field }) => (
-                  <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]/60 p-4 md:p-5">
+                  <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 rounded-xl border border-[#A9822E]/25 bg-[#FDFBF7]/60 p-4 md:p-5">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={(checked) => field.onChange(checked === true)}
-                    className="mt-0.5 grid h-5 w-5 min-w-5 place-items-center rounded border-[#B89555] data-[state=checked]:bg-[#064E3B] data-[state=checked]:text-white"
+                    className="mt-0.5 grid h-5 w-5 min-w-5 place-items-center rounded border-[#A9822E] data-[state=checked]:bg-[#064E3B] data-[state=checked]:text-white"
                     data-no-contrast-guard
                     />
                   </FormControl>
