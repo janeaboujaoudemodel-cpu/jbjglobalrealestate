@@ -12,7 +12,7 @@ import { useFounderPhoto } from "@/hooks/useFounderPhoto";
 // Cream divider used between marketing sections — replaces the heavy black bands.
 const CreamDivider = () => (
   <div aria-hidden className="w-full bg-[#FDFBF7]">
-    <div className="h-px bg-[#EFE6D6]" />
+    <div className="h-px bg-[#FAF6EF]" />
   </div>
 );
 
@@ -123,7 +123,7 @@ const Founder = () => {
           {/* Multi-layer gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-[#1A1A1A]/10" />
+          <div className="absolute inset-0 bg-[#14263D]/10" />
         </motion.div>
         
         {/* Gold accent lines */}
@@ -166,10 +166,10 @@ const Founder = () => {
               <a 
                 href="#leadership"
                 data-surface="champagne"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold/20 to-gold/10 border border-[#B89555]/50 text-[#1A1A1A] font-semibold rounded-xl hover:bg-[#EFE6D6]/30 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold/20 to-gold/10 border border-[#B89555]/50 text-[#14263D] font-semibold rounded-xl hover:bg-[#FAF6EF]/30 transition-all duration-300"
               >
                 Meet Our Leadership
-                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A]" />
+                <ArrowUpRight className="w-4 h-4 text-[#14263D]" />
               </a>
             </motion.div>
           </motion.div>
@@ -179,7 +179,7 @@ const Founder = () => {
       {/* Thin eyebrow on champagne — replaces the heavy black "Leadership" divider block */}
       <section className="relative bg-[#FDFBF7] pt-6 pb-2">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center gap-1.5 text-[#1A1A1A]/70">
+          <div className="flex flex-col items-center gap-1.5 text-[#14263D]/70">
             <span className="text-[10px] uppercase tracking-[0.3em]">Leadership</span>
             <div className="w-px h-6 bg-[#B89555]/60" />
           </div>
@@ -225,7 +225,7 @@ const Founder = () => {
                     whileInView={{ scale: 1 }}
                     transition={{ delay: 0.5, type: "spring" }}
                   >
-                    <Award className="w-6 h-6 text-[#1A1A1A]" />
+                    <Award className="w-6 h-6 text-[#14263D]" />
                   </motion.div>
                 </div>
               </motion.div>
@@ -310,14 +310,14 @@ const Founder = () => {
               variants={staggerContainer}
             >
               <motion.div className="text-center mb-12" variants={fadeInUp}>
-                <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.4em] drop-shadow-sm">Structure</span>
+                <span className="text-[#14263D] text-sm uppercase tracking-[0.4em] drop-shadow-sm">Structure</span>
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
-                  className="text-[#1A1A1A] text-4xl md:text-5xl lg:text-6xl font-bold"
+                  className="text-[#14263D] text-4xl md:text-5xl lg:text-6xl font-bold"
                 >
-                  Executive <span className="text-[#1A1A1A]">Leadership</span>
+                  Executive <span className="text-[#14263D]">Leadership</span>
                 </h2>
-                <p className="text-[#1A1A1A]/70 text-lg mt-6 max-w-3xl mx-auto">
+                <p className="text-[#14263D]/70 text-lg mt-6 max-w-3xl mx-auto">
                   The executive leadership team supports the operational, advisory, and administrative functions of JBJ Global Real Estate under centralized governance.
                 </p>
               </motion.div>
@@ -330,22 +330,22 @@ const Founder = () => {
                 {executiveTeam.map((member, index) => (
                   <motion.div 
                     key={index}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 hover:border-[#B89555] transition-all duration-500 text-center shadow-sm"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#FAF6EF] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 hover:border-[#B89555] transition-all duration-500 text-center shadow-sm"
                     data-surface="champagne"
                     variants={fadeInUp}
                   >
                     <IconTile icon={member.icon} tone="ink" size="lg" className="mx-auto mb-6" />
 
-                    <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1">
+                    <h4 className="text-[#14263D] text-lg font-semibold mb-1">
                       {member.name}
                     </h4>
                     {member.nameAr && (
-                      <p className="text-[#1A1A1A]/70 text-sm mb-2">{member.nameAr}</p>
+                      <p className="text-[#14263D]/70 text-sm mb-2">{member.nameAr}</p>
                     )}
-                    <p className="text-[#1A1A1A] text-xs uppercase tracking-wider mb-4">
+                    <p className="text-[#14263D] text-xs uppercase tracking-wider mb-4">
                       {member.role}
                     </p>
-                    <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+                    <p className="text-[#14263D]/70 text-sm leading-relaxed">
                       {member.responsibility}
                     </p>
                   </motion.div>
@@ -368,12 +368,12 @@ const Founder = () => {
               variants={staggerContainer}
             >
               <motion.div className="text-center mb-12" variants={fadeInUp}>
-                <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.4em] drop-shadow-sm">Framework</span>
+                <span className="text-[#14263D] text-sm uppercase tracking-[0.4em] drop-shadow-sm">Framework</span>
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
-                  className="text-[#1A1A1A] text-4xl md:text-5xl lg:text-6xl font-bold"
+                  className="text-[#14263D] text-4xl md:text-5xl lg:text-6xl font-bold"
                 >
-                  Governance & <span className="text-[#1A1A1A]">Accountability</span>
+                  Governance & <span className="text-[#14263D]">Accountability</span>
                 </h2>
               </motion.div>
 
@@ -381,31 +381,31 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm" data-surface="champagne">
-                  <p className="text-lg mb-6 text-[#1A1A1A]">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#FAF6EF] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm" data-surface="champagne">
+                  <p className="text-lg mb-6 text-[#14263D]">
                     JBJ Global Real Estate operates with a centralized governance structure designed to ensure:
                   </p>
                   
                   <div className="grid sm:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-start gap-3">
                       <IconTile icon={FileCheck} tone="ink" size="sm" />
-                      <p className="text-[#1A1A1A]/70">Clear decision-making authority</p>
+                      <p className="text-[#14263D]/70">Clear decision-making authority</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <IconTile icon={Shield} tone="ink" size="sm" />
-                      <p className="text-[#1A1A1A]/70">Compliance with UAE real estate regulations</p>
+                      <p className="text-[#14263D]/70">Compliance with UAE real estate regulations</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <IconTile icon={Scale} tone="ink" size="sm" />
-                      <p className="text-[#1A1A1A]/70">Controlled advisory and brokerage processes</p>
+                      <p className="text-[#14263D]/70">Controlled advisory and brokerage processes</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <IconTile icon={Users} tone="ink" size="sm" />
-                      <p className="text-[#1A1A1A]/70">Transparent internal accountability</p>
+                      <p className="text-[#14263D]/70">Transparent internal accountability</p>
                     </div>
                   </div>
                   
-                  <p className="text-[#1A1A1A]/70 border-t border-[#B89555]/20 pt-6">
+                  <p className="text-[#14263D]/70 border-t border-[#B89555]/20 pt-6">
                     Executive oversight applies to brokerage operations, platform tools, client engagement workflows, and partner introductions.
                   </p>
                 </div>
@@ -427,12 +427,12 @@ const Founder = () => {
               variants={staggerContainer}
             >
               <motion.div className="text-center mb-12" variants={fadeInUp}>
-                <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.4em] drop-shadow-sm">Licensing</span>
+                <span className="text-[#14263D] text-sm uppercase tracking-[0.4em] drop-shadow-sm">Licensing</span>
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
-                  className="text-[#1A1A1A] text-4xl md:text-5xl lg:text-6xl font-bold"
+                  className="text-[#14263D] text-4xl md:text-5xl lg:text-6xl font-bold"
                 >
-                  Regulatory <span className="text-[#1A1A1A]">Standing</span>
+                  Regulatory <span className="text-[#14263D]">Standing</span>
                 </h2>
               </motion.div>
 
@@ -440,21 +440,21 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6" data-surface="champagne">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#FAF6EF] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6" data-surface="champagne">
                   <div className="flex items-center gap-4 pb-6 border-b border-[#B89555]/20">
                     <IconTile icon={Building2} tone="ink" size="lg" />
 
                     <div>
-                      <p className="text-[#1A1A1A] text-xl font-semibold">Dubai Mainland Licensed</p>
-                      <p className="text-[#1A1A1A] text-sm uppercase tracking-wider">Real Estate Brokerage</p>
+                      <p className="text-[#14263D] text-xl font-semibold">Dubai Mainland Licensed</p>
+                      <p className="text-[#14263D] text-sm uppercase tracking-wider">Real Estate Brokerage</p>
                     </div>
                   </div>
                   
-                  <p className="text-lg text-[#1A1A1A]">
+                  <p className="text-lg text-[#14263D]">
                     JBJ Global Real Estate is a Dubai mainland licensed real estate brokerage authorized to conduct BUY, SELL, and RENT activities.
                   </p>
                   
-                  <p className="text-[#1A1A1A]/70">
+                  <p className="text-[#14263D]/70">
                     Legal, mortgage, visa, and other regulated services are provided through independent licensed partners. JBJ Global Real Estate facilitates introductions only and does not provide regulated services outside its brokerage license.
                   </p>
                 </div>
@@ -473,7 +473,7 @@ const Founder = () => {
             <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
               {/* INNER CARD - Champagne Layer */}
               <motion.div 
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#FAF6EF] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 data-surface="champagne"
                 initial="hidden"
                 whileInView="visible"
@@ -486,7 +486,7 @@ const Founder = () => {
                 </motion.div>
                 
                 <motion.p 
-                  className="text-[#1A1A1A]/70 text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                  className="text-[#14263D]/70 text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                   variants={fadeInUp}
                 >
                   Leadership at JBJ Global Real Estate is structured to support long-term stability, professional standards, and informed client decision-making across all brokerage activities.
@@ -514,16 +514,16 @@ const Founder = () => {
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center gap-1">
-                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Contact Our</span>
-                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Team</span>
+                      <span className="text-[#14263D] group-hover:text-[#14263D] transition-colors">Contact Our</span>
+                      <span className="text-[#14263D] group-hover:text-[#14263D] transition-colors">Team</span>
                     </span>
-                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors relative z-10" />
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#14263D] group-hover:text-[#14263D] transition-colors relative z-10" />
                   </Link>
 
                   {/* Secondary Button - Services */}
                   <Link 
                     to="/services"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#14263D] text-[#14263D] hover:bg-[#14263D] hover:text-white"
                   >
                     View Our Services
                     <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
