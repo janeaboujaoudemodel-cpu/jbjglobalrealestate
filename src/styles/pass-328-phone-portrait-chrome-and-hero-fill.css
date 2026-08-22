@@ -34,8 +34,8 @@
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]):not(#jj-p328-h1):not(#jj-p328-h2):not(#jj-p328-h3):not(#jj-p328-h4) body div#root
     [data-chrome="header"] > header[data-header-surface][data-surface][data-header-scrolled="false"]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline) {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+    color: #14263D !important;
+    -webkit-text-fill-color: #14263D !important;
     text-shadow: none !important;
   }
 
@@ -146,24 +146,24 @@
     div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][data-surface="emerald"][data-surface="emerald"],
   html[data-jbj-theme="sun"]:not(#jj-p328-a):not(#jj-p328-b):not(#jj-p328-c):not(#jj-p328-d) body[data-home-hero-state] div#root
     div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][aria-pressed="true"][aria-pressed="true"] {
-    background-color: #C8AD7A !important;
+    background-color: #A9822E !important;
     background-image: linear-gradient(
       90deg,
-      #F1E8D6 0%,
-      #E2D2B4 22%,
-      #C8AD7A 50%,
-      #E2D2B4 78%,
-      #F1E8D6 100%
+      #FDFBF7 0%,
+      #FAF6EF 22%,
+      #A9822E 50%,
+      #FAF6EF 78%,
+      #FDFBF7 100%
     ) !important;
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+    color: #14263D !important;
+    -webkit-text-fill-color: #14263D !important;
   }
   html[data-jbj-theme="sun"]:not(#jj-p328-a):not(#jj-p328-b):not(#jj-p328-c):not(#jj-p328-d) body[data-home-hero-state] div#root
     div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][data-surface="emerald"][data-surface="emerald"] :is(span, svg, path),
   html[data-jbj-theme="sun"]:not(#jj-p328-a):not(#jj-p328-b):not(#jj-p328-c):not(#jj-p328-d) body[data-home-hero-state] div#root
     div[data-property-search-bar][data-property-search-bar][data-property-search-bar][data-search-tone] :is(button, a)[data-no-contrast-guard][data-no-contrast-guard][aria-pressed="true"][aria-pressed="true"] :is(span, svg, path) {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+    color: #14263D !important;
+    -webkit-text-fill-color: #14263D !important;
     stroke: currentColor !important;
   }
 }
