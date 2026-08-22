@@ -14,10 +14,10 @@
     [data-chrome="header"] > header[data-header-surface="dark"],
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
     [data-chrome="header"] > header[data-header-surface="light"] {
-    background-color: #F4EDDF !important;
+    background-color: #FAF6EF !important;
     background-image: var(
       --jj-champagne-long-h,
-      linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)
+      linear-gradient(90deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)
     ) !important;
     background-size: 220% 100% !important;
     animation: jjChampagneShimmer 18s ease-in-out infinite !important;
@@ -35,8 +35,8 @@
     [data-chrome="header"] > header[data-surface][data-header-surface]
     :is(.jj-header-wordmark, .jj-header-wordmark *, .jj-header-tagline,
         a[href="/"] span, a[href="/"] div, a[href="/"] p, a[href="/"] svg) {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+    color: #14263D !important;
+    -webkit-text-fill-color: #14263D !important;
     text-shadow: none !important;
     background: transparent !important;
     background-image: none !important;
@@ -59,14 +59,14 @@
     [data-chrome="header"] > header[data-header-surface="dark"],
   html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"]) body div#root
     [data-chrome="header"] > header[data-header-surface="light"] {
-    background-color: #C8AD7A !important;
+    background-color: #A9822E !important;
     background-image: linear-gradient(
       90deg,
-      #F1E8D6 0%,
-      #E2D2B4 22%,
-      #C8AD7A 50%,
-      #E2D2B4 78%,
-      #F1E8D6 100%
+      #FDFBF7 0%,
+      #FAF6EF 22%,
+      #A9822E 50%,
+      #FAF6EF 78%,
+      #FDFBF7 100%
     ) !important;
     background-size: 100% 100% !important;
     animation: none !important;
