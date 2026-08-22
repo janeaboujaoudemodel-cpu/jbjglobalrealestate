@@ -10,8 +10,8 @@
 
    Rule applied here (brand contract Rule 1):
      Sun + AI tool route  ->  champagne band identical to the Sun sidebar
-                              (#FBF6EC → #F4EDDF → #EAE0CC), BLACK ink
-                              (#1A1A1A), gold hairline rgba(184,149,85,.42).
+                              (#FDFBF7 → #FAF6EF → #FAF6EF), BLACK ink
+                              (#14263D), gold hairline rgba(184,149,85,.42).
 
    Hard scope guards — this file can never touch:
      · Moon  — every selector requires html[data-jbj-theme="sun"].
@@ -19,7 +19,7 @@
      · Chrome (header / nav / footer / rails) and photo heroes.
      · Layout: only background, border-color, colour, fill/stroke, shadow.
 
-   Contrast: #1A1A1A on #F4EDDF = 15.0:1 (AAA), on #EAE0CC = 13.6:1 (AAA).
+   Contrast: #14263D on #FAF6EF = 15.0:1 (AAA), on #FAF6EF = 13.6:1 (AAA).
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ───────── 1. Champagne fills replace the emerald ombre ───────── */
@@ -45,8 +45,8 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
     textarea,
     select
   ):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *) {
-  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
-  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
   background-color: #F7F1E4 !important;
   border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 14px 34px -20px rgba(26, 26, 26, 0.22) !important;
@@ -70,8 +70,8 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   #root#root#root#root#root#root#root#root
   :is([data-slot="card"], .card, [data-surface="emerald"], [class*="rounded-2xl"][class*="border"], [class*="rounded-xl"][class*="border"]):not([data-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-brand-hero]):not([data-brand-hero] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *)
   :is(h1, h2, h3, h4, h5, h6, p, span, label, strong, em, small, li, dt, dd, button, a, div, td, th) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
 }
 
 /* Icons follow the ink. */
@@ -80,7 +80,7 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   #root#root#root#root#root#root#root#root
   :is([data-slot="card"], .card, [data-surface="emerald"], [class*="rounded-2xl"][class*="border"], [class*="rounded-xl"][class*="border"]):not([data-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-brand-hero]):not([data-brand-hero] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *)
   :is(svg, svg *, .lucide, path, line, polyline, polygon, rect, circle, ellipse):not([stroke="none"]) {
-  color: #1A1A1A !important;
+  color: #14263D !important;
   stroke: currentColor !important;
 }
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
@@ -88,7 +88,7 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   #root#root#root#root#root#root#root#root
   :is([data-slot="card"], .card, [data-surface="emerald"], [class*="rounded-xl"][class*="border"])
   :is(svg, .lucide) [fill]:not([fill="none"]) {
-  fill: #1A1A1A !important;
+  fill: #14263D !important;
 }
 
 /* Field placeholders — readable warm grey, not white on champagne. */
@@ -108,8 +108,8 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   background: linear-gradient(160deg, #EFE4CC 0%, #E7D9BC 100%) !important;
   background-image: linear-gradient(160deg, #EFE4CC 0%, #E7D9BC 100%) !important;
   border-color: rgba(184, 149, 85, 0.68) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
 }
 
 /* ───────── 4. Hairlines: no white-on-champagne borders ───────── */
@@ -128,12 +128,12 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   body[data-ai-tools-scope="true"]
   #root#root#root#root#root#root#root#root
   .jj-cta-dark:not(header *):not(nav *):not(footer *):not([data-jj-rail] *):not([data-brand-hero] *) {
-  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
-  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
   background-color: #F7F1E4 !important;
   border: 1px solid var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
 }
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   body[data-ai-tools-scope="true"]
@@ -143,15 +143,15 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   background-image: linear-gradient(160deg, #EFE4CC 0%, #E7D9BC 100%) !important;
   background-color: #EBDFC4 !important;
   border-color: rgba(184, 149, 85, 0.68) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
 }
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   body[data-ai-tools-scope="true"]
   #root#root#root#root#root#root#root#root
   :is(.jj-cta-dark, .jj-pill-active) :is(span, svg, svg *, .lucide, path, line, polyline, polygon, rect, circle, ellipse):not([stroke="none"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
   stroke: currentColor !important;
 }
 
@@ -165,15 +165,15 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   #root#root#root#root#root#root#root#root
   :is(a, button):not(.allow-white):not(.allow-white *):not([data-allow-ink]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-brand-hero] *):not([data-photo-copy-lock] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *):not([data-surface="light"]):not([data-emerald-lock="true"])[class*="rounded"] {
   border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
 }
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   body[data-ai-tools-scope="true"]
   #root#root#root#root#root#root#root#root
   :is(a, button):not(.allow-white):not(.allow-white *):not([data-allow-ink]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-brand-hero] *):not([data-photo-copy-lock] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *):not([data-surface="light"]):not([data-emerald-lock="true"])[class*="rounded"][style*="linear-gradient"] {
-  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
-  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
   background-color: #F7F1E4 !important;
 }
 html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
@@ -181,8 +181,8 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   #root#root#root#root#root#root#root#root
   :is(a, button)[class*="rounded"][style*="linear-gradient"]:not(.allow-white):not([data-preserve-surface]):not([data-brand-hero] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *)
   :is(span, svg, svg *, .lucide, path, line, polyline, polygon, rect, circle, ellipse):not([stroke="none"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
   stroke: currentColor !important;
 }
 
@@ -194,12 +194,12 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   body[data-ai-tools-scope="true"]
   #root#root#root#root#root#root#root#root
   [class*="bg-emerald-"]:not(.allow-white):not([data-preserve-surface]):not([data-brand-hero] *):not(header *):not(nav *):not(footer *):not([data-jj-rail] *) {
-  background: linear-gradient(160deg, #F4EDDF 0%, #EAE0CC 100%) !important;
-  background-image: linear-gradient(160deg, #F4EDDF 0%, #EAE0CC 100%) !important;
+  background: linear-gradient(160deg, #FAF6EF 0%, #FAF6EF 100%) !important;
+  background-image: linear-gradient(160deg, #FAF6EF 0%, #FAF6EF 100%) !important;
   background-color: #F0E7D5 !important;
   border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
 }
 
 /* ───────── 8. Final catch-all: any inline emerald gradient in Sun AI scope ───────── */
@@ -207,9 +207,9 @@ html[data-jbj-theme="sun"]:not([data-jbj-backend-lock="1"])
   body[data-ai-tools-scope="true"]
   #root#root#root#root#root#root#root#root
   [style*="linear-gradient"]:not(.allow-white):not(.allow-white *):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-brand-hero]):not([data-brand-hero] *):not([data-photo-copy-lock]):not([data-photo-copy-lock] *):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):not([data-jj-rail]):not([data-jj-rail] *):not([style*="url("]) {
-  background: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
-  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%)) !important;
+  background: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
+  background-image: var(--jj-sun-band-d, linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 52%, #FAF6EF 100%)) !important;
   border-color: var(--jj-sun-line, rgba(184, 149, 85, 0.42)) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #14263D !important;
+  -webkit-text-fill-color: #14263D !important;
 }
