@@ -89,13 +89,18 @@
   --jj-champagne-long-h: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
   --jj-champagne-long-d: linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
 
-  /* ── Consolidated from src/styles/pass-348-sun-champagne-dominant-chrome.css ──
-   * Champagne equivalents of the emerald pair, matching the Sun sidebar. */
-  --jj-sun-band-h: linear-gradient(90deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
-  --jj-sun-band-v: linear-gradient(180deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
-  --jj-sun-band-d: linear-gradient(160deg, #FBF6EC 0%, #F4EDDF 52%, #EAE0CC 100%);
-  --jj-sun-ink: #1A1A1A;
-  --jj-sun-line: rgba(184, 149, 85, 0.42);
+  /* ── PASS 390: sun theme full repaint (ivory / navy / muted brass gold) ──
+   * Approved 2026-08-22. Replaces the old champagne-band + near-black-ink
+   * pair with the ivory/white + deep-navy palette from the approved
+   * roadmap. These four tokens are consumed ONLY by rules already scoped
+   * under html[data-jbj-theme="sun"] elsewhere in this codebase, so this
+   * edit is sun-theme-only by construction -- moon theme reads none of
+   * these vars. Do not use --jj-sun-* tokens for anything moon-facing. */
+  --jj-sun-band-h: linear-gradient(90deg, #FDFBF7 0%, #FAF6EF 100%);
+  --jj-sun-band-v: linear-gradient(180deg, #FDFBF7 0%, #FAF6EF 100%);
+  --jj-sun-band-d: linear-gradient(160deg, #FDFBF7 0%, #FAF6EF 100%);
+  --jj-sun-ink: #14263D;
+  --jj-sun-line: rgba(169, 130, 46, 0.35);
 
   /* ── Consolidated from src/styles/pass-349-sun-emerald-accents-and-gold-borders.css ── */
   --jj349-emerald: linear-gradient(160deg, #064E3B 0%, #042c1c 58%, #000000 100%);
